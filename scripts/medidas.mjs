@@ -21,5 +21,5 @@
  *   do commit) — é o que mantém o invariante «o último a tocar é o declarado».
  */
 
-export const COMMIT_DA_CONSOLIDACAO = "158b646";
-export const COMMIT_ULTIMO_QUE_TOCOU_GLOBALS = "158b646";
+export const COMMIT_DA_CONSOLIDACAO = "ca6bd52";
+export const COMMIT_ULTIMO_QUE_TOCOU_GLOBALS = "ca6bd52";
