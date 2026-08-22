@@ -1,0 +1,328 @@
+/* ---------------------------------------------------------------------------
+ * cidade.css — as regras do Modo Cidade.
+ *
+ * MORA AQUI, E NÃO EM `globals.css`, porque vários planos escrevem em paralelo nesta fase e
+ * `globals.css` é o único arquivo que todos eles tocariam. O import é feito pelo componente
+ * que usa as regras e o alcance é o mesmo — o que muda é que dois planos nunca disputam o
+ * mesmo arquivo.
+ *
+ * CSS PURO, e não utilitários do Tailwind, pelo limite já conhecido do projeto: variante
+ * (`app:`, `desk:`) só prefixa UTILITÁRIO, e `.cidade-dia` é classe semântica nossa.
+ *
+ * NENHUMA COR DE LINGUAGEM APARECE AQUI (D-08). A cor da linguagem é dado: ela chega como
+ * custom property inline, vinda do vocabulário gerado. Escrever `--ic-lilas` neste arquivo
+ * criaria uma segunda fonte de verdade que diverge na primeira edição.
+ *
+ * NENHUM POSICIONAMENTO PRESO À JANELA. `position: fixed` dentro da moldura escaparia do
+ * telefone e grudaria na borda do navegador (D-03). Tudo aqui é fluxo.
+ * ------------------------------------------------------------------------- */
+
+.cidade-tela {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+[data-view="web"] .cidade-tela {
+  max-width: 64rem;
+  margin-inline: auto;
+  padding: 2rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * A janela — «quantos dias você fica», e nunca «quando você vem».
+ * ------------------------------------------------------------------------- */
+
+.cidade-janela {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}
+
+.cidade-janela-rotulo {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+
+.cidade-dias {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.cidade-dia-botao {
+  cursor: pointer;
+  min-width: 2.25rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 25%, transparent);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  background: transparent;
+}
+
+/* O estado do controle sai do ATRIBUTO DE ACESSIBILIDADE, e não de uma classe paralela:
+   `aria-pressed` já precisa estar certo para leitor de tela, e derivar o desenho dele
+   impede que os dois se separem numa edição futura. */
+.cidade-dia-botao[aria-pressed="true"] {
+  background: var(--ic-laranja);
+  border-color: var(--ic-laranja);
+  color: var(--ic-branco);
+}
+
+/* ---------------------------------------------------------------------------
+ * A frase de enquadramento — D-49 e D-52.
+ *
+ * PESO VISUAL DE PRIMEIRA ORDEM, e não de legenda: é a frase que carrega a decisão da fase
+ * e é ela que vai ser lida em voz alta na apresentação. Mesma gramática do selo de motivo
+ * do cartão, que a fase 2 fixou para o mesmo tipo de conteúdo.
+ * ------------------------------------------------------------------------- */
+
+.cidade-enquadramento {
+  display: flex;
+  gap: 0.5rem;
+  border-left: 3px solid var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 7%, transparent);
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.625rem 0.75rem;
+}
+
+.cidade-enquadramento-frase {
+  max-width: 66ch;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.cidade-enquadramento-adiante {
+  max-width: 66ch;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * O dia
+ * ------------------------------------------------------------------------- */
+
+.cidade-fonte-distancia {
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+  max-width: 62ch;
+}
+
+.cidade-dia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+  border-radius: 0.75rem;
+  padding: 0.625rem;
+}
+
+.cidade-dia-cabeca {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cidade-dia-titulo {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cidade-dia-deslocamento {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--ic-preto) 62%, transparent);
+}
+
+.cidade-dia-justificativa,
+.cidade-dia-nota {
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
+  max-width: 62ch;
+}
+
+.cidade-dia-nota {
+  font-size: 0.6875rem;
+  font-style: italic;
+}
+
+.cidade-itens {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cidade-item {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 8%, transparent);
+}
+
+.cidade-item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.cidade-item-classe {
+  font-size: 0.5625rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+
+.cidade-item-titulo {
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  color: inherit;
+}
+
+a.cidade-item-titulo:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* D-51 — a data que a fonte declarou, e a ausência dita quando não há.
+   As duas têm o MESMO peso tipográfico de propósito: dizer «não há data» é uma afirmação
+   do mesmo valor que dizer a data, e rebaixá-la visualmente a transformaria em desculpa. */
+.cidade-item-data,
+.cidade-item-sem-data {
+  font-size: 0.6875rem;
+  line-height: 1.3;
+}
+
+.cidade-item-data {
+  color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+}
+
+.cidade-item-sem-data {
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  font-style: italic;
+}
+
+/* T-03-30 — a marca de próprio do território vem SEMPRE com o número que a sustenta. */
+.cidade-item-proprio {
+  display: flex;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--ic-preto) 68%, transparent);
+}
+
+/* A coluna da capa: imagem em cima, controle de troca embaixo. Largura fixa para as três
+   linhas do dia alinharem — coluna elástica faria cada item começar num lugar diferente. */
+.cidade-item-capa {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 5rem;
+  flex: none;
+}
+
+.cidade-alternar {
+  cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 22%, transparent);
+  border-radius: 999px;
+  padding: 0.0625rem 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.4;
+  background: transparent;
+}
+
+.cidade-alternar:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+/* ---------------------------------------------------------------------------
+ * Ações e exportação
+ * ------------------------------------------------------------------------- */
+
+.cidade-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cidade-acao {
+  cursor: pointer;
+  border: 1px solid var(--ic-laranja);
+  border-radius: 999px;
+  padding: 0.3125rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--ic-laranja);
+  background: transparent;
+}
+
+.cidade-exportado {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.cidade-exportado-recado {
+  font-size: 0.6875rem;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* O roteiro em texto simples: sem rede e sem biblioteca. Ele ROLA por dentro em vez de
+   esticar a página, para a exportação não empurrar a lente do mapa para fora da moldura. */
+.cidade-exportado-texto {
+  max-height: 16rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 15%, transparent);
+  border-radius: 0.5rem;
+  padding: 0.625rem;
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * As outras cidades
+ * ------------------------------------------------------------------------- */
+
+.cidade-outras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3125rem;
+}
+
+.cidade-outra {
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+  border-radius: 999px;
+  padding: 0.1875rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* A definição da marca de próprio, uma vez por tela. */
+.cidade-legenda-proprio {
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  max-width: 66ch;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}

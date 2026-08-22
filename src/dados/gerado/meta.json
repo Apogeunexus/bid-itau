@@ -1,0 +1,231 @@
+{
+  "geradoEm": "2026-08-22",
+  "grauHub": 60,
+  "fanoutSemelhante": 20,
+  "fanoutEfetivo": 20,
+  "fontes": {
+    "cms": [
+      "dados/normalizado/eventos.json",
+      "dados/normalizado/conteudos.json",
+      "dados/normalizado/midias.json",
+      "dados/normalizado/publicacoes.json",
+      "dados/normalizado/formacoes.json",
+      "dados/normalizado/agentes.json"
+    ],
+    "taxonomia": [
+      "dados/taxonomia/linguagens.json",
+      "dados/taxonomia/temas.json"
+    ],
+    "enciclopedia": [
+      {
+        "fonte": "dados/amostra/enciclopedia.jsonl",
+        "lidos": 1766,
+        "novos": 1766
+      }
+    ],
+    "imagens": "dados/imagens/"
+  },
+  "totais": {
+    "entidades": 7810,
+    "arestas": 66563,
+    "linguagens": 33,
+    "temas": 94,
+    "temporadas": 287,
+    "ocorrencias": 2425,
+    "duplicatas": 40
+  },
+  "porClasse": {
+    "coletivo": 217,
+    "conteudo": 1805,
+    "espaco": 113,
+    "evento": 300,
+    "formacao": 54,
+    "instituicao": 246,
+    "linguagem": 33,
+    "midia": 529,
+    "obra": 239,
+    "ocorrencia": 2425,
+    "pessoa": 575,
+    "pessoa-usuaria": 3,
+    "publicacao": 46,
+    "repertorio": 3,
+    "tema": 94,
+    "temporada": 287,
+    "termo": 481,
+    "territorio": 359,
+    "trilha": 1
+  },
+  "porProcedencia": {
+    "autorado": 47,
+    "derivado": 2937,
+    "ic": 4826
+  },
+  "porRelacao": {
+    "aprofunda": 887,
+    "atua_em": 508,
+    "contextualiza": 4,
+    "dialoga_com": 31,
+    "duplicata_suspeita": 40,
+    "fala_sobre": 39,
+    "ocorre_em": 2712,
+    "pertence_a": 13000,
+    "realiza": 527,
+    "semelhante_a": 47259,
+    "situado_em": 1556
+  },
+  "porProcedenciaDeAresta": {
+    "autorado": 81,
+    "derivado": 51600,
+    "ic": 14882
+  },
+  "acessibilidade": {
+    "audio_description": 0,
+    "libras": 56,
+    "descriptive_subtitle": 0,
+    "closed_caption": 0,
+    "open_caption": 1,
+    "simultaneous_translation": 0,
+    "stenotypy": 0,
+    "subtitle": 1
+  },
+  "acessibilidadeIncluindoDerivadas": {
+    "audio_description": 0,
+    "libras": 180,
+    "descriptive_subtitle": 0,
+    "closed_caption": 0,
+    "open_caption": 1,
+    "simultaneous_translation": 0,
+    "stenotypy": 0,
+    "subtitle": 1
+  },
+  "fichaDeAcessibilidade": {
+    "declaram": 5108,
+    "naoDeclaram": 2702,
+    "declaramPorClasse": {
+      "conteudo": 1785,
+      "evento": 140,
+      "formacao": 54,
+      "midia": 529,
+      "ocorrencia": 2425,
+      "publicacao": 46,
+      "temporada": 129
+    }
+  },
+  "cobertura": {
+    "imagens": {
+      "disponivel": true,
+      "arquivos": 2382,
+      "presentes": 2382,
+      "chavesRejeitadas": 0,
+      "exemplosRejeitados": [],
+      "donosDesconhecidos": 0
+    },
+    "entidadesComImagemLocal": 2835,
+    "slugsDesambiguados": 76,
+    "coordenadas": {
+      "comCoordenada": 472,
+      "porMetodo": {
+        "centroide-estado": 27,
+        "centroide-municipio": 118,
+        "centroide-pais": 214,
+        "deslocamento-por-espaco": 113
+      },
+      "municipiosNaTabela": 118,
+      "paisesNaTabela": 41,
+      "aproximados": [
+        "Ingazeiras|Ceará",
+        "Itabirinha de Mantena|Minas Gerais",
+        "Jenipapo de Minas|Minas Gerais",
+        "Morro Agudo de Goiás|Goiás",
+        "Umbuzeiro|Paraíba"
+      ]
+    },
+    "semCoordenada": {
+      "total": 0,
+      "nomes": []
+    },
+    "trilhaAutorada": {
+      "id": "trilha:autorado:do-rap-ao-teatro-documentario",
+      "passos": [
+        "termo:enc:80292",
+        "termo:enc:80282",
+        "termo:enc:79963",
+        "evento:cms:13787"
+      ],
+      "porQue": "rap (Música) e slam (Literatura) não compartilham nenhum atributo na fonte; a ponte é conhecimento cultural e por isso é autorada"
+    },
+    "fanoutCopresenca": 8,
+    "agenda": {
+      "eventosSemPeriodo": 11,
+      "eventosComOcorrencia": 129,
+      "ocorrenciasTruncadas": 36,
+      "diasTruncados": 16282,
+      "temporadasSemOcorrencia": 158,
+      "diasMaximosDeVisitacao": 60,
+      "variacoesDeDuplicata": [
+        "acento removido",
+        "caixa alterada no título",
+        "espaço duplo e pontuação trocada",
+        "nome do espaço grafado de outra forma",
+        "ocorrência deslocada em minutos",
+        "prefixo do produtor no título",
+        "sufixo de edição acrescentado"
+      ]
+    },
+    "linguagensPromovidas": [
+      "Arte",
+      "Gestão cultural",
+      "Rádio",
+      "TV"
+    ],
+    "aliasDeLinguagem": {
+      "tecnologia": "arte-e-tecnologia"
+    }
+  },
+  "concentradores": {
+    "limiar": 60,
+    "total": 122,
+    "maiores": [
+      {
+        "id": "linguagem:cms:artes-visuais",
+        "grau": 2623
+      },
+      {
+        "id": "tema:cms:exposicao",
+        "grau": 961
+      },
+      {
+        "id": "linguagem:cms:teatro",
+        "grau": 799
+      },
+      {
+        "id": "linguagem:cms:literatura",
+        "grau": 736
+      },
+      {
+        "id": "linguagem:cms:musica",
+        "grau": 569
+      },
+      {
+        "id": "tema:cms:acervos",
+        "grau": 460
+      },
+      {
+        "id": "tema:cms:ocupacao",
+        "grau": 372
+      },
+      {
+        "id": "linguagem:cms:cinema",
+        "grau": 324
+      },
+      {
+        "id": "linguagem:cms:audiovisual",
+        "grau": 280
+      },
+      {
+        "id": "tema:cms:ancestralidades",
+        "grau": 239
+      }
+    ]
+  }
+}

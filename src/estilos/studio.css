@@ -1,0 +1,306 @@
+/* ---------------------------------------------------------------------------
+ * studio.css — o vocabulário visual compartilhado das duas telas de bastidor da
+ * fase 4: resolução de duplicatas (tela 31) e gestão de ocorrências (tela 32).
+ *
+ * DE QUEM É ESTE ARQUIVO. Dele escrevem o plano 04-01 (que o cria) e, no que for
+ * genuinamente compartilhado, 04-03. Regra que só serve a uma tela mora na folha
+ * daquela tela — `studio-duplicatas.css` ou `studio-ocorrencias.css` —, e não aqui.
+ *
+ * A LARGURA DE PROJETO É 1.152px, que é a largura útil da moldura na visão web
+ * (`desk:max-w-6xl`, 72rem). O Studio só existe nessa visão (D-67): ninguém resolve
+ * uma fila de mil duplicatas em 390px, e a tela declara isso em vez de espremer a
+ * tabela. Por isso não há aqui nenhuma regra sob `[data-view="mobile"]` — o layout
+ * de bastidor já esconde o conteúdo na visão app e mostra o aviso de superfície.
+ *
+ * NADA AQUI USA POSIÇÃO ANCORADA NA JANELA. O único `fixed` legítimo do projeto mora
+ * na casca. Dentro da moldura, `fixed` escaparia para a largura da tela e quebraria a
+ * ilusão de D-03 — e a fase 3 já pagou por isso uma vez. Quem precisa grudar usa
+ * `sticky`, como a barra de abas faz.
+ *
+ * As cores saem sempre de token (`var(--ic-laranja)`), nunca de hex literal: o hex do
+ * manual tem UMA fonte de verdade, que é o bloco `:root` de `globals.css` (D-06).
+ * ------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+ * Superfície — o contêiner de página das telas de bastidor.
+ * ------------------------------------------------------------------------- */
+
+.studio {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* O cabeçalho da superfície: quem opera, sobre o que, e com qual escopo. Ele GRUDA
+ * no topo porque a fila é longa e quem rola trinta grupos precisa continuar sabendo
+ * em que tela está. `sticky` e não `fixed`, pelo motivo declarado no topo do arquivo. */
+.studio-cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: -2rem -1.5rem 0;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid rgb(0 0 0 / 0.12);
+  background: var(--ic-branco);
+}
+
+.studio-superficie {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ic-laranja);
+}
+
+.studio-titulo {
+  font-family: var(--fonte-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.studio-objetivo {
+  max-width: 68ch;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgb(0 0 0 / 0.65);
+}
+
+/* ---------------------------------------------------------------------------
+ * Pastilha de número — a contagem que qualifica um rótulo sem virar letra miúda.
+ * «40 grupos na fila», «6 do acervo», «1.304 ocorrências envolvidas».
+ * ------------------------------------------------------------------------- */
+
+.studio-pastilha {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  border-radius: 999px;
+  background: var(--ic-branco);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.studio-pastilha-numero {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A pastilha de destaque usa o laranja da marca — mesma família do selo de motivo e
+ * do alerta. `color-mix` e não um rgb() literal: o laranja tem uma fonte de verdade. */
+.studio-pastilha-marca {
+  border-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * Painel — a caixa de um grupo, de um evento, de um bloco de argumento.
+ * ------------------------------------------------------------------------- */
+
+.studio-painel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.25rem;
+  border: 1px solid rgb(0 0 0 / 0.14);
+  border-radius: 1rem;
+  background: var(--ic-branco);
+}
+
+.studio-painel-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.studio-painel-nome {
+  font-family: var(--fonte-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.studio-rotulo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.5);
+}
+
+.studio-nota {
+  max-width: 78ch;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgb(0 0 0 / 0.7);
+}
+
+/* O valor literal — chave de identidade, id de entidade, score. Monoespaçado de
+ * propósito: quem confere uma chave está comparando CARACTERE a caractere, e fonte
+ * proporcional esconde exatamente a diferença que a tela existe para mostrar. */
+.studio-literal {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------------------
+ * Lado a lado — os dois (ou três) registros de um grupo, em colunas.
+ *
+ * Grade e não flex: as colunas precisam ter a MESMA largura mesmo quando um dos
+ * títulos é três vezes mais longo que o outro, senão a comparação visual mente.
+ * ------------------------------------------------------------------------- */
+
+.studio-lados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 0.75rem;
+}
+
+.studio-lado {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.85rem;
+  border: 1px solid rgb(0 0 0 / 0.12);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
+}
+
+.studio-lado-marca {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: var(--ic-preto);
+  color: var(--ic-branco);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.studio-lado-titulo {
+  font-family: var(--fonte-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tabela densa — a comparação campo a campo, e a tabela de ocorrências de 04-03.
+ *
+ * Escrita em grade em vez de <table> porque as duas telas precisam de linhas com
+ * número variável de colunas (dois registros aqui, um trio no grupo de
+ * «#Vivendoartisticamente»), e uma <table> obrigaria a reescrever o cabeçalho.
+ * ------------------------------------------------------------------------- */
+
+.studio-tabela {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(0 0 0 / 0.12);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.studio-linha {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 0;
+  border-top: 1px solid rgb(0 0 0 / 0.09);
+}
+
+.studio-linha:first-child {
+  border-top: 0;
+}
+
+.studio-celula {
+  padding: 0.55rem 0.7rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.studio-celula-rotulo {
+  font-weight: 600;
+  color: rgb(0 0 0 / 0.6);
+  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * Barra de ações — fundir, manter separados, adiar (04-02); confirmar e cancelar
+ * a alteração de sessão (04-03). Gruda no pé do painel, nunca na janela.
+ * ------------------------------------------------------------------------- */
+
+.studio-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgb(0 0 0 / 0.09);
+}
+
+.studio-botao {
+  cursor: pointer;
+  padding: 0.45rem 0.95rem;
+  border: 1px solid var(--ic-preto);
+  border-radius: 999px;
+  background: var(--ic-branco);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: background-color 120ms ease, color 120ms ease, opacity 120ms ease;
+}
+
+.studio-botao:hover {
+  background: color-mix(in srgb, var(--ic-preto) 6%, transparent);
+}
+
+.studio-botao-primario {
+  border-color: var(--ic-laranja);
+  background: var(--ic-laranja);
+  color: var(--ic-branco);
+}
+
+.studio-botao-primario:hover {
+  background: var(--ic-laranja);
+  opacity: 0.9;
+}
+
+/* ---------------------------------------------------------------------------
+ * A declaração honesta — o que o acervo NÃO sustenta.
+ *
+ * PRODUTO, e não comentário: ela fica visível com o modo comentado desligado. A
+ * honestidade sobre o dado é o argumento da proposta, não a nota de rodapé sobre
+ * ele — a mesma regra que mantém o rótulo de procedência sempre na tela.
+ * ------------------------------------------------------------------------- */
+
+.studio-nao-sustenta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-width: 78ch;
+  padding: 0.7rem 0.85rem;
+  border-left: 3px solid var(--ic-laranja);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.studio-nao-sustenta-rotulo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ic-laranja);
+}

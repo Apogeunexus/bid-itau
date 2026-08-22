@@ -1,0 +1,25 @@
+{
+  "source_path": "/Users/macos/Desktop/Noz/dados/inventario/mapa-conteudo.md",
+  "type": "DOC",
+  "confidence": "high",
+  "manifest_override": true,
+  "title": "Varredura do acervo digital do Itaú Cultural",
+  "summary": "Technical survey of Itaú Cultural's digital estate — content inventory, infrastructure, and subdomain status — gathered to support the Agenda Cultural BR RFP proposal.",
+  "scope": [
+    "Itaú Cultural digital archive",
+    "Next.js frontend",
+    "Fundação Itaú infrastructure",
+    "CMS editor",
+    "S3 media storage",
+    "subdomains",
+    "content entities",
+    "Agenda Cultural BR RFP"
+  ],
+  "cross_refs": [
+    "../coletar.py",
+    "../normalizar.py"
+  ],
+  "locked": false,
+  "precedence": 2,
+  "notes": ""
+}

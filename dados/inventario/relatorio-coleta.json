@@ -1,0 +1,481 @@
+{
+ "buildId": "94260e6e56af376dbbef8b34441fc4e9d103ac29",
+ "secoes": {
+  "/agenda": {
+   "schedules": 50
+  },
+  "/noticias": {
+   "noticias": 50,
+   "highlights": 0,
+   "mostRead": 1,
+   "subcategories": 2,
+   "items": 2
+  },
+  "/colunas": {
+   "colunas": 50,
+   "highlights": 3,
+   "mostRead": 1,
+   "columnists": 143,
+   "subcategories": 23,
+   "items": 2,
+   "featureColumnists": 3
+  },
+  "/opiniao": {
+   "opiniao": 50,
+   "highlights": 0,
+   "mostRead": 1,
+   "subcategories": 0,
+   "items": 2
+  },
+  "/entrevista": {
+   "entrevistas": 50,
+   "highlights": 0,
+   "mostRead": 1,
+   "subcategories": 0,
+   "items": 2
+  },
+  "/videos": {
+   "videos": 50,
+   "highlights": 3,
+   "mostRead": 1,
+   "subcategories": 0,
+   "items": 2
+  },
+  "/playlists": {
+   "playlists": 50,
+   "highlights": 3,
+   "mostRead": 1,
+   "subcategories": 0,
+   "items": 2
+  },
+  "/podcasts": {
+   "podcasts": 50,
+   "highlights": 2,
+   "mostRead": 1,
+   "subcategories": 14,
+   "items": 2
+  },
+  "/series": {
+   "series": 50,
+   "highlights": 0,
+   "mostRead": 1,
+   "subcategories": 4,
+   "items": 2
+  },
+  "/publicacoes": {
+   "publicacoes": 50,
+   "highlights": 1,
+   "mostRead": 1,
+   "subcategories": 0,
+   "items": 2
+  },
+  "/ic-play": {
+   "icplay": 50,
+   "highlights": 0,
+   "mostRead": 1,
+   "noticias": 50,
+   "agenda": 50
+  },
+  "/rumos": {
+   "rumos": 50,
+   "highlights": 0,
+   "mostRead": 1,
+   "expressions": 29,
+   "years": 4
+  },
+  "/escola": {
+   "schools": 22
+  },
+  "/enciclopedia": {
+   "encyclopedia": 0
+  },
+  "/mostras-e-exposicoes/exposicoes": {
+   "years": 15,
+   "exhibitions": 50
+  },
+  "/mostras-e-exposicoes/exposicoes-virtuais": {
+   "years": 4,
+   "nextExhibitions": 0,
+   "exhibitions": 4
+  },
+  "/mostras-e-exposicoes/ocupacao": {
+   "highlights": 2,
+   "lastOccupations": 0,
+   "occupations": 3,
+   "years": 15
+  },
+  "/espaco-olavo-setubal": {
+   "modules": 9
+  },
+  "/observatorio/conteudos": {
+   "noticias": 3,
+   "publicacoes": 3,
+   "podcasts": 0
+  },
+  "/observatorio/formacoes": {
+   "formation": 49
+  },
+  "/observatorio/pesquisas": {
+   "pesquisas": 0,
+   "highlights": 0,
+   "mostRead": 1,
+   "subcategories": 0,
+   "items": 2
+  },
+  "/observatorio/publicacoes": {
+   "books": 3,
+   "revistaObservatorio": 2,
+   "noticias": 50
+  },
+  "/ancestralidade": {
+   "ancestralidades": 7,
+   "highlights": 1
+  },
+  "/arte-e-acesso": {
+   "artAccess": 1
+  },
+  "/mekukradja": {
+   "highlights": 2,
+   "mekukradja": 3,
+   "schedules": 50,
+   "mostRead": 1
+  },
+  "/quem-somos": {
+   "noticias": 50,
+   "reports": 1
+  }
+ },
+ "subcategorias": {
+  "/colunas/a-caminho": {
+   "columns": 12,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 142
+  },
+  "/colunas/ativos-escritos": {
+   "columns": 11,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/brechas-urbanas": {
+   "columns": 23,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/cariri-territorio-e-patrimonio": {
+   "columns": 2,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/daquebradapromundo": {
+   "columns": 18,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/doladodecadomundo": {
+   "columns": 6,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/emaranhado": {
+   "columns": 7,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 142
+  },
+  "/colunas/encontro-com-espectadores": {
+   "columns": 20,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/encontros": {
+   "columns": 33,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/espacodejogo": {
+   "columns": 8,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/game-perifa": {
+   "columns": 1,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/grande-angular": {
+   "columns": 33,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/inventario": {
+   "columns": 20,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/na-ponta-da-agulha": {
+   "columns": 24,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/oraculo": {
+   "columns": 12,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/perspectivas": {
+   "columns": 6,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/poranduba": {
+   "columns": 6,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/revelacao": {
+   "columns": 16,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/sankofas": {
+   "columns": 17,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/sarjeta": {
+   "columns": 24,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/sincera-forma-do-mundo": {
+   "columns": 6,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/travessias": {
+   "columns": 12,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 143
+  },
+  "/colunas/um-por-todos": {
+   "columns": 23,
+   "items": 3,
+   "subcategories": 23,
+   "columnists": 142
+  },
+  "/noticias/institucional": {
+   "noticias": 1833,
+   "items": 3,
+   "subcategories": 2
+  },
+  "/noticias/pesquisas": {
+   "noticias": 1833,
+   "items": 3,
+   "subcategories": 2
+  },
+  "/podcasts/70": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/critica-em-movimento": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/dialogos-sobre-paulofreire": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/escritores-leitores": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/ficcoes-criancas": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/ficcoes-itau-cultural": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/mekukradja": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/paiol-literario": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/pedra-de-toque": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/podcast-observe": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/rumos-possiveis": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/ta-no-ar-producao": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/toca-brasil": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/podcasts/versoes-do-tempo": {
+   "podcasts": 342,
+   "subcategories": 14,
+   "items": 3
+  },
+  "/series/aconteceunoic": {
+   "series": 79,
+   "subcategories": 4,
+   "items": 3
+  },
+  "/series/cineaulaicplay": {
+   "series": 79,
+   "subcategories": 4,
+   "items": 3
+  },
+  "/series/efemerides": {
+   "series": 79,
+   "subcategories": 4,
+   "items": 3
+  },
+  "/series/quemtraduziu": {
+   "series": 79,
+   "subcategories": 4,
+   "items": 3
+  }
+ },
+ "materias": {
+  "/a-carnauba-como-testemunha": true,
+  "/a-imaginacao-cenica-nos-extremos-": true,
+  "/aconteceu-no-ic--dezembro-de-2024": true,
+  "/aconteceu-no-ic--novembro-de-2024": true,
+  "/blecaute-novo-podcast-apoiado-pelo-ic-traz-diferentes-artistas-pensar-cultura-brasil": true,
+  "/canto-o-canto-dos-que-seguem-comigo": true,
+  "/cinco-anos-de-itau-cultural-play-a-janela-digital-que-acompanha-o-novo-folego-do-cinema-brasileiro": true,
+  "/cineaula-ic-play-1-o-terror-em-horacio-quiroga": true,
+  "/conheca-cinco-experiencias-de-gestao-cultural-em-curso-da-escola-fundacao": true,
+  "/critica-cultura-e-politica-acesse-a-publicacao-dedicada-a-mario-pedrosa": true,
+  "/curso-gratuito-ensina-usos-da-inteligencia-artificial-para-as-artes-e-o-marketing": true,
+  "/danca-contemporanea-bale-e-memoria-se-cruzam-em-transversa-novo-espetaculo-de-ana-catarina-vieira": true,
+  "/deco-farkas-traz-botanica-alienigena-para-fachada-do-itau-cultural": true,
+  "/dois-portos-reflexoes-sobre-diversidade-disparidade-e-deslocamentos": true,
+  "/estampa-com-carimbo--ic-para-criancas--tecidos": true,
+  "/estencil--ic-para-criancas--tecidos": true,
+  "/exposicao-percorre-toda-a-carreira-de-mestre-didi": true,
+  "/fabricio-mota-e-duda-almeida-sao-os-convidados-da-nova-edicao-do-sonora-brasiliana": true,
+  "/ficcoes-criancas---a-aventura-do-velho-baoba": true,
+  "/filmes-videos-artistas-mostra-on-line": true,
+  "/fotografia-modernista-brasileira-exposicao-virtual-itau": true,
+  "/gean-ramos-se-apresenta-no-itau-cultural": true,
+  "/gilberto-mendonca-teles-um-saci-contra-o-autoimperialismo": true,
+  "/hq-homenageia-nana-vasconcelos-como-o-heroi-do-berimbau": true,
+  "/ic-play-conclui-chamamento-para-producoes-audiovisuais-do-centro-oeste-e-do-norte-do-brasil": true,
+  "/imprensa": true,
+  "/inscreva-se-no-doutorado-profissional-em-artes-da-cena": true,
+  "/itau-cultural-disponibiliza-publicacoes-digitais-de-forma-gratuita": true,
+  "/itau-cultural-fecha-mais-cedo-no-dia-5-de-julho": true,
+  "/itau-cultural-lanca-dossie-sobre-acessibilidade": true,
+  "/joao-silverio-trevisan-destrincha-processo-do-romance-ana-em-veneza": true,
+  "/joao-silverio-trevisan-faz-80-anos": true,
+  "/leia-gratuitamente-as-versoes-digitais-das-publicacoes-do-projeto-ocupacao": true,
+  "/livros-de-artista-na-colecao-itau-cultural-destaca-obras-do-acervo-": true,
+  "/lousinha--ic-para-criancas--tecidos": true,
+  "/marcelo-marmelo-ocupacao-ruth-rocha-recebe-homenagem-no-itau-cultural": true,
+  "/mostra-sem-fronteiras-traz-o-real-e-o-sonho-em-dialogo-na-ic-play": true,
+  "/no-reino-de-bruno-berle": true,
+  "/o-comboio-da-ilusao-de-patricia-polayne": true,
+  "/o-hip-hop-floresce-na-fachada-do-itau-cultural-com-a-pintura-de-ricardo-sotaq": true,
+  "/o-que-e-filosofia-pop": true,
+  "/o-ser-tao-pragmatico-de-tom-ze": true,
+  "/para-gio-elefante-arte-e-reparacao-historica-em-nivel-pessoal": true,
+  "/reconstruindo-transmasculinidades": true,
+  "/relatos-de-criacao-as-questoes-do-envelhecer-e-a-origem-de-um-romance": true,
+  "/secoes/observatorio-itau-cultural/direitos-culturais-perspectivas-brasil-atual-contemporaneo": true,
+  "/secoes/observatorio-itau-cultural/web-2-0-web-3-0-economia-criativa-transformacao-regulacao": true,
+  "/show-de-edivan-fulni-o-apresenta-a-ancestralidade-negra-e-indigena": true,
+  "/soturna-de-thati-dias": true,
+  "/souto-mc-traz-seu-show-flow-marginal-ao-palco-do-itau-cultural-": true,
+  "/trabalhe-conosco": true,
+  "/universo-dos-games-e-tema-de-programacao-do-itau-cultural": true,
+  "/veja-as-ocupacoes-que-passaram-pelo-ic-em-2024": true
+ },
+ "falhas": [
+  {
+   "rota": "/",
+   "erro": "HTTP 404"
+  },
+  {
+   "rota": "/biblioteca",
+   "erro": "Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+   "rota": "/espaco-olavo-setubal/AboutSpace",
+   "erro": "Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+   "rota": "/espaco-olavo-setubal/Collection",
+   "erro": "Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+   "rota": "/espaco-olavo-setubal/PhotosAndVideos",
+   "erro": "Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+   "rota": "/newsletter",
+   "erro": "Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+   "rota": "/contato",
+   "erro": "Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+   "rota": "/quem-somos/Aboutus",
+   "erro": "Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+   "rota": "/quem-somos/Founder",
+   "erro": "Expecting value: line 1 column 1 (char 0)"
+  }
+ ]
+}

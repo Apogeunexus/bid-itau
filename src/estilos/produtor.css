@@ -1,0 +1,162 @@
+/* ===========================================================================
+ * produtor.css — a página do produtor
+ *
+ * DE QUEM É: plano 05-03.
+ * DECLARADA E VAZIA DE REGRA por 05-01, na onda 1 da fase 5.
+ *
+ * Ela chega aqui sem uma única regra de propósito. `src/app/globals.css` é o
+ * único arquivo que os seis planos da onda 2 tocariam, e dois executores
+ * editando a mesma folha é a colisão que o merge não resolve sozinho. Com as
+ * onze linhas de `@import` declaradas na onda 1, o ponto de colisão deixa de
+ * EXISTIR em vez de ser administrado: 05-03 escreve SÓ neste arquivo e não precisa
+ * abrir `globals.css` nem esperar os outros cinco.
+ *
+ * Uma folha vazia importada não custa byte no bundle final.
+ *
+ * O QUE ELA COBRE: a superfície de quem publica: identificação, acervo do produtor e o que ele declara. Vale nas duas visões.
+ *
+ * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`, e há gate medindo isso.
+ *  - Nenhum hex do manual: use `var(--ic-*)` e `color-mix` para transparência
+ *    (D-06, D-08).
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]` ou
+ *    `[data-view="mobile"]`. As variantes `desk:`/`app:` só prefixam
+ *    UTILITÁRIO do Tailwind e nunca alcançam uma classe semântica nossa.
+ *  - Reuse o vocabulário de `web.css` antes de escrever regra nova: ele já traz
+ *    duas colunas, grade parametrizada, coluna fixa, painel, realce, alternador,
+ *    declaração com denominador e lista densa.
+ *  - Nada de posicionamento preso à janela (`position: fixed`) fora de
+ *    `casca.tsx` — dentro da moldura de celular ele escapa e quebra D-03.
+ * ======================================================================== */
+
+/* ===========================================================================
+ * AS REGRAS DO PLANO 05-03. O cabeçalho herdado de 05-01 fica intacto acima.
+ *
+ * A tela do produtor é MOBILE (APPX-05, superfície app). A visão web dela é
+ * Camada 3 e NÃO é escopo desta fase: o que se faz aqui por `[data-view="web"]`
+ * é só não deixá-la feia dentro da moldura larga — nenhuma densidade nova,
+ * nenhum painel colado, nenhuma tabela.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * O BLOCO «O QUE ESTÁ EM CARTAZ AGORA» — D-90, e o bloco mais difícil da tela.
+ *
+ * Ele é obrigatório na tela 24, o acervo não o sustenta em NENHUMA das 359
+ * páginas, e não pode sumir nem aparecer zerado sem explicação. Visualmente ele
+ * usa a mesma gramática que a fase 4 fixou para declaração honesta e que
+ * `.web-declaracao` de `web.css` repete na visão web: barra laranja à esquerda,
+ * fundo de laranja diluído por `color-mix`. O leitor já sabe que aquela barra
+ * quer dizer «a tela está te dizendo por quê».
+ *
+ * NÃO é `.comentario`: com o modo comentado desligado ele CONTINUA na tela. É
+ * produto, e a regra `[data-comentado="nao"] .comentario` de `globals.css` não
+ * o alcança porque ele nunca teve essa classe.
+ * ------------------------------------------------------------------------ */
+.pr-cartaz {
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--ic-laranja);
+  border-radius: 0 1rem 1rem 0;
+  background: color-mix(in srgb, var(--ic-laranja) 7%, transparent);
+}
+
+.pr-cartaz-frase {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+/* Os denominadores em linha. Número grande, rótulo pequeno: é o número que
+ * sustenta a frase, e é ele que a foto do slide precisa pegar. */
+.pr-denominadores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.35rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pr-denominador {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.pr-denominador-numero {
+  font-family: var(--fonte-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pr-denominador-rotulo {
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * A LISTA DE VÍNCULOS ROLA POR DENTRO quando é longa.
+ *
+ * Uma instituição realiza até dezenas de eventos e chega a 21 pessoas a dois
+ * saltos. Dentro da moldura de 390 px isso empurraria «linguagens» e
+ * «conteúdo editorial» para dois mil pixels abaixo, e um bloco que ninguém
+ * alcança rolando é, na prática, um bloco que sumiu — que é justamente o que
+ * esta tela não pode ter.
+ * ------------------------------------------------------------------------ */
+.pr-bloco > ul {
+  max-height: 22rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* ---------------------------------------------------------------------------
+ * VISÃO WEB — só o suficiente para a tela não ficar uma coluna de 1.100 px de
+ * largura com listas de duas palavras.
+ *
+ * `.pr-tela` vira grade de duas colunas iguais, e não `.web-duas-colunas`: o
+ * vocabulário de `web.css` é painel principal MAIS lateral de 22 rem, que é o
+ * desenho da ficha do evento e da busca. Aqui não há principal nem lateral —
+ * há cinco blocos do mesmo peso. Reusar a classe errada faria a tela herdar
+ * uma hierarquia que ela não tem.
+ *
+ * Identificação, território, «em cartaz» e o rodapé atravessam as duas colunas:
+ * o primeiro porque é o cabeçalho da entidade, o segundo porque é uma linha só e
+ * ao lado de meia grade vazia parece defeito em vez de decisão, o terceiro porque
+ * é a declaração de D-90 e ela não é uma coluna entre outras, e o quarto porque é
+ * o pé da página.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .pr-tela {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--web-gap, 1.5rem);
+}
+
+[data-view="web"] .pr-identificacao,
+[data-view="web"] .pr-territorio,
+[data-view="web"] .pr-cartaz,
+[data-view="web"] .pr-rodape {
+  grid-column: 1 / -1;
+}
+
+[data-view="web"] .pr-bloco {
+  padding: 1.25rem;
+  border: var(--web-borda, 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent));
+  border-radius: var(--web-raio, 1rem);
+  background: var(--ic-branco);
+}
+
+/* O «em cartaz» é declaração, não painel: mantém a barra laranja e não ganha a
+ * moldura de painel que os outros blocos recebem na web. */
+[data-view="web"] .pr-cartaz {
+  border: 0;
+  border-left: 3px solid var(--ic-laranja);
+}
+
+/* Na moldura larga cabe mais lista antes de a rolagem interna começar. */
+[data-view="web"] .pr-bloco > ul {
+  max-height: 26rem;
+}

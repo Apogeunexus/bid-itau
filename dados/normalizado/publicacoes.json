@@ -1,0 +1,1506 @@
+[
+ {
+  "id": "publicacao:13616",
+  "tipo": "publicacao",
+  "titulo": "Itaú Cultural disponibiliza publicações digitais de forma gratuita",
+  "resumo": "Acesse as publicações digitais do Itaú Cultural nas plataformas Amazon, Google, Apple, Skeelo e Tocalivros",
+  "slug": "itau-cultural-disponibiliza-publicacoes-digitais-de-forma-gratuita",
+  "publicadoEm": "2025-12-22T17:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:49 de 22/12/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1062/file/optimized-7673e41523e3fd61c7ef8c52c76ef40c.jpg",
+  "imagemAlt": "Na imagem, Dona Onete posa sorrindo, olhando para cima e com as mãos na cabeça. Ela tem cabelos curtos e usa anéis e colar dourados e um vestido preto com estampa floral rosada.",
+  "creditoImagem": "André Seiti",
+  "categoria": "noticias",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "itau-cultural-disponibiliza-publicacoes-digitais-de-forma-gratuita",
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias"
+  ]
+ },
+ {
+  "id": "publicacao:1646",
+  "tipo": "publicacao",
+  "titulo": "Itaú Cultural lança dossiê sobre acessibilidade",
+  "resumo": "Publicação busca compartilhar exemplos e recomendações de boas práticas no setor cultural",
+  "slug": "itau-cultural-lanca-dossie-sobre-acessibilidade",
+  "publicadoEm": "2025-11-07T13:10:00.000-03:00",
+  "atualizadoEm": "Atualizado às 13:10 de 07/11/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/3583/file/optimized-225587985f858a5ed897fd800dfede93.jpeg",
+  "imagemAlt": "Dois homens se estendem um ao outro, separados por um retângulo de luz no chão escuro. A claridade do tapete branco parece respirar e pulsar luz, no centro da sala, cercada pela penumbra. À esquerda, o homem em cadeira de rodas projeta o corpo à frente, o braço esquerdo erguido em gesto de alcance. As pernas amputadas se revelam sob o short cor de areia. O homem na cadeira de rodas usa um casaco de lã quadriculado em tons de marrom e bege, abotoado sobre uma camisa branca. O semblante dele traz a urgência de quem quer tocar o outro. À direita, o segundo homem espelha o gesto: inclina-se para frente, a mão direita aberta no mesmo desejo de encontro. Usa roupas semelhantes, casaco, calça clara, e o rosto sem barba reflete o mesmo esforço silencioso. Ambos permanecem à margem da luz, sobre o piso negro que se confunde com o fundo da cena. Acima deles, o teto branco exibe um emaranhado geométrico de tubos e refletores que projetam uma iluminação amarelada e densa, como se o ar inteiro vibrasse com o impulso contido desse toque a distância.",
+  "creditoImagem": "Enio Cesar",
+  "categoria": "noticias",
+  "linguagens": [],
+  "temas": [
+   "acessibilidade"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "itau-cultural-lanca-dossie-sobre-acessibilidade",
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias"
+  ]
+ },
+ {
+  "id": "publicacao:1594",
+  "tipo": "publicacao",
+  "titulo": "Caderno do Professor trata de arte e política a partir de Rivane Neuenschwander",
+  "resumo": "Livreto traz sugestões de como levar discussões sobre arte contemporânea à sala de aula",
+  "slug": "caderno-do-professor-trata-de-arte-e-politica-a-partir-de-rivane-neuenschwander",
+  "publicadoEm": "2025-10-06T10:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:28 de 06/10/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/3366/file/optimized-ab04c5b719c6c0c118339b92b231eec4.jpeg",
+  "imagemAlt": "Fitas finas, coloridas, com escritos em inglês penduradas em uma parede branca.",
+  "creditoImagem": "Divulgação",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:1557",
+  "tipo": "publicacao",
+  "titulo": "Conheça a publicação da “Ocupação Paulo Herkenhoff”",
+  "resumo": "Parte da “69ª Ocupação Itaú Cultural”, o livro homenageia o curador, gestor cultural, crítico de arte e artista brasileiro",
+  "slug": "conheca-publicacao-da-ocupacao-paulo-herkenhoff",
+  "publicadoEm": "2025-09-01T11:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 11:13 de 01/09/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/3382/file/optimized-b6e289413b981f098b8a1a7247ffaab0.jpeg",
+  "imagemAlt": "Imagem com fundo azul-escuro e, ao centro, o nome “Paulo Herkenhoff” escrito em letras brancas estilizadas, com traços geométricos e cortes nas junções das letras. Abaixo, em caixa alta, lê-se a palavra “OCUPAÇÃO”",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:170",
+  "tipo": "publicacao",
+  "titulo": "“Caderno do professor” propõe atividades sobre artes visuais e literatura negra",
+  "resumo": "Com base em metodologia criada por Ana Mae Barbosa, sequência didática promove educação antirracista",
+  "slug": "caderno-do-professor-propoe-atividades-sobre-artes-visuais-e-literatura-negra",
+  "publicadoEm": "2025-04-28T16:13:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:32 de 23/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2081/file/optimized-85c33ab11eac641a628acd1d435ebedc.png",
+  "imagemAlt": "Título do Caderno do professor",
+  "creditoImagem": "Divulgação",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [
+   "caderno do professor"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:912",
+  "tipo": "publicacao",
+  "titulo": "Confira a publicação da “Ocupação Oswald de Andrade”",
+  "resumo": "O conteúdo, em formato de jornal, foca na produção jornalística do escritor",
+  "slug": "confira-a-publicacao-da-ocupacao-oswald-de-andrade",
+  "publicadoEm": "2025-01-30T17:56:35.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2614/file/optimized-b2608fc00c4037cb1c5812c6a71f8551.jpg",
+  "imagemAlt": "Fotografia em preto e branco de Oswald de Andrade com nove meses. A foto mostra Oswald, um homem branco, vestindo terno e gravata. Ele está sentado e inclinado para o lado esquerdo. ",
+  "creditoImagem": "Acervo CEDAE/Unicamp. Foto: autoria desconhecida",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:104",
+  "tipo": "publicacao",
+  "titulo": "Acesse o catálogo da mostra “Guto Lacaz: cheque mate”",
+  "resumo": "Artes visuais, design e ludicidade se misturam na obra de Guto",
+  "slug": "acesse-o-catalogo-da-mostra-guto-lacaz-cheque-mate",
+  "publicadoEm": "2024-12-27T17:52:37.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1503/file/optimized-78a823f15387e3bbb3deea686527bcda.png",
+  "imagemAlt": "Com fundo amarelo, um desenho de um homem com roupas pretas que observa um peixe flutuando à altura do seu olho.",
+  "creditoImagem": "Guto Lacaz",
+  "categoria": "publicacoes",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:438",
+  "tipo": "publicacao",
+  "titulo": "Leia a publicação da “Ocupação Leda Maria Martins”",
+  "resumo": "Esta publicação, parte da 67ª “Ocupação Itaú Cultural”, celebra a relação de Leda Maria Martins com a cultura e os rituais do Reinado",
+  "slug": "leia-a-publicacao-da-ocupacao-leda-maria-martins",
+  "publicadoEm": "2024-12-27T17:20:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2324/file/optimized-f00662700d637d925051a50c520fd0a3.jpg",
+  "imagemAlt": "Fotografia de Leda Maria Martins, uma mulher negra, de 69 anos. Ela está com uma roupa colorida e olha diretamente para a câmera.",
+  "creditoImagem": "Murilo Alvesso",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:756",
+  "tipo": "publicacao",
+  "titulo": "O presente e o futuro do metaverso, em dossiê",
+  "resumo": "Publicação do Itaú Cultural reúne textos que abordam essa ferramenta por diversas perspectivas, e discutem o futuro da internet",
+  "slug": "o-presente-e-o-futuro-do-metaverso-em-dossie",
+  "publicadoEm": "2024-11-25T17:21:35.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/639/file/optimized-e79c2abdb738e63963f15b4683867032.png",
+  "imagemAlt": "Sobre um fundo nas cores laranja e azul, está escrito Dossiê Metaverso.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "publicacoes",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:597",
+  "tipo": "publicacao",
+  "titulo": "“Caderno do professor’’ apresenta “Verbete”, nova ferramenta enciclopédica",
+  "resumo": "A publicação traz um plano de aulas para incentivar a pesquisa",
+  "slug": "novo-caderno-do-professor-apresenta-verbete-nova-ferramenta-enciclopedica",
+  "publicadoEm": "2024-10-25T21:02:40.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/976/file/optimized-29db743ab1d0b0541b1177f52dbc5ae6.jpg",
+  "imagemAlt": "Na imagem desenhos na cor laranja e está escrito ''Verbete''",
+  "creditoImagem": "divulgação",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [
+   "caderno do professor"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:1158",
+  "tipo": "publicacao",
+  "titulo": "Lúdico, experimental e surpreendente: o \"Caderno do Professor\" enfoca Guto Lacaz",
+  "resumo": "Acesse um plano de aula que explora as possibilidades da obra do artista visual",
+  "slug": "ludico-experimental-e-surpreendente-o-caderno-do-professor-enfoca-guto-lacaz",
+  "publicadoEm": "2024-09-05T22:37:12.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/888/file/optimized-8e4aec33f463611fbcb60209e275b4be.png",
+  "imagemAlt": "Capa do Caderno do Professor sobre Guto Lacaz",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [
+   "caderno do professor"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:1182",
+  "tipo": "publicacao",
+  "titulo": "“a_ponte”: confira os selecionados do “Pontilhados 2023/2024”",
+  "resumo": "O projeto busca reunir estudantes de artes cênicas de todo o país para promover a renovação da cena teatral",
+  "slug": "a_ponte-confira-os-selecionados-do-pontilhados-20232024",
+  "publicadoEm": "2024-07-12T20:25:50.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/780/file/optimized-a5b96cee135e196da26563184dd1da73.jpg",
+  "imagemAlt": "Imagem colorida com a identidade visual da mostra a_ponte. Com um fundo azul, a imagem traz o nome da mostra em letras brancas.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "noticias",
+  "linguagens": [
+   "pesquisa"
+  ],
+  "temas": [
+   "artes cênicas"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:623",
+  "tipo": "publicacao",
+  "titulo": "Mapas, arte e viagem e são temas do “Caderno do professor”",
+  "resumo": "O plano de aula traz atividades em torno dos sentidos do espaço",
+  "slug": "mapas-arte-e-viagem-e-sao-temas-do-caderno-do-professor",
+  "publicadoEm": "2024-06-27T20:51:19.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/489/file/optimized-a7b1c3992ca02a1e9d3d277475437e5e.png",
+  "imagemAlt": "Na imagem está escrito o texto \"Cartografia para pequenos percursos\"",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:247",
+  "tipo": "publicacao",
+  "titulo": "Novo “Caderno do professor” aborda a obra de Cildo Meireles",
+  "resumo": "Plano de aula “Cildo Meireles: a arte é a vida!” é voltado para o ensino médio",
+  "slug": "novo-caderno-do-professor-aborda-a-obra-de-cildo-meireles",
+  "publicadoEm": "2024-04-26T21:31:57.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/168/file/optimized-84bf2042ff9520ac147d70035442bb06.jpg",
+  "imagemAlt": "Capa do caderno do professor sobre a obra de Cildo Meireles. Na imagem, há o título da publicação em fontes pretas ao centro: Cildo Meireles, a arte é a vida. No topo da imagem há o texto Caderno do Professor e o logo da Enciclopédia Itaú Cultural.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "publicacoes",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "formação",
+   "caderno do professor"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:871",
+  "tipo": "publicacao",
+  "titulo": "“Caderno do professor” propõe atividades e debates em torno dos museus",
+  "resumo": "Plano de aula \"Museus: arte e memória em exposição\" é voltado para o ensino médio",
+  "slug": "caderno-do-professor-propoe-atividades-e-debates-em-torno-dos-museus",
+  "publicadoEm": "2024-02-26T20:53:56.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2187/file/optimized-27dabf37589c7ad9a3e389e37dbd85d6.jpg",
+  "imagemAlt": "Fotografia de uma sala de piso branco cujas paredes apresentam diversos quadros com pássaros da fauna brasileira.",
+  "creditoImagem": "Edouard Fraipont",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [
+   "caderno do professor"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:874",
+  "tipo": "publicacao",
+  "titulo": "Projeto “a_ponte” lança a nova edição da publicação “Pontilhados”",
+  "resumo": "Conheça as pesquisas selecionadas na convocatória de 2023",
+  "slug": "projeto-a_ponte-lanca-a-nova-edicao-da-publicacao-pontilhados",
+  "publicadoEm": "2024-01-19T23:52:17.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/780/file/optimized-a5b96cee135e196da26563184dd1da73.jpg",
+  "imagemAlt": "Imagem colorida com a identidade visual da mostra a_ponte. Com um fundo azul, a imagem traz o nome da mostra em letras brancas.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "noticias",
+  "linguagens": [
+   "pesquisa"
+  ],
+  "temas": [
+   "artes cênicas"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:1152",
+  "tipo": "publicacao",
+  "titulo": "Acesse o terceiro volume da coleção “Economia da cultura e indústrias criativas”",
+  "resumo": "Inovação e impacto econômico se destacam entre os temas do livro, que conta com uma entrevista com o ministro do Arts Council do Reino Unido, Peter Bazalgette",
+  "slug": "confira-o-terceiro-volume-da-colecao-economia-da-cultura-e-industrias-criativas",
+  "publicadoEm": "2023-11-22T00:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1565/file/optimized-0e2d88375ad13a0a18a66b8483967f3e.jpg",
+  "imagemAlt": "Homenagem ao palhaço, óleo sobre tela sobre MDF, 90x 135cm, 2020. Obra de Rodrigo Andrade",
+  "creditoImagem": "Rodrigo Andrade",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "economia da cultura",
+   "gestao cultural"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "observatorio__conteudos.publicacoes",
+   "observatorio__publicacoes.books",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:553",
+  "tipo": "publicacao",
+  "titulo": "Revista Obs 36 | Direitos Culturais: perspectivas no Brasil contemporâneo",
+  "resumo": "Edição discute o histórico, os avanços e os obstáculos dos direitos culturais no país e como garantir esses direitos em um país tão plural como o Brasil",
+  "slug": "direitos-culturais-perspectivas-brasil-atual-contemporaneo",
+  "publicadoEm": "2023-10-23T21:27:33.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/234/file/optimized-d0117cab08f1fe617da9244cd958458b.jpg",
+  "imagemAlt": "Capa da Revista Observatório 36 \"Direitos Culturais: perspectivas no Brasil contemporâneo\". A capa é um desenho do artista Denilson Baniwa, com um personagem central com desenhos no corpo, segurando um megafone com falas em um balão se referindo a artes indígenas. Na canto inferior, ao lado do personagem central, há também o deseneho de uma onça. A capa da revista é toda em tons marrons e há um quadrado marrom escuro com o logo da revista e o título, em letras amarelas. ",
+  "creditoImagem": "Itaú Cultural/ Denilson Baniwa",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "observatorio__conteudos.publicacoes",
+   "observatorio__publicacoes.revistaObservatorio",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:1125",
+  "tipo": "publicacao",
+  "titulo": "Acesse guia de aplicação para projetos culturais e criativos O Valor da cultura",
+  "resumo": "A publicação elucida como medir o impacto de projetos artísticos e culturais",
+  "slug": "manual-o-valor-da-cultura-com-metodologia-de-pesquisa-disponivel-para-download",
+  "publicadoEm": "2023-10-23T16:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/799/file/optimized-b3e0188b67553c566e73888c8ed35882.jpg",
+  "imagemAlt": "Capa da publicação \"O Valor da Cultura: rumo a uma nova narrativa\". O Fundo é em roxo e algumas formas geométricas coloridos em amarelo, azul e rosa, também compõem a capa. O título mencionado está em letra branca e centralizado na capa.  ",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "pesquisa"
+  ],
+  "temas": [
+   "políticas culturais",
+   "gestao cultural"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "observatorio__conteudos.publicacoes",
+   "observatorio__publicacoes.books",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:634",
+  "tipo": "publicacao",
+  "titulo": "Esperança Garcia e o 6 de setembro piauiense",
+  "resumo": "Projeto contemplado pelo programa “Rumos Itaú Cultural” que resgata a história de Esperança está disponível para download",
+  "slug": "esperanca-garcia-6-setembro-piauiense",
+  "publicadoEm": "2023-09-06T17:24:20.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1482/file/optimized-a290c88cf320d8e6092fe3536359d5a1.jpg",
+  "imagemAlt": "Imagem colorida da capa da publicação A voz de Esperança Garcia. Na imagem há o título escrito em letra cursiva em amarelo, os nomes dos autores em preto e é possível ver o desenho de uma lua crescente e uma estrela e algumas formas humanas",
+  "creditoImagem": "Quinta Capa",
+  "categoria": "publicacoes",
+  "linguagens": [
+   "memória"
+  ],
+  "temas": [
+   "questoesraciais",
+   "rumos20192020",
+   "questoesdegenero",
+   "quadrinhos"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [
+   "agente:1"
+  ],
+  "_origem": [
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:1088",
+  "tipo": "publicacao",
+  "titulo": "Evolução da internet: entrevista de Silvio Meira por Cláudio Lins de Vasconcelos",
+  "resumo": "Entrevista de Silvio Meira aborda a questão da evolução da internet, sobre o impacto das novas tecnologias e o desafio da regulação do universo digital",
+  "slug": "evolucao-da-internet-entrevista-de-silvio-meira-por-claudio-lins-de-vasconcelos",
+  "publicadoEm": "2023-06-27T00:40:26.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2222/file/optimized-55f564a2cefd7b0664a963a40dbe953b.png",
+  "imagemAlt": "fundo rosa ao lado direito preto, escrito revista observatório Itaú cultural #35",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [
+   "tecnologia"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:978",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 35 - Ensaio Artístico",
+  "resumo": "Confira um pouco mais sobre as obras da série Flora da artista Rejane Cantoni que compôs o ensaio artístico da edição 35 da Revista Observatório Itaú Cultural",
+  "slug": "revista-observatorio-35---ensaio-artistico",
+  "publicadoEm": "2023-06-27T00:31:24.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2242/file/optimized-232fb878a9dfbaa3f664b28fa09c9809.png",
+  "imagemAlt": "fundo preto com obra da Rejane Cantoni ",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [
+   "tecnologia"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:315",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 35 - Expediente",
+  "resumo": "Confira o expediente e os envolvidos na produção da Revista Observatório 35",
+  "slug": "revista-observatorio-35---expediente",
+  "publicadoEm": "2023-06-23T19:38:42.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1045/file/optimized-a0aeffd25c78299292ee1ddf850e993c.png",
+  "imagemAlt": "fundo rosa e cinza, escrito revista observatório Itaú Cultura #35",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:23",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 35 - Carta ao Leitor",
+  "resumo": "Esta edição da Revista Observatório é um convite para os leitores mergulharem no tema da web 1.0 à web 3.0 e como isso impacta os setores criativos e cultural",
+  "slug": "rumos-possiveis",
+  "publicadoEm": "2023-06-23T19:28:57.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2242/file/optimized-232fb878a9dfbaa3f664b28fa09c9809.png",
+  "imagemAlt": "fundo preto com obra da Rejane Cantoni ",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [
+   "economia da cultura",
+   "tecnologia",
+   "gestao cultural"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "podcasts__rumos-possiveis",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:643",
+  "tipo": "publicacao",
+  "titulo": "Relações entre a desindustrialização brasileira e a indústria criativa",
+  "resumo": "Filipe da Silva, Gustavo Möller e Leandro Valiati analisam a desindustrialização no Brasil e no Mundo em relação com um modelo econômico baseado no conhecimento",
+  "slug": "desindustrializacao-brasil-mundo-economia-industria-criativa",
+  "publicadoEm": "2023-06-23T18:57:26.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2222/file/optimized-55f564a2cefd7b0664a963a40dbe953b.png",
+  "imagemAlt": "fundo rosa ao lado direito preto, escrito revista observatório Itaú cultural #35",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [
+   "economia da cultura"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:195",
+  "tipo": "publicacao",
+  "titulo": "Do on-line ao on-chain",
+  "resumo": "Artigo de Filipe Santos discute como as organizações na web 3.0 expressam novidade em governança, monetização e comunidades colaborativas",
+  "slug": "organizacoes-autonoma-decentralizada-dao-comunidades-web-3-0",
+  "publicadoEm": "2023-06-22T23:55:14.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2442/file/optimized-90d46eee8aaa5c1b5260fe2f56267ce5.png",
+  "imagemAlt": "Capa da revista Observatório, rosa, preto e da obra flora_bloom de Rejane Cantoni",
+  "creditoImagem": "imagem: FLORAS_BLOOM_#1 de  Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "tecnologia"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:178",
+  "tipo": "publicacao",
+  "titulo": "NFT e o direito",
+  "resumo": "Artigo de Gustavo Martins de Almeida apresenta um panorama geral sobre os non-fungible tokens (NFT) e explicita a relação dessa tecnologia com o campo da arte",
+  "slug": "panorama-geral-nft-arte-tecnologia",
+  "publicadoEm": "2023-06-22T21:48:51.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2443/file/optimized-dd50e3c672507eee04693c62fd3bc5b5.png",
+  "imagemAlt": "obra de Rejane Cantoni",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [
+   "tecnologia"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:648",
+  "tipo": "publicacao",
+  "titulo": "O NFT como verbo",
+  "resumo": "Gustavo Perino apresenta uma visão sobre NFT que extrapola a perspectiva sobre o valor individual desta tecnologia, privilegiando mais suas funções e objetivos",
+  "slug": "nft-como-verbo-objetivos-funcoes",
+  "publicadoEm": "2023-06-22T21:23:19.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2222/file/optimized-55f564a2cefd7b0664a963a40dbe953b.png",
+  "imagemAlt": "fundo rosa ao lado direito preto, escrito revista observatório Itaú cultural #35",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [
+   "tecnologia"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:217",
+  "tipo": "publicacao",
+  "titulo": "Néstor García Canclini ganha site sobre sua obra e lança livro",
+  "resumo": "Titular na Cátedra Olavo Setubal no biênio 2021-2022, o sociólogo analisa a sociedade, tratando de cultura, tecnologia e política",
+  "slug": "lancamento-de-site-e-livro-de-nestor-garcia-canclini",
+  "publicadoEm": "2023-06-17T00:05:31.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/634/file/optimized-91f2d5b8cf601fbb47b89b54f7343001.jpg",
+  "imagemAlt": "Capa do livro Emergências Culturais de Néstor García Canclini",
+  "creditoImagem": "Letícia Vieira (Itaú Cultural)",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "pesquisa"
+  ],
+  "temas": [
+   "formação",
+   "gestao cultural"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias",
+   "observatorio__conteudos.noticias"
+  ]
+ },
+ {
+  "id": "publicacao:267",
+  "tipo": "publicacao",
+  "titulo": "O impacto da digitalização nos modelos de negócio do setor editorial",
+  "resumo": "Filipe da Silva e Gustavo Möller analisam como o contexto do e-commerce e das plataformas digitais vem impactando o mercado editorial",
+  "slug": "impacto-digitalizacao-mercado-editorial",
+  "publicadoEm": "2023-06-15T00:27:12.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1045/file/optimized-a0aeffd25c78299292ee1ddf850e993c.png",
+  "imagemAlt": "fundo rosa e cinza, escrito revista observatório Itaú Cultura #35",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [
+   "economia da cultura",
+   "tecnologia",
+   "gestao cultural"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:166",
+  "tipo": "publicacao",
+  "titulo": "Os desafios da regulação do vídeo sob demanda no contexto da web 3.0",
+  "resumo": "Texto de Alessandra Meleiro e Debora Ivanov discute e reforça a importância da regulação do mercado de vídeo sob demanda no Brasil",
+  "slug": "desafios-regulacao-video-sob-demanda-brasil",
+  "publicadoEm": "2023-06-10T00:27:32.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2442/file/optimized-90d46eee8aaa5c1b5260fe2f56267ce5.png",
+  "imagemAlt": "Capa da revista Observatório, rosa, preto e da obra flora_bloom de Rejane Cantoni",
+  "creditoImagem": "imagem: FLORAS_BLOOM_#1 de  Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia",
+   "audiovisual"
+  ],
+  "temas": [
+   "economia da cultura",
+   "tecnologia"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:408",
+  "tipo": "publicacao",
+  "titulo": "Música nas webs 2.0 e 3.0: do streaming aos tokens",
+  "resumo": "Artigo de Daniela Ribas sobre a relação entre música e as tecnologias digitais, explorando a transição dos modelos das web 2.0 para web 3.0",
+  "slug": "musica-web-2-0-web-3-0",
+  "publicadoEm": "2023-06-10T00:06:13.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/790/file/optimized-8062e0aff39fefc6edd2340ded312357.png",
+  "imagemAlt": "Capa5_Revista Observatório 35",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [
+   "tecnologia"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:1074",
+  "tipo": "publicacao",
+  "titulo": "Abismo digital: desigualdades e privações no acesso à internet no Brasil",
+  "resumo": "O artigo busca mapear as desigualdades de acesso à internet no Brasil, compreendendo suas principais características e consequências",
+  "slug": "abismo-digital-desigualdades-acesso-internet-brasil",
+  "publicadoEm": "2023-06-09T23:49:18.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2242/file/optimized-232fb878a9dfbaa3f664b28fa09c9809.png",
+  "imagemAlt": "fundo preto com obra da Rejane Cantoni ",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "tecnologia"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:431",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 35 | Da web 2.0 à web 3.0",
+  "resumo": "Confira a nova edição da revista com o tema \"da web 2.0 à web 3.0\" que discute as transformações e desafios da economia criativa no novo cenário da internet",
+  "slug": "web-2-0-web-3-0-economia-criativa-transformacao-regulacao",
+  "publicadoEm": "2023-06-01T16:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/419/file/optimized-b034362b3b0f73d1620a9c24d46e9fb5.jpg",
+  "imagemAlt": "capa da revista observatório edição 35, fundo rosa com letras pretas, imagem da obrigada da Rejane Cantoni ",
+  "creditoImagem": "Rejane Cantoni",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [
+   "arte e tecnologia"
+  ],
+  "temas": [
+   "tecnologia",
+   "políticas culturais"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "observatorio__publicacoes.revistaObservatorio",
+   "publicacoes.publicacoes",
+   "secoes__observatorio-itau-cultural__direitos-culturais-perspectivas-brasil-atual-contemporaneo.revistaObservatorio"
+  ]
+ },
+ {
+  "id": "publicacao:1116",
+  "tipo": "publicacao",
+  "titulo": "Publicação de \"Todos os gêneros\" aborda a cultura drag queen",
+  "resumo": "Material parte das biografias de Brenda Lee e Kaká di Polly para investigar e discutir a cultura drag",
+  "slug": "publicacao-todos-generos-cultura-drag-queen",
+  "publicadoEm": "2023-05-25T21:44:18.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1098/file/optimized-463a9783222ce10808aa2a588cf25324.jpg",
+  "imagemAlt": "Imagem com fundo cinza e com diversas marcas de digitais pretas, rosa e lilás espalhadas na tela.",
+  "creditoImagem": "divulgação",
+  "categoria": "publicacoes",
+  "linguagens": [],
+  "temas": [
+   "questoesdegenero"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:452",
+  "tipo": "publicacao",
+  "titulo": "Conheça a publicação da exposição “Além das ruas: histórias do graffiti”",
+  "resumo": "Na publicação, há entrevistas, fotografias e sugestões de leitura para você conhecer mais sobre a história do grafite",
+  "slug": "conheca-publicacao-alem-das-ruas",
+  "publicadoEm": "2023-05-08T16:00:59.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2499/file/optimized-ae62ed9349d6b1bdd8bf55c4e72a290d.jpg",
+  "imagemAlt": "Logotipo da exposição Além das ruas: histórias do graffiti. O texto está em branco sobre um plano de fundo preto",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "publicacoes",
+  "linguagens": [
+   "cidade"
+  ],
+  "temas": [
+   "exposição",
+   "arte urbana"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:524",
+  "tipo": "publicacao",
+  "titulo": "\"Criatividade e Emancipação nas Comunidades-Rede\", de Cláudia Leitão, é lançado",
+  "resumo": "A obra promove a reflexão e a formulação de políticas públicas de economia criativa no Brasil voltadas para a construção de desenvolvimento sustentável",
+  "slug": "livro-criatividade-emancipacao-comunidades-rede-claudia-leitao",
+  "publicadoEm": "2023-04-27T20:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1170/file/optimized-1f85549cddad17d25727382ad1c9d47d.jpg",
+  "imagemAlt": "Imagem da obra \"Magia\" 2014 de Sonia Gomes",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "economia da cultura",
+   "políticas culturais"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "observatorio__publicacoes.books",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:980",
+  "tipo": "publicacao",
+  "titulo": "Caderno “Ensaios de fruição” abre o processo criativo de Magiluth",
+  "resumo": "Acesse a publicação que aborda o processo criativo do grupo teatral em sua obra “Miró: estudo nº 2”, sobre o poeta Miró da Muribeca",
+  "slug": "caderno-ensaios-fruicao-processo-criativo-magiluth",
+  "publicadoEm": "2023-04-20T16:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/796/file/optimized-ad2b5811eb2af63ecf9f8e5da9cbc9bd.jpg",
+  "imagemAlt": "Imagem de um grupo de pessoas em uma sala ensaiando. São quatro homens, andando de um lado para o outro da sala. A imagem tem um filtro vermelho.",
+  "creditoImagem": "divulgação",
+  "categoria": "publicacoes",
+  "linguagens": [
+   "pesquisa",
+   "teatro"
+  ],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias",
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:110",
+  "tipo": "publicacao",
+  "titulo": "\"Métodos e Técnicas de Pesquisa para Economia Criativa e da Cultura\"",
+  "resumo": "Terceiro volume da série apresenta  instrumentos conceituais e analíticos capazes de auxiliar na mensuração das atividades econômicas típicas dos campo",
+  "slug": "metodos-e-tecnicas-de-pesquisa-para-economia-criativa-e-da-cultura",
+  "publicadoEm": "2023-04-17T18:16:08.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/330/file/optimized-d1d83ad4f28edfa1dea26559f9d157e8.jpg",
+  "imagemAlt": "Capa do livro Introdução a Economia Criativa e da Cultura em roxo e azul, escrito em letras brancas com o nome dos organizadores também em branco escrito Marcelo Milan, Gustavo Möller e Debora Wobeto, a capa também traz formas geométricas. ",
+  "creditoImagem": "itaú cultural",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "economia da cultura",
+   "gestao cultural"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:13607",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 34 | Expediente",
+  "resumo": "Expediente da edição 34 da Revista Observatório \"PIB da Economia da Cultura e Indústrias Criativas\"",
+  "slug": "revista-observatorio-34-pib-economia-da-cultura-expediente",
+  "publicadoEm": "2023-04-10T20:44:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:16 de 20/06/2023",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/9032/file/optimized-f3f2f91d5b31f4309ba5ec04ebe52788.jpeg",
+  "imagemAlt": "Imagem não identificável que tem vários olhos turcos.",
+  "creditoImagem": "Adriano Catenzaro",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "revista observatorio 34",
+   "pib economia cultura"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:13593",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 34 | Ensaio Artístico",
+  "resumo": "Ensaio artístico da Revista Observatório 34 \"PIB da Economia da Cultura e Indústrias Criativas\"",
+  "slug": "revista-observatorio-pib-economia-cultura-industrias-criativas",
+  "publicadoEm": "2023-04-10T20:43:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:28 de 20/06/2023",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/9024/file/optimized-80e2c2817436fbacaf0b84ec889df5f5.jpeg",
+  "imagemAlt": "Papeis coloridos que forma uma imagem com diversas construções.",
+  "creditoImagem": "Adriano Catenzaro",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "revista observatorio 34"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:13594",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 34 | O processo de construção do PIB da Economia da Cultura e das Indústrias Criativas | Entrevista",
+  "resumo": "Entrevista de Leandro Valiati para Flávia Oliveira integra a Revista Observatório 34 \" PIB da Economia da Cultura e Indústrias Criativas\"",
+  "slug": "revista-observatorio-34-pib-economia-cultura-entrevista",
+  "publicadoEm": "2023-04-10T20:42:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:27 de 20/06/2023",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/9033/file/optimized-40c6a9f9dbc4f2a83337aee202a1e0a2.jpeg",
+  "imagemAlt": "Imagem não identificável feita com pedaços de cartões de créditos.",
+  "creditoImagem": "Adriano Catenzaro",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "revista observatorio 34",
+   "pib economia da cultura"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:13606",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 34 | Produto Interno Bruto da Economia da Cultura e das Indústrias Criativas: uma abordagem pela ótica da renda",
+  "resumo": "Nesse artigo os autores propõe uma discussão de cálculo do PIB para o setor da cultura e das indústrias criativas brasileiro pela ótica na renda e não pela ótica tradicional que é do produto",
+  "slug": "revista-observatorio-34-pib- economia-cultura-abordagem-pela-otica-renda",
+  "publicadoEm": "2023-04-10T20:40:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:15 de 20/06/2023",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/9035/file/optimized-06471bfc4eee6557b3e1faa8e2ed2756.jpeg",
+  "imagemAlt": "Imagem com papéis coloridos que forma uma grande construção.",
+  "creditoImagem": "Adriano Catenzaro",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "revista observatorio 34",
+   "pib economia da cultura"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:13605",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 34 | Impactos da tecnologia digital na mensuração, monetização e participação cultural e criativa",
+  "resumo": "O artigo de Marcelo Milan avalia as contribuições dos autores Moreau, Navarrete, Rey e Sacco a partir do fio condutor da tecnologia digital",
+  "slug": "revista-observatorio-34-pib-impactos-tecnologia-digital-mensuracao-monetizacao",
+  "publicadoEm": "2023-04-10T20:39:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:17 de 20/06/2023",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/9036/file/optimized-cf26eb57a155c6381b2a014f9fc2baf6.jpeg",
+  "imagemAlt": "Imagem não identificável com papéis coloridos.",
+  "creditoImagem": "Adriano Catenzaro",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "revista observatorio 34",
+   "pib economia da cultura"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:13604",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 34 | A participação cultural na era digital. O que medir e por quê?",
+  "resumo": "Em seu artigo Pier Luigi Sacco analisa a participação cultural mediada digitalmente e destaca a importância das novas formas dessa participação sejam fundamentadas na criação coletiva como paradigmas transformacionais de mudança comportamental e social",
+  "slug": "revista-observatorio-34-a-participacao-cultural-era-digital-o-que-medir-porque",
+  "publicadoEm": "2023-04-10T20:38:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:18 de 20/06/2023",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/9028/file/optimized-dd1704c9207ceb7dab7706feb544a8f3.jpeg",
+  "imagemAlt": "Com fundo de cor laranja a imagem é formada por papéis coloridos que tem vários conectores.",
+  "creditoImagem": "Adriano Catenzaro",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "revista observatorio 34",
+   "pib economia da cultura"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ },
+ {
+  "id": "publicacao:13603",
+  "tipo": "publicacao",
+  "titulo": "Revista Observatório 34 | Participação cultural digital como elemento de produção",
+  "resumo": "Trilce Navarrete em seu artigo analisa como patrimônio digital pode contribuir no setor cultural além dos usos relacionados ao patrimônio",
+  "slug": "revista-observatorio-34- pib- economia-participacao-cultural-digital-elemento",
+  "publicadoEm": "2023-04-10T20:37:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:19 de 20/06/2023",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/9031/file/optimized-55b6543b33ec71babfab74cbf3283534.jpeg",
+  "imagemAlt": "Imagem feita de papéis brancos que forma a imagem de uma torre, com fundo marrom claro.",
+  "creditoImagem": "Adriano Catenzaro",
+  "categoria": "observatorio-itau-cultural",
+  "linguagens": [],
+  "temas": [
+   "revista observatorio 34",
+   "pib economia da cultura"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "publicacoes.publicacoes"
+  ]
+ }
+]

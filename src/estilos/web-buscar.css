@@ -1,0 +1,142 @@
+/* ===========================================================================
+ * web-buscar.css — Buscar com as facetas em coluna permanente (D-80)
+ *
+ * DE QUEM É: plano 05-02.
+ * DECLARADA E VAZIA DE REGRA por 05-01, na onda 1 da fase 5.
+ *
+ * Ela chega aqui sem uma única regra de propósito. `src/app/globals.css` é o
+ * único arquivo que os seis planos da onda 2 tocariam, e dois executores
+ * editando a mesma folha é a colisão que o merge não resolve sozinho. Com as
+ * onze linhas de `@import` declaradas na onda 1, o ponto de colisão deixa de
+ * EXISTIR em vez de ser administrado: 05-02 escreve SÓ neste arquivo e não precisa
+ * abrir `globals.css` nem esperar os outros cinco.
+ *
+ * Uma folha vazia importada não custa byte no bundle final.
+ *
+ * O QUE ELA COBRE: a coluna de facetas que na visão app é tela à parte e na web fica visível o tempo todo ao lado dos resultados. Reuse .web-coluna-fixa.
+ *
+ * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`, e há gate medindo isso.
+ *  - Nenhum hex do manual: use `var(--ic-*)` e `color-mix` para transparência
+ *    (D-06, D-08).
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]` ou
+ *    `[data-view="mobile"]`. As variantes `desk:`/`app:` só prefixam
+ *    UTILITÁRIO do Tailwind e nunca alcançam uma classe semântica nossa.
+ *  - Reuse o vocabulário de `web.css` antes de escrever regra nova: ele já traz
+ *    duas colunas, grade parametrizada, coluna fixa, painel, realce, alternador,
+ *    declaração com denominador e lista densa.
+ *  - Nada de posicionamento preso à janela (`position: fixed`) fora de
+ *    `casca.tsx` — dentro da moldura de celular ele escapa e quebra D-03.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * O CORPO EM DUAS COLUNAS, COM AS FACETAS À ESQUERDA (D-80, tela 28).
+ *
+ * `.web-duas-colunas` de `web.css` já traz a grade, o `align-items: start` que permite à
+ * coluna colar e o `minmax(0, 1fr)` que impede um título sem quebra de estourar a linha.
+ * O que ela NÃO traz é a ordem: o vocabulário compartilhado foi escrito para «principal +
+ * lateral», com o lateral à direita, que é o que a página do evento pede em 05-03. Aqui a
+ * coluna vem à ESQUERDA, e é por isso que esta folha redeclara as faixas — sobrescrever o
+ * compartilhado na folha da tela é exatamente o que a ordem dos `@import` de `globals.css`
+ * existe para permitir, e é mais barato que uma segunda classe em `web.css`, que 05-02 não
+ * pode editar.
+ *
+ * A COLOCAÇÃO É EXPLÍCITA, e não por `order`. Os dois filhos estão no DOM na ordem da fase
+ * 3 — resultados, depois facetas — e `grid-column` os põe onde o olho precisa sem mexer na
+ * ordem de leitura de quem usa teclado ou leitor de tela. `grid-row: 1` nos dois é o que
+ * os mantém na MESMA faixa: sem ele, o item colocado na coluna 1 depois de um item na
+ * coluna 2 cai para a linha seguinte, e a coluna de facetas apareceria embaixo dos
+ * resultados — presente, visível, e visivelmente errada.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .busca-corpo {
+  /* 20rem = 320px. A conta: 1.088px úteis dentro da moldura `max-w-6xl` menos 24px de
+   * `--web-gap` deixam 744px para os resultados, que dão duas colunas de 360px — largura
+   * em que o título de um resultado cabe em duas linhas ao lado da capa de 56px. */
+  grid-template-columns: var(--busca-facetas, 20rem) minmax(0, 1fr);
+}
+
+[data-view="web"] .busca-corpo > [data-coluna-facetas] {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+[data-view="web"] .busca-corpo > [data-coluna-resultados] {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* ---------------------------------------------------------------------------
+ * A COLUNA DE FACETAS.
+ *
+ * `.web-coluna-fixa` já cola no topo e rola por dentro. O que falta é o que a faz LER como
+ * uma coluna e não como uma pilha de fichas soltas ao lado do resultado: uma borda que a
+ * delimita e um fundo próprio. Sem isso, numa tela de 1.440px as fichas de faceta flutuam
+ * na margem esquerda e a pessoa não vê uma coluna — vê sobra.
+ *
+ * O respiro à direita é menor que os outros três de propósito: é por ali que passa a barra
+ * de rolagem interna que `.web-coluna-fixa` instala, e `padding-right: 0.35rem` dela mais
+ * 1rem daqui afastariam as fichas da própria borda.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] [data-coluna-facetas] {
+  padding: 1rem 0.65rem 1rem 1rem;
+  border: var(--web-borda);
+  border-radius: var(--web-raio);
+  background: color-mix(in srgb, var(--ic-preto) 2%, var(--ic-branco));
+}
+
+/* ---------------------------------------------------------------------------
+ * OS RESULTADOS EM GRADE.
+ *
+ * Duas colunas, pelo número que `.web-grade` parametriza. Duas e não três: a etiqueta de
+ * tipo (D-63) e os selos de linguagem convivem na mesma linha do título, e a 240px de
+ * coluna a etiqueta desce sozinha para uma linha própria — a tela passaria a mostrar o
+ * tipo de todo resultado deslocado do resultado.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] [data-grade-resultados] {
+  --web-colunas: 2;
+}
+
+/* Na visão app o resultado é uma LINHA separada da anterior por um traço (`busca.css`), e
+ * numa grade essa gramática desmonta: o traço superior de cada célula vira uma cerca solta
+ * no meio da tela, sem nada à esquerda nem à direita para continuá-la. Na grade cada
+ * resultado é uma caixa fechada. Não é enfeite: é a mesma informação lida na densidade em
+ * que ela está.
+ *
+ * `.busca-resultado:first-child { border-top: 0 }` de `busca.css` continua valendo na
+ * visão app e não é tocado — esta regra é mais específica e só existe sob `[data-view=web]`. */
+[data-view="web"] [data-grade-resultados] > .busca-resultado {
+  padding: 0.85rem;
+  border: var(--web-borda);
+  border-radius: 0.6rem;
+  background: var(--ic-branco);
+}
+
+/* ---------------------------------------------------------------------------
+ * O QUE APARECE EM UMA VISÃO E NÃO NA OUTRA — SEMPRE POR CSS, NUNCA POR RAMO.
+ *
+ * Os três blocos abaixo existem NO DOM nas duas visões, e é isso que permite não haver um
+ * único `if (visao === …)` em `buscar.tsx`. A visão só é conhecida depois de ler o
+ * `localStorage`, e ramificar por ela em JavaScript renderizaria no build uma árvore
+ * diferente da do navegador — o React acusaria a divergência e o gate de console limpo
+ * cairia. Quem some é a CAIXA, e `display: none` a remove sem deixar buraco: o `gap` do
+ * flex e o da grade só existem entre caixas geradas.
+ * ------------------------------------------------------------------------ */
+
+/* A tradução da busca em linguagem natural é permanente na web (tela 28) e não existe na
+ * app, onde o convite equivalente da fase 3 continua no bloco «antes de digitar». */
+[data-view="mobile"] [data-frase-natural] {
+  display: none;
+}
+
+/* E o inverso: na web o convite da fase 3 sai, porque o bloco permanente acima já diz a
+ * mesma coisa com a frase do Cenário 5 escrita por extenso. */
+[data-view="web"] [data-convite-frase="app"] {
+  display: none;
+}
+
+/* A porta para `/filtros/` é da coluna de facetas da web. No app, a entrada de Filtros é
+ * do plano 05-06 e esta tela não abre uma segunda. */
+[data-view="mobile"] [data-link-filtros] {
+  display: none;
+}

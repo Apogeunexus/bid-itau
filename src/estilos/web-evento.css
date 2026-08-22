@@ -1,0 +1,368 @@
+/* ===========================================================================
+ * web-evento.css — a página do evento com «aprofunda isto» em painel lateral (D-80)
+ *
+ * DE QUEM É: plano 05-03.
+ * DECLARADA E VAZIA DE REGRA por 05-01, na onda 1 da fase 5.
+ *
+ * Ela chega aqui sem uma única regra de propósito. `src/app/globals.css` é o
+ * único arquivo que os seis planos da onda 2 tocariam, e dois executores
+ * editando a mesma folha é a colisão que o merge não resolve sozinho. Com as
+ * onze linhas de `@import` declaradas na onda 1, o ponto de colisão deixa de
+ * EXISTIR em vez de ser administrado: 05-03 escreve SÓ neste arquivo e não precisa
+ * abrir `globals.css` nem esperar os outros cinco.
+ *
+ * Uma folha vazia importada não custa byte no bundle final.
+ *
+ * O QUE ELA COBRE: a divisão entre a ficha do evento e o painel lateral colável, a tabela densa de ocorrências e a coluna de acessibilidade. Reuse .web-duas-colunas e .web-colada.
+ *
+ * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`, e há gate medindo isso.
+ *  - Nenhum hex do manual: use `var(--ic-*)` e `color-mix` para transparência
+ *    (D-06, D-08).
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]` ou
+ *    `[data-view="mobile"]`. As variantes `desk:`/`app:` só prefixam
+ *    UTILITÁRIO do Tailwind e nunca alcançam uma classe semântica nossa.
+ *  - Reuse o vocabulário de `web.css` antes de escrever regra nova: ele já traz
+ *    duas colunas, grade parametrizada, coluna fixa, painel, realce, alternador,
+ *    declaração com denominador e lista densa.
+ *  - Nada de posicionamento preso à janela (`position: fixed`) fora de
+ *    `casca.tsx` — dentro da moldura de celular ele escapa e quebra D-03.
+ * ======================================================================== */
+
+/* ===========================================================================
+ * AS REGRAS DO PLANO 05-03. Escritas depois do cabeçalho herdado de 05-01, que
+ * fica intacto acima.
+ *
+ * O QUE ESTA FOLHA FAZ, EM UMA FRASE: ela é a única diferença entre a ficha de
+ * evento que a fase 2 entregou e a tela 27 do `docs/telas.md`. Nenhuma linha de
+ * `page.tsx` pergunta em que visão está, e não existe `EventoWeb` (D-79, D-05).
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * 1. O QUE NASCE ESCONDIDO.
+ *
+ * Estas células e este cabeçalho existem no DOM das duas visões — o HTML é um
+ * só, gerado no build, e a visão é estado de cliente. Elas nascem `display:
+ * none` e SÓ a visão web as revela. Escondê-las por padrão, em vez de escondê-
+ * las sob `[data-view="mobile"]`, é o que garante que um quadro renderizado
+ * antes de `data-view` existir não pisque uma tabela dentro da moldura de
+ * celular.
+ * ------------------------------------------------------------------------ */
+.ocorrencia-cabecalho,
+.ocorrencia-dia-curto,
+.ocorrencia-temporada,
+.ocorrencia-acesso,
+.ocorrencia-espaco-curto,
+.ocorrencia-nota-tabela {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * 2. VISÃO APP — a pilha da fase 2, na ordem exata da fase 2.
+ *
+ * `display: contents` dissolve os dois invólucros de coluna: os onze blocos
+ * voltam a ser filhos diretos da mesma coluna flex, como eram antes de existir
+ * visão web. Os quatro `order` devolvem a ficha de acessibilidade para depois
+ * de «onde acontece», que é onde a fase 2 a deixou — sem eles, o único bloco
+ * fora de lugar seria ela, arrastada para o fim da coluna principal pelo
+ * agrupamento que a web exige.
+ *
+ * A ORDEM DO DOM É UMA SÓ, e quem reordena é isto aqui. Um `if (visao === …)`
+ * em `page.tsx` faria a mesma coisa e seria o começo de dois componentes.
+ * ------------------------------------------------------------------------ */
+[data-view="mobile"] .ev-principal,
+[data-view="mobile"] .ev-lateral {
+  display: contents;
+}
+
+[data-view="mobile"] .ev-ficha-acesso {
+  order: 1;
+}
+[data-view="mobile"] .ev-aprofunda {
+  order: 2;
+}
+[data-view="mobile"] .ev-se-nao-puder {
+  order: 3;
+}
+[data-view="mobile"] .ev-rodape {
+  order: 4;
+}
+
+/* ---------------------------------------------------------------------------
+ * 3. VISÃO WEB — duas colunas, e a lateral colada.
+ *
+ * `max-width: none` desfaz o `desk:max-w-5xl` da fase 2: 1.024 px menos a
+ * lateral de 22 rem deixaria a coluna principal com 584 px, e uma tabela de
+ * cinco colunas em 584 px é a rolagem horizontal que o gate proíbe. A moldura
+ * já limita tudo em `max-w-6xl`, então isto não estica nada além do que D-03
+ * permite.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .ev-tela {
+  max-width: none;
+}
+
+[data-view="web"] .ev-cabecalho,
+[data-view="web"] .ev-rodape {
+  grid-column: 1 / -1;
+}
+
+[data-view="web"] .ev-principal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--web-gap);
+  /* Sem isto o mínimo automático do item de grade é o conteúdo, e a tabela
+     empurraria a coluna para fora da grade em vez de rolar por dentro. */
+  min-width: 0;
+}
+
+/* A lateral já é `.web-painel` + `.web-coluna-fixa` de `web.css`: painel com
+ * respiro de desktop, colado ao topo, rolando por dentro quando passa da
+ * altura da janela. Aqui só o que é desta tela. */
+[data-view="web"] .ev-lateral {
+  font-size: 0.8125rem;
+}
+
+[data-view="web"] .ev-lateral h2 {
+  margin: 0;
+}
+
+/* Na moldura de 390 px a capa de 9 rem é o topo da tela; numa faixa de 1.088 px
+ * ela vira uma tarja. Metade da altura, e o título passa a mandar. */
+[data-view="web"] .ev-cabecalho > :first-child {
+  height: 7rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * 4. A TABELA DE OCORRÊNCIAS — o ponto em que esta tela justifica a visão web.
+ *
+ * 53 sessões empilhadas em cartão são uma rolagem; 53 sessões em tabela com
+ * coluna de acessibilidade são consultáveis. É a tela 27, literalmente.
+ *
+ * A grade é do `<ul>` e cada `<li>` a herda por `subgrid`. Por que subgrid e
+ * não `display: contents` no `<li>`: o `<li>` carrega `data-ocorrencia`, e os
+ * gates da fase 2 contam OCORRÊNCIAS VISÍVEIS por `getBoundingClientRect`. Um
+ * elemento `display: contents` não tem retângulo — a tabela ficaria perfeita na
+ * tela e o gate herdado passaria a contar zero. Com `subgrid` o `<li>` continua
+ * sendo uma caixa de verdade E as colunas continuam alinhadas entre as linhas.
+ *
+ * As larguras são todas `minmax(…)`: o mínimo automático de um item de grade é
+ * o tamanho do conteúdo, e um título de temporada sem espaço em branco
+ * empurraria a linha inteira para fora da janela. É esse o transbordo que o
+ * gate mede comparando `scrollWidth` com `clientWidth`.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .ocorrencias-lista {
+  display: grid;
+  /* As colunas OPCIONAIS são `auto` e as permanentes têm `fr`: uma coluna `fr`
+     vazia continua reservando a sua fração da largura, e as duas que o acervo
+     não sustenta ficariam como 100 px de nada à direita da tabela. `auto`
+     colapsa para zero quando ninguém a ocupa. */
+  grid-template-columns:
+    minmax(7.5rem, 0.75fr) /* 1 · data */
+    minmax(3rem, auto) /* 2 · horário */
+    minmax(0, 1.4fr) /* 3 · temporada */
+    auto /* 4 · espaço, quando ele discrimina */
+    minmax(5rem, auto) /* 5 · acessibilidade */
+    auto /* 6 · condição, quando ela discrimina */
+    auto; /* 7 · salvar */
+  gap: 0;
+  max-height: var(--ev-altura-tabela, 52vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: var(--web-borda);
+  border-radius: var(--web-raio);
+  background: var(--ic-branco);
+}
+
+[data-view="web"] .ocorrencias-lista > li {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.45rem 0.8rem;
+  border: 0;
+  border-top: var(--web-borda);
+  border-radius: 0;
+}
+
+[data-view="web"] .ocorrencias-lista > li:nth-of-type(odd) {
+  background: color-mix(in srgb, var(--ic-preto) 2.5%, transparent);
+}
+
+/* O CABEÇALHO GRUDA NO TOPO DA TABELA. Sem isto, na linha 40 de 53 ninguém
+ * sabe mais qual coluna é a da acessibilidade — que é justamente a coluna pela
+ * qual a tela 27 existe. O contêiner de rolagem é o próprio `<ul>`, e é a ele
+ * que o `sticky` se ancora. */
+[data-view="web"] .ocorrencia-cabecalho {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  gap: 0.6rem;
+  padding: 0.5rem 0.8rem;
+  border-top: 0;
+  border-bottom: 2px solid var(--ic-laranja);
+  background: var(--ic-branco);
+  font-family: var(--fonte-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* Uma frase na app, duas células na web: o `<p>` que embrulha dia e hora some
+ * como caixa e devolve os dois filhos à grade da linha. O separador só existia
+ * para a frase da app e não tem lugar numa tabela. */
+/* TODAS AS CÉLULAS NA MESMA LINHA DA SUBGRADE.
+ *
+ * Sem `grid-row: 1` a colocação automática avança um cursor da esquerda para a
+ * direita: «temporada» e «acessibilidade» estão DEPOIS do botão no DOM — porque
+ * a ordem do DOM é a da visão app — e pedir a coluna 3 quando o cursor já passou
+ * pela 7 joga a célula para uma SEGUNDA LINHA. O gate passava (as células
+ * existiam, eram visíveis, não transbordavam) e a tabela na tela tinha a
+ * temporada meia linha abaixo da data. Foi a foto que pegou, pela terceira vez
+ * nesta obra. */
+[data-view="web"] .ocorrencia-dia,
+[data-view="web"] .ocorrencia-dia-curto,
+[data-view="web"] .ocorrencia-hora,
+[data-view="web"] .ocorrencia-temporada,
+[data-view="web"] .ocorrencia-espaco,
+[data-view="web"] .ocorrencia-acesso,
+[data-view="web"] .ocorrencia-condicao,
+[data-view="web"] .ocorrencia-salvar {
+  grid-row: 1;
+}
+
+/* CADA CÉLULA DIZ EM QUE COLUNA MORA, em vez de cair no encaixe automático.
+ * Com encaixe automático, esconder a coluna de condição não apagaria a coluna:
+ * empurraria «salvar» para o lugar dela e a tabela passaria a ter o cabeçalho
+ * de uma coluna sobre o conteúdo de outra — verde no gate, errada na tela. */
+[data-view="web"] .ocorrencia-quando {
+  display: contents;
+}
+[data-view="web"] .ocorrencia-sep {
+  display: none;
+}
+
+/* A DATA NA TABELA É A CURTA, e a por extenso é a da visão app.
+ *
+ * «terça-feira, 8 de dezembro de 2020» pede 230 px; em 53 linhas isso é uma
+ * coluna de duas linhas cada, e a tabela deixa de ser consultável — que é a
+ * única razão pela qual ela existe. As duas saem da MESMA string ISO por duas
+ * funções puras: não são dois dados, são dois formatos do mesmo. */
+[data-view="web"] .ocorrencia-dia {
+  display: none;
+}
+
+[data-view="web"] .ocorrencia-dia-curto {
+  grid-column: 1;
+  display: block;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+[data-view="web"] .ocorrencia-hora {
+  grid-column: 2;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+[data-view="web"] .ocorrencia-temporada {
+  grid-column: 3;
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+[data-view="web"] .ocorrencia-espaco {
+  grid-column: 4;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+[data-view="web"] .ocorrencia-acesso {
+  grid-column: 5;
+  display: block;
+  font-size: 0.7rem;
+  line-height: 1.3;
+}
+[data-view="web"] .ocorrencia-condicao {
+  grid-column: 6;
+  font-size: 0.7rem;
+}
+[data-view="web"] .ocorrencia-salvar {
+  grid-column: 7;
+  justify-self: end;
+  white-space: nowrap;
+  font-size: 0.65rem;
+}
+
+/* D-43 DENTRO DA CÉLULA. «Declarado ausente» e «não declarado» NÃO são a mesma
+ * coisa e não podem parecer a mesma coisa: a ficha preenchida que diz «não» tem
+ * contorno cheio, o registro que não fala do assunto tem contorno tracejado e
+ * cinza. Achatar os dois num «não tem» afirmaria, em nome do Itaú Cultural, uma
+ * negação que a fonte nunca fez. */
+[data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade] {
+  width: fit-content;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+[data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade="presente"] {
+  border-color: var(--ic-laranja);
+  background: var(--ic-laranja);
+  color: var(--ic-branco);
+}
+[data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade="ausente-declarada"] {
+  border-color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+[data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade="nao-declarada"] {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--ic-preto) 25%, transparent);
+  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+/* O cabeçalho reusa a classe da célula para herdar a coluna e o `order`, mas
+ * não é pastilha nenhuma — ele não carrega o atributo, e é o atributo que
+ * pinta. */
+[data-view="web"] .ocorrencia-cabecalho .ocorrencia-acesso {
+  border: 0;
+  padding: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * 5. A COLUNA QUE NÃO DISCRIMINA SAI DA TABELA — E VIRA FRASE COM DENOMINADOR.
+ *
+ * Medido no acervo carregado: as 2.425 ocorrências são gratuitas, nenhuma está
+ * esgotada, e nenhuma tem espaço publicado. Três colunas iguais em todas as
+ * linhas roubam a largura das duas que informam e não dizem nada. Apagá-las em
+ * silêncio esconderia um fato do acervo; então elas saem da tabela e o fato é
+ * dito UMA VEZ, com o denominador, ao pé dela — que é o que D-90 pede.
+ *
+ * As classes vêm do componente e só existem quando a medição das ocorrências
+ * DAQUELE evento diz que o valor não varia. No dia em que a fonte publicar uma
+ * sessão paga, a coluna volta sozinha.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .ocorrencias-condicao-uniforme .ocorrencia-condicao,
+[data-view="web"] .ocorrencias-espaco-uniforme .ocorrencia-espaco {
+  display: none;
+}
+
+[data-view="web"] .ocorrencia-nota-tabela {
+  display: block;
+  padding: 0.6rem 0.85rem;
+  border-left: 3px solid var(--ic-laranja);
+  border-radius: 0 0.6rem 0.6rem 0;
+  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}

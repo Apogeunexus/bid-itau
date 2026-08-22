@@ -1,0 +1,219 @@
+/* ---------------------------------------------------------------------------
+ * busca.css — as regras de Buscar (AGEN-06, `docs/telas.md` tela 16).
+ *
+ * ESTE ARQUIVO FOI REESCRITO. O original do plano 03-04 foi despejado pelo iCloud com o
+ * volume a 96% e commitado já vazio: `git ls-files` o rastreia, `git show HEAD:` devolve
+ * zero byte. As classes abaixo vêm de `buscar.tsx`, que sobreviveu íntegro — então o que
+ * se recompôs foi a aparência, não o comportamento. Se algo aqui divergir do que o 03-04
+ * mediu, a divergência é minha e está neste arquivo, não na tela.
+ *
+ * POR QUE ARQUIVO PRÓPRIO E NÃO `globals.css`. Quatro planos correram em paralelo nesta
+ * onda e `globals.css` é o único arquivo que os quatro tocariam. Um CSS por plano,
+ * importado pelo componente que o usa, é o que torna a paralelização segura.
+ *
+ * NADA AQUI USA POSIÇÃO ANCORADA NA JANELA. Dentro da moldura de 390×844 (D-03), `fixed`
+ * escaparia para a largura da tela inteira e desmontaria a ilusão do telefone. Quem
+ * precisa grudar usa `sticky`, como a barra de abas faz.
+ * ------------------------------------------------------------------------- */
+
+/* --- O campo (D-63) ------------------------------------------------------
+ * Um campo só, para todos os tipos. Grudado no topo porque a pessoa reformula a busca
+ * lendo os resultados — subir para alcançar o campo quebraria o ciclo. `sticky` e não
+ * `fixed`: o contexto de rolagem é a moldura.                                        */
+
+.busca-campo {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 15%, transparent);
+  border-radius: 999px;
+  background: var(--ic-branco);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.3;
+  color: var(--ic-preto);
+}
+
+.busca-campo::placeholder {
+  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+
+.busca-campo:focus-visible {
+  outline: 2px solid var(--ic-laranja);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+/* --- Blocos e seus títulos ----------------------------------------------
+ * O título é minúsculo e em caixa alta para ceder a hierarquia ao conteúdo: quem manda
+ * na tela é o resultado, não o rótulo da seção.                                       */
+
+.busca-bloco {
+  margin-block: 1.25rem;
+}
+
+.busca-bloco-titulo {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* --- Fichas e facetas (D-80: facetas vêm da ontologia) -------------------
+ * Pastilha de contorno, nunca preenchida: faceta é filtro, não etiqueta de conteúdo, e
+ * confundir as duas famílias visuais faria o filtro competir com o selo de linguagem —
+ * que é dado, e por isso tem cor própria vinda do vocabulário (D-08).                 */
+
+.busca-ficha,
+.busca-faceta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
+  border-radius: 999px;
+  background: var(--ic-branco);
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  color: var(--ic-preto);
+  cursor: pointer;
+}
+
+.busca-faceta:hover {
+  border-color: var(--ic-laranja);
+}
+
+.busca-faceta[aria-pressed="true"] {
+  border-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 10%, var(--ic-branco));
+  font-weight: 600;
+}
+
+.busca-faceta:focus-visible {
+  outline: 2px solid var(--ic-laranja);
+  outline-offset: 2px;
+}
+
+/* O contador ao lado da faceta é informação secundária — e é ele que sustenta D-66,
+ * porque «sem ela: 300» é a promessa de que nenhum caminho leva a lugar nenhum. */
+.busca-faceta-n {
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* --- Resultado ----------------------------------------------------------
+ * Sem cartão e sem sombra: a lista mistura 15 classes (D-63) e uma moldura por item
+ * pesaria a tela inteira. A separação é uma linha, e o que distingue os tipos é a
+ * etiqueta, não o contêiner.                                                          */
+
+.busca-resultado {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.8rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
+  color: inherit;
+  text-decoration: none;
+}
+
+.busca-resultado:first-child {
+  border-top: 0;
+}
+
+.busca-resultado:hover .busca-titulo,
+.busca-resultado:focus-visible .busca-titulo {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.busca-resultado:focus-visible {
+  outline: 2px solid var(--ic-laranja);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --- A etiqueta de tipo -------------------------------------------------
+ * D-63 exige o tipo visível em todo resultado: é o que impede a busca de parecer uma
+ * agenda quando o primeiro resultado é um evento. Caixa alta e pequena, sobre fundo
+ * neutro — o tipo orienta, não decora.                                                */
+
+.busca-tipo {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ic-preto) 8%, transparent);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+
+/* --- Afrouxamento (D-66) ------------------------------------------------
+ * A tela de zero resultado não é um beco. Cada afrouxamento diz quantos resultados
+ * traria, e o número é o argumento — por isso ele é laranja e tabular, e não texto
+ * corrido: a pessoa compara «300» com «12» antes de escolher qual critério soltar.    */
+
+.busca-afrouxamento {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--ic-laranja) 40%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ic-laranja) 6%, var(--ic-branco));
+  font-size: 0.875rem;
+  line-height: 1.35;
+  text-align: left;
+  color: var(--ic-preto);
+  cursor: pointer;
+}
+
+.busca-afrouxamento + .busca-afrouxamento {
+  margin-top: 0.5rem;
+}
+
+.busca-afrouxamento:hover {
+  border-color: var(--ic-laranja);
+}
+
+.busca-afrouxamento:focus-visible {
+  outline: 2px solid var(--ic-laranja);
+  outline-offset: 2px;
+}
+
+.busca-afrouxamento-n {
+  flex: none;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ic-laranja);
+}
+
+/* --- A visão web (D-01, D-02) -------------------------------------------
+ * O gatilho é `data-view`, o estado da aplicação, e nunca uma media query: o alternador
+ * precisa funcionar numa telona de apresentação, onde a janela é larga em ambas as
+ * visões. Classe semântica não aceita variante Tailwind, então a regra é escrita à mão.
+ * Na web há largura para as facetas respirarem e para o resultado ganhar densidade.   */
+
+[data-view="web"] .busca-campo {
+  padding: 0.9rem 1.1rem;
+  font-size: 1.0625rem;
+}
+
+[data-view="web"] .busca-resultado {
+  padding: 1rem 0;
+  gap: 1rem;
+}
+
+[data-view="web"] .busca-bloco {
+  margin-block: 1.75rem;
+}

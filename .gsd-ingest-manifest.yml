@@ -1,0 +1,10 @@
+docs:
+  - path: docs/PRD.md
+    type: PRD
+    precedence: 0
+  - path: docs/funcionalidades.md
+    type: SPEC
+    precedence: 1
+  - path: dados/inventario/mapa-conteudo.md
+    type: DOC
+    precedence: 2

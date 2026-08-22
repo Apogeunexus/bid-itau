@@ -1,0 +1,123 @@
+/* ===========================================================================
+ * web-descobrir.css — Descobrir em grade na visão web (D-80)
+ *
+ * DE QUEM É: plano 05-02.
+ * DECLARADA E VAZIA DE REGRA por 05-01, na onda 1 da fase 5.
+ *
+ * Ela chega aqui sem uma única regra de propósito. `src/app/globals.css` é o
+ * único arquivo que os seis planos da onda 2 tocariam, e dois executores
+ * editando a mesma folha é a colisão que o merge não resolve sozinho. Com as
+ * onze linhas de `@import` declaradas na onda 1, o ponto de colisão deixa de
+ * EXISTIR em vez de ser administrado: 05-02 escreve SÓ neste arquivo e não precisa
+ * abrir `globals.css` nem esperar os outros cinco.
+ *
+ * Uma folha vazia importada não custa byte no bundle final.
+ *
+ * O QUE ELA COBRE: a grade de cartões com o destaque curado ocupando mais colunas, e a serendipidade na densidade da web. Reuse .web-grade e .web-grade-largo.
+ *
+ * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`, e há gate medindo isso.
+ *  - Nenhum hex do manual: use `var(--ic-*)` e `color-mix` para transparência
+ *    (D-06, D-08).
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]` ou
+ *    `[data-view="mobile"]`. As variantes `desk:`/`app:` só prefixam
+ *    UTILITÁRIO do Tailwind e nunca alcançam uma classe semântica nossa.
+ *  - Reuse o vocabulário de `web.css` antes de escrever regra nova: ele já traz
+ *    duas colunas, grade parametrizada, coluna fixa, painel, realce, alternador,
+ *    declaração com denominador e lista densa.
+ *  - Nada de posicionamento preso à janela (`position: fixed`) fora de
+ *    `casca.tsx` — dentro da moldura de celular ele escapa e quebra D-03.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * A GRADE (D-80, tela 25).
+ *
+ * Três colunas, e o número sai da variável que `.web-grade` de `web.css` expõe — não de
+ * uma classe numerada e não de uma media query. A visão é ESTADO DA APLICAÇÃO e não
+ * tamanho de janela (D-01, D-02): a única media query legítima do projeto é a da moldura,
+ * em `globals.css`, e ela é sobre o telefone de verdade, não sobre a visão escolhida.
+ *
+ * Por que 3 e não 4: a moldura da web é `max-w-6xl` (1.152px) e a tela tira 64px de
+ * respiro, sobrando 1.088px. Com o `--web-gap` de 1,5rem, três colunas dão 346,7px de
+ * cartão e quatro dariam 254px — abaixo dos 280px em que o título de duas linhas mais o
+ * selo de motivo começam a brigar por espaço. O selo é o argumento da tela (D-28), e é ele
+ * que decide a contagem de colunas, não o contrário.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] [data-grade-web] {
+  --web-colunas: 3;
+
+  /* `stretch` e não o `start` que `.web-grade` traz por padrão. Com `start`, cada cartão
+   * fica com a própria altura e a linha inteira termina em serrilha — três pés de cartão
+   * em três alturas diferentes, que numa foto de slide lê como desalinhamento e não como
+   * densidade. Com `stretch` a linha fecha reta e o pé de cada cartão cai no mesmo lugar. */
+  align-items: stretch;
+}
+
+/* O invólucro do cartão é o ITEM da grade, e é ele que a grade estica. Sem estas duas
+ * regras o `stretch` acima esticaria o invólucro e o `.cartao` de dentro continuaria com a
+ * altura do conteúdo, deixando um buraco branco embaixo de cada cartão curto — o mesmo
+ * defeito, com um passo a mais para achar. */
+[data-view="web"] [data-grade-web] > * {
+  display: flex;
+  flex-direction: column;
+}
+
+[data-view="web"] [data-grade-web] > * > .cartao {
+  flex: 1 1 auto;
+}
+
+/* O pé do cartão desce para a base. É o que transforma altura igual em BASE ALINHADA: sem
+ * ele, o cartão esticado empurra o espaço sobrando para depois do rodapé e o «por que isto
+ * apareceu?» de cada cartão flutua numa altura diferente. */
+[data-view="web"] [data-grade-web] .cartao > footer {
+  margin-top: auto;
+}
+
+/* ---------------------------------------------------------------------------
+ * O DESTAQUE CURADO OCUPANDO DUAS COLUNAS.
+ *
+ * `.web-grade-largo` de `web.css` já traz `grid-column: span var(--web-span, 2)`, e o
+ * invólucro do cartão especial a carrega. A regra abaixo não repete o `span`: ela apenas
+ * declara, por atributo, a mesma coisa — para que um cartão que ganhe
+ * `data-destaque-curado` sem a classe continue largo, e para que o gate meça o atributo,
+ * que é contrato, em vez da classe, que é implementação.
+ *
+ * É O SPAN, E NÃO UMA BORDA MAIS GROSSA, que faz o destaque ser outra coisa numa grade.
+ * A borda laranja de `.cartao[data-especial]` continua e continua fazendo o trabalho dela
+ * na visão app, onde não há grade para ocupar.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] [data-grade-web] > [data-destaque-curado] {
+  grid-column: span var(--web-span, 2);
+}
+
+/* O selo de motivo no cartão largo cresce junto: numa caixa de 717px o mesmo corpo de
+ * 0,875rem que `web.css` já dá ao selo lê como legenda, e rebaixar o selo a legenda
+ * desmontaria o argumento da tela. Cresce o texto, não a cor nem a barra — a gramática
+ * do selo é a mesma dos outros, só que na medida da caixa em que ele está. */
+[data-view="web"] [data-grade-web] > [data-destaque-curado] .selo-motivo {
+  padding: 0.7rem 0.8rem;
+  font-size: 1rem;
+}
+
+/* A tipografia do título acompanha a largura pelo mesmo motivo. */
+[data-view="web"] [data-grade-web] > [data-destaque-curado] .cartao h3 {
+  font-size: 1.25rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * O MODO COMENTADO DESLIGADO NÃO PODE FURAR A GRADE.
+ *
+ * `<Diagnostico>` mora inteiro dentro de `<Comentario>` e é IRMÃO da grade, não filho —
+ * então `display: none` o remove sem deixar buraco nenhum, e o gate mede que a grade não
+ * tem um único `.comentario` dentro.
+ *
+ * Esta regra é a rede para o dia em que um `<Comentario>` cair DENTRO da grade: a regra do
+ * `globals.css` só o esconde com o modo desligado, e com o modo LIGADO ele viraria uma
+ * célula da grade, roubando uma coluna de uma linha de cartões. Aqui ele sai do fluxo de
+ * grade nos dois modos. `display: none` remove a caixa, e o `gap` da grade não abre espaço
+ * entre irmãos ausentes — só entre caixas geradas.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] [data-grade-web] > .comentario {
+  display: none;
+}

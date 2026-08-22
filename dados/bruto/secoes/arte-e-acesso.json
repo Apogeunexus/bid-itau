@@ -1,0 +1,39 @@
+{
+ "pageProps": {
+  "artAccess": [
+   {
+    "id": 1005,
+    "title": "Confira a programação completa do \"||entre|| arte e acesso 2025\"",
+    "link": "itaucultural.org.br/secoes/agenda-cultural/confira-a-programacao-completa-do-entre-arte-e-acesso-2025",
+    "slug": "confira-a-programacao-completa-do-entre-arte-e-acesso-2025",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1637/file/optimized-230bbf6d8609efa966cfecbf3e6901d3.jpg",
+    "cover": true,
+    "rights": "Gustavo Almeida Amat",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Uma mulher, vestida de palhaça, segura um emaranhado de fios vermelhos. Ela está à frente de quatro relas e atrás de um arame com textura",
+    "category": {
+     "id": 2,
+     "name": "Agenda Cultural",
+     "slug": "agenda-cultural"
+    },
+    "publishedAt": "2025-03-28T18:41:42.000-03:00",
+    "exhibition": false,
+    "occupation": false,
+    "call": "O evento anual acontece desde 2015 e, em sua edição de 2025, vai de 10 a 13 de abril",
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "program": "Arte e Acesso",
+    "fixedPosition": 0,
+    "startDate": "2025-04-10T06:00:00.000-03:00",
+    "endDate": "2025-04-13T05:59:00.000-03:00",
+    "locale": ""
+   }
+  ]
+ },
+ "__N_SSP": true
+}

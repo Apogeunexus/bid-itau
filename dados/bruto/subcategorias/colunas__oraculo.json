@@ -1,0 +1,2267 @@
+{
+ "pageProps": {
+  "columns": [
+   {
+    "id": 12872,
+    "title": "A água da bacia da história da arte brasileira",
+    "shortDescription": "No último texto da coluna “Oráculo”, Naine Terena conversa com Fernanda Pitta, curadora sênior da Pinacoteca de São Paulo",
+    "slug": "agua-bacia-historia-arte-brasileira",
+    "publicationDate": "Publicado em 13/02/2022",
+    "publishedAt": "2022-02-13T14:00:00.000-03:00",
+    "publicationYear": 2022,
+    "updatedDate": "Atualizado às 23:55 de 11/02/2022",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15761/file/optimized-3f1172f7f51edf607fb1a65e3f1709af.png",
+    "cover": true,
+    "rights": "Téo Miranda",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Naine Terena e Fernanda Pitta estão juntas, sentadas em uma pedra. Naine é uma mulher indígena, com cabelos longos, pretos e lisos. Ela veste uma blusa cinza e está sorrindo. Fernanda é uma mulher branca, com cabelos curtos e ruivos. Ela usa óculos de grau e blusa cinza. Atrás delas, aparecem copas de árvores e o céu.",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões indígenas",
+     "artes visuais"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12866,
+     "uuid": "346db731-67c4-403e-b5a6-841ab0178f27",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "A água da bacia da história da arte brasileira",
+    "metaDescription": "No último texto da coluna “Oráculo”, Naine Terena conversa com Fernanda Pitta, curadora sênior da Pinacoteca de São Paulo",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12818,
+    "title": "Um passo para a frente, um passo para trás, um iPhone na mão",
+    "shortDescription": "A colunista Naine Terena reflete sobre a “obsolescência programada” dos ditos espaços de visibilidade para a presença indígena",
+    "slug": "passo-frente-passo-tras-iphone-mao",
+    "publicationDate": "Publicado em 09/01/2022",
+    "publishedAt": "2022-01-09T14:00:00.000-03:00",
+    "publicationYear": 2022,
+    "updatedDate": "Atualizado às 22:43 de 11/02/2022",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15724/file/optimized-b5dd75cdc9173a0ec57f9d22013baf0c.jpeg",
+    "cover": true,
+    "rights": "Naine Terena",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Fotografia de um celular, modelo iPhone, com a tela quebrada. No reflexo da tela é possível ver o vulto de uma pessoa se fotografando.",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões indígenas"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12812,
+     "uuid": "c8e12271-487c-4418-b88b-81fa5d546487",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "Um passo para a frente, um passo para trás, um iPhone na mão",
+    "metaDescription": "A colunista Naine Terena reflete sobre a “obsolescência programada” dos ditos espaços de visibilidade para a presença indígena",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12785,
+    "title": "Eu estava aqui o tempo todo, só você não viu – parte 2",
+    "shortDescription": "Na coluna “Oráculo” deste mês, Naine Terena conversa com Luciara Ribeiro, educadora, pesquisadora e curadora que vem mapeando curadores indígenas e negros brasileiros",
+    "slug": "estava-aqui-tempo-todo-voce-parte",
+    "publicationDate": "Publicado em 12/12/2021",
+    "publishedAt": "2021-12-12T15:00:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 22:15 de 30/11/2022",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15693/file/optimized-a3d990df2427e3d941c6ac6818076ea5.jpeg",
+    "cover": true,
+    "rights": "divulgação",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Mulher negra e jovem está de pé, sorrindo. Ela usa turbante estampado na cabeça e camisa sem manga, bege com estampa cor de vinho. Ela usa também um brinco de tamanho médio, pendurado, com uma pérola em cada brinco.",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões indígenas"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12779,
+     "uuid": "75b38147-eb2e-4ab6-90ea-6c3d5fa2351c",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "Eu estava aqui o tempo todo, só você não viu – parte 2",
+    "metaDescription": "Na coluna “Oráculo” deste mês, Naine Terena conversa com Luciara Ribeiro, educadora, pesquisadora e curadora que vem mapeando curadores indígenas e negros brasileiros",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12721,
+    "title": "A gaiola está com a porta aberta, passarinho...",
+    "shortDescription": "“A gente não vê que a porta está aberta e não sabe que pode voar. Ou a gente não voa. A gente não reconhece as asas e não voa” – Jurema Werneck",
+    "slug": "gaiola-esta-porta-aberta-passarinho",
+    "publicationDate": "Publicado em 17/11/2021",
+    "publishedAt": "2021-11-17T15:46:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 21:45 de 15/07/2022",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15627/file/optimized-426cceeef4a3799eb0ff46f630504559.jpeg",
+    "cover": true,
+    "rights": "Itaú Cultural",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Diversos logos do Itaú Cultural em verde sobre fundo rosa.",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões raciais",
+     "questões indígenas"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12715,
+     "uuid": "d44dc14f-2cd8-41ec-a80f-4af093484fe9",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "A gaiola está com a porta aberta, passarinho...",
+    "metaDescription": "“A gente não vê que a porta está aberta e não sabe que pode voar. Ou a gente não voa. A gente não reconhece as asas e não voa” – Jurema Werneck",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12633,
+    "title": "Arte que vem do mato",
+    "shortDescription": "“Um conselho: carregue sempre um pedacinho de pau para, pelo menos, amaciar o mato e percorrer os caminhos”, escreve a colunista Naine Terena",
+    "slug": "arte-que-vem-mato",
+    "publicationDate": "Publicado em 10/10/2021",
+    "publishedAt": "2021-10-10T15:00:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 23:38 de 08/10/2021",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15584/file/optimized-7e3e59aebe67f6954191ed7dfa0326b1.jpeg",
+    "cover": true,
+    "rights": "Gervane de Paula",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Imagem de uma pessoa de costas, com uma sacola nas costas escrito Arte aqui eu mato. ",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões indígenas"
+    ],
+    "participants": [],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12627,
+     "uuid": "09a7ad7d-529d-4e94-a052-a1ea8b4c017f",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "Arte que vem do mato",
+    "metaDescription": "“Um conselho: carregue sempre um pedacinho de pau para, pelo menos, amaciar o mato e percorrer os caminhos”, escreve a colunista Naine Terena",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12524,
+    "title": "Quarto momento, alianças afetivas, primavera indígena, entre outros enunciados para doutor não reclamar",
+    "shortDescription": "Na coluna do mês, Naine Terena interpreta algumas reflexões conduzidas por indígenas em torno dos povos originários",
+    "slug": "quarto-momento-primavera-indigena-enunciados",
+    "publicationDate": "Publicado em 12/09/2021",
+    "publishedAt": "2021-09-12T15:00:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 23:45 de 17/08/2022",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15508/file/optimized-0a9cbd8a7156ea1c267ec4e3da78ee1d.jpeg",
+    "cover": true,
+    "rights": "Adriano Sobral Fotografia",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Na obra de Denilson Baniwa, intitulada Frestas, é possível ver a cabeça de um tigre, ele está rugindo. O animal está no centro da imagem, com uma fresta de iluminação. As beiradas da imagem estão escurecidas. ",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões indígenas"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12518,
+     "uuid": "e5a466f0-bfa5-42c1-b1e6-0507bbb22bad",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "Quarto momento, alianças afetivas, primavera indígena, entre outros enunciados para doutor não reclamar",
+    "metaDescription": "Na coluna do mês, Naine Terena interpreta algumas reflexões conduzidas por indígenas em torno dos povos originários",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12415,
+    "title": "O lugar onde oprimidos se encontram: escuta ",
+    "shortDescription": "Neste texto, a colunista Naine Terena se põe à escuta de Dandara Kuntê e Lorena Saavedra",
+    "slug": "lugar-onde-oprimidos-encontram-escuta",
+    "publicationDate": "Publicado em 08/08/2021",
+    "publishedAt": "2021-08-08T15:00:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 22:22 de 17/02/2022",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15411/file/optimized-84e557f0ae4c4b9130b24ff8bfc614a6.jpeg",
+    "cover": true,
+    "rights": "divulgação",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Lorena Saavedra é uma mulher negra, jovem, com cabelo grande, preto e cacheado. Ela está sorrindo e olha diretamente para a câmera. ",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões de gênero",
+     "questões raciais",
+     "feminismo",
+     "lgbtqia+"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12409,
+     "uuid": "e48efd5d-c677-4b76-8d2d-30022acf67e8",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "O lugar onde oprimidos se encontram: escuta ",
+    "metaDescription": "Neste texto, a colunista Naine Terena se põe à escuta de Dandara Kuntê e Lorena Saavedra",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12337,
+    "title": "Corpos dóceis",
+    "shortDescription": "Naine Terena escreve sobre ancestralidade e resistência em um mundo que quer apagar sua história",
+    "slug": "corpos-doceis",
+    "publicationDate": "Publicado em 11/07/2021",
+    "publishedAt": "2021-07-11T15:00:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 21:39 de 14/03/2022",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/8539/file/optimized-d32b8464ba1ccb12805a92fc4382f768.jpeg",
+    "cover": true,
+    "rights": "Naine Terena",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Imagem da obra Quem roubou essas memórias, 2016, de Naine Terena. A foto mostra seis chinelos dispostos numa parede branca. ",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões indígenas"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12331,
+     "uuid": "3a2ef244-0872-4dd0-82fa-5bbb292d3a88",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "Corpos dóceis",
+    "metaDescription": "Naine Terena escreve sobre ancestralidade e resistência em um mundo que quer apagar sua história",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12285,
+    "title": "“Eu estava aqui o tempo todo, só você não viu [?]” – a arte brasileira feita por indígenas",
+    "shortDescription": "A coluna fala de como os indígenas têm sido representados nos manuais escolares e do papel do pensamento e da arte indígena em renovar essas perspectivas",
+    "slug": "manuais-escolares-e-arte-brasileira-feita-por-indigenas",
+    "publicationDate": "Publicado em 13/06/2021",
+    "publishedAt": "2021-06-13T15:00:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 19:12 de 02/03/2022",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15312/file/optimized-35c630f52706a92e8c4da3d3f01747cd.jpeg",
+    "cover": true,
+    "rights": "Kássia Borges Karajá",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "\"Origine\" de Kássia Borges Karajá",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões indígenas"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12279,
+     "uuid": "1fe3cce3-1f3c-413e-87e4-5901de4be061",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "“Eu estava aqui o tempo todo, só você não viu [?]” – a arte brasileira feita por indígenas",
+    "metaDescription": "A coluna fala de como os indígenas têm sido representados nos manuais escolares e do papel do pensamento e da arte indígena em renovar essas perspectivas",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12218,
+    "title": "Entrelaçando saberes e memórias durante a pandemia",
+    "shortDescription": "Em sua coluna para o Itaú Cultural, Naine Terena faz um relato pessoal sobre a pandemia do novo coronavírus e sobre como os saberes ancestrais indígenas são ricas lições também para esse período",
+    "slug": "entrelacando-saberes-memorias-durante-pandemia",
+    "publicationDate": "Publicado em 09/05/2021",
+    "publishedAt": "2021-05-09T15:00:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 22:51 de 07/05/2021",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/14498/file/optimized-02a21e154de40c710d52bc4058961296.jpeg",
+    "cover": true,
+    "rights": "Divulgação",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "O artista Denilson Baniwa está de olhos fechados e sem camisa. Ele veste um cocar e usa pinturas no rosto. Há uma projeção de uma flor na parede em que ele está apoiado.",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões indígenas",
+     "coronavírus"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12212,
+     "uuid": "9e5ad19d-e42a-4773-acaa-819c1229d8ed",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "Entrelaçando saberes e memórias durante a pandemia",
+    "metaDescription": "Em sua coluna para o Itaú Cultural, Naine Terena faz um relato pessoal sobre a pandemia do novo coronavírus e sobre como os saberes ancestrais indígenas são ricas lições também para esse período",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12156,
+    "title": "Economia indígena (?)",
+    "shortDescription": "Em seu segundo texto para a coluna Oráculo, Naine Terena pontua questões sobre a produção cultural e a economia que gira em torno das comunidades indígenas",
+    "slug": "economia-indigena",
+    "publicationDate": "Publicado em 11/04/2021",
+    "publishedAt": "2021-04-11T15:00:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 22:05 de 09/04/2021",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15223/file/optimized-62647d2510398ce97335bc7cfeb74fdb.jpeg",
+    "cover": true,
+    "rights": "Coletivo Manoki",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Um grupo de pessoas indígenas estão reunidos, há pessoas filmando e alguns objetos pelo chão. Imagem do Coletivo Manoki. ",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "questões indígenas"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12150,
+     "uuid": "c11999a9-a3bb-4447-a813-88064d4f644e",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "Economia indígena (?)",
+    "metaDescription": "Em seu segundo texto para a coluna Oráculo, Naine Terena pontua questões sobre a produção cultural e a economia que gira em torno das comunidades indígenas",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   },
+   {
+    "id": 12105,
+    "title": "As mulheres que sabem demais",
+    "shortDescription": "Na estreia desta coluna mensal, Naine Terena fala sobre a importância das mulheres que compartilham seus saberes ancestrais",
+    "slug": "mulheres-sabem-demais",
+    "publicationDate": "Publicado em 14/03/2021",
+    "publishedAt": "2021-03-14T15:00:00.000-03:00",
+    "publicationYear": 2021,
+    "updatedDate": "Atualizado às 00:35 de 18/08/2022",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15179/file/optimized-6e4642d352ea88c0f3695e37ce9106a2.jpeg",
+    "cover": true,
+    "rights": "Mirrah da Silva",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Mulher indígena idosa aparece séria, em foto de close, com um cocar de flores na cabeça, em forma de coroa.",
+    "category": "colunistas",
+    "subcategory": "Oráculo",
+    "tags": [
+     "feminismo",
+     "questões de gênero",
+     "questões indígenas"
+    ],
+    "participants": [
+     {
+      "id": 1018,
+      "name": "Naine Terena",
+      "image": "",
+      "columnist": true,
+      "active": true,
+      "description": null,
+      "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n"
+     }
+    ],
+    "exhibition": false,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "page": {
+     "id": 12099,
+     "uuid": "b31466df-4ba9-4491-b1ac-1fc6dc6d701f",
+     "pageType": "blocks",
+     "position": 1
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "site": {
+     "id": 1,
+     "name": "Itaú Cultural",
+     "link": "itaucultural.org.br"
+    },
+    "section": "Colunistas",
+    "hasAudioDescription": false,
+    "hasAccessibility": false,
+    "hasEstenotipia": false,
+    "hasClosedCaption": false,
+    "hasSubtitle": false,
+    "hasDescriptiveSubtitle": false,
+    "hasOpenCaption": false,
+    "hasTraducao": false,
+    "metaTitle": "As mulheres que sabem demais",
+    "metaDescription": "Na estreia desta coluna mensal, Naine Terena fala sobre a importância das mulheres que compartilham seus saberes ancestrais",
+    "presential": false,
+    "schedules": [],
+    "ticket": false,
+    "hideTicket": false,
+    "soldOut": false,
+    "online": false,
+    "hideOnlineAccess": false
+   }
+  ],
+  "content": {
+   "id": 25,
+   "name": "Oráculo",
+   "slug": "oraculo",
+   "description": "Naine Terena escreve sobre a importância dos saberes ancestrais, a produção cultural e a economia nas comunidades indígenas, entre outros temas.",
+   "isActiveCategory": false
+  },
+  "items": [
+   {
+    "title": "Home",
+    "link": "/",
+    "active": false
+   },
+   {
+    "title": "Colunas",
+    "link": "/colunas",
+    "active": false
+   },
+   {
+    "title": "Oráculo",
+    "active": true
+   }
+  ],
+  "subcategories": [
+   {
+    "id": 37,
+    "name": "A Caminho",
+    "slug": "a-caminho",
+    "description": "Encontros entre filosofia e cultura",
+    "isActiveCategory": true,
+    "imageId": 959,
+    "imageCategory": "1e47c850-d043-4c0a-b630-1f9fa16b4824-Imagem_GeneÌrica_Site-06.jpg",
+    "imageUrl": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/959/file/b2b0a8c2f3844fade0ad0484d7e3f094.jpg"
+   },
+   {
+    "id": 44,
+    "name": "Ativos escritos",
+    "slug": "ativos-escritos",
+    "description": "",
+    "isActiveCategory": false
+   },
+   {
+    "id": 45,
+    "name": "Brechas Urbanas",
+    "slug": "brechas-urbanas",
+    "description": "",
+    "isActiveCategory": false
+   },
+   {
+    "id": 68,
+    "name": "Cariri: território e patrimonio",
+    "slug": "cariri-territorio-e-patrimonio",
+    "description": "",
+    "isActiveCategory": false
+   },
+   {
+    "id": 19,
+    "name": "Da quebrada pro mundo",
+    "slug": "daquebradapromundo",
+    "description": "",
+    "isActiveCategory": false
+   },
+   {
+    "id": 52,
+    "name": "Do lado de cá do mundo",
+    "slug": "doladodecadomundo",
+    "description": "Coluna em Libras sobre cultura surda e diversos assuntos, comandada por Gabriel Isaac.",
+    "isActiveCategory": true,
+    "imageId": 2070,
+    "imageCategory": "5ca84d97-4fb2-4198-aaff-649eacf83b5b-Banner_apresentacao_1366x302px_COLUNAS_Do_lado_de_ca_do_mundo.png",
+    "imageUrl": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2070/file/5961700e6c07c4cca1b9d1b718ca77a7.png"
+   },
+   {
+    "id": 46,
+    "name": "Emaranhado",
+    "slug": "emaranhado",
+    "description": "",
+    "isActiveCategory": false
+   },
+   {
+    "id": 54,
+    "name": "Encontro com espectadores",
+    "slug": "encontro-com-espectadores",
+    "description": "",
+    "isActiveCategory": false
+   },
+   {
+    "id": 31,
+    "name": "Encontros",
+    "slug": "encontros",
+    "description": "Com curadoria de Fabiana Carneiro da Silva e atualmente de Enéias Tavares, a série apresenta escritores da cena literária de todas as regiões do país.",
+    "isActiveCategory": true,
+    "imageId": 2329,
+    "imageCategory": "86c1f006-f6ce-4234-8edd-ba79d8a31235-Banner_apresentacao_1366x302px_COLUNAS_Encontros.png",
+    "imageUrl": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2329/file/1f0f946b9ec522beaf2b5ebc877e984f.png"
+   },
+   {
+    "id": 32,
+    "name": "Espaço de Jogo",
+    "slug": "espacodejogo",
+    "description": "O escritor Daniel Galera escreve sobre o universo dos games, falando de jogos que vem descobrindo.",
+    "isActiveCategory": false
+   },
+   {
+    "id": 38,
+    "name": "Game perifa",
+    "slug": "game-perifa",
+    "description": "A escritora Andreza Delgado escreve sobre o universo e consumo de jogos no Brasil, seus alcances e limitações.",
+    "isActiveCategory": false
+   },
+   {
+    "id": 30,
+    "name": "Grande angular",
+    "slug": "grande-angular",
+    "description": "A jornalista Luísa Pécora escreve sobre a presença feminina no mundo do cinema e do audiovisual.",
+    "isActiveCategory": true,
+    "imageId": 1621,
+    "imageCategory": "d7295b66-75d7-410f-b2c8-4212b01a3372-Banner_apresentacao_1366x302px_COLUNAS_Grande_angular.png",
+    "imageUrl": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1621/file/a5490b8ae359a3f62a463e9c2e9c02a4.png"
+   },
+   {
+    "id": 26,
+    "name": "Inventário",
+    "slug": "inventario",
+    "description": "Dois fotógrafos recebem, todo mês, uma palavra diferente e são convidados a transformá-la em imagem e texto.",
+    "isActiveCategory": false
+   },
+   {
+    "id": 41,
+    "name": "Na ponta da agulha",
+    "slug": "na-ponta-da-agulha",
+    "description": "O radialista e produtor carioca Jorge LZ fala sobre novos nomes e vários cenários da música popular brasileira.",
+    "isActiveCategory": true,
+    "imageId": 1318,
+    "imageCategory": "81c0029a-7351-49c4-a0b8-67bd0afdcda9-Banner_apresentacao_1366x302px_COLUNAS_Na_ponta_da_agulha.png",
+    "imageUrl": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1318/file/950815ed7368f4c88c58d0d4546b3ee6.png"
+   },
+   {
+    "id": 25,
+    "name": "Oráculo",
+    "slug": "oraculo",
+    "description": "Naine Terena escreve sobre a importância dos saberes ancestrais, a produção cultural e a economia nas comunidades indígenas, entre outros temas.",
+    "isActiveCategory": false
+   },
+   {
+    "id": 42,
+    "name": "Perspectivas",
+    "slug": "perspectivas",
+    "description": "A jornalista e doutora em Comunicação Rosane Borges faz reflexões sobre questões raciais.",
+    "isActiveCategory": true
+   },
+   {
+    "id": 14,
+    "name": "Poranduba",
+    "slug": "poranduba",
+    "description": "O escritor Daniel Munduruku comenta em vídeos temas relacionados à cultura dos povos indígenas.",
+    "isActiveCategory": false
+   },
+   {
+    "id": 29,
+    "name": "Revelação",
+    "slug": "revelacao",
+    "description": "Fotógrafos, artistas e pesquisadores escrevem ensaios sobre a produção de imagens, fotografias etc.",
+    "isActiveCategory": false
+   },
+   {
+    "id": 5,
+    "name": "Sankofas",
+    "slug": "sankofas",
+    "description": "Alexandre Ribeiro e Nayra Lays escrevem juntos sobre questões raciais e os vários temas que podem nascer desse debate.",
+    "isActiveCategory": false
+   },
+   {
+    "id": 16,
+    "name": "Sarjeta",
+    "slug": "sarjeta",
+    "description": "Ramon Vitral escreve uma vez por mês sobre o universo das histórias em quadrinhos.",
+    "isActiveCategory": false
+   },
+   {
+    "id": 55,
+    "name": "Sincera forma do mundo",
+    "slug": "sincera-forma-do-mundo",
+    "description": "Divagações e pontas de conversas para “jogar prosa fora”, com um olhar atento ao que nem sempre se vê no audiovisual.",
+    "isActiveCategory": true,
+    "imageId": 583,
+    "imageCategory": "b08f968d-8905-43ea-923f-cbad7d77dd8e-Imagem genÃ©rica.jpg",
+    "imageUrl": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/583/file/45a016454494a6d23327d64629ab746c.jpg"
+   },
+   {
+    "id": 15,
+    "name": "Travessias",
+    "slug": "travessias",
+    "description": "Por meio de textos, fotos e vídeos, Nayra Lays conversa com pessoas que a inspiram na vida e na arte.",
+    "isActiveCategory": false
+   },
+   {
+    "id": 6,
+    "name": "Um Por Todos",
+    "slug": "um-por-todos",
+    "description": "A cada quatro meses, um artista assume a coluna e fala sobre temas variados e/ou sobre seus processos criativos.",
+    "isActiveCategory": false
+   }
+  ],
+  "columnists": [
+   {
+    "id": 980,
+    "name": "Ailson Taveira Silva",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 965,
+    "name": "Alan Pessoa Valadares",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 215,
+    "name": "Alexandre Ribeiro",
+    "description": "Escritor, produtor e poeta.",
+    "bio": "<p>Escritor, produtor e poeta. Ex-secundarista das ocupa&ccedil;&otilde;es e atual aluno da Universidade Federal do ABC, tamb&eacute;m passou pela ag&ecirc;ncia-escola de jornalismo &Eacute;nois. Trabalha como assistente na produtora Laborat&oacute;rio Fantasma e participa de projetos liter&aacute;rios nas unidades da Funda&ccedil;&atilde;o Casa.</p>",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/215/image/3c469d2062bdee306d91c254dc81f543.jpg",
+    "active": true
+   },
+   {
+    "id": 990,
+    "name": "Alexandre Ribeiro",
+    "description": null,
+    "bio": "<p>Escritor, produtor e poeta. Ex-secundarista das ocupa&ccedil;&otilde;es e atual aluno da Universidade Federal do ABC, tamb&eacute;m passou pela ag&ecirc;ncia-escola de jornalismo &Eacute;nois. Trabalha como assistente na produtora Laborat&oacute;rio Fantasma e participa de projetos liter&aacute;rios nas unidades da Funda&ccedil;&atilde;o Casa.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 966,
+    "name": "Alisson Gomes Dos Santos",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 967,
+    "name": "Ana Maria Fernandes Cardoso",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 187,
+    "name": "Andrea Ormond",
+    "description": "<p>Pesquisadora e cr&iacute;tica de cinema.</p>\r\n",
+    "bio": "<p>Pesquisadora e cr&iacute;tica de cinema.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 994,
+    "name": "Andrea Ormond",
+    "description": null,
+    "bio": "<p>Pesquisadora e cr&iacute;tica de cinema.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 143,
+    "name": "Andreza Delgado",
+    "description": "<p>Baiana radicada em S&atilde;o Paulo. S&oacute;cia fundadora da <em>Perifacon</em>, a primeira <em>Comic Con</em> das favelas, criadora do <em>Portal Perifacon</em>, voltado para cultura POP,&nbsp; uma das respons&aacute;veis pela <em>Copa das Favelas</em>, evento de esportes eletr&ocirc;nicos voltado para a periferia premiado em 2021 como melhor projeto social geek, fundadora da <em>Gamer Perifa</em> iniciativa que democratiza os games. Tamb&eacute;m trabalha como curadora e chegou a ser premiada pela campanha na qual participou como curadora, <em>Vivo: F&aacute;bulas da Conex&atilde;o</em>. &Eacute; apresentadora do podcast Lan&ccedil;a a Braba.</p>\r\n",
+    "bio": "<p>Baiana radicada em S&atilde;o Paulo. S&oacute;cia fundadora da <em>Perifacon</em>, a primeira <em>Comic Con</em> das favelas, criadora do <em>Portal Perifacon</em>, voltado para cultura POP,&nbsp; uma das respons&aacute;veis pela <em>Copa das Favelas</em>, evento de esportes eletr&ocirc;nicos voltado para a periferia premiado em 2021 como melhor projeto social geek, fundadora da <em>Gamer Perifa</em> iniciativa que democratiza os games. Tamb&eacute;m trabalha como curadora e chegou a ser premiada pela campanha na qual participou como curadora, <em>Vivo: F&aacute;bulas da Conex&atilde;o</em>. &Eacute; apresentadora do podcast Lan&ccedil;a a Braba.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/143/image/b076c98eb91173bd068175cbd05b7685.png",
+    "active": true
+   },
+   {
+    "id": 1035,
+    "name": "Andreza Delgado",
+    "description": null,
+    "bio": "<p>Baiana radicada em S&atilde;o Paulo. S&oacute;cia fundadora da <em>Perifacon</em>, a primeira <em>Comic Con</em> das favelas, criadora do <em>Portal Perifacon</em>, voltado para cultura POP,&nbsp; uma das respons&aacute;veis pela <em>Copa das Favelas</em>, evento de esportes eletr&ocirc;nicos voltado para a periferia premiado em 2021 como melhor projeto social geek, fundadora da <em>Gamer Perifa</em> iniciativa que democratiza os games. Tamb&eacute;m trabalha como curadora e chegou a ser premiada pela campanha na qual participou como curadora, <em>Vivo: F&aacute;bulas da Conex&atilde;o</em>. &Eacute; apresentadora do podcast Lan&ccedil;a a Braba.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 968,
+    "name": "Beatriz Almeida Da Silva",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1047,
+    "name": "Bruna Ferreira Moraes",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1025,
+    "name": "Bruno Inokawa",
+    "description": null,
+    "bio": "<p><strong>Bruno Inokawa</strong> (S&atilde;o Paulo, SP) atua como <em>designer</em>, fot&oacute;grafo e artista visual em Porto Alegre (RS). Sua pesquisa e produ&ccedil;&atilde;o art&iacute;stica se desenvolvem por meio da fotografia, do <em>design</em> gr&aacute;fico e do v&iacute;deo, explorando quest&otilde;es sobre identidade, cultura e mem&oacute;ria sob uma perspectiva familiar e autobiogr&aacute;fica. Paralelamente, busca expressar rela&ccedil;&otilde;es &iacute;ntimas entre os espa&ccedil;os e corpos presentes em seu cotidiano.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 572,
+    "name": "Bruno Inokawa",
+    "description": "<p><strong>Bruno Inokawa</strong> (S&atilde;o Paulo, SP) atua como <em>designer</em>, fot&oacute;grafo e artista visual em Porto Alegre (RS). Sua pesquisa e produ&ccedil;&atilde;o art&iacute;stica se desenvolvem por meio da fotografia, do <em>design</em> gr&aacute;fico e do v&iacute;deo, explorando quest&otilde;es sobre identidade, cultura e mem&oacute;ria sob uma perspectiva familiar e autobiogr&aacute;fica. Paralelamente, busca expressar rela&ccedil;&otilde;es &iacute;ntimas entre os espa&ccedil;os e corpos presentes em seu cotidiano.</p>\r\n",
+    "bio": "<p><strong>Bruno Inokawa</strong> (S&atilde;o Paulo, SP) atua como <em>designer</em>, fot&oacute;grafo e artista visual em Porto Alegre (RS). Sua pesquisa e produ&ccedil;&atilde;o art&iacute;stica se desenvolvem por meio da fotografia, do <em>design</em> gr&aacute;fico e do v&iacute;deo, explorando quest&otilde;es sobre identidade, cultura e mem&oacute;ria sob uma perspectiva familiar e autobiogr&aacute;fica. Paralelamente, busca expressar rela&ccedil;&otilde;es &iacute;ntimas entre os espa&ccedil;os e corpos presentes em seu cotidiano.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/572/image/03810ac5176a019b3da16280285a0981.jpg",
+    "active": true
+   },
+   {
+    "id": 988,
+    "name": "Bruno Truzzi Rosa",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 731,
+    "name": "Camila Svenson",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Camila Svenson</strong> (Bauru, SP) &eacute; fot&oacute;grafa e artista visual residente em S&atilde;o Paulo. Formou-se em audiovisual pelo Senac e em jornalismo visual e fotojornalismo pelo International Center of Photography, em Nova York. Trabalha com fotografia, objetos e v&iacute;deo, investigando poss&iacute;veis fic&ccedil;&otilde;es e como acontecem dentro de diferentes espa&ccedil;os sociais e imagin&aacute;rios.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Camila Svenson</strong> (Bauru, SP) &eacute; fot&oacute;grafa e artista visual residente em S&atilde;o Paulo. Formou-se em audiovisual pelo Senac e em jornalismo visual e fotojornalismo pelo International Center of Photography, em Nova York. Trabalha com fotografia, objetos e v&iacute;deo, investigando poss&iacute;veis fic&ccedil;&otilde;es e como acontecem dentro de diferentes espa&ccedil;os sociais e imagin&aacute;rios.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/731/image/1c46cf10c773798a9d40b98ae48f9f5c.jpg",
+    "active": true
+   },
+   {
+    "id": 1019,
+    "name": "Camila Svenson",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Camila Svenson</strong> (Bauru, SP) &eacute; fot&oacute;grafa e artista visual residente em S&atilde;o Paulo. Formou-se em audiovisual pelo Senac e em jornalismo visual e fotojornalismo pelo International Center of Photography, em Nova York. Trabalha com fotografia, objetos e v&iacute;deo, investigando poss&iacute;veis fic&ccedil;&otilde;es e como acontecem dentro de diferentes espa&ccedil;os sociais e imagin&aacute;rios.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1011,
+    "name": "Da Quebrada Pro Mundo com Alexandre Ribeiro",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Escritor e jornalista #DaQuebradaProMundo. Ex-secundarista das ocupa&ccedil;&otilde;es e formado pela ag&ecirc;ncia-escola de jornalismo &Eacute;nois. Autor do livro <em>Reservado</em>, participa de projetos liter&aacute;rios pelas quebradas do mundo e nas unidades da Funda&ccedil;&atilde;o Casa.&nbsp;Crescido na favela da Torre, em Diadema (SP), vai se mudar para a&nbsp;Alemanha em 2019.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 393,
+    "name": "Da Quebrada Pro Mundo com Alexandre Ribeiro",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Escritor e jornalista #DaQuebradaProMundo. Ex-secundarista das ocupa&ccedil;&otilde;es e formado pela ag&ecirc;ncia-escola de jornalismo &Eacute;nois. Autor do livro <em>Reservado</em>, participa de projetos liter&aacute;rios pelas quebradas do mundo e nas unidades da Funda&ccedil;&atilde;o Casa.&nbsp;Crescido na favela da Torre, em Diadema (SP), vai se mudar para a&nbsp;Alemanha em 2019.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Escritor e jornalista #DaQuebradaProMundo. Ex-secundarista das ocupa&ccedil;&otilde;es e formado pela ag&ecirc;ncia-escola de jornalismo &Eacute;nois. Autor do livro <em>Reservado</em>, participa de projetos liter&aacute;rios pelas quebradas do mundo e nas unidades da Funda&ccedil;&atilde;o Casa.&nbsp;Crescido na favela da Torre, em Diadema (SP), vai se mudar para a&nbsp;Alemanha em 2019.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/393/image/102c772c9ef995950b66359aca35e727.jpg",
+    "active": true
+   },
+   {
+    "id": 1049,
+    "name": "Daiany Oliveira",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1032,
+    "name": "Dalila Coelho",
+    "description": null,
+    "bio": "<p>Jovem fot&oacute;grafa e jornalista de Belo Horizonte, dedica-se a fazer registros fotogr&aacute;ficos documentais de movimenta&ccedil;&otilde;es, culturas e est&eacute;ticas aut&ecirc;nticas das periferias da capital mineira, como forma de dar visibilidade ao que est&aacute; sendo produzido nos bairros mais afastados da cidade. Com percurso recente na fotografia, em 2020 recebeu o Pr&ecirc;mio D&eacute;cio Noviello de Fotografia e em 2021 publicou, pela Editora Tona, seu primeiro fotolivro, <em>Beleza</em>, que re&uacute;ne as s&eacute;ries <em>&Eacute; ver&atilde;o o ano inteiro</em> e <em>Rituais est&eacute;ticos da periferia</em> e foi selecionado como destaque no <em>Festival ZUM</em>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 563,
+    "name": "Dalila Coelho",
+    "description": "<p>Jovem fot&oacute;grafa e jornalista de Belo Horizonte, dedica-se a fazer registros fotogr&aacute;ficos documentais de movimenta&ccedil;&otilde;es, culturas e est&eacute;ticas aut&ecirc;nticas das periferias da capital mineira, como forma de dar visibilidade ao que est&aacute; sendo produzido nos bairros mais afastados da cidade. Com percurso recente na fotografia, em 2020 recebeu o Pr&ecirc;mio D&eacute;cio Noviello de Fotografia e em 2021 publicou, pela Editora Tona, seu primeiro fotolivro, <em>Beleza</em>, que re&uacute;ne as s&eacute;ries <em>&Eacute; ver&atilde;o o ano inteiro</em> e <em>Rituais est&eacute;ticos da periferia</em> e foi selecionado como destaque no <em>Festival ZUM</em>.</p>\r\n",
+    "bio": "<p>Jovem fot&oacute;grafa e jornalista de Belo Horizonte, dedica-se a fazer registros fotogr&aacute;ficos documentais de movimenta&ccedil;&otilde;es, culturas e est&eacute;ticas aut&ecirc;nticas das periferias da capital mineira, como forma de dar visibilidade ao que est&aacute; sendo produzido nos bairros mais afastados da cidade. Com percurso recente na fotografia, em 2020 recebeu o Pr&ecirc;mio D&eacute;cio Noviello de Fotografia e em 2021 publicou, pela Editora Tona, seu primeiro fotolivro, <em>Beleza</em>, que re&uacute;ne as s&eacute;ries <em>&Eacute; ver&atilde;o o ano inteiro</em> e <em>Rituais est&eacute;ticos da periferia</em> e foi selecionado como destaque no <em>Festival ZUM</em>.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/563/image/28ead44ee8c4f33e3658777a4c4afb9f.jpg",
+    "active": true
+   },
+   {
+    "id": 58,
+    "name": "Daniel Munduruku ",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Escritor ind&iacute;gena brasileiro, &eacute; autor de 50 livros para crian&ccedil;as, jovens e educadores. Recebeu diversos pr&ecirc;mios no Brasil e no exterior, entre eles o Pr&ecirc;mio Jabuti, o Pr&ecirc;mio da Academia Brasileira de Letras e o Pr&ecirc;mio Toler&acirc;ncia (Unesco). &Eacute; graduado em filosofia, com licenciatura em hist&oacute;ria e psicologia, doutor em educa&ccedil;&atilde;o pela Universidade de S&atilde;o Paulo (USP) e p&oacute;s-doutor em literatura pela Universidade Federal de S&atilde;o Carlos (UFSCar).</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Escritor ind&iacute;gena brasileiro, &eacute; autor de 50 livros para crian&ccedil;as, jovens e educadores. Recebeu diversos pr&ecirc;mios no Brasil e no exterior, entre eles o Pr&ecirc;mio Jabuti, o Pr&ecirc;mio da Academia Brasileira de Letras e o Pr&ecirc;mio Toler&acirc;ncia (Unesco). &Eacute; graduado em filosofia, com licenciatura em hist&oacute;ria e psicologia, doutor em educa&ccedil;&atilde;o pela Universidade de S&atilde;o Paulo (USP) e p&oacute;s-doutor em literatura pela Universidade Federal de S&atilde;o Carlos (UFSCar).</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/58/image/902f1f48e00d1df527ca5df5265ed6b3.jpg",
+    "active": true
+   },
+   {
+    "id": 1012,
+    "name": "Daniel Munduruku ",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Escritor ind&iacute;gena brasileiro, &eacute; autor de 50 livros para crian&ccedil;as, jovens e educadores. Recebeu diversos pr&ecirc;mios no Brasil e no exterior, entre eles o Pr&ecirc;mio Jabuti, o Pr&ecirc;mio da Academia Brasileira de Letras e o Pr&ecirc;mio Toler&acirc;ncia (Unesco). &Eacute; graduado em filosofia, com licenciatura em hist&oacute;ria e psicologia, doutor em educa&ccedil;&atilde;o pela Universidade de S&atilde;o Paulo (USP) e p&oacute;s-doutor em literatura pela Universidade Federal de S&atilde;o Carlos (UFSCar).</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1026,
+    "name": "Daniela Paoliello",
+    "description": null,
+    "bio": "<p><strong>Daniela Paoliello</strong> &eacute; artista visual e reside em Belo Horizonte (MG). &Eacute; graduada em ci&ecirc;ncias sociais pela Universidade Federal de Minas Gerais (UFMG) e doutora em artes pela Universidade Estadual do Rio de Janeiro (Uerj). Foi contemplada com o&nbsp;XIII Pr&ecirc;mio Funarte Marc Ferrez de Fotografia por meio do qual publicou o livro <em>Ex&iacute;lio,</em> em 2015. Em 2018 foi premiada como artista destaque do <em>Sal&atilde;o de artes nov&iacute;ssimos 2018</em>, da Galeria Ibeu (RJ). Em 2019 passou a integrar a cole&ccedil;&atilde;o do Museu de Arte do Rio (MAR). Em 2020 publicou o livro <em>Que horas s&atilde;o no para&iacute;so?</em>. Nos &uacute;ltimos anos vem desenvolvendo sua pesquisa em torno da autoperformance feita exclusivamente para a c&acirc;mera &ndash; fotografia e v&iacute;deo &ndash; e da produ&ccedil;&atilde;o de uma autofic&ccedil;&atilde;o. Ela se interessa tamb&eacute;m pelas rela&ccedil;&otilde;es entre corpo e natureza.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 320,
+    "name": "Daniela Paoliello",
+    "description": "<p><strong>Daniela Paoliello</strong> &eacute; artista visual e reside em Belo Horizonte (MG). &Eacute; graduada em ci&ecirc;ncias sociais pela Universidade Federal de Minas Gerais (UFMG) e doutora em artes pela Universidade Estadual do Rio de Janeiro (Uerj). Foi contemplada com o&nbsp;XIII Pr&ecirc;mio Funarte Marc Ferrez de Fotografia por meio do qual publicou o livro <em>Ex&iacute;lio,</em> em 2015. Em 2018 foi premiada como artista destaque do <em>Sal&atilde;o de artes nov&iacute;ssimos 2018</em>, da Galeria Ibeu (RJ). Em 2019 passou a integrar a cole&ccedil;&atilde;o do Museu de Arte do Rio (MAR). Em 2020 publicou o livro <em>Que horas s&atilde;o no para&iacute;so?</em>. Nos &uacute;ltimos anos vem desenvolvendo sua pesquisa em torno da autoperformance feita exclusivamente para a c&acirc;mera &ndash; fotografia e v&iacute;deo &ndash; e da produ&ccedil;&atilde;o de uma autofic&ccedil;&atilde;o. Ela se interessa tamb&eacute;m pelas rela&ccedil;&otilde;es entre corpo e natureza.</p>\r\n",
+    "bio": "<p><strong>Daniela Paoliello</strong> &eacute; artista visual e reside em Belo Horizonte (MG). &Eacute; graduada em ci&ecirc;ncias sociais pela Universidade Federal de Minas Gerais (UFMG) e doutora em artes pela Universidade Estadual do Rio de Janeiro (Uerj). Foi contemplada com o&nbsp;XIII Pr&ecirc;mio Funarte Marc Ferrez de Fotografia por meio do qual publicou o livro <em>Ex&iacute;lio,</em> em 2015. Em 2018 foi premiada como artista destaque do <em>Sal&atilde;o de artes nov&iacute;ssimos 2018</em>, da Galeria Ibeu (RJ). Em 2019 passou a integrar a cole&ccedil;&atilde;o do Museu de Arte do Rio (MAR). Em 2020 publicou o livro <em>Que horas s&atilde;o no para&iacute;so?</em>. Nos &uacute;ltimos anos vem desenvolvendo sua pesquisa em torno da autoperformance feita exclusivamente para a c&acirc;mera &ndash; fotografia e v&iacute;deo &ndash; e da produ&ccedil;&atilde;o de uma autofic&ccedil;&atilde;o. Ela se interessa tamb&eacute;m pelas rela&ccedil;&otilde;es entre corpo e natureza.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/320/image/25fc369a4a26796bea6aa0698baa713f.png",
+    "active": true
+   },
+   {
+    "id": 461,
+    "name": "Daniel Galera",
+    "description": "<p>Escritor, tradutor e ensa&iacute;sta. Publicou, entre outros livros, os romances <em>M&atilde;os de cavalo</em>&nbsp;(2006), <em>Barba ensopada de sangue</em>&nbsp;(2012) e <em>O deus das avencas</em>&nbsp;(2021), e a hist&oacute;ria em quadrinhos <em>Cachalote</em>&nbsp;(2010),&nbsp;com Rafael Coutinho.&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n",
+    "bio": "<p>Escritor, tradutor e ensa&iacute;sta. Publicou, entre outros livros, os romances <em>M&atilde;os de cavalo</em>&nbsp;(2006), <em>Barba ensopada de sangue</em>&nbsp;(2012) e <em>O deus das avencas</em>&nbsp;(2021), e a hist&oacute;ria em quadrinhos <em>Cachalote</em>&nbsp;(2010),&nbsp;com Rafael Coutinho.&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/461/image/22cd830e471637ba45a885747c618359.jpg",
+    "active": true
+   },
+   {
+    "id": 1028,
+    "name": "Daniel Galera",
+    "description": null,
+    "bio": "<p>Escritor, tradutor e ensa&iacute;sta. Publicou, entre outros livros, os romances <em>M&atilde;os de cavalo</em>&nbsp;(2006), <em>Barba ensopada de sangue</em>&nbsp;(2012) e <em>O deus das avencas</em>&nbsp;(2021), e a hist&oacute;ria em quadrinhos <em>Cachalote</em>&nbsp;(2010),&nbsp;com Rafael Coutinho.&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 602,
+    "name": "Duanne Oliveira Ribeiro",
+    "description": "null",
+    "bio": "null",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 775,
+    "name": "Edu Carvalho",
+    "description": "<p>Estuda comunica&ccedil;&atilde;o social &ndash; jornalismo na Pontif&iacute;cia Universidade Cat&oacute;lica do Rio de Janeiro (PUC-Rio) e &eacute; rep&oacute;rter do site FaveladaRocinha.com. Ativista social, j&aacute; participou de eventos como Onda Cidad&atilde;, no Cariri (CE), Bienal do Livro, no Rio de Janeiro (RJ), e Festa Liter&aacute;ria Internacional de Paraty (Flip), em Paraty (RJ), sempre mostrando em sua escrita os assuntos do cotidiano do local onde mora, a Rocinha.</p>\r\n",
+    "bio": "<p>Estuda comunica&ccedil;&atilde;o social &ndash; jornalismo na Pontif&iacute;cia Universidade Cat&oacute;lica do Rio de Janeiro (PUC-Rio) e &eacute; rep&oacute;rter do site FaveladaRocinha.com. Ativista social, j&aacute; participou de eventos como Onda Cidad&atilde;, no Cariri (CE), Bienal do Livro, no Rio de Janeiro (RJ), e Festa Liter&aacute;ria Internacional de Paraty (Flip), em Paraty (RJ), sempre mostrando em sua escrita os assuntos do cotidiano do local onde mora, a Rocinha.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/775/image/c34fd38223e8050e684757f69e12707e.jpg",
+    "active": true
+   },
+   {
+    "id": 1003,
+    "name": "Edu Carvalho",
+    "description": null,
+    "bio": "<p>Estuda comunica&ccedil;&atilde;o social &ndash; jornalismo na Pontif&iacute;cia Universidade Cat&oacute;lica do Rio de Janeiro (PUC-Rio) e &eacute; rep&oacute;rter do site FaveladaRocinha.com. Ativista social, j&aacute; participou de eventos como Onda Cidad&atilde;, no Cariri (CE), Bienal do Livro, no Rio de Janeiro (RJ), e Festa Liter&aacute;ria Internacional de Paraty (Flip), em Paraty (RJ), sempre mostrando em sua escrita os assuntos do cotidiano do local onde mora, a Rocinha.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 970,
+    "name": "Eduardo Foster",
+    "description": null,
+    "bio": null,
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 659,
+    "name": "Encontro com Espectadores – Beth Néspoli",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna &eacute; assinada pelos editores do <em>Teatrojornal &ndash; Leituras de Cena</em>, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Beth N&eacute;spoli &eacute; jornalista, cr&iacute;tica e doutora em artes c&ecirc;nicas pela Universidade de S&atilde;o Paulo (USP).</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna &eacute; assinada pelos editores do <em>Teatrojornal &ndash; Leituras de Cena</em>, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Beth N&eacute;spoli &eacute; jornalista, cr&iacute;tica e doutora em artes c&ecirc;nicas pela Universidade de S&atilde;o Paulo (USP).</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/659/image/95c669754fb237091a310fa16f625400.jpg",
+    "active": true
+   },
+   {
+    "id": 1001,
+    "name": "Encontro com Espectadores – Beth Néspoli",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna &eacute; assinada pelos editores do <em>Teatrojornal &ndash; Leituras de Cena</em>, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Beth N&eacute;spoli &eacute; jornalista, cr&iacute;tica e doutora em artes c&ecirc;nicas pela Universidade de S&atilde;o Paulo (USP).</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 156,
+    "name": "Encontro com Espectadores – Kil Abreu",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Coluna dos editores do Teatrojornal &ndash; Leituras de Cena, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Kil Abreu &eacute; jornalista, cr&iacute;tico e curador de teatro.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Coluna dos editores do Teatrojornal &ndash; Leituras de Cena, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Kil Abreu &eacute; jornalista, cr&iacute;tico e curador de teatro.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/156/image/dbd6e044d77e10bad02f527c24a2ae41.jpg",
+    "active": true
+   },
+   {
+    "id": 1004,
+    "name": "Encontro com Espectadores – Kil Abreu",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Coluna dos editores do Teatrojornal &ndash; Leituras de Cena, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Kil Abreu &eacute; jornalista, cr&iacute;tico e curador de teatro.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 95,
+    "name": "Encontro com Espectadores – Maria Eugênia de Menezes",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Coluna dos editores do Teatrojornal &ndash; Leituras de Cena, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Maria Eug&ecirc;nia de Menezes &eacute; jornalista, cr&iacute;tica e colaboradora do jornal&nbsp;<em>O Estado de S. Paulo</em>.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Coluna dos editores do Teatrojornal &ndash; Leituras de Cena, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Maria Eug&ecirc;nia de Menezes &eacute; jornalista, cr&iacute;tica e colaboradora do jornal&nbsp;<em>O Estado de S. Paulo</em>.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/95/image/33092de00656eee13c29365a7f23fb97.jpg",
+    "active": true
+   },
+   {
+    "id": 1007,
+    "name": "Encontro com Espectadores – Maria Eugênia de Menezes",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Coluna dos editores do Teatrojornal &ndash; Leituras de Cena, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Maria Eug&ecirc;nia de Menezes &eacute; jornalista, cr&iacute;tica e colaboradora do jornal&nbsp;<em>O Estado de S. Paulo</em>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 902,
+    "name": "Encontro com Espectadores – Valmir Santos",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Coluna dos editores do Teatrojornal &ndash; Leituras de Cena, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Valmir Santos &eacute; jornalista, cr&iacute;tico e mestre em artes c&ecirc;nicas pela Universidade de S&atilde;o Paulo (USP).</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Coluna dos editores do Teatrojornal &ndash; Leituras de Cena, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Valmir Santos &eacute; jornalista, cr&iacute;tico e mestre em artes c&ecirc;nicas pela Universidade de S&atilde;o Paulo (USP).</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/902/image/04d7ce0690a1976578d90ea097863131.jpg",
+    "active": true
+   },
+   {
+    "id": 1006,
+    "name": "Encontro com Espectadores – Valmir Santos",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Coluna dos editores do Teatrojornal &ndash; Leituras de Cena, site que realiza essa a&ccedil;&atilde;o mensal envolvendo cr&iacute;ticos, artistas e espectadores. Valmir Santos &eacute; jornalista, cr&iacute;tico e mestre em artes c&ecirc;nicas pela Universidade de S&atilde;o Paulo (USP).</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 557,
+    "name": "Fabiana Carneiro da Silva",
+    "description": "<p>Neta de Amada e de Quiteria, filha de Lourdes e m&atilde;e de Imani e Yet&eacute;, tece um caminho que alinhava doc&ecirc;ncia, pesquisa e a&ccedil;&otilde;es art&iacute;sticas no campo dos saberes contra-hegem&ocirc;nicos, sobretudo a partir do eixo constitu&iacute;do por literatura, corpo e experi&ecirc;ncia comunit&aacute;ria. Doutora em teoria liter&aacute;ria e literatura comparada pela Universidade de S&atilde;o Paulo (USP), atua como professora adjunta do Departamento de Letras Cl&aacute;ssicas e Vern&aacute;culas da Universidade Federal da Para&iacute;ba (DLCV/UFPB).</p>\r\n",
+    "bio": "<p>Neta de Amada e de Quiteria, filha de Lourdes e m&atilde;e de Imani e Yet&eacute;, tece um caminho que alinhava doc&ecirc;ncia, pesquisa e a&ccedil;&otilde;es art&iacute;sticas no campo dos saberes contra-hegem&ocirc;nicos, sobretudo a partir do eixo constitu&iacute;do por literatura, corpo e experi&ecirc;ncia comunit&aacute;ria. Doutora em teoria liter&aacute;ria e literatura comparada pela Universidade de S&atilde;o Paulo (USP), atua como professora adjunta do Departamento de Letras Cl&aacute;ssicas e Vern&aacute;culas da Universidade Federal da Para&iacute;ba (DLCV/UFPB).</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/557/image/3cc3a7873241badf9f7fe21e3b206a6d.jpeg",
+    "active": true
+   },
+   {
+    "id": 1040,
+    "name": "Fabiana Carneiro da Silva",
+    "description": "",
+    "bio": "<p>Neta de Amada e de Quiteria, filha de Lourdes e m&atilde;e de Imani e Yet&eacute;, tece um caminho que alinhava doc&ecirc;ncia, pesquisa e a&ccedil;&otilde;es art&iacute;sticas no campo dos saberes contra-hegem&ocirc;nicos, sobretudo a partir do eixo constitu&iacute;do por literatura, corpo e experi&ecirc;ncia comunit&aacute;ria. Doutora em teoria liter&aacute;ria e literatura comparada pela Universidade de S&atilde;o Paulo (USP), atua como professora adjunta do Departamento de Letras Cl&aacute;ssicas e Vern&aacute;culas da Universidade Federal da Para&iacute;ba (DLCV/UFPB).</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 973,
+    "name": "Fabiana Pereira",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 404,
+    "name": "Filipe Alves",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Artista visual, designer, pesquisador e membro da Funda&ccedil;&atilde;o Casa Grande, no Cear&aacute;, Filipe Alves acredita no potencial da cultura local e da ancestralidade do povo Kariri. Por meio de amor, alegria, tinta, l&aacute;pis e papel, trabalha com a linguagem das artes visuais. Como designer, procura mergulhar na imensid&atilde;o dos territ&oacute;rios e das culturas para se inspirar nas belezas e valores, criando sites que valorizam o afeto e a valoriza&ccedil;&atilde;o do espa&ccedil;o territorial.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Artista visual, designer, pesquisador e membro da Funda&ccedil;&atilde;o Casa Grande, no Cear&aacute;, Filipe Alves acredita no potencial da cultura local e da ancestralidade do povo Kariri. Por meio de amor, alegria, tinta, l&aacute;pis e papel, trabalha com a linguagem das artes visuais. Como designer, procura mergulhar na imensid&atilde;o dos territ&oacute;rios e das culturas para se inspirar nas belezas e valores, criando sites que valorizam o afeto e a valoriza&ccedil;&atilde;o do espa&ccedil;o territorial.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/404/image/8b796e3db45039cc009e13bc80cab5b8.jpeg",
+    "active": true
+   },
+   {
+    "id": 1010,
+    "name": "Filipe Alves",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Artista visual, designer, pesquisador e membro da Funda&ccedil;&atilde;o Casa Grande, no Cear&aacute;, Filipe Alves acredita no potencial da cultura local e da ancestralidade do povo Kariri. Por meio de amor, alegria, tinta, l&aacute;pis e papel, trabalha com a linguagem das artes visuais. Como designer, procura mergulhar na imensid&atilde;o dos territ&oacute;rios e das culturas para se inspirar nas belezas e valores, criando sites que valorizam o afeto e a valoriza&ccedil;&atilde;o do espa&ccedil;o territorial.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 772,
+    "name": "Gabriel Carneiro",
+    "description": "<p>Jornalista, diretor de filmes, cr&iacute;tico e pesquisador de cinema</p>\r\n",
+    "bio": "<p>Jornalista, diretor de filmes, cr&iacute;tico e pesquisador de cinema</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 997,
+    "name": "Gabriel Carneiro",
+    "description": null,
+    "bio": "<p>Jornalista, diretor de filmes, cr&iacute;tico e pesquisador de cinema</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 982,
+    "name": "Gabriel de Souza Lopes",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 376,
+    "name": "Gabriel Isaac",
+    "description": "Multiartista, influenciador, ator, produtor, tradutor de Libras e consultor.",
+    "bio": "<p>Multiartista, influenciador, ator, produtor, tradutor de Libras e consultor. Foi o pioneiro de um dos grandes projetos para o Dia dos Surdos que segue realizando at&eacute; hoje. Uma das vozes mais potentes da comunidade surda, publica v&aacute;rios conte&uacute;dos sobre a import&acirc;ncia da acessibilidade, inclus&atilde;o e diversidade, mostrando todas as nuances do que &eacute; ser surdo nessa sociedade inacess&iacute;vel e capacitista.&nbsp;</p>",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/376/image/7277e7f1d040f7b931282fb59fe4833c.jpeg",
+    "active": true
+   },
+   {
+    "id": 983,
+    "name": "Gabriela Monteiro",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 319,
+    "name": "Heitor Augusto ",
+    "description": "<p>&Eacute; cr&iacute;tico de cinema, pesquisador, jornalista e professor. Tem textos publicados em revistas eletr&ocirc;nicas de cr&iacute;tica e ve&iacute;culos impressos, al&eacute;m de cat&aacute;logos e colet&acirc;neas. Ministra cursos sobre cinema e oficinas de cr&iacute;tica, al&eacute;m de pesquisar o cinema<em> blaxploitation</em>. &Eacute; um dos curadores do 50<u><sup>o</sup></u> Festival de Bras&iacute;lia do Cinema Brasileiro. Seus trabalhos mais recentes est&atilde;o posicionados na intersec&ccedil;&atilde;o entre est&eacute;tica/forma, pol&iacute;tica/hist&oacute;ria e representa&ccedil;&atilde;o/representatividade racial. Seus textos podem ser encontrados no site <a href=\"http://www.ursodelata.com/\">Urso de Lata</a>.</p>\r\n",
+    "bio": "<p>&Eacute; cr&iacute;tico de cinema, pesquisador, jornalista e professor. Tem textos publicados em revistas eletr&ocirc;nicas de cr&iacute;tica e ve&iacute;culos impressos, al&eacute;m de cat&aacute;logos e colet&acirc;neas. Ministra cursos sobre cinema e oficinas de cr&iacute;tica, al&eacute;m de pesquisar o cinema<em> blaxploitation</em>. &Eacute; um dos curadores do 50<u><sup>o</sup></u> Festival de Bras&iacute;lia do Cinema Brasileiro. Seus trabalhos mais recentes est&atilde;o posicionados na intersec&ccedil;&atilde;o entre est&eacute;tica/forma, pol&iacute;tica/hist&oacute;ria e representa&ccedil;&atilde;o/representatividade racial. Seus textos podem ser encontrados no site <a href=\"http://www.ursodelata.com/\">Urso de Lata</a>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1000,
+    "name": "Heitor Augusto ",
+    "description": null,
+    "bio": "<p>&Eacute; cr&iacute;tico de cinema, pesquisador, jornalista e professor. Tem textos publicados em revistas eletr&ocirc;nicas de cr&iacute;tica e ve&iacute;culos impressos, al&eacute;m de cat&aacute;logos e colet&acirc;neas. Ministra cursos sobre cinema e oficinas de cr&iacute;tica, al&eacute;m de pesquisar o cinema<em> blaxploitation</em>. &Eacute; um dos curadores do 50<u><sup>o</sup></u> Festival de Bras&iacute;lia do Cinema Brasileiro. Seus trabalhos mais recentes est&atilde;o posicionados na intersec&ccedil;&atilde;o entre est&eacute;tica/forma, pol&iacute;tica/hist&oacute;ria e representa&ccedil;&atilde;o/representatividade racial. Seus textos podem ser encontrados no site <a href=\"http://www.ursodelata.com/\">Urso de Lata</a>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 720,
+    "name": "Heloísa Iaconis",
+    "description": "null",
+    "bio": "null",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/720/image/e78a6e59538f4c649b7ab0fa23d7508f.jpeg",
+    "active": true
+   },
+   {
+    "id": 964,
+    "name": "Icaro Mello",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 127,
+    "name": "Ivana Moura",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Jornalista, cr&iacute;tica de teatro, escritora, artista e produtora cultural. Idealizadora e editora do site <a href=\"https://www.satisfeitayolanda.com.br/blog/\" target=\"_blank\"><strong><em>Satisfeita, Yolanda?</em></strong></a>. Doutoranda em Artes C&ecirc;nicas na Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA-USP).</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Jornalista, cr&iacute;tica de teatro, escritora, artista e produtora cultural. Idealizadora e editora do site <a href=\"https://www.satisfeitayolanda.com.br/blog/\" target=\"_blank\"><strong><em>Satisfeita, Yolanda?</em></strong></a>. Doutoranda em Artes C&ecirc;nicas na Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA-USP).</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/127/image/573cd855fcaf7b3d254248059e2c0ff7.jpg",
+    "active": true
+   },
+   {
+    "id": 1021,
+    "name": "Ivana Moura",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Jornalista, cr&iacute;tica de teatro, escritora, artista e produtora cultural. Idealizadora e editora do site <a href=\"https://www.satisfeitayolanda.com.br/blog/\" target=\"_blank\"><strong><em>Satisfeita, Yolanda?</em></strong></a>. Doutoranda em Artes C&ecirc;nicas na Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA-USP).</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1042,
+    "name": "Jemima Bispo",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1038,
+    "name": "Jorge LZ",
+    "description": "",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Carioca, radialista, curador, pesquisador musical, produtor cultural e DJ. Produz e apresenta o programa semanal <em>Na ponta da agulha</em>, na R&aacute;dio Graviola, &eacute; curador do <em>Festival levada</em> e integra o Radialivres, coletivo de radialistas do Brasil.&nbsp;Foi idealizador e curador do <em>Festival BRio</em> e do projeto <em>Ver&atilde;o musical no Castelinho</em>, e produziu e apresentou os programas <em>Geleia moderna</em>, <em>Radar</em> e <em>Compacto</em>, na R&aacute;dio Roquette-Pinto.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 748,
+    "name": "Jorge LZ",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Carioca, radialista, curador, pesquisador musical, produtor cultural e DJ. Produz e apresenta o programa semanal <em>Na ponta da agulha</em>, na R&aacute;dio Graviola, &eacute; curador do <em>Festival levada</em> e integra o Radialivres, coletivo de radialistas do Brasil.&nbsp;Foi idealizador e curador do <em>Festival BRio</em> e do projeto <em>Ver&atilde;o musical no Castelinho</em>, e produziu e apresentou os programas <em>Geleia moderna</em>, <em>Radar</em> e <em>Compacto</em>, na R&aacute;dio Roquette-Pinto.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Carioca, radialista, curador, pesquisador musical, produtor cultural e DJ. Produz e apresenta o programa semanal <em>Na ponta da agulha</em>, na R&aacute;dio Graviola, &eacute; curador do <em>Festival levada</em> e integra o Radialivres, coletivo de radialistas do Brasil.&nbsp;Foi idealizador e curador do <em>Festival BRio</em> e do projeto <em>Ver&atilde;o musical no Castelinho</em>, e produziu e apresentou os programas <em>Geleia moderna</em>, <em>Radar</em> e <em>Compacto</em>, na R&aacute;dio Roquette-Pinto.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/748/image/69765b77f2f34c772da51ec3e6fddfec.jpg",
+    "active": true
+   },
+   {
+    "id": 906,
+    "name": "José Geraldo Couto ",
+    "description": "<p>Jornalista e cr&iacute;tico de cinema. Trabalhou durante mais de 20 anos para a&nbsp;<em>Folha de S.Paulo</em>. &Eacute; tradutor de ingl&ecirc;s e espanhol. Do ingl&ecirc;s traduziu, entre outros autores, Henry James, Saul Bellow, Norman Mailer, Truman Capote, Michael Cunningham e Martin Scorsese. Do espanhol, Adolfo Bioy Casares e Enrique Vila-Matas.</p>\r\n",
+    "bio": "<p>Jornalista e cr&iacute;tico de cinema. Trabalhou durante mais de 20 anos para a&nbsp;<em>Folha de S.Paulo</em>. &Eacute; tradutor de ingl&ecirc;s e espanhol. Do ingl&ecirc;s traduziu, entre outros autores, Henry James, Saul Bellow, Norman Mailer, Truman Capote, Michael Cunningham e Martin Scorsese. Do espanhol, Adolfo Bioy Casares e Enrique Vila-Matas.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 996,
+    "name": "José Geraldo Couto ",
+    "description": null,
+    "bio": "<p>Jornalista e cr&iacute;tico de cinema. Trabalhou durante mais de 20 anos para a&nbsp;<em>Folha de S.Paulo</em>. &Eacute; tradutor de ingl&ecirc;s e espanhol. Do ingl&ecirc;s traduziu, entre outros autores, Henry James, Saul Bellow, Norman Mailer, Truman Capote, Michael Cunningham e Martin Scorsese. Do espanhol, Adolfo Bioy Casares e Enrique Vila-Matas.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 977,
+    "name": "Julia Codeminer",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 969,
+    "name": "Julia Leibovitz",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 962,
+    "name": "Juliana Araujo",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 949,
+    "name": "Juliana Ribeiro",
+    "description": "null",
+    "bio": "null",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/949/image/47521310966d23314aca553689c05035.jpeg",
+    "active": true
+   },
+   {
+    "id": 984,
+    "name": "Jully Marinho",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 948,
+    "name": "Laura Erber",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Laura Erber</strong> &eacute; escritora, artista e pesquisadora, atuando nas &aacute;reas de literatura, artes visuais e teoria da imagem. Desde 2020 &eacute; pesquisadora visitante do Department of English, Germanic and Romance Studies, na Universidade de Copenhague (Dinamarca), e professora visitante da Universidade Cat&oacute;lica Portuguesa. Cofundadora e diretora-geral da Zazie Edi&ccedil;&otilde;es &ndash; editora independente e sem fins lucrativos voltada para a divulga&ccedil;&atilde;o de textos te&oacute;rico-cr&iacute;ticos em portugu&ecirc;s, em sistema de <em>open access</em> &ndash;, &eacute; tamb&eacute;m autora de livros de poesia e do romance <em>Esquilos</em> <em>de Pavlov</em> (Alfaguara, 2013). Colabora em jornais e suplementos culturais brasileiros, como <em>Folha de S.Paulo</em>, <em>O globo</em> e <em>Suplemento Pernambuco</em>. Publicou os livros de ensaio <em>Gh&eacute;rasim Luca</em> (Eduerj, 2012) e <em>O artista improdutivo</em> (Editora &Acirc;yin&eacute;, 2021). Como artista, realizou exposi&ccedil;&otilde;es em diversos museus e centros de arte no Brasil e no exterior, como Funda&ccedil;&atilde;o Mir&oacute;, na Espanha, Museu de Arte Moderna do Rio de Janeiro (MAM Rio), Skive Ny Kunstmuseum, na Dinamarca, Centro Cultural Banco do Brasil (CCBB), Grand Palais de Paris e Centre International d&rsquo;Art du Paysage &Icirc;le de Vassivi&egrave;re, ambos na Fran&ccedil;a.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Laura Erber</strong> &eacute; escritora, artista e pesquisadora, atuando nas &aacute;reas de literatura, artes visuais e teoria da imagem. Desde 2020 &eacute; pesquisadora visitante do Department of English, Germanic and Romance Studies, na Universidade de Copenhague (Dinamarca), e professora visitante da Universidade Cat&oacute;lica Portuguesa. Cofundadora e diretora-geral da Zazie Edi&ccedil;&otilde;es &ndash; editora independente e sem fins lucrativos voltada para a divulga&ccedil;&atilde;o de textos te&oacute;rico-cr&iacute;ticos em portugu&ecirc;s, em sistema de <em>open access</em> &ndash;, &eacute; tamb&eacute;m autora de livros de poesia e do romance <em>Esquilos</em> <em>de Pavlov</em> (Alfaguara, 2013). Colabora em jornais e suplementos culturais brasileiros, como <em>Folha de S.Paulo</em>, <em>O globo</em> e <em>Suplemento Pernambuco</em>. Publicou os livros de ensaio <em>Gh&eacute;rasim Luca</em> (Eduerj, 2012) e <em>O artista improdutivo</em> (Editora &Acirc;yin&eacute;, 2021). Como artista, realizou exposi&ccedil;&otilde;es em diversos museus e centros de arte no Brasil e no exterior, como Funda&ccedil;&atilde;o Mir&oacute;, na Espanha, Museu de Arte Moderna do Rio de Janeiro (MAM Rio), Skive Ny Kunstmuseum, na Dinamarca, Centro Cultural Banco do Brasil (CCBB), Grand Palais de Paris e Centre International d&rsquo;Art du Paysage &Icirc;le de Vassivi&egrave;re, ambos na Fran&ccedil;a.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/948/image/62db28b2d4a90373130021de4b535d8d.png",
+    "active": true
+   },
+   {
+    "id": 1027,
+    "name": "Laura Erber",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Laura Erber</strong> &eacute; escritora, artista e pesquisadora, atuando nas &aacute;reas de literatura, artes visuais e teoria da imagem. Desde 2020 &eacute; pesquisadora visitante do Department of English, Germanic and Romance Studies, na Universidade de Copenhague (Dinamarca), e professora visitante da Universidade Cat&oacute;lica Portuguesa. Cofundadora e diretora-geral da Zazie Edi&ccedil;&otilde;es &ndash; editora independente e sem fins lucrativos voltada para a divulga&ccedil;&atilde;o de textos te&oacute;rico-cr&iacute;ticos em portugu&ecirc;s, em sistema de <em>open access</em> &ndash;, &eacute; tamb&eacute;m autora de livros de poesia e do romance <em>Esquilos</em> <em>de Pavlov</em> (Alfaguara, 2013). Colabora em jornais e suplementos culturais brasileiros, como <em>Folha de S.Paulo</em>, <em>O globo</em> e <em>Suplemento Pernambuco</em>. Publicou os livros de ensaio <em>Gh&eacute;rasim Luca</em> (Eduerj, 2012) e <em>O artista improdutivo</em> (Editora &Acirc;yin&eacute;, 2021). Como artista, realizou exposi&ccedil;&otilde;es em diversos museus e centros de arte no Brasil e no exterior, como Funda&ccedil;&atilde;o Mir&oacute;, na Espanha, Museu de Arte Moderna do Rio de Janeiro (MAM Rio), Skive Ny Kunstmuseum, na Dinamarca, Centro Cultural Banco do Brasil (CCBB), Grand Palais de Paris e Centre International d&rsquo;Art du Paysage &Icirc;le de Vassivi&egrave;re, ambos na Fran&ccedil;a.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 974,
+    "name": "Ligia Dona de Souza",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1043,
+    "name": "Lucas Abreu Antonio",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1020,
+    "name": "Lucas Cordeiro",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Lucas Cordeiro</strong> (Itapetinga, BA) &eacute; fot&oacute;grafo e artista visual baseado em S&atilde;o Paulo. Cria a partir de est&eacute;ticas afrocentradas que dialogam com temas como ancestralidade, religi&atilde;o, tecnologias e suas intersec&ccedil;&otilde;es. Usa a fotografia e o v&iacute;deo como linguagem art&iacute;stica afim de mimetizar possibilidades entre o real e o virtual.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 352,
+    "name": "Lucas Cordeiro",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Lucas Cordeiro</strong> (Itapetinga, BA) &eacute; fot&oacute;grafo e artista visual baseado em S&atilde;o Paulo. Cria a partir de est&eacute;ticas afrocentradas que dialogam com temas como ancestralidade, religi&atilde;o, tecnologias e suas intersec&ccedil;&otilde;es. Usa a fotografia e o v&iacute;deo como linguagem art&iacute;stica afim de mimetizar possibilidades entre o real e o virtual.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Lucas Cordeiro</strong> (Itapetinga, BA) &eacute; fot&oacute;grafo e artista visual baseado em S&atilde;o Paulo. Cria a partir de est&eacute;ticas afrocentradas que dialogam com temas como ancestralidade, religi&atilde;o, tecnologias e suas intersec&ccedil;&otilde;es. Usa a fotografia e o v&iacute;deo como linguagem art&iacute;stica afim de mimetizar possibilidades entre o real e o virtual.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/352/image/e5c94fd43ec3bbde9d65cb94bdab516b.jpg",
+    "active": true
+   },
+   {
+    "id": 1024,
+    "name": "Luísa Pécora",
+    "description": "",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Jornalista e criadora do site <a href=\"https://mulhernocinema.com/\" target=\"_blank\"><strong>Mulher no cinema</strong></a>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 975,
+    "name": "Marcelo Bule",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 246,
+    "name": "Márcio Vasconcelos",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>M&aacute;rcio Vasconcelos</strong> (S&atilde;o Lu&iacute;s, MA) &eacute; fot&oacute;grafo profissional autodidata e independente. Dedica-se h&aacute; mais de 20 anos &agrave; pesquisa e ao registro da cultura popular e religiosa de matriz afro no Brasil, especialmente no Maranh&atilde;o. Seus trabalhos aliam a fotografia a uma vasta pesquisa antropol&oacute;gica e social.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>M&aacute;rcio Vasconcelos</strong> (S&atilde;o Lu&iacute;s, MA) &eacute; fot&oacute;grafo profissional autodidata e independente. Dedica-se h&aacute; mais de 20 anos &agrave; pesquisa e ao registro da cultura popular e religiosa de matriz afro no Brasil, especialmente no Maranh&atilde;o. Seus trabalhos aliam a fotografia a uma vasta pesquisa antropol&oacute;gica e social.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/246/image/097c0622113e353d115dbacabd1c309a.jpg",
+    "active": true
+   },
+   {
+    "id": 1029,
+    "name": "Márcio Vasconcelos",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>M&aacute;rcio Vasconcelos</strong> (S&atilde;o Lu&iacute;s, MA) &eacute; fot&oacute;grafo profissional autodidata e independente. Dedica-se h&aacute; mais de 20 anos &agrave; pesquisa e ao registro da cultura popular e religiosa de matriz afro no Brasil, especialmente no Maranh&atilde;o. Seus trabalhos aliam a fotografia a uma vasta pesquisa antropol&oacute;gica e social.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 542,
+    "name": "Marcos Carvalho Lopes",
+    "description": "Doutor em filosofia, professor universitário e host do podcast Filosofia Pop",
+    "bio": "<p><strong><span style=\"font-size: 10.0pt; line-height: 107%; font-family: 'Arial',sans-serif; mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; mso-ansi-language: PT-BR; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;\">Marcos Carvalho Lopes</span></strong><span style=\"font-size: 10.0pt; line-height: 107%; font-family: 'Arial',sans-serif; mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; mso-ansi-language: PT-BR; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;\"> &eacute; doutor em filosofia pela Universidade Federal do Rio de Janeiro (UFRJ) e p&oacute;s-doutor em literatura, cultura e contemporaneidade pela Pontif&iacute;cia Universidade Cat&oacute;lica do Rio de Janeiro (PUC Rio). &Eacute; professor da Universidade Federal de Jata&iacute; (UFJ), em Goi&aacute;s. Com Murilo Ferraz, &eacute; criador do <em>podcast</em> </span><span style=\"font-size: 11.0pt; line-height: 107%; font-family: 'Calibri',sans-serif; mso-ascii-theme-font: minor-latin; mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: 'Times New Roman'; mso-bidi-theme-font: minor-bidi; mso-ansi-language: PT-BR; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;\"><a href=\"http://filosofiapop.com.br/\"><em><span style=\"font-size: 10.0pt; line-height: 107%; font-family: 'Arial',sans-serif;\">Filosofia pop</span></em></a></span><span style=\"font-size: 10.0pt; line-height: 107%; font-family: 'Arial',sans-serif; mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; mso-ansi-language: PT-BR; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;\">.</span></p>",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/542/image/fe072775e106f4fe6c0a85b439c5576a.jpeg",
+    "active": true
+   },
+   {
+    "id": 539,
+    "name": "Marcos Terena ",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Marcos Terena </strong>&eacute; ind&iacute;gena da tradi&ccedil;&atilde;o X&uacute;mono do Mato Grosso do Sul. &Eacute; comunicador e articulador dos direitos ind&iacute;genas na Constituinte.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Marcos Terena </strong>&eacute; ind&iacute;gena da tradi&ccedil;&atilde;o X&uacute;mono do Mato Grosso do Sul. &Eacute; comunicador e articulador dos direitos ind&iacute;genas na Constituinte.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 55,
+    "name": "Maria do Rosário Caetano",
+    "description": "<p>Jornalista e pesquisadora. Autora dos livros <em>Fernando Meirelles &ndash; Biografia Prematura </em>e<em> Cineastas Latino-Americanos &ndash; Entrevistas e Filmes</em>.<em> </em>Foi tamb&eacute;m organizadora de <em>Canga&ccedil;o, o Nordestern&nbsp;no Cinema Brasileiro</em> e <em>Paulo Emilio Salles Gomes &ndash; o Homem que Amava o Cinema e N&oacute;s que o Am&aacute;vamos Tanto</em>.</p>\r\n",
+    "bio": "<p>Jornalista e pesquisadora. Autora dos livros <em>Fernando Meirelles &ndash; Biografia Prematura </em>e<em> Cineastas Latino-Americanos &ndash; Entrevistas e Filmes</em>.<em> </em>Foi tamb&eacute;m organizadora de <em>Canga&ccedil;o, o Nordestern&nbsp;no Cinema Brasileiro</em> e <em>Paulo Emilio Salles Gomes &ndash; o Homem que Amava o Cinema e N&oacute;s que o Am&aacute;vamos Tanto</em>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 995,
+    "name": "Maria do Rosário Caetano",
+    "description": null,
+    "bio": "<p>Jornalista e pesquisadora. Autora dos livros <em>Fernando Meirelles &ndash; Biografia Prematura </em>e<em> Cineastas Latino-Americanos &ndash; Entrevistas e Filmes</em>.<em> </em>Foi tamb&eacute;m organizadora de <em>Canga&ccedil;o, o Nordestern&nbsp;no Cinema Brasileiro</em> e <em>Paulo Emilio Salles Gomes &ndash; o Homem que Amava o Cinema e N&oacute;s que o Am&aacute;vamos Tanto</em>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 386,
+    "name": "Marina Nacamuli",
+    "description": "<p>&Eacute; fot&oacute;grafa e trabalha principalmente com 35mm. Seu trabalho se estende por <em>fine art</em>, documental, moda e <em>lifestyle</em>. Depois de sete anos vivendo no Brooklyn (NY), voltou para&nbsp;S&atilde;o Paulo&nbsp;e h&aacute; alguns anos explorando sua&nbsp;cidade. Marina fotografa seus &iacute;ntimos, a vida na rua&nbsp;e &eacute; atra&iacute;da por assuntos que envolvem a mulher&nbsp;e as subculturas. &Eacute; formada em cinema pela New York Film Academy&nbsp;e, hoje, trabalha mesclando suas forma&ccedil;&otilde;es de video e fotografia. Teve seu trabalho exposto em diversas exposi&ccedil;&otilde;es, festivais e galerias em Nova York e em S&atilde;o Paulo, como A.I.R. Gallery, Baboo Gallery, Casa Sinlogo, Festival Valongo, SP-Arte/Foto, entre outros. Em 2017 lan&ccedil;ou seu primeiro fotolivro <em>Roose</em>, sobre a Pra&ccedil;a Roosevelt e seus frequentadores. O fotolivro est&aacute; arquivado na biblioteca do Instituto Moreira Salles.</p>\r\n",
+    "bio": "<p>&Eacute; fot&oacute;grafa e trabalha principalmente com 35mm. Seu trabalho se estende por <em>fine art</em>, documental, moda e <em>lifestyle</em>. Depois de sete anos vivendo no Brooklyn (NY), voltou para&nbsp;S&atilde;o Paulo&nbsp;e h&aacute; alguns anos explorando sua&nbsp;cidade. Marina fotografa seus &iacute;ntimos, a vida na rua&nbsp;e &eacute; atra&iacute;da por assuntos que envolvem a mulher&nbsp;e as subculturas. &Eacute; formada em cinema pela New York Film Academy&nbsp;e, hoje, trabalha mesclando suas forma&ccedil;&otilde;es de video e fotografia. Teve seu trabalho exposto em diversas exposi&ccedil;&otilde;es, festivais e galerias em Nova York e em S&atilde;o Paulo, como A.I.R. Gallery, Baboo Gallery, Casa Sinlogo, Festival Valongo, SP-Arte/Foto, entre outros. Em 2017 lan&ccedil;ou seu primeiro fotolivro <em>Roose</em>, sobre a Pra&ccedil;a Roosevelt e seus frequentadores. O fotolivro est&aacute; arquivado na biblioteca do Instituto Moreira Salles.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/386/image/7079bd569e2739319a985af711d33e4a.jpg",
+    "active": true
+   },
+   {
+    "id": 1037,
+    "name": "Marina Nacamuli",
+    "description": null,
+    "bio": "<p>&Eacute; fot&oacute;grafa e trabalha principalmente com 35mm. Seu trabalho se estende por <em>fine art</em>, documental, moda e <em>lifestyle</em>. Depois de sete anos vivendo no Brooklyn (NY), voltou para&nbsp;S&atilde;o Paulo&nbsp;e h&aacute; alguns anos explorando sua&nbsp;cidade. Marina fotografa seus &iacute;ntimos, a vida na rua&nbsp;e &eacute; atra&iacute;da por assuntos que envolvem a mulher&nbsp;e as subculturas. &Eacute; formada em cinema pela New York Film Academy&nbsp;e, hoje, trabalha mesclando suas forma&ccedil;&otilde;es de video e fotografia. Teve seu trabalho exposto em diversas exposi&ccedil;&otilde;es, festivais e galerias em Nova York e em S&atilde;o Paulo, como A.I.R. Gallery, Baboo Gallery, Casa Sinlogo, Festival Valongo, SP-Arte/Foto, entre outros. Em 2017 lan&ccedil;ou seu primeiro fotolivro <em>Roose</em>, sobre a Pra&ccedil;a Roosevelt e seus frequentadores. O fotolivro est&aacute; arquivado na biblioteca do Instituto Moreira Salles.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 981,
+    "name": "Mauryce",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 963,
+    "name": "Mayra Campos",
+    "description": null,
+    "bio": null,
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 50,
+    "name": "Mayra Fonseca",
+    "description": "<p>Nasceu no norte de Minas Gerais, entre o cerrado e o sert&atilde;o. Pesquisadora de culturas e linguagens brasileiras e amer&iacute;ndias, estudou comunica&ccedil;&atilde;o e antropologia com a vontade de pesquisar e contar hist&oacute;rias brasileiras para brasileiros. Est&aacute; envolvida principalmente em projetos de educa&ccedil;&atilde;o, pesquisa, media&ccedil;&atilde;o/modera&ccedil;&atilde;o e produ&ccedil;&atilde;o de conte&uacute;do. Domina ferramentas de etnografia, narrativas e inova&ccedil;&atilde;o social.</p>\r\n",
+    "bio": "<p>Nasceu no norte de Minas Gerais, entre o cerrado e o sert&atilde;o. Pesquisadora de culturas e linguagens brasileiras e amer&iacute;ndias, estudou comunica&ccedil;&atilde;o e antropologia com a vontade de pesquisar e contar hist&oacute;rias brasileiras para brasileiros. Est&aacute; envolvida principalmente em projetos de educa&ccedil;&atilde;o, pesquisa, media&ccedil;&atilde;o/modera&ccedil;&atilde;o e produ&ccedil;&atilde;o de conte&uacute;do. Domina ferramentas de etnografia, narrativas e inova&ccedil;&atilde;o social.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/50/image/a09cf2087bf009dccc2d2805a1b0de05.jpg",
+    "active": true
+   },
+   {
+    "id": 993,
+    "name": "Mayra Fonseca",
+    "description": null,
+    "bio": "<p>Nasceu no norte de Minas Gerais, entre o cerrado e o sert&atilde;o. Pesquisadora de culturas e linguagens brasileiras e amer&iacute;ndias, estudou comunica&ccedil;&atilde;o e antropologia com a vontade de pesquisar e contar hist&oacute;rias brasileiras para brasileiros. Est&aacute; envolvida principalmente em projetos de educa&ccedil;&atilde;o, pesquisa, media&ccedil;&atilde;o/modera&ccedil;&atilde;o e produ&ccedil;&atilde;o de conte&uacute;do. Domina ferramentas de etnografia, narrativas e inova&ccedil;&atilde;o social.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 986,
+    "name": "Milena Dias de Sa",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 779,
+    "name": "Naine Terena",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/779/image/85caddecd16cda5c4a04e5c653954d05.jpg",
+    "active": true
+   },
+   {
+    "id": 1018,
+    "name": "Naine Terena",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; membro da na&ccedil;&atilde;o Terena. Doutora em educa&ccedil;&atilde;o pela Pontif&iacute;cia Universidade Cat&oacute;lica de S&atilde;o Paulo (PUC-SP), tem est&aacute;gio p&oacute;s-doutoral na Universidade Federal de Mato Grosso (UFMT) e na Universidade do Estado de Mato Grosso (Unemat). Mestre em artes pela Universidade de Bras&iacute;lia (UnB), &eacute; tamb&eacute;m radialista (UFMT), curadora independente, professora universit&aacute;ria e empreendedora cultural na <a href=\"https://oraculocomunica.eco.br/naineterena/\" target=\"_blank\">Or&aacute;culo Comunica&ccedil;&atilde;o, Educa&ccedil;&atilde;o e Cultura</a>. Foi agraciada como Mestre da Cultura de Mato Grosso (2021).</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 789,
+    "name": "Natália Garcia",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; jornalista e criadora da comunidade Cidades para Pessoas. Representa a embaixada no Brasil da plataforma de cria&ccedil;&atilde;o e inova&ccedil;&atilde;o <em>urban maker</em> Pakhuis de Zwijger. Em todos esses trabalhos, dedica-se a investigar, comunicar e implementar a&ccedil;&otilde;es pr&aacute;ticas que melhorem a vida no planeta. &Eacute; atualmente mediadora do Brechas Urbanas, s&eacute;rie de debates sobre a vida na cidade que acontece mensalmente no Ita&uacute; Cultural.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; jornalista e criadora da comunidade Cidades para Pessoas. Representa a embaixada no Brasil da plataforma de cria&ccedil;&atilde;o e inova&ccedil;&atilde;o <em>urban maker</em> Pakhuis de Zwijger. Em todos esses trabalhos, dedica-se a investigar, comunicar e implementar a&ccedil;&otilde;es pr&aacute;ticas que melhorem a vida no planeta. &Eacute; atualmente mediadora do Brechas Urbanas, s&eacute;rie de debates sobre a vida na cidade que acontece mensalmente no Ita&uacute; Cultural.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/789/image/db91ecf47ff8815d0cbb17b9eb376385.jpg",
+    "active": true
+   },
+   {
+    "id": 1002,
+    "name": "Natália Garcia",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">&Eacute; jornalista e criadora da comunidade Cidades para Pessoas. Representa a embaixada no Brasil da plataforma de cria&ccedil;&atilde;o e inova&ccedil;&atilde;o <em>urban maker</em> Pakhuis de Zwijger. Em todos esses trabalhos, dedica-se a investigar, comunicar e implementar a&ccedil;&otilde;es pr&aacute;ticas que melhorem a vida no planeta. &Eacute; atualmente mediadora do Brechas Urbanas, s&eacute;rie de debates sobre a vida na cidade que acontece mensalmente no Ita&uacute; Cultural.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 893,
+    "name": "Nayra Lays ",
+    "description": "<p>@nayralays_ &eacute; compositora, cantora, MC e comunicadora. Na m&uacute;sica, passou por uma resid&ecirc;ncia na Red Bull Station ao lado de outros artistas independentes, e j&aacute; tem lan&ccedil;ado um EP, intitulado <em>OR&Iacute;</em>. Estudou jornalismo na ag&ecirc;ncia-escola &Eacute;nois, voltada para jovens de periferias, e fez parte do projeto Kennedys, na ag&ecirc;ncia de publicidade Wieden + Kennedy. Aos 21 anos de idade, v&ecirc; nas palavras um ref&uacute;gio e uma forma de (r)existir.</p>\r\n",
+    "bio": "<p>@nayralays_ &eacute; compositora, cantora, MC e comunicadora. Na m&uacute;sica, passou por uma resid&ecirc;ncia na Red Bull Station ao lado de outros artistas independentes, e j&aacute; tem lan&ccedil;ado um EP, intitulado <em>OR&Iacute;</em>. Estudou jornalismo na ag&ecirc;ncia-escola &Eacute;nois, voltada para jovens de periferias, e fez parte do projeto Kennedys, na ag&ecirc;ncia de publicidade Wieden + Kennedy. Aos 21 anos de idade, v&ecirc; nas palavras um ref&uacute;gio e uma forma de (r)existir.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/893/image/74cacde2ddea9adfd57c1cb382032568.jpg",
+    "active": true
+   },
+   {
+    "id": 989,
+    "name": "Nayra Lays ",
+    "description": null,
+    "bio": "<p>@nayralays_ &eacute; compositora, cantora, MC e comunicadora. Na m&uacute;sica, passou por uma resid&ecirc;ncia na Red Bull Station ao lado de outros artistas independentes, e j&aacute; tem lan&ccedil;ado um EP, intitulado <em>OR&Iacute;</em>. Estudou jornalismo na ag&ecirc;ncia-escola &Eacute;nois, voltada para jovens de periferias, e fez parte do projeto Kennedys, na ag&ecirc;ncia de publicidade Wieden + Kennedy. Aos 21 anos de idade, v&ecirc; nas palavras um ref&uacute;gio e uma forma de (r)existir.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 622,
+    "name": "Oswaldo Faustino",
+    "description": "<p>66,&nbsp;jornalista h&aacute;&nbsp;40 anos, escritor com dez obras publicadas, ativista dos movimentos negro&nbsp;e de direitos humanos desde a d&eacute;cada de 1970, palestrante, autor e ator teatral, com incurs&otilde;es pela poesia e pela m&uacute;sica.</p>\r\n",
+    "bio": "<p>66,&nbsp;jornalista h&aacute;&nbsp;40 anos, escritor com dez obras publicadas, ativista dos movimentos negro&nbsp;e de direitos humanos desde a d&eacute;cada de 1970, palestrante, autor e ator teatral, com incurs&otilde;es pela poesia e pela m&uacute;sica.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1048,
+    "name": "Paloma Reis ",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1022,
+    "name": "Pollyanna Diniz",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Jornalista, cr&iacute;tica e pesquisadora de teatro. Mestre em Artes C&ecirc;nicas pela Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA-USP). Cofundadora e editora do site <a href=\"https://www.satisfeitayolanda.com.br/blog/\" target=\"_blank\"><strong><em>Satisfeita, Yolanda?</em></strong></a>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 932,
+    "name": "Pollyanna Diniz",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Jornalista, cr&iacute;tica e pesquisadora de teatro. Mestre em Artes C&ecirc;nicas pela Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA-USP). Cofundadora e editora do site <a href=\"https://www.satisfeitayolanda.com.br/blog/\" target=\"_blank\"><strong><em>Satisfeita, Yolanda?</em></strong></a>.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Jornalista, cr&iacute;tica e pesquisadora de teatro. Mestre em Artes C&ecirc;nicas pela Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA-USP). Cofundadora e editora do site <a href=\"https://www.satisfeitayolanda.com.br/blog/\" target=\"_blank\"><strong><em>Satisfeita, Yolanda?</em></strong></a>.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/932/image/c782b89126a723ecb872a5ffa381e18d.jpg",
+    "active": true
+   },
+   {
+    "id": 833,
+    "name": "Ramon Vitral",
+    "description": "<p>Ramon Vitral &eacute; jornalista e editor do blog Vitralizado (<a href=\"http://www.vitralizado.com/\" target=\"_blank\">www.vitralizado.com</a>).</p>\r\n",
+    "bio": "<p>Ramon Vitral &eacute; jornalista e editor do blog Vitralizado (<a href=\"http://www.vitralizado.com/\" target=\"_blank\">www.vitralizado.com</a>).</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/833/image/31fdabe06a343894d07832c1c226a6d8.jpg",
+    "active": true
+   },
+   {
+    "id": 1016,
+    "name": "Ramon Vitral",
+    "description": null,
+    "bio": "<p>Ramon Vitral &eacute; jornalista e editor do blog Vitralizado (<a href=\"http://www.vitralizado.com/\" target=\"_blank\">www.vitralizado.com</a>).</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 381,
+    "name": "Renato Corch",
+    "description": null,
+    "bio": null,
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/381/image/6dbd65c751346f39e13e16b29a825592.png",
+    "active": true
+   },
+   {
+    "id": 80,
+    "name": "Rita Palmeira",
+    "description": "<p>Doutora em literatura brasileira pela Universidade de S&atilde;o Paulo (USP) e mestre em teoria liter&aacute;ria pela Universidade de Campinas (Unicamp). Foi professora das Faculdades de Campinas (Facamp) de 2001 a 2011 e professora tempor&aacute;ria da USP em 2012. &Eacute; editora-assistente do Tr&ecirc;s Estrelas, selo de n&atilde;o fic&ccedil;&atilde;o da <em>Folha de S.Paulo</em>, e, desde 2008, pesquisadora do Conex&otilde;es Ita&uacute; Cultural.</p>\r\n",
+    "bio": "<p>Doutora em literatura brasileira pela Universidade de S&atilde;o Paulo (USP) e mestre em teoria liter&aacute;ria pela Universidade de Campinas (Unicamp). Foi professora das Faculdades de Campinas (Facamp) de 2001 a 2011 e professora tempor&aacute;ria da USP em 2012. &Eacute; editora-assistente do Tr&ecirc;s Estrelas, selo de n&atilde;o fic&ccedil;&atilde;o da <em>Folha de S.Paulo</em>, e, desde 2008, pesquisadora do Conex&otilde;es Ita&uacute; Cultural.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 998,
+    "name": "Rita Palmeira",
+    "description": null,
+    "bio": "<p>Doutora em literatura brasileira pela Universidade de S&atilde;o Paulo (USP) e mestre em teoria liter&aacute;ria pela Universidade de Campinas (Unicamp). Foi professora das Faculdades de Campinas (Facamp) de 2001 a 2011 e professora tempor&aacute;ria da USP em 2012. &Eacute; editora-assistente do Tr&ecirc;s Estrelas, selo de n&atilde;o fic&ccedil;&atilde;o da <em>Folha de S.Paulo</em>, e, desde 2008, pesquisadora do Conex&otilde;es Ita&uacute; Cultural.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 808,
+    "name": "Rodrigo Masina Pinheiro ",
+    "description": "<p><strong>Rodrigo Masina Pinheiro</strong> (1987) &eacute; artista visual. Utiliza diversos meios em seu trabalho, como curtas-metragens, ensaios e fotografia. Sua s&eacute;rie intitulada <em>GH, Gal e Hiroshima</em>, feita em colabora&ccedil;&atilde;o com Gal Cipreste Marinelli, &eacute; umas das dez finalistas do Pr&ecirc;mio Louis Roederer Discovery Award 2022 e indicada ao pr&ecirc;mio principal do Gomma Photography Grant. Em 2021, foi premiado com o PH Museum of Photography 2021, ao lado de Gal Cipreste Marinelli, e selecionado para o Pr&ecirc;mio Pierre Verger e para o X Di&aacute;rio Contempor&acirc;neo de Fotografia com a s&eacute;rie <em>N&atilde;o leve flores</em>. Em abril de 2018, seu livro de artista <em>Tornaras</em> teve um lan&ccedil;amento especial na SP-Arte/Foto, ganhando v&aacute;rios pr&ecirc;mios no mesmo ano, incluindo Melhor Portf&oacute;lio no festival <em>FotoRio Resiste</em>, Melhor Portf&oacute;lio no Ateli&ecirc; da Imagem e um dos sete destaques do ano no <em>Festival ZUM </em>(Instituto Moreira Salles e revista<em> ZUM</em>). Com Ton Zaranza e Rochelle Guimar&atilde;es, Rodrigo fundou a editora independente Chorona, dedicada &agrave; fotografia e &agrave; literatura.</p>\r\n",
+    "bio": "<p><strong>Rodrigo Masina Pinheiro</strong> (1987) &eacute; artista visual. Utiliza diversos meios em seu trabalho, como curtas-metragens, ensaios e fotografia. Sua s&eacute;rie intitulada <em>GH, Gal e Hiroshima</em>, feita em colabora&ccedil;&atilde;o com Gal Cipreste Marinelli, &eacute; umas das dez finalistas do Pr&ecirc;mio Louis Roederer Discovery Award 2022 e indicada ao pr&ecirc;mio principal do Gomma Photography Grant. Em 2021, foi premiado com o PH Museum of Photography 2021, ao lado de Gal Cipreste Marinelli, e selecionado para o Pr&ecirc;mio Pierre Verger e para o X Di&aacute;rio Contempor&acirc;neo de Fotografia com a s&eacute;rie <em>N&atilde;o leve flores</em>. Em abril de 2018, seu livro de artista <em>Tornaras</em> teve um lan&ccedil;amento especial na SP-Arte/Foto, ganhando v&aacute;rios pr&ecirc;mios no mesmo ano, incluindo Melhor Portf&oacute;lio no festival <em>FotoRio Resiste</em>, Melhor Portf&oacute;lio no Ateli&ecirc; da Imagem e um dos sete destaques do ano no <em>Festival ZUM </em>(Instituto Moreira Salles e revista<em> ZUM</em>). Com Ton Zaranza e Rochelle Guimar&atilde;es, Rodrigo fundou a editora independente Chorona, dedicada &agrave; fotografia e &agrave; literatura.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/808/image/7081ca81990e05b11fbdea5b75d16fc8.jpg",
+    "active": true
+   },
+   {
+    "id": 1034,
+    "name": "Rodrigo Masina Pinheiro ",
+    "description": null,
+    "bio": "<p><strong>Rodrigo Masina Pinheiro</strong> (1987) &eacute; artista visual. Utiliza diversos meios em seu trabalho, como curtas-metragens, ensaios e fotografia. Sua s&eacute;rie intitulada <em>GH, Gal e Hiroshima</em>, feita em colabora&ccedil;&atilde;o com Gal Cipreste Marinelli, &eacute; umas das dez finalistas do Pr&ecirc;mio Louis Roederer Discovery Award 2022 e indicada ao pr&ecirc;mio principal do Gomma Photography Grant. Em 2021, foi premiado com o PH Museum of Photography 2021, ao lado de Gal Cipreste Marinelli, e selecionado para o Pr&ecirc;mio Pierre Verger e para o X Di&aacute;rio Contempor&acirc;neo de Fotografia com a s&eacute;rie <em>N&atilde;o leve flores</em>. Em abril de 2018, seu livro de artista <em>Tornaras</em> teve um lan&ccedil;amento especial na SP-Arte/Foto, ganhando v&aacute;rios pr&ecirc;mios no mesmo ano, incluindo Melhor Portf&oacute;lio no festival <em>FotoRio Resiste</em>, Melhor Portf&oacute;lio no Ateli&ecirc; da Imagem e um dos sete destaques do ano no <em>Festival ZUM </em>(Instituto Moreira Salles e revista<em> ZUM</em>). Com Ton Zaranza e Rochelle Guimar&atilde;es, Rodrigo fundou a editora independente Chorona, dedicada &agrave; fotografia e &agrave; literatura.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1023,
+    "name": "Rogério Felix",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Nasceu e vive em Salvador (BA). &Eacute; pesquisadore e curadore independente.&nbsp;Bacharelande&nbsp;em museologia pela Universidade Federal da Bahia (Ufba), investiga o potencial das imagens da heran&ccedil;a cultural africana em acervos museol&oacute;gicos para a experimenta&ccedil;&atilde;o de pr&aacute;ticas curatoriais interdisciplinares, girando em torno de quest&otilde;es que colaborem para promover autodetermina&ccedil;&atilde;o hist&oacute;rica. Interessa-se pelas rela&ccedil;&otilde;es entre cultura&nbsp;(i)material&nbsp;e arte contempor&acirc;nea, operando por meio da documenta&ccedil;&atilde;o, da a&ccedil;&atilde;o cultural educativa e da cr&iacute;tica. Recentemente, integrou o programa &iexcl;n[s]urg&ecirc;nc!as (2021)&nbsp;e a curadoria do <em>I f&oacute;rum da imagem </em>da<em> </em>Galeria Homero Massena, no Esp&iacute;rito Santo (2020). Atualmente &eacute;&nbsp;bolsista do Programa Milton Santos e comp&otilde;e a linha Imagem e Hist&oacute;ria do grupo de pesquisa e estudos Arqueologia do Sens&iacute;vel.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 670,
+    "name": "Rogério Felix",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Nasceu e vive em Salvador (BA). &Eacute; pesquisadore e curadore independente.&nbsp;Bacharelande&nbsp;em museologia pela Universidade Federal da Bahia (Ufba), investiga o potencial das imagens da heran&ccedil;a cultural africana em acervos museol&oacute;gicos para a experimenta&ccedil;&atilde;o de pr&aacute;ticas curatoriais interdisciplinares, girando em torno de quest&otilde;es que colaborem para promover autodetermina&ccedil;&atilde;o hist&oacute;rica. Interessa-se pelas rela&ccedil;&otilde;es entre cultura&nbsp;(i)material&nbsp;e arte contempor&acirc;nea, operando por meio da documenta&ccedil;&atilde;o, da a&ccedil;&atilde;o cultural educativa e da cr&iacute;tica. Recentemente, integrou o programa &iexcl;n[s]urg&ecirc;nc!as (2021)&nbsp;e a curadoria do <em>I f&oacute;rum da imagem </em>da<em> </em>Galeria Homero Massena, no Esp&iacute;rito Santo (2020). Atualmente &eacute;&nbsp;bolsista do Programa Milton Santos e comp&otilde;e a linha Imagem e Hist&oacute;ria do grupo de pesquisa e estudos Arqueologia do Sens&iacute;vel.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Nasceu e vive em Salvador (BA). &Eacute; pesquisadore e curadore independente.&nbsp;Bacharelande&nbsp;em museologia pela Universidade Federal da Bahia (Ufba), investiga o potencial das imagens da heran&ccedil;a cultural africana em acervos museol&oacute;gicos para a experimenta&ccedil;&atilde;o de pr&aacute;ticas curatoriais interdisciplinares, girando em torno de quest&otilde;es que colaborem para promover autodetermina&ccedil;&atilde;o hist&oacute;rica. Interessa-se pelas rela&ccedil;&otilde;es entre cultura&nbsp;(i)material&nbsp;e arte contempor&acirc;nea, operando por meio da documenta&ccedil;&atilde;o, da a&ccedil;&atilde;o cultural educativa e da cr&iacute;tica. Recentemente, integrou o programa &iexcl;n[s]urg&ecirc;nc!as (2021)&nbsp;e a curadoria do <em>I f&oacute;rum da imagem </em>da<em> </em>Galeria Homero Massena, no Esp&iacute;rito Santo (2020). Atualmente &eacute;&nbsp;bolsista do Programa Milton Santos e comp&otilde;e a linha Imagem e Hist&oacute;ria do grupo de pesquisa e estudos Arqueologia do Sens&iacute;vel.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/670/image/525b8356a280eed4755cbbeae2707673.jpg",
+    "active": true
+   },
+   {
+    "id": 919,
+    "name": "Rosane Borges",
+    "description": "É jornalista e doutora em ciências da comunicação.",
+    "bio": "<p>&Eacute; jornalista, doutora em ci&ecirc;ncias da comunica&ccedil;&atilde;o, professora colaboradora do Colabor [Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA/USP)] e professora convidada do Diversitas (USP). &Eacute; articulista da revista<em> Isto&eacute;</em> e autora de diversos livros, entre eles <em>Espelho infiel: o negro no jornalismo brasileiro</em> (2004), <em>M&iacute;dia e racismo</em> (2012), <em>Esbo&ccedil;os de um tempo presente</em> (2016) e <em>Fragmentos do tempo presente</em> (2016).</p>",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/919/image/b619b5042fc50d36a0b2af8371ee2e5d.jpg",
+    "active": true
+   },
+   {
+    "id": 1039,
+    "name": "Rosane Borges",
+    "description": null,
+    "bio": "<p>&Eacute; jornalista, doutora em ci&ecirc;ncias da comunica&ccedil;&atilde;o, professora colaboradora do Colabor [Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA/USP)] e professora convidada do Diversitas (USP). &Eacute; articulista da revista<em> Isto&eacute;</em> e autora de diversos livros, entre eles <em>Espelho infiel: o negro no jornalismo brasileiro</em> (2004), <em>M&iacute;dia e racismo</em> (2012), <em>Esbo&ccedil;os de um tempo presente</em> (2016) e <em>Fragmentos do tempo presente</em> (2016).</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1031,
+    "name": "Sofia Borges",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Sofia Borges</strong> (1984, Ribeir&atilde;o Preto) vive e trabalha entre S&atilde;o Paulo e Paris, Fran&ccedil;a.&nbsp;&Eacute; uma artista conceitual que usa o meio fotogr&aacute;fico h&aacute; mais de uma d&eacute;cada para estudar no&ccedil;&otilde;es filos&oacute;ficas sobre a rela&ccedil;&atilde;o entre mat&eacute;ria e significado. Usando colagem, performance, fogo e camadas de pigmentos, Borges cria imagens t&atilde;o estranhas que parecem irreais e muitas vezes s&atilde;o mal interpretadas como imagens projetadas ou manipuladas por software.&nbsp;</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 36,
+    "name": "Sofia Borges",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Sofia Borges</strong> (1984, Ribeir&atilde;o Preto) vive e trabalha entre S&atilde;o Paulo e Paris, Fran&ccedil;a.&nbsp;&Eacute; uma artista conceitual que usa o meio fotogr&aacute;fico h&aacute; mais de uma d&eacute;cada para estudar no&ccedil;&otilde;es filos&oacute;ficas sobre a rela&ccedil;&atilde;o entre mat&eacute;ria e significado. Usando colagem, performance, fogo e camadas de pigmentos, Borges cria imagens t&atilde;o estranhas que parecem irreais e muitas vezes s&atilde;o mal interpretadas como imagens projetadas ou manipuladas por software.&nbsp;</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Sofia Borges</strong> (1984, Ribeir&atilde;o Preto) vive e trabalha entre S&atilde;o Paulo e Paris, Fran&ccedil;a.&nbsp;&Eacute; uma artista conceitual que usa o meio fotogr&aacute;fico h&aacute; mais de uma d&eacute;cada para estudar no&ccedil;&otilde;es filos&oacute;ficas sobre a rela&ccedil;&atilde;o entre mat&eacute;ria e significado. Usando colagem, performance, fogo e camadas de pigmentos, Borges cria imagens t&atilde;o estranhas que parecem irreais e muitas vezes s&atilde;o mal interpretadas como imagens projetadas ou manipuladas por software.&nbsp;</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/36/image/a6f42ab00b88c9433f29edce2f7ab2f8.jpg",
+    "active": true
+   },
+   {
+    "id": 46,
+    "name": "Stefany Silva dos Santos",
+    "description": null,
+    "bio": "<p>Stefany Santos &eacute; estagi&aacute;ria da equipe de conte&uacute;do do Ita&uacute; Cultural.</p>",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/46/image/086f09a1bbf30a3944390f0087ab3b4b.jpeg",
+    "active": true
+   },
+   {
+    "id": 129,
+    "name": "Tereza Maciel",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Tereza Maciel </strong>nasceu em Bel&eacute;m, no Par&aacute;, e trabalha h&aacute; seis anos como fot&oacute;grafa de est&uacute;dio. Faz retratos e circula na moda, na publicidade e na m&uacute;sica. J&aacute; clicou Dona Onete, Gaby Amarantos, Faf&aacute; de Bel&eacute;m e Johnny Hooker, entre outros artistas brasileiros. Atualmente pesquisa sobre a mulher latina em seu projeto <em>Am&eacute;rica ladina</em>.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Tereza Maciel </strong>nasceu em Bel&eacute;m, no Par&aacute;, e trabalha h&aacute; seis anos como fot&oacute;grafa de est&uacute;dio. Faz retratos e circula na moda, na publicidade e na m&uacute;sica. J&aacute; clicou Dona Onete, Gaby Amarantos, Faf&aacute; de Bel&eacute;m e Johnny Hooker, entre outros artistas brasileiros. Atualmente pesquisa sobre a mulher latina em seu projeto <em>Am&eacute;rica ladina</em>.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/129/image/4ff2bc6fd4a496f656e12244fcdc6f05.jpeg",
+    "active": true
+   },
+   {
+    "id": 1030,
+    "name": "Tereza Maciel",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Tereza Maciel </strong>nasceu em Bel&eacute;m, no Par&aacute;, e trabalha h&aacute; seis anos como fot&oacute;grafa de est&uacute;dio. Faz retratos e circula na moda, na publicidade e na m&uacute;sica. J&aacute; clicou Dona Onete, Gaby Amarantos, Faf&aacute; de Bel&eacute;m e Johnny Hooker, entre outros artistas brasileiros. Atualmente pesquisa sobre a mulher latina em seu projeto <em>Am&eacute;rica ladina</em>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1041,
+    "name": "Thais Bannwart",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 985,
+    "name": "Thais Mayara",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 106,
+    "name": "Thalita Modesto",
+    "description": null,
+    "bio": null,
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/106/image/0cbf8553c6dab141e110db895663edc5.png",
+    "active": true
+   },
+   {
+    "id": 814,
+    "name": "Ubiratan Gamalodtaba Suruí",
+    "description": "<p>Fot&oacute;grafo do povo ind&iacute;gena Paiter Suru&iacute;, vive na Aldeia Lapetanha &ndash; Terra Ind&iacute;gena Sete de Setembro, no munic&iacute;pio de Cacoal (RO). Atrav&eacute;s da fotografia, revela o dia a dia de sua comunidade, as amea&ccedil;as ao seu territ&oacute;rio e as riquezas culturais dos Paiter Suru&iacute;. Formado em tecnologia em gest&atilde;o ambiental, est&aacute; cursando ci&ecirc;ncias humanas na Universidade Federal de Rond&ocirc;nia (Unir). Faz parte da coordena&ccedil;&atilde;o da Associa&ccedil;&atilde;o Metareil&aacute; do Povo Ind&iacute;gena Suru&iacute; e &eacute; comunicador do Movimento Juventude Ind&iacute;gena de Rond&ocirc;nia (JIR) e membro do Coletivo Audiovisual Paiter Suru&iacute; &ndash; Lakapoy.</p>\r\n",
+    "bio": "<p>Fot&oacute;grafo do povo ind&iacute;gena Paiter Suru&iacute;, vive na Aldeia Lapetanha &ndash; Terra Ind&iacute;gena Sete de Setembro, no munic&iacute;pio de Cacoal (RO). Atrav&eacute;s da fotografia, revela o dia a dia de sua comunidade, as amea&ccedil;as ao seu territ&oacute;rio e as riquezas culturais dos Paiter Suru&iacute;. Formado em tecnologia em gest&atilde;o ambiental, est&aacute; cursando ci&ecirc;ncias humanas na Universidade Federal de Rond&ocirc;nia (Unir). Faz parte da coordena&ccedil;&atilde;o da Associa&ccedil;&atilde;o Metareil&aacute; do Povo Ind&iacute;gena Suru&iacute; e &eacute; comunicador do Movimento Juventude Ind&iacute;gena de Rond&ocirc;nia (JIR) e membro do Coletivo Audiovisual Paiter Suru&iacute; &ndash; Lakapoy.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/814/image/17d13e809e73ce7667ac921501d8b985.jpg",
+    "active": true
+   },
+   {
+    "id": 1033,
+    "name": "Ubiratan Gamalodtaba Suruí",
+    "description": null,
+    "bio": "<p>Fot&oacute;grafo do povo ind&iacute;gena Paiter Suru&iacute;, vive na Aldeia Lapetanha &ndash; Terra Ind&iacute;gena Sete de Setembro, no munic&iacute;pio de Cacoal (RO). Atrav&eacute;s da fotografia, revela o dia a dia de sua comunidade, as amea&ccedil;as ao seu territ&oacute;rio e as riquezas culturais dos Paiter Suru&iacute;. Formado em tecnologia em gest&atilde;o ambiental, est&aacute; cursando ci&ecirc;ncias humanas na Universidade Federal de Rond&ocirc;nia (Unir). Faz parte da coordena&ccedil;&atilde;o da Associa&ccedil;&atilde;o Metareil&aacute; do Povo Ind&iacute;gena Suru&iacute; e &eacute; comunicador do Movimento Juventude Ind&iacute;gena de Rond&ocirc;nia (JIR) e membro do Coletivo Audiovisual Paiter Suru&iacute; &ndash; Lakapoy.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1013,
+    "name": "Um Por Todos - Anna Muylaert",
+    "description": null,
+    "bio": "<p>Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas.&nbsp;Diretora, roteirista e produtora, Anna Muylaert estudou cinema na Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA/USP). No come&ccedil;o da carreira, na d&eacute;cada de 1980, realizou alguns curtas-metragens. Integrou equipes de cria&ccedil;&atilde;o de programas infantis, como <em>Mundo da Lua</em> e<em> Castelo R&aacute;-Tim-Bum,&nbsp;</em><em>d</em>a TV Cultura. Seu primeiro longa,&nbsp;<em>Durval Discos </em><em>(2002),</em><em> </em>recebeu os pr&ecirc;mios de Melhor Filme, Melhor Diretor e Melhor Roteiro no 30<u><sup>o</sup></u> Festival de Gramado e de Melhor Roteiro no 20<u><sup>o</sup></u> Festival de Torino. Seu filme mais recente &eacute; de 2016: <em>M&atilde;e S&oacute; H&aacute; uma</em>.</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 69,
+    "name": "Um Por Todos - Anna Muylaert",
+    "description": "<p>Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas.&nbsp;Diretora, roteirista e produtora, Anna Muylaert estudou cinema na Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA/USP). No come&ccedil;o da carreira, na d&eacute;cada de 1980, realizou alguns curtas-metragens. Integrou equipes de cria&ccedil;&atilde;o de programas infantis, como <em>Mundo da Lua</em> e<em> Castelo R&aacute;-Tim-Bum,&nbsp;</em><em>d</em>a TV Cultura. Seu primeiro longa,&nbsp;<em>Durval Discos </em><em>(2002),</em><em> </em>recebeu os pr&ecirc;mios de Melhor Filme, Melhor Diretor e Melhor Roteiro no 30<u><sup>o</sup></u> Festival de Gramado e de Melhor Roteiro no 20<u><sup>o</sup></u> Festival de Torino. Seu filme mais recente &eacute; de 2016: <em>M&atilde;e S&oacute; H&aacute; uma</em>.</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "bio": "<p>Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas.&nbsp;Diretora, roteirista e produtora, Anna Muylaert estudou cinema na Escola de Comunica&ccedil;&otilde;es e Artes da Universidade de S&atilde;o Paulo (ECA/USP). No come&ccedil;o da carreira, na d&eacute;cada de 1980, realizou alguns curtas-metragens. Integrou equipes de cria&ccedil;&atilde;o de programas infantis, como <em>Mundo da Lua</em> e<em> Castelo R&aacute;-Tim-Bum,&nbsp;</em><em>d</em>a TV Cultura. Seu primeiro longa,&nbsp;<em>Durval Discos </em><em>(2002),</em><em> </em>recebeu os pr&ecirc;mios de Melhor Filme, Melhor Diretor e Melhor Roteiro no 30<u><sup>o</sup></u> Festival de Gramado e de Melhor Roteiro no 20<u><sup>o</sup></u> Festival de Torino. Seu filme mais recente &eacute; de 2016: <em>M&atilde;e S&oacute; H&aacute; uma</em>.</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/69/image/bae7225bbde5290912f6f67c30870c70.jpg",
+    "active": true
+   },
+   {
+    "id": 757,
+    "name": "Um Por Todos - Fernanda D´Umbra",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Fernanda D&#39;Umbra &eacute; atriz, diretora, roteirista, vocalista da banda F&aacute;brica de Animais e artista inclassific&aacute;vel&nbsp;na empresa Roque D&#39;Umbra. Tem dois discos lan&ccedil;ados&nbsp;pelo selo Baratos Afins. Mora&nbsp;em S&atilde;o Paulo.&nbsp;</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Fernanda D&#39;Umbra &eacute; atriz, diretora, roteirista, vocalista da banda F&aacute;brica de Animais e artista inclassific&aacute;vel&nbsp;na empresa Roque D&#39;Umbra. Tem dois discos lan&ccedil;ados&nbsp;pelo selo Baratos Afins. Mora&nbsp;em S&atilde;o Paulo.&nbsp;</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/757/image/11ff3ac861f7a681a9d2af160bb9b7ff.jpg",
+    "active": true
+   },
+   {
+    "id": 999,
+    "name": "Um Por Todos - Fernanda D´Umbra",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Fernanda D&#39;Umbra &eacute; atriz, diretora, roteirista, vocalista da banda F&aacute;brica de Animais e artista inclassific&aacute;vel&nbsp;na empresa Roque D&#39;Umbra. Tem dois discos lan&ccedil;ados&nbsp;pelo selo Baratos Afins. Mora&nbsp;em S&atilde;o Paulo.&nbsp;</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 530,
+    "name": "Um Por Todos - Glauco Mattoso",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas.&nbsp;Glauco Mattoso &eacute; poeta, propheta e parathleta da metrica com barreiras. Paulistano de 1951, nasceu glaucomatoso mas cegou em 1972 no olho da direita e em 1995 no olho da esquerda. &Eacute; auctor de mais de 60 livros, na maioria teclados em computador fallante. Alem de archaista, &eacute; anarchista, monarchista e masochista.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas.&nbsp;Glauco Mattoso &eacute; poeta, propheta e parathleta da metrica com barreiras. Paulistano de 1951, nasceu glaucomatoso mas cegou em 1972 no olho da direita e em 1995 no olho da esquerda. &Eacute; auctor de mais de 60 livros, na maioria teclados em computador fallante. Alem de archaista, &eacute; anarchista, monarchista e masochista.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/530/image/190d5d22c4a9da7f48846850bbea4dae.jpg",
+    "active": true
+   },
+   {
+    "id": 1005,
+    "name": "Um Por Todos - Glauco Mattoso",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas.&nbsp;Glauco Mattoso &eacute; poeta, propheta e parathleta da metrica com barreiras. Paulistano de 1951, nasceu glaucomatoso mas cegou em 1972 no olho da direita e em 1995 no olho da esquerda. &Eacute; auctor de mais de 60 livros, na maioria teclados em computador fallante. Alem de archaista, &eacute; anarchista, monarchista e masochista.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 897,
+    "name": "Um Por Todos - Kiko Dinucci",
+    "description": "<p>Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Nos primeiros quatro meses, nosso colunista &eacute; o m&uacute;sico Kiko Dinucci. Nascido em S&atilde;o Paulo e criado em Guarulhos (SP), Kiko &eacute; integrante dos grupos Met&aacute; Met&aacute; e Passo Torto. Recentemente, lan&ccedil;ou <em>Cortes Curtos</em>, seu primeiro disco solo.</p>\r\n",
+    "bio": "<p>Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Nos primeiros quatro meses, nosso colunista &eacute; o m&uacute;sico Kiko Dinucci. Nascido em S&atilde;o Paulo e criado em Guarulhos (SP), Kiko &eacute; integrante dos grupos Met&aacute; Met&aacute; e Passo Torto. Recentemente, lan&ccedil;ou <em>Cortes Curtos</em>, seu primeiro disco solo.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/897/image/bfe48c1966b438071be66ecf5736009b.jpg",
+    "active": true
+   },
+   {
+    "id": 992,
+    "name": "Um Por Todos - Kiko Dinucci",
+    "description": null,
+    "bio": "<p>Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Nos primeiros quatro meses, nosso colunista &eacute; o m&uacute;sico Kiko Dinucci. Nascido em S&atilde;o Paulo e criado em Guarulhos (SP), Kiko &eacute; integrante dos grupos Met&aacute; Met&aacute; e Passo Torto. Recentemente, lan&ccedil;ou <em>Cortes Curtos</em>, seu primeiro disco solo.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 681,
+    "name": "Um Por Todos - Tulipa Ruiz",
+    "description": "<p>Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas.&nbsp;Tulipa Ruiz&nbsp;&eacute; cantora, compositora e desenhista.</p>\r\n",
+    "bio": "<p>Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas.&nbsp;Tulipa Ruiz&nbsp;&eacute; cantora, compositora e desenhista.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/681/image/9ab6daf3849f252da452b7136bb04edf.jpg",
+    "active": true
+   },
+   {
+    "id": 1014,
+    "name": "Um Por Todos - Tulipa Ruiz",
+    "description": null,
+    "bio": "<p>Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas.&nbsp;Tulipa Ruiz&nbsp;&eacute; cantora, compositora e desenhista.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 318,
+    "name": "Um por Todos – Assucena Assucena",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Assucena Assucena, 30 anos, &eacute; vocalista da banda As Bahias e a Cozinha Mineira, compositora, escritora. Baiana de Vit&oacute;ria da Conquista, do sert&atilde;o de Glauber Rocha e Elomar, ingressou na Universidade de S&atilde;o Paulo (USP) em 2011 para estudar hist&oacute;ria e l&aacute; come&ccedil;ou seu aprofundamento nos debates sobre g&ecirc;nero, arte e est&eacute;tica. Divide o palco com Raquel Virginia, com quem aprendeu a ouvir e admirar as obras de Gal Costa, maior influ&ecirc;ncia de sua carreira musical. Tem dois discos lan&ccedil;ados com As Bahias e a Cozinha Mineira: <em>Mulher</em> (2015) e <em>Bixa </em>(2017), vencedor em duas categorias do Pr&ecirc;mio da M&uacute;sica Brasileira em 2018.</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Assucena Assucena, 30 anos, &eacute; vocalista da banda As Bahias e a Cozinha Mineira, compositora, escritora. Baiana de Vit&oacute;ria da Conquista, do sert&atilde;o de Glauber Rocha e Elomar, ingressou na Universidade de S&atilde;o Paulo (USP) em 2011 para estudar hist&oacute;ria e l&aacute; come&ccedil;ou seu aprofundamento nos debates sobre g&ecirc;nero, arte e est&eacute;tica. Divide o palco com Raquel Virginia, com quem aprendeu a ouvir e admirar as obras de Gal Costa, maior influ&ecirc;ncia de sua carreira musical. Tem dois discos lan&ccedil;ados com As Bahias e a Cozinha Mineira: <em>Mulher</em> (2015) e <em>Bixa </em>(2017), vencedor em duas categorias do Pr&ecirc;mio da M&uacute;sica Brasileira em 2018.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/318/image/1e9f168bfd55d784f9f0ce60997e9802.jpeg",
+    "active": true
+   },
+   {
+    "id": 1008,
+    "name": "Um por Todos – Assucena Assucena",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Assucena Assucena, 30 anos, &eacute; vocalista da banda As Bahias e a Cozinha Mineira, compositora, escritora. Baiana de Vit&oacute;ria da Conquista, do sert&atilde;o de Glauber Rocha e Elomar, ingressou na Universidade de S&atilde;o Paulo (USP) em 2011 para estudar hist&oacute;ria e l&aacute; come&ccedil;ou seu aprofundamento nos debates sobre g&ecirc;nero, arte e est&eacute;tica. Divide o palco com Raquel Virginia, com quem aprendeu a ouvir e admirar as obras de Gal Costa, maior influ&ecirc;ncia de sua carreira musical. Tem dois discos lan&ccedil;ados com As Bahias e a Cozinha Mineira: <em>Mulher</em> (2015) e <em>Bixa </em>(2017), vencedor em duas categorias do Pr&ecirc;mio da M&uacute;sica Brasileira em 2018.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 334,
+    "name": "Um por Todos – Raquel Virginia",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Nascida em 15 de outubro de 1988 no Jabaquara, zona sul de S&atilde;o Paulo, Raquel Virginia se criou entre o Jardim Miriam e Graja&uacute;. Aos 18 anos, ela se mudou para Salvador (BA), onde viveu por dois anos e meio, em busca do sonho de ser cantora de ax&eacute;. De volta &agrave; capital paulista, ingressou na Universidade de S&atilde;o Paulo no curso de hist&oacute;ria. Ministrou aula por quatro anos de hist&oacute;ria do Brasil em cursinho pr&eacute;-vestibular para alunos de baixa renda e participou do N&uacute;cleo de Consci&ecirc;ncia Negra (NCN) na USP. Em 2012, ao lado de Rafael Acerbi e Assucena Assucena, criou a banda As Bahias e a Cozinha Mineira, da qual &eacute; uma das vocalistas.&nbsp;</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Nascida em 15 de outubro de 1988 no Jabaquara, zona sul de S&atilde;o Paulo, Raquel Virginia se criou entre o Jardim Miriam e Graja&uacute;. Aos 18 anos, ela se mudou para Salvador (BA), onde viveu por dois anos e meio, em busca do sonho de ser cantora de ax&eacute;. De volta &agrave; capital paulista, ingressou na Universidade de S&atilde;o Paulo no curso de hist&oacute;ria. Ministrou aula por quatro anos de hist&oacute;ria do Brasil em cursinho pr&eacute;-vestibular para alunos de baixa renda e participou do N&uacute;cleo de Consci&ecirc;ncia Negra (NCN) na USP. Em 2012, ao lado de Rafael Acerbi e Assucena Assucena, criou a banda As Bahias e a Cozinha Mineira, da qual &eacute; uma das vocalistas.&nbsp;</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/334/image/3a3b880eec53847f31488fdd78c939e8.jpg",
+    "active": true
+   },
+   {
+    "id": 1009,
+    "name": "Um por Todos – Raquel Virginia",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\">Esta coluna ser&aacute; &ldquo;ocupada&rdquo; por artistas de v&aacute;rias &aacute;reas. Nascida em 15 de outubro de 1988 no Jabaquara, zona sul de S&atilde;o Paulo, Raquel Virginia se criou entre o Jardim Miriam e Graja&uacute;. Aos 18 anos, ela se mudou para Salvador (BA), onde viveu por dois anos e meio, em busca do sonho de ser cantora de ax&eacute;. De volta &agrave; capital paulista, ingressou na Universidade de S&atilde;o Paulo no curso de hist&oacute;ria. Ministrou aula por quatro anos de hist&oacute;ria do Brasil em cursinho pr&eacute;-vestibular para alunos de baixa renda e participou do N&uacute;cleo de Consci&ecirc;ncia Negra (NCN) na USP. Em 2012, ao lado de Rafael Acerbi e Assucena Assucena, criou a banda As Bahias e a Cozinha Mineira, da qual &eacute; uma das vocalistas.&nbsp;</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1015,
+    "name": "Vanessa Barbara",
+    "description": null,
+    "bio": "<p>&Eacute; escritora, jornalista e tradutora. Autora de&nbsp;<em>O Livro Amarelo do Terminal&nbsp;</em>(2008; reportagem),&nbsp;<em>Opera&ccedil;&atilde;o Impens&aacute;vel</em>&nbsp;(2014; romance) e&nbsp;<em>O Louco de Palestra</em>&nbsp;(2014: cr&ocirc;nicas), entre outros, j&aacute; colaborou com os jornais&nbsp;<em>Folha de S.Paulo&nbsp;</em>e&nbsp;<em>O Estado de S. Paulo</em>&nbsp;e com a revista&nbsp;<em>piau&iacute;</em>. Comp&otilde;e o time internacional do&nbsp;<em>New York Times</em>. Mant&eacute;m o site&nbsp;<em><a href=\"http://www.hortifruti.org/\" target=\"_blank\">Hortifruti</a></em>.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 863,
+    "name": "Vanessa Barbara",
+    "description": "<p>&Eacute; escritora, jornalista e tradutora. Autora de&nbsp;<em>O Livro Amarelo do Terminal&nbsp;</em>(2008; reportagem),&nbsp;<em>Opera&ccedil;&atilde;o Impens&aacute;vel</em>&nbsp;(2014; romance) e&nbsp;<em>O Louco de Palestra</em>&nbsp;(2014: cr&ocirc;nicas), entre outros, j&aacute; colaborou com os jornais&nbsp;<em>Folha de S.Paulo&nbsp;</em>e&nbsp;<em>O Estado de S. Paulo</em>&nbsp;e com a revista&nbsp;<em>piau&iacute;</em>. Comp&otilde;e o time internacional do&nbsp;<em>New York Times</em>. Mant&eacute;m o site&nbsp;<em><a href=\"http://www.hortifruti.org/\" target=\"_blank\">Hortifruti</a></em>.</p>\r\n",
+    "bio": "<p>&Eacute; escritora, jornalista e tradutora. Autora de&nbsp;<em>O Livro Amarelo do Terminal&nbsp;</em>(2008; reportagem),&nbsp;<em>Opera&ccedil;&atilde;o Impens&aacute;vel</em>&nbsp;(2014; romance) e&nbsp;<em>O Louco de Palestra</em>&nbsp;(2014: cr&ocirc;nicas), entre outros, j&aacute; colaborou com os jornais&nbsp;<em>Folha de S.Paulo&nbsp;</em>e&nbsp;<em>O Estado de S. Paulo</em>&nbsp;e com a revista&nbsp;<em>piau&iacute;</em>. Comp&otilde;e o time internacional do&nbsp;<em>New York Times</em>. Mant&eacute;m o site&nbsp;<em><a href=\"http://www.hortifruti.org/\" target=\"_blank\">Hortifruti</a></em>.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/863/image/92c8dc0a0f72dbf31d5ddb688113c516.jpg",
+    "active": true
+   },
+   {
+    "id": 1050,
+    "name": "Vinicius Oliveira ",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1036,
+    "name": "Walter Thoms",
+    "description": null,
+    "bio": "<p>Nasceu em 1991 na cidade de Curitiba (PR). Trabalha com fotografia e v&iacute;deo. Seu trabalho &eacute; guiado por uma abordagem documental onde as imagens criadas s&atilde;o pensadas para se conectarem entre si. Na maioria de seus projetos as fotografias se conversam para formarem narrativas. Tem um interesse especial por fotolivros, publica&ccedil;&otilde;es, processos de edi&ccedil;&atilde;o e sequenciamento de imagens. Integrou a 2&ordf;&nbsp;edi&ccedil;&atilde;o do fotolivro <em>Imagin&aacute;rio crom&aacute;tico</em>&nbsp;(2013) com a s&eacute;rie <em>O chamado da montanha</em> (2010-2013). Editou os livros <em>Huellas</em> (2019), de Ana Sallas, <em>Avesso do verso</em> (2020),&nbsp;de Angelo Silva,&nbsp;e colaborou na edi&ccedil;&atilde;o do fotolivro <em>Leve a s&eacute;rio o que ela diz&nbsp;</em>(2022),&nbsp;de Isa Lanave. Em seu projeto&nbsp;<em>Os anos s&atilde;o como n&eacute;voa</em>&nbsp;investiga a rela&ccedil;&atilde;o entre fam&iacute;lia, mem&oacute;ria e no&ccedil;&otilde;es de classe.</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 615,
+    "name": "Walter Thoms",
+    "description": "<p>Nasceu em 1991 na cidade de Curitiba (PR). Trabalha com fotografia e v&iacute;deo. Seu trabalho &eacute; guiado por uma abordagem documental onde as imagens criadas s&atilde;o pensadas para se conectarem entre si. Na maioria de seus projetos as fotografias se conversam para formarem narrativas. Tem um interesse especial por fotolivros, publica&ccedil;&otilde;es, processos de edi&ccedil;&atilde;o e sequenciamento de imagens. Integrou a 2&ordf;&nbsp;edi&ccedil;&atilde;o do fotolivro <em>Imagin&aacute;rio crom&aacute;tico</em>&nbsp;(2013) com a s&eacute;rie <em>O chamado da montanha</em> (2010-2013). Editou os livros <em>Huellas</em> (2019), de Ana Sallas, <em>Avesso do verso</em> (2020),&nbsp;de Angelo Silva,&nbsp;e colaborou na edi&ccedil;&atilde;o do fotolivro <em>Leve a s&eacute;rio o que ela diz&nbsp;</em>(2022),&nbsp;de Isa Lanave. Em seu projeto&nbsp;<em>Os anos s&atilde;o como n&eacute;voa</em>&nbsp;investiga a rela&ccedil;&atilde;o entre fam&iacute;lia, mem&oacute;ria e no&ccedil;&otilde;es de classe.</p>\r\n",
+    "bio": "<p>Nasceu em 1991 na cidade de Curitiba (PR). Trabalha com fotografia e v&iacute;deo. Seu trabalho &eacute; guiado por uma abordagem documental onde as imagens criadas s&atilde;o pensadas para se conectarem entre si. Na maioria de seus projetos as fotografias se conversam para formarem narrativas. Tem um interesse especial por fotolivros, publica&ccedil;&otilde;es, processos de edi&ccedil;&atilde;o e sequenciamento de imagens. Integrou a 2&ordf;&nbsp;edi&ccedil;&atilde;o do fotolivro <em>Imagin&aacute;rio crom&aacute;tico</em>&nbsp;(2013) com a s&eacute;rie <em>O chamado da montanha</em> (2010-2013). Editou os livros <em>Huellas</em> (2019), de Ana Sallas, <em>Avesso do verso</em> (2020),&nbsp;de Angelo Silva,&nbsp;e colaborou na edi&ccedil;&atilde;o do fotolivro <em>Leve a s&eacute;rio o que ela diz&nbsp;</em>(2022),&nbsp;de Isa Lanave. Em seu projeto&nbsp;<em>Os anos s&atilde;o como n&eacute;voa</em>&nbsp;investiga a rela&ccedil;&atilde;o entre fam&iacute;lia, mem&oacute;ria e no&ccedil;&otilde;es de classe.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/615/image/18fa4a32430b97bb83f1bc777733b800.jpg",
+    "active": true
+   },
+   {
+    "id": 780,
+    "name": "William Nunes",
+    "description": "null",
+    "bio": "null",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 823,
+    "name": "Winnie Bueno",
+    "description": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Winnie Bueno</strong> &eacute; ialorix&aacute;, mestra em direito e coordenadora da <a href=\"https://twitter.com/WinnieTeca\" target=\"_blank\">Winnieteca</a>, projeto de distribui&ccedil;&atilde;o de livros &agrave; popula&ccedil;&atilde;o negra desenvolvido em parceria com o Twitter BR e o Instituto Geled&eacute;s.</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Winnie Bueno</strong> &eacute; ialorix&aacute;, mestra em direito e coordenadora da <a href=\"https://twitter.com/WinnieTeca\" target=\"_blank\">Winnieteca</a>, projeto de distribui&ccedil;&atilde;o de livros &agrave; popula&ccedil;&atilde;o negra desenvolvido em parceria com o Twitter BR e o Instituto Geled&eacute;s.</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/823/image/f139e9448f9334a25972043cf02e800e.jpg",
+    "active": true
+   },
+   {
+    "id": 1017,
+    "name": "Winnie Bueno",
+    "description": null,
+    "bio": "<p style=\"margin-left:0cm; margin-right:0cm\"><strong>Winnie Bueno</strong> &eacute; ialorix&aacute;, mestra em direito e coordenadora da <a href=\"https://twitter.com/WinnieTeca\" target=\"_blank\">Winnieteca</a>, projeto de distribui&ccedil;&atilde;o de livros &agrave; popula&ccedil;&atilde;o negra desenvolvido em parceria com o Twitter BR e o Instituto Geled&eacute;s.</p>\r\n\r\n<p style=\"margin-left:0cm; margin-right:0cm\">&nbsp;</p>\r\n",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 1051,
+    "name": "Yasmin Carvalho",
+    "description": "",
+    "bio": "",
+    "image": "",
+    "active": true
+   },
+   {
+    "id": 507,
+    "name": "Zema Ribeiro",
+    "description": "<p>Jornalista, j&aacute; colaborou com todos os jornais de S&atilde;o Lu&iacute;s (MA), onde nasceu e vive, al&eacute;m de revistas como <em>Top</em> (MA), <em>Overmundo</em> (RJ) e a francesa <em>Brazuca </em>(bil&iacute;ngue). Escreve regularmente no blog <a href=\"https://zemaribeiro.com.br/\" target=\"_blank\"><strong>Homem de V&iacute;cios Antigos</strong></a>&nbsp;e apresenta, com Gisa Franco, o <em>Balaio Cultural</em>, aos s&aacute;bados, de 12h &agrave;s 14h, na <a href=\"http://www.radiotimbira.ma.gov.br\" target=\"_blank\"><strong>R&aacute;dio Timbira AM</strong></a>.</p>\r\n",
+    "bio": "<p>Jornalista, j&aacute; colaborou com todos os jornais de S&atilde;o Lu&iacute;s (MA), onde nasceu e vive, al&eacute;m de revistas como <em>Top</em> (MA), <em>Overmundo</em> (RJ) e a francesa <em>Brazuca </em>(bil&iacute;ngue). Escreve regularmente no blog <a href=\"https://zemaribeiro.com.br/\" target=\"_blank\"><strong>Homem de V&iacute;cios Antigos</strong></a>&nbsp;e apresenta, com Gisa Franco, o <em>Balaio Cultural</em>, aos s&aacute;bados, de 12h &agrave;s 14h, na <a href=\"http://www.radiotimbira.ma.gov.br\" target=\"_blank\"><strong>R&aacute;dio Timbira AM</strong></a>.</p>\r\n",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/participant/507/image/69c53686bd1b740fedbc76a04e378ff8.jpg",
+    "active": true
+   },
+   {
+    "id": 991,
+    "name": "Zema Ribeiro",
+    "description": null,
+    "bio": "<p>Jornalista, j&aacute; colaborou com todos os jornais de S&atilde;o Lu&iacute;s (MA), onde nasceu e vive, al&eacute;m de revistas como <em>Top</em> (MA), <em>Overmundo</em> (RJ) e a francesa <em>Brazuca </em>(bil&iacute;ngue). Escreve regularmente no blog <a href=\"https://zemaribeiro.com.br/\" target=\"_blank\"><strong>Homem de V&iacute;cios Antigos</strong></a>&nbsp;e apresenta, com Gisa Franco, o <em>Balaio Cultural</em>, aos s&aacute;bados, de 12h &agrave;s 14h, na <a href=\"http://www.radiotimbira.ma.gov.br\" target=\"_blank\"><strong>R&aacute;dio Timbira AM</strong></a>.</p>\r\n",
+    "image": "",
+    "active": true
+   }
+  ]
+ },
+ "__N_SSG": true
+}

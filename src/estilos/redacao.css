@@ -1,0 +1,676 @@
+/* ===========================================================================
+ * redacao.css — Redação — a fila de curadoria e o editor de trilha (D-82 a D-86)
+ *
+ * DE QUEM É: plano 05-04.
+ * DECLARADA E VAZIA DE REGRA por 05-01, na onda 1 da fase 5.
+ *
+ * Ela chega aqui sem uma única regra de propósito. `src/app/globals.css` é o
+ * único arquivo que os seis planos da onda 2 tocariam, e dois executores
+ * editando a mesma folha é a colisão que o merge não resolve sozinho. Com as
+ * onze linhas de `@import` declaradas na onda 1, o ponto de colisão deixa de
+ * EXISTIR em vez de ser administrado: 05-04 escreve SÓ neste arquivo e não precisa
+ * abrir `globals.css` nem esperar os outros cinco.
+ *
+ * Uma folha vazia importada não custa byte no bundle final.
+ *
+ * O QUE ELA COBRE: a fila com procedência e score de IA visíveis, as quatro ações, o motivo de veto obrigatório, o escopo do curador no topo, o editor de trilha com motivo por passo e o rodapé de limites da IA.
+ *
+ * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`, e há gate medindo isso.
+ *  - Nenhum hex do manual: use `var(--ic-*)` e `color-mix` para transparência
+ *    (D-06, D-08).
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]` ou
+ *    `[data-view="mobile"]`. As variantes `desk:`/`app:` só prefixam
+ *    UTILITÁRIO do Tailwind e nunca alcançam uma classe semântica nossa.
+ *  - Reuse o vocabulário de `web.css` antes de escrever regra nova: ele já traz
+ *    duas colunas, grade parametrizada, coluna fixa, painel, realce, alternador,
+ *    declaração com denominador e lista densa.
+ *  - Nada de posicionamento preso à janela (`position: fixed`) fora de
+ *    `casca.tsx` — dentro da moldura de celular ele escapa e quebra D-03.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * A SUPERFÍCIE
+ *
+ * Tudo aqui vive dentro de `.studio`, que é o contêiner de página das telas de
+ * bastidor da fase 4. Reuso por CLASSE, sem tocar `studio.css`: as três
+ * superfícies de bastidor — Studio, Redação e Observatório — têm de parecer a
+ * mesma família, e a folha da fase 4 tem gates herdados sobre ela.
+ *
+ * Nenhuma regra sob `[data-view="mobile"]`: o layout de `(bastidor)` já esconde o
+ * conteúdo na visão app e monta o `<AvisoDesktop>`. Redação existe só na web, que
+ * é a única exceção que D-05 autoriza.
+ * ------------------------------------------------------------------------- */
+
+.redacao {
+  /* A fila é longa. A lista rola POR DENTRO para o painel do item escolhido
+   * continuar na primeira tela — sem isto a página inteira ganharia a altura de
+   * 60 linhas e o painel só apareceria depois de rolar, que é o gate verde sobre
+   * tela cortada que esta fase já pagou três vezes. */
+  --web-altura-lista: 52vh;
+}
+
+/* Duas colunas com a LISTA à esquerda. `.web-duas-colunas` põe o lateral à
+ * direita com 22rem, e 22rem não comporta uma ficha com tabela, cinco
+ * componentes de score e quatro ações — o painel é o lado largo aqui. Por isso a
+ * grade é própria: o vocabulário de `web.css` é reusado nas PEÇAS
+ * (`.web-painel`, `.web-lista-densa`, `.web-linha`, `.web-alternador`), e só a
+ * proporção das colunas é desta tela.
+ *
+ * `minmax(0, 1fr)` na segunda coluna, e não `1fr`: o mínimo automático de um item
+ * de grade é o tamanho do conteúdo, e uma URL de fonte sem espaço empurraria a
+ * coluna para fora da grade, estourando a linha inteira para a direita. */
+.redacao-colunas {
+  display: grid;
+  grid-template-columns: 26rem minmax(0, 1fr);
+  align-items: start;
+  gap: var(--web-gap);
+}
+
+.redacao-coluna-fila,
+.redacao-coluna-painel {
+  min-width: 0;
+}
+
+.redacao-coluna-painel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--web-gap);
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * O ESCOPO DO CURADOR — D-84 / D-89
+ * ------------------------------------------------------------------------- */
+
+.redacao-escopos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: 0.35rem;
+}
+
+.redacao-escopo-descricao {
+  max-width: 88ch;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * A FILA
+ * ------------------------------------------------------------------------- */
+
+.redacao-contagens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.redacao-lista {
+  /* A lista rola por dentro; sem a folga à direita a barra de rolagem cobriria a
+   * borda do item realçado e o realce pareceria cortado. */
+  padding-right: 0.25rem;
+}
+
+.redacao-linha {
+  padding: 0;
+}
+
+/* O alvo de clique é o botão, e ele ocupa a linha inteira: um alvo menor que a
+ * linha produz a falha em que o operador clica na borda e nada acontece — e num
+ * gate de hit-test de verdade isso aparece como «ponto central coberto». */
+.redacao-linha-botao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.redacao-linha-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+/* O selo de origem. Ele é o primeiro elemento da linha, e a sugestão de IA usa o
+ * laranja da marca porque é a origem que exige leitura — as outras duas afirmam. */
+.redacao-selo-origem {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 30%, transparent);
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.redacao-selo-origem[data-origem="ia"] {
+  border-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 12%, transparent);
+  color: var(--ic-laranja);
+}
+
+/* ---------------------------------------------------------------------------
+ * O SCORE — visível na linha, conferível no painel
+ * ------------------------------------------------------------------------- */
+
+.redacao-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--ic-laranja);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+  white-space: nowrap;
+}
+
+.redacao-score-rotulo {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
+}
+
+.redacao-score-numero {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A ausência de score é DITA, e não deixada em branco (D-90). */
+.redacao-sem-score {
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  white-space: nowrap;
+}
+
+.redacao-sem-score-explicado {
+  border-left: 3px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
+  padding-left: 0.7rem;
+}
+
+.redacao-bloco-score {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.9rem;
+  border: 1px solid var(--ic-laranja);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--ic-laranja) 4%, transparent);
+}
+
+/* Os cinco componentes, um por linha, com a marca à esquerda e o peso à direita.
+ * É esta lista que torna o número conferível a olho — e é por isso que ela não é
+ * um gráfico: quem confere um score compara CRITÉRIO a critério, e uma barra
+ * esconde exatamente a informação que a tela existe para mostrar. */
+.redacao-componentes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redacao-componente {
+  display: grid;
+  grid-template-columns: 1.2rem minmax(0, 1fr) 3.5rem;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  background: var(--ic-branco);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.redacao-componente[data-atende="nao"] {
+  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+
+.redacao-componente-marca {
+  color: var(--ic-laranja);
+}
+
+.redacao-componente[data-atende="nao"] .redacao-componente-marca {
+  color: color-mix(in srgb, var(--ic-preto) 30%, transparent);
+}
+
+.redacao-componente-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.redacao-componente-peso {
+  text-align: right;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A regra por extenso, ao lado do número. Score sem regra é o recomendador opaco
+ * contra o qual a proposta inteira se posiciona; ela é PRODUTO e fica na tela com
+ * o modo comentado desligado. */
+.redacao-regra-score {
+  max-width: 92ch;
+}
+
+/* ---------------------------------------------------------------------------
+ * A SUGESTÃO DA IA — a frase é a DA ARESTA, não do modelo
+ * ------------------------------------------------------------------------- */
+
+.redacao-sugestao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * AS AÇÕES E O VETO — D-83
+ * ------------------------------------------------------------------------- */
+
+.redacao-acoes {
+  gap: 0.5rem;
+}
+
+.redacao-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.redacao-textarea {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 25%, transparent);
+  border-radius: 0.6rem;
+  background: var(--ic-branco);
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.redacao-textarea:focus-visible {
+  outline: 2px solid var(--ic-laranja);
+  outline-offset: 1px;
+}
+
+/* O bloco do veto usa a moldura da declaração honesta de propósito: ele é o lugar
+ * onde a tela cobra explicação, e a família visual já significa isso. */
+.redacao-veto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.9rem;
+  border-left: 3px solid var(--ic-laranja);
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+}
+
+/* O botão travado tem de PARECER travado além de estar travado — as duas coisas,
+ * porque o gate mede `disabled` e o avaliador vê a opacidade. */
+.redacao-veto .studio-botao[disabled] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.redacao-aviso-veto {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ic-preto) 65%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * O REGISTRO — D-84: nunca sem autor, nunca sem carimbo
+ * ------------------------------------------------------------------------- */
+
+.redacao-decisoes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redacao-decisao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 14%, transparent);
+  border-radius: 0.75rem;
+  background: var(--ic-branco);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.redacao-decisao[data-acao-registrada="vetar"] {
+  border-left: 3px solid var(--ic-laranja);
+}
+
+.redacao-decisao-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.redacao-decisao-titulo {
+  font-family: var(--fonte-display);
+  font-weight: 700;
+}
+
+/* O motivo do veto fica GUARDADO com a decisão e VISÍVEL no registro: um veto
+ * cujo motivo some é moderação silenciosa com um passo a mais. */
+.redacao-decisao-motivo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+}
+
+.redacao-decisao-assinatura {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
+}
+
+.redacao-desfazer {
+  align-self: flex-start;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.7rem;
+}
+
+.redacao-distribuicao {
+  gap: 0.75rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * OS TRÊS LIMITES DA IA — D-86
+ *
+ * Rodapé de PRODUTO, fora de `<Comentario>`: ele continua na tela com o modo
+ * comentado desligado, porque é a resposta à pergunta do RFP e não uma nota sobre
+ * o protótipo.
+ * ------------------------------------------------------------------------- */
+
+.redacao-limites {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--ic-preto);
+  border-radius: 1rem;
+  background: var(--ic-preto);
+  color: var(--ic-branco);
+}
+
+.redacao-limites .studio-nao-sustenta-rotulo {
+  color: var(--ic-laranja);
+}
+
+.redacao-limites ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redacao-limites li {
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--ic-laranja);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+/* A meta da linha vem de `.web-linha-meta`, que é só tipografia: sem esta regra a
+ * classe e o rótulo de procedência encostam um no outro e a linha lê
+ * «eventoPROCEDÊNCIA IC». Pego na foto, não no gate — presença não é legibilidade. */
+.redacao-linha .web-linha-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+/* Densidade de D-80 na linha da fila: com o respiro padrão, quatro itens ocupavam a
+ * altura inteira da lista e a fila deixava de parecer fila. Aparado, cabem seis —
+ * e nenhum texto é cortado para isso, porque truncar título de evento esconde
+ * exatamente o que quem modera precisa ler. */
+.redacao-linha .redacao-linha-botao {
+  gap: 0.15rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.redacao-linha .web-linha-titulo {
+  font-size: 0.85rem;
+  line-height: 1.25;
+}
+
+/* ===========================================================================
+ * O EDITOR DE TRILHA — D-85 e D-86
+ * ======================================================================== */
+
+/* O catálogo é a coluna estreita; os passos e a publicabilidade, a larga. Mesma
+ * proporção da fila, e de propósito: as duas telas de Redação são a mesma
+ * superfície com conteúdos diferentes, e trocar a proporção entre elas faria o
+ * operador reaprender o layout a cada rota. */
+.redacao-colunas-editor {
+  --web-altura-lista: 46vh;
+}
+
+.redacao-catalogo {
+  padding-right: 0.25rem;
+}
+
+.redacao-candidato {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: grab;
+}
+
+.redacao-candidato[data-arrastando="sim"] {
+  outline: 2px dashed var(--ic-laranja);
+  outline-offset: 2px;
+}
+
+.redacao-candidato-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.redacao-acrescentar {
+  padding: 0.2rem 0.7rem;
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.redacao-classe {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * A PUBLICABILIDADE — o bloco que NOMEIA o passo sem motivo
+ *
+ * Ele muda de moldura conforme o estado, e não só de texto: um aviso que só troca
+ * a frase passa despercebido numa tela cheia, e o que esta tela precisa é que a
+ * impossibilidade de publicar seja legível de longe.
+ * ------------------------------------------------------------------------- */
+
+.redacao-publicabilidade[data-publicavel="nao"] {
+  border-left: 4px solid var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
+}
+
+.redacao-publicabilidade .studio-botao[disabled] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.redacao-pendencias {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.redacao-pendencias li {
+  padding: 0.5rem 0.65rem;
+  border-left: 3px solid var(--ic-laranja);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: var(--ic-branco);
+}
+
+.redacao-assinatura {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * OS PASSOS
+ * ------------------------------------------------------------------------- */
+
+.redacao-lista-passos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: passo;
+}
+
+.redacao-passo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 14%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
+}
+
+/* Passo acrescentado agora não é passo do acervo, e a moldura diz isso antes do
+ * texto: confundir os dois faria a curadoria assinar como do acervo uma ponte que
+ * ela acabou de escrever. */
+.redacao-passo[data-do-acervo="nao"] {
+  border-style: dashed;
+  border-color: var(--ic-laranja);
+}
+
+.redacao-passo-cabeca {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.redacao-passo-nos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.redacao-no {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+  border-radius: 0.6rem;
+  background: var(--ic-branco);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.redacao-seta {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ic-laranja);
+}
+
+/* O campo vazio é o estado que a tela existe para tornar impossível de ignorar. */
+.redacao-motivo[data-vazio="sim"] {
+  border-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
+}
+
+.redacao-passo-procedencia {
+  font-size: 0.7rem;
+}
+
+.redacao-sugestao-ia {
+  border-color: var(--ic-laranja);
+}
+
+/* ---------------------------------------------------------------------------
+ * A PRÉVIA — o mesmo texto, na largura do app
+ *
+ * Não é um componente irmão (D-05/D-79 proíbem), e não é uma tela falsa: é o mesmo
+ * campo `motivo` renderizado com `.selo-motivo`, a classe que `/trilha/[slug]/`
+ * usa. A moldura só reproduz a LARGURA do app, para o curador ver a quebra de
+ * linha que o leitor verá.
+ * ------------------------------------------------------------------------- */
+
+.redacao-previa {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+  max-width: 24.375rem; /* 390px — a largura da moldura de celular de D-03 */
+  padding: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
+  border-radius: 1.25rem;
+  background: var(--ic-branco);
+}
+
+.redacao-previa-passo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.redacao-selo-vazio {
+  border-left-style: dashed;
+  font-style: italic;
+}

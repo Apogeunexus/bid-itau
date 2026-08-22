@@ -1,0 +1,372 @@
+/* ===========================================================================
+ * web.css — o vocabulário compartilhado da visão web desktop.
+ *
+ * Fase 5, plano 05-01. ESCRITA POR INTEIRO AQUI E CONGELADA: 05-02 e 05-03 a
+ * consomem e não a editam. Quem precisar de medida própria escreve na folha da
+ * própria tela, que vem depois desta no bundle e a sobrescreve.
+ *
+ * POR QUE ELA EXISTE (D-79, D-80). A visão web usa OS MESMOS componentes da
+ * mobile — é proibido criar `ComponenteWeb` como arquivo irmão (D-05). O que
+ * diverge é layout, e o layout diverge por dois caminhos: pelos utilitários
+ * `desk:`/`app:` do Tailwind, e por CSS puro sob `[data-view="…"]` quando o alvo
+ * é uma classe SEMÂNTICA nossa. `desk:` só prefixa UTILITÁRIO: `desk:web-grade`
+ * não existe e nunca vai existir. As classes abaixo são semânticas, e por isso
+ * todas moram aqui, aninhadas sob `[data-view="web"]`.
+ *
+ * TODA REGRA DESTE ARQUIVO ESTÁ SOB `[data-view="web"]`. Nenhuma delas pode ter
+ * efeito na visão app — a moldura de 390×844 de D-03 não comporta duas colunas, e
+ * uma regra que vazasse para lá quebraria a agenda da fase 3 sem que nada nesta
+ * fase a estivesse verificando.
+ *
+ * O QUE MUDA NA WEB NÃO É LARGURA, É DENSIDADE E SIMULTANEIDADE (D-80). É por
+ * isso que o vocabulário aqui é de GRADE e de COLUNA COLADA, e não de
+ * `max-width`: pôr duas coisas na tela ao mesmo tempo é o produto; esticar uma
+ * só é a adaptação que esta fase existe para não entregar.
+ *
+ * NENHUM HEX DO MANUAL APARECE AQUI (D-06, D-08). Cor sai de `var(--ic-*)`, e
+ * transparência sai de `color-mix`, nunca de um `rgb()` literal que criaria uma
+ * segunda fonte de verdade para o laranja.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * Medidas compartilhadas.
+ *
+ * Ficam num bloco próprio, e não espalhadas: são elas que fazem duas telas
+ * escritas por executores diferentes na onda 2 parecerem a mesma superfície.
+ * `--web-topo-colado` é a distância do topo da janela em que tudo que cola —
+ * coluna de facetas, painel lateral — se ancora; alterá-la aqui move as duas.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] {
+  --web-topo-colado: 1.25rem;
+  --web-gap: 1.5rem;
+  --web-lateral: 22rem;
+  --web-raio: 1rem;
+  --web-borda: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * .web-duas-colunas — painel principal + painel lateral colável (D-80).
+ *
+ * `align-items: start` é o que permite ao lateral colar: um filho esticado pela
+ * altura da linha da grade tem altura igual à do painel principal, e `sticky`
+ * sobre um elemento tão alto quanto o contêiner de rolagem nunca sai do lugar —
+ * o sintoma é uma coluna que simplesmente não gruda, sem nenhum erro.
+ *
+ * `minmax(0, 1fr)` e não `1fr`: o mínimo automático de um item de grade é o
+ * tamanho do conteúdo, e uma tabela larga ou um título sem quebra empurraria a
+ * coluna principal para além da grade, estourando a linha inteira para a direita.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .web-duas-colunas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--web-lateral);
+  align-items: start;
+  gap: var(--web-gap);
+}
+
+/* A coluna que cola. Vale dentro de `.web-duas-colunas` e fora dela — é a mesma
+ * afirmação em qualquer lugar: este painel acompanha a rolagem do irmão. */
+[data-view="web"] .web-colada {
+  position: sticky;
+  top: var(--web-topo-colado);
+}
+
+/* ---------------------------------------------------------------------------
+ * .web-grade — grade de cartões com o número de colunas parametrizado.
+ *
+ * Cada tela escolhe o seu `--web-colunas` em style ou na própria folha; o padrão
+ * de 3 é o que Descobrir quer. O parâmetro é variável CSS e não classe numerada
+ * (`.web-grade-3`) porque 05-02, 05-06 e 05-07 escolhem números diferentes e
+ * nenhuma delas pode precisar editar ESTE arquivo para isso.
+ *
+ * `repeat(var(--web-colunas), …)` é substituído aqui de forma confiável porque a
+ * variável é lida em tempo de cascata sobre um valor completo; o caso que a fase
+ * 4 registrou como não-confiável era outro — `repeat(var(--n), …)` montado a
+ * partir de dado do componente, que ali foi resolvido escrevendo a grade em
+ * `style`. Quem tiver número vindo de dado continua fazendo assim.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .web-grade {
+  display: grid;
+  grid-template-columns: repeat(var(--web-colunas, 3), minmax(0, 1fr));
+  align-items: start;
+  gap: var(--web-gap);
+}
+
+/* Um item que ocupa mais de uma coluna da grade — o destaque curado de D-29 na
+ * densidade de D-80. `--web-span` é do item, não da grade. */
+[data-view="web"] .web-grade > .web-grade-largo {
+  grid-column: span var(--web-span, 2);
+}
+
+/* ---------------------------------------------------------------------------
+ * .web-coluna-fixa — a coluna de facetas permanente de D-80.
+ *
+ * Na visão app, filtrar é uma TELA à parte; na web, as facetas ficam visíveis o
+ * tempo todo ao lado dos resultados. Ela cola no topo e ROLA POR DENTRO: sem
+ * `max-height` + `overflow-y`, uma lista de 8 dimensões de acessibilidade mais
+ * linguagens mais territórios ficaria mais alta que a janela e o pé dela seria
+ * inalcançável — a coluna colada nunca rola para revelar o próprio fim.
+ *
+ * `overscroll-behavior: contain` para a rolagem da coluna não vazar para o
+ * documento quando ela chega ao fim, que é o mesmo cuidado que a moldura de
+ * celular já toma em `globals.css`.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .web-coluna-fixa {
+  position: sticky;
+  top: var(--web-topo-colado);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: calc(100vh - (2 * var(--web-topo-colado)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 0.35rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * .web-painel — a superfície de painel da web.
+ *
+ * Mesma ideia do `.cartao` da fase 2, com borda e respiro maiores: numa tela de
+ * 1440 px o respiro de 0,75rem que funciona dentro de uma moldura de 390 px lê
+ * como aperto. É a densidade de D-80 aplicada ao contêiner em vez de ao conteúdo.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .web-painel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: var(--web-borda);
+  border-radius: var(--web-raio);
+  background: var(--ic-branco);
+}
+
+/* Cabeçalho de painel: o rótulo pequeno e maiúsculo que nomeia a superfície. */
+[data-view="web"] .web-painel-titulo {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * .web-realce — o estado de realce de D-81, ESCRITO UMA VEZ.
+ *
+ * D-81 é a coisa desta fase que só existe onde há cursor: passar sobre um item da
+ * lista realça o pino do mapa, e passar sobre o pino realça o item. Os dois lados
+ * do par usam ESTA classe e leem o MESMO atributo `data-realcado` — se cada lado
+ * tivesse a sua regra, o realce da lista e o do mapa divergiriam na primeira
+ * correção e o par deixaria de parecer um par.
+ *
+ * O gatilho é o atributo, não `:hover`. `:hover` só realçaria o elemento sob o
+ * cursor; a sincronia PRECISA que o outro lado — que não está sob cursor nenhum —
+ * responda ao mesmo estado. É por isso que existe um `parRealcado` no componente
+ * e não uma pseudo-classe aqui.
+ *
+ * DOIS ALVOS, UMA CLASSE. Elemento de HTML aceita `outline`, `background` e
+ * `box-shadow`; elemento de SVG ignora `background` e `box-shadow` e responde a
+ * `stroke`. A regra base serve o item da lista e a especialização de `circle`
+ * serve o pino, com a MESMA cor e a mesma espessura — a diferença é do meio de
+ * pintura, não da decisão de design.
+ *
+ * `transition` nas duas: o realce que aparece de estalo lê como defeito de
+ * renderização numa demonstração ao vivo.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .web-realce {
+  transition:
+    outline-color 120ms ease,
+    background-color 120ms ease,
+    box-shadow 120ms ease,
+    stroke-width 120ms ease,
+    r 120ms ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+[data-view="web"] .web-realce[data-realcado="sim"] {
+  outline-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--ic-preto) 18%, transparent);
+}
+
+/* O pino. `outline` sobre SVG desenha o retângulo do contorno, o que num círculo
+ * de 3 px de raio vira um quadrado maior que o próprio pino e some no meio dos
+ * outros 157. `stroke` acompanha a forma. */
+[data-view="web"] circle.web-realce {
+  outline: none;
+  stroke: transparent;
+  stroke-width: 0;
+}
+
+[data-view="web"] circle.web-realce[data-realcado="sim"] {
+  stroke: var(--ic-laranja);
+  stroke-width: 2;
+}
+
+/* Um item de lista que participa do par ganha cursor de apontamento mesmo quando
+ * o alvo do clique é o link interno: a linha inteira é a superfície do gesto. */
+[data-view="web"] .web-realce[data-par] {
+  cursor: pointer;
+}
+
+/* O foco de teclado usa o MESMO realce, porque a sincronia de D-81 também
+ * acontece por `Tab` — cursor não é o único apontador. O anel do navegador
+ * continua por cima; isto é o par, não o foco. */
+[data-view="web"] .web-realce:focus-within {
+  outline-color: color-mix(in srgb, var(--ic-laranja) 55%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * .web-declaracao — o bloco de declaração honesta na densidade da web.
+ *
+ * D-90 pede que, onde o dado não sustenta, a tela declare a ausência COM O
+ * DENOMINADOR. Isso é produto e fica FORA de `<Comentario>` — a fase 4 fixou o
+ * padrão e a fase 5 o herda em sete telas. A borda esquerda laranja é a mesma
+ * gramática do `.selo-motivo`: o leitor já sabe que aquela barra significa «a
+ * tela está te dizendo por quê».
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .web-declaracao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--ic-laranja);
+  border-radius: 0 var(--web-raio) var(--web-raio) 0;
+  background: color-mix(in srgb, var(--ic-laranja) 7%, transparent);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* Os denominadores da declaração, em linha. Número grande, rótulo pequeno: é o
+ * número que sustenta a frase, e é ele que a foto do slide precisa pegar. */
+[data-view="web"] .web-denominadores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-view="web"] .web-denominador {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+[data-view="web"] .web-denominador-numero {
+  font-family: var(--fonte-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+[data-view="web"] .web-denominador-rotulo {
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * .web-alternador — o grupo de botões que troca RECORTE, não tela (D-84, D-89).
+ *
+ * Três planos da onda 2 precisam do mesmo gesto: o Observatório troca de público,
+ * a Redação troca de escopo de curador, e Acontece troca de recorte da lista. É a
+ * mesma superfície servindo escopos diferentes, e por isso o controle é um só,
+ * escrito aqui. O estado é `aria-pressed`, que é o atributo que o leitor de tela
+ * já entende — não uma classe «ativo» que só o olho enxerga.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .web-alternador {
+  display: inline-flex;
+  gap: 0;
+  padding: 0.2rem;
+  border: var(--web-borda);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-preto) 4%, transparent);
+}
+
+[data-view="web"] .web-alternador > button {
+  padding: 0.4rem 0.95rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: color-mix(in srgb, var(--ic-preto) 65%, transparent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+[data-view="web"] .web-alternador > button:hover {
+  color: var(--ic-preto);
+}
+
+[data-view="web"] .web-alternador > button[aria-pressed="true"] {
+  background: var(--ic-laranja);
+  color: var(--ic-branco);
+}
+
+/* ---------------------------------------------------------------------------
+ * .web-lista-densa — lista longa que rola por dentro, ao lado de outra coisa.
+ *
+ * É o par de `.web-coluna-fixa` do lado do conteúdo: quando a lista tem 158 itens
+ * e precisa ficar ao lado de um mapa que não rola, ela é que rola. Sem isto, a
+ * página inteira ficaria com a altura da lista e o mapa sumiria da primeira
+ * visão — que é exatamente a falha que D-80 proíbe («sem rolar para achar o
+ * segundo»).
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .web-lista-densa {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: var(--web-altura-lista, 62vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Uma linha da lista densa. Densidade de D-80: informação em linha, não cartão
+ * empilhado — o cartão de 390 px mostra 3 itens por tela, a linha mostra 12. */
+[data-view="web"] .web-linha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.55rem 0.7rem;
+  border: var(--web-borda);
+  border-radius: 0.6rem;
+  background: var(--ic-branco);
+}
+
+[data-view="web"] .web-linha-titulo {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+[data-view="web"] .web-linha-meta {
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * .web-mapa — o quadro do SVG quando ele é METADE da tela e não a tela toda.
+ *
+ * `/mapa` da fase 3 é uma tela inteira de mapa; aqui o mapa é uma coluna. O SVG
+ * fica com altura limitada e proporção preservada, e o quadro não rola: quem rola
+ * é a lista ao lado.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .web-mapa {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: var(--web-altura-mapa, 62vh);
+  border-radius: 0.6rem;
+  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
+}

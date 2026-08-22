@@ -1,0 +1,20 @@
+{
+ "conteudo_sem_agente": 1742,
+ "conteudo_sem_linguagem": 741,
+ "midia_sem_agente": 516,
+ "conteudo_sem_alt_text": 507,
+ "midia_sem_linguagem": 177,
+ "evento_sem_ocorrencia": 100,
+ "evento_sem_espaco": 100,
+ "evento_sem_territorio": 100,
+ "evento_sem_preco": 100,
+ "evento_sem_agente": 100,
+ "formacao_sem_agente": 54,
+ "evento_sem_linguagem": 51,
+ "publicacao_sem_agente": 45,
+ "formacao_sem_linguagem": 30,
+ "publicacao_sem_linguagem": 26,
+ "midia_sem_alt_text": 23,
+ "evento_sem_data": 11,
+ "evento_sem_alt_text": 3
+}

@@ -1,0 +1,331 @@
+/* ---------------------------------------------------------------------------
+ * frase.css — as regras de /buscar/frase (AGEN-07, D-64, D-65, D-66).
+ *
+ * POR QUE ARQUIVO PRÓPRIO E NÃO `globals.css`. Dois planos correm em paralelo nesta onda
+ * e `globals.css` é o único arquivo que os dois tocariam. Um CSS por plano, importado
+ * pelo componente que o usa, é o que torna a paralelização segura.
+ *
+ * NADA AQUI USA POSIÇÃO ANCORADA NA JANELA. Dentro da moldura de 390×844 (D-03), `fixed`
+ * escaparia para a largura da tela inteira e desmontaria a ilusão do telefone.
+ *
+ * A MOLDURA MANDA NA DENSIDADE. Frase, fichas e o primeiro resultado precisam caber
+ * juntos na primeira vista — é a foto de slide do Cenário 5. Por isso a ficha é densa: o
+ * rótulo e a marca curta ficam sempre visíveis, e o parágrafo inteiro da confissão abre
+ * em um toque. O que NUNCA encolhe é o número: «2.425 de 2.425» e «sem ela: 40» estão na
+ * linha visível, porque são eles que sustentam D-64 e D-66.
+ * ------------------------------------------------------------------------- */
+
+/* --- A frase, no topo (D-64) ---------------------------------------------
+ * Ela é o campo e é a resposta ao mesmo tempo: editar retraduz. Grudada no topo porque a
+ * pessoa reformula lendo as fichas logo abaixo. `sticky`, nunca `fixed`.               */
+
+.frase-campo {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 15%, transparent);
+  border-radius: 14px;
+  background: var(--ic-branco);
+  font: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: var(--ic-preto);
+}
+
+.frase-campo:focus-visible {
+  outline: 2px solid var(--ic-laranja);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+/* A leitura da frase: o mesmo texto, com o pedaço que virou ficha destacado. É o que
+ * torna VISÍVEL a ligação entre o que se digitou e o que a regra fez — sem ela, a
+ * tradução voltaria a ser um passo escondido, que é exatamente o que D-64 proíbe. */
+.frase-leitura {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+
+.frase-trecho {
+  padding: 0.05rem 0.15rem;
+  border-bottom: 2px solid var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 12%, transparent);
+  color: var(--ic-preto);
+  font-weight: 600;
+}
+
+.frase-trecho[data-marca="confissao"] {
+  border-bottom-style: dashed;
+}
+
+/* --- As fichas de critério (D-64) ----------------------------------------
+ * Bloco, e não pastilha: a pastilha de `/buscar` carrega duas palavras, e a ficha daqui
+ * carrega o trecho da frase, o número «sem ela» e, nas duas especiais, a confissão. Uma
+ * pastilha com esse conteúdo viraria um parágrafo redondo.                             */
+
+.frase-ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+  border-left: 3px solid var(--ic-laranja);
+  border-radius: 8px;
+  background: var(--ic-branco);
+}
+
+.frase-ficha + .frase-ficha {
+  margin-top: 0.3rem;
+}
+
+/* A ficha que confessa tem borda tracejada: a diferença entre «esta recortou» e «esta
+ * não recorta, e eu te digo isso» precisa ser vista antes de ser lida. */
+.frase-ficha[data-confissao="sim"] {
+  border-left-style: dashed;
+  border-left-color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  background: color-mix(in srgb, var(--ic-preto) 3%, var(--ic-branco));
+}
+
+.frase-ficha-topo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.frase-ficha-regra {
+  flex: none;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+}
+
+.frase-ficha-rotulo {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.frase-ficha-n {
+  flex: none;
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+.frase-ficha-marca {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+}
+
+.frase-ficha-detalhe {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--ic-preto) 78%, transparent);
+}
+
+/* --- Botões pequenos -----------------------------------------------------
+ * Um só desenho para remover ficha, abrir confissão e abrir a lista de regras: são todos
+ * o mesmo gesto — «me mostre mais desta consulta» —, e desenhá-los diferente sugeriria
+ * consequências diferentes.                                                            */
+
+.frase-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
+  border-radius: 999px;
+  background: var(--ic-branco);
+  font: inherit;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: var(--ic-preto);
+  cursor: pointer;
+}
+
+.frase-botao:hover {
+  border-color: var(--ic-laranja);
+}
+
+.frase-botao:focus-visible {
+  outline: 2px solid var(--ic-laranja);
+  outline-offset: 2px;
+}
+
+.frase-botao[aria-pressed="true"] {
+  border-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 10%, var(--ic-branco));
+  font-weight: 600;
+}
+
+/* --- O bloco que declara a ausência de IA (D-65) -------------------------
+ * PRODUTO, e não comentário: fica na tela nos dois modos. A borda laranja é o mesmo
+ * peso visual do afrouxamento — as duas são afirmações que a proposta faz sobre si.    */
+
+.frase-sem-ia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--ic-laranja) 45%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ic-laranja) 6%, var(--ic-branco));
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+/* --- A lista de regras — o argumento de D-65 ----------------------------- */
+
+.frase-regra {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.45rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.frase-regra:first-child {
+  border-top: 0;
+}
+
+.frase-regra-nome {
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.frase-regra-exemplo {
+  color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
+  font-style: italic;
+}
+
+/* --- Resultado, com o motivo do casamento -------------------------------
+ * Sem cartão e sem sombra, no mesmo desenho de `/buscar`: a lista mistura classes e uma
+ * moldura por item pesaria a tela. O que distingue os tipos é a etiqueta.              */
+
+.frase-resultado {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.45rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
+}
+
+/* O primeiro resultado não paga o respiro de separação: ele encosta na contagem, e são
+ * esses ~7px que colocam «frase + fichas + primeiro resultado» dentro da primeira vista
+ * da moldura — a foto de slide do Cenário 5. */
+.frase-resultado:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.frase-tipo {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ic-preto) 8%, transparent);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+
+/* O motivo do casamento. A ORIGEM MUDA O DESENHO, e isso não é decoração: texto escrito
+ * no acervo e texto composto por nós não podem parecer a mesma coisa (T-02-05). O
+ * escrito ganha a barra laranja da citação; o composto fica em cinza, sem barra. */
+.frase-motivo {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--ic-preto) 75%, transparent);
+}
+
+.frase-motivo[data-origem-casamento="aresta"] {
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--ic-laranja);
+  font-style: italic;
+}
+
+/* --- Afrouxamento (D-66) ------------------------------------------------
+ * Mesmo desenho de `/buscar`: o número é o argumento, e por isso é laranja e tabular. A
+ * pessoa compara «40» com «9» antes de escolher qual critério soltar.                  */
+
+.frase-afrouxamento {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--ic-laranja) 40%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ic-laranja) 6%, var(--ic-branco));
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  text-align: left;
+  color: var(--ic-preto);
+  cursor: pointer;
+}
+
+.frase-afrouxamento + .frase-afrouxamento {
+  margin-top: 0.4rem;
+}
+
+.frase-afrouxamento:hover {
+  border-color: var(--ic-laranja);
+}
+
+.frase-afrouxamento:focus-visible {
+  outline: 2px solid var(--ic-laranja);
+  outline-offset: 2px;
+}
+
+.frase-afrouxamento-n {
+  flex: none;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ic-laranja);
+}
+
+/* --- Títulos de bloco, no vocabulário de `/buscar` ----------------------- */
+
+.frase-bloco-titulo {
+  margin: 0 0 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* --- A visão web (D-01, D-02) -------------------------------------------
+ * O gatilho é `data-view`, o estado da aplicação, e nunca uma media query: o alternador
+ * precisa funcionar numa telona de apresentação. Na web há largura para a ficha
+ * respirar — e é só ali que a confissão inteira cabe sem toque.                        */
+
+[data-view="web"] .frase-campo {
+  padding: 0.9rem 1.1rem;
+  font-size: 1.0625rem;
+}
+
+[data-view="web"] .frase-ficha {
+  padding: 0.7rem 0.9rem;
+}
+
+[data-view="web"] .frase-resultado {
+  padding: 0.8rem 0;
+}

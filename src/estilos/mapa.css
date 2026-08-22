@@ -1,0 +1,223 @@
+/* ---------------------------------------------------------------------------
+ * mapa.css — as regras do mapa e da camada de desertos culturais.
+ *
+ * MORA AQUI, E NÃO EM `globals.css`, porque quatro planos escrevem em paralelo nesta fase
+ * e `globals.css` é o único arquivo que os quatro tocariam. O import é feito pelo
+ * componente que usa as regras, e o alcance é o mesmo — o que muda é que dois planos nunca
+ * disputam o mesmo arquivo.
+ *
+ * CSS PURO, e não utilitários do Tailwind, pelo limite já conhecido do projeto: variante
+ * (`app:`, `desk:`) só prefixa UTILITÁRIO, e `.mapa` é classe semântica nossa.
+ *
+ * NENHUMA COR DE LINGUAGEM APARECE AQUI. A cor da linguagem é dado (D-08): ela chega como
+ * custom property inline, vinda do vocabulário gerado. Escrever `--ic-lilas` neste arquivo
+ * criaria uma segunda fonte de verdade que diverge na primeira edição.
+ * ------------------------------------------------------------------------- */
+
+.mapa-desenho {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* O SVG tem `viewBox` fixo e proporção própria; a altura acompanha a largura da moldura.
+     O teto existe porque a tela inteira precisa caber sem rolagem — a camada de desertos é
+     uma imagem para ser projetada, e uma imagem que rola não é uma imagem. */
+  max-height: 288px;
+  overflow: visible;
+}
+
+.mapa-contorno {
+  fill: color-mix(in srgb, var(--ic-preto) 4%, transparent);
+  stroke: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.mapa-pino {
+  stroke: var(--ic-branco);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  fill: var(--cor-pino, var(--ic-laranja));
+}
+
+/* ---------------------------------------------------------------------------
+ * A TELA INTEIRA CABE SEM ROLAR, e isso é requisito e não capricho: a camada de desertos
+ * culturais é uma imagem para ser projetada num slide, e uma imagem que rola não é uma
+ * imagem. A moldura de celular tem 824px de caixa de conteúdo e a barra de abas ocupa 59px;
+ * as alturas abaixo são o orçamento dos 765px que sobram.
+ * ------------------------------------------------------------------------- */
+.mapa-tela {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.mapa-controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.mapa-botao {
+  border: 1px solid var(--ic-preto);
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.1rem;
+  transition: background-color 150ms;
+}
+
+.mapa-botao:hover {
+  background: color-mix(in srgb, var(--ic-preto) 5%, transparent);
+}
+
+.mapa-quadro {
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+  border-radius: 0.75rem;
+}
+
+/* O painel é o único ponto de rolagem da tela, e é onde ficam as listas suplementares —
+ * as entidades sem posição e as de fora do Brasil. As frases que precisam ser LIDAS numa
+ * foto de slide ficam no topo dele, nunca abaixo da dobra do painel. */
+.mapa-painel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 286px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.mapa-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  border: 1px solid var(--ic-preto);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.625rem;
+}
+
+.mapa-fechar {
+  cursor: pointer;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  text-decoration: underline;
+}
+
+.mapa-legenda {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.6875rem;
+  line-height: 1.05rem;
+  color: color-mix(in srgb, var(--ic-preto) 62%, transparent);
+}
+
+.mapa-pino {
+  cursor: pointer;
+}
+
+/* COM A CAMADA LIGADA OS PINOS RECUAM, mas não somem: a sobreposição é a leitura — é o
+ * recorte que a pessoa estava vendo, colocado sobre o mapa da concentração. Em cima de um
+ * coroplético, a cor da linguagem passa a competir com a intensidade do estado e as duas
+ * se anulam; recuar a opacidade devolve a hierarquia sem apagar a identidade do pino. */
+.mapa-pinos[data-sob-camada="sim"] .mapa-pino {
+  opacity: 0.5;
+  stroke-width: 1;
+}
+
+.mapa-pino:focus-visible {
+  outline: 2px solid var(--ic-laranja);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+ * CAMADA DE DESERTOS CULTURAIS (D-62).
+ *
+ * A intensidade de cada estado chega como custom property inline, calculada a partir da
+ * CONTAGEM MEDIDA — nenhum valor por estado é escrito aqui. Escrever «São Paulo: 0.9» neste
+ * arquivo criaria um número de tela que não responde ao grafo, que é exatamente o defeito
+ * que a camada existe para não ter.
+ *
+ * TRÊS FAIXAS, e a distância visual entre `minimo` e `vazio` é deliberada e grande: 1 é um
+ * acervo magro, 0 é um estado que o acervo não sabe que existe.
+ * ------------------------------------------------------------------------- */
+.desertos-uf {
+  stroke: color-mix(in srgb, var(--ic-preto) 30%, transparent);
+  stroke-width: 0.7;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.desertos-uf[data-faixa="registrado"] {
+  fill: color-mix(
+    in srgb,
+    var(--ic-laranja) calc(8% + var(--intensidade, 0) * 85%),
+    var(--ic-branco)
+  );
+}
+
+/* Um registro só: quase branco, mas AINDA PREENCHIDO — o estado existe no acervo. */
+.desertos-uf[data-faixa="minimo"] {
+  fill: color-mix(in srgb, var(--ic-laranja) 7%, var(--ic-branco));
+  stroke: color-mix(in srgb, var(--ic-laranja) 55%, transparent);
+  stroke-width: 1;
+}
+
+/* Zero: VAZADO e hachurado, com contorno tracejado. Não é um tom mais claro da mesma
+   escala — é a ausência da escala, e precisa ler como buraco à distância de um slide. */
+.desertos-uf[data-faixa="vazio"] {
+  fill: url(#desertos-hachura);
+  stroke: var(--ic-preto);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 2;
+}
+
+.desertos-hachura-traco {
+  stroke: color-mix(in srgb, var(--ic-preto) 38%, transparent);
+  stroke-width: 1.2;
+}
+
+.desertos-sigla {
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--ic-preto);
+  paint-order: stroke;
+  stroke: var(--ic-branco);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.desertos-leitura {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  line-height: 1.05rem;
+  color: color-mix(in srgb, var(--ic-preto) 78%, transparent);
+}
+
+.desertos-titulo {
+  font-family: var(--fonte-display, inherit);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ic-preto);
+}
+
+/* A tese fica destacada porque ela é a frase que a apresentação vai ler em voz alta. */
+.desertos-tese {
+  border-left: 3px solid var(--ic-laranja);
+  padding-left: 0.5rem;
+  font-weight: 600;
+  color: var(--ic-preto);
+}
+
+.mapa-botao-camada[aria-pressed="true"] {
+  background: var(--ic-laranja);
+  border-color: var(--ic-laranja);
+  color: var(--ic-branco);
+}

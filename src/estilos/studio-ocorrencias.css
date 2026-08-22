@@ -1,0 +1,503 @@
+/* ---------------------------------------------------------------------------
+ * studio-ocorrencias.css — as regras próprias da tela 32, gestão de ocorrências.
+ *
+ * DE QUEM É ESTE ARQUIVO. Do plano 04-03, e de mais ninguém. Ele NASCE VAZIO DE
+ * REGRA de propósito, criado aqui pelo 04-01 junto com a sua linha de `@import` em
+ * `globals.css`.
+ *
+ * POR QUE VAZIO, E POR QUE ISSO É O CONTRÁRIO DE DESLEIXO. `globals.css` é o único
+ * arquivo que os três planos da onda 2 tocariam, e a fase 3 registrou por escrito que
+ * dois executores editando a mesma folha é a colisão que o merge não resolve sozinho.
+ * Declarando as três folhas aqui, na onda 1, o ponto de colisão deixa de existir em
+ * vez de ser administrado — 04-02, 04-03 e 04-04 correm em paralelo, cada um na sua
+ * folha, e nenhum precisa esperar os outros.
+ *
+ * A regra que vale para as duas telas de bastidor mora em `studio.css`: cabeçalho da
+ * superfície, painel, lado a lado, tabela densa, barra de ações, pastilha de número.
+ * ------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+ * O seletor de evento — trocar de evento NÃO navega.
+ * ------------------------------------------------------------------------- */
+
+.oco-seletor {
+  display: grid;
+  grid-template-columns: auto minmax(18rem, 30rem) 1fr;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.oco-seletor-rotulo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.5);
+}
+
+.oco-seletor-campo {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid rgb(0 0 0 / 0.25);
+  border-radius: 0.5rem;
+  background: var(--ic-branco);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.oco-seletor-nota {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: rgb(0 0 0 / 0.6);
+}
+
+/* ---------------------------------------------------------------------------
+ * A ficha imutável do evento — D-73, T-04-15.
+ *
+ * A borda laranja à esquerda é a mesma marca da declaração honesta: os dois blocos
+ * dizem «isto aqui é afirmação sobre o dado», e vale o olho reconhecer a família.
+ * ------------------------------------------------------------------------- */
+
+.oco-ficha {
+  border-left: 3px solid var(--ic-laranja);
+}
+
+.oco-selo-imutavel {
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--ic-preto);
+  color: var(--ic-branco);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.oco-ficha-titulo {
+  font-family: var(--fonte-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.oco-ficha-imutavel {
+  max-width: 78ch;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgb(0 0 0 / 0.75);
+}
+
+/* Grade e não lista: os cinco campos da ficha são lidos em comparação uns com os
+ * outros, e uma coluna só transformaria a ficha numa tira de 5 linhas altas. */
+.oco-ficha-campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.6rem 1rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgb(0 0 0 / 0.09);
+}
+
+.oco-ficha-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.oco-ficha-campo-largo {
+  grid-column: 1 / -1;
+}
+
+.oco-fonte {
+  color: rgb(0 0 0 / 0.55);
+}
+
+/* «não declarado» tem forma própria: o vazio do acervo aparece como ausência
+ * declarada, e não como célula em branco que se confunde com defeito de tela. */
+.oco-ausente {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: rgb(0 0 0 / 0.45);
+}
+
+/* ---------------------------------------------------------------------------
+ * A semeadura do Cenário 4.
+ * ------------------------------------------------------------------------- */
+
+.oco-semeadura {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px dashed var(--ic-laranja);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
+}
+
+.oco-semeadura-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  max-width: 72ch;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.oco-semeadura-titulo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ic-laranja);
+}
+
+.oco-semeadura .studio-botao:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* ---------------------------------------------------------------------------
+ * A tabela de sessões — 53 linhas é o caso normal.
+ *
+ * Grade e não <table>: a linha em edição abre um bloco abaixo dela, dentro do
+ * MESMO <li>, e uma <table> obrigaria a um <tr> falso de largura total. As colunas
+ * são fixas para os números ficarem alinhados verticalmente ao longo das 53 linhas —
+ * data e hora desalinhadas fazem a varredura vertical parar de funcionar.
+ * ------------------------------------------------------------------------- */
+
+.oco-tabela {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(0 0 0 / 0.12);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.oco-linha {
+  display: grid;
+  grid-template-columns: 3rem 7rem 8.5rem 14rem 1fr 9rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.oco-linha-cabecalho {
+  border-bottom: 1px solid rgb(0 0 0 / 0.12);
+  background: color-mix(in srgb, var(--ic-preto) 4%, transparent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.55);
+}
+
+.oco-corpo {
+  display: flex;
+  flex-direction: column;
+}
+
+.oco-item {
+  border-top: 1px solid rgb(0 0 0 / 0.07);
+}
+
+.oco-item:first-child {
+  border-top: 0;
+}
+
+.oco-item:hover {
+  background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
+}
+
+/* A linha em edição é marcada por fundo E por borda à esquerda: quem lê a tela numa
+ * foto em preto e branco continua achando a linha aberta. */
+.oco-item[data-editando] {
+  border-left: 3px solid var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 7%, transparent);
+}
+
+.oco-celula-ordem {
+  font-variant-numeric: tabular-nums;
+  color: rgb(0 0 0 / 0.4);
+}
+
+.oco-celula-hora {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.oco-marca-alterada {
+  padding: 0.05rem 0.35rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-laranja) 18%, transparent);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.oco-celula-entrada {
+  font-size: 0.75rem;
+  color: rgb(0 0 0 / 0.6);
+}
+
+.oco-celula-acao {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.oco-botao-editar {
+  cursor: pointer;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgb(0 0 0 / 0.3);
+  border-radius: 999px;
+  background: var(--ic-branco);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.oco-botao-editar:hover {
+  border-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 12%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * O bloco de edição, dentro da própria linha.
+ * ------------------------------------------------------------------------- */
+
+.oco-edicao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 0.35rem 0.7rem 0.9rem 0.7rem;
+}
+
+.oco-edicao-campos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.oco-edicao-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.oco-edicao-hora {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid rgb(0 0 0 / 0.3);
+  border-radius: 0.4rem;
+  background: var(--ic-branco);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.oco-edicao-de-para {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.oco-acoes-nota {
+  max-width: 52ch;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: rgb(0 0 0 / 0.6);
+}
+
+.oco-edicao .studio-botao:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+/* ---------------------------------------------------------------------------
+ * A prévia de impacto — D-74, o coração da tela.
+ * ------------------------------------------------------------------------- */
+
+.oco-impacto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--ic-laranja);
+  border-radius: 0.75rem;
+  background: var(--ic-branco);
+}
+
+.oco-impacto-numeros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.9rem;
+}
+
+.oco-impacto-pastilha {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-laranja) 14%, transparent);
+  font-size: 0.8125rem;
+}
+
+.oco-impacto-numero {
+  font-family: var(--fonte-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* O contraste fica na MESMA linha de leitura do número: avisados e não-avisados lado
+ * a lado é o argumento inteiro do Cenário 4, e separá-los em dois blocos deixaria a
+ * comparação por conta do leitor. */
+.oco-impacto-contraste {
+  max-width: 60ch;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: rgb(0 0 0 / 0.7);
+}
+
+.oco-impacto-fonte {
+  max-width: 84ch;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgb(0 0 0 / 0.7);
+}
+
+.oco-impacto-descarte {
+  max-width: 84ch;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ic-laranja);
+}
+
+.oco-impacto-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.oco-impacto-pessoa {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid rgb(0 0 0 / 0.12);
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+/* ---------------------------------------------------------------------------
+ * A frase de D-73 e o histórico — D-75.
+ * ------------------------------------------------------------------------- */
+
+.oco-nota-d73 {
+  max-width: 82ch;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgb(0 0 0 / 0.09);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgb(0 0 0 / 0.75);
+}
+
+.oco-historico-amarra {
+  max-width: 82ch;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgb(0 0 0 / 0.7);
+}
+
+.oco-historico-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.oco-historico-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgb(0 0 0 / 0.12);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
+}
+
+.oco-historico-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.oco-historico-selo {
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.oco-historico-selo[data-origem-alteracao="autorado"] {
+  background: var(--ic-laranja);
+  color: var(--ic-branco);
+}
+
+.oco-historico-selo[data-origem-alteracao="operador"] {
+  border: 1px solid var(--ic-preto);
+  background: var(--ic-branco);
+}
+
+.oco-historico-quando {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: rgb(0 0 0 / 0.55);
+}
+
+.oco-historico-mudanca {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+.oco-historico-quem,
+.oco-historico-frase {
+  max-width: 84ch;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgb(0 0 0 / 0.65);
+}
+
+.oco-operador {
+  max-width: 84ch;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgb(0 0 0 / 0.09);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgb(0 0 0 / 0.65);
+}
+
+/* ---------------------------------------------------------------------------
+ * As quatro declarações honestas. Visíveis com o modo comentado DESLIGADO: a
+ * honestidade sobre o dado é o argumento da proposta, não a nota de rodapé.
+ * ------------------------------------------------------------------------- */
+
+.oco-honesto-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+  gap: 0.6rem;
+}

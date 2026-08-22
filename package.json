@@ -1,0 +1,34 @@
+{
+  "name": "agenda-cultural-br",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "gerar-grafo": "node scripts/gerar-grafo.mjs",
+    "smoke": "tsx scripts/smoke-grafo.ts",
+    "testar-caminhada": "tsx scripts/testar-caminhada.ts",
+    "verificar-fase2": "node scripts/verificar-fase2.mjs",
+    "verificar-fase3": "node scripts/verificar-fase3.mjs",
+    "verificar-fase4": "node scripts/verificar-fase4.mjs",
+    "verificar-fase5": "node scripts/verificar-fase5.mjs",
+    "verificar-comentado": "node scripts/verificar-comentado.mjs"
+  },
+  "dependencies": {
+    "next": "^16.3.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "clsx": "^2.1.1",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3"
+  }
+}

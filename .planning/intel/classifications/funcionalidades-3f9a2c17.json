@@ -1,0 +1,13 @@
+{
+  "source_path": "/Users/macos/Desktop/Noz/docs/funcionalidades.md",
+  "type": "SPEC",
+  "confidence": "high",
+  "manifest_override": true,
+  "title": "Funcionalidades — Agenda Cultural BR",
+  "summary": "Catalog of 86 numbered product capabilities for a Brazilian cultural agenda platform, organized by graph operation, with 48 marked as MVP.",
+  "scope": ["descoberta/feed", "agenda de eventos", "mapa e território", "play (mídia)", "enciclopédia e acervo", "leituras", "formação", "oportunidades/editais", "acessibilidade", "grafo de conhecimento"],
+  "cross_refs": ["PRD.md"],
+  "locked": false,
+  "precedence": 1,
+  "notes": "Type taken from MANIFEST_TYPE (SPEC); content is a numbered feature/capability list supporting the PRD."
+}

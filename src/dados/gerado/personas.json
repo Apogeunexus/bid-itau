@@ -1,0 +1,105 @@
+{
+  "personas": [
+    {
+      "id": "pessoa-usuaria:autorado:maria",
+      "nome": "Maria",
+      "resumo": "Ouve rap desde a adolescência e nunca foi ao teatro. É a persona do Cenário 1: a recomendação precisa explicar por que a poesia falada se parece com o que ela já ouve.",
+      "procedencia": "autorado",
+      "fonte": "protótipo Agenda Cultural BR — dado autorado, rotulado como tal na tela",
+      "repertorio": {
+        "id": "repertorio:autorado:maria",
+        "pessoaUsuariaId": "pessoa-usuaria:autorado:maria",
+        "linguagens": [
+          "literatura",
+          "musica",
+          "poesia"
+        ],
+        "entidades": [
+          "pessoa:enc:10036",
+          "pessoa:enc:1012",
+          "pessoa:enc:10461",
+          "pessoa:enc:121",
+          "termo:enc:194279",
+          "termo:enc:194282",
+          "termo:enc:194509",
+          "termo:enc:196072",
+          "termo:enc:80016",
+          "termo:enc:80292"
+        ],
+        "ocorrenciasSalvas": [],
+        "procedencia": "autorado"
+      }
+    },
+    {
+      "id": "pessoa-usuaria:autorado:carlos",
+      "nome": "Carlos",
+      "resumo": "Vai passar quatro dias em Belém e quer saber o que a cidade tem de cultura. É a persona do Cenário 2: o repertório é de território, não de gênero.",
+      "procedencia": "autorado",
+      "fonte": "protótipo Agenda Cultural BR — dado autorado, rotulado como tal na tela",
+      "repertorio": {
+        "id": "repertorio:autorado:carlos",
+        "pessoaUsuariaId": "pessoa-usuaria:autorado:carlos",
+        "linguagens": [
+          "artes-visuais",
+          "cultura-popular",
+          "teatro"
+        ],
+        "entidades": [
+          "evento:enc:123758",
+          "evento:enc:124783",
+          "evento:enc:124862",
+          "evento:enc:125449",
+          "evento:enc:125669",
+          "evento:enc:135124",
+          "instituicao:enc:196649",
+          "instituicao:enc:70998",
+          "pessoa:enc:12915",
+          "pessoa:enc:1310",
+          "pessoa:enc:13741",
+          "pessoa:enc:17078"
+        ],
+        "ocorrenciasSalvas": [],
+        "procedencia": "autorado"
+      }
+    },
+    {
+      "id": "pessoa-usuaria:autorado:joana",
+      "nome": "Joana",
+      "resumo": "Frequentadora antiga, com repertório largo e agenda cheia. É a persona do Cenário 4: tem ocorrência salva que pode ser alterada para disparar o alerta de mudança.",
+      "procedencia": "autorado",
+      "fonte": "protótipo Agenda Cultural BR — dado autorado, rotulado como tal na tela",
+      "repertorio": {
+        "id": "repertorio:autorado:joana",
+        "pessoaUsuariaId": "pessoa-usuaria:autorado:joana",
+        "linguagens": [
+          "artes-visuais",
+          "cinema",
+          "danca",
+          "literatura",
+          "teatro"
+        ],
+        "entidades": [
+          "evento:cms:13787",
+          "evento:cms:13803",
+          "evento:cms:13847",
+          "evento:cms:13849",
+          "evento:cms:13861",
+          "midia:cms:1067",
+          "midia:cms:12099",
+          "midia:cms:12100",
+          "midia:cms:12117"
+        ],
+        "ocorrenciasSalvas": [
+          "ocorrencia:derivado:7000-t1-o0001",
+          "ocorrencia:derivado:7000-t1-o0002",
+          "ocorrencia:derivado:7000-t1-o0003",
+          "ocorrencia:derivado:7000-t1-o0004"
+        ],
+        "procedencia": "autorado"
+      }
+    }
+  ],
+  "trilhas": [
+    "trilha:autorado:do-rap-ao-teatro-documentario"
+  ]
+}

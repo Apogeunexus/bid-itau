@@ -1,0 +1,76 @@
+{
+ "pageProps": {
+  "pesquisas": [],
+  "highlights": [],
+  "mostRead": [
+   {
+    "id": 1100,
+    "title": "Por dentro do IC",
+    "shortDescription": "Confira, andar a andar, a programação de mostras do Itaú Cultural",
+    "slug": "por-dentro-do-ic",
+    "metaTitle": "Por dentro do IC",
+    "metaDescription": "Confira, andar a andar, a programação de mostras do Itaú Cultural",
+    "publicationDate": "Publicado em 06/08/2024",
+    "publishedAt": "2024-08-06T16:49:00.000-03:00",
+    "updatedDate": "Atualizado às 09:58 de 03/08/2026",
+    "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/583/file/optimized-896f78e5ba5fe1b6da0578546373631c.jpg",
+    "cover": true,
+    "rights": "Itaú Cultural",
+    "cover_position": 50,
+    "programs_position": 50,
+    "miniature_position": 50,
+    "image_description": "Diversos logos do Itaú Cultural em amarelo sobre fundo roxo.",
+    "mainCategory": {
+     "id": 3,
+     "name": "Notícias",
+     "slug": "noticias",
+     "metaDescription": "",
+     "categoryType": null
+    },
+    "category": "noticias",
+    "tags": [
+     "exposição",
+     "arte contemporânea",
+     "artes visuais"
+    ],
+    "participants": [],
+    "exhibition": true,
+    "occupation": false,
+    "accessibility": {
+     "audio_description": false,
+     "libras": false,
+     "descriptive_subtitle": false,
+     "closed_caption": false,
+     "open_caption": false,
+     "simultaneous_translation": false,
+     "stenotypy": false,
+     "subtitle": false
+    },
+    "template_type": "default",
+    "observatorio_require_login": true,
+    "section": "Notícias",
+    "countClick": 103626
+   }
+  ],
+  "subcategories": [],
+  "items": [
+   {
+    "title": "Home",
+    "link": "/",
+    "active": false
+   },
+   {
+    "title": "Pesquisas",
+    "link": "/observatorio/pesquisas",
+    "active": true
+   }
+  ],
+  "seo": {
+   "title": "Pesquisas",
+   "description": "Pesquisas produzidas pelo Observatório Itaú Cultural sobre hábitos, produção e gestão culturais, economia criativa e economia da cultura.",
+   "category": "pesquisas",
+   "keywords": "pesquisas"
+  }
+ },
+ "__N_SSG": true
+}

@@ -1,0 +1,445 @@
+/* ---------------------------------------------------------------------------
+ * roteiro.css — as regras próprias da rota `/roteiro`, o percurso clicável dos
+ * cinco cenários (D-76, D-77, D-78).
+ *
+ * DE QUEM É ESTE ARQUIVO. Do plano 04-04, e de mais ninguém. Ele NASCE VAZIO DE
+ * REGRA de propósito, criado aqui pelo 04-01 junto com a sua linha de `@import` em
+ * `globals.css`.
+ *
+ * POR QUE VAZIO. Pelo mesmo motivo que `studio-ocorrencias.css`: `globals.css` é o
+ * único ponto de colisão entre os três planos da onda 2, e resolvê-lo uma vez na onda
+ * 1 é o que permite os três correrem juntos. Ver o cabeçalho daquele arquivo.
+ *
+ * O roteiro vive na visão web (D-78), porque é ferramenta de apresentação — a mesma
+ * razão pela qual as duas telas do Studio são web.
+ * ------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+ * A SUPERFÍCIE
+ *
+ * Coluna única de cinco blocos, e não acordeão. A escolha é de requisito, não de
+ * gosto: a banca vai pedir um cenário DE SURPRESA, e um percurso que esconde
+ * quatro dos cinco atrás de um clique transforma o pedido numa caçada. Tudo fica
+ * visível o tempo todo; o que varia é o peso tipográfico.
+ * ------------------------------------------------------------------------- */
+
+.rot {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem 2rem 6rem;
+  /* A folga de baixo é para o canto fixo dos controles (D-04) não cobrir o último
+     bloco: sem ela, o botão do Cenário 5 fica sob o alternador de visão. */
+}
+
+.rot-cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--ic-preto);
+  padding-bottom: 1rem;
+}
+
+.rot-superficie {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ic-laranja);
+}
+
+.rot-cabecalho-titulo {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.rot-objetivo {
+  max-width: 62ch;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+
+/* --- o cenário ----------------------------------------------------------- */
+
+.rot-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.rot-cenario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+  border-left: 4px solid var(--ic-laranja);
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.4rem;
+  background: var(--ic-branco);
+}
+
+.rot-cenario-cabeca {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.rot-numero {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ic-laranja);
+}
+
+.rot-titulo {
+  flex: 1 1 20rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* A visão exigida é pastilha e não texto corrido: ela decide se a primeira tela
+   abre certa, e quem apresenta precisa vê-la sem ler o parágrafo. */
+.rot-visao {
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 30%, transparent);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.rot-visao[data-visao="mobile"] {
+  border-color: var(--ic-laranja);
+  color: var(--ic-laranja);
+}
+
+.rot-pergunta {
+  max-width: 68ch;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: color-mix(in srgb, var(--ic-preto) 78%, transparent);
+}
+
+/* --- a entrada direta (STUD-04) ------------------------------------------ */
+
+.rot-entrada {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  border-radius: 0.4rem;
+  padding: 0.65rem 0.8rem;
+  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+}
+
+.rot-botao {
+  cursor: pointer;
+  border-radius: 999px;
+  border: none;
+  padding: 0.5rem 1.1rem;
+  background: var(--ic-laranja);
+  color: var(--ic-branco);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: opacity 150ms;
+}
+
+.rot-botao:hover {
+  opacity: 0.9;
+}
+
+/* O que o botão vai mudar, dito ANTES de ele ser apertado. */
+.rot-semeadura {
+  flex: 1 1 24rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+}
+
+/* --- os passos, com a rota escrita --------------------------------------- */
+
+.rot-passos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rot-passo {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
+  padding-top: 0.6rem;
+}
+
+.rot-passo:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.rot-passo-ordem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: var(--ic-preto);
+  color: var(--ic-branco);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.rot-passo-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.rot-passo-tela {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* A rota é o contrato: ela tem de ser LEGÍVEL e copiável, não decorativa. */
+.rot-rota {
+  overflow-wrap: anywhere;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+  background: color-mix(in srgb, var(--ic-preto) 7%, transparent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.rot-como-chegar {
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+
+.rot-provar {
+  max-width: 74ch;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--ic-preto) 76%, transparent);
+}
+
+/* --- D-77: os dois blocos com o MESMO peso ------------------------------- */
+
+/* Lado a lado e com a MESMA largura de propósito. O que o acervo não sustenta
+   não é letra miúda: dar-lhe metade da linha é o que faz a declaração ser
+   argumento em vez de ressalva. */
+.rot-honestidade {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+@media (max-width: 60rem) {
+  .rot-honestidade {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rot-bloco {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-radius: 0.4rem;
+  padding: 0.8rem 0.9rem;
+}
+
+.rot-bloco-sustenta {
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+}
+
+.rot-bloco-nao-sustenta {
+  border: 1px solid var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
+}
+
+.rot-bloco-rotulo {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rot-bloco-nao-sustenta .rot-bloco-rotulo {
+  color: var(--ic-laranja);
+}
+
+.rot-bloco-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.rot-bloco-texto {
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.rot-origem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  font-size: 0.66rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+}
+
+.rot-origem-rotulo {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* --- o fecho -------------------------------------------------------------- */
+
+.rot-fecho {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 2px solid var(--ic-preto);
+  padding-top: 1rem;
+}
+
+.rot-fecho-linha {
+  max-width: 74ch;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.rot-fecho-limite {
+  max-width: 74ch;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+
+.rot-constantes-nota {
+  max-width: 74ch;
+}
+
+.rot-constantes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0.4rem 0 0;
+  padding-left: 1rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+/* ---------------------------------------------------------------------------
+ * O ÍNDICE GRUDADO NO TOPO
+ *
+ * Medido: a página tem ~4.375px numa janela de 960px, e o botão do Cenário 5
+ * fica a 3.429px do topo. Sem este índice, atender ao pedido «mostra o Cenário
+ * 5» começa por três telas e meia de rolagem na frente de quem avalia — que é
+ * a caçada que STUD-04 existe para eliminar.
+ *
+ * `sticky` e não `fixed`: o único `fixed` legítimo do projeto é o canto dos
+ * controles (D-04), e a moldura só vira contêiner de rolagem na visão app —
+ * na web, que é onde o roteiro vive (D-78), quem rola é o documento.
+ * ------------------------------------------------------------------------- */
+
+.rot-indice {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.4rem;
+  margin: 0 -0.4rem;
+  padding: 0.55rem 0.4rem;
+  background: color-mix(in srgb, var(--ic-branco) 94%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+}
+
+@media (max-width: 60rem) {
+  .rot-indice {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.rot-atalho {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  /* Sem `min-width: 0` o item de grade não encolhe abaixo do conteúdo — o track
+     de 1fr estoura, o quinto atalho sai da janela e a página ganha rolagem
+     horizontal. `nowrap` + `ellipsis` só recortam depois que isto permite. */
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+  border-radius: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 150ms;
+}
+
+.rot-atalho:hover {
+  border-color: var(--ic-laranja);
+}
+
+.rot-atalho-numero {
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ic-laranja);
+}
+
+.rot-atalho-titulo {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rot-atalho-visao {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+
+.rot-atalho-visao[data-visao="mobile"] {
+  color: var(--ic-laranja);
+}
+
+/* O salto do atalho não pode parar com o cabeçalho do cenário por baixo da
+   barra grudada — senão o número do cenário fica escondido justamente para
+   quem acabou de pedir por ele. */
+.rot-cenario {
+  scroll-margin-top: 3.75rem;
+}

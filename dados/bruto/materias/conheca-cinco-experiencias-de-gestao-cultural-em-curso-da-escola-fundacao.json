@@ -1,0 +1,85 @@
+{
+ "pageProps": {
+  "content": {
+   "id": 678,
+   "title": "Conheça cinco experiências de gestão cultural em curso da Escola Fundação",
+   "shortDescription": "Formação apresenta práticas de organizações atuantes em diversos contextos sociais e geográficos da cidade de São Paulo",
+   "slug": "conheca-cinco-experiencias-de-gestao-cultural-em-curso-da-escola-fundacao",
+   "program": "escola ic",
+   "content": "<p dir=\"ltr\">J&aacute; dispon&iacute;vel na <a href=\"https://fundacaoitau.org.br/escola/\">Escola Funda&ccedil;&atilde;o</a>, o curso Experi&ecirc;ncias em Gest&atilde;o Cultural em S&atilde;o Paulo prop&otilde;e uma imers&atilde;o em diferentes abordagens da gest&atilde;o cultural na capital paulista.&nbsp;</p>\n<p dir=\"ltr\">A forma&ccedil;&atilde;o examina desafios e pr&aacute;ticas de cinco organiza&ccedil;&otilde;es que atuam em realidades distintas: Associa&ccedil;&atilde;o Bloco do Beco, Casa Ecoativa Ilha de Boror&eacute;, Comunidade Cultural Quilombaque, Projeto Cultural Pimenteiros e Pimenteiras do Vermelh&atilde;o e Tekoa Yvy Por&atilde;-Jaragu&aacute;.&nbsp;</p>\n<p dir=\"ltr\">A proposta &eacute; ampliar a compreens&atilde;o do conceito de gest&atilde;o cultural com base nessas experi&ecirc;ncias. As aulas s&atilde;o conduzidas por Tatiana Schunck, escritora, pesquisadora e doutora em artes da cena pela Universidade Estadual de Campinas (Unicamp). Mestre em artes pela Universidade Estadual Paulista (Unesp), Tatiana foi coordenadora pedag&oacute;gica da especializa&ccedil;&atilde;o Gest&atilde;o Cultural Contempor&acirc;nea da Escola Ita&uacute; Cultural.</p>\n<p dir=\"ltr\">O curso tem dura&ccedil;&atilde;o de quatro horas, &eacute; autoformativo e voltado para gestores culturais, educadores e interessados em cultura, arte e educa&ccedil;&atilde;o. <a href=\"https://fundacaoitau.org.br/escola/autoformativos/experiencias-em-gestao-cultural-em-sao-paulo\" target=\"_blank\" rel=\"noopener\">Acesse</a>.</p>\n<p>&nbsp;</p>",
+   "publicationDate": "Publicado em 06/02/2025",
+   "publishedAt": "2025-02-06T16:34:42.000-03:00",
+   "updatedDate": "Atualizado às 03:00 de 11/05/2025",
+   "image": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1652/file/optimized-07b650e706e5265bafdbad04c38c6878.jpg",
+   "cover": true,
+   "rights": "Associação Comunitária do Jardim Vermelhão",
+   "cover_position": 50,
+   "programs_position": 50,
+   "miniature_position": 50,
+   "image_description": "Uma mulher negra estende a mão, apontando algo fora da cena. Atrás, vemos outra mulher diante de uma parede.",
+   "category": "formacao",
+   "tags": [
+    "gestao cultural"
+   ],
+   "participants": [],
+   "exhibition": false,
+   "occupation": false,
+   "accessibility": {
+    "audio_description": false,
+    "libras": false,
+    "descriptive_subtitle": false,
+    "closed_caption": false,
+    "open_caption": false,
+    "simultaneous_translation": false,
+    "stenotypy": false,
+    "subtitle": false
+   },
+   "page": {
+    "id": 836,
+    "uuid": "979d67e8-090e-4c47-ae34-37326b79eeb9",
+    "pageType": "blocks",
+    "position": 1,
+    "sections": [
+     {
+      "id": 854,
+      "uuid": "a01ffff8-5e43-49b6-ad85-1acf55405acd",
+      "title": "",
+      "position": 1,
+      "contentHtml": "<p dir=\"ltr\">J&aacute; dispon&iacute;vel na <a href=\"https://fundacaoitau.org.br/escola/\">Escola Funda&ccedil;&atilde;o</a>, o curso Experi&ecirc;ncias em Gest&atilde;o Cultural em S&atilde;o Paulo prop&otilde;e uma imers&atilde;o em diferentes abordagens da gest&atilde;o cultural na capital paulista.&nbsp;</p>\n<p dir=\"ltr\">A forma&ccedil;&atilde;o examina desafios e pr&aacute;ticas de cinco organiza&ccedil;&otilde;es que atuam em realidades distintas: Associa&ccedil;&atilde;o Bloco do Beco, Casa Ecoativa Ilha de Boror&eacute;, Comunidade Cultural Quilombaque, Projeto Cultural Pimenteiros e Pimenteiras do Vermelh&atilde;o e Tekoa Yvy Por&atilde;-Jaragu&aacute;.&nbsp;</p>\n<p dir=\"ltr\">A proposta &eacute; ampliar a compreens&atilde;o do conceito de gest&atilde;o cultural com base nessas experi&ecirc;ncias. As aulas s&atilde;o conduzidas por Tatiana Schunck, escritora, pesquisadora e doutora em artes da cena pela Universidade Estadual de Campinas (Unicamp). Mestre em artes pela Universidade Estadual Paulista (Unesp), Tatiana foi coordenadora pedag&oacute;gica da especializa&ccedil;&atilde;o Gest&atilde;o Cultural Contempor&acirc;nea da Escola Ita&uacute; Cultural.</p>\n<p dir=\"ltr\">O curso tem dura&ccedil;&atilde;o de quatro horas, &eacute; autoformativo e voltado para gestores culturais, educadores e interessados em cultura, arte e educa&ccedil;&atilde;o. <a href=\"https://fundacaoitau.org.br/escola/autoformativos/experiencias-em-gestao-cultural-em-sao-paulo\" target=\"_blank\" rel=\"noopener\">Acesse</a>.</p>\n<p>&nbsp;</p>",
+      "containerType": "regular",
+      "sectionType": "content",
+      "verticalAlignment": "align_top",
+      "styleSettings": null
+     }
+    ]
+   },
+   "template_type": "default",
+   "observatorio_require_login": true,
+   "site": {
+    "id": 1,
+    "name": "Itaú Cultural",
+    "link": "itaucultural.org.br"
+   },
+   "section": "Formação",
+   "hasAudioDescription": false,
+   "hasAccessibility": false,
+   "hasEstenotipia": false,
+   "hasClosedCaption": false,
+   "hasSubtitle": false,
+   "hasDescriptiveSubtitle": false,
+   "hasOpenCaption": false,
+   "hasTraducao": false,
+   "metaTitle": "Conheça cinco experiências de gestão cultural em curso da Escola Fundação",
+   "metaDescription": "Formação apresenta práticas de organizações atuantes em diversos contextos sociais e geográficos da cidade de São Paulo",
+   "presential": false,
+   "schedules": [],
+   "ticket": false,
+   "hideTicket": false,
+   "soldOut": false,
+   "online": false,
+   "hideOnlineAccess": false
+  },
+  "items": []
+ },
+ "__N_SSG": true
+}

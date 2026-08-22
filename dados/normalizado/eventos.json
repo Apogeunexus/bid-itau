@@ -1,0 +1,4718 @@
+[
+ {
+  "id": "evento:13913",
+  "tipo": "evento",
+  "titulo": "Espetáculo “Deserto” celebra a obra do escritor chileno Roberto Bolaño",
+  "resumo": "Obra articula teatro, literatura, poesia, música e audiovisual",
+  "slug": "espetaculo-deserto-celebra-a-obra-do-escritor-chileno-roberto-bolano",
+  "publicadoEm": "2026-08-04T16:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 18:22 de 18/08/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20445/file/optimized-6626ceda04e690a30003d247bde001db.jpeg",
+  "imagemAlt": "Fotografia na horizontal de um palco teatral iluminado no centro. Em primeiro plano, um homem de cabelos cacheados e óculos de grau veste blazer preto sobre camiseta cinza e calça escura. Ele está de pé, com os braços abertos e as palmas das mãos voltadas para cima. Ao fundo, uma grande projeção em preto e branco exibe o rosto do escritor Roberto Bolaño em close-up, olhando fixamente para a frente com óculos redondos. O cenário ao redor inclui uma cadeira à esquerda e uma mesa com cadeira à direita, sob fundo escuro, destacando a figura central sob um foco de luz no chão.",
+  "creditoImagem": "Renato Mangolin",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-08-20T00:00:00.000-03:00",
+   "fim": "2026-08-30T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13910",
+  "tipo": "evento",
+  "titulo": "Expedição Brasiliana apresenta oficina de desenho de modelo vivo com Noam Scapin",
+  "resumo": "Atividade integra a porgramação da Jornada do Patrimônio de 2026",
+  "slug": "expedicao-brasiliana-apresenta-oficina-de-desenho-com-modelo-vivo",
+  "publicadoEm": "2026-08-04T16:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:10 de 04/08/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20256/file/optimized-ac6cd375f50428b0b8209489c4fb8f24.jpeg",
+  "imagemAlt": "com fundo totalmente preto, retrata uma pessoa da cintura para cima em uma pose teatral e expressiva, segurando o rosto com as duas mãos e com os olhos bem arregalados. A pessoa possui cavanhaque e bigode, e usa uma maquiagem lúdica com as bochechas e a ponta do nariz avermelhadas, pequenos traços sob os olhos e uma tatuagem escura na testa. O figurino é extravagante e brinca com contrastes: na cabeça, há uma grande touca branca feita de babados de renda e tule; no tronco, veste uma peça com listras horizontais pretas e brancas acompanhada de uma saia de tule branco. Seus braços e mãos, que emolduram o rosto, são inteiramente cobertos por tatuagens escuras e detalhadas",
+  "creditoImagem": "Divulgação",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-08-15T00:00:00.000-03:00",
+   "fim": "2026-08-15T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13909",
+  "tipo": "evento",
+  "titulo": "Exposição apresenta obra de Solange Pessoa",
+  "resumo": "A mostra reúne desenhos inéditos, filmes e uma instalação da artista que há décadas ocupa um lugar de destaque na arte brasileira",
+  "slug": "exposicao-apresenta-obras-de-solange-pessoa",
+  "publicadoEm": "2026-08-03T15:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:12 de 05/08/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20444/file/optimized-41c9362f2f8915711b351e995729bff9.jpeg",
+  "imagemAlt": "A imagem apresenta uma arte abstrata com um fundo em preto intenso e textura que lembra uma pincelada rústica. Sobre esse fundo preto, há duas formas orgânicas e sinuosas em cor de bege-ocre, com uma textura granular que remete à areia. Uma dessas formas está localizada na parte superior direita e a outra, na parte inferior central, criando um contraste visual impactante.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-08-04T00:00:00.000-03:00",
+   "fim": "2026-11-01T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13908",
+  "tipo": "evento",
+  "titulo": "Oficina no Itaú Cultural convida todos a criar desenhos a partir das texturas da cidade",
+  "resumo": "Descubra a técnica da frotagem em uma oficina gratuita para toda a família",
+  "slug": "oficina-no-itau-cultural-convida-todos-a-criar-desenhos-a-partir-das-texturas-da-cidade",
+  "publicadoEm": "2026-08-03T14:19:00.000-03:00",
+  "atualizadoEm": "Atualizado às 14:30 de 03/08/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2360/file/optimized-464c49d54996e5b73dcc7b4cfb64bfda.jpg",
+  "imagemAlt": "Na imagem, Luiza Zelada está sorridente. Ela tem cabelos escuros, usa uma camiseta branca e avental verde e segura duas borboletas de cartolina. Atrás da artista, prateleiras com objetos, flores e quadros, além de um varal com papéis coloridos. ",
+  "creditoImagem": "André Seiti/Itaú Cultural",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [
+   "oficina"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-08-02T00:00:00.000-03:00",
+   "fim": "2026-09-20T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13906",
+  "tipo": "evento",
+  "titulo": "Espetáculo “As armas milagrosas” aborda racialidade e representação no teatro",
+  "resumo": "Obra demonstra embate entre um elenco de teatro e os trabalhadores do local",
+  "slug": "espetaculo-as-armas-milagrosas-aborda-racialidade-e-representacao-no-teatro",
+  "publicadoEm": "2026-08-03T10:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:20 de 03/08/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20396/file/optimized-2ce4c1118332a4131545875e13c4fad2.jpeg",
+  "imagemAlt": "Cena em um palco de teatro escuro, sob iluminação pontual e quente. À esquerda, quatro pessoas usam roupas em tons claros de bege e branco — vestidos longos e ternos — posicionadas em fila e olhando em direção ao centro. Ao centro, uma mulher de vestido claro está sentada numa cadeira. Ao lado dela, no chão, há uma guitarra elétrica e pequenos fragmentos claros espalhados pelo piso. À direita, em pé e em segundo plano, um grupo de cinco artistas veste figurinos predominantemente pretos, observando atentamente a cena.",
+  "creditoImagem": "Marcelle Cerutti",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-08-06T00:00:00.000-03:00",
+   "fim": "2026-08-16T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13904",
+  "tipo": "evento",
+  "titulo": "Confira a agenda de agosto no Itaú Cultural",
+  "resumo": "Chame a família e reserve sua agenda, pois esse mês chega repleto de atividades",
+  "slug": "confira-a-agenda-de-agosto-no-itau-cultural",
+  "publicadoEm": "2026-07-30T15:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 15:02 de 30/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20383/file/optimized-367e8af266c069ff1f92067f82e2fe53.jpeg",
+  "imagemAlt": "Banner retangular com fundo laranja vibrante, estampado por um padrão repetido da sigla \"IC\" (Itaú Cultural) em uma tonalidade de laranja levemente mais clara. No centro, há um retângulo branco de cantos arredondados. Dentro dele, no topo esquerdo, há uma pequena tarja laranja com o texto \"ATIVIDADES GRATUITAS\" em letras brancas maiúsculas. Abaixo, em destaque, lê-se o texto em letras laranjas: \"Programação de agosto do Itaú Cultural\", com o nome da instituição escrito em negrito.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-08-01T00:00:00.000-03:00",
+   "fim": "2026-08-31T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13903",
+  "tipo": "evento",
+  "titulo": "Itaú Cultural apresenta contação de histórias indígenas da Mata Atlântica",
+  "resumo": "O espetáculo narra saberes dos povos Borum-Kren e Pataxó e convida o público a refletir sobre a preservação da floresta",
+  "slug": "itau-cultural-apresenta-contacao-de-historias-indigenas-da-mata-atlantica",
+  "publicadoEm": "2026-07-30T11:16:00.000-03:00",
+  "atualizadoEm": "Atualizado às 14:40 de 30/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20384/file/optimized-8fe8ba01267f8bd35a43cce017a5c265.jpeg",
+  "imagemAlt": "A fotografia captura o rosto de uma mulher indígena com expressão serena e um leve sorriso, olhando para o alto com os olhos brilhantes refletindo a luz. Sua pele apresenta textura natural, com poros e pequenas pintas visíveis, e está adornada por pinturas faciais tradicionais na cor vermelho-terra: um traço horizontal espesso que atravessa as bochechas e a ponte do nariz, além de marcações verticais que descem pelo queixo. Com os cabelos escuros caindo levemente pelas laterais, a imagem transmite uma sensação de ancestralidade, força e contemplação.",
+  "creditoImagem": "Natie Paz",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [
+   "contação de histórias",
+   "questões indígenas"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-08-01T00:00:00.000-03:00",
+   "fim": "2026-08-29T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13901",
+  "tipo": "evento",
+  "titulo": "“Menu Cultural” de agosto destaca os sabores da estação mais fria do ano",
+  "resumo": "Feira gastronômica acontece no dia 2 de agosto, com o tema “sabores de inverno”",
+  "slug": "menu-cultural-de-agosto-destaca-os-sabores-da-estacao-mais-fria-do-ano",
+  "publicadoEm": "2026-07-29T12:31:00.000-03:00",
+  "atualizadoEm": "Atualizado às 14:37 de 30/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2154/file/optimized-0c34181f6478a4940afd48d2ad47ebb3.png",
+  "imagemAlt": "Uma imagem com a palavra menu cultural e varios formatos brancos, rosas e laranjas",
+  "creditoImagem": "divulgação",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-08-02T00:00:00.000-03:00",
+   "fim": "2026-08-02T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13899",
+  "tipo": "evento",
+  "titulo": "“O bocejo da serpente” aborda a poética e o lúdico na busca por poesias perdidas",
+  "resumo": "Espetáculo é inspirado no livro homônimo da escritora Antônia Gomes Minchoni",
+  "slug": "o-bocejo-da-serpente-aborda-a-poetica-e-o-ludico-na-busca-por-poesias-perdidas",
+  "publicadoEm": "2026-07-28T10:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:35 de 28/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20382/file/optimized-58fa420f01afe6f1976965e0ab846b6e.jpeg",
+  "imagemAlt": "Fotografia colorida com fundo bege plano. Quatro pessoas fazem poses expressivas e divertidas. Todas usam maquiagem artística vermelha nos olhos e figurinos em tons de verde-militar e vermelho.\r\n\r\nÀ esquerda, uma mulher de cabelo curto e capuz verde faz uma pose forte de salto, estendendo as mãos com os dedos curvos como garras. Ao centro, uma mulher de cabelos cacheados sorri de boca aberta, abaixada. Atrás dela, uma mulher negra com tranças comemora alegremente com a língua para fora e um braço erguido. À direita, uma mulher com tranças finas equilibra-se em uma perna só, sorrindo e projetando as mãos à frente.",
+  "creditoImagem": "José de Holanda",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-08-02T00:00:00.000-03:00",
+   "fim": "2026-11-29T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13897",
+  "tipo": "evento",
+  "titulo": "Sonora Brasiliana convida Juan Falú",
+  "resumo": "Referência fundamental da música argentina, Juan Falú é compositor e violonista.",
+  "slug": "sonora-brasiliana-convida-juan-falu",
+  "publicadoEm": "2026-07-28T10:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:16 de 28/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20380/file/optimized-84ff8e91acee903c2ebdf94bacccc1bb.jpeg",
+  "imagemAlt": "Fotografia em preto e branco com fundo totalmente escuro. Um homem idoso, posicionado ligeiramente à direita do centro, olha diretamente para a câmera com a cabeça levemente inclinada. Ele tem pele clara, cabelos grisalhos e curtos, sobrancelhas escuras e expressivas, e usa óculos de grau de armação fina e oval. A iluminação é dramática (estilo chiaroscuro), vindo do lado esquerdo da imagem, destacando as linhas de expressão em seu rosto, enquanto o lado direito fica suavemente sombreado. Suas roupas escuras se confundem com o fundo negro.",
+  "creditoImagem": "Sergio Manes",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-29T00:00:00.000-03:00",
+   "fim": "2026-07-29T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13891",
+  "tipo": "evento",
+  "titulo": "Oficina de Bordado se inspira na Coleção Brasiliana Itaú para criar registros têxteis",
+  "resumo": "Ministrada pela artista Desiree Helissa, atividade ocorre nos últimos domingos de julho e agosto",
+  "slug": "oficina-de-bordado-se-inspira-na-colecao-brasiliana-itau-para-criar-registros-texteis",
+  "publicadoEm": "2026-07-22T15:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 15:22 de 22/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1273/file/optimized-41d53f0b478fe2136599f6595c68f26d.jpg",
+  "imagemAlt": "Rolos de lã rosa, vermelha e colorida (azul, laranja e roxo juntos) aparecem na foto.",
+  "creditoImagem": "Letícia Vieira",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-26T00:00:00.000-03:00",
+   "fim": "2026-08-30T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13887",
+  "tipo": "evento",
+  "titulo": "Encontro com Professores se aprofunda no conteúdo da Ocupação Ruth Rocha",
+  "resumo": "Atividade convida pedagogos, educadores, estudantes e profissionais da cultura para uma imersão presencial no universo da literatura infantil",
+  "slug": "encontro-com-professores-se-aprofunda-no-conteudo-da-ocupacao-ruth-rocha",
+  "publicadoEm": "2026-07-21T18:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 18:15 de 21/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20166/file/optimized-434ac261665515313f5b81c9a71a7a45.jpeg",
+  "imagemAlt": "Ruth Rocha, senhora branca de cabelos grisalhos e sorriso aberto, senta-se em uma cadeira de balanço de palhinha preta. Veste blusa branca, colar de pérolas e calça azul-turquesa. Ao fundo, quadros decoram a parede clara e há um vaso com antúrios vermelhos à direita.",
+  "creditoImagem": "Letícia Vieira",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-28T00:00:00.000-03:00",
+   "fim": "2026-07-28T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13883",
+  "tipo": "evento",
+  "titulo": "“Todos os gêneros” parte da obra de João Silvério Trevisan para falar sobre cultura LBGTQIAPN+",
+  "resumo": "13º edição de “Todos os gêneros: mostra de artes e pluralidades” acontece de 28 de julho a 2 de agosto de 2026",
+  "slug": "todos-os-generos-parte-da-obra-de-joao-silverio-trevisan-para-falar-sobre-cultura-lbgtqiapn",
+  "publicadoEm": "2026-07-17T20:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 15:20 de 23/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20371/file/optimized-dc793f884007fffd12e240bd381e1634.jpeg",
+  "imagemAlt": "João Silvério Trevisan, um homem branco e com cabelos brancos, sorri. Ele usa óculos de grau e olha para cima em uma escadaria. Ele veste uma jaqueta preta sobre uma camisa salmão e ergue um chapéu de palha com a mão direita. A foto foi tirada de um ângulo superior, destacando as linhas diagonais dos degraus e do corrimão.",
+  "creditoImagem": "Tamara dos Santos",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-28T00:00:00.000-03:00",
+   "fim": "2026-08-02T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13866",
+  "tipo": "evento",
+  "titulo": "Centenário de Sérgio Cardoso é celebrado em espetáculo inédito no Itaú Cultural",
+  "resumo": "Com direção de Rita Batata, peça resgata genialidade e contradições do icônico artista e revive bastidores de seus personagens",
+  "slug": "centenario-de-sergio-cardoso-e-celebrado-em-espetaculo-inedito-no-itau-cultural",
+  "publicadoEm": "2026-07-13T09:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:47 de 06/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20307/file/optimized-86b64fa9eecf07e452aaa1f401c3dcc9.jpeg",
+  "imagemAlt": "Ao fundo, há uma cortina vermelha. Ao centro, seis atores jovens sobre o tablado, vestindo blusas brancas, calças pretas e feições sérias. Com exceção da atriz que está ao meio: ela está com a boca aberta, olhos arregalados, parece gritar. Há uma luz amarela direta em sua face e ela usa uma espécie de cachecol de penas, além de bermuda e botas.",
+  "creditoImagem": "Adriano Escanhuela",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "teatro"
+  ],
+  "temas": [
+   "artes cênicas",
+   "espetáculo"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-23T00:00:00.000-03:00",
+   "fim": "2026-07-26T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13864",
+  "tipo": "evento",
+  "titulo": "Itaú Cultural estende mostra de “teatro lido” com espetáculo “A próxima estação”",
+  "resumo": "Cacá Carvalho vive as transformações de um casal ao longo de 50 anos, em continuidade à pesquisa com o autor italiano Michele Santeramo",
+  "slug": "itau-cultural-estende-mostra-de-teatro-lido-com-espetaculo-a-proxima-estacao",
+  "publicadoEm": "2026-07-09T14:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 09:59 de 10/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20306/file/optimized-bc034ac010b6ae600ba0f8377c78ae33.jpeg",
+  "imagemAlt": "À direita, há um homem, o ator Caca Carvalho, usando um óculos e olhando para o público com seriedade e as mãos suspensas no ar. Há papéis à sua frente, onde está o texto da peça. Atrás dele, há uma projeção de um desenho onde uma espécie de gato que possui orelhas pontudas e usa um pijama, coça os olhos e parece deitado. ",
+  "creditoImagem": "Lenise Pinheiro",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "teatro"
+  ],
+  "temas": [
+   "artes cênicas",
+   "espetáculo"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-18T00:00:00.000-03:00",
+   "fim": "2026-07-19T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13862",
+  "tipo": "evento",
+  "titulo": "A máquina que vence a morte: a busca de Leonardo da Vinci vira espetáculo no Itaú Cultural",
+  "resumo": "Com texto do italiano Michele Santeramo, Caca Carvalho celebra mais de 50 anos de carreira em monólogo que investiga a busca do inventor pela imortalidade",
+  "slug": "a-maquina-que-vence-a-morte-a-busca-de-leonardo-da-vinci-vira-espetaculo-no-itau-cultural",
+  "publicadoEm": "2026-07-09T12:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 14:29 de 30/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20304/file/optimized-96580e867755820fcbb2a1dab0caca9f.jpeg",
+  "imagemAlt": "Há um homem de terno cinza, camisa púrpura, usando óculos de grau e lendo, com as mãos suspensas no ar. À frente dele, há uma mesa com papéis. Atrás dele, há um fundo preto e uma espécie de placa colorida verde, amarela e vermelha.",
+  "creditoImagem": "Maria Fanchin",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "teatro"
+  ],
+  "temas": [
+   "artes cênicas",
+   "espetáculo"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-16T00:00:00.000-03:00",
+   "fim": "2026-07-17T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13873",
+  "tipo": "evento",
+  "titulo": "Venha curtir a programação presencial do \"IC para crianças\"",
+  "resumo": "Novo espaço de acolhimento e atividades para a família estreia em julho",
+  "slug": "venha-curtir-a-programacao-do-ic-para-criancas-na-sede-do-itau-cultural",
+  "publicadoEm": "2026-07-07T16:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:17 de 07/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20353/file/optimized-00442e4ca81e277a9414e37dc5d16a5c.png",
+  "imagemAlt": "Uma mulher sorridente, de pele clara e cabelos presos por uma faixa azul e laranja, está atrás de uma mesa de madeira. Ela usa avental rosa e segura um desenho preto de um pássaro colorido. O fundo é uma parede amarela com furos e ilustrações azuis de plantas e aves, além de dois quadros pendurados. Sobre a mesa, há pequenos cavaletes de madeira com desenhos fixados por prendedores de roupa: à esquerda, três desenhos sobre fundo preto (estrela cadente, recife de corais e um pássaro); à direita, três desenhos sobre fundo branco (um inseto azul, uma baleia e palmeiras).",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [
+   "ic para crianças"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-11T00:00:00.000-03:00",
+   "fim": "2026-07-26T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13861",
+  "tipo": "evento",
+  "titulo": "“A bailarina fantasma” denuncia apagamento histórico e racismo estrutural",
+  "resumo": "Diferente do fluxo habitual, a distribuição de ingressos para este espetáculo é feita diretamente na bilheteria do IC, uma hora antes de cada sessão",
+  "slug": "a-bailarina-fantasma-denuncia-apagamento-historico-e-racismo-estrutural-em-espetaculo-imersivo",
+  "publicadoEm": "2026-07-02T12:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:17 de 09/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20302/file/optimized-7eb610ee8c6d2aea3c1f304810dcaf9b.jpeg",
+  "imagemAlt": "Atriz Verônica Santos de perfil em um palco escuro, iluminada por focos de luz amarelada e fumaça cênica. Ao fundo, um tapete rosa no chão e cadeiras vazias.",
+  "creditoImagem": "Noelia Najera",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "dança contemporânea",
+   "teatro",
+   "dança"
+  ],
+  "temas": [
+   "artes cênicas",
+   "questões raciais"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-09T00:00:00.000-03:00",
+   "fim": "2026-07-12T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13868",
+  "tipo": "evento",
+  "titulo": "\"Menu Cultural\" de julho celebra a Copa do Mundo com comidas típicas",
+  "resumo": "Edição deste mês acontece excepcionalmente no segundo domingo, dia 12",
+  "slug": "menu-cultural-de-julho-celebra-a-copa-do-mundo-com-comidas-tipicas",
+  "publicadoEm": "2026-07-02T11:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:53 de 02/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2154/file/optimized-0c34181f6478a4940afd48d2ad47ebb3.png",
+  "imagemAlt": "Uma imagem com a palavra menu cultural e varios formatos brancos, rosas e laranjas",
+  "creditoImagem": "divulgação",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-12T00:00:00.000-03:00",
+   "fim": "2026-07-12T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13860",
+  "tipo": "evento",
+  "titulo": "Dança contemporânea, balé e memória se cruzam em “Transversa”, novo espetáculo de Ana Catarina Vieira",
+  "resumo": "Com mais de duas décadas de pesquisa, a coreógrafa e bailarina tensiona as estruturas do corpo em apresentações gratuitas no Teatro do Itaú Cultural",
+  "slug": "danca-contemporanea-bale-e-memoria-se-cruzam-em-transversa-novo-espetaculo-de-ana-catarina-vieira",
+  "publicadoEm": "2026-06-30T11:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 12:06 de 30/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20300/file/optimized-233e12dc12515c3f09f81188b0b51716.jpeg",
+  "imagemAlt": "Uma dançarina de costas é fotografada em um giro veloz no palco. Ela veste um tutu de tule em degradê colorido (vermelho, amarelo e rosa), salto plataforma dourado e segura grandes asas laminadas brilhantes. O palco preto tem como fundo cortinas de veludo em um gradiente que vai do laranja ao azul-real. No canto inferior direito, avistam-se uma maleta verde-água e um busto manequim metálico sob iluminação cênica.",
+  "creditoImagem": "Carol Moraes",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "dança contemporânea",
+   "memória",
+   "dança"
+  ],
+  "temas": [
+   "arte contemporânea",
+   "espetáculo"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "danca-contemporanea-bale-e-memoria-se-cruzam-em-transversa-novo-espetaculo-de-ana-catarina-vieira",
+   "ic-play.agenda"
+  ],
+  "periodo": {
+   "inicio": "2026-07-02T00:00:00.000-03:00",
+   "fim": "2026-07-04T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13857",
+  "tipo": "evento",
+  "titulo": "Ancestralidade e bastidores da criação: projeto “Sonora Brasiliana” recebe Fabrício Mota e Duda",
+  "resumo": "Em formato intimista e interativo, os músicos e educadores baianos costuram história e sonoridades afro-atlânticas no IC em 1º de julho.",
+  "slug": "fabricio-mota-e-duda-almeida-sao-os-convidados-da-nova-edicao-do-sonora-brasiliana",
+  "publicadoEm": "2026-06-30T11:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 12:13 de 30/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/8367/file/optimized-9452a243c8bd79f6f552886f773729a3.jpeg",
+  "imagemAlt": "A escada do espaço Olavo Setubal, no Itaú Cultural.",
+  "creditoImagem": "Edouard Fraipont",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "fabricio-mota-e-duda-almeida-sao-os-convidados-da-nova-edicao-do-sonora-brasiliana",
+   "ic-play.agenda"
+  ],
+  "periodo": {
+   "inicio": "2026-07-01T00:00:00.000-03:00",
+   "fim": "2026-07-01T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13859",
+  "tipo": "evento",
+  "titulo": "João Silvério Trevisan destrincha processo do romance “Ana em Veneza”",
+  "resumo": "Série de encontros “Viagem a Veneza” convida a percorrer os caminhos históricos, literários e biográficos dessa que é uma das obras mais emblemáticas do escritor paulista",
+  "slug": "joao-silverio-trevisan-destrincha-processo-do-romance-ana-em-veneza",
+  "publicadoEm": "2026-06-30T10:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 15:51 de 30/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/583/file/optimized-896f78e5ba5fe1b6da0578546373631c.jpg",
+  "imagemAlt": "Diversos logos do Itaú Cultural em amarelo sobre fundo roxo.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "joao-silverio-trevisan-destrincha-processo-do-romance-ana-em-veneza"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13849",
+  "tipo": "evento",
+  "titulo": "Livros de Ruth Rocha ganham vida nos palcos do Itaú Cultural nestas férias",
+  "resumo": "Traga as crianças para curtir as montagens teatrais gratuitas dos livros “O reizinho mandão” e “A Cinderela das bonecas”",
+  "slug": "livros-de-ruth-rocha-ganham-vida-nos-palcos-do-itau-cultural-nestas-ferias",
+  "publicadoEm": "2026-06-25T14:33:00.000-03:00",
+  "atualizadoEm": "Atualizado às 14:27 de 30/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20284/file/optimized-9e856a4e61c1627010ea4ea5a0cf74ff.jpeg",
+  "imagemAlt": "A fotografia mostra duas pessoas interagindo com um grande letreiro rosa tridimensional escrito \"Ruth RocHA\", apoiado sobre uma base verde retangular que traz a palavra \"OCUPAÇÃO\" também em rosa. O cenário é o interior de uma exposição iluminada e colorida. Ao fundo, há uma divisória feita com longos tubos de papelão coloridos e uma parede vermelha com telas exibindo vídeos. O chão claro possui linhas de piso tátil para acessibilidade. À esquerda, uma mulher de cabelos escuros e volumosos, vestindo uma sobreposição de roupas em tons de azul e cinza com um lenço no pescoço, está sentada na base verde olhando para o lado com uma expressão feliz. À direita, um jovem sorridente de jaqueta jeans debruça-se entre as palavras do letreiro, apoiando o rosto na mão enquanto olha para a câmera.",
+  "creditoImagem": "André Seiti",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "teatro"
+  ],
+  "temas": [
+   "infantil"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-04T00:00:00.000-03:00",
+   "fim": "2026-07-26T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13847",
+  "tipo": "evento",
+  "titulo": "Confira a agenda de julho no Itaú Cultural",
+  "resumo": "Chame a família toda e venha se divertir com a gente no mês das férias!",
+  "slug": "confira-a-agenda-mensal-do-itau-cultural",
+  "publicadoEm": "2026-06-23T12:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:16 de 30/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20283/file/optimized-561d7385678b27f03c52cf12e0c2ad15.jpeg",
+  "imagemAlt": "Descrição da imagem banner_siteic_programacao_V.jpg:\r\n\r\nBanner retangular com fundo laranja vibrante, estampado por um padrão repetido da sigla \"IC\" (Itaú Cultural) em uma tonalidade de laranja levemente mais clara. No centro, há um retângulo branco de cantos arredondados. Dentro dele, no topo esquerdo, há uma pequena tarja laranja com o texto \"ATIVIDADES GRATUITAS\" em letras brancas maiúsculas. Abaixo, em destaque, lê-se o texto em letras laranjas: \"Programação de julho do Itaú Cultural\", com o nome da instituição escrito em negrito.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "música",
+   "teatro",
+   "oficinas"
+  ],
+  "temas": [
+   "acessibilidade",
+   "questões de gênero"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-01T00:00:00.000-03:00",
+   "fim": "2026-07-31T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13845",
+  "tipo": "evento",
+  "titulo": "Helena Ignez é a homenageada da 74ª “Ocupação Itaú Cultural”",
+  "resumo": "A mostra celebra a atriz e cineasta movida pela experimentação e pela liberdade criativa",
+  "slug": "ocupacao-itau-cultural-homenageia-helena-ignez",
+  "publicadoEm": "2026-06-22T15:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 08:44 de 27/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20373/file/optimized-90d6320210c22a20935a22c4c4b86edb.jpeg",
+  "imagemAlt": "A imagem mostra uma mulher sorridente, com cabelos longos e ruivos e batom roxo. Ela está posicionada no centro, de braços abertos, vestindo uma roupa clara e um colar rústico volumoso. O fundo é composto por uma praia, destacando o azul do mar e um céu em tons semelhantes. Ela tem uma expressão alegre.",
+  "creditoImagem": "Acervo Karen Black",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-07-22T00:00:00.000-03:00",
+   "fim": "2026-10-18T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13837",
+  "tipo": "evento",
+  "titulo": "Itaú Cultural e Museu Afro Brasil promovem visita às exposições de Mestre Didi e “Padê: sentinela à porta da memória”",
+  "resumo": "Percurso formativo, que terá transporte gratuito no deslocamento entre as duas mostras, oferece imersão profunda na arte e na ancestralidade afro-brasileiras",
+  "slug": "itau-cultural-e-museu-afro-brasil-promovem-visita-integrada-as-exposicoes-de-mestre-didi-e-pade-sentinela-a-porta-da-memoria",
+  "publicadoEm": "2026-06-17T00:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:34 de 17/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/8605/file/optimized-ef58956651d2bab2402664aea1f5b438.png",
+  "imagemAlt": "\"Omo Oba Ayê\" (década de 1980), por Mestre Didi",
+  "creditoImagem": "Milena Buarque",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-27T00:00:00.000-03:00",
+   "fim": "2026-07-04T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13836",
+  "tipo": "evento",
+  "titulo": "Lançamento do livro “14 de maio: Lições de Resistência ao Racismo”",
+  "resumo": "Obra de Hélio Santos une memórias pessoais à história da luta pela equidade racial no país",
+  "slug": "lancamento-do-livro-14-de-maio-licoes-de-resistencia-ao-racismo",
+  "publicadoEm": "2026-06-16T15:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:57 de 23/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20265/file/optimized-73c21c12ca08672632993a10ccf77662.jpeg",
+  "imagemAlt": "Retrato horizontal de Helio Santos, um homem negro de pele clara e careca, sentado e sorrindo. Ele usa óculos redondos, camiseta cinza, calça jeans azul e sandálias de couro marrom. Suas pernas estão cruzadas e a mão esquerda pousa sobre o ombro direito. Ele está sentado em uma cadeira simples com assento de madeira e pernas de metal. O fundo é cinza texturizado e a iluminação suave e quente vem da esquerda.",
+  "creditoImagem": "Mauro Figa",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-23T00:00:00.000-03:00",
+   "fim": "2026-06-23T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13833",
+  "tipo": "evento",
+  "titulo": "“Macuco” aborda ancestralidade, memória e racismo ambiental",
+  "resumo": "Obra fica em cartaz entre 18 e 28 de junho; exceto dia 19, data do jogo da seleção brasileira",
+  "slug": "espetaculo-macuco-aborda-ancestralidade-memoria-e-racismo-ambiental",
+  "publicadoEm": "2026-06-15T10:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 11:02 de 15/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20259/file/optimized-6547fae5048870a3d69bd15820bd8c42.jpeg",
+  "imagemAlt": "Fotografia com um homem negro de cabelos crespos curtos está no centro, inclinado para a frente com uma expressão facial intensa e boca aberta. Ele veste roupas claras e carrega nos ombros uma estrutura volumosa coberta por fibras longas e emaranhadas, semelhantes a palha ou sisal, que caem pelas laterais como asas ou uma capa rústica. Toda a cena é banhada por uma iluminação cênica predominantemente azul e fria, destacando as texturas. O fundo é escuro, sugerindo um palco de teatro, com tecidos claros pendurados discretamente à direita.",
+  "creditoImagem": "Noelia Nájera",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-18T00:00:00.000-03:00",
+   "fim": "2026-06-28T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13832",
+  "tipo": "evento",
+  "titulo": "Sonora Brasiliana apresenta Carol Panesi no Itaú Cultural",
+  "resumo": "Repertório da artista tem influência direta da música universal de Hermeto Pascoal; evento, com entrada gratuita, será no dia 17 de junho",
+  "slug": "sonora-brasiliana-apresenta-carol-panesi-no-itau-cultural",
+  "publicadoEm": "2026-06-12T12:13:00.000-03:00",
+  "atualizadoEm": "Atualizado às 15:54 de 12/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20257/file/optimized-914963de2497fbe4a6e433b021be3c12.jpeg",
+  "imagemAlt": "A fotografia, com um fundo liso em tom cor de vinho, retrata uma mulher sorridente da cintura para cima enquanto segura e se prepara para tocar um instrumento de cordas de madeira, semelhante a uma rabeca ou violino. Ela tem cabelos escuros e cacheados presos em um penteado alto enfeitado com grandes flores vermelhas, deixando algumas mechas soltas que emolduram seu rosto. Veste uma blusa clara de frente única feita com um tecido de bordados vazados. O braço e o pulso direitos estão enfeitados com diversas pulseiras e braceletes dourados. Em suas mãos, que seguram o instrumento e o arco com delicadeza, é possível notar anéis dourados, esmalte vermelho nas unhas e uma tatuagem de rosas nas costas da mão direita.",
+  "creditoImagem": "João Julio Mello",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "música"
+  ],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-17T00:00:00.000-03:00",
+   "fim": "2026-06-17T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13831",
+  "tipo": "evento",
+  "titulo": "\"Expedição Brasiliana\" recebe Noam Scapin em encontro que une circo e artes visuais",
+  "resumo": "A partir da observação e da expressão corporal do artista, os participantes criam seus próprios desenhos em diálogo com as exposições do Itaú Cultural",
+  "slug": "expedicao-brasiliana-recebe-noam-scapin-em-encontro-que-une-circo-e-artes-visuais",
+  "publicadoEm": "2026-06-12T10:49:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:49 de 12/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20256/file/optimized-ac6cd375f50428b0b8209489c4fb8f24.jpeg",
+  "imagemAlt": "com fundo totalmente preto, retrata uma pessoa da cintura para cima em uma pose teatral e expressiva, segurando o rosto com as duas mãos e com os olhos bem arregalados. A pessoa possui cavanhaque e bigode, e usa uma maquiagem lúdica com as bochechas e a ponta do nariz avermelhadas, pequenos traços sob os olhos e uma tatuagem escura na testa. O figurino é extravagante e brinca com contrastes: na cabeça, há uma grande touca branca feita de babados de renda e tule; no tronco, veste uma peça com listras horizontais pretas e brancas acompanhada de uma saia de tule branco. Seus braços e mãos, que emolduram o rosto, são inteiramente cobertos por tatuagens escuras e detalhadas",
+  "creditoImagem": "Divulgação",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "artes visuais",
+   "performance"
+  ],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-13T00:00:00.000-03:00",
+   "fim": "2026-06-13T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13825",
+  "tipo": "evento",
+  "titulo": "“Sonora Brasiliana” recebe o compositor e multi-instrumentista Alexandre Rodrigues",
+  "resumo": "Para a realização desse evento, o Espaço Olavo Setubal, no 4º andar do prédio do IC, ficará fechado à visitação do público a partir das 18h do dia 10 de junho",
+  "slug": "sonora-brasiliana-recebe-o-compositor-e-multi-instrumentista-alexandre-rodrigues",
+  "publicadoEm": "2026-06-08T13:53:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:51 de 10/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20246/file/optimized-6777322ab9f543ae67971dcaab2b530a.jpeg",
+  "imagemAlt": "Retrato da cintura para cima de um homem de pele parda e cabelos curtos e escuros, olhando serenamente para o alto e à sua esquerda, contra um fundo liso e vibrante em tom verde-azulado. Ele veste uma camisa preta de botões de manga curta com um detalhe em relevo no peito — uma aplicação de tecido esverdeado com círculos vermelhos bordados com desenhos de olhos —, acompanhada por colares longos de miçangas finas e calça verde escura com linhas pretas grossas estampadas. Com a mão direita, ele segura uma flauta longa de madeira clara, que repousa em diagonal ao longo do seu braço, enquanto mantém o braço esquerdo, adornado com pulseiras finas, relaxado ao longo do corpo.",
+  "creditoImagem": "José Holanda",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "música"
+  ],
+  "temas": [
+   "show"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-10T00:00:00.000-03:00",
+   "fim": "2026-06-10T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13822",
+  "tipo": "evento",
+  "titulo": "Mariana Aydar chega ao Itaú Cultural com o “Forro da Mari”",
+  "resumo": "Apresentação une clássicos do forró com sucessos da artista",
+  "slug": "mariana-aydar-chega-ao-itau-cultural-com-o-forro-da-mari",
+  "publicadoEm": "2026-06-05T13:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 12:59 de 05/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20240/file/optimized-8f6fd46d6bfc05279c432e7e862ba437.jpeg",
+  "imagemAlt": "Uma fotografia de plano médio colorida, capturada de um ângulo ligeiramente baixo, mostra uma mulher de pele clara, com cabelos castanhos ondulados e longos, sorrindo abertamente para a câmera. Ela veste uma blusa vermelha de crochê com franjas e acessórios de metal dourado no pescoço e pulso. Seus braços estão arqueados, com as mãos na cintura. Ela está centralizada na imagem, em frente a uma imponente árvore com casca texturizada e folhagem densa, que se estende por todo o fundo. A luz do sol atinge a mulher e a casca da árvore de forma suave, criando sombras quentes. O céu azul aparece entre os galhos.",
+  "creditoImagem": "Flora Negri",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-11T00:00:00.000-03:00",
+   "fim": "2026-06-11T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13821",
+  "tipo": "evento",
+  "titulo": "Mesa no Itaú Cultural debate Arqueobotânica, Saberes Indígenas e Ciência",
+  "resumo": "Novo recurso pedagógico do MAE/USP, “Kit educativo de arqueobotânica“ será lançado no IC com entrada gratuita e distribuição de livro aos presentes",
+  "slug": "mesa-no-itau-cultural-debate-arqueobotanica-saberes-indigenas-e-ciencia",
+  "publicadoEm": "2026-06-05T12:49:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:10 de 10/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20242/file/optimized-79ca6e11985299abef604fda6b04341a.png",
+  "imagemAlt": "ma pilha de livretos de capa verde-vibrante dispostos em formato de leque sobre um fundo liso e claro. A capa do livreto superior apresenta o texto \"kit educativo de\" e, em grande destaque, a palavra \"arqueobotânica\" dividida em três linhas com letras amarelas. No centro da capa, há uma ilustração preenchida em amarelo com contornos pretos que retrata uma pessoa com características indígenas agachada, manuseando o que parecem ser raízes ou sementes ao lado de um cesto de palha. Na margem inferior, constam os nomes dos organizadores, Jennifer Watling e Maurício André da Silva, seguidos por pequenos logotipos pretos, incluindo os da USP e do MAE",
+  "creditoImagem": "Ader Gotardo",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [
+   "lançamento",
+   "debate"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-10T00:00:00.000-03:00",
+   "fim": "2026-06-10T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13818",
+  "tipo": "evento",
+  "titulo": "IC realiza encontro presencial para educadores trazendo o legado de Mestre Didi",
+  "resumo": "Ação formativa propõe imersão na cultura afro-brasileira, debate práticas pedagógicas antirracistas e apresenta novo “Caderno do professor”, da “Enciclopédia Itaú Cultural”",
+  "slug": "ic-realiza-encontro-presencial-para-educadores-trazendo-o-legado-de-mestre-didi",
+  "publicadoEm": "2026-06-03T17:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 15:11 de 18/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20063/file/optimized-42c32174b88759639e5c3ff9598e8a91.jpeg",
+  "imagemAlt": "A foto em preto e branco traz Mestre Didi de perfil, usando óculos e uma camisa xadrez. Ele segura uma escultura de sua autoria.",
+  "creditoImagem": "autoria desconhecida",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [
+   "educacao",
+   "caderno do professor"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-18T00:00:00.000-03:00",
+   "fim": "2026-06-18T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13817",
+  "tipo": "evento",
+  "titulo": "Venha criar seus próprios acessórios no Itaú Cultural",
+  "resumo": "“Ateliê de miçangas” acontece em todos os domingos de junho e julho",
+  "slug": "venha-criar-seus-proprios-acessorios-no-itau-cultural",
+  "publicadoEm": "2026-06-03T15:53:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:38 de 03/07/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/12299/file/optimized-54547490ab6bb3183fa8d0a2453c0ace.jpeg",
+  "imagemAlt": null,
+  "creditoImagem": "Divulgação",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-07T00:00:00.000-03:00",
+   "fim": "2026-07-26T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13815",
+  "tipo": "evento",
+  "titulo": "“Menu Cultural” de junho celebra festividades ao redor do mundo",
+  "resumo": "Com o tema “festas tradicionais populares”, a feira gastronômica do IC acontece no dia 7 deste mês e tem entrada gratuita",
+  "slug": "menu-cultural-de-junho-celebra-festividades-ao-redor-do-mundo",
+  "publicadoEm": "2026-06-02T11:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 14:23 de 05/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2154/file/optimized-0c34181f6478a4940afd48d2ad47ebb3.png",
+  "imagemAlt": "Uma imagem com a palavra menu cultural e varios formatos brancos, rosas e laranjas",
+  "creditoImagem": "divulgação",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [
+   "festas populares",
+   "gastronomia"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-07T00:00:00.000-03:00",
+   "fim": "2026-06-07T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13814",
+  "tipo": "evento",
+  "titulo": "Janayna Pereira celebra a riqueza do forró pé de serra em apresentação única no Itaú Cultural",
+  "resumo": "A artista traz o show “Ela no Forró”, unindo composições autorais que marcaram época e clássicos da música nordestina",
+  "slug": "janayna-pereira-celebra-a-riqueza-do-forro-pe-de-serra-em-apresentacao-unica-no-itau-cultural",
+  "publicadoEm": "2026-06-01T18:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:01 de 03/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20221/file/optimized-8200c8ce2d01e65a91d897ff23a01aa5.jpeg",
+  "imagemAlt": "Ao centro, há uma mulher loira com os braços atrás da cabeça e um meio sorriso no rosto. Ela veste uma blusa decotada e florida e, atrás dela, há uma parede vinho.",
+  "creditoImagem": "Caio Oviedo",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-06T00:00:00.000-03:00",
+   "fim": "2026-06-06T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13813",
+  "tipo": "evento",
+  "titulo": "Embarque nas reflexões de um velho pescador na intervenção itinerante ‘Memórias d’Omar’",
+  "resumo": "Livremente inspirado em poemas de autores santistas, o espetáculo da Cia. PlastikOnírica traz com sutileza os mistérios do envelhecer e a passagem do tempo",
+  "slug": "embarque-nas-reflexoes-de-um-velho-pescador-na-intervencao-itinerante-memorias-domar",
+  "publicadoEm": "2026-06-01T18:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:02 de 03/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20222/file/optimized-5eb420d8e101eb97d60e03a84db04ef2.jpeg",
+  "imagemAlt": "Da esquerda para a direita, há um homem vestindo chapéu de palha e uma camisa amarela, carregando uma corda azul nos ombros e sorrindo. Ao seu lado, há uma mulher de camisa rosa e chapéu de palha, segurando um peixe falso de madeira. Ainda ao seu lado, há um boneco de tamanho real, de pele negra, bigodes brancos, aspecto de idade avançada, vestindo uma camisa branca e azul, além de uma regata branca, uma corrente de prata e também chapéu de palha. Esse boneco está sendo operado por um homem jovem que está atrás dele, sorrindo, usando uma camiseta de manga longa preta, uma touca preta, óculos de grau e sorrindo. Essa cena se dá em uma paisagem de praia e serra atrás. ",
+  "creditoImagem": "Nadja Kouchi",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-06T00:00:00.000-03:00",
+   "fim": "2026-06-27T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13812",
+  "tipo": "evento",
+  "titulo": "Forró pé de serra com o Trio Macambira",
+  "resumo": "Grupo apresenta canções autorais e releituras de obras clássicas do forró",
+  "slug": "forro-pe-de-serra-com-o-trio-macambira",
+  "publicadoEm": "2026-06-01T17:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:11 de 01/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20225/file/optimized-9f1aab09207c4d9fdd6c52f98e9c0e5f.jpeg",
+  "imagemAlt": "Três mulheres sorridentes formam um trio musical sobre fundo vermelho-escuro. À esquerda, uma mulher de cabelos pretos e curtos segura um grande bumbo vermelho e branco pendurado no ombro, com uma baqueta na mão. No centro, uma mulher com volumoso cabelo black power veste um vestido de renda branca e segura uma sanfona preta. À direita, uma mulher de longos cabelos castanhos e calça branca segura um triângulo de metal. Todas vestem blusas brancas e transmitem alegria",
+  "creditoImagem": "Rafael Berezinski",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-07T00:00:00.000-03:00",
+   "fim": "2026-06-07T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13811",
+  "tipo": "evento",
+  "titulo": "Forró do Zé Pitoco coloca o Itaú Cultural pra dançar",
+  "resumo": "Multi-instrumentista pernambucano celebra a identidade nordestina em um show que une o tradicional e o contemporâneo",
+  "slug": "forro-do-ze-pitoco-coloca-o-itau-cultural-pra-dancar",
+  "publicadoEm": "2026-06-01T15:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 15:42 de 01/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20224/file/optimized-b5d334cdaf050b6014c89d3ff2a19dc0.jpeg",
+  "imagemAlt": "Fotografia em plano médio e ângulo levemente inclinado de um músico de pele clara e cabelos curtos grisalhos, posicionado à esquerda, de perfil para a direita. Ele veste camisa floral azul e branca, canta em um microfone com pedestal e segura uma baqueta com ponta de feltro azul, encostada no centro da pele de uma zabumba (grande tambor). O instrumento está na diagonal, à direita, com uma flanela roxa presa na borda superior. O fundo é escuro, com outro músico desfocado ao fundo à direita. A iluminação é quente e cênica, vinda de cima.",
+  "creditoImagem": "Luan Cardoso",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-05T00:00:00.000-03:00",
+   "fim": "2026-06-05T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13810",
+  "tipo": "evento",
+  "titulo": "Rastapé traz o forró pé de chão ao Itaú Cultural",
+  "resumo": "Grupo paraibano mistura canções autorais a releituras de Luiz Gonzaga, Jackson do Pandeiro, Dominguinhos, e Os 3 do Nordeste; entrada para show no IC é gratuita",
+  "slug": "rastape-traz-o-forro-pe-de-chao-ao-itau-cultural",
+  "publicadoEm": "2026-06-01T15:25:00.000-03:00",
+  "atualizadoEm": "Atualizado às 11:40 de 02/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20223/file/optimized-a459732dc9e940fd6cf8eea08bce614f.jpeg",
+  "imagemAlt": "A foto tirada de baixo para cima, retrata quatro homens posicionados em uma escada de madeira no interior de uma casa bem iluminada. Em primeiro plano, sentado nos degraus, está um homem de cabelos claros com um colar de contas grossas, camiseta branca, sobreposição clara e calça com estampa de folhagens, mantendo as mãos unidas sobre os joelhos. Atrás dele e à esquerda, apoiado no corrimão e sorrindo, está um homem de cabelos escuros usando uma regata branca texturizada. Ao centro e um pouco mais ao fundo, um terceiro homem de cabelos platinados e regata branca observa a câmera com expressão neutra. À direita, de pé nos degraus, um senhor de cabelos brancos e sorriso gentil veste uma camisa de manga curta com listras claras e calça bege.",
+  "creditoImagem": "Marcos Hermes",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "música"
+  ],
+  "temas": [
+   "show"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-04T00:00:00.000-03:00",
+   "fim": "2026-06-04T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13803",
+  "tipo": "evento",
+  "titulo": "Confira a agenda completa de junho no Itaú Cultural",
+  "resumo": "Prepare o coração e separe um espaço em seu calendário, pois este mês chega com uma programação imperdível e cheia de energia",
+  "slug": "confira-a-agenda-completa-de-junho-no-itau-cultural",
+  "publicadoEm": "2026-05-26T13:25:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:15 de 15/06/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20218/file/optimized-3917c206971f5a1666c988f1693e5e6e.jpeg",
+  "imagemAlt": "fundo totalmente laranja. No lado esquerdo, há uma pequena caixa branca com o texto em laranja \"ATIVIDADES GRATUITAS\", escrita em letras maiúsculas. Logo abaixo, em destaque com letras grandes e brancas, lê-se \"Programação de junho do Itaú Cultural\". No lado direito da imagem, destaca-se o logotipo em branco do Itaú Cultural, que é composto por uma grande barra diagonal invertida seguida da letra \"C\" maiúscula",
+  "creditoImagem": "Divulgação",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "teatro"
+  ],
+  "temas": [
+   "show"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-06-01T00:00:00.000-03:00",
+   "fim": "2026-06-30T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13800",
+  "tipo": "evento",
+  "titulo": "Itaú Cultural oferece visitas mediadas adaptadas para pessoas com TEA e outras neurodivergências",
+  "resumo": "Edição de agosto acontece no dia 30. Se inscreva!",
+  "slug": "itau-cultural-oferece-visitas-mediadas-adaptadas-para-pessoas-com-tea-outras-neurodivergencias",
+  "publicadoEm": "2026-05-25T12:41:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:02 de 12/08/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/17831/file/optimized-7a48ae1fc6e3345483c544ee13b3e789.jpeg",
+  "imagemAlt": null,
+  "creditoImagem": null,
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [
+   "mediação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-05-31T00:00:00.000-03:00",
+   "fim": "2026-12-13T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13801",
+  "tipo": "evento",
+  "titulo": "Pavilhão da Magnólia investiga a violência policial em \"Jararacas\"",
+  "resumo": "Com dramaturgia de Giordano Castro e direção de Murillo Ramos, o espetáculo parte da figura histórica de um dos principais cangaceiros de Lampião para refletir sobre o Brasil contemporâneo",
+  "slug": "o-cangaco-revisitado-pavilhao-da-magnolia-investiga-a-violencia-policial-na-peca-jararacas",
+  "publicadoEm": "2026-05-25T12:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:47 de 25/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20214/file/optimized-cc85263c631e6738918b9f9e304d5a88.jpeg",
+  "imagemAlt": "Quatro pessoas em um palco com fundo preto olham fixamente para a frente, sob uma iluminação dramática com tons avermelhados. À esquerda, uma pessoa usa óculos escuros e um adereço de cabeça extravagante com penas coloridas; veste uma jaqueta de lantejoulas aberta e calça bege. Ao lado, uma mulher de camisa azul aberta, top e calça vermelhos faz uma expressão séria. O terceiro homem veste colete inflável azul sobre regata brilhante e colar verde. O homem à direita usa uma jaqueta colorida em tons de laranja, marrom e amarelo. Em primeiro plano, desfocados, aparecem uma cadeira e um galo decorativo.",
+  "creditoImagem": "Allan Diniz",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-05-28T00:00:00.000-03:00",
+   "fim": "2026-05-31T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13799",
+  "tipo": "evento",
+  "titulo": "Camila Silva é a convidada da nova edição do Sonora Brasiliana",
+  "resumo": "Musicista e compositora apresenta suas criações e percorre a cronologia feminina do choro em apresentação no Itaú Cultural",
+  "slug": "camila-silva-e-a-convidada-da-nova-edicao-do-sonora-brasiliana",
+  "publicadoEm": "2026-05-25T12:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 12:31 de 25/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20213/file/optimized-78a0c0c236aa3091205a407d4dcd240a.jpeg",
+  "imagemAlt": "Uma mulher jovem com a pele parda clara sorri com alegria, olhando para cima e para a esquerda, contra um fundo preto e fosco. Ela tem cabelo preto crespo e curto, usa batom escuro e brincos pequenos. Veste uma blusa branca de alças finas e uma saia longa vermelha. Sentada em uma posição agachada, ela segura um cavaquinho de madeira clara em seu colo com as duas mãos. Seu braço esquerdo está apoiado no joelho, tocando levemente o próprio cabelo, revelando pulseiras largas e colares dourados finos. O enquadramento a posiciona no lado direito, deixando um amplo espaço vazio à esquerda.",
+  "creditoImagem": "Giovanna Name",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-05-27T00:00:00.000-03:00",
+   "fim": "2026-05-27T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13796",
+  "tipo": "evento",
+  "titulo": "Vivência de dança explora o corpo como território de memória no Itaú Cultural",
+  "resumo": "“Experimentos Afro Corpóreos” dialoga com a exposição “Mestre Didi: invenção e ancestralidade na arte afro-brasileira”",
+  "slug": "vivencia-de-danca-explora-o-corpo-como-territorio-de-memoria-no-itau-cultural",
+  "publicadoEm": "2026-05-21T14:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 15:52 de 22/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20194/file/optimized-da0a1e78e7951efd55e0d4c8a3fcb1c0.jpeg",
+  "imagemAlt": "Uma mulher negra e de cabelos crespos, vestida com uma calça preta e uma regata igualmente preta, dança em frente a uma árvore de tronco largo. Ela está descalça sobre a terra e o pouco céu que se vê por trás das folhas dessa árvore é azul claro. ",
+  "creditoImagem": "Jack Bones",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-05-30T00:00:00.000-03:00",
+   "fim": "2026-05-31T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13795",
+  "tipo": "evento",
+  "titulo": "Virada Cultural | Noite de terror: crie sua narrativa de mistério e suspense",
+  "resumo": "Intitulado “Expedição Brasiliana - Histórias de Mistério”, o Itaú Cultural convida você e sua família para a construção coletiva de contos assustadores!",
+  "slug": "noite-de-terror-crie-sua-narrativa-de-misterio-e-suspense-no-itau-cultural",
+  "publicadoEm": "2026-05-21T13:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 11:13 de 22/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/3644/file/optimized-d3c760b0076635ce0352aee409a6bc2d.jpeg",
+  "imagemAlt": "A foto mostra duas pessoas vistas de costas, em um ambiente escuro de exposição. Elas observam uma parede com várias gravuras iluminadas suavemente por uma lanterna. A pessoa à esquerda segura uma pequena lanterna verde que destaca uma das imagens. As silhuetas aparecem em primeiro plano, enquanto os desenhos expostos — cenas históricas do Rio de Janeiro — ocupam toda a parede à frente. Uma placa no canto inferior menciona o pintor francês Debret.",
+  "creditoImagem": "Agência Ophelia",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [
+   "fim de semana em família",
+   "contação de histórias"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-05-23T00:00:00.000-03:00",
+   "fim": "2026-05-23T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13786",
+  "tipo": "evento",
+  "titulo": "“Sonora Brasiliana” recebe Allan Abbadia no Itaú Cultural",
+  "resumo": "Multi-instrumentista apresenta suas criações e compartilha histórias de mais de 20 anos de carreira na música brasileira",
+  "slug": "sonora-brasiliana-recebe-allan-abbadia-no-itau-cultural",
+  "publicadoEm": "2026-05-18T12:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 13:05 de 18/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20187/file/optimized-81b1882f4e447ffdff308c2821bb2a02.jpeg",
+  "imagemAlt": "Fotografia em plano médio e fundo branco de Allan Abbadia, um homem negro de pele clara, barba estilizada grisalha e óculos de grau redondos. Ele usa uma camisa de botão branca de mangas curtas, relógio de pulso prateado e uma boina amarela clara. À esquerda, ele segura um trombone de vara dourado e prateado na altura do ombro; a campana do instrumento cobre parcialmente o lado direito de seu rosto, deixando seus olhos marcantes visíveis e direcionados para a câmera.",
+  "creditoImagem": "MariSer",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-05-20T00:00:00.000-03:00",
+   "fim": "2026-05-20T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13787",
+  "tipo": "evento",
+  "titulo": "“O veneno do teatro” traz thriller fascinante protagonizado por Osmar Prado e Maurício Machado",
+  "resumo": "Peça do premiado autor espanhol Rodolf Sirera, que já passou por 62 países, chega a São Paulo para curta temporada de quatro apresentações",
+  "slug": "o-veneno-do-teatro-traz-thriller-fascinante-protagonizado-por-osmar-prado-e-mauricio-machado",
+  "publicadoEm": "2026-05-18T12:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 13:37 de 18/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20192/file/optimized-97c36c3b51e00e6120c822c96a8a59d5.jpeg",
+  "imagemAlt": "Em um fundo preto e iluminação dramática de penumbra, o ator Osmar Prado aparece em primeiro plano. Ele é um homem idoso, branco, de barba grisalha, usa óculos redondos e veste um traje escuro de gola alta. Logo atrás dele, parcialmente visível, está o ator Maurício Machado, um homem branco, jovem, com olhos azuis marcantes, cabelo escuro penteado e bigode fino, vestindo terno e gravata. Ambos olham sérios e concentrados para a esquerda, fora da câmera.",
+  "creditoImagem": "Divulgação ",
+  "categoria": "Agenda Cultural",
+  "linguagens": [
+   "teatro"
+  ],
+  "temas": [
+   "artes cênicas",
+   "espetáculo"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-05-21T00:00:00.000-03:00",
+   "fim": "2026-05-24T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13780",
+  "tipo": "evento",
+  "titulo": "Dança e memória: espetáculos em sinergia com a Ocupação Ana Botafogo",
+  "resumo": "Programação de 12 a 17 de maio reúne obras criadas e interpretadas por mulheres de diferentes regiões do Brasil",
+  "slug": "danca-e-memoria-espetaculos-em-sinergia-com-a-ocupacao-ana-botafogo",
+  "publicadoEm": "2026-05-11T18:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 18:32 de 11/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20179/file/optimized-05599323c0e811307faf4b096ac41522.jpeg",
+  "imagemAlt": "Fotografia em plano médio com iluminação dramática em tons de sépia e âmbar. Duas pessoas se abraçam e mantém os braços esticados na horizontal, criando o efeito visual de uma figura com múltiplos braços, como uma divindade. Ao fundo, uma projeção difusa mostra uma sombra gigante que mimetiza a pose, amplificando a sensação de expansão e movimento ancestral no palco.",
+  "creditoImagem": "Nina Xará",
+  "categoria": "Agenda Cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "agenda.schedules",
+   "ic-play.agenda",
+   "mekukradja.schedules"
+  ],
+  "periodo": {
+   "inicio": "2026-05-12T00:00:00.000-03:00",
+   "fim": "2026-05-17T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13766",
+  "tipo": "evento",
+  "titulo": "Marcelo, marmelo, “Ocupação”! Ruth Rocha recebe homenagem no Itaú Cultural",
+  "resumo": "Exposição apresenta a trajetória da autora e exibe suas centenas de livros, seus personagens memoráveis e as particularidades de sua escrita",
+  "slug": "marcelo-marmelo-ocupacao-ruth-rocha-recebe-homenagem-no-itau-cultural",
+  "publicadoEm": "2026-05-06T09:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 11:37 de 29/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20166/file/optimized-434ac261665515313f5b81c9a71a7a45.jpeg",
+  "imagemAlt": "Ruth Rocha, senhora branca de cabelos grisalhos e sorriso aberto, senta-se em uma cadeira de balanço de palhinha preta. Veste blusa branca, colar de pérolas e calça azul-turquesa. Ao fundo, quadros decoram a parede clara e há um vaso com antúrios vermelhos à direita.",
+  "creditoImagem": "Letícia Vieira",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "marcelo-marmelo-ocupacao-ruth-rocha-recebe-homenagem-no-itau-cultural",
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2026-05-09T00:00:00.000-03:00",
+   "fim": "2026-08-02T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13725",
+  "tipo": "evento",
+  "titulo": "Exposição percorre toda a carreira de Mestre Didi",
+  "resumo": "De 8 de abril a 5 de julho de 2026, o Itaú Cultural apresenta uma mostra dedicada ao sacerdote-artista, destacando sua atuação artística, religiosa e como pesquisador",
+  "slug": "exposicao-percorre-toda-a-carreira-de-mestre-didi",
+  "publicadoEm": "2026-04-02T19:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 08:42 de 12/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/20063/file/optimized-42c32174b88759639e5c3ff9598e8a91.jpeg",
+  "imagemAlt": "A foto em preto e branco traz Mestre Didi de perfil, usando óculos e uma camisa xadrez. Ele segura uma escultura de sua autoria.",
+  "creditoImagem": "autoria desconhecida",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "ancestralidades"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "exposicao-percorre-toda-a-carreira-de-mestre-didi",
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2026-04-08T00:00:00.000-03:00",
+   "fim": "2026-07-05T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13660",
+  "tipo": "evento",
+  "titulo": "Universo dos games é tema de bate-papos no Itaú Cultural",
+  "resumo": "Mesas de debate abordam perspectivas de criação, apoio, formação e pesquisa",
+  "slug": "universo-dos-games-e-tema-de-programacao-do-itau-cultural",
+  "publicadoEm": "2026-02-13T15:30:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:30 de 13/02/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/3647/file/optimized-0a657590c3c2d4221afe0c96ffd4e7fb.png",
+  "imagemAlt": "A imagem mostra um fundo em degradê suave, passando por tons de verde, amarelo, rosa, azul e roxo. No centro-esquerda, lê-se “GAME+” em letras grandes com estética pixelada. À direita, em letras menores, estão as palavras “arte”, “cultura” e “comunidade”, alinhadas verticalmente. Ícones pretos em pixel art aparecem ao redor: um símbolo de arroba, uma borboleta, um coração e um computador portátil.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [
+   "games"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions",
+   "universo-dos-games-e-tema-de-programacao-do-itau-cultural"
+  ],
+  "periodo": {
+   "inicio": "2026-02-23T00:00:00.000-03:00",
+   "fim": "2026-03-03T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:13619",
+  "tipo": "evento",
+  "titulo": "O que você precisa saber antes de visitar a exposição “Game+”",
+  "resumo": "Devido ao sucesso da mostra, montamos um protocolo de visitação para garantir seu conforto",
+  "slug": "o-que-voce-precisa-saber-antes-de-visitar-a-exposicao-game",
+  "publicadoEm": "2026-01-08T16:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 10:42 de 03/02/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/19957/file/optimized-e6d01d018e6cda93e1a0b3adacf80826.jpeg",
+  "imagemAlt": "Imagem colorida mostra uma exposição interativa em ambiente interno, com iluminação baixa. No espaço, há várias estruturas feitas de grandes blocos cúbicos empilhados, em tons de cinza, bege e rosa. Alguns cubos emitem luz colorida — azul, verde, rosa e branco — funcionando como assentos ou elementos cenográficos. Em certas estruturas há telas exibindo jogos digitais. Ao fundo, paredes decoradas com ilustrações de personagens de videogame e, mais distante, um monitor contém um cronômetro indicando 15 minutos. O piso é escuro e o teto possui refletores alinhados.",
+  "creditoImagem": "Agência Ophelia",
+  "categoria": "noticias",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions",
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1678",
+  "tipo": "evento",
+  "titulo": "Os videogames chegam ao Itaú Cultural na mostra “Game+ Arte, cultura e comunidade”",
+  "resumo": "Mostra fica em cartaz entre 13 de dezembro de 2025 e 8 de março de 2026",
+  "slug": "os-videogames-chegam-ao-itau-cultural-na-mostra-game-arte-cultura-e-comunidade",
+  "publicadoEm": "2025-12-09T17:28:00.000-03:00",
+  "atualizadoEm": "Atualizado às 18:26 de 04/03/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/3647/file/optimized-0a657590c3c2d4221afe0c96ffd4e7fb.png",
+  "imagemAlt": "A imagem mostra um fundo em degradê suave, passando por tons de verde, amarelo, rosa, azul e roxo. No centro-esquerda, lê-se “GAME+” em letras grandes com estética pixelada. À direita, em letras menores, estão as palavras “arte”, “cultura” e “comunidade”, alinhadas verticalmente. Ícones pretos em pixel art aparecem ao redor: um símbolo de arroba, uma borboleta, um coração e um computador portátil.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "games"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2025-12-13T00:00:00.000-03:00",
+   "fim": "2026-03-08T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1608",
+  "tipo": "evento",
+  "titulo": "Espaço Milú Villela, dedicado às artes visuais, é inaugurado no Itaú Cultural",
+  "resumo": "A abertura do novo espaço expositivo traz a exposição “Brasil das múltiplas faces”, com curadoria de Agnaldo Farias",
+  "slug": "espaco-milu-villela-dedicado-as-artes-visuais-e-inaugurado-no-itau-cultural",
+  "publicadoEm": "2025-10-17T00:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 17:08 de 11/03/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/3511/file/optimized-83f53ebc3a25051d6de37ada583f7f31.jpeg",
+  "imagemAlt": "Espaço Milú Villela, no qual aparece uma série de quadros.",
+  "creditoImagem": "André Seiti",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [
+   "exposição"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2025-10-22T00:00:00.000-03:00",
+   "fim": "2027-05-31T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1548",
+  "tipo": "evento",
+  "titulo": "“Encontro com professores” promove conversas sobre exposição de Rivane Neuenschwander",
+  "resumo": "Os encontros são on-line e organizados pela equipe de Mediação do IC",
+  "slug": "encontro-com-professores-promove-conversas-sobre-exposicao-de-rivane-neuenschwander",
+  "publicadoEm": "2025-08-22T00:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 15:12 de 22/08/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/3366/file/optimized-ab04c5b719c6c0c118339b92b231eec4.jpeg",
+  "imagemAlt": "Fitas finas, coloridas, com escritos em inglês penduradas em uma parede branca.",
+  "creditoImagem": "Divulgação",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1527",
+  "tipo": "evento",
+  "titulo": "Exposição de Rivane Neuenschwander nos convida a voltar a sonhar",
+  "resumo": "“Brasil de susto e sonho: um panorama da obra de Rivane Neuenschwander” reúne novos trabalhos e obras emblemáticas da artista",
+  "slug": "exposicao-de-rivane-neuenschwander-nos-convida-a-voltar-a-sonhar",
+  "publicadoEm": "2025-08-06T12:05:00.000-03:00",
+  "atualizadoEm": "Atualizado às 16:46 de 04/09/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/3412/file/optimized-9c5393ae7306a696c4d96eb0345e4fad.jpeg",
+  "imagemAlt": "Foto da obra Dream.lab/São Paulo exposta no Itaú Cultural. No centro da imagem, divisórias de madeira com painéis coloridos e desenhos grandes em preto e branco de figuras idílicas. No teto, um globo espelhado e, ao fundo, uma luminária de neon amarela decoram o ambiente amplo e claro.",
+  "creditoImagem": "Letícia Vieira",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [
+   "exposição"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2025-08-14T00:00:00.000-03:00",
+   "fim": "2025-11-02T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:520",
+  "tipo": "evento",
+  "titulo": "Encontro com as curadoras da exposição “Artistas do vestir\"",
+  "resumo": "Carol Barreto e Hanayrá Negreiros falam sobre a curadoria da exposição e a moda enquanto linguagem central nas relações humanas",
+  "slug": "encontro-com-as-curadoras-da-exposicao-artistas-do-vestir",
+  "publicadoEm": "2025-02-06T18:17:48.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/101/file/optimized-0a13ff92dcc53333d7e23e22601134c3.jpg",
+  "imagemAlt": "Fotografia colorida de Carol Barreto e Hanayrá Negreiros. Elas estão lado a lado, vestem camisa branca e posam para a foto. CArol Barreto e uma mulher negra de pele clara, tem cabelos ruivos e encaracolados. Hanayrá é uma mulher negra de pele escura e tem cabelos pretos raspados.",
+  "creditoImagem": "Letícia Vieira/Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [
+   "exposição",
+   "moda"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": true,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2025-02-21T01:00:00.000-03:00",
+   "fim": "2025-02-21T02:30:00.000-03:00",
+   "horaInicio": "01:00",
+   "horaFim": "02:30"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:792",
+  "tipo": "evento",
+  "titulo": "Ateliê têxtil com o coletivo Flor de Kantuta",
+  "resumo": "Oficina convida o público a produzir uma chuspita – bolsa tradicional das culturas andinas",
+  "slug": "atelie-textil-com-o-coletivo-flor-de-kantuta",
+  "publicadoEm": "2025-01-10T19:40:48.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1273/file/optimized-41d53f0b478fe2136599f6595c68f26d.jpg",
+  "imagemAlt": "Rolos de lã rosa, vermelha e colorida (azul, laranja e roxo juntos) aparecem na foto.",
+  "creditoImagem": "Letícia Vieira",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "oficinas"
+  ],
+  "temas": [
+   "moda"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2025-02-20T06:00:00.000-03:00",
+   "fim": "2025-02-21T05:59:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "05:59"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:271",
+  "tipo": "evento",
+  "titulo": "“Ocupação Itaú Cultural” homenageia Leda Maria Martins",
+  "resumo": "Mostra tem abertura em 7 de dezembro e fica em cartaz até 30 de março de 2025",
+  "slug": "ocupacao-itau-cultural-homenageia-leda-maria-martins",
+  "publicadoEm": "2024-11-22T18:51:23.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2513/file/optimized-9a3e73924f469af6b59c6f1747f6e5d8.jpg",
+  "imagemAlt": "Retrato colorido de Leda Maria Martins. Ela é uma mulher negra de cabelos castanhos ondulados, usa uma blusa off-white, brincos dourados e colar azul.",
+  "creditoImagem": "Murilo Alvesso",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "poesia",
+   "literatura",
+   "teatro"
+  ],
+  "temas": [
+   "questoesraciais",
+   "artes cênicas"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-12-07T17:00:00.000-03:00",
+   "fim": "2025-03-31T02:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:674",
+  "tipo": "evento",
+  "titulo": "“Artistas do vestir: uma costura dos afetos”: a moda chega ao Itaú Cultural",
+  "resumo": "Exposição com obras de mais de 70 talentos fica em cartaz de 27 de novembro de 2024 a 23 de fevereiro de 2025",
+  "slug": "artistas-do-vestir-uma-costura-dos-afetos-a-moda-chega-ao-itau-cultural",
+  "publicadoEm": "2024-11-15T01:45:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1975/file/optimized-bb912e709c04d9c165935c1c4357e8a1.png",
+  "imagemAlt": "O título da exposição Artistas do vestir: uma costura dos afetos aparece costurado em um tecido bege. As linhas que compõem as letras são marrons.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "moda"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": true,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-11-28T01:30:00.000-03:00",
+   "fim": "2025-02-24T02:00:00.000-03:00",
+   "horaInicio": "01:30",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1079",
+  "tipo": "evento",
+  "titulo": "Provocativo e inovador, Oswald de Andrade é homenageado pelo Ocupação",
+  "resumo": "A exposição apresenta a sua biografia, as suas relações intelectuais e afetivas e a sua variada produção em manuscritos, edições históricas e releituras",
+  "slug": "provocativo-e-inovador-oswald-de-andrade-e-homenageado-pelo-ocupacao",
+  "publicadoEm": "2024-10-10T00:46:55.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2711/file/optimized-80cce66ef75ed6870320b7da4a096d89.jpg",
+  "imagemAlt": "Close do rosto de Oswald. A foto é em preto e branco e ele olha fixo para a câmera.",
+  "creditoImagem": "Gregori Warchavchik",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "literatura"
+  ],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-10-24T01:30:00.000-03:00",
+   "fim": "2025-02-24T02:00:00.000-03:00",
+   "horaInicio": "01:30",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:796",
+  "tipo": "evento",
+  "titulo": "“Encontro de professores” dialoga com a exposição “Guto Lacaz: cheque mate\"",
+  "resumo": "Encontro voltado à professores apresenta a vida e a obra do artista homenageado em exposição retrospectiva no Itaú Cultural",
+  "slug": "encontro-de-professores-dialoga-com-a-exposicao-guto-lacaz-cheque-mate",
+  "publicadoEm": "2024-10-08T21:18:46.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1692/file/optimized-5efb89fac183fda60f2caaff2da7dcbd.jpg",
+  "imagemAlt": "Retrato de Guto Lacaz em seu ateliê. Ele é um homem branco, idoso, calvo e de cabelos brancos.",
+  "creditoImagem": "André Seiti/Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [
+   "exposição",
+   "mediação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": true,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-10-16T01:00:00.000-03:00",
+   "fim": "2024-10-16T02:00:00.000-03:00",
+   "horaInicio": "01:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1115",
+  "tipo": "evento",
+  "titulo": "Guto Lacaz lança livros de poemas visuais em homenagem a grandes brasileiros",
+  "resumo": "De Beatriz Sousa a Elza Soares, passando por Tunga e Zé Celso, \"34 poemas-homenagem\" manipula formas e cores com espontaneidade e beleza",
+  "slug": "guto-lacaz-lanca-livros-de-poemas-visuais-em-homenagem-a-grandes-brasileiros",
+  "publicadoEm": "2024-10-04T23:18:26.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2487/file/optimized-c0e684eab9300f8966ae8ead500c313a.jpg",
+  "imagemAlt": "Nas páginas estão poemas que jogam com as letras dos nomes Erasmo e Rita Lee.",
+  "creditoImagem": "Guto Lacaz",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-10-13T21:00:00.000-03:00",
+   "fim": "2024-10-13T23:00:00.000-03:00",
+   "horaInicio": "21:00",
+   "horaFim": "23:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:422",
+  "tipo": "evento",
+  "titulo": "Fundação Itaú leva mostra sobre Machado de Assis à Bienal de São Paulo",
+  "resumo": "O público poderá conferir o conteúdo exibido na “Ocupação Machado de Assis”, do Itaú Cultural; evento literário acontece de 6 a 15 de setembro",
+  "slug": "fundacao-itau-leva-mostra-sobre-machado-de-assis-a-bienal-de-sao-paulo",
+  "publicadoEm": "2024-08-30T18:57:18.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/718/file/optimized-b3dbd48d11e9d3073fe77443df845d98.jpg",
+  "imagemAlt": "Uma fotografia em tons de cinza de Machado de Assis. O escritor está sentado e posa para a foto. Ele é um homem negro de pele clara, usa óculos, tem uma barba desgrenhada grisalha e penteia os cabelos negros para trás, formando um topete. Veste um casaco abotoado.",
+  "creditoImagem": "Marc Ferrez",
+  "categoria": "noticias",
+  "linguagens": [
+   "literatura"
+  ],
+  "temas": [
+   "exposição",
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions",
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:932",
+  "tipo": "evento",
+  "titulo": "HQ homenageia Naná Vasconcelos como o herói do berimbau",
+  "resumo": "Publicação sobre o percussionista é distribuída gratuitamente na Ocupação Naná Vasconcelos, no Itaú Cultural, e pode ser acessada também on-line",
+  "slug": "hq-homenageia-nana-vasconcelos-como-o-heroi-do-berimbau",
+  "publicadoEm": "2024-08-09T18:56:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1281/file/optimized-f966a04ca1986a7fa6a00cc82c4ec581.jpg",
+  "imagemAlt": "HQ Nana Vasconcelos",
+  "creditoImagem": "HQ Nana Vasconcelos",
+  "categoria": "ocupacao",
+  "linguagens": [
+   "música"
+  ],
+  "temas": [
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "hq-homenageia-nana-vasconcelos-como-o-heroi-do-berimbau",
+   "mostras-e-exposicoes__ocupacao.occupations",
+   "publicacoes.publicacoes"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1100",
+  "tipo": "evento",
+  "titulo": "Por dentro do IC",
+  "resumo": "Confira, andar a andar, a programação de mostras do Itaú Cultural",
+  "slug": "por-dentro-do-ic",
+  "publicadoEm": "2024-08-06T16:49:00.000-03:00",
+  "atualizadoEm": "Atualizado às 09:58 de 03/08/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/583/file/optimized-896f78e5ba5fe1b6da0578546373631c.jpg",
+  "imagemAlt": "Diversos logos do Itaú Cultural em amarelo sobre fundo roxo.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "noticias",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "arte contemporânea"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions",
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:469",
+  "tipo": "evento",
+  "titulo": "Visite a exposição “Guto Lacaz: cheque mate”",
+  "resumo": "A mostra retrospectiva resgata os quase 50 anos de carreira do artista multimídia",
+  "slug": "itau-cultural-inaugura-a-exposicao-guto-lacaz-cheque-mate",
+  "publicadoEm": "2024-07-22T17:39:21.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2637/file/optimized-e262ede6ca652d7c1b718cfaf9ed3452.jpg",
+  "imagemAlt": "Fotografia colorida daperformance Máquinas 2, de Guto Lacaz. Na imagem, o artista está sentado com um controle remoto nas mãos enquanto uma retroescavadeira de brinquedo está com a pá nos óculos do artista.",
+  "creditoImagem": "Rômulo Fialdini",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-08-01T17:00:00.000-03:00",
+   "fim": "2024-10-27T02:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:330",
+  "tipo": "evento",
+  "titulo": "Artacho Jurado e o estilo do bem morar",
+  "resumo": "Visita guiada e roda de conversa apresentam a vida e a obra do homenageado do projeto Ocupação Itaú Cultural",
+  "slug": "artacho-jurado-e-o-estilo-do-bem-morar",
+  "publicadoEm": "2024-07-09T15:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2136/file/optimized-80117ebe4074159cef9ffaa654be2d63.jpg",
+  "imagemAlt": "Fotografia em preto e branco que mostra a a área social interna do Edifício Bretagne. Numa sala de recepção, algumas pessoas estão sentadas em cadeiras interagindo. ",
+  "creditoImagem": "Hans Gunter Flieg | Acervo IMS",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "arquitetura"
+  ],
+  "temas": [
+   "exposição",
+   "mediação",
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-07-23T06:00:00.000-03:00",
+   "fim": "2024-08-13T05:59:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "05:59"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:517",
+  "tipo": "evento",
+  "titulo": "Naná Vasconcelos é o novo homenageado da “Ocupação Itaú Cultural”",
+  "resumo": "O multi-instrumentista é tema da mostra que fica em cartaz de 17 de julho a 26 de outubro",
+  "slug": "nana-vasconcelos-e-o-novo-homenageado-da-ocupacao-itau-cultural",
+  "publicadoEm": "2024-07-08T20:50:49.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1871/file/optimized-a6e367a9dae35c6d5b7fd8d41da8b548.jpg",
+  "imagemAlt": "Fotografia colorida do músico Naná Vasconcelos. Ele é um homem negro, está vestido com uma roupa branca e segurando um berimbau. Está de pé no meio de uma área verde.",
+  "creditoImagem": "André Seiti/Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "música"
+  ],
+  "temas": [
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-07-17T17:00:00.000-03:00",
+   "fim": "2024-10-27T02:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:909",
+  "tipo": "evento",
+  "titulo": "Itaú Cultural realiza oficina “Construindo fotografias”",
+  "resumo": "A ideia é possibilitar experimentações e intervenções em imagens com técnicas manuais",
+  "slug": "itau-cultural-realiza-oficina-construindo-fotografias",
+  "publicadoEm": "2024-06-14T18:26:44.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/32/file/optimized-3aba954d359f581afd9074cdc5ac98a7.jpg",
+  "imagemAlt": "Parede com três quadros, um na sequência do outro, com imagens coloridas.",
+  "creditoImagem": "Letícia Vieira",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "fotografia",
+   "oficinas"
+  ],
+  "temas": [
+   "exposição"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-06-29T06:00:00.000-03:00",
+   "fim": "2024-06-30T05:59:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "05:59"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1025",
+  "tipo": "evento",
+  "titulo": "Nova edição da “Ocupação Itaú Cultural” homenageia Artacho Jurado",
+  "resumo": "Exposição sobre o arquiteto paulista fica em cartaz de 20 de junho a 15 de setembro",
+  "slug": "ocupacao-itau-cultural-homenageia-artacho-jurado",
+  "publicadoEm": "2024-06-10T17:28:12.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/875/file/optimized-6b07610c0e66840582655d92b8af5a9f.jpg",
+  "imagemAlt": "Fotografia em preto e branco de João Artacho Jurado trabalhando em uma mesa em seu escritório. Artacho Jurado é um homem branco, de cabelos curtos e pretos, bigode, e usa óculos.",
+  "creditoImagem": "Acervo da família",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "cidade",
+   "artes visuais",
+   "arquitetura"
+  ],
+  "temas": [
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-06-20T17:00:00.000-03:00",
+   "fim": "2024-09-16T02:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:199",
+  "tipo": "evento",
+  "titulo": "Itaú Cultural promove bate-papo sobre Claudia Andujar",
+  "resumo": "Conversa aborda a fotografia como ferramenta de memória e a luta da artista pela vida dos povos indígenas",
+  "slug": "itau-cultural-promove-bate-papo-sobre-claudia-andujar",
+  "publicadoEm": "2024-06-03T21:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/816/file/optimized-e01b414f14a1dc886f6e465ec2ea7c0e.jpg",
+  "imagemAlt": "Na imagem está um espaço em que estão expostas nas paredes algumas fotografias em preto e branco. O ambiente tem uma iluminação avermelhada. ",
+  "creditoImagem": "Letícia Vieira",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "fotografia"
+  ],
+  "temas": [
+   "exposição",
+   "mediação",
+   "questoesindigenas"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-06-11T06:00:00.000-03:00",
+   "fim": "2024-06-25T05:59:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "05:59"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:445",
+  "tipo": "evento",
+  "titulo": "Espaço Olavo Setubal em manutenção",
+  "resumo": "Entre 27 de maio e 13 de junho, o EOS estará aberto de maneira parcial. Saiba mais!",
+  "slug": "espaco-olavo-setubal-em-manutencao",
+  "publicadoEm": "2024-05-20T17:41:39.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2187/file/optimized-27dabf37589c7ad9a3e389e37dbd85d6.jpg",
+  "imagemAlt": "Fotografia de uma sala de piso branco cujas paredes apresentam diversos quadros com pássaros da fauna brasileira.",
+  "creditoImagem": "Edouard Fraipont",
+  "categoria": "noticias",
+  "linguagens": [
+   "acervo",
+   "artes visuais"
+  ],
+  "temas": [
+   "institucional"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions",
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:691",
+  "tipo": "evento",
+  "titulo": "Visita expandida às exposições de Claudia Andujar, no IC, e George Love, no MAM",
+  "resumo": "Traslado entre as duas instituições será feito por ônibus disponibilizado aos participantes; faça sua inscrição",
+  "slug": "visita-expandida-as-exposicoes-de-claudia-andujar-no-ic-e-george-love-no-mam",
+  "publicadoEm": "2024-05-01T00:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2298/file/optimized-65685cc09b8ed8e74e417a5c288cac7a.jpg",
+  "imagemAlt": "Há três obras na parede de uma exposição, nas quais as imagens parecem de pessoas mascaradas. ",
+  "creditoImagem": "Letícia Vieira",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "fotografia"
+  ],
+  "temas": [
+   "exposição"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": true,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-05-11T20:00:00.000-03:00",
+   "fim": "2024-05-11T23:00:00.000-03:00",
+   "horaInicio": "20:00",
+   "horaFim": "23:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:998",
+  "tipo": "evento",
+  "titulo": "Itaú Cultural recebe exposição em homenagem a Claudia Andujar",
+  "resumo": "A mostra reúne experimentações artísticas, releitura de séries e a maneira singular com que a fotógrafa vê o mundo",
+  "slug": "itau-cultural-recebe-exposicao-em-homenagem-a-claudia-andujar",
+  "publicadoEm": "2024-03-19T23:35:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1930/file/optimized-d6c7dabbd57172a6c2a769ca0d2c8aae.jpg",
+  "imagemAlt": "Mulher idosa com os cabelos pintados de castanho claro aparece sentada em mesa branca, onde estão muitos livros abertos e algumas telas com desenhos. Ela usa casaco com estampa de onça, com camisa bege por baixo e um colar marrom, com formas arredondadas. As mãos dela estão sobre a mesa, cruzadas. Atrás dela há uma estante com muitos livros, um sofá, duas poltronas, uma mesa de centro, um hack, além de quadros e outros objetos de decoração.",
+  "creditoImagem": "Murilo Alvesso",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "fotografia"
+  ],
+  "temas": [
+   "exposição"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-04-03T17:00:00.000-03:00",
+   "fim": "2024-07-01T02:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:277",
+  "tipo": "evento",
+  "titulo": "Exposição “Narrativas em processo” chega à Fundação Iberê",
+  "resumo": "A partir da Coleção Itaú Cultural, a mostra explora a história do livro de artista no país",
+  "slug": "exposicao-narrativas-em-processo-chega-a-fundacao-ibere",
+  "publicadoEm": "2024-01-26T14:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/175/file/optimized-16de334cf990373ba1ad7cbe82c0af38.jpg",
+  "imagemAlt": "Fotografia colorida com fundo branco e diversos livros de artista dispostos lado a lado. No topo da fotografia estão dispostos cinco livros, abaixo há mais uma linha com quatro livros e na parcela mais baixa da fotografia outra sequência de cinco livros.",
+  "creditoImagem": "Ana Rovati/Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "livro de artista",
+   "itinerância"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2024-02-03T20:00:00.000-03:00",
+   "fim": "2024-04-01T01:00:00.000-03:00",
+   "horaInicio": "20:00",
+   "horaFim": "01:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:446",
+  "tipo": "evento",
+  "titulo": "Vem aí: veja quais exposições e ocupações acontecem no Itaú Cultural em 2024",
+  "resumo": "Programe-se para as exposições dos primeiros meses deste ano: \neventos são todos gratuitos",
+  "slug": "vem-ai-veja-quais-exposicoes-e-ocupacoes-acontecem-no-itau-cultural-em-2024",
+  "publicadoEm": "2024-01-19T14:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1930/file/optimized-d6c7dabbd57172a6c2a769ca0d2c8aae.jpg",
+  "imagemAlt": "Mulher idosa com os cabelos pintados de castanho claro aparece sentada em mesa branca, onde estão muitos livros abertos e algumas telas com desenhos. Ela usa casaco com estampa de onça, com camisa bege por baixo e um colar marrom, com formas arredondadas. As mãos dela estão sobre a mesa, cruzadas. Atrás dela há uma estante com muitos livros, um sofá, duas poltronas, uma mesa de centro, um hack, além de quadros e outros objetos de decoração.",
+  "creditoImagem": "Murilo Alvesso",
+  "categoria": "noticias",
+  "linguagens": [],
+  "temas": [
+   "exposição",
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions",
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:707",
+  "tipo": "evento",
+  "titulo": "Itaú Cultural (IC) inaugura exposição dedicada à numismática e à filatelia",
+  "resumo": "Moedas, medalhas, cédulas e selos compõem o Espaço Herculano Pires – Arte no Dinheiro; as peças dialogam com trabalhos artísticos contemporâneos",
+  "slug": "itau-cultural-ic-inaugura-exposicao-dedicada-a-numismatica-e-a-filatelia",
+  "publicadoEm": "2023-12-01T00:40:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2667/file/optimized-c3b478b712c58242cdd5ef551e39558e.jpg",
+  "imagemAlt": "A imagem traz um fundo branco, com o logo da mostra. As palavras Espaço Herculano Pires aparecem em preto. Já os termos Arte no dinheiro estão em azul.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "exposicoes",
+  "linguagens": [],
+  "temas": [
+   "exposição"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": true,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions",
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1118",
+  "tipo": "evento",
+  "titulo": "Crítica, cultura e política: acesse a publicação dedicada a Mario Pedrosa",
+  "resumo": "Livro compõe a mostra que expõe o trabalho de um dos nossos maiores intelectuais",
+  "slug": "critica-cultura-e-politica-acesse-a-publicacao-dedicada-a-mario-pedrosa",
+  "publicadoEm": "2023-11-29T17:49:33.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/962/file/optimized-14ef9f132553a83a3a8250ddc8b8ce63.jpg",
+  "imagemAlt": "Visto de lado, Mario Pedrosa está sentado em um poltrona, com o braço sobre o encosto dela. Ele olha para a frente como se falasse com alguém. Atrás dele, no chão, há um quadro de arte abstrata.",
+  "creditoImagem": "Acervo da família",
+  "categoria": "ocupacao",
+  "linguagens": [],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "critica-cultura-e-politica-acesse-a-publicacao-dedicada-a-mario-pedrosa",
+   "mostras-e-exposicoes__ocupacao.occupations",
+   "publicacoes.publicacoes"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1104",
+  "tipo": "evento",
+  "titulo": "Autores revisitam Machado de Assis em publicação",
+  "resumo": "Publicação pode ser retirada na sede do Itaú Cultural, na Avenida Paulista, e também está disponível on-line",
+  "slug": "autores-revisitam-machado-de-assis-em-publicacao",
+  "publicadoEm": "2023-11-22T20:23:27.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2441/file/optimized-03ea44456b378b48d9cb854d62739472.jpg",
+  "imagemAlt": "Machado de Assis é um homem negro, aparece em foto preto e branca, com óculos redondo de grau e barba e bigode grisalhos e espessos. Ele usa casaco escuro fechado.",
+  "creditoImagem": "Marc Ferrez/acervo Instituto Moreira Salles",
+  "categoria": "ocupacao",
+  "linguagens": [
+   "literatura"
+  ],
+  "temas": [
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__ocupacao.occupations",
+   "publicacoes.publicacoes"
+  ],
+  "periodo": {
+   "inicio": null,
+   "fim": null,
+   "horaInicio": null,
+   "horaFim": null
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:842",
+  "tipo": "evento",
+  "titulo": "Museu do meu corpo",
+  "resumo": "Atividade convida o público a refletir sobre a própria identidade e o corpo como lugar de memória",
+  "slug": "museu-do-meu-corpo",
+  "publicadoEm": "2023-11-16T15:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/447/file/optimized-5f42471641df9228ec5c3510710f8135.jpg",
+  "imagemAlt": "Sala de exposição mostra um tambor em cima de uma estrutura de madeira, deitado. Há quadros no canto esquerdo, com imagens pintadas e retratadas de pessoas negras. No fundo, em cima de um altar com toalha roxa, há três imagens de santos. ",
+  "creditoImagem": "Leticia Vieira",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "memória",
+   "artes visuais",
+   "oficinas"
+  ],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-11-26T06:00:00.000-03:00",
+   "fim": "2024-01-20T05:59:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "05:59"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:484",
+  "tipo": "evento",
+  "titulo": "Eterno e contemporâneo, Machado de Assis é homenageado pela “Ocupação”",
+  "resumo": "Exposição apresenta documentos históricos – como manuscritos e primeiras edições dos livros de Machado –, leituras dramáticas e traduções da obra do Bruxo",
+  "slug": "eterno-e-contemporaneo-machado-de-assis-e-homenageado-pelo-ocupacao",
+  "publicadoEm": "2023-11-06T21:25:36.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2148/file/optimized-359fb836e0a520faca24947ddc1036d5.jpg",
+  "imagemAlt": "Foto de época, com tons sépias nas partes mais clara. Mostra Machado sentado co centro. Ele é um homem negro, de cabelos escuros e bigode.",
+  "creditoImagem": "Academia Brasileira de Letras",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "literatura",
+   "teatro"
+  ],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-11-18T17:00:00.000-03:00",
+   "fim": "2024-02-05T02:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:196",
+  "tipo": "evento",
+  "titulo": "Confira a programação do “Papo com o Educativo” de novembro",
+  "resumo": "As visitas educativas apresentam ao público a “Ocupação Mario Pedrosa” e a exposição “Ensaios para o Museu das Origens”",
+  "slug": "confira-a-programacao-do-papo-com-o-educativo-de-novembro",
+  "publicadoEm": "2023-10-20T15:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/486/file/optimized-90aa0f2ec1b46aa8e264fc94f93418cd.jpg",
+  "imagemAlt": "Descritivo da exposição, Ensaio Para O Museu Das Origens ",
+  "creditoImagem": "Leticia Vieira ",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "mediação",
+   "ocupação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-11-01T06:00:00.000-03:00",
+   "fim": "2023-11-28T05:59:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "05:59"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1070",
+  "tipo": "evento",
+  "titulo": "A exposição “Livros de artista” estreia no Museu de Arte do Rio",
+  "resumo": "A mostra itinerante “Narrativas em processo” apresenta cinco novas obras recém-adquiridas pela “Coleção Itaú Cultural”",
+  "slug": "a-exposicao-livros-de-artista-estreia-no-museu-de-arte-do-rio",
+  "publicadoEm": "2023-10-18T15:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/175/file/optimized-16de334cf990373ba1ad7cbe82c0af38.jpg",
+  "imagemAlt": "Fotografia colorida com fundo branco e diversos livros de artista dispostos lado a lado. No topo da fotografia estão dispostos cinco livros, abaixo há mais uma linha com quatro livros e na parcela mais baixa da fotografia outra sequência de cinco livros.",
+  "creditoImagem": "Ana Rovati/Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "itinerância"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-10-28T17:00:00.000-03:00",
+   "fim": "2024-01-22T00:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:957",
+  "tipo": "evento",
+  "titulo": "‘’Rodas de saberes, Ensaio para o Museu das Origens’’: uma jornada artística",
+  "resumo": "Atividades interativas ocorrem nos dias 22 de outubro e 19 de novembro, em frente ao Itaú Cultural (IC)",
+  "slug": "roda-de-saber-ensaio-para-o-museu-das-origens-uma-jornada-artistica-",
+  "publicadoEm": "2023-10-03T18:27:36.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1860/file/optimized-2d760004990088b4adc431244426c14b.jpg",
+  "imagemAlt": "Sala de museu tem chão branco e a parede à esquerda cheia de quadros variados. Mais ao centro, indo para a direita, a parede branca exibe um texto cujo título é \"Acervo da laje\". No centro da sala, há uma mesa de madeira baixa e redonda, cercada de bancos de madeira de tamanhos variados. No meio da mesa há uma mão aberta, esculpida em madeira escura, em tamanho bem maior que uma mão humana.",
+  "creditoImagem": "Leticia Vieira ",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [
+   "ancestralidades"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": true,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-10-22T17:00:00.000-03:00",
+   "fim": "2023-11-19T18:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "18:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:972",
+  "tipo": "evento",
+  "titulo": "Participe da visita expandida à exposição “Ensaios para o Museu das Origens”",
+  "resumo": "A atividade promove visitas educativas integradas nos espaços expositivos do Itaú Cultural e do Instituto Tomie Ohtake",
+  "slug": "participe-da-visita-expandida-a-exposicao-ensaios-para-o-museu-das-origens",
+  "publicadoEm": "2023-09-27T16:13:29.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/447/file/optimized-5f42471641df9228ec5c3510710f8135.jpg",
+  "imagemAlt": "Sala de exposição mostra um tambor em cima de uma estrutura de madeira, deitado. Há quadros no canto esquerdo, com imagens pintadas e retratadas de pessoas negras. No fundo, em cima de um altar com toalha roxa, há três imagens de santos. ",
+  "creditoImagem": "Leticia Vieira",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "acervo",
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "acervos"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-10-14T06:00:00.000-03:00",
+   "fim": "2024-01-13T05:59:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "05:59"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1123",
+  "tipo": "evento",
+  "titulo": "“Ensaios para o Museu das Origens” faz um mergulho na proposta de Mario Pedrosa",
+  "resumo": "A exposição é uma parceria entre o Itaú Cultural e o Instituto Tomie Ohtake",
+  "slug": "ensaios-para-museu-das-origens",
+  "publicadoEm": "2023-08-26T14:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/667/file/optimized-5613998936a1d8afb1f9c5bee7d45814.jpg",
+  "imagemAlt": "Logo da exposição Ensaios para o Museu das Origens, com o nome da exposição em fontes brancas sobre um fundo rosa.",
+  "creditoImagem": "Itaú Cultural/Instituto Tomie Ohtake",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "pesquisa",
+   "patrimônio",
+   "memória",
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "acervos",
+   "ancestralidades",
+   "coletivos culturais"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-09-06T17:00:00.000-03:00",
+   "fim": "2024-01-29T01:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "01:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:924",
+  "tipo": "evento",
+  "titulo": "Oficina promove a criação de poesia inspirada na exposição “Além das ruas”",
+  "resumo": "O público é convidado a experimentar a criação a partir da arte de rua e da cultura hip-hop",
+  "slug": "oficina-criacao-poesia-alem-das-ruas",
+  "publicadoEm": "2023-05-26T18:01:22.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2499/file/optimized-ae62ed9349d6b1bdd8bf55c4e72a290d.jpg",
+  "imagemAlt": "Logotipo da exposição Além das ruas: histórias do graffiti. O texto está em branco sobre um plano de fundo preto",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "poesia",
+   "literatura",
+   "oficinas"
+  ],
+  "temas": [
+   "arte urbana"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-06-03T06:00:00.000-03:00",
+   "fim": "2023-06-17T05:59:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "05:59"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:309",
+  "tipo": "evento",
+  "titulo": "Coletivo Matéria Rima apresenta espetáculo e oficina de breakdance no IC",
+  "resumo": "As atividades fazem parte da exposição “Além das ruas: histórias do graffiti” e acontecem aos sábados no mês de maio",
+  "slug": "coletivo-materia-rima-espetaculo-oficina-breakdance",
+  "publicadoEm": "2023-05-05T18:53:22.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/524/file/optimized-e24cf08a069967ce6797dd0aa4a3ffa3.jpg",
+  "imagemAlt": "Fotografia colorida de homem dançando breakdance no espaço expositivo durante abertura da exposição Além das Ruas. O chão onde o artista está dançando possui um padrão quadriculado, preto e branco. O artista está com sua mão direita e pé direito no chão, com o tronco de lado e o seu pé esquerdo levantado acima da altura da cabeça, realizando um movimento de dança. Ao fundo, vemos espectadores, um dj e mcs.",
+  "creditoImagem": "Olga Lysloff",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "dança contemporânea",
+   "cidade",
+   "artes visuais",
+   "dança"
+  ],
+  "temas": [
+   "inscrição",
+   "arte urbana",
+   "coletivos culturais",
+   "espetáculo"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-05-13T06:00:00.000-03:00",
+   "fim": "2023-05-27T05:59:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "05:59"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:262",
+  "tipo": "evento",
+  "titulo": "A arte urbana chega ao IC em exposição",
+  "resumo": "A mostra “Além das ruas: histórias do graffiti” resgata a trajetória do grafite desde seu surgimento até a diversidade da cena atual",
+  "slug": "a-arte-urbana-chega-ao-ic-na-exposicao-alem-das-ruas-historias-do-graffiti-",
+  "publicadoEm": "2023-04-26T17:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/693/file/optimized-08db45cfcca2095415b026c27b177649.jpg",
+  "imagemAlt": "Na imagem estão dois homens, um de pé e outro sentado sobre um skate. Ambos observam o muro grafitado. ",
+  "creditoImagem": "Acervo - Binho Ribeiro",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "mostras",
+   "arte urbana"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-05-06T17:00:00.000-03:00",
+   "fim": "2023-07-31T02:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1154",
+  "tipo": "evento",
+  "titulo": "“Encontro de professores – virtual”: saiba quais são as atividades de maio",
+  "resumo": "Encontros on-line para professores são mediados pelos educadores do Itaú Cultural; faça seu agendamento",
+  "slug": "encontro-de-professores--virtual-saiba-quais-sao-as-atividades-de-maio",
+  "publicadoEm": "2023-04-26T15:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2454/file/optimized-828422492f817352f89357e074eaa827.jpg",
+  "imagemAlt": "Banner azul claro com a frase Encontro de professores [virtual] escrito em preto. Mais para baixo aparece uma barra inclinada na cor rosa.",
+  "creditoImagem": "Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [],
+  "temas": [
+   "debate"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": true,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-05-31T01:00:00.000-03:00",
+   "fim": "2023-05-31T02:00:00.000-03:00",
+   "horaInicio": "01:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:38",
+  "tipo": "evento",
+  "titulo": "Exposição homenageia Olavo Setubal, criador do Itaú Cultural",
+  "resumo": "“Olavo Setubal – um homem diante do seu tempo” traz imagens, documentos e entrevistas, uma celebração do legado daquele que sempre foi apaixonado por São Paulo",
+  "slug": "game-perifa",
+  "publicadoEm": "2023-04-08T16:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/369/file/optimized-45cd75a522e2cee7e8c33c01d4c41b0a.jpg",
+  "imagemAlt": "Na fotografia em preto e branco, aparece Olavo Setubal sentado em uma cadeira, com as mãos em uma mesa. Ele veste um terno. Na mesa, há ainda um telefone.",
+  "creditoImagem": "Agência Estado",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "cidade"
+  ],
+  "temas": [
+   "gestao cultural"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "colunas__game-perifa",
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-04-14T17:00:00.000-03:00",
+   "fim": "2023-09-18T01:00:00.000-03:00",
+   "horaInicio": "17:00",
+   "horaFim": "01:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:1140",
+  "tipo": "evento",
+  "titulo": "“ritual de abertura da carcaça”: abigail Campos Leal realiza performance no IC",
+  "resumo": "A obra performática parte de “nós estávamos esperando por vocês”, conjunto de cinco fotografias que a artista exibe na mostra “Um século de agora”",
+  "slug": "ritual-de-abertura-da-carcaca-abigail-campos-leal-realiza-performance-no-ic",
+  "publicadoEm": "2023-03-07T17:41:36.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1226/file/optimized-c902d23b327ff4f86bad975e2bf198a5.jpg",
+  "imagemAlt": "Em um suporte vertical laranja, estão dispostas quatro fotografias emolduradas.",
+  "creditoImagem": "Renato Parada",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais",
+   "performance"
+  ],
+  "temas": [],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-03-18T23:15:00.000-03:00",
+   "fim": "2023-03-18T23:45:00.000-03:00",
+   "horaInicio": "23:15",
+   "horaFim": "23:45"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:416",
+  "tipo": "evento",
+  "titulo": "Professores, participem do encontro sobre a mostra “Um século de agora”",
+  "resumo": "A atividade, conduzida pelos educadores do IC, aborda temas como identidade, territorialidade, arte e sociedade",
+  "slug": "professores-participem-encontro-mostra-seculo-agora",
+  "publicadoEm": "2023-02-22T19:41:14.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/2436/file/optimized-5d72d31afdd3b92cbee952598821cbb8.jpg",
+  "imagemAlt": "Fotografia colorida que destaca uma vista do espaço expositivo da mostra \"Um século de agora\". Na imagem se vê alguns quadros nas paredes laranjas e duas pessoas, não identificáveis, andando pelo lugar.",
+  "creditoImagem": "Renato Parada",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "mediação"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": true,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2023-03-01T01:00:00.000-03:00",
+   "fim": "2023-03-01T02:00:00.000-03:00",
+   "horaInicio": "01:00",
+   "horaFim": "02:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:776",
+  "tipo": "evento",
+  "titulo": "\"Livros de artista na coleção Itaú Cultural” destaca obras do acervo",
+  "resumo": "Com curadoria de Felipe Scovino, a mostra conta com recursos imersivos e interativos, permitindo a apreciação das obras em seus detalhes",
+  "slug": "livros-de-artista-na-colecao-itau-cultural-destaca-obras-do-acervo-",
+  "publicadoEm": "2022-10-25T22:43:57.000-03:00",
+  "atualizadoEm": "Atualizado às 03:00 de 11/05/2025",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/175/file/optimized-16de334cf990373ba1ad7cbe82c0af38.jpg",
+  "imagemAlt": "Fotografia colorida com fundo branco e diversos livros de artista dispostos lado a lado. No topo da fotografia estão dispostos cinco livros, abaixo há mais uma linha com quatro livros e na parcela mais baixa da fotografia outra sequência de cinco livros.",
+  "creditoImagem": "Ana Rovati/Itaú Cultural",
+  "categoria": "agenda-cultural",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "livro de artista",
+   "exposição virtual"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": true,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "livros-de-artista-na-colecao-itau-cultural-destaca-obras-do-acervo-",
+   "mostras-e-exposicoes__exposicoes-virtuais.exhibitions"
+  ],
+  "periodo": {
+   "inicio": "2022-10-25T06:00:00.000-03:00",
+   "fim": "2025-12-31T06:00:00.000-03:00",
+   "horaInicio": "06:00",
+   "horaFim": "06:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:12799",
+  "tipo": "evento",
+  "titulo": "“Filmes e vídeos de artistas”: mostra on-line reúne obras audiovisuais produzidas desde os anos 1970 no Brasil",
+  "resumo": "Produções de caráter experimental abordam temas que vão da memória à realidade sociopolítica do país",
+  "slug": "filmes-videos-artistas-mostra-on-line",
+  "publicadoEm": "2021-12-16T14:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 08:26 de 25/05/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/15705/file/optimized-868de11ea72985105da93d16ff5cf99b.jpeg",
+  "imagemAlt": "Quatro telas com filmes aparecem penduradas em um sala expositiva com paredes pretas e carpete cinza. Há bancos pela sala, mas sem ninguém sentado neles.",
+  "creditoImagem": "divulgação",
+  "categoria": "exposicoes-virtuais",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "acervos"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "filmes-videos-artistas-mostra-on-line",
+   "mostras-e-exposicoes__exposicoes-virtuais.exhibitions",
+   "noticias__institucional.noticias"
+  ],
+  "periodo": {
+   "inicio": "2021-12-16T00:00:00.000-03:00",
+   "fim": "2030-12-31T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:11809",
+  "tipo": "evento",
+  "titulo": "Fotografia Modernista Brasileira, exposição virtual do Itaú Cultural, pode ser vista no Google Arts & Culture",
+  "resumo": "Recorte virtual disponibiliza 70 obras de fotografias modernistas do acervo do Itaú Cultural",
+  "slug": "fotografia-modernista-brasileira-exposicao-virtual-itau",
+  "publicadoEm": "2020-12-08T14:00:00.000-03:00",
+  "atualizadoEm": "Atualizado às 01:18 de 05/10/2022",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/14950/file/optimized-3fa35d84feb5c71a65eda653d8e6555a.jpeg",
+  "imagemAlt": "Arabescos em branco em fundo preto aparecem entrelaçados.",
+  "creditoImagem": "João Luiz Musa/Itaú Cultural",
+  "categoria": "noticias",
+  "linguagens": [
+   "fotografia",
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "acervos",
+   "exposição virtual"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "fotografia-modernista-brasileira-exposicao-virtual-itau",
+   "mostras-e-exposicoes__exposicoes-virtuais.exhibitions",
+   "noticias__institucional.noticias"
+  ],
+  "periodo": {
+   "inicio": "2020-12-08T00:00:00.000-03:00",
+   "fim": "2025-12-31T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ },
+ {
+  "id": "evento:7000",
+  "tipo": "evento",
+  "titulo": "Nova forma de explorar o Espaço Olavo Setubal",
+  "resumo": "Já é possível realizar uma visita virtual ao Espaço Olavo Setubal, por meio da ferramenta do Street View, do Google",
+  "slug": "nova-forma-de-explorar-o-espaco-olavo-setubal",
+  "publicadoEm": "2016-11-21T14:07:00.000-02:00",
+  "atualizadoEm": "Atualizado às 19:22 de 13/01/2026",
+  "imagem": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/9404/file/optimized-3d9d40edb8c4d0b68bf64a2ac0168baa.jpeg",
+  "imagemAlt": null,
+  "creditoImagem": "foto: Chema Llamos",
+  "categoria": "noticias",
+  "linguagens": [
+   "artes visuais"
+  ],
+  "temas": [
+   "exposição",
+   "exposição virtual"
+  ],
+  "acessibilidade": {
+   "audio_description": false,
+   "libras": false,
+   "descriptive_subtitle": false,
+   "closed_caption": false,
+   "open_caption": false,
+   "simultaneous_translation": false,
+   "stenotypy": false,
+   "subtitle": false
+  },
+  "agentes": [],
+  "_origem": [
+   "mostras-e-exposicoes__exposicoes-virtuais.exhibitions",
+   "noticias__institucional.noticias",
+   "noticias__pesquisas.noticias"
+  ],
+  "periodo": {
+   "inicio": "2016-11-21T00:00:00.000-02:00",
+   "fim": "2025-12-31T00:00:00.000-03:00",
+   "horaInicio": "00:00",
+   "horaFim": "00:00"
+  },
+  "ocorrencias": [],
+  "presencial": false,
+  "online": false,
+  "comIngresso": false,
+  "esgotado": false,
+  "espaco": null,
+  "territorio": null,
+  "preco": null
+ }
+]

@@ -1,0 +1,13 @@
+{
+  "source_path": "/Users/macos/Desktop/Noz/docs/PRD.md",
+  "type": "PRD",
+  "confidence": "high",
+  "manifest_override": true,
+  "title": "PRD — Agenda Cultural BR",
+  "summary": "Product requirements for a national cultural discovery infrastructure proposed to Itau Cultural's RFP, built on a cultural knowledge graph.",
+  "scope": ["Agenda Cultural BR", "Itau Cultural acervo digital", "Enciclopedia", "IC Play", "grafo cultural", "entidades Artista/Ocorrencia/Territorio/Pessoa-usuaria", "modelo de dados/CMS"],
+  "cross_refs": ["../dados/inventario/mapa-conteudo.md"],
+  "locked": false,
+  "precedence": 0,
+  "notes": ""
+}

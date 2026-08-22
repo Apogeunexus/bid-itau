@@ -1,0 +1,273 @@
+/* ===========================================================================
+ * play.css — Play — o catálogo das 529 mídias e o player (D-92)
+ *
+ * DE QUEM É: plano 05-07.
+ * DECLARADA E VAZIA DE REGRA por 05-01, na onda 1 da fase 5.
+ *
+ * Ela chega aqui sem uma única regra de propósito. `src/app/globals.css` é o
+ * único arquivo que os seis planos da onda 2 tocariam, e dois executores
+ * editando a mesma folha é a colisão que o merge não resolve sozinho. Com as
+ * onze linhas de `@import` declaradas na onda 1, o ponto de colisão deixa de
+ * EXISTIR em vez de ser administrado: 05-07 escreve SÓ neste arquivo e não precisa
+ * abrir `globals.css` nem esperar os outros cinco.
+ *
+ * Uma folha vazia importada não custa byte no bundle final.
+ *
+ * O QUE ELA COBRE: o catálogo unificado por categoria, o bloco «não pode ir? veja isto» ligando ao evento, o player e o registro no repertório ao concluir.
+ *
+ * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`, e há gate medindo isso.
+ *  - Nenhum hex do manual: use `var(--ic-*)` e `color-mix` para transparência
+ *    (D-06, D-08).
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]` ou
+ *    `[data-view="mobile"]`. As variantes `desk:`/`app:` só prefixam
+ *    UTILITÁRIO do Tailwind e nunca alcançam uma classe semântica nossa.
+ *  - Reuse o vocabulário de `web.css` antes de escrever regra nova: ele já traz
+ *    duas colunas, grade parametrizada, coluna fixa, painel, realce, alternador,
+ *    declaração com denominador e lista densa.
+ *  - Nada de posicionamento preso à janela (`position: fixed`) fora de
+ *    `casca.tsx` — dentro da moldura de celular ele escapa e quebra D-03.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * Os chips de recorte — categoria e recurso de acessibilidade.
+ *
+ * UM chip só para os dois grupos, e isso é deliberado: categoria e acessibilidade
+ * são o MESMO gesto (recortar a lista sem sair da tela), e desenhá-los diferente
+ * sugeriria que um deles navega. O que os distingue é o número ao lado, que em
+ * acessibilidade traz o denominador — porque ali o número é o argumento.
+ * ------------------------------------------------------------------------ */
+.play-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.375rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ic-preto);
+}
+
+.play-chip:hover {
+  border-color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+
+.play-chip[aria-pressed="true"] {
+  background: var(--ic-laranja);
+  border-color: var(--ic-laranja);
+  color: var(--ic-branco);
+  font-weight: 700;
+}
+
+.play-chip-n {
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.65;
+}
+
+/* O recurso que o acervo NÃO sustenta continua marcável — o vazio é explicado, não
+ * proibido. O tracejado diz, antes do clique, que ali não há o que recortar. */
+.play-chip[data-nao-sustenta] {
+  border-style: dashed;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * O catálogo. Na visão app é UMA COLUNA de linhas horizontais: dentro da moldura
+ * de 390px uma grade de cartões daria dois cartões ilegíveis por linha. Na visão
+ * web vira a grade de `web.css`, que esta folha não reescreve — só parametriza.
+ * ------------------------------------------------------------------------ */
+.play-catalogo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  /* `min-width: 0` na lista e nos itens: sem ele um título longo empurra a grade
+   * e a tela passa a rolar de lado dentro da moldura, que é o gate `scrollWidth
+   * === clientWidth`. */
+  min-width: 0;
+}
+
+.play-catalogo > li {
+  min-width: 0;
+}
+
+.play-cartao {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  grid-template-areas:
+    "capa tipo"
+    "capa titulo"
+    "capa data";
+  align-items: start;
+  gap: 0.125rem 0.75rem;
+  min-width: 0;
+}
+
+.play-capa {
+  grid-area: capa;
+  aspect-ratio: 16 / 10;
+  border-radius: 0.5rem;
+  align-self: start;
+}
+
+.play-cartao-tipo {
+  grid-area: tipo;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+}
+
+.play-cartao-titulo {
+  grid-area: titulo;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.3;
+  min-width: 0;
+  /* Três linhas e reticências. Sem o limite, um título de 139 caracteres estica a
+   * linha da grade e o catálogo vira uma escada. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.play-cartao-pe {
+  grid-area: data;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+}
+
+/* O crédito de imagem é OBRIGATÓRIO quando há imagem — o acervo é de terceiros e a
+ * procedência é argumento da proposta, não rodapé. Aqui ele é linha de texto e não
+ * tarja sobre a foto: sobreposto a uma miniatura de 88px ele ficava ilegível. Uma
+ * linha, com reticências; o crédito inteiro está na página da própria mídia. */
+.play-credito {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.play-capa-imagem {
+  object-fit: cover;
+  background: color-mix(in srgb, var(--ic-preto) 5%, transparent);
+}
+
+.play-cartao:hover .play-cartao-titulo {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+ * A visão web (D-79/D-80): o catálogo vira grade de cartões verticais.
+ *
+ * A divergência é por CSS sob `[data-view="web"]`, nunca por ramo em JavaScript —
+ * o DOM é um só. `--web-colunas` é escolhido pelo componente em `style`, e
+ * `.web-grade` de `web.css` faz a grade; esta folha não a reescreve.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .play-cartao {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "capa"
+    "tipo"
+    "titulo"
+    "data";
+  gap: 0.25rem;
+}
+
+[data-view="web"] .play-capa {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+[data-view="web"] .play-cartao-titulo {
+  font-size: 0.9375rem;
+  -webkit-line-clamp: 2;
+}
+
+/* ---------------------------------------------------------------------------
+ * O Player — a página de uma mídia.
+ *
+ * Os três recursos da tela 20 em EVIDÊNCIA: legenda, Libras e audiodescrição
+ * como controles de primeira ordem, cada um dizendo em que estado ESTA mídia
+ * declara aquela dimensão. Os três estados são os de D-43 e a aparência é a
+ * mesma de `ficha-acessibilidade.tsx` — «não declarado» tracejado e apagado,
+ * porque ausência de declaração não é negação e não pode PARECER negação.
+ * ------------------------------------------------------------------------ */
+.player-recurso {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+}
+
+.player-recurso-nome {
+  font-weight: 700;
+}
+
+.player-recurso-estado {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.player-recurso[data-estado="presente"] {
+  background: var(--ic-laranja);
+  border-color: var(--ic-laranja);
+  color: var(--ic-branco);
+}
+
+.player-recurso[data-estado="ausente-declarada"] {
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+
+/* Tracejado e mais apagado: o estado «a fonte não falou disso» tem de ser
+ * visivelmente OUTRA COISA que «a fonte disse que não tem». */
+.player-recurso[data-estado="nao-declarada"] {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--ic-preto) 25%, transparent);
+  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+
+/* O controle de concluir. Alvo grande de propósito: é o único gesto que esta
+ * tela pede, e um alvo apertado num telefone de 390px é o tipo de defeito que
+ * passa em gate de presença e reprova no dedo de quem usa. */
+.player-botao {
+  align-self: flex-start;
+  padding: 0.55rem 1.1rem;
+  min-height: 2.5rem;
+  border: 1px solid var(--ic-preto);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ic-preto);
+}
+
+.player-botao:hover {
+  background: color-mix(in srgb, var(--ic-preto) 6%, transparent);
+}
+
+.player-botao[aria-pressed="true"] {
+  background: var(--ic-laranja);
+  border-color: var(--ic-laranja);
+  color: var(--ic-branco);
+}

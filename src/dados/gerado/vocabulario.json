@@ -1,0 +1,834 @@
+{
+  "linguagens": [
+    {
+      "id": "acervo",
+      "rotulo": "acervo",
+      "cor": "--ic-lilas",
+      "ocorrencias": 10,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "animacao",
+      "rotulo": "animação",
+      "cor": "--ic-azul",
+      "ocorrencias": 34,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "arquitetura",
+      "rotulo": "arquitetura",
+      "cor": "--ic-amarelo",
+      "ocorrencias": 17,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "arte",
+      "rotulo": "Arte",
+      "cor": "--ic-rosa",
+      "ocorrencias": 0,
+      "promovida": true,
+      "fonte": "https://enciclopedia.itaucultural.org.br/"
+    },
+    {
+      "id": "arte-e-tecnologia",
+      "rotulo": "arte e tecnologia",
+      "cor": "--ic-verde",
+      "ocorrencias": 32,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "artes-visuais",
+      "rotulo": "artes visuais",
+      "cor": "--ic-azul",
+      "ocorrencias": 267,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "audiovisual",
+      "rotulo": "audiovisual",
+      "cor": "--ic-laranja",
+      "ocorrencias": 280,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "cidade",
+      "rotulo": "cidade",
+      "cor": "--ic-lilas",
+      "ocorrencias": 27,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "cinema",
+      "rotulo": "cinema",
+      "cor": "--ic-verde-agua",
+      "ocorrencias": 276,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "circo",
+      "rotulo": "circo",
+      "cor": "--ic-amarelo",
+      "ocorrencias": 13,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "culinaria",
+      "rotulo": "culinária",
+      "cor": "--ic-rosa",
+      "ocorrencias": 1,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "cultura-popular",
+      "rotulo": "cultura popular",
+      "cor": "--ic-verde",
+      "ocorrencias": 39,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "curta-metragem",
+      "rotulo": "curta-metragem",
+      "cor": "--ic-verde-agua",
+      "ocorrencias": 38,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "danca",
+      "rotulo": "dança",
+      "cor": "--ic-verde",
+      "ocorrencias": 46,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "danca-contemporanea",
+      "rotulo": "dança contemporânea",
+      "cor": "--ic-lilas",
+      "ocorrencias": 9,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "documentario",
+      "rotulo": "documentário",
+      "cor": "--ic-azul",
+      "ocorrencias": 85,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "feminismo",
+      "rotulo": "feminismo",
+      "cor": "--ic-amarelo",
+      "ocorrencias": 8,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "fotografia",
+      "rotulo": "fotografia",
+      "cor": "--ic-rosa",
+      "ocorrencias": 53,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "gestao-cultural",
+      "rotulo": "Gestão cultural",
+      "cor": "--ic-verde",
+      "ocorrencias": 0,
+      "promovida": true,
+      "fonte": "https://enciclopedia.itaucultural.org.br/"
+    },
+    {
+      "id": "instalacao",
+      "rotulo": "instalação",
+      "cor": "--ic-verde-agua",
+      "ocorrencias": 1,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "jornalismo",
+      "rotulo": "jornalismo",
+      "cor": "--ic-laranja",
+      "ocorrencias": 8,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "lgbtqia",
+      "rotulo": "lgbtqia+",
+      "cor": "--ic-lilas",
+      "ocorrencias": 12,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "literatura",
+      "rotulo": "literatura",
+      "cor": "--ic-amarelo",
+      "ocorrencias": 319,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "memoria",
+      "rotulo": "memória",
+      "cor": "--ic-amarelo",
+      "ocorrencias": 38,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "musica",
+      "rotulo": "música",
+      "cor": "--ic-rosa",
+      "ocorrencias": 307,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "oficinas",
+      "rotulo": "oficinas",
+      "cor": "--ic-verde",
+      "ocorrencias": 47,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "patrimonio",
+      "rotulo": "patrimônio",
+      "cor": "--ic-verde-agua",
+      "ocorrencias": 5,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "performance",
+      "rotulo": "performance",
+      "cor": "--ic-laranja",
+      "ocorrencias": 21,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "pesquisa",
+      "rotulo": "pesquisa",
+      "cor": "--ic-lilas",
+      "ocorrencias": 54,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "poesia",
+      "rotulo": "poesia",
+      "cor": "--ic-azul",
+      "ocorrencias": 31,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "radio",
+      "rotulo": "Rádio",
+      "cor": "--ic-amarelo",
+      "ocorrencias": 0,
+      "promovida": true,
+      "fonte": "https://enciclopedia.itaucultural.org.br/"
+    },
+    {
+      "id": "teatro",
+      "rotulo": "teatro",
+      "cor": "--ic-lilas",
+      "ocorrencias": 205,
+      "promovida": false,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "tv",
+      "rotulo": "TV",
+      "cor": "--ic-verde",
+      "ocorrencias": 0,
+      "promovida": true,
+      "fonte": "https://enciclopedia.itaucultural.org.br/"
+    }
+  ],
+  "temas": [
+    {
+      "id": "a-copa-e-nossa",
+      "rotulo": "a copa é nossa",
+      "ocorrencias": 5,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "acervos",
+      "rotulo": "acervos",
+      "ocorrencias": 84,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "acessibilidade",
+      "rotulo": "acessibilidade",
+      "ocorrencias": 68,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "ancestralidades",
+      "rotulo": "ancestralidades",
+      "ocorrencias": 12,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "arte-contemporanea",
+      "rotulo": "arte contemporânea",
+      "ocorrencias": 14,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "arte-e-acesso",
+      "rotulo": "arte e acesso",
+      "ocorrencias": 18,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "arte-grafica",
+      "rotulo": "arte gráfica",
+      "ocorrencias": 7,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "arte-na-rua",
+      "rotulo": "arte na rua",
+      "ocorrencias": 5,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "arte-urbana",
+      "rotulo": "arte urbana",
+      "ocorrencias": 29,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "artes-cenicas",
+      "rotulo": "artes cênicas",
+      "ocorrencias": 31,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "auditorio-ibirapuera",
+      "rotulo": "auditório ibirapuera",
+      "ocorrencias": 35,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "brechas-urbanas",
+      "rotulo": "brechas urbanas",
+      "ocorrencias": 1,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "caderno-do-professor",
+      "rotulo": "caderno do professor",
+      "ocorrencias": 8,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "camarim-em-cena",
+      "rotulo": "camarim em cena",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "caminhada-rumos",
+      "rotulo": "caminhada rumos",
+      "ocorrencias": 30,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "caminhos-da-hq",
+      "rotulo": "caminhos da hq",
+      "ocorrencias": 1,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "cineaulaicplay",
+      "rotulo": "cineaulaicplay",
+      "ocorrencias": 10,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "coletivos-culturais",
+      "rotulo": "coletivos culturais",
+      "ocorrencias": 9,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "conceicao-evaristo",
+      "rotulo": "conceição evaristo",
+      "ocorrencias": 12,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "contacao-de-historias",
+      "rotulo": "contação de histórias",
+      "ocorrencias": 7,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "coronavirus",
+      "rotulo": "coronavírus",
+      "ocorrencias": 56,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "critica",
+      "rotulo": "crítica",
+      "ocorrencias": 7,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "curso",
+      "rotulo": "curso",
+      "ocorrencias": 28,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "debate",
+      "rotulo": "debate",
+      "ocorrencias": 53,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "desenho",
+      "rotulo": "desenho",
+      "ocorrencias": 4,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "design",
+      "rotulo": "design",
+      "ocorrencias": 3,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "dialogos-ausentes",
+      "rotulo": "diálogos ausentes",
+      "ocorrencias": 5,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "documentarios",
+      "rotulo": "documentários",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "dona-ivone-lara",
+      "rotulo": "dona ivone lara",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "economia-da-cultura",
+      "rotulo": "economia da cultura",
+      "ocorrencias": 11,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "edital",
+      "rotulo": "edital",
+      "ocorrencias": 104,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "educacao",
+      "rotulo": "educacao",
+      "ocorrencias": 15,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "efemerides",
+      "rotulo": "efemérides",
+      "ocorrencias": 131,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "encontros-de-cinema",
+      "rotulo": "encontros de cinema",
+      "ocorrencias": 8,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "escola-ic",
+      "rotulo": "escola ic",
+      "ocorrencias": 38,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "espetaculo",
+      "rotulo": "espetáculo",
+      "ocorrencias": 57,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "exposicao",
+      "rotulo": "exposição",
+      "ocorrencias": 68,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "exposicao-virtual",
+      "rotulo": "exposição virtual",
+      "ocorrencias": 4,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "festas-populares",
+      "rotulo": "festas populares",
+      "ocorrencias": 6,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "filme",
+      "rotulo": "filme",
+      "ocorrencias": 118,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "filmes",
+      "rotulo": "filmes",
+      "ocorrencias": 37,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "fim-de-semana-em-familia",
+      "rotulo": "fim de semana em família",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "folclore",
+      "rotulo": "folclore",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "formacao",
+      "rotulo": "formação",
+      "ocorrencias": 12,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "forum-latino-americano-de-fotografia",
+      "rotulo": "fórum latino-americano de fotografia",
+      "ocorrencias": 5,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "game",
+      "rotulo": "game",
+      "ocorrencias": 1,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "games",
+      "rotulo": "games",
+      "ocorrencias": 5,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "gastronomia",
+      "rotulo": "gastronomia",
+      "ocorrencias": 3,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "gestao-cultural",
+      "rotulo": "gestao cultural",
+      "ocorrencias": 81,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "ic-para-criancas",
+      "rotulo": "ic para crianças",
+      "ocorrencias": 32,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "ic-play",
+      "rotulo": "ic play",
+      "ocorrencias": 143,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "ilustracao",
+      "rotulo": "ilustração",
+      "ocorrencias": 1,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "infantil",
+      "rotulo": "infantil",
+      "ocorrencias": 38,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "inscricao",
+      "rotulo": "inscrição",
+      "ocorrencias": 38,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "instalacao-sonora",
+      "rotulo": "instalação sonora",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "institucional",
+      "rotulo": "institucional",
+      "ocorrencias": 150,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "inteligenciaartificial",
+      "rotulo": "inteligenciaartificial",
+      "ocorrencias": 6,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "itinerancia",
+      "rotulo": "itinerância",
+      "ocorrencias": 8,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "lancamento",
+      "rotulo": "lançamento",
+      "ocorrencias": 22,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "livro-de-artista",
+      "rotulo": "livro de artista",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "mais70",
+      "rotulo": "mais70",
+      "ocorrencias": 12,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "mediacao",
+      "rotulo": "mediação",
+      "ocorrencias": 8,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "moda",
+      "rotulo": "moda",
+      "ocorrencias": 7,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "mostra-rumos",
+      "rotulo": "mostra rumos",
+      "ocorrencias": 9,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "mostras",
+      "rotulo": "mostras",
+      "ocorrencias": 18,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "ocupacao",
+      "rotulo": "ocupação",
+      "ocorrencias": 80,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "oficina",
+      "rotulo": "oficina",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "palestra",
+      "rotulo": "palestra",
+      "ocorrencias": 6,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "pib-economia-cultura",
+      "rotulo": "pib economia cultura",
+      "ocorrencias": 1,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "pib-economia-da-cultura",
+      "rotulo": "pib economia da cultura",
+      "ocorrencias": 5,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "playlists",
+      "rotulo": "playlists",
+      "ocorrencias": 5,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "politicas-culturais",
+      "rotulo": "políticas culturais",
+      "ocorrencias": 59,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "por-ai",
+      "rotulo": "por aí",
+      "ocorrencias": 31,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "premio",
+      "rotulo": "prêmio",
+      "ocorrencias": 30,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "quadrinhos",
+      "rotulo": "quadrinhos",
+      "ocorrencias": 39,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "questoes-de-genero",
+      "rotulo": "questões de gênero",
+      "ocorrencias": 34,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "questoes-indigenas",
+      "rotulo": "questões indígenas",
+      "ocorrencias": 131,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "questoes-raciais",
+      "rotulo": "questões raciais",
+      "ocorrencias": 75,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "questoesdegenero",
+      "rotulo": "questoesdegenero",
+      "ocorrencias": 20,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "questoesindigenas",
+      "rotulo": "questoesindigenas",
+      "ocorrencias": 21,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "questoesraciais",
+      "rotulo": "questoesraciais",
+      "ocorrencias": 30,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "relatos-de-criacao-rumos",
+      "rotulo": "relatos de criação rumos",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "revista-observatorio-34",
+      "rotulo": "revista observatorio 34",
+      "ocorrencias": 7,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "rumos-2015-2016",
+      "rotulo": "rumos 2015-2016",
+      "ocorrencias": 1,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "rumos-2017-2018",
+      "rotulo": "rumos 2017-2018",
+      "ocorrencias": 51,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "rumos-2019-2020",
+      "rotulo": "rumos 2019-2020",
+      "ocorrencias": 23,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "rumos20172018",
+      "rotulo": "rumos20172018",
+      "ocorrencias": 1,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "rumos20192020",
+      "rotulo": "rumos20192020",
+      "ocorrencias": 9,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "rumos20232024",
+      "rotulo": "rumos20232024",
+      "ocorrencias": 16,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "saude-mental",
+      "rotulo": "saúde mental",
+      "ocorrencias": 2,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "show",
+      "rotulo": "show",
+      "ocorrencias": 25,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "tecnologia",
+      "rotulo": "tecnologia",
+      "ocorrencias": 18,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "televisao",
+      "rotulo": "televisão",
+      "ocorrencias": 8,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    },
+    {
+      "id": "workshop",
+      "rotulo": "workshop",
+      "ocorrencias": 10,
+      "fonte": "https://www.itaucultural.org.br/secoes/rumos-itau-cultural"
+    }
+  ]
+}

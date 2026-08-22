@@ -1,0 +1,581 @@
+/* ===========================================================================
+ * observatorio.css — Observatório — os indicadores e o painel de procedência (D-87 a D-90)
+ *
+ * DE QUEM É: plano 05-05.
+ * DECLARADA E VAZIA DE REGRA por 05-01, na onda 1 da fase 5.
+ *
+ * Ela chega aqui sem uma única regra de propósito. `src/app/globals.css` é o
+ * único arquivo que os seis planos da onda 2 tocariam, e dois executores
+ * editando a mesma folha é a colisão que o merge não resolve sozinho. Com as
+ * onze linhas de `@import` declaradas na onda 1, o ponto de colisão deixa de
+ * EXISTIR em vez de ser administrado: 05-05 escreve SÓ neste arquivo e não precisa
+ * abrir `globals.css` nem esperar os outros cinco.
+ *
+ * Uma folha vazia importada não custa byte no bundle final.
+ *
+ * O QUE ELA COBRE: os indicadores de impacto cultural calculados do grafo, o painel de procedência como tela de primeira classe, o seletor de público e os indicadores que declaram ausência com denominador. Sem biblioteca de gráfico e sem requisição de rede.
+ *
+ * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`, e há gate medindo isso.
+ *  - Nenhum hex do manual: use `var(--ic-*)` e `color-mix` para transparência
+ *    (D-06, D-08).
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]` ou
+ *    `[data-view="mobile"]`. As variantes `desk:`/`app:` só prefixam
+ *    UTILITÁRIO do Tailwind e nunca alcançam uma classe semântica nossa.
+ *  - Reuse o vocabulário de `web.css` antes de escrever regra nova: ele já traz
+ *    duas colunas, grade parametrizada, coluna fixa, painel, realce, alternador,
+ *    declaração com denominador e lista densa.
+ *  - Nada de posicionamento preso à janela (`position: fixed`) fora de
+ *    `casca.tsx` — dentro da moldura de celular ele escapa e quebra D-03.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * A moldura da tela.
+ *
+ * Rota de bastidor: o layout de `(bastidor)` não monta barra de abas, então a
+ * moldura inteira é a primeira vista e não há 59 px a descontar. O respiro do
+ * topo é curto de propósito — cada pixel gasto no cabeçalho é um pixel a menos
+ * do painel de procedência acima da dobra, e D-88 pede o painel na primeira
+ * vista, não só no documento.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem 3rem;
+}
+
+[data-view="web"] .obs-cabecalho {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+[data-view="web"] .obs-superficie {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+}
+
+[data-view="web"] .obs-titulo {
+  margin: 0.1rem 0 0;
+  font-family: var(--fonte-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+[data-view="web"] .obs-atalhos {
+  display: flex;
+  gap: 0.5rem;
+}
+
+[data-view="web"] .obs-atalho {
+  padding: 0.35rem 0.8rem;
+  border: var(--web-borda);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+[data-view="web"] .obs-atalho:hover {
+  background: color-mix(in srgb, var(--ic-laranja) 12%, transparent);
+  color: var(--ic-preto);
+}
+
+/* ---------------------------------------------------------------------------
+ * O painel de procedência (D-88) — o argumento, não a legenda.
+ *
+ * Ele não usa `.web-painel` porque `.web-painel` é a superfície NEUTRA, a mesma
+ * dos sete blocos de indicador logo abaixo. Se o painel tivesse o mesmo peso
+ * visual deles, ele seria o oitavo cartão de uma lista de cartões — e a tela
+ * diria, pela composição, que a procedência é mais um número entre outros. Ela
+ * não é: ela é a condição dos outros. Daí a borda laranja e o fundo próprio.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-procedencia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.15rem 1.35rem 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--ic-laranja) 45%, transparent);
+  border-top: 4px solid var(--ic-laranja);
+  border-radius: var(--web-raio);
+  background: color-mix(in srgb, var(--ic-laranja) 4%, var(--ic-branco));
+}
+
+[data-view="web"] .obs-procedencia-titulo {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+[data-view="web"] .obs-procedencia-tese {
+  margin: 0.3rem 0 0;
+  max-width: 88ch;
+  font-size: 0.83rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--ic-preto) 80%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * A tabela do painel: UMA LINHA POR PROCEDÊNCIA, com as duas leituras lado a
+ * lado e o significado atravessando as duas.
+ *
+ * Duas colunas independentes — «entidades» de um lado, «arestas» do outro —
+ * foi a primeira montagem, e a foto mostrou o problema: a inversão de proporção
+ * entre as duas leituras, que é o ACHADO do painel, ficava a 500 px de
+ * distância de si mesma, e o significado de cada procedência aparecia duas
+ * vezes, palavra por palavra, gastando seis parágrafos idênticos. Na linha, o
+ * olho compara 61,8% com 22,4% sem sair do lugar, e a frase aparece uma vez.
+ *
+ * `minmax(0, …)` nas três colunas: sem o mínimo zero, a linha de composição —
+ * «pertence a 12.997 · situado em 1.556 · …» — empurraria a grade para fora da
+ * janela, e `scrollWidth === clientWidth` é gate desta tela.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-tabela {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+[data-view="web"] .obs-colunas,
+[data-view="web"] .obs-linha {
+  display: grid;
+  grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.3rem 1.5rem;
+  margin: 0;
+  align-items: start;
+}
+
+[data-view="web"] .obs-coluna-cabeca {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+}
+
+[data-view="web"] .obs-coluna-rotulo {
+  font-family: var(--fonte-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
+}
+
+[data-view="web"] .obs-coluna-total {
+  font-family: var(--fonte-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+[data-view="web"] .obs-coluna-nota {
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* O nome da procedência ocupa a primeira coluna e alinha com os dois números. */
+[data-view="web"] .obs-linha-nome {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+[data-view="web"] .obs-linha-nome[data-procedencia="autorado"] {
+  color: var(--ic-laranja);
+}
+
+/* A frase da procedência, uma vez, atravessando as três colunas. */
+[data-view="web"] .obs-linha-significado {
+  grid-column: 1 / -1;
+  margin: 0.1rem 0 0;
+  font-size: 0.73rem;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ic-preto) 78%, transparent);
+}
+
+[data-view="web"] .obs-linha[data-procedencia="autorado"] .obs-linha-significado {
+  font-weight: 600;
+  color: var(--ic-preto);
+}
+
+[data-view="web"] .obs-linha[data-procedencia="autorado"] {
+  padding-top: 0.7rem;
+  border-top: 1px solid color-mix(in srgb, var(--ic-laranja) 35%, transparent);
+}
+
+[data-view="web"] .obs-fatia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  min-width: 0;
+}
+
+[data-view="web"] .obs-fatia-cabeca {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+[data-view="web"] .obs-fatia-numero {
+  font-family: var(--fonte-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+[data-view="web"] .obs-fatia-percentual {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * A barra.
+ *
+ * `min-width` e não `min-width: 0`: a fatia `autorado` das arestas é 0,1% e
+ * mediria menos de meio pixel. Uma barra que some da tela apaga justamente a
+ * informação de que aquela fatia é minúscula — e o gate, que compara a ORDEM
+ * das larguras medidas com a ordem dos números, continua verde com a maior
+ * ainda maior que a menor. Os 3 px são piso de visibilidade, e a proporção
+ * exata continua no atributo `style`, calculada do dado.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-trilho {
+  display: block;
+  width: 100%;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-preto) 8%, transparent);
+  overflow: hidden;
+}
+
+[data-view="web"] .obs-barra {
+  display: block;
+  height: 100%;
+  min-width: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+
+[data-view="web"] .obs-barra[data-procedencia="ic"] {
+  background: color-mix(in srgb, var(--ic-preto) 62%, transparent);
+}
+
+[data-view="web"] .obs-barra[data-procedencia="derivado"] {
+  background: color-mix(in srgb, var(--ic-laranja) 55%, var(--ic-branco));
+}
+
+/* `autorado` em laranja cheio: é a fatia que a tela existe para não esconder, e
+   ela é a menor de todas. Cor é o único recurso que compensa área. */
+[data-view="web"] .obs-barra[data-procedencia="autorado"] {
+  background: var(--ic-laranja);
+}
+
+
+
+[data-view="web"] .obs-fatia-exemplo,
+[data-view="web"] .obs-fatia-composicao {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--ic-preto) 52%, transparent);
+  overflow-wrap: anywhere;
+}
+
+[data-view="web"] .obs-etiqueta {
+  margin-right: 0.4rem;
+  font-family: var(--fonte-display);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-laranja) 85%, var(--ic-preto));
+}
+
+[data-view="web"] .obs-diferenca {
+  margin: 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
+  font-size: 0.8rem;
+  line-height: 1.42;
+}
+
+[data-view="web"] .obs-conferencia {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * O seletor de público (D-89) e a grade de indicadores.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-recorte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+[data-view="web"] .obs-recorte-cabeca {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+[data-view="web"] .obs-secao-titulo {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+[data-view="web"] .obs-publico-nota {
+  margin: 0;
+  max-width: 92ch;
+  font-size: 0.8rem;
+  line-height: 1.42;
+  color: color-mix(in srgb, var(--ic-preto) 78%, transparent);
+}
+
+/* Duas colunas. Sete blocos de texto denso em três colunas dariam linha de 30
+   caracteres e a leitura viraria coluna de jornal; em uma só, o público teria de
+   rolar sete vezes para comparar dois indicadores. */
+[data-view="web"] .obs-indicadores {
+  --web-colunas: 2;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-view="web"] .obs-indicador {
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+/* A ênfase do recorte, e ela é MEDÍVEL: trocar de público muda quais blocos têm
+   esta borda e qual deles ocupa as duas colunas. É o recorte aparecendo na
+   composição, e não só na ordem do DOM. */
+[data-view="web"] .obs-indicador[data-destaque="sim"] {
+  border-color: color-mix(in srgb, var(--ic-laranja) 55%, transparent);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--ic-preto) 8%, transparent);
+}
+
+[data-view="web"] .obs-indicador[data-sustentado="nao"] {
+  background: color-mix(in srgb, var(--ic-preto) 3%, var(--ic-branco));
+}
+
+[data-view="web"] .obs-indicador-titulo {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+[data-view="web"] .obs-valor {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+[data-view="web"] .obs-numero {
+  font-family: var(--fonte-display);
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ic-laranja);
+}
+
+/* «o dado não sustenta» tem o peso do número que ele substitui, e não o de uma
+   nota de rodapé: a ausência declarada é uma afirmação da tela, não um vazio. */
+[data-view="web"] .obs-sem-lastro {
+  font-family: var(--fonte-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+}
+
+[data-view="web"] .obs-unidade {
+  flex: 1 1 12ch;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  color: color-mix(in srgb, var(--ic-preto) 58%, transparent);
+}
+
+/* Os denominadores. `web-denominadores` dá o arranjo; o rótulo aqui deixa de ser
+   caixa-alta porque `do_que` é uma FRASE medida — «personas autoradas, este
+   indicador inteiro se apoia em pessoas que nós inventamos» — e uma frase em
+   maiúsculas de 0,65rem não se lê. */
+[data-view="web"] .obs-denominadores {
+  gap: 0.9rem;
+}
+
+[data-view="web"] .obs-denominador {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+[data-view="web"] .obs-denominador .web-denominador-rotulo {
+  font-size: 0.68rem;
+  letter-spacing: 0;
+  line-height: 1.3;
+  text-transform: none;
+}
+
+[data-view="web"] .obs-declaracao {
+  margin: 0;
+  font-size: 0.76rem;
+}
+
+[data-view="web"] .obs-indicador-leitura {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.42;
+  color: color-mix(in srgb, var(--ic-preto) 80%, transparent);
+}
+
+[data-view="web"] .obs-detalhe {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 13rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+[data-view="web"] .obs-detalhe-linha {
+  display: grid;
+  grid-template-columns: minmax(0, 9rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+}
+
+[data-view="web"] .obs-detalhe-rotulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--ic-preto) 75%, transparent);
+}
+
+[data-view="web"] .obs-detalhe-trilho {
+  display: block;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-preto) 7%, transparent);
+  overflow: hidden;
+}
+
+[data-view="web"] .obs-detalhe-barra {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-laranja) 60%, var(--ic-branco));
+}
+
+/* Onde o indicador não é sustentado, o lugar da barra recebe a PALAVRA, e não um
+   desenho pálido: um trilho vazio ainda é um gráfico, e um gráfico afirma escala.
+   «não recorta» afirma o contrário, que é o que o acervo sustenta. */
+[data-view="web"] .obs-detalhe-sem-barra {
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-preto) 40%, transparent);
+}
+
+[data-view="web"] .obs-detalhe-valor {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}
+
+[data-view="web"] .obs-detalhe-de {
+  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+}
+
+[data-view="web"] .obs-origem {
+  margin: 0;
+  padding-top: 0.45rem;
+  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 8%, transparent);
+  font-size: 0.65rem;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------------------
+ * O mapa de desertos culturais dentro do Observatório.
+ *
+ * `.web-mapa` de `web.css` dá o quadro; as classes `.desertos-*` e
+ * `.mapa-contorno` são as MESMAS de `mapa.css`, sem uma linha alterada — a
+ * camada é da fase 3 e reescrevê-la aqui criaria uma segunda fonte de verdade
+ * para a imagem mais forte da proposta.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-desertos {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  border: var(--web-borda);
+  border-radius: var(--web-raio);
+  background: var(--ic-branco);
+}
+
+[data-view="web"] .obs-mapa {
+  --web-altura-mapa: 46vh;
+  background: transparent;
+}
+
+[data-view="web"] .obs-desertos-leitura {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+[data-view="web"] .obs-desertos-leitura .desertos-leitura {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  gap: 0.5rem;
+}
+
+[data-view="web"] .obs-desertos-leitura .desertos-titulo {
+  font-size: 1.15rem;
+}
+
+[data-view="web"] .obs-comentario {
+  margin: 0;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--ic-preto) 52%, transparent);
+}
+
+[data-view="web"] .obs-comentario code {
+  font-size: 0.95em;
+  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+}

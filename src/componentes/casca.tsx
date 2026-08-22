@@ -1,0 +1,133 @@
+"use client";
+
+import clsx from "clsx";
+import type { ReactNode } from "react";
+import { useComentado } from "@/contexto/comentado";
+import { useVisao, type Visao } from "@/contexto/visao";
+
+const OPCOES: Array<{ valor: Visao; rotulo: string }> = [
+  { valor: "mobile", rotulo: "App" },
+  { valor: "web", rotulo: "Web" },
+];
+
+/**
+ * Par de botões no canto, fora do fluxo do conteúdo e visível nas duas visões (D-04).
+ *
+ * A ancoragem à janela mora no `.canto` que envolve este bloco — ver `Canto` abaixo. É o
+ * ÚNICO `fixed` legítimo do projeto: os controles de apresentação são deliberadamente
+ * externos ao conteúdo e devem mesmo se ancorar na janela. A barra de abas, que pertence ao
+ * telefone, não pode usar o mesmo mecanismo — ver `globals.css`.
+ */
+function Alternador() {
+  const { visao, definirVisao } = useVisao();
+
+  return (
+    <div
+      role="group"
+      aria-label="Alternar visão"
+      className="alternador flex gap-1 rounded-full border border-[var(--ic-preto)] bg-[var(--ic-branco)] p-1 shadow-lg"
+    >
+      {OPCOES.map((opcao) => {
+        const ativa = visao === opcao.valor;
+        return (
+          <button
+            key={opcao.valor}
+            type="button"
+            aria-pressed={ativa}
+            onClick={() => definirVisao(opcao.valor)}
+            className={clsx(
+              "cursor-pointer rounded-full px-4 py-1.5 text-sm font-semibold transition-colors",
+              ativa
+                ? "bg-[var(--ic-laranja)] text-[var(--ic-branco)]"
+                : "text-[var(--ic-preto)] hover:bg-black/5",
+            )}
+          >
+            {opcao.rotulo}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * O interruptor do modo comentado. MESMA FAMÍLIA VISUAL DO ALTERNADOR — pastilha branca,
+ * borda, sombra — e CLARAMENTE SECUNDÁRIO A ELE: um botão só em vez de dois, tipografia
+ * menor, e ligado ele apenas contorna de laranja em vez de preencher. Empatar os dois faria
+ * o avaliador achar que a escolha app/web e a de modo têm o mesmo peso, e elas não têm.
+ *
+ * O rótulo é deliberadamente distante do vocabulário do alternador («App», «Web»): o gate
+ * de tela da fase 2 encontra o botão de visão por expressão regular sobre o texto, e um
+ * rótulo como «modo desktop» aqui faria o gate clicar no controle errado.
+ */
+function InterruptorComentado() {
+  const { comentado, alternar } = useComentado();
+
+  return (
+    <button
+      type="button"
+      data-comentado-alternar
+      aria-pressed={comentado}
+      onClick={alternar}
+      title="Mostra as notas que explicam o protótipo: o raciocínio de cada tela e as decisões citadas."
+      className={clsx(
+        "controle-comentado cursor-pointer rounded-full border bg-[var(--ic-branco)] px-3 py-1 text-xs font-semibold shadow-lg transition-colors",
+        comentado
+          ? "border-[var(--ic-laranja)] text-[var(--ic-laranja)]"
+          : "border-black/25 text-black/50 hover:text-[var(--ic-preto)]",
+      )}
+    >
+      <span aria-hidden className="mr-1">
+        {comentado ? "✓" : "＋"}
+      </span>
+      modo comentado
+    </button>
+  );
+}
+
+/**
+ * Casca do protótipo. Escreve `data-view` no seu elemento raiz — é esse atributo
+ * que as variantes `app:` e `desk:` do Tailwind leem. Sem ele, nenhuma classe de
+ * visão resolve.
+ *
+ * Na visão mobile o conteúdo vai dentro de uma moldura de celular de 390×844
+ * centralizada (D-03). A moldura some em viewport estreito, e essa é a única
+ * media query legítima do projeto: ela é sobre o tamanho real da janela, não
+ * sobre a visão escolhida. Mora em `globals.css`, na classe `.moldura`.
+ *
+ * A moldura tem ALTURA e rola por dentro. Isso é requisito da barra de abas, não
+ * capricho: é o que permite a barra ficar contida no telefone em vez de escapar
+ * para a largura da janela.
+ */
+export function Casca({ children }: { children: ReactNode }) {
+  const { visao, hidratado } = useVisao();
+  const { comentado, hidratado: comentadoHidratado } = useComentado();
+
+  return (
+    <div
+      data-view={visao}
+      // O MESMO ELEMENTO RAIZ que carrega `data-view`, de propósito: a regra de
+      // `[data-comentado="nao"] .comentario` em `globals.css` precisa alcançar a árvore
+      // inteira, e um segundo portador criaria dois escopos que divergem.
+      data-comentado={comentado ? "sim" : "nao"}
+      // `data-hidratado` agora significa «os DOIS espelhos de localStorage foram lidos». Os
+      // gates da fase 2 esperam por este sinalizador antes de medir; se ele subisse com
+      // apenas a visão lida, uma medição do modo comentado pegaria o quadro anterior à
+      // leitura da chave — e o defeito seria intermitente, que é o pior tipo.
+      data-hidratado={hidratado && comentadoHidratado ? "sim" : "nao"}
+      className="min-h-screen bg-[var(--ic-branco)] text-[var(--ic-preto)] app:bg-neutral-100 desk:bg-[var(--ic-branco)]"
+    >
+      <div className="palco">
+        <div className="moldura desk:mx-auto desk:w-full desk:max-w-6xl">{children}</div>
+      </div>
+
+      {/* O canto: o único ponto do projeto ancorado na janela (D-04). Os dois controles
+          empilham, o de modo por cima e o alternador de visão embaixo, mais perto do
+          polegar — a hierarquia também é posicional, e não só de cor. */}
+      <div className="canto fixed right-4 bottom-4 z-50 flex flex-col items-end gap-1.5">
+        <InterruptorComentado />
+        <Alternador />
+      </div>
+    </div>
+  );
+}

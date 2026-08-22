@@ -1,0 +1,692 @@
+/* ---------------------------------------------------------------------------
+ * studio-duplicatas.css — as regras próprias da tela 31, resolução de duplicatas.
+ *
+ * DE QUEM É ESTE ARQUIVO. Do plano 04-01 (o grupo do traçador, o bloco do critério,
+ * a marca de campo divergente) e do plano 04-02 (a fila, a navegação entre grupos, a
+ * barra de decisão e o registro da decisão tomada). Nenhum dos dois precisa tocar
+ * `globals.css`: a linha de `@import` já está declarada lá desde 04-01, e é isso que
+ * torna a onda 2 paralelizável.
+ *
+ * O que for compartilhado com a tela de ocorrências mora em `studio.css`.
+ *
+ * Todo laranja sai de `var(--ic-laranja)`, e as misturas usam `color-mix` em vez de um
+ * rgb() literal: o hex do manual tem UMA fonte de verdade, que é `globals.css` (D-06).
+ * ------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+ * D-68 — o bloco do critério escrito.
+ * ------------------------------------------------------------------------- */
+
+.dup-criterio {
+  border-color: color-mix(in srgb, var(--ic-preto) 22%, transparent);
+}
+
+/* Os três componentes do critério, com o que o acervo preenche e o que ele deixa vazio.
+ * A marca é textual («preenchido» / «vazio») e não só cromática: quem lê a tela numa
+ * foto de slide em preto e branco continua entendendo o que ela afirma. */
+.dup-componentes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dup-componente {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+}
+
+.dup-componente-marca {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.5);
+}
+
+/* O componente que o acervo NÃO preenche fica marcado, e não escondido. Ele é metade do
+ * argumento: o critério tem três partes e a fonte entrega uma. */
+.dup-componente[data-sustentado="nao"] {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--ic-preto) 35%, transparent);
+  background: color-mix(in srgb, var(--ic-preto) 4%, transparent);
+  color: rgb(0 0 0 / 0.55);
+}
+
+.dup-componente[data-sustentado="sim"] {
+  border-color: var(--ic-preto);
+}
+
+/* A chave literal dos registros, uma sob a outra — é sobre este VALOR que a comparação
+ * acontece, e mostrá-lo é o que separa auditar de acreditar. */
+.dup-chaves {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dup-chave-linha {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid rgb(0 0 0 / 0.1);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * D-69 — o estágio que pegou o grupo, e o score.
+ * ------------------------------------------------------------------------- */
+
+.dup-estagio {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.dup-estagio-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dup-estagio-selo {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--ic-preto);
+  color: var(--ic-branco);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* O estágio probabilístico se declara heurística também no visual: contorno em vez de
+ * preenchimento cheio. A chave AFIRMA; o probabilístico ESTIMA, e a tela não deixa os
+ * dois parecerem a mesma coisa. */
+.dup-estagio-selo[data-estagio="probabilistico"] {
+  border: 1px solid var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 12%, transparent);
+  color: var(--ic-preto);
+}
+
+.dup-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--ic-laranja);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dup-sem-score {
+  font-size: 0.75rem;
+  color: rgb(0 0 0 / 0.55);
+}
+
+/* ---------------------------------------------------------------------------
+ * D-70 — a comparação campo a campo.
+ *
+ * A grade de cada linha é montada em `style` pelo componente, porque o número de colunas
+ * é o número de registros do grupo — dois no par, três no grupo de
+ * «#Vivendoartisticamente» — e `repeat(var(--n), …)` não é substituído de forma
+ * confiável nos navegadores.
+ * ------------------------------------------------------------------------- */
+
+.dup-comparacao {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(0 0 0 / 0.14);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.dup-campo {
+  display: grid;
+  border-top: 1px solid rgb(0 0 0 / 0.09);
+}
+
+.dup-campo:first-child {
+  border-top: 0;
+}
+
+.dup-campo-rotulo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.55rem 0.7rem;
+  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgb(0 0 0 / 0.65);
+}
+
+.dup-campo-valor {
+  padding: 0.55rem 0.7rem;
+  border-left: 1px solid rgb(0 0 0 / 0.07);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.dup-campo-cabecalho .dup-campo-valor,
+.dup-campo-coluna {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.5);
+}
+
+/* ---------------------------------------------------------------------------
+ * A MARCA DE CAMPO DIVERGENTE — peso visual de PRIMEIRA ORDEM, de propósito.
+ *
+ * Não é itálico cinza e não é letra miúda. Quem decide precisa VER onde os registros
+ * discordam; ir procurar a diferença é exatamente o trabalho que esta tela existe para
+ * evitar, e um destaque tímido devolveria esse trabalho para a pessoa.
+ *
+ * A cor é o laranja da marca — a mesma família do selo de motivo e do alerta —, e vem do
+ * token, nunca de hex literal.
+ * ------------------------------------------------------------------------- */
+
+.dup-campo[data-divergente="sim"] {
+  background: color-mix(in srgb, var(--ic-laranja) 9%, transparent);
+  box-shadow: inset 3px 0 0 var(--ic-laranja);
+}
+
+.dup-campo[data-divergente="sim"] .dup-campo-rotulo {
+  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
+  color: var(--ic-preto);
+}
+
+.dup-campo[data-divergente="sim"] .dup-campo-valor {
+  font-weight: 600;
+}
+
+.dup-marca-divergente {
+  align-self: flex-start;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: var(--ic-laranja);
+  color: var(--ic-branco);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------------------
+ * D-72 — o par que o humano tem de SEPARAR.
+ *
+ * Ele é o contraexemplo, e por isso o painel se distingue do grupo suspeito: quem olha a
+ * tela não pode confundir «o motor acertou» com «o motor levantou e errou».
+ * ------------------------------------------------------------------------- */
+
+.dup-falso-positivo {
+  border-style: dashed;
+  border-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 4%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * A FILA E O PAINEL — a tela de 04-02.
+ *
+ * Duas colunas: a fila à esquerda, o grupo escolhido à direita. Escolher um grupo troca o
+ * painel SEM NAVEGAR, e é por isso que a fila é uma coluna e não uma tela anterior — quem
+ * resolve oitenta e quatro grupos não pode perder o lugar na fila a cada decisão.
+ *
+ * A largura de projeto continua sendo os 1.152px da moldura na visão web (D-67).
+ * ------------------------------------------------------------------------- */
+
+.dup-tela {
+  display: grid;
+  grid-template-columns: minmax(17rem, 21rem) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+/* A fila GRUDA e rola por dentro. `sticky` e não `fixed`: dentro da moldura, `fixed`
+ * escaparia para a largura da janela e quebraria a ilusão de D-03 — a fase 3 já pagou por
+ * isso uma vez. O deslocamento do topo acompanha o cabeçalho da superfície, que também é
+ * `sticky`, e foi medido no navegador em vez de chutado. */
+.dup-fila {
+  position: sticky;
+  top: 14.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  max-height: calc(100vh - 19rem);
+  overflow-y: auto;
+  padding: 0.9rem;
+  border: 1px solid rgb(0 0 0 / 0.14);
+  border-radius: 1rem;
+  background: var(--ic-branco);
+}
+
+.dup-fila-cabeca {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.dup-fila-total {
+  font-family: var(--fonte-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dup-fila-total strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.dup-fila-nota {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: rgb(0 0 0 / 0.6);
+}
+
+.dup-fila-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* O título de estágio gruda no topo da própria fila: quem rola cinquenta e um pares
+ * probabilísticos continua sabendo em qual dos dois estágios está olhando. */
+.dup-fila-titulo {
+  position: sticky;
+  top: -0.9rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 -0.9rem;
+  padding: 0.35rem 0.9rem;
+  background: var(--ic-branco);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.55);
+}
+
+.dup-fila-quantos {
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-preto) 8%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+
+.dup-fila-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * A LINHA DA FILA — um grupo em três palavras.
+ * ------------------------------------------------------------------------- */
+
+.dup-linha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  cursor: pointer;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid rgb(0 0 0 / 0.12);
+  border-radius: 0.6rem;
+  background: var(--ic-branco);
+  text-align: left;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.dup-linha:hover {
+  background: color-mix(in srgb, var(--ic-preto) 4%, transparent);
+}
+
+/* O grupo aberto. `aria-pressed` carrega a mesma informação para quem não vê a cor. */
+.dup-linha[aria-pressed="true"] {
+  border-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 10%, transparent);
+}
+
+.dup-linha-titulo {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.dup-linha-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.55);
+}
+
+.dup-linha-score,
+.dup-linha-contagem {
+  font-variant-numeric: tabular-nums;
+}
+
+.dup-linha-score {
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--ic-laranja);
+  border-radius: 999px;
+  color: var(--ic-preto);
+}
+
+/* ---------------------------------------------------------------------------
+ * ENCENADA CONTRA REAL DO ACERVO — a distinção mais importante da fila.
+ *
+ * As 6 duplicatas que o primeiro estágio encontrou no acervo do Itaú Cultural NÃO são
+ * ruído ao lado das 40 que plantamos: são a prova de que o critério funciona fora do
+ * laboratório. Por isso a marca do acervo é a cheia, de primeira ordem, e a da encenada é
+ * a contornada — o contrário do que a intuição faria, e de propósito.
+ * ------------------------------------------------------------------------- */
+
+.dup-linha-origem,
+.dup-origem {
+  padding: 0.05rem 0.4rem;
+  border: 1px solid rgb(0 0 0 / 0.2);
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.dup-linha-origem[data-origem="acervo"],
+.dup-origem[data-origem="acervo"] {
+  border-color: var(--ic-preto);
+  background: var(--ic-preto);
+  color: var(--ic-branco);
+}
+
+.dup-linha-origem[data-origem="encenado"],
+.dup-origem[data-origem="encenado"] {
+  border-style: dashed;
+  color: rgb(0 0 0 / 0.6);
+}
+
+.dup-linha-origem[data-origem="cruzado"],
+.dup-origem[data-origem="cruzado"] {
+  border-style: dotted;
+  color: rgb(0 0 0 / 0.6);
+}
+
+.dup-origem {
+  padding: 0.15rem 0.55rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* O par que o segundo estágio aproximou e que um humano tem de separar, marcado NA FILA e
+ * não só no painel do contraexemplo: ele é o argumento de D-72 em forma de dado. */
+.dup-linha-separar {
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: var(--ic-laranja);
+  color: var(--ic-branco);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
+ * O painel do grupo escolhido.
+ * ------------------------------------------------------------------------- */
+
+.dup-painel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * D-71 e D-72 — as três ações, a fusão declarada e o registro da decisão.
+ *
+ * AS TRÊS AÇÕES FICAM VISÍVEIS AO MESMO TEMPO, nenhuma escondida atrás de menu. Esconder
+ * «manter separados» num submenu transformaria a resposta certa de 38 dos 51 pares do
+ * segundo estágio num caminho de segunda classe — e o operador acabaria fundindo o que
+ * devia separar, que é exatamente o desfecho que D-72 existe para impedir.
+ * ------------------------------------------------------------------------- */
+
+.dup-decisao {
+  border-color: color-mix(in srgb, var(--ic-preto) 22%, transparent);
+}
+
+/* O bloco que declara o que a fusão FAZ, antes de ela acontecer. Ele tem o mesmo peso
+ * visual da declaração honesta — pela mesma razão: quem decide precisa ver a consequência
+ * junto do botão, e não num rodapé que ninguém lê. */
+.dup-reversivel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
+}
+
+.dup-reversivel-rotulo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.5);
+}
+
+.dup-reversivel-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0;
+  padding-left: 1.15rem;
+  max-width: 78ch;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  list-style: decimal;
+  color: rgb(0 0 0 / 0.75);
+}
+
+.dup-reversivel-lista strong {
+  color: var(--ic-preto);
+}
+
+/* A consequência que a tela ASSUME: `duplicata_de` ainda não está no vocabulário fechado
+ * de relações do PRD §6. Ela fica marcada em laranja porque é uma dívida declarada, e não
+ * uma nota de rodapé — a alternativa seria alargar a ontologia em silêncio. */
+.dup-reversivel-consequencia {
+  max-width: 78ch;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgb(0 0 0 / 0.1);
+  border-left: 3px solid var(--ic-laranja);
+  padding-left: 0.65rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
+ * A barra de ações.
+ * ------------------------------------------------------------------------- */
+
+.dup-acoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgb(0 0 0 / 0.09);
+}
+
+.dup-acao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.dup-acao-nota {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: rgb(0 0 0 / 0.65);
+}
+
+/* O atalho para o par que o humano tem de separar, dentro da própria frase: o argumento
+ * fica operável em vez de ilustrado. Sublinhado, porque é ação de texto. */
+.dup-atalho {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--ic-preto);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+/* ---------------------------------------------------------------------------
+ * O REGISTRO DA DECISÃO — o quê, por quem, quando.
+ *
+ * Sem ele não há como auditar quem fundiu o quê, e uma fusão anônima é indistinguível de
+ * uma fusão automática. É a mitigação de T-04-08 em forma de tela.
+ * ------------------------------------------------------------------------- */
+
+.dup-decisao-painel,
+.dup-sem-decisao {
+  max-width: 78ch;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgb(0 0 0 / 0.7);
+}
+
+.dup-sem-decisao {
+  color: rgb(0 0 0 / 0.55);
+}
+
+.dup-decisao-acao {
+  display: inline-block;
+  margin-right: 0.35rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--ic-laranja);
+  color: var(--ic-branco);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dup-item-decidido {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--ic-laranja) 45%, transparent);
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--ic-laranja) 5%, transparent);
+}
+
+.dup-decisao-registro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: rgb(0 0 0 / 0.65);
+}
+
+/* O caminho de volta, nomeado na tela. Sem ele, «reversível» seria adjetivo. */
+.dup-desfazer {
+  align-self: flex-start;
+  cursor: pointer;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid rgb(0 0 0 / 0.25);
+  border-radius: 999px;
+  background: var(--ic-branco);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dup-desfazer:hover {
+  background: color-mix(in srgb, var(--ic-preto) 6%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * O COLAPSO, CONTADO — e o que foi plantado por nós.
+ *
+ * O número aqui é PRODUTO e fica visível com o modo comentado desligado. Declarar quanto da
+ * fila plantamos é o que separa uma demonstração auditável de um truque: se o acervo real
+ * não tivesse duplicata nenhuma, a tela teria de dizer isso — e diz.
+ * ------------------------------------------------------------------------- */
+
+.dup-colapso {
+  border-color: color-mix(in srgb, var(--ic-preto) 22%, transparent);
+}
+
+/* `block` e não `flex`: num contêiner flex cada <strong> vira ITEM e a frase quebra a linha
+ * antes e depois do número, como se fossem três frases. O rótulo ganha o espaço por margem. */
+.dup-colapso-grupo {
+  display: block;
+  max-width: 78ch;
+  padding: 0.6rem 0.75rem;
+  border: 1px dashed rgb(0 0 0 / 0.2);
+  border-radius: 0.6rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  color: rgb(0 0 0 / 0.75);
+}
+
+.dup-colapso-grupo .studio-rotulo {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+/* Os números do registro, junto do registro: quantas ocorrências ele tem e em que período
+ * ele acontece. É o que uma pessoa olha para decidir se os dois são o mesmo evento. */
+.dup-lado-numeros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  color: rgb(0 0 0 / 0.65);
+}
+
+/* A VARIAÇÃO ENCENADA, DECLARADA JUNTO DO REGISTRO. Um clone que não dissesse que é clone
+ * transformaria a demonstração em truque — e o rótulo de procedência já ao lado é a mesma
+ * regra que vale na trilha e no cartão. */
+.dup-lado-variacao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.4rem 0.5rem;
+  border-left: 3px solid color-mix(in srgb, var(--ic-preto) 30%, transparent);
+  border-radius: 0 0.4rem 0.4rem 0;
+  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
