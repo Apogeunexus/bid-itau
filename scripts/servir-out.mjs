@@ -77,6 +77,24 @@ async function resolver(raiz, urlBruta) {
   const indice = path.join(alvo, "index.html");
   if (await ehArquivo(indice)) return { arquivo: indice };
 
+  // Segment cache do Next 16.3: o cliente pede o payload numa linha só, com pontos —
+  // `/rota/__next.!HASH.seg.__PAGE__.txt` — mas o export grava aninhado em pastas:
+  // `/rota/__next.!HASH/seg/__PAGE__.txt`. Na Vercel um rewrite faz essa ponte; aqui
+  // o servidor de verificação faz a mesma tradução, e SÓ quando o caminho literal
+  // não existe (as formas `__next._full.txt` e `__next._tree.txt` são arquivos reais
+  // e nunca chegam aqui).
+  const m = path.basename(alvo).match(/^__next\.([^.]+)\.(.+)\.txt$/);
+  if (m) {
+    const aninhado = path.join(
+      path.dirname(alvo),
+      `__next.${m[1]}`,
+      ...m[2].split("."),
+    ) + ".txt";
+    if (aninhado.startsWith(raiz + path.sep) && (await ehArquivo(aninhado))) {
+      return { arquivo: aninhado };
+    }
+  }
+
   return null;
 }
 

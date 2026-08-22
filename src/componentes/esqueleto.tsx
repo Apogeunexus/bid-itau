@@ -116,7 +116,7 @@ export function TelaEsqueleto({
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{nome}</h1>
           {camada ? (
             <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">

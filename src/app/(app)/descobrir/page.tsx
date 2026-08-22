@@ -28,7 +28,7 @@ export default function Descobrir() {
     <div className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-6xl desk:gap-6 desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Descobrir</h1>
           <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
             C1

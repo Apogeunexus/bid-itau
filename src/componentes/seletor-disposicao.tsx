@@ -39,7 +39,7 @@ export function SeletorDisposicao() {
       className="flex flex-col gap-2 rounded-xl border border-black/10 bg-[var(--ic-branco)] p-3"
     >
       <div className="flex items-start gap-2">
-        <Grafismo variacao="barra" className="mt-1 h-4 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="mt-1 h-4 w-auto shrink-0 text-acao" />
 
         {/* A disposição em TEXTO CORRIDO. É a metade «visível» de D-32, e é o que a foto
             do slide precisa mostrar sem ninguém tocar em nada. */}
@@ -68,7 +68,7 @@ export function SeletorDisposicao() {
           data-abrir-disposicao
           aria-expanded={aberto}
           onClick={() => setAberto((v) => !v)}
-          className="shrink-0 cursor-pointer rounded-full border border-[var(--ic-laranja)] px-3 py-1 text-xs font-bold text-[var(--ic-laranja)]"
+          className="shrink-0 cursor-pointer rounded-full border border-acao px-3 py-1 text-xs font-bold text-acao"
         >
           {aberto ? "fechar" : "editar"}
         </button>
@@ -106,7 +106,7 @@ export function SeletorDisposicao() {
                     marcar um corte que o acervo não sustenta e descobrir isso adiante seria
                     deixar a pessoa supor que o filtro rodou. */}
                 {d.ausencia ? (
-                  <span className="block border-l-2 border-[var(--ic-laranja)] pl-2 text-[0.7rem] leading-snug text-black/70">
+                  <span className="block border-l-2 border-acao pl-2 text-[0.7rem] leading-snug text-black/70">
                     {d.ausencia}
                   </span>
                 ) : null}

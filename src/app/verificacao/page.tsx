@@ -49,7 +49,7 @@ function Secao({ titulo, children }: { titulo: string; children: React.ReactNode
   return (
     <section className="mt-10">
       <h2 className="text-lg font-bold">
-        <span className="mr-2 text-[var(--ic-laranja)]">\</span>
+        <span className="mr-2 text-acao">\</span>
         {titulo}
       </h2>
       <div className="mt-3">{children}</div>
@@ -91,7 +91,7 @@ function Cartao({ entidade }: { entidade: Entidade }) {
   const sessoes = ocorrenciasDe(entidade.id);
   return (
     <article className="rounded-2xl border-2 border-[var(--ic-preto)] p-5">
-      <span className="inline-block rounded-full bg-[var(--ic-laranja)] px-3 py-1 text-xs font-bold tracking-wider text-[var(--ic-branco)] uppercase">
+      <span className="inline-block rounded-full bg-acao px-3 py-1 text-xs font-bold tracking-wider text-[var(--ic-branco)] uppercase">
         {entidade.classe}
       </span>
       <h3 className="mt-3 text-xl leading-snug font-bold">{entidade.titulo}</h3>
@@ -104,7 +104,7 @@ function Cartao({ entidade }: { entidade: Entidade }) {
         <Campo rotulo="fonte">
           {entidade.fonte ? (
             <a
-              className="text-[var(--ic-laranja)] underline underline-offset-2"
+              className="text-acao underline underline-offset-2"
               href={entidade.fonte}
               rel="noreferrer noopener"
               target="_blank"
@@ -136,7 +136,7 @@ export default function Verificacao() {
 
   return (
     <main className="bg-[var(--ic-branco)] p-6 text-[var(--ic-preto)]">
-      <p className="text-xs font-semibold tracking-widest text-[var(--ic-laranja)] uppercase">
+      <p className="text-xs font-semibold tracking-widest text-acao uppercase">
         Verificação da fase 1
       </p>
       <h1 className="mt-2 text-2xl font-bold app:text-2xl desk:text-4xl">

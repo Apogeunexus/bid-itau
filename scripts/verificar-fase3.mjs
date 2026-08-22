@@ -90,7 +90,10 @@ const ANO_DE_REFERENCIA = 2026;
  * `globals.css`, que é a propriedade que a paralelização depende e que nada mais verifica.
  * Nenhum limiar foi movido; a diferença exigida continua sendo zero.
  */
-const COMMIT_FIM_DA_FASE_2 = "c90fc9b";
+/* Reancorado na reformulação do design system: o histórico do repositório foi
+ * recriado em 2026-08-22 e `c90fc9b` deixou de existir. A âncora agora mora em
+ * `medidas.mjs` e avança sempre que uma fase legitimamente toca `globals.css`. */
+import { COMMIT_ULTIMO_QUE_TOCOU_GLOBALS as COMMIT_FIM_DA_FASE_2 } from "./medidas.mjs";
 
 // ---------------------------------------------------------------------------
 // Relatório: toda medição imprime uma linha nomeada com o NÚMERO medido.
@@ -643,7 +646,11 @@ async function gatesEstruturais() {
       if (e.isDirectory()) {
         if (p === path.join(OUT, "_next") || p === path.join(OUT, "acervo")) continue;
         andar(p);
-      } else if (e.name.endsWith(".html")) paginas.push(path.relative(OUT, p));
+      } else if (e.name.endsWith(".html")) {
+        // Separador normalizado para "/" — no Windows `path.relative` devolve "\" e
+        // nenhuma das regexes de rota abaixo casaria (medido: 0 novas, resíduo 2463).
+        paginas.push(path.relative(OUT, p).split(path.sep).join("/"));
+      }
     }
   })(OUT);
   const novas = paginas.filter(

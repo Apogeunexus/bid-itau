@@ -115,7 +115,7 @@ export function BarraAbas() {
     >
       <div className="flex items-stretch desk:mx-auto desk:max-w-6xl desk:gap-6 desk:px-6">
         <span className="hidden items-center gap-2 pr-2 font-bold whitespace-nowrap desk:flex">
-          <Grafismo variacao="completo" className="h-5 w-auto text-[var(--ic-laranja)]" />
+          <Grafismo variacao="completo" className="h-5 w-auto text-acao" />
           Agenda Cultural BR
         </span>
 
@@ -132,7 +132,7 @@ export function BarraAbas() {
                     "app:flex-col app:gap-0.5 app:px-1 app:py-2 app:text-[11px]",
                     "desk:border-b-2 desk:px-3 desk:py-4 desk:text-sm",
                     ativa
-                      ? "text-[var(--ic-laranja)] desk:border-[var(--ic-laranja)]"
+                      ? "text-acao desk:border-acao"
                       : "text-black/55 hover:text-[var(--ic-preto)] desk:border-transparent",
                   )}
                 >

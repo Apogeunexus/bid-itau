@@ -352,7 +352,7 @@ export function ListaDeOcorrencias({
                     onClick={() => alternarSalvo(ocorrencia.id)}
                     className={`ocorrencia-salvar w-fit cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors ${
                       salvo
-                        ? "border-[var(--ic-laranja)] bg-[var(--ic-laranja)] text-[var(--ic-branco)]"
+                        ? "border-acao bg-acao text-[var(--ic-branco)]"
                         : "border-black/25 text-[var(--ic-preto)] hover:border-[var(--ic-preto)]"
                     }`}
                   >

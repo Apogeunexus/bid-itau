@@ -70,7 +70,7 @@ export function Explicacao({ pagina }: { pagina: PaginaExplicacao }) {
       <header className="flex items-center gap-2 text-xs">
         <Link
           href="/descobrir/"
-          className="font-bold text-[var(--ic-laranja)] underline underline-offset-2"
+          className="font-bold text-acao underline underline-offset-2"
         >
           ← Descobrir
         </Link>
@@ -110,7 +110,7 @@ export function Explicacao({ pagina }: { pagina: PaginaExplicacao }) {
       {/* 5 — D-35. O limite da IA em texto, no pé, em toda página de explicação. */}
       <p
         data-limite-ia
-        className="mt-auto border-t-2 border-[var(--ic-laranja)] pt-2 text-[0.7rem] leading-snug text-black/70"
+        className="mt-auto border-t-2 border-acao pt-2 text-[0.7rem] leading-snug text-black/70"
       >
         <strong className="font-bold">Nenhuma decisão editorial foi tomada por IA.</strong> O
         caminho acima é travessia determinística no acervo, o destaque curado é humano e
@@ -200,7 +200,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
         {ativo ? (
           <Cadeia caminho={ativo} />
         ) : (
-          <p className="rounded-lg border-2 border-[var(--ic-laranja)] p-2.5 text-xs leading-snug">
+          <p className="rounded-lg border-2 border-acao p-2.5 text-xs leading-snug">
             {explicacao.caminhos.length ? (
               <>
                 <strong className="font-bold">
@@ -228,7 +228,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
             marcações acima seriam decoração, e a diferença entre citar o acervo e redigir a
             partir dele ficaria só no estilo. Sem cadeia ela não tem o que legendar. */}
         <p className={clsx("text-[0.65rem] leading-snug text-black/55", !ativo && "hidden")}>
-          <span className="mr-1 border-l-[3px] border-[var(--ic-laranja)] pl-1 font-semibold">
+          <span className="mr-1 border-l-[3px] border-acao pl-1 font-semibold">
             «entre aspas»
           </span>
           é texto do acervo do Itaú Cultural;
@@ -256,7 +256,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
                 className={clsx(
                   "cursor-pointer rounded-full border px-1.5 py-px text-[0.65rem] font-semibold",
                   c === ativo
-                    ? "border-[var(--ic-laranja)] text-[var(--ic-laranja)]"
+                    ? "border-acao text-acao"
                     : "border-black/20 text-black/60",
                 )}
               >
@@ -295,7 +295,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
                     "flex cursor-pointer items-baseline gap-1 rounded-full border px-2 py-0.5 text-xs",
                     fora
                       ? "border-black/20 text-black/35 line-through"
-                      : "border-[var(--ic-laranja)] font-semibold",
+                      : "border-acao font-semibold",
                   )}
                 >
                   <span className="text-[0.55rem] tracking-widest text-black/45 uppercase">
@@ -347,7 +347,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
             className={clsx(
               "flex-1 cursor-pointer rounded-full border px-3 py-1.5 text-xs font-bold",
               preferencia === valor
-                ? "border-[var(--ic-laranja)] bg-[var(--ic-laranja)] text-[var(--ic-branco)]"
+                ? "border-acao bg-acao text-[var(--ic-branco)]"
                 : "border-black/25 text-[var(--ic-preto)]",
             )}
           >
@@ -420,7 +420,7 @@ function Cadeia({
               className={clsx(
                 "rounded-full px-1.5 text-[0.55rem] font-bold tracking-wide",
                 passo.origemMotivo === "escrito"
-                  ? "bg-[var(--ic-laranja)] text-[var(--ic-branco)]"
+                  ? "bg-acao text-[var(--ic-branco)]"
                   : "border border-black/30 text-black/55",
               )}
             >
@@ -474,7 +474,7 @@ function Recalculo({
     <p
       className={clsx(
         "rounded-lg p-2 text-xs leading-snug",
-        restaram ? "bg-black/[0.05]" : "border-2 border-[var(--ic-laranja)]",
+        restaram ? "bg-black/[0.05]" : "border-2 border-acao",
       )}
     >
       {decorativo ? (

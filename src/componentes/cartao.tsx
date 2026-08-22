@@ -133,7 +133,7 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
       >
         <Grafismo
           variacao="barra"
-          className="mt-0.5 h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]"
+          className="mt-0.5 h-3.5 w-auto shrink-0 text-acao"
         />
         <span>{cartao.motivo.texto}</span>
       </p>
@@ -150,7 +150,7 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
         </span>
         <Link
           href={rotaDaExplicacao(cartao)}
-          className="text-xs font-semibold text-[var(--ic-laranja)] underline underline-offset-2"
+          className="text-xs font-semibold text-acao underline underline-offset-2"
         >
           por que isto apareceu?
         </Link>

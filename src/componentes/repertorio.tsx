@@ -73,7 +73,7 @@ function Secao({
   return (
     <Envolucro className="flex flex-col gap-2">
       <h2 className="flex items-center gap-1.5 text-sm font-bold tracking-wide text-black/70 uppercase">
-        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
         {titulo}
       </h2>
       {apoio ? <p className="text-xs leading-snug text-black/50">{apoio}</p> : null}
@@ -284,7 +284,7 @@ export function TelaRepertorio({
       <TrocaPersona />
 
       {/* ---- O número que a tela existe para mostrar (D-44) ---- */}
-      <div className="flex flex-col gap-1.5 rounded-xl border border-[var(--ic-laranja)] bg-[color-mix(in_srgb,var(--ic-laranja)_7%,transparent)] p-3">
+      <div className="flex flex-col gap-1.5 rounded-xl border border-acao bg-[color-mix(in_srgb,var(--ic-laranja)_7%,transparent)] p-3">
         <p
           data-linguagens-novas={repertorio.linguagensNovas.length}
           className="text-base leading-snug font-bold"

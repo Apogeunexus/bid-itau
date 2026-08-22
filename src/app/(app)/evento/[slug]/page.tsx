@@ -83,7 +83,7 @@ function Cabecalho({ nome, objetivo }: { nome: string; objetivo: string }) {
   return (
     <header className="flex flex-col gap-2">
       <div className="flex items-baseline gap-2">
-        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
         <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{nome}</h1>
         <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
           C1
@@ -228,7 +228,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
       {ocorrencias.length ? (
         <Link
           href={`/evento/${entidade.slug}/sessoes/`}
-          className="w-fit rounded-full bg-[var(--ic-laranja)] px-4 py-2 text-sm font-semibold text-[var(--ic-branco)] no-underline transition-opacity hover:opacity-90"
+          className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-[var(--ic-branco)] no-underline transition-opacity hover:opacity-90"
         >
           Escolher e salvar uma sessão
         </Link>

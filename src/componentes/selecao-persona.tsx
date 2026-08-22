@@ -54,7 +54,7 @@ export function SelecaoPersona({ personas }: { personas: PersonaExibivel[] }) {
             className={clsx(
               "cursor-pointer rounded-xl border p-3 text-left transition-colors",
               ativa
-                ? "border-[var(--ic-laranja)] bg-[var(--ic-laranja)]/10"
+                ? "border-acao bg-acao/10"
                 : "border-black/15 hover:border-[var(--ic-preto)]",
             )}
           >

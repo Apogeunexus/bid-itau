@@ -26,6 +26,10 @@ tsconfig.tsbuildinfo
 # capturas da verificação do modo comentado
 /capturas
 
+# capturas de tela do fechamento de cada onda do design system (capturar-telas.mjs);
+# a revisão a olho acontece no fechamento, não no histórico
+/verificacao/capturas
+
 # Material de terceiros — nao vai para o repositorio publico.
 # O edital e um documento de processo em andamento; os manuais de marca sao
 # material protegido do Itau Cultural e da Fundacao Itau. Quem assumir o projeto

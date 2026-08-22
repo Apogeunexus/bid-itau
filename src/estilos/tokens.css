@@ -1,0 +1,201 @@
+/* ---------------------------------------------------------------------------
+ * TOKENS DO DESIGN SYSTEM — a camada semântica sobre a paleta da marca.
+ *
+ * Decisões e fichas de referência: docs/DESIGN-SYSTEM.md.
+ *
+ * Regras desta folha:
+ *   1. NENHUM hex novo. Todo token de cor deriva de `var(--ic-*)` (declarados em
+ *      `globals.css`, a fonte de verdade única — D-06) via color-mix.
+ *   2. Esta é a ÚNICA folha onde medidas literais (rem/px/ms) podem nascer.
+ *      As folhas de tela consomem tokens; `scripts/verificar-ds.mjs` trava isso.
+ *   3. Overrides por visão ficam AQUI, sob `[data-view="web"]` — densidade é
+ *      token, não classe nova (D-05: nunca um componente irmão por visão).
+ * ------------------------------------------------------------------------- */
+
+/* As duas variantes de visão (D-01, D-02). A visão é ESTADO DA APLICAÇÃO, não
+ * tamanho de janela: o ViewProvider escreve data-view no raiz da casca e estas
+ * variantes respondem a ele. Só prefixam UTILITÁRIO; classe semântica usa CSS
+ * puro sob `[data-view="…"]`. */
+@custom-variant app (&:is([data-view="mobile"] *, [data-view="mobile"]));
+@custom-variant desk (&:is([data-view="web"] *, [data-view="web"]));
+
+:root {
+  /* ---- Cor semântica: o PAPEL de cada cor (DESIGN-SYSTEM.md §2) ----------
+   * Laranja é AÇÃO — botão primário, link ativo, foco, progresso. Nunca
+   * decoração, nunca data. As cores de linguagem continuam DADO e entram por
+   * custom property vinda do vocabulário, nunca daqui. */
+  --cor-acao: var(--ic-laranja);
+  --cor-acao-lavada: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+  --cor-tinta: var(--ic-preto);
+  --cor-tinta-2: color-mix(in srgb, var(--ic-preto) 62%, transparent);
+  --cor-tinta-3: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  --cor-fundo: var(--ic-branco);
+  --cor-superficie: var(--ic-branco);
+  --cor-superficie-2: color-mix(in srgb, var(--ic-preto) 4%, var(--ic-branco));
+  --cor-borda: color-mix(in srgb, var(--ic-preto) 12%, transparent);
+  --cor-borda-forte: color-mix(in srgb, var(--ic-preto) 28%, transparent);
+  --cor-foco: var(--ic-laranja);
+
+  /* ---- Tipografia: um degrau = tamanho + entrelinha ----------------------
+   * O corte do manual (Itaú Text ≤16px, Itaú Display ≥17px) está soldado nos
+   * utilitários `tipo-*` abaixo, que fixam família junto — não há como errar. */
+  --tipo-micro: 0.6875rem; /* 11px */
+  --tipo-legenda: 0.75rem; /* 12px */
+  --tipo-detalhe: 0.875rem; /* 14px */
+  --tipo-corpo: 1rem; /* 16px — o teto da Text (12pt, D-10) */
+  --tipo-destaque: 1.125rem; /* 18px — «destaque = corpo + 2» do manual */
+  --tipo-titulo-3: 1.25rem; /* 20px */
+  --tipo-titulo-2: 1.5rem; /* 24px */
+  --tipo-titulo-1: 1.75rem; /* 28px */
+  --tipo-cartaz: 2.25rem; /* 36px */
+
+  /* ---- Espaço: grade de 0.25rem + quatro papéis que variam por visão ----- */
+  --espaco-tela: 1rem; /* gutter lateral da tela */
+  --espaco-secao: 2rem; /* respiro entre seções */
+  --espaco-cartao: 0.75rem; /* padding interno de cartão/painel */
+  --espaco-pilha: 0.5rem; /* gap padrão de pilha/fileira */
+
+  /* ---- Raio ---- */
+  --raio-s: 0.5rem; /* capa, chip quadrado */
+  --raio-m: 0.75rem; /* cartão */
+  --raio-l: 1rem; /* painel, folha */
+  --raio-pilula: 999px;
+
+  /* ---- Elevação: preto em alfa baixo, nunca cor ---- */
+  --sombra-1: 0 1px 3px color-mix(in srgb, var(--ic-preto) 8%, transparent);
+  --sombra-2: 0 4px 12px color-mix(in srgb, var(--ic-preto) 10%, transparent);
+  --sombra-3: 0 12px 32px color-mix(in srgb, var(--ic-preto) 18%, transparent);
+
+  /* ---- Motion ---- */
+  --dur-1: 120ms; /* micro: hover, foco */
+  --dur-2: 200ms; /* entrada de painel */
+  --dur-3: 320ms; /* drawer, folha */
+  --ease-padrao: cubic-bezier(0.2, 0, 0, 1);
+  --ease-saida: cubic-bezier(0.3, 0, 1, 1);
+}
+
+/* Densidade da visão web: os mesmos papéis, medidas maiores. Trocar o token
+ * troca a tela inteira sem tocar componente. */
+[data-view="web"] {
+  --tipo-titulo-1: 2.125rem; /* 34px */
+  --tipo-cartaz: 2.75rem; /* 44px */
+  --espaco-tela: 1.5rem;
+  --espaco-secao: 3rem;
+  --espaco-cartao: 1.25rem;
+  --espaco-pilha: 0.75rem;
+}
+
+/* Exposição ao Tailwind: os utilitários leem o token, e trocar o token troca a
+ * cor sem recompilar classe nenhuma (D-06). A paleta da marca (`--color-ic-*`)
+ * continua exposta para os poucos usos diretos legítimos (chancela, grafismo). */
+@theme {
+  --color-ic-laranja: var(--ic-laranja);
+  --color-ic-preto: var(--ic-preto);
+  --color-ic-branco: var(--ic-branco);
+  --color-ic-lilas: var(--ic-lilas);
+  --color-ic-azul: var(--ic-azul);
+  --color-ic-amarelo: var(--ic-amarelo);
+  --color-ic-rosa: var(--ic-rosa);
+  --color-ic-verde: var(--ic-verde);
+  --color-ic-verde-agua: var(--ic-verde-agua);
+  --color-fit-azul: var(--fit-azul);
+  --color-fit-laranja: var(--fit-laranja);
+  --color-fit-cyan: var(--fit-cyan);
+
+  --color-acao: var(--cor-acao);
+  --color-acao-lavada: var(--cor-acao-lavada);
+  --color-tinta: var(--cor-tinta);
+  --color-tinta-2: var(--cor-tinta-2);
+  --color-tinta-3: var(--cor-tinta-3);
+  --color-fundo: var(--cor-fundo);
+  --color-superficie: var(--cor-superficie);
+  --color-superficie-2: var(--cor-superficie-2);
+  --color-borda: var(--cor-borda);
+  --color-borda-forte: var(--cor-borda-forte);
+  --color-foco: var(--cor-foco);
+
+  --font-texto: var(--fonte-texto);
+  --font-display: var(--fonte-display);
+
+  --radius-s: var(--raio-s);
+  --radius-m: var(--raio-m);
+  --radius-l: var(--raio-l);
+  --radius-pilula: var(--raio-pilula);
+
+  --shadow-1: var(--sombra-1);
+  --shadow-2: var(--sombra-2);
+  --shadow-3: var(--sombra-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * Escala tipográfica como utilitário composto: família + tamanho + entrelinha
+ * soldados. `tipo-corpo` para baixo é Itaú Text; `tipo-destaque` para cima é
+ * Itaú Display — a regra do manual vira estrutura, não disciplina.
+ * O tamanho vem do token, então a densidade por visão (acima) vale aqui também.
+ * ------------------------------------------------------------------------- */
+@utility tipo-micro {
+  font-family: var(--fonte-texto);
+  font-size: var(--tipo-micro);
+  line-height: 1.35;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@utility tipo-legenda {
+  font-family: var(--fonte-texto);
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+}
+
+@utility tipo-detalhe {
+  font-family: var(--fonte-texto);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+}
+
+@utility tipo-corpo {
+  font-family: var(--fonte-texto);
+  font-size: var(--tipo-corpo);
+  line-height: 1.5;
+}
+
+@utility tipo-destaque {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-destaque);
+  line-height: 1.45;
+}
+
+@utility tipo-titulo-3 {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
+  line-height: 1.3;
+}
+
+@utility tipo-titulo-2 {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-2);
+  line-height: 1.25;
+}
+
+@utility tipo-titulo-1 {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-1);
+  line-height: 1.15;
+}
+
+@utility tipo-cartaz {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-cartaz);
+  line-height: 1.1;
+}
+
+/* A segunda @media legítima do projeto: sobre preferência real do usuário, não
+ * sobre a visão (a primeira é o colapso da moldura em janela estreita — ambas
+ * documentadas em DESIGN-SYSTEM.md §2 e ARQUITETURA.md §2). */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 0ms;
+    --dur-2: 0ms;
+    --dur-3: 0ms;
+  }
+}

@@ -40,7 +40,7 @@ export function TrocaPersona({ className }: { className?: string }) {
               className={clsx(
                 "flex-1 cursor-pointer rounded-full px-3 py-1.5 text-sm font-semibold transition-colors",
                 ativa
-                  ? "bg-[var(--ic-laranja)] text-[var(--ic-branco)]"
+                  ? "bg-acao text-[var(--ic-branco)]"
                   : "text-[var(--ic-preto)] hover:bg-black/5",
               )}
             >

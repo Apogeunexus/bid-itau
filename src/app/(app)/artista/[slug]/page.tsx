@@ -37,7 +37,7 @@ function Cabecalho({ nome, objetivo }: { nome: string; objetivo: string }) {
   return (
     <header className="flex flex-col gap-2">
       <div className="flex items-baseline gap-2">
-        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
         <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{nome}</h1>
         <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
           C1
@@ -102,7 +102,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
                   <li
                     key={p.papel}
                     data-papel={p.papel}
-                    className="rounded-full bg-[var(--ic-laranja)] px-2.5 py-0.5 text-xs font-bold text-[var(--ic-branco)]"
+                    className="rounded-full bg-acao px-2.5 py-0.5 text-xs font-bold text-[var(--ic-branco)]"
                   >
                     {`${p.papel} · ${p.contagem} ${p.contagem === 1 ? "vínculo" : "vínculos"}`}
                   </li>

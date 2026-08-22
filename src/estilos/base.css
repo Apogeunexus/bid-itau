@@ -1,0 +1,210 @@
+/* ---------------------------------------------------------------------------
+ * BASE VISUAL — o que era regra dentro de `globals.css` até a reformulação do
+ * design system, movido para cá na consolidação de 2026-08: `globals.css`
+ * voltou a ser só `:root` da marca + @import, como a regra de ARQUITETURA §5
+ * sempre pediu. Nenhum valor mudou na mudança de endereço.
+ *
+ * Conteúdo: camada base tipográfica, moldura de celular (D-03), modo comentado,
+ * cartão de Descobrir e capa sem imagem.
+ * ------------------------------------------------------------------------- */
+
+@layer base {
+  body {
+    font-family: var(--fonte-texto);
+    font-size: 16px; /* 12 pt — o teto da stack de texto (D-10) */
+    line-height: 1.5;
+  }
+
+  /* 13 pt (17 px) para cima é território da Display (D-10). Título é sempre
+   * display, independente do tamanho que a tela lhe der. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--fonte-display);
+  }
+}
+
+html,
+body {
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+}
+
+/* ---------------------------------------------------------------------------
+ * Moldura de celular da visão mobile (D-03).
+ *
+ * Escrita em CSS puro e presa ao atributo data-view, e não a uma variante
+ * Tailwind, porque `app:` só se aplica a utilitários — não a classes semânticas.
+ * O gatilho continua sendo a visão escolhida, não o tamanho da janela.
+ *
+ * A MOLDURA TEM ALTURA E ROLA POR DENTRO, e isso não é detalhe estético: é o que
+ * permite a barra de abas ficar contida nela. Barra com `position: fixed` se
+ * ancoraria na JANELA, não no telefone, e escaparia para a largura toda da tela
+ * — destruindo exatamente a ilusão que D-03 existe para criar. Com a moldura
+ * como contêiner de rolagem, a barra usa `sticky` e fica presa ao pé do
+ * telefone. 390×844 é o tamanho lógico de um iPhone 14/15.
+ * ------------------------------------------------------------------------- */
+[data-view="mobile"] .palco {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+[data-view="mobile"] .moldura {
+  width: 390px;
+  height: min(844px, calc(100vh - 4rem));
+  flex: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 10px solid var(--ic-preto);
+  border-radius: 2.5rem;
+  background: var(--ic-branco);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.25);
+}
+
+/* A media query do colapso da moldura. É sobre o tamanho real da janela — num
+ * celular de verdade a moldura seria uma moldura dentro de outra — e não sobre
+ * a visão escolhida, que é estado da aplicação (D-01, D-02). A outra @media
+ * legítima do projeto é a de prefers-reduced-motion, em tokens.css. */
+@media (max-width: 430px) {
+  [data-view="mobile"] .palco {
+    padding: 0;
+  }
+
+  [data-view="mobile"] .moldura {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* Sem moldura, os controles fixos cairiam em cima da barra de abas. Eles continuam
+   * presos à janela de propósito (D-04) — só sobem o suficiente para não brigar.
+   * O alvo é o CANTO, que é quem carrega o `fixed`; o alternador e o interruptor de modo
+   * comentado viajam dentro dele, empilhados. */
+  [data-view="mobile"] .canto {
+    bottom: 5.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * MODO COMENTADO — o interruptor que separa produto de especificação anotada.
+ *
+ * `<Comentario>` marca todo texto que fala SOBRE o protótipo — o parágrafo que explica a
+ * tela, o mecanismo, a citação de número de decisão. A casca escreve `data-comentado` no
+ * MESMO elemento raiz que carrega `data-view`, e a regra abaixo responde a ele: nenhum dos
+ * componentes precisa assinar o contexto para saber se deve renderizar.
+ *
+ * CSS PURO, e não uma variante Tailwind, pelo limite conhecido: `app:`/`desk:`
+ * e qualquer variante só prefixam UTILITÁRIO. `.comentario` é classe semântica nossa e
+ * nunca aceitaria `comentado:comentario`.
+ *
+ * `display: none` E NÃO «ESCONDIDO VISUALMENTE». Um comentário que continuasse no fluxo
+ * ocupando altura deixaria a tela furada exatamente onde o texto foi tirado — e o modo
+ * desligado, que é o padrão, pareceria uma tela quebrada. Como `display: none` remove a
+ * caixa, os contêineres em `flex … gap-N` também não abrem espaço entre os irmãos: o gap do
+ * flexbox só existe entre caixas geradas.
+ * ------------------------------------------------------------------------- */
+[data-comentado="nao"] .comentario {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Cartão de Descobrir e capa sem imagem (fase 2, plano 02-01).
+ *
+ * Escrito em CSS puro, e não com as variantes `app:`/`desk:`, pelo limite conhecido:
+ * `app:` e `desk:` só prefixam UTILITÁRIO do Tailwind. `.cartao` é classe
+ * semântica nossa e nunca aceitaria `app:cartao` — a variação de visão dela mora aqui.
+ *
+ * NADA AQUI USA POSIÇÃO ANCORADA NA JANELA. Dentro da moldura de celular, `fixed`
+ * escaparia para a largura da tela e quebraria a ilusão de D-03. Quem precisar grudar
+ * usa `sticky`, como a barra de abas faz.
+ * ------------------------------------------------------------------------- */
+.cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid rgb(0 0 0 / 0.1);
+  border-radius: 0.85rem;
+  background: var(--ic-branco);
+}
+
+/* Cartão especial: o destaque curado (D-29) e a serendipidade (D-30) precisam ser
+ * VISIVELMENTE outra coisa, senão o rótulo textual vira letra miúda que ninguém lê. */
+.cartao[data-especial] {
+  border-color: var(--ic-laranja);
+  box-shadow: 0 0 0 1px var(--ic-laranja) inset;
+}
+
+.cartao-faixa {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: -0.25rem -0.25rem 0;
+  color: var(--ic-laranja);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* O SELO DE MOTIVO. Peso visual de primeira ordem de propósito: é o elemento que
+ * diferencia mediação legível de recomendador opaco, e é o que vai para a foto do
+ * slide. Rebaixá-lo a legenda cinza desmontaria o argumento da tela. */
+.selo-motivo {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.5rem 0.6rem;
+  border-left: 3px solid var(--ic-laranja);
+  border-radius: 0 0.5rem 0.5rem 0;
+  /* color-mix e não um rgb() literal: o hex do laranja tem UMA fonte de verdade,
+   * que é o token em globals.css. Repetir 255 120 0 aqui criaria a segunda (D-06). */
+  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.capa-sem-imagem {
+  isolation: isolate;
+}
+
+/* Cartão grande de disposição — tela 2, DESC-01. */
+.cartao-disposicao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  border-radius: 0.85rem;
+  background: var(--ic-branco);
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.cartao-disposicao:hover {
+  border-color: var(--ic-preto);
+}
+
+.cartao-disposicao-ativa,
+.cartao-disposicao-ativa:hover {
+  border-color: var(--ic-laranja);
+  background: color-mix(in srgb, var(--ic-laranja) 10%, transparent);
+}
+
+/* Na visão web o mesmo cartão respira mais e a capa fica maior — mesma árvore de JSX,
+ * outra medida (D-05: é proibido um componente irmão por visão). */
+[data-view="web"] .cartao {
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+[data-view="web"] .selo-motivo {
+  font-size: 0.875rem;
+}

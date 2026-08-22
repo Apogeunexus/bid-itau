@@ -235,7 +235,7 @@ export default async function PaginaProdutor({ params }: { params: Promise<{ slu
           <div className="flex items-baseline gap-2">
             <Grafismo
               variacao="barra"
-              className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]"
+              className="h-5 w-auto shrink-0 text-acao"
             />
             <h1 className="text-2xl leading-tight font-bold desk:text-3xl">
               Página do produtor ou instituição

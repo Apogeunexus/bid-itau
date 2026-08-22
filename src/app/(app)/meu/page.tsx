@@ -33,7 +33,7 @@ export default function Meu() {
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Meu Repertório</h1>
           <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
             C1
@@ -55,7 +55,7 @@ export default function Meu() {
             aqui. */}
         <Link
           href="/salvos"
-          className="w-fit rounded-full border border-[var(--ic-laranja)] px-3 py-1 text-xs font-bold text-[var(--ic-laranja)] transition-colors hover:bg-[var(--ic-laranja)] hover:text-[var(--ic-branco)]"
+          className="w-fit rounded-full border border-acao px-3 py-1 text-xs font-bold text-acao transition-colors hover:bg-acao hover:text-[var(--ic-branco)]"
         >
           Salvos e alertas de alteração →
         </Link>

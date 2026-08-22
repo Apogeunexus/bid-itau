@@ -38,7 +38,7 @@ function Alternador() {
             className={clsx(
               "cursor-pointer rounded-full px-4 py-1.5 text-sm font-semibold transition-colors",
               ativa
-                ? "bg-[var(--ic-laranja)] text-[var(--ic-branco)]"
+                ? "bg-acao text-[var(--ic-branco)]"
                 : "text-[var(--ic-preto)] hover:bg-black/5",
             )}
           >
@@ -73,7 +73,7 @@ function InterruptorComentado() {
       className={clsx(
         "controle-comentado cursor-pointer rounded-full border bg-[var(--ic-branco)] px-3 py-1 text-xs font-semibold shadow-lg transition-colors",
         comentado
-          ? "border-[var(--ic-laranja)] text-[var(--ic-laranja)]"
+          ? "border-acao text-acao"
           : "border-black/25 text-black/50 hover:text-[var(--ic-preto)]",
       )}
     >

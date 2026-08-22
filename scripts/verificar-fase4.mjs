@@ -104,7 +104,9 @@ const DATA_DE_REFERENCIA = "2026-08-22";
  * bloco `:root` com os hex do manual é a fonte de verdade única da paleta e tem de
  * continuar byte a byte idêntico.
  */
-const COMMIT_DA_CONSOLIDACAO = "a40f380";
+/* Reancorado na reformulação do design system: o histórico do repositório foi
+ * recriado em 2026-08-22 e `a40f380` deixou de existir. A âncora mora em `medidas.mjs`. */
+import { COMMIT_DA_CONSOLIDACAO } from "./medidas.mjs";
 
 /** O peso de `out/_next/static/chunks` medido antes da fase 4, e o teto fixado pela fase 3. */
 const CHUNKS_ANTES_DA_FASE_4_KB = 1124;
@@ -501,7 +503,7 @@ async function gatesEstruturais() {
         if (imp.apenasTipo) continue;
         const alvo = resolverModulo(imp.especificador, atual);
         if (!alvo) continue;
-        const rel = path.relative(RAIZ, alvo);
+        const rel = path.relative(RAIZ, alvo).split(path.sep).join("/");
         if (/^src\/dados\/grafo\.tsx?$/.test(rel)) {
           violacoes.push([...caminho, rel].join(" → "));
           continue;
@@ -512,7 +514,9 @@ async function gatesEstruturais() {
       }
     }
   }
-  const relClientes = clientes.map((c) => path.relative(RAIZ, c));
+  // Separador normalizado para "/": no Windows `path.relative` devolve "\" e a chamada
+  // nominal abaixo casaria 0 de 3 mesmo com a varredura correta.
+  const relClientes = clientes.map((c) => path.relative(RAIZ, c).split(path.sep).join("/"));
   const clientesNovosVarridos = CLIENTES_NOVOS_DA_FASE_4.filter((c) => relClientes.includes(c));
   exigir(
     violacoes.length === 0 && clientesNovosVarridos.length === CLIENTES_NOVOS_DA_FASE_4.length,
@@ -565,7 +569,7 @@ async function gatesEstruturais() {
     const { limpo } = await fonte(a);
     for (const imp of importsDe(limpo)) {
       if (!imp.especificador.endsWith(".css")) continue;
-      const rel = path.relative(RAIZ, a);
+      const rel = path.relative(RAIZ, a).split(path.sep).join("/");
       if (rel === "src/app/layout.tsx" && imp.especificador === "./globals.css") continue;
       importsDeCss.push(`${rel} → ${imp.especificador}`);
     }
@@ -655,12 +659,18 @@ async function gatesEstruturais() {
     "idêntico byte a byte",
   );
 
+  // Desde a consolidação do design system (2026-08) as variantes moram em
+  // `src/estilos/tokens.css` e a regra do modo comentado em `src/estilos/base.css` —
+  // ambos importados por globals.css, mesmo bundle. O gate segue provando a EXISTÊNCIA;
+  // só o endereço mudou junto com a arquitetura (docs/DESIGN-SYSTEM.md §5).
+  const tokensCss = await readFile(path.join(SRC, "estilos", "tokens.css"), "utf8");
+  const baseCss = await readFile(path.join(SRC, "estilos", "base.css"), "utf8");
   const variantes = ["@custom-variant app", "@custom-variant desk"];
-  const faltamVariantes = variantes.filter((v) => !globals.includes(v));
-  const regraComentada = /\[data-comentado="nao"\]\s*\.comentario/.test(globals);
+  const faltamVariantes = variantes.filter((v) => !tokensCss.includes(v));
+  const regraComentada = /\[data-comentado="nao"\]\s*\.comentario/.test(baseCss);
   exigir(
     faltamVariantes.length === 0 && regraComentada,
-    "as variantes app:/desk: e a regra do modo comentado continuam em globals.css",
+    "as variantes app:/desk: (tokens.css) e a regra do modo comentado (base.css) presentes",
     faltamVariantes.length === 0 && regraComentada
       ? `app: e desk: presentes · [data-comentado="nao"] .comentario presente`
       : `faltam ${faltamVariantes.join(", ")}${regraComentada ? "" : " · regra do modo comentado AUSENTE"}`,
@@ -768,7 +778,11 @@ async function gatesEstruturais() {
       if (e.isDirectory()) {
         if (p === path.join(OUT, "_next") || p === path.join(OUT, "acervo")) continue;
         andar(p);
-      } else if (e.name.endsWith(".html")) paginas.push(path.relative(OUT, p));
+      } else if (e.name.endsWith(".html")) {
+        // Separador normalizado para "/" — no Windows `path.relative` devolve "\" e
+        // nenhuma das regexes de rota abaixo casaria (medido: 0 novas, resíduo 2463).
+        paginas.push(path.relative(OUT, p).split(path.sep).join("/"));
+      }
     }
   })(OUT);
   const novasFase3 = paginas.filter(
@@ -840,12 +854,15 @@ console.log("<<<SONDA>>>" + JSON.stringify({
 `;
 
 async function sondarModulos() {
-  const tsx = path.join(RAIZ, "node_modules", ".bin", "tsx");
+  // A entrada JS do tsx, e não `node_modules/.bin/tsx`: o atalho de `.bin` é script de
+  // shell, e no Windows `execFileSync` não o executa (spawn EINVAL). O mesmo Node que
+  // roda esta suíte roda a sonda.
+  const tsx = path.join(RAIZ, "node_modules", "tsx", "dist", "cli.mjs");
   if (!existsSync(tsx)) {
     // Falha alta, não pulo. Sem a sonda este gate não existe, e um gate que se autodispensa
     // quando a ferramenta falta é exatamente o que T-04-26 proíbe.
     throw new Error(
-      `node_modules/.bin/tsx não existe. Ele é devDependency do projeto e é como esta suíte lê ` +
+      `node_modules/tsx/dist/cli.mjs não existe. tsx é devDependency do projeto e é como esta suíte lê ` +
         `o que duplicatas.ts e ocorrencias-studio.ts calculam. Rode \`npm install\`. NÃO pulo o gate.`,
     );
   }
@@ -859,7 +876,7 @@ async function sondarModulos() {
   await writeFile(arquivo, SONDA, "utf8");
   let saida;
   try {
-    saida = execFileSync(tsx, [arquivo], { cwd: RAIZ, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+    saida = execFileSync(process.execPath, [tsx, arquivo], { cwd: RAIZ, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
   } finally {
     await rm(arquivo, { force: true }).catch(() => {});
   }

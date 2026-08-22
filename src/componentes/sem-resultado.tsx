@@ -109,7 +109,7 @@ export function SemResultado({ beco, indice, comNavegacaoPropria = false }: SemR
         <h1 className="beco-titulo">
           <Grafismo
             variacao="barra"
-            className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]"
+            className="h-3.5 w-auto shrink-0 text-acao"
           />
           {beco.titulo}
         </h1>

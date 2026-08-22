@@ -379,7 +379,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
     <div className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-6xl desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Buscar</h1>
           <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
             C1
@@ -521,7 +521,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
             >
               <Grafismo
                 variacao="barra"
-                className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]"
+                className="h-3.5 w-auto shrink-0 text-acao"
               />
               traduzir esta frase em critérios
             </Link>
@@ -618,7 +618,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   href="/buscar/frase/"
                   className="busca-faceta w-fit font-semibold no-underline"
                 >
-                  <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+                  <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
                   buscar por frase
                 </Link>
               </section>
@@ -775,7 +775,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                       >
                         <Grafismo
                           variacao="barra"
-                          className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]"
+                          className="h-3.5 w-auto shrink-0 text-acao"
                         />
                         <span>{afrouxamento.rotulo}</span>
                         <span className="busca-afrouxamento-n">
@@ -844,7 +844,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
             >
               <Grafismo
                 variacao="barra"
-                className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]"
+                className="h-3.5 w-auto shrink-0 text-acao"
               />
               filtrar por acessibilidade — as 8 dimensões como critério, não como selo
             </Link>
@@ -866,7 +866,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 facetas.tema.length > TEMAS_VISIVEIS ? (
                   <button
                     type="button"
-                    className="w-fit text-xs font-semibold text-[var(--ic-laranja)] underline underline-offset-2"
+                    className="w-fit text-xs font-semibold text-acao underline underline-offset-2"
                     onClick={() => setTodosOsTemas((v) => !v)}
                   >
                     {todosOsTemas
@@ -914,7 +914,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           abre com o conjunto que está aqui e com o endereço de volta para esta busca.
         </p>
         <Link href={lente} className="busca-faceta w-fit font-semibold no-underline">
-          <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
           {idsLente.length
             ? `abrir ${milhar(idsLente.length)} no mapa`
             : "abrir o mapa sem recorte"}

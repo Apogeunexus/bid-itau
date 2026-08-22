@@ -63,7 +63,7 @@ const DIMENSOES = Object.keys(ROTULOS) as DimensaoAcessibilidade[];
 const APARENCIA: Record<EstadoDimensao, { texto: string; classe: string }> = {
   presente: {
     texto: "declarado",
-    classe: "border-[var(--ic-laranja)] bg-[var(--ic-laranja)] text-[var(--ic-branco)]",
+    classe: "border-acao bg-acao text-[var(--ic-branco)]",
   },
   "ausente-declarada": {
     texto: "declarado ausente",

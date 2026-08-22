@@ -96,7 +96,9 @@ const DATA_DE_REFERENCIA = "2026-08-22";
  * a fonte de verdade única da paleta e tem de continuar byte a byte idêntico. A fase 5
  * acrescentou 11 linhas de `@import` e ZERO linha de regra; este gate é o que prova isso.
  */
-const COMMIT_DA_CONSOLIDACAO = "a40f380";
+/* Reancorado na reformulação do design system: o histórico do repositório foi
+ * recriado em 2026-08-22 e `a40f380` deixou de existir. A âncora mora em `medidas.mjs`. */
+import { COMMIT_DA_CONSOLIDACAO } from "./medidas.mjs";
 
 /**
  * O commit de 05-01 que escreveu as 11 linhas de `@import` da fase 5 de uma vez. É a âncora
@@ -104,7 +106,9 @@ const COMMIT_DA_CONSOLIDACAO = "a40f380";
  * diante, `globals.css` tem de ter DIFERENÇA ZERO — é isso que prova que os SEIS executores
  * da onda 2 não tocaram o arquivo de colisão da fase.
  */
-const COMMIT_DAS_FOLHAS_DA_FASE_5 = "c90fc9b";
+/* Mesma reancoragem: `c90fc9b` era do histórico anterior. A âncora «último commit
+ * que tocou globals.css» mora em `medidas.mjs` e avança a cada fase que o toca. */
+import { COMMIT_ULTIMO_QUE_TOCOU_GLOBALS as COMMIT_DAS_FOLHAS_DA_FASE_5 } from "./medidas.mjs";
 
 /**
  * O peso de `out/_next/static/chunks` ANTES da onda 2.
@@ -489,7 +493,7 @@ async function gatesEstruturais() {
         if (imp.apenasTipo) continue;
         const alvo = resolverModulo(imp.especificador, atual);
         if (!alvo) continue;
-        const rel = path.relative(RAIZ, alvo);
+        const rel = path.relative(RAIZ, alvo).split(path.sep).join("/");
         if (/^src\/dados\/grafo\.tsx?$/.test(rel)) {
           violacoes.push([...caminho, rel].join(" → "));
           continue;
@@ -500,7 +504,9 @@ async function gatesEstruturais() {
       }
     }
   }
-  const relClientes = clientes.map((c) => path.relative(RAIZ, c));
+  // Separador normalizado para "/": no Windows `path.relative` devolve "\" e a chamada
+  // nominal abaixo casaria 0 de 11 mesmo com a varredura correta.
+  const relClientes = clientes.map((c) => path.relative(RAIZ, c).split(path.sep).join("/"));
   const daFaseVarridos = CLIENTES_DA_FASE_5.filter((c) => relClientes.includes(c));
   exigir(
     violacoes.length === 0 && daFaseVarridos.length === CLIENTES_DA_FASE_5.length,
@@ -527,7 +533,7 @@ async function gatesEstruturais() {
         if (imp.apenasTipo) continue;
         const alvo = resolverModulo(imp.especificador, atual);
         if (!alvo) continue;
-        if (/^src\/dados\/grafo\.tsx?$/.test(path.relative(RAIZ, alvo))) {
+        if (/^src\/dados\/grafo\.tsx?$/.test(path.relative(RAIZ, alvo).split(path.sep).join("/"))) {
           alcanca = true;
           break;
         }
@@ -592,7 +598,7 @@ async function gatesEstruturais() {
     const { limpo } = await fonte(a);
     for (const imp of importsDe(limpo)) {
       if (!imp.especificador.endsWith(".css")) continue;
-      const rel = path.relative(RAIZ, a);
+      const rel = path.relative(RAIZ, a).split(path.sep).join("/");
       if (rel === "src/app/layout.tsx" && imp.especificador === "./globals.css") continue;
       importsDeCss.push(`${rel} → ${imp.especificador}`);
     }
@@ -738,7 +744,7 @@ async function gatesEstruturais() {
   // nomeada, que é como um gate começa a não medir mais nada.
   const lendoAVisao = [];
   for (const a of arquivos) {
-    const rel = path.relative(RAIZ, a);
+    const rel = path.relative(RAIZ, a).split(path.sep).join("/");
     if (rel.startsWith("src/contexto/") || PODEM_LER_A_VISAO.includes(rel)) continue;
     const { limpo } = await fonte(a);
     for (const m of limpo.matchAll(/(?:const|let)\s*\{([^}]*)\}\s*=\s*useVisao\(\)/g)) {
@@ -748,7 +754,7 @@ async function gatesEstruturais() {
   }
   const ramosDeVisao = [];
   for (const a of arquivos) {
-    const rel = path.relative(RAIZ, a);
+    const rel = path.relative(RAIZ, a).split(path.sep).join("/");
     if (PODEM_LER_A_VISAO.includes(rel)) continue;
     const { limpo } = await fonte(a);
     const m = [...limpo.matchAll(/(?<![.\w])(visao|view)\s*===\s*["'](web|mobile|app|desk)["']/g)];
@@ -933,7 +939,11 @@ async function gatesEstruturais() {
       if (e.isDirectory()) {
         if (p === path.join(OUT, "_next") || p === path.join(OUT, "acervo")) continue;
         andar(p);
-      } else if (e.name.endsWith(".html")) paginas.push(path.relative(OUT, p));
+      } else if (e.name.endsWith(".html")) {
+        // Separador normalizado para "/" — no Windows `path.relative` devolve "\" e
+        // nenhuma das regexes de rota abaixo casaria (medido: 0 novas, resíduo 2463).
+        paginas.push(path.relative(OUT, p).split(path.sep).join("/"));
+      }
     }
   })(OUT);
 
@@ -1030,12 +1040,15 @@ console.log("<<<SONDA>>>" + JSON.stringify({
 `;
 
 async function sondarModulos() {
-  const tsx = path.join(RAIZ, "node_modules", ".bin", "tsx");
+  // A entrada JS do tsx, e não `node_modules/.bin/tsx`: o atalho de `.bin` é script de
+  // shell, e no Windows `execFileSync` não o executa (spawn EINVAL). O mesmo Node que
+  // roda esta suíte roda a sonda.
+  const tsx = path.join(RAIZ, "node_modules", "tsx", "dist", "cli.mjs");
   if (!existsSync(tsx)) {
     // Falha alta, não pulo. Sem a sonda este bloco não existe, e um gate que se autodispensa
     // quando a ferramenta falta é exatamente o que T-02-22 e T-04-26 proíbem.
     throw new Error(
-      `node_modules/.bin/tsx não existe. Ele é devDependency do projeto e é como esta suíte lê o ` +
+      `node_modules/tsx/dist/cli.mjs não existe. tsx é devDependency do projeto e é como esta suíte lê o ` +
         `que os cinco módulos da fase calculam. Rode \`npm install\`. NÃO pulo o gate.`,
     );
   }
@@ -1043,7 +1056,7 @@ async function sondarModulos() {
   await writeFile(arquivo, SONDA, "utf8");
   let saida;
   try {
-    saida = execFileSync(tsx, [arquivo], { cwd: RAIZ, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+    saida = execFileSync(process.execPath, [tsx, arquivo], { cwd: RAIZ, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
   } finally {
     await rm(arquivo, { force: true }).catch(() => {});
   }

@@ -24,7 +24,7 @@ export function OnboardingDisposicao() {
   return (
     <section className="flex flex-col gap-3">
       <h2 className="flex items-center gap-1.5 text-xl leading-tight font-bold">
-        <Grafismo variacao="barra" className="h-4 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="h-4 w-auto shrink-0 text-acao" />
         O que te move hoje?
       </h2>
       <p className="text-xs text-black/55">
@@ -56,7 +56,7 @@ export function OnboardingDisposicao() {
                 {disposicao.explicacao}
               </span>
               {disposicao.ausencia ? (
-                <span className="block border-l-2 border-[var(--ic-laranja)] pl-2 text-[0.7rem] leading-snug text-black/55">
+                <span className="block border-l-2 border-acao pl-2 text-[0.7rem] leading-snug text-black/55">
                   {disposicao.ausencia}
                 </span>
               ) : (

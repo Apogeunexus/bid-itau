@@ -46,7 +46,7 @@ function LinhaVinculo({ grupo, item }: { grupo: GrupoVinculo; item: ItemVinculo 
           e não um link: sem esta pastilha, «A. Mattera» e «Paço Imperial» pareceriam a
           mesma coisa dentro do mesmo bloco. */}
       {item.papel ? (
-        <span className="shrink-0 self-start rounded-full border border-[var(--ic-laranja)] px-2 py-0.5 text-xs font-bold text-[var(--ic-laranja)]">
+        <span className="shrink-0 self-start rounded-full border border-acao px-2 py-0.5 text-xs font-bold text-acao">
           {item.papel}
         </span>
       ) : null}
@@ -116,7 +116,7 @@ export function BlocoPonte({
       className={`flex flex-col gap-1 ${className ?? ""}`}
     >
       <h3 className="flex items-baseline gap-1.5 text-sm font-bold">
-        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
         {rotulo ?? grupo.rotulo}
         {!vazio ? (
           <span className="text-xs font-normal text-black/45">
@@ -174,7 +174,7 @@ export function BlocoAusenciaDeclarada({
   return (
     <section data-ponte={chave} className={`flex flex-col gap-1 ${className ?? ""}`}>
       <h3 className="flex items-baseline gap-1.5 text-sm font-bold">
-        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
         {rotulo}
       </h3>
       <p

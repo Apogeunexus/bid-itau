@@ -38,7 +38,7 @@ export default async function PaginaPorque({ params }: { params: Promise<{ id: s
       <div className="flex min-h-full flex-col gap-3 p-4">
         <Link
           href="/descobrir/"
-          className="text-xs font-bold text-[var(--ic-laranja)] underline underline-offset-2"
+          className="text-xs font-bold text-acao underline underline-offset-2"
         >
           ← Descobrir
         </Link>
@@ -49,7 +49,7 @@ export default async function PaginaPorque({ params }: { params: Promise<{ id: s
         </p>
         <p
           data-limite-ia
-          className="mt-auto border-t-2 border-[var(--ic-laranja)] pt-2 text-[0.7rem] leading-snug text-black/70"
+          className="mt-auto border-t-2 border-acao pt-2 text-[0.7rem] leading-snug text-black/70"
         >
           <strong className="font-bold">Nenhuma decisão editorial foi tomada por IA.</strong> O
           caminho mostrado nesta tela é travessia determinística no grafo do acervo, e o

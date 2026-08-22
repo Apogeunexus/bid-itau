@@ -97,7 +97,7 @@ function Secao({
   return (
     <section className={`flex flex-col gap-2 ${className ?? ""}`}>
       <h2 className="flex items-center gap-1.5 text-sm font-bold tracking-wide text-black/70 uppercase">
-        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
         {titulo}
       </h2>
       {children}
@@ -122,7 +122,7 @@ function No({ no, papel }: { no: NonNullable<PassoTrilha["de"]>; papel: string }
       {no.rota ? (
         <Link href={no.rota} className="block no-underline">
           {corpo}
-          <span className="mt-1 block text-xs font-semibold text-[var(--ic-laranja)] underline underline-offset-2">
+          <span className="mt-1 block text-xs font-semibold text-acao underline underline-offset-2">
             abrir a página
           </span>
         </Link>
@@ -144,8 +144,8 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
   const gratuitas = final.sessoes.filter((s) => s.gratuito).length;
 
   return (
-    <div className="mt-3 flex flex-col gap-3 rounded-lg border border-[var(--ic-laranja)] bg-[color-mix(in_srgb,var(--ic-laranja)_6%,transparent)] p-3">
-      <p className="text-[0.65rem] font-bold tracking-wide text-[var(--ic-laranja)] uppercase">
+    <div className="mt-3 flex flex-col gap-3 rounded-lg border border-acao bg-[color-mix(in_srgb,var(--ic-laranja)_6%,transparent)] p-3">
+      <p className="text-[0.65rem] font-bold tracking-wide text-acao uppercase">
         Aqui a trilha vira agenda
       </p>
 
@@ -218,7 +218,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
             href={final.evento.fonte}
             target="_blank"
             rel="noreferrer"
-            className="text-xs font-semibold text-[var(--ic-laranja)] underline underline-offset-2"
+            className="text-xs font-semibold text-acao underline underline-offset-2"
           >
             conferir na fonte
           </a>
@@ -262,7 +262,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
       {final.evento.rota ? (
         <Link
           href={final.evento.rota}
-          className="rounded-full bg-[var(--ic-laranja)] px-4 py-2 text-center text-sm font-bold text-[var(--ic-branco)] no-underline"
+          className="rounded-full bg-acao px-4 py-2 text-center text-sm font-bold text-[var(--ic-branco)] no-underline"
         >
           abrir a página do evento
         </Link>
@@ -290,7 +290,7 @@ function Passo({ passo, total }: { passo: PassoTrilha; total: number }) {
         <No no={passo.de} papel="de onde veio" />
         <div
           aria-hidden
-          className="flex shrink-0 items-center text-lg font-bold text-[var(--ic-laranja)]"
+          className="flex shrink-0 items-center text-lg font-bold text-acao"
         >
           →
         </div>
@@ -301,7 +301,7 @@ function Passo({ passo, total }: { passo: PassoTrilha; total: number }) {
       <p className="selo-motivo" data-motivo-passo={passo.motivo}>
         <Grafismo
           variacao="barra"
-          className="mt-0.5 h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]"
+          className="mt-0.5 h-3.5 w-auto shrink-0 text-acao"
         />
         <span>{passo.motivo}</span>
       </p>
@@ -314,7 +314,7 @@ function Passo({ passo, total }: { passo: PassoTrilha; total: number }) {
         className="flex flex-col gap-1 rounded-lg border border-black/15 bg-[var(--ic-branco)] p-2.5"
       >
         <p className="flex flex-wrap items-center gap-1.5 text-xs font-bold">
-          <span className="rounded-full border border-[var(--ic-laranja)] px-2 py-0.5 text-[0.65rem] tracking-wide text-[var(--ic-laranja)] uppercase">
+          <span className="rounded-full border border-acao px-2 py-0.5 text-[0.65rem] tracking-wide text-acao uppercase">
             {procedencia ?? "sem aresta"}
           </span>
           {procedencia ? ROTULO_PROCEDENCIA[procedencia] : "os dois passos não estão ligados"}
@@ -348,7 +348,7 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
       {/* ---- Título, destino e a ponte em uma frase ---- */}
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
           <h1 className="text-2xl leading-tight font-bold">{trilha.titulo}</h1>
         </div>
 
@@ -373,8 +373,8 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
       </header>
 
       {/* ---- A procedência da trilha inteira, antes dos passos ---- */}
-      <div className="flex flex-col gap-1.5 rounded-xl border border-[var(--ic-laranja)] bg-[color-mix(in_srgb,var(--ic-laranja)_7%,transparent)] p-3">
-        <p className="text-[0.65rem] font-bold tracking-wide text-[var(--ic-laranja)] uppercase">
+      <div className="flex flex-col gap-1.5 rounded-xl border border-acao bg-[color-mix(in_srgb,var(--ic-laranja)_7%,transparent)] p-3">
+        <p className="text-[0.65rem] font-bold tracking-wide text-acao uppercase">
           {trilha.ligacoesAutoradas} de {trilha.passos.length}{" "}
           {trilha.passos.length === 1 ? "ligação autorada" : "ligações autoradas"}
         </p>
@@ -414,7 +414,7 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
         onClick={() => alternarSalvo(trilha.id)}
         className={
           salva
-            ? "cursor-pointer rounded-full border border-[var(--ic-laranja)] bg-[var(--ic-laranja)] px-4 py-2 text-sm font-bold text-[var(--ic-branco)]"
+            ? "cursor-pointer rounded-full border border-acao bg-acao px-4 py-2 text-sm font-bold text-[var(--ic-branco)]"
             : "cursor-pointer rounded-full border border-black/20 px-4 py-2 text-sm font-bold hover:border-[var(--ic-preto)]"
         }
       >

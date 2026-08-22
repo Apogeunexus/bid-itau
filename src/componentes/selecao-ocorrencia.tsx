@@ -142,13 +142,13 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
       <header className="flex flex-col gap-2">
         <Link
           href={`/evento/${evento.slug}/`}
-          className="w-fit text-xs font-semibold text-[var(--ic-laranja)] underline underline-offset-2"
+          className="w-fit text-xs font-semibold text-acao underline underline-offset-2"
         >
           ← voltar para o evento
         </Link>
 
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{evento.titulo}</h1>
         </div>
 
@@ -268,7 +268,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
                       onClick={() => salvarSessao(sessao.id)}
                       className={`w-fit cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors ${
                         salvo
-                          ? "border-[var(--ic-laranja)] bg-[var(--ic-laranja)] text-[var(--ic-branco)]"
+                          ? "border-acao bg-acao text-[var(--ic-branco)]"
                           : "border-black/25 text-[var(--ic-preto)] hover:border-[var(--ic-preto)]"
                       }`}
                     >
@@ -283,7 +283,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
                         </span>
                         <Link
                           href="/salvos/"
-                          className="w-fit text-xs font-bold text-[var(--ic-laranja)] underline underline-offset-2"
+                          className="w-fit text-xs font-bold text-acao underline underline-offset-2"
                         >
                           ver as sessões salvas
                         </Link>

@@ -333,7 +333,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {/* ================================================================== */}
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Acontece</h1>
           <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
             C1
@@ -617,7 +617,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
             <div className="flex flex-col gap-1">
               <a
                 href={lente}
-                className="w-fit rounded-full bg-[var(--ic-laranja)] px-4 py-2 text-sm font-semibold text-[var(--ic-branco)] no-underline transition-opacity hover:opacity-90"
+                className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-[var(--ic-branco)] no-underline transition-opacity hover:opacity-90"
               >
                 Ver este dia no mapa
               </a>
@@ -653,7 +653,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
                     <p className="contagem-sessoes">
                       <Grafismo
                         variacao="barra"
-                        className="mt-0.5 h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]"
+                        className="mt-0.5 h-3.5 w-auto shrink-0 text-acao"
                       />
                       <span>
                         <strong>{plural(evento.totalSessoes, "sessão", "sessões")}</strong>
@@ -691,7 +691,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
 
                     <Link
                       href={`/evento/${evento.slug}/sessoes/`}
-                      className="w-fit text-xs font-semibold text-[var(--ic-laranja)] underline underline-offset-2"
+                      className="w-fit text-xs font-semibold text-acao underline underline-offset-2"
                     >
                       escolher e salvar uma sessão
                     </Link>

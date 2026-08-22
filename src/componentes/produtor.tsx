@@ -165,7 +165,7 @@ function BlocoDoProdutor({
           <h2 className="flex items-baseline gap-1.5 text-sm font-bold">
             <Grafismo
               variacao="barra"
-              className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]"
+              className="h-3.5 w-auto shrink-0 text-acao"
             />
             {rotulo}
             {contagem ? (
@@ -202,7 +202,7 @@ function LinhaDeEvento({ evento }: { evento: EventoDoProdutor }) {
         </span>
       </span>
       {evento.datado ? (
-        <span className="shrink-0 self-start rounded-full border border-[var(--ic-laranja)] px-2 py-0.5 text-xs font-bold text-[var(--ic-laranja)]">
+        <span className="shrink-0 self-start rounded-full border border-acao px-2 py-0.5 text-xs font-bold text-acao">
           com sessão datada
         </span>
       ) : null}
@@ -250,7 +250,7 @@ function LinhaDePessoa({ pessoa }: { pessoa: PessoaLigada }) {
           </span>
         </span>
         {pessoa.papel ? (
-          <span className="shrink-0 self-start rounded-full border border-[var(--ic-laranja)] px-2 py-0.5 text-xs font-bold text-[var(--ic-laranja)]">
+          <span className="shrink-0 self-start rounded-full border border-acao px-2 py-0.5 text-xs font-bold text-acao">
             {pessoa.papel}
           </span>
         ) : null}
@@ -371,7 +371,7 @@ export function Produtor({
         className="pr-bloco pr-cartaz flex flex-col gap-2"
       >
         <h2 className="flex items-baseline gap-1.5 text-sm font-bold">
-          <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
           O que está em cartaz agora
         </h2>
         <p className="pr-cartaz-frase">{fraseDoCartaz}</p>

@@ -53,7 +53,7 @@ export function TelaEntidade({
             {entidade.fonte ? (
               <a
                 href={entidade.fonte}
-                className="w-fit text-xs font-semibold text-[var(--ic-laranja)] underline underline-offset-2"
+                className="w-fit text-xs font-semibold text-acao underline underline-offset-2"
                 rel="noreferrer"
               >
                 fonte no acervo do Itaú Cultural

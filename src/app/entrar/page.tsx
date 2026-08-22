@@ -23,12 +23,12 @@ export default function Entrar() {
       <EsqueletoBloco altura="9rem" rotulo="imagem do acervo, com a marca por cima" />
 
       <p className="flex items-center gap-2 text-lg leading-snug font-bold">
-        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
         Descubra a cultura brasileira pelo que te move
       </p>
 
       {/* D-25 exige que o mock esteja rotulado como tal NA PRÓPRIA TELA. */}
-      <p className="rounded-lg border border-[var(--ic-laranja)] bg-[var(--ic-laranja)]/10 p-3 text-xs font-semibold">
+      <p className="rounded-lg border border-acao bg-acao/10 p-3 text-xs font-semibold">
         Mock explícito: este protótipo não tem autenticação. Escolher uma persona só grava a
         escolha no navegador — não há cadastro, senha, sessão nem dado pessoal.
       </p>
@@ -44,7 +44,7 @@ export default function Entrar() {
 
       <Link
         href="/descobrir"
-        className="w-fit text-sm font-semibold text-[var(--ic-laranja)] underline underline-offset-2"
+        className="w-fit text-sm font-semibold text-acao underline underline-offset-2"
       >
         Pular para Descobrir
       </Link>

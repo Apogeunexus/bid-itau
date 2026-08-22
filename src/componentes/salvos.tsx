@@ -90,7 +90,7 @@ function BlocoAlerta({ alteracao }: { alteracao: AlteracaoAutorada }) {
       <div className="alerta-cabeca">
         <Grafismo
           variacao="barra"
-          className="h-3.5 w-auto shrink-0 text-[var(--ic-laranja)]"
+          className="h-3.5 w-auto shrink-0 text-acao"
         />
         <span data-procedencia-alerta={alteracao.procedencia} className="alerta-selo">
           {alteracao.procedencia}
@@ -309,7 +309,7 @@ export function Salvos({
       {/* ---- 1. Cabeçalho: a fila é de sessões, não de eventos (D-56) ---- */}
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
           <h1 className="text-2xl leading-tight font-bold">Salvos</h1>
           <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
             C1

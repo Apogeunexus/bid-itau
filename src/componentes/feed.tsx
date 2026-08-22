@@ -80,7 +80,7 @@ export function Feed({
             <li
               key={aviso.origem}
               data-aviso={aviso.origem}
-              className="rounded-lg border border-[var(--ic-laranja)] bg-[var(--ic-branco)] p-2.5 text-xs leading-snug"
+              className="rounded-lg border border-acao bg-[var(--ic-branco)] p-2.5 text-xs leading-snug"
             >
               {aviso.texto}
             </li>

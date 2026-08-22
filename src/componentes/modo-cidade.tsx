@@ -288,7 +288,7 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
       {/* ================================================================== */}
       <header className="flex flex-col gap-1.5">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{dados.titulo}</h1>
           <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
             C1
@@ -328,7 +328,7 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
       {/*     importante da fase e a ponte narrativa para o Studio.            */}
       {/* ================================================================== */}
       <section className="cidade-enquadramento" data-enquadramento={dados.slug}>
-        <Grafismo variacao="barra" className="h-4 w-auto shrink-0 text-[var(--ic-laranja)]" />
+        <Grafismo variacao="barra" className="h-4 w-auto shrink-0 text-acao" />
         <div className="flex flex-col gap-1.5">
           <p className="cidade-enquadramento-frase">{enquadramento.frase}</p>
           <p className="cidade-enquadramento-adiante">{enquadramento.fraseDoStudio}</p>
@@ -449,7 +449,7 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
                           >
                             <Grafismo
                               variacao="barra"
-                              className="mt-px h-3 w-auto shrink-0 text-[var(--ic-laranja)]"
+                              className="mt-px h-3 w-auto shrink-0 text-acao"
                             />
                             <span>{item.proprioDoTerritorio.curta}</span>
                           </p>

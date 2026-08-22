@@ -41,7 +41,7 @@ export default async function PaginaTrilha({
           <div className="flex items-baseline gap-2">
             <Grafismo
               variacao="barra"
-              className="h-5 w-auto shrink-0 text-[var(--ic-laranja)]"
+              className="h-5 w-auto shrink-0 text-acao"
             />
             <h1 className="text-2xl leading-tight font-bold">Trilha não encontrada</h1>
           </div>
@@ -52,7 +52,7 @@ export default async function PaginaTrilha({
           </p>
           <Link
             href="/descobrir/"
-            className="text-sm font-semibold text-[var(--ic-laranja)] underline underline-offset-2"
+            className="text-sm font-semibold text-acao underline underline-offset-2"
           >
             voltar para Descobrir
           </Link>

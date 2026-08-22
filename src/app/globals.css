@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
+ * A camada de tokens do design system vem PRIMEIRO: variantes de visão, cores
+ * semânticas, escala tipográfica, espaço, raio, sombra e motion. As folhas de
+ * tela consomem esses tokens. Decisões documentadas em docs/DESIGN-SYSTEM.md.
+ * ------------------------------------------------------------------------- */
+@import "../estilos/tokens.css";
+
+/* ---------------------------------------------------------------------------
  * As folhas por tela, reunidas aqui.
  *
  * Durante a fase 3, cada plano teve o seu arquivo em `src/estilos/` porque quatro
@@ -22,19 +29,6 @@
 @import "../estilos/salvos.css";
 
 /* As quatro folhas da fase 4, declaradas AQUI E DE UMA VEZ, pelo plano 04-01.
- *
- * `globals.css` é o único arquivo que os três planos da onda 2 — 04-02 (fila de
- * duplicatas), 04-03 (ocorrências) e 04-04 (roteiro) — tocariam. Como a fase 3
- * registrou por escrito, dois executores editando a mesma folha é a colisão que o
- * merge não resolve sozinho. Declarando as quatro linhas na onda 1, o ponto de
- * colisão deixa de EXISTIR em vez de ser administrado: cada plano da onda 2 escreve
- * só na sua folha, e nenhum precisa esperar os outros nem tocar este arquivo.
- *
- * POR ISSO TRÊS DELAS CHEGAM AQUI VAZIAS DE REGRA. `studio-ocorrencias.css` e
- * `roteiro.css` só ganham conteúdo em 04-03 e 04-04; `studio-duplicatas.css` recebe
- * as regras do grupo ainda nesta fase e as da fila em 04-02. Uma folha vazia importada
- * não custa byte no bundle — e custa muito menos que a colisão que ela evita.
- *
  * `studio.css` é o vocabulário compartilhado das duas telas de bastidor da fase.
  * Vem primeiro de propósito: as folhas por tela sobrescrevem o compartilhado, nunca
  * o contrário. */
@@ -44,16 +38,6 @@
 @import "../estilos/roteiro.css";
 
 /* As 11 folhas da fase 5, declaradas AQUI E DE UMA VEZ, pelo plano 05-01.
- *
- * Mesmo gesto que 04-01 fez com quatro folhas e três executores, agora com onze e seis:
- * `globals.css` é o único arquivo que os SEIS planos da onda 2 — 05-02 (Descobrir web),
- * 05-03 (evento web), 05-04 (Redação), 05-05 (Observatório), 05-06 (Filtros e
- * zero-resultado) e 05-07 (Play) — tocariam. Declarando as onze linhas na onda 1, o ponto
- * de colisão deixa de EXISTIR em vez de ser administrado: cada plano da onda 2 escreve só
- * na sua folha, e nenhum precisa esperar os outros nem tocar este arquivo.
- *
- * POR ISSO DEZ DELAS CHEGAM AQUI VAZIAS DE REGRA. Uma folha vazia importada não custa byte
- * no bundle — e custa muito menos que a colisão que ela evita.
  *
  * `web.css` vem PRIMEIRO de todas, e não é ordem alfabética: ela é o vocabulário
  * compartilhado da visão web desktop (D-79, D-80, D-81), e as folhas por tela têm de poder
@@ -85,22 +69,13 @@
 @import "../estilos/play.css";
 
 /* ---------------------------------------------------------------------------
- * As duas variantes que sustentam a promessa de duas visões (D-01, D-02).
- *
- * A visão é ESTADO DA APLICAÇÃO, não tamanho de janela: o ViewProvider escreve
- * data-view no elemento raiz da casca e estas variantes respondem a ele.
- * O :is(… *, …) cobre tanto os descendentes quanto o próprio elemento portador.
- *
- * As variantes de breakpoint nativas do Tailwind não são usadas neste projeto —
- * amarrariam o alternador ao tamanho da janela do avaliador, e a apresentação
- * precisa funcionar numa telona.
- *
- * LIMITE CONHECIDO: `app:` e `desk:` só prefixam UTILITÁRIO do Tailwind. Uma
- * classe semântica nossa (`.moldura`, `.selo-linguagem`) nunca aceita a variante
- * — para essas, escreva CSS puro sob `[data-view="…"] .classe`, mais abaixo.
+ * A base visual (camada base tipográfica, moldura D-03, modo comentado, cartão)
+ * vem DEPOIS das folhas de tela, na mesma posição do cascade que essas regras
+ * ocupavam quando moravam neste arquivo. Movidas na consolidação do design
+ * system de 2026-08 — desde ela, `globals.css` é só a paleta da marca + @import,
+ * como ARQUITETURA §5 sempre pediu.
  * ------------------------------------------------------------------------- */
-@custom-variant app (&:is([data-view="mobile"] *, [data-view="mobile"]));
-@custom-variant desk (&:is([data-view="web"] *, [data-view="web"]));
+@import "../estilos/base.css";
 
 /* ---------------------------------------------------------------------------
  * Paleta — fonte de verdade ÚNICA dos hex do manual (D-06, D-07, FUND-03).
@@ -147,224 +122,4 @@
    * --------------------------------------------------------------------- */
   --fonte-texto: "Itaú Text", "Itaú Display", Myriad, Arial, Helvetica, sans-serif;
   --fonte-display: "Itaú Display", "Itaú Text", Myriad, Arial, Helvetica, sans-serif;
-}
-
-/* Exposição ao Tailwind: os utilitários leem o token, e trocar o token troca a
- * cor sem recompilar classe nenhuma (D-06). */
-@theme {
-  --color-ic-laranja: var(--ic-laranja);
-  --color-ic-preto: var(--ic-preto);
-  --color-ic-branco: var(--ic-branco);
-  --color-ic-lilas: var(--ic-lilas);
-  --color-ic-azul: var(--ic-azul);
-  --color-ic-amarelo: var(--ic-amarelo);
-  --color-ic-rosa: var(--ic-rosa);
-  --color-ic-verde: var(--ic-verde);
-  --color-ic-verde-agua: var(--ic-verde-agua);
-  --color-fit-azul: var(--fit-azul);
-  --color-fit-laranja: var(--fit-laranja);
-  --color-fit-cyan: var(--fit-cyan);
-
-  --font-texto: var(--fonte-texto);
-  --font-display: var(--fonte-display);
-}
-
-@layer base {
-  body {
-    font-family: var(--fonte-texto);
-    font-size: 16px; /* 12 pt — o teto da stack de texto (D-10) */
-    line-height: 1.5;
-  }
-
-  /* 13 pt (17 px) para cima é território da Display (D-10). Título é sempre
-   * display, independente do tamanho que a tela lhe der. */
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-family: var(--fonte-display);
-  }
-}
-
-html,
-body {
-  background: var(--ic-branco);
-  color: var(--ic-preto);
-}
-
-/* ---------------------------------------------------------------------------
- * Moldura de celular da visão mobile (D-03).
- *
- * Escrita em CSS puro e presa ao atributo data-view, e não a uma variante
- * Tailwind, porque `app:` só se aplica a utilitários — não a classes semânticas.
- * O gatilho continua sendo a visão escolhida, não o tamanho da janela.
- *
- * A MOLDURA TEM ALTURA E ROLA POR DENTRO, e isso não é detalhe estético: é o que
- * permite a barra de abas ficar contida nela. Barra com `position: fixed` se
- * ancoraria na JANELA, não no telefone, e escaparia para a largura toda da tela
- * — destruindo exatamente a ilusão que D-03 existe para criar. Com a moldura
- * como contêiner de rolagem, a barra usa `sticky` e fica presa ao pé do
- * telefone. 390×844 é o tamanho lógico de um iPhone 14/15.
- * ------------------------------------------------------------------------- */
-[data-view="mobile"] .palco {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 2rem 1rem;
-}
-
-[data-view="mobile"] .moldura {
-  width: 390px;
-  height: min(844px, calc(100vh - 4rem));
-  flex: none;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border: 10px solid var(--ic-preto);
-  border-radius: 2.5rem;
-  background: var(--ic-branco);
-  box-shadow: 0 24px 60px rgb(0 0 0 / 0.25);
-}
-
-/* A ÚNICA media query do projeto. É sobre o tamanho real da janela — num celular
- * de verdade a moldura seria uma moldura dentro de outra — e não sobre a visão
- * escolhida, que é estado da aplicação (D-01, D-02). */
-@media (max-width: 430px) {
-  [data-view="mobile"] .palco {
-    padding: 0;
-  }
-
-  [data-view="mobile"] .moldura {
-    width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-  /* Sem moldura, os controles fixos cairiam em cima da barra de abas. Eles continuam
-   * presos à janela de propósito (D-04) — só sobem o suficiente para não brigar.
-   * O alvo é o CANTO, que é quem carrega o `fixed`; o alternador e o interruptor de modo
-   * comentado viajam dentro dele, empilhados. */
-  [data-view="mobile"] .canto {
-    bottom: 5.5rem;
-  }
-}
-
-/* ---------------------------------------------------------------------------
- * MODO COMENTADO — o interruptor que separa produto de especificação anotada.
- *
- * `<Comentario>` marca todo texto que fala SOBRE o protótipo — o parágrafo que explica a
- * tela, o mecanismo, a citação de número de decisão. A casca escreve `data-comentado` no
- * MESMO elemento raiz que carrega `data-view`, e a regra abaixo responde a ele: nenhum dos
- * componentes precisa assinar o contexto para saber se deve renderizar.
- *
- * CSS PURO, e não uma variante Tailwind, pelo limite já anotado lá em cima: `app:`/`desk:`
- * e qualquer variante só prefixam UTILITÁRIO. `.comentario` é classe semântica nossa e
- * nunca aceitaria `comentado:comentario`.
- *
- * `display: none` E NÃO «ESCONDIDO VISUALMENTE». Um comentário que continuasse no fluxo
- * ocupando altura deixaria a tela furada exatamente onde o texto foi tirado — e o modo
- * desligado, que é o padrão, pareceria uma tela quebrada. Como `display: none` remove a
- * caixa, os contêineres em `flex … gap-N` também não abrem espaço entre os irmãos: o gap do
- * flexbox só existe entre caixas geradas.
- * ------------------------------------------------------------------------- */
-[data-comentado="nao"] .comentario {
-  display: none;
-}
-
-/* ---------------------------------------------------------------------------
- * Cartão de Descobrir e capa sem imagem (fase 2, plano 02-01).
- *
- * Escrito em CSS puro, e não com as variantes `app:`/`desk:`, pelo limite conhecido lá
- * de cima: `app:` e `desk:` só prefixam UTILITÁRIO do Tailwind. `.cartao` é classe
- * semântica nossa e nunca aceitaria `app:cartao` — a variação de visão dela mora aqui.
- *
- * NADA AQUI USA POSIÇÃO ANCORADA NA JANELA. Dentro da moldura de celular, `fixed`
- * escaparia para a largura da tela e quebraria a ilusão de D-03. Quem precisar grudar
- * usa `sticky`, como a barra de abas faz.
- * ------------------------------------------------------------------------- */
-.cartao {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border: 1px solid rgb(0 0 0 / 0.1);
-  border-radius: 0.85rem;
-  background: var(--ic-branco);
-}
-
-/* Cartão especial: o destaque curado (D-29) e a serendipidade (D-30) precisam ser
- * VISIVELMENTE outra coisa, senão o rótulo textual vira letra miúda que ninguém lê. */
-.cartao[data-especial] {
-  border-color: var(--ic-laranja);
-  box-shadow: 0 0 0 1px var(--ic-laranja) inset;
-}
-
-.cartao-faixa {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin: -0.25rem -0.25rem 0;
-  color: var(--ic-laranja);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-/* O SELO DE MOTIVO. Peso visual de primeira ordem de propósito: é o elemento que
- * diferencia mediação legível de recomendador opaco, e é o que vai para a foto do
- * slide. Rebaixá-lo a legenda cinza desmontaria o argumento da tela. */
-.selo-motivo {
-  display: flex;
-  gap: 0.4rem;
-  padding: 0.5rem 0.6rem;
-  border-left: 3px solid var(--ic-laranja);
-  border-radius: 0 0.5rem 0.5rem 0;
-  /* color-mix e não um rgb() literal: o hex do laranja tem UMA fonte de verdade,
-   * que é o token acima. Repetir 255 120 0 aqui criaria a segunda (D-06). */
-  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
-  font-size: 0.8125rem;
-  line-height: 1.35;
-  font-weight: 600;
-}
-
-.capa-sem-imagem {
-  isolation: isolate;
-}
-
-/* Cartão grande de disposição — tela 2, DESC-01. */
-.cartao-disposicao {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  padding: 0.75rem 0.85rem;
-  border: 1px solid rgb(0 0 0 / 0.15);
-  border-radius: 0.85rem;
-  background: var(--ic-branco);
-  transition: border-color 120ms ease, background-color 120ms ease;
-}
-
-.cartao-disposicao:hover {
-  border-color: var(--ic-preto);
-}
-
-.cartao-disposicao-ativa,
-.cartao-disposicao-ativa:hover {
-  border-color: var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 10%, transparent);
-}
-
-/* Na visão web o mesmo cartão respira mais e a capa fica maior — mesma árvore de JSX,
- * outra medida (D-05: é proibido um componente irmão por visão). */
-[data-view="web"] .cartao {
-  padding: 1rem;
-  border-radius: 1rem;
-}
-
-[data-view="web"] .selo-motivo {
-  font-size: 0.875rem;
 }
