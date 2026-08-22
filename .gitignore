@@ -32,3 +32,5 @@ tsconfig.tsbuildinfo
 # recebe os tres por canal privado. A paleta e a tipografia ja estao extraidas
 # em src/app/globals.css e documentadas em docs/ARQUITETURA.md.
 referencias/
+
+.vercel
