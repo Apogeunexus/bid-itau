@@ -118,11 +118,21 @@
   max-width: calc(100% - 3rem);
   box-shadow: var(--sombra-3);
   transform: translateX(-110%);
-  transition: transform var(--dur-3) var(--ease-padrao);
+  /* `visibility: hidden` com atraso igual ao da saída: a gaveta fechada sai da
+   * ordem de tabulação e da árvore de acessibilidade — um Tab a partir do
+   * hambúrguer não pode entrar num menu que não está na tela (flow-critic). */
+  visibility: hidden;
+  transition:
+    transform var(--dur-3) var(--ease-padrao),
+    visibility 0s var(--dur-3);
 }
 
 [data-view="mobile"] .menu-lateral[data-aberto="sim"] {
   transform: translateX(0);
+  visibility: visible;
+  transition:
+    transform var(--dur-3) var(--ease-padrao),
+    visibility 0s;
 }
 
 [data-view="mobile"] .menu-scrim {

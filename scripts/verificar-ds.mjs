@@ -12,9 +12,11 @@
  *     `text-tinta`/`bg-fundo`/`bg-superficie`).
  *  4. Só `tokens.css` DECLARA tokens do DS (`--cor-*`, `--tipo-*`, `--espaco-*`,
  *     `--raio-*`, `--sombra-*`, `--dur-*`). As outras folhas consomem.
- *  5. Nas folhas MIGRADAS, medida literal (`rem`/`px`/`ms`) e `text-align:
- *     center|justify` em bloco de texto são proibidos — a lista começa nas
- *     folhas novas do DS e cresce a cada onda de redesign.
+ *  5. Nas folhas MIGRADAS, medida `rem` FORA da grade de 0.25rem, `px`/`ms`
+ *     literais e `text-align: center|justify` em bloco de texto são proibidos
+ *     (a regra documentada em DESIGN-SYSTEM.md §2: múltiplos da grade são
+ *     legítimos; papel semântico vira token; duração vira --dur-*). A lista
+ *     cresce a cada onda de redesign.
  *
  * Rode com `node scripts/verificar-ds.mjs`.
  */
@@ -26,8 +28,8 @@ const RAIZ = path.resolve(import.meta.dirname, "..");
 const SRC = path.join(RAIZ, "src");
 
 /** Folhas cuja migração para tokens já foi feita — as únicas onde medida
- *  literal é proibida. Cada onda de redesign acrescenta as suas aqui. */
-const FOLHAS_MIGRADAS = [];
+ *  literal fora da grade é proibida. Cada onda de redesign acrescenta as suas. */
+const FOLHAS_MIGRADAS = ["menu-lateral.css"];
 
 /** Medidas que podem existir mesmo em folha migrada, nomeadas uma a uma. */
 const EXCECOES_DE_MEDIDA = [
@@ -152,7 +154,12 @@ console.log("\nverificar-ds — regras estruturais do design system");
     const limpo = semComentarios(await readFile(a, "utf8"));
     const medidas = [...limpo.matchAll(/\b\d+(?:\.\d+)?(?:rem|px|ms)\b/g)]
       .map((m) => m[0])
-      .filter((m) => !EXCECOES_DE_MEDIDA.includes(m));
+      .filter((m) => {
+        if (EXCECOES_DE_MEDIDA.includes(m)) return false;
+        // rem múltiplo de 0.25 é a grade — legítimo (DESIGN-SYSTEM.md §2).
+        if (m.endsWith("rem")) return (Number(m.slice(0, -3)) * 100) % 25 !== 0;
+        return true;
+      });
     const centrados = [...limpo.matchAll(/text-align:\s*(center|justify)/g)];
     exigir(
       medidas.length === 0 && centrados.length === 0,

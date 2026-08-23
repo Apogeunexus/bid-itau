@@ -236,6 +236,41 @@ export function SalvarRoteiro({ combinacao }: { combinacao: string }) {
   );
 }
 
+/**
+ * Link de troca de combinação que PRESERVA a companhia do hash: sem isso, trocar
+ * gosto ou janela apagaria em silêncio uma das quatro respostas (achado do
+ * critic). O href nasce sem hash no HTML estático e ganha o hash após montar —
+ * mudança de atributo, sem divergência de hidratação.
+ */
+export function LinkDaCombinacao({
+  href,
+  ativo,
+  children,
+}: {
+  href: string;
+  ativo: boolean;
+  children: React.ReactNode;
+}) {
+  const [hash, setHash] = useState("");
+  useEffect(() => {
+    const m = window.location.hash.match(/companhia=[a-z-]+/);
+    if (m) setHash(`#${m[0]}`);
+  }, []);
+  return (
+    <a
+      href={`${href}${hash}`}
+      aria-current={ativo ? "true" : undefined}
+      className={
+        ativo
+          ? "rounded-pilula bg-tinta px-2.5 py-1 text-xs font-bold text-ic-branco no-underline"
+          : "rounded-pilula border border-borda px-2.5 py-1 text-xs font-semibold text-tinta-2 no-underline"
+      }
+    >
+      {children}
+    </a>
+  );
+}
+
 /** O aviso da companhia, lido do hash — a resposta 2 viaja fora do slug de propósito. */
 export function AvisoDaCompanhia({ rotulos }: { rotulos: Record<string, string> }) {
   const [companhia, setCompanhia] = useState<string | null>(null);

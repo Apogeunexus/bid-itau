@@ -234,7 +234,11 @@ function ItemDeMenu({
 }
 
 export function MenuLateral() {
-  const caminho = usePathname() ?? "";
+  // Sem a barra final: `trailingSlash: true` faz o pathname canônico vir como
+  // `/descobrir/`, e a igualdade exata do aria-current nunca acenderia contra os
+  // hrefs sem barra (regressão pega pelo flow-critic — a barra de abas antiga
+  // normalizava com startsWith).
+  const caminho = (usePathname() ?? "").replace(/\/$/, "");
   const { personaId } = useSessao();
   const persona = personaPorId(personaId);
   const [aberto, setAberto] = useState(false);

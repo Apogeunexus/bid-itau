@@ -5,6 +5,7 @@ import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Comentario } from "@/componentes/comentario";
 import {
   AvisoDaCompanhia,
+  LinkDaCombinacao,
   SalvarRoteiro,
 } from "@/componentes/entrevista-estrelinha";
 import { Grafismo } from "@/componentes/grafismo";
@@ -68,34 +69,24 @@ export default async function RoteiroDaIa({ params }: PageProps<"/ia/roteiro/[co
           <p className="tipo-micro text-tinta-3">Suas respostas · toque para trocar</p>
           <div className="flex flex-wrap gap-1.5">
             {GOSTOS.map((g) => (
-              <Link
+              <LinkDaCombinacao
                 key={g.slug}
                 href={`/ia/roteiro/${cidade.slug}--${dias}-dias--${g.slug}/`}
-                aria-current={g.slug === gosto.slug ? "true" : undefined}
-                className={
-                  g.slug === gosto.slug
-                    ? "rounded-pilula bg-tinta px-2.5 py-1 text-xs font-bold text-ic-branco no-underline"
-                    : "rounded-pilula border border-borda px-2.5 py-1 text-xs font-semibold text-tinta-2 no-underline"
-                }
+                ativo={g.slug === gosto.slug}
               >
                 {g.rotulo}
-              </Link>
+              </LinkDaCombinacao>
             ))}
           </div>
           <div className="flex flex-wrap gap-1.5">
             {OPCOES_DE_DIAS.map((d) => (
-              <Link
+              <LinkDaCombinacao
                 key={d}
                 href={`/ia/roteiro/${cidade.slug}--${d}-dias--${gosto.slug}/`}
-                aria-current={d === dias ? "true" : undefined}
-                className={
-                  d === dias
-                    ? "rounded-pilula bg-tinta px-2.5 py-1 text-xs font-bold text-ic-branco no-underline"
-                    : "rounded-pilula border border-borda px-2.5 py-1 text-xs font-semibold text-tinta-2 no-underline"
-                }
+                ativo={d === dias}
               >
                 {d} dias
-              </Link>
+              </LinkDaCombinacao>
             ))}
             <Link
               href="/ia/"
