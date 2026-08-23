@@ -326,6 +326,31 @@ console.log("\nverificar-ds — regras estruturais do design system");
   // fica evidente em poucas visitas e o efeito vira defeito.
   if (entradas.length < 8) problemas.push(`só ${entradas.length} entradas, mínimo 8`);
 
+  // O CSS TEM DE COBRIR TODOS OS ÍNDICES. As regras `[data-heroi="N"]` são
+  // escritas à mão em base.css, uma por imagem além da primeira. Acrescentar uma
+  // nona imagem à lista sem acrescentar a regra passaria em tudo — o sorteio
+  // escolheria `data-heroi="8"`, nenhum seletor casaria, e o hero cairia no
+  // `:first-child` uma vez a cada nove carregamentos. Falha invisível, do tipo
+  // que ninguém investiga porque a tela nunca fica quebrada.
+  const css = await readFile(path.join(SRC, "estilos", "base.css"), "utf8");
+  const cobertos = new Set(
+    [...css.matchAll(/\[data-heroi="(\d+)"\]\s+\.heroi-slide\[data-heroi-slide="(\d+)"\]/g)]
+      .filter((m) => m[1] === m[2])
+      .map((m) => Number(m[1])),
+  );
+  const faltando = [];
+  for (let i = 1; i < entradas.length; i++) if (!cobertos.has(i)) faltando.push(i);
+  if (faltando.length) {
+    problemas.push(
+      `base.css não tem regra para os índices ${faltando.join(", ")} — ` +
+        `essas imagens nunca apareceriam`,
+    );
+  }
+  const sobrando = [...cobertos].filter((i) => i >= entradas.length);
+  if (sobrando.length) {
+    problemas.push(`base.css tem regra para os índices ${sobrando.join(", ")}, que não existem`);
+  }
+
   exigir(
     problemas.length === 0,
     `curadoria do hero: ${entradas.length} imagens conferidas contra o disco`,

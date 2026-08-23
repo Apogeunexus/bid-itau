@@ -987,6 +987,14 @@ function BlocoFaceta({
     <div className="flex flex-col gap-1.5">
       <p className="busca-bloco-titulo">{titulo}</p>
       {opcoes.length ? (
+        // A CONTAGEM FICA AQUI, e não é exceção arbitrária: o parágrafo acima
+        // promete que «o número é quantos resultados aquela opção devolve
+        // agora». Tirá-la, como esta migração chegou a fazer, deixou a frase
+        // apontando para um dado que não estava na tela — e a promessa de que
+        // nenhum recorte leva a lugar nenhum (D-66) é argumento do produto, não
+        // decoração de chip. O que continua fora é o «sem ela: 340» dos
+        // critérios já marcados: aquele é o mesmo número repetido em cada
+        // pílula de uma fileira, e ninguém prometeu nada sobre ele.
         <TrilhoDeChips rotulo={`Recortar por ${titulo}`}>
           {opcoes.map((opcao) => {
             const chave = chaveCriterio(opcao);
@@ -996,6 +1004,7 @@ function BlocoFaceta({
                 selecionado={marcados.has(chave)}
                 data-faceta={chave}
                 cor={opcao.cor ?? undefined}
+                contagem={milhar(opcao.n)}
                 onClick={() => aoTocar(opcao)}
               >
                 {rotulo ? rotulo(opcao.valor) : opcao.rotulo}

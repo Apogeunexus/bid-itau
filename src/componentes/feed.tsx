@@ -1,7 +1,6 @@
 "use client";
 
 import { Cartao } from "@/componentes/cartao";
-import { Comentario } from "@/componentes/comentario";
 import { useSessao } from "@/contexto/sessao";
 import type { AvisoFeed, Cartao as CartaoDTO, DiagnosticoFeed } from "@/dados/cartao";
 

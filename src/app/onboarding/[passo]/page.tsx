@@ -65,7 +65,7 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
         <>
           <Link
             href={proximo}
-            className="rounded-full bg-acao px-4 py-2 text-sm font-semibold text-ic-branco transition-opacity hover:opacity-90"
+            className="rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao transition-opacity hover:opacity-90"
           >
             Avançar
           </Link>
@@ -115,7 +115,7 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
           </p>
           <Link
             href="/filtros/"
-            className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-ic-branco no-underline transition-opacity hover:opacity-90"
+            className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao no-underline transition-opacity hover:opacity-90"
           >
             Abrir as 8 dimensões de acessibilidade
           </Link>

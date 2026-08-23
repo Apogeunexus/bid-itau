@@ -159,10 +159,13 @@
   white-space: nowrap;
 }
 
+/* A tinta sobre o realce lavado, e não o laranja: o fundo já É laranja a 18% no
+   escuro, e laranja sobre laranja mede 3,98:1. Quem carrega a cor aqui é a
+   BORDA — o selo continua lendo como «isto é da IA» sem pagar a legibilidade. */
 .redacao-selo-origem[data-origem="ia"] {
   border-color: var(--cor-acao);
   background: var(--cor-acao-lavada);
-  color: var(--cor-acao-tinta);
+  color: var(--cor-tinta);
 }
 
 /* ---------------------------------------------------------------------------
@@ -417,19 +420,30 @@
  * o protótipo.
  * ------------------------------------------------------------------------- */
 
+/* PAINEL ESCURO NOS DOIS TEMAS, e não invertido pela tinta corrente.
+ *
+ * Escrito com `background: var(--cor-tinta)`, ele acompanhava o tema e virava um
+ * bloco BRANCO no escuro — e o rótulo laranja por cima caía para 2,65:1. A troca
+ * do fundo não conserta sozinha: o token de laranja-texto foi calculado contra o
+ * PAPEL, então num painel invertido ele também erra, na direção oposta.
+ *
+ * A saída é a mesma do hero: um painel que é escuro POR CONSTRUÇÃO, nos dois
+ * temas, e não por herdar a tinta. Aí o par que funciona é fixo e conhecido —
+ * branco sobre preto (21:1) e o laranja CHEIO sobre preto (7,9:1). */
 .redacao-limites {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem 1.25rem;
-  border: 1px solid var(--cor-tinta);
+  border: 1px solid var(--ic-preto);
   border-radius: var(--raio-g);
-  background: var(--cor-tinta);
-  color: var(--cor-fundo);
+  background: var(--ic-preto);
+  color: var(--ic-branco);
 }
 
+/* O laranja CHEIO, porque o fundo aqui é sempre preto — ver acima. */
 .redacao-limites .studio-nao-sustenta-rotulo {
-  color: var(--cor-acao-tinta);
+  color: var(--cor-acao);
 }
 
 .redacao-limites ul {

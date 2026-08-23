@@ -62,7 +62,14 @@ export function Heroi() {
       </div>
 
       <div className="heroi-texto">
-        <h1 className="heroi-titulo">Descubra a cultura que move</h1>
+        {/* `<p>` e não `<h1>`, apesar de ser o maior texto da tela. O `<h1>` desta
+            rota é «Descobrir», logo abaixo — é ele que diz ONDE a pessoa está, e
+            é o que as outras trinta telas usam. Esta frase é chamada, não
+            estrutura: promovê-la a cabeçalho daria dois `<h1>` à página e faria
+            a navegação por cabeçalhos anunciar um slogan no lugar do nome da
+            tela. Quem lê com os olhos vê o tamanho; quem lê com leitor de tela
+            recebe o texto no fluxo, na ordem certa. */}
+        <p className="heroi-titulo">Descubra a cultura que move</p>
         <p className="heroi-linha">
           Programação, exposições, obras e artistas — do acervo inteiro, não do que está em
           cartaz esta semana.

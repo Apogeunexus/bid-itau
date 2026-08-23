@@ -231,7 +231,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
       {ocorrencias.length ? (
         <Link
           href={`/evento/${entidade.slug}/sessoes/`}
-          className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-ic-branco no-underline transition-opacity hover:opacity-90"
+          className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao no-underline transition-opacity hover:opacity-90"
         >
           Escolher e salvar uma sessão
         </Link>
@@ -248,7 +248,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
             href={ingresso.url}
             target="_blank"
             rel="noreferrer"
-            className="w-fit rounded-full border-2 border-acao px-4 py-2 text-sm font-bold text-acao-tinta no-underline transition-colors hover:bg-acao hover:text-ic-branco"
+            className="w-fit rounded-full border-2 border-acao px-4 py-2 text-sm font-bold text-acao-tinta no-underline transition-colors hover:bg-acao hover:text-sobre-acao"
           >
             Ingressos na {ingresso.plataforma} ↗
           </a>

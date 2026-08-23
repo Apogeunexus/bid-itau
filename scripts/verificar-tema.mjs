@@ -28,15 +28,49 @@ import { abrirNavegador, naPagina } from "./navegador.mjs";
 
 const ALVO = process.env.ALVO ?? "http://localhost:3737";
 
-/** As rotas que cobrem os vocabulários visuais distintos do produto. */
+/**
+ * As rotas medidas, e em que VISÃO cada uma existe.
+ *
+ * A primeira versão desta lista tinha sete rotas, todas na visão app, e o
+ * relatório dizia «1.134 textos medidos, nenhum abaixo do mínimo» — o que lia
+ * como resultado global e não era. Uma revisão hostil encontrou cinco defeitos
+ * de contraste reais em rotas de fora da lista: o botão «Avançar» do onboarding,
+ * os chips do roteiro da estrelinha, o painel de limites da Redação, o selo de
+ * origem de IA e catorze etiquetas do Observatório. Um portão que mede uma
+ * amostra e relata como se fosse o todo é pior que nenhum, porque produz a frase
+ * «zero falhas» sobre a parte que ninguém olhou.
+ *
+ * As rotas do grupo `(bastidor)` — Studio, Redação, Observatório, Roteiro — só
+ * renderizam na visão WEB: na app elas trocam a tela inteira por um aviso de
+ * «superfície de desktop». Medi-las na app não dá falso verde, dá falso «não
+ * carregou», que é como a checagem de sanidade as via antes.
+ */
 const ROTAS = [
-  "/descobrir/", // cartão, selo de motivo, capa
-  "/acontece/", // faixa de dias, cartão de agenda, mapa
-  "/buscar/", // campo, facetas, vitrine
-  "/play/", // chips, grade de mídia
-  "/filtros/", // caixas de marcação, contador vivo
-  "/salvos/", // lista densa
-  "/meu/", // hub, troca de persona
+  // Grupo público — a visão app é a que a moldura de 390px exercita.
+  { rota: "/descobrir/", visao: "mobile" }, // hero, cartão, selo de motivo, capa
+  { rota: "/acontece/", visao: "mobile" }, // faixa de dias, cartão de agenda, mapa
+  { rota: "/buscar/", visao: "mobile" }, // campo, facetas, vitrine
+  { rota: "/play/", visao: "mobile" }, // chips, grade de mídia
+  { rota: "/filtros/", visao: "mobile" }, // caixas de marcação, contador vivo
+  { rota: "/salvos/", visao: "mobile" }, // lista densa
+  { rota: "/meu/", visao: "mobile" }, // hub, troca de persona
+  { rota: "/ia/", visao: "mobile" }, // entrevista da estrelinha, botão primário
+  { rota: "/onboarding/1/", visao: "mobile" }, // botão «Avançar», fora da casca do app
+  { rota: "/entrar/", visao: "mobile" }, // seleção de persona
+  { rota: "/noticias/", visao: "mobile" }, // hub editorial, cartão de leitura
+  { rota: "/museu/", visao: "mobile" }, // catálogo com capa
+  { rota: "/cast/", visao: "mobile" }, // catálogo de podcast
+  { rota: "/cursos/", visao: "mobile" }, // catálogo de formação
+  { rota: "/meu/repertorio/", visao: "mobile" }, // barras de progresso
+  { rota: "/mapa/", visao: "mobile" }, // SVG, traço e preenchimento
+  { rota: "/busca-nao-encontrada/", visao: "mobile" }, // beco, afrouxamentos
+
+  // Grupo bastidor — só existe na visão web.
+  { rota: "/studio/duplicatas/", visao: "web" }, // painéis densos, selos pretos
+  { rota: "/studio/publicar/", visao: "web" }, // formulário, botão primário
+  { rota: "/redacao/fila/", visao: "web" }, // painel invertido, selo de IA
+  { rota: "/observatorio/", visao: "web" }, // etiquetas, barras, indicadores
+  { rota: "/roteiro/", visao: "web" }, // blocos numerados
 ];
 
 /**
@@ -222,9 +256,15 @@ exigir(
 // oposto. Gravando a escolha, o script de antes da pintura e o provider leem o
 // MESMO valor e não há corrida — e de quebra o portão passa a exercitar o
 // mecanismo real de persistência em vez de simular o resultado dele.
-for (const rota of ROTAS) {
+for (const { rota, visao } of ROTAS) {
   for (const tema of ["claro", "escuro"]) {
-    await cdp.avaliar(`localStorage.setItem('agenda-cultural:tema', '${tema}')`);
+    // A visão viaja pelo mesmo caminho do tema — localStorage antes de navegar —
+    // porque `casca.tsx` a lê de lá. Sem isso, as rotas de bastidor renderizam o
+    // aviso de superfície e o portão mede uma tela que não é a tela.
+    await cdp.avaliar(
+      `localStorage.setItem('agenda-cultural:tema', '${tema}');` +
+        `localStorage.setItem('agenda-cultural:visao', '${visao}')`,
+    );
     await cdp.navegar(ALVO + rota);
     await cdp.assentar();
     // SANIDADE ANTES DE MEDIR — o oitavo defeito da casa, na versão deste portão.

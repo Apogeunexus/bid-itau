@@ -212,7 +212,7 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
               onClick={() => alternarDimensao(d)}
               className={
                 dimensoes.includes(d)
-                  ? "rounded-pilula bg-tinta px-2.5 py-1 text-xs font-bold text-ic-branco"
+                  ? "rounded-pilula bg-tinta px-2.5 py-1 text-xs font-bold text-fundo"
                   : "rounded-pilula border border-borda-forte px-2.5 py-1 text-xs font-semibold text-tinta-2"
               }
             >
@@ -238,7 +238,7 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
       <button
         type="submit"
         disabled={!obrigatoriosOk}
-        className="w-fit rounded-pilula bg-acao px-5 py-2.5 text-sm font-bold text-ic-branco transition-opacity disabled:opacity-40"
+        className="w-fit rounded-pilula bg-acao px-5 py-2.5 text-sm font-bold text-sobre-acao transition-opacity disabled:opacity-40"
       >
         Publicar no acervo
       </button>

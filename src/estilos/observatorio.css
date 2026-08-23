@@ -306,7 +306,11 @@
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--cor-acao) 85%, var(--cor-tinta-crua));
+  /* O token, e não uma mistura de 85% escrita aqui. O percentual avulso sobrou da
+     faxina — media 2,93:1 sobre o papel claro em catorze etiquetas desta tela.
+     `--cor-acao-tinta` é a mesma ideia calculada uma vez e conferida nos dois
+     temas: laranja rebaixado no claro, laranja cheio no escuro. */
+  color: var(--cor-acao-tinta);
 }
 
 [data-view="web"] .obs-diferenca {

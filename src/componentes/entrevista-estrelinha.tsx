@@ -142,7 +142,7 @@ export function EntrevistaEstrelinha({ gostos, companhias, dias, cidades }: Prop
           if (!completa) return;
           router.push(`/ia/roteiro/${cidade}--${nDias}-dias--${gosto}/#companhia=${companhia}`);
         }}
-        className="w-fit rounded-pilula bg-acao px-5 py-2.5 text-sm font-bold text-ic-branco transition-opacity disabled:opacity-40"
+        className="w-fit rounded-pilula bg-acao px-5 py-2.5 text-sm font-bold text-sobre-acao transition-opacity disabled:opacity-40"
       >
         ✦ Montar meu roteiro
       </button>
@@ -202,9 +202,9 @@ export function SalvarRoteiro({ combinacao }: { combinacao: string }) {
       }}
       className={
         salvo
-          ? "w-fit rounded-pilula bg-tinta px-4 py-2 text-sm font-bold text-ic-branco"
+          ? "w-fit rounded-pilula bg-tinta px-4 py-2 text-sm font-bold text-fundo"
           : // smaug-ignore ui-strings: «acao» aqui é nome de classe CSS (bg-acao/text-acao-tinta), não texto de interface
-            "w-fit rounded-pilula border-2 border-acao px-4 py-2 text-sm font-bold text-acao-tinta transition-colors hover:bg-acao hover:text-ic-branco"
+            "w-fit rounded-pilula border-2 border-acao px-4 py-2 text-sm font-bold text-acao-tinta transition-colors hover:bg-acao hover:text-sobre-acao"
       }
     >
       {salvo ? "✓ Roteiro salvo — remover" : "✦ Salvar este roteiro"}
@@ -238,7 +238,7 @@ export function LinkDaCombinacao({
       aria-current={ativo ? "true" : undefined}
       className={
         ativo
-          ? "rounded-pilula bg-tinta px-2.5 py-1 text-xs font-bold text-ic-branco no-underline"
+          ? "rounded-pilula bg-tinta px-2.5 py-1 text-xs font-bold text-fundo no-underline"
           : "rounded-pilula border border-borda px-2.5 py-1 text-xs font-semibold text-tinta-2 no-underline"
       }
     >
