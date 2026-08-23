@@ -189,6 +189,118 @@ body {
   isolation: isolate;
 }
 
+/* ---------------------------------------------------------------------------
+ * CHIP e TRILHO — a primitiva de `src/componentes/base/chip.tsx`.
+ *
+ * Mora aqui, e não em folha própria, por um motivo prático: `globals.css` é
+ * intocável (os portões comparam o `:root` byte a byte e exigem diff zero de
+ * regra), então uma folha nova exigiria acrescentar um `@import` lá e reancorar
+ * `scripts/medidas.mjs` num segundo commit. `base.css` já é o endereço do
+ * vocabulário compartilhado — `.cartao` mora nele — e já está sob o portão de
+ * medidas. Um ritual de dois commits para nada não é rigor, é cerimônia.
+ * ------------------------------------------------------------------------- */
+
+.trilho-chips {
+  display: flex;
+  gap: var(--espaco-pilha);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximate;
+  scrollbar-width: thin;
+  padding-bottom: 0.25rem;
+  /* SANGRA ATÉ A BORDA DA TELA. O trilho recua o gutter lateral e devolve como
+     padding, então o primeiro chip alinha com o texto mas os que rolam passam
+     por baixo da margem — é o que faz o trilho PARECER que continua em vez de
+     parecer cortado. Sem isso, um chip parado no meio do recuo lê como bug. */
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+}
+
+/* Na web há largura de sobra e rolagem horizontal seria pior que quebrar linha.
+   Mesma árvore de JSX, outra medida — a mesma escolha que `.cartao` faz logo
+   abaixo, e a razão de não existir um componente irmão por visão (D-05). */
+[data-view="web"] .trilho-chips {
+  flex-wrap: wrap;
+  overflow-x: visible;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+  scroll-snap-align: start;
+  min-height: 2.25rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-1) var(--ease-padrao),
+    border-color var(--dur-1) var(--ease-padrao);
+}
+
+.chip:hover {
+  border-color: var(--cor-tinta);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* SELECIONADO É PRETO CHEIO (DESIGN-SYSTEM.md §4). Não é só o que o doc mandou:
+   branco sobre o laranja da marca mede 2,64:1 e reprova, enquanto papel sobre
+   tinta mede 18,7:1 no claro e 21:1 no escuro. E deixa o laranja livre para
+   significar só AÇÃO, que é o princípio 2. No escuro os dois lados invertem
+   sozinhos, porque são token e não cor escrita à mão. */
+.chip[aria-pressed="true"] {
+  background: var(--cor-tinta);
+  border-color: var(--cor-tinta);
+  color: var(--cor-fundo);
+  font-weight: 700;
+}
+
+/* A CONTAGEM SEM POLUIÇÃO. Um degrau abaixo do rótulo e em tinta-3: ela informa
+   sem competir. `tabular-nums` para o chip não pular de largura quando o recorte
+   recalcula — um trilho que se mexe sozinho ao filtrar parece quebrado. */
+.chip-n {
+  font-size: var(--tipo-legenda);
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-tinta-3);
+}
+
+.chip[aria-pressed="true"] .chip-n {
+  color: currentColor;
+  opacity: 0.7;
+}
+
+/* O que o acervo não sustenta continua MARCÁVEL, e declara o zero pelo traço em
+   vez de sumir da lista. Esconder o recorte vazio seria fingir que a pergunta
+   não pode ser feita; o produto inteiro é construído contra isso. */
+.chip[data-nao-sustenta] {
+  border-style: dashed;
+  color: var(--cor-tinta-2);
+}
+
+/* A bolinha da cor da linguagem. A cor vem do DADO por custom property inline
+   (`--cor-chip`), como em `selo-linguagem.tsx` — nunca de um mapa aqui. */
+.chip-ponto {
+  flex: none;
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-chip);
+}
+
 /* Cartão grande de disposição — tela 2, DESC-01. */
 .cartao-disposicao {
   display: flex;

@@ -31,50 +31,20 @@
  * ======================================================================== */
 
 /* ---------------------------------------------------------------------------
- * Os chips de recorte — categoria e recurso de acessibilidade.
+ * Os chips de recorte desta tela MUDARAM DE ENDEREÇO.
  *
- * UM chip só para os dois grupos, e isso é deliberado: categoria e acessibilidade
- * são o MESMO gesto (recortar a lista sem sair da tela), e desenhá-los diferente
- * sugeriria que um deles navega. O que os distingue é o número ao lado, que em
- * acessibilidade traz o denominador — porque ali o número é o argumento.
+ * Eram `.play-chip`, uma das oito famílias de pílula do projeto, e a única que
+ * preenchia o selecionado de laranja com texto branco — 2,64:1, reprovado. Hoje
+ * são a primitiva `Chip` de `src/componentes/base/chip.tsx`, com o CSS em
+ * `base.css`: selecionado preto cheio (18,7:1 no claro, 21:1 no escuro) e o
+ * grupo dentro de um trilho que ROLA em vez de quebrar linha.
+ *
+ * A decisão que estava escrita aqui e continua valendo: UM chip só para os dois
+ * grupos, categoria e acessibilidade. Os dois são o MESMO gesto — recortar a
+ * lista sem sair da tela — e desenhá-los diferente sugeriria que um deles
+ * navega. O que os distingue é o número ao lado, que em acessibilidade traz o
+ * denominador, porque ali o número é o argumento.
  * ------------------------------------------------------------------------ */
-.play-chip {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  border: 1px solid var(--cor-borda-forte);
-  border-radius: var(--raio-pilula);
-  font-size: var(--tipo-detalhe);
-  line-height: 1.2;
-  cursor: pointer;
-  background: transparent;
-  color: var(--cor-tinta);
-}
-
-.play-chip:hover {
-  border-color: var(--cor-borda-forte);
-}
-
-.play-chip[aria-pressed="true"] {
-  background: var(--cor-acao);
-  border-color: var(--cor-acao);
-  color: var(--cor-sobre-acao);
-  font-weight: 700;
-}
-
-.play-chip-n {
-  font-size: var(--tipo-micro);
-  font-variant-numeric: tabular-nums;
-  opacity: 0.65;
-}
-
-/* O recurso que o acervo NÃO sustenta continua marcável — o vazio é explicado, não
- * proibido. O tracejado diz, antes do clique, que ali não há o que recortar. */
-.play-chip[data-nao-sustenta] {
-  border-style: dashed;
-  color: var(--cor-tinta-3);
-}
 
 /* ---------------------------------------------------------------------------
  * O catálogo. Na visão app é UMA COLUNA de linhas horizontais: dentro da moldura

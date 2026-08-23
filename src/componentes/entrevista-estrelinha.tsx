@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 
 /**
  * entrevista-estrelinha.tsx — as quatro perguntas da IA (reformulação 2026-08).
@@ -48,31 +49,6 @@ function Pergunta({
   );
 }
 
-function Chip({
-  ativo,
-  onClick,
-  children,
-}: {
-  ativo: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={ativo}
-      onClick={onClick}
-      className={
-        ativo
-          ? "rounded-pilula bg-tinta px-3 py-1.5 text-sm font-semibold text-ic-branco"
-          : "rounded-pilula border border-borda-forte px-3 py-1.5 text-sm font-semibold text-tinta-2 transition-colors hover:border-tinta hover:text-tinta"
-      }
-    >
-      {children}
-    </button>
-  );
-}
-
 /** Os roteiros salvos neste navegador. Chave própria, fora da sessão de persona. */
 const CHAVE_SALVOS = "agenda-cultural:roteiros-estrelinha";
 
@@ -109,24 +85,24 @@ export function EntrevistaEstrelinha({ gostos, companhias, dias, cidades }: Prop
   return (
     <div className="flex flex-col gap-5">
       <Pergunta numero={1} titulo="O que te chama?">
-        <div className="flex flex-wrap gap-2">
+        <TrilhoDeChips rotulo="O que te chama">
           {gostos.map((g) => (
-            <Chip key={g.slug} ativo={gosto === g.slug} onClick={() => setGosto(g.slug)}>
+            <Chip key={g.slug} selecionado={gosto === g.slug} onClick={() => setGosto(g.slug)}>
               {g.rotulo}
             </Chip>
           ))}
-        </div>
+        </TrilhoDeChips>
       </Pergunta>
 
       {gosto !== null ? (
         <Pergunta numero={2} titulo="Com quem você vai?">
-          <div className="flex flex-wrap gap-2">
+          <TrilhoDeChips rotulo="Com quem você vai">
             {companhias.map((c) => (
-              <Chip key={c.slug} ativo={companhia === c.slug} onClick={() => setCompanhia(c.slug)}>
+              <Chip key={c.slug} selecionado={companhia === c.slug} onClick={() => setCompanhia(c.slug)}>
                 {c.rotulo}
               </Chip>
             ))}
-          </div>
+          </TrilhoDeChips>
           <p className="tipo-legenda text-tinta-3">
             Esta resposta não filtra o acervo — ele não declara classificação etária, e o
             roteiro diz isso em vez de fingir o recorte.
@@ -136,26 +112,26 @@ export function EntrevistaEstrelinha({ gostos, companhias, dias, cidades }: Prop
 
       {companhia !== null ? (
         <Pergunta numero={3} titulo="Quantos dias?">
-          <div className="flex flex-wrap gap-2">
+          <TrilhoDeChips rotulo="Quantos dias">
             {dias.map((d) => (
-              <Chip key={d} ativo={nDias === d} onClick={() => setNDias(d)}>
+              <Chip key={d} selecionado={nDias === d} onClick={() => setNDias(d)}>
                 {d} dias
               </Chip>
             ))}
-          </div>
+          </TrilhoDeChips>
         </Pergunta>
       ) : null}
 
       {nDias !== null ? (
         <Pergunta numero={4} titulo="Em que cidade?">
-          <div className="flex flex-wrap gap-2">
+          <TrilhoDeChips rotulo="Em que cidade">
             {cidades.map((c) => (
-              <Chip key={c.slug} ativo={cidade === c.slug} onClick={() => setCidade(c.slug)}>
+              <Chip key={c.slug} selecionado={cidade === c.slug} onClick={() => setCidade(c.slug)}>
                 {c.rotulo}
                 {c.detalhe ? <span className="ml-1 opacity-60">{c.detalhe}</span> : null}
               </Chip>
             ))}
-          </div>
+          </TrilhoDeChips>
         </Pergunta>
       ) : null}
 

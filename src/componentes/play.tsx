@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { Comentario } from "@/componentes/comentario";
 import {
@@ -258,29 +259,27 @@ export function Play({
       {/* -------------------------------------------------------- recorte por categoria */}
       <section className="flex flex-col gap-2">
         <h2 className="text-sm font-bold">Categorias do acervo</h2>
-        <div role="group" aria-label="Recortar o catálogo por categoria" className="flex flex-wrap gap-1.5">
-          <button
-            type="button"
+        <TrilhoDeChips rotulo="Recortar o catálogo por categoria">
+          <Chip
             data-categoria={SEM_RECORTE || "todas"}
-            aria-pressed={categoria === SEM_RECORTE}
+            selecionado={categoria === SEM_RECORTE}
             onClick={() => setCategoria(SEM_RECORTE)}
-            className="play-chip"
+            contagem={catalogo.total}
           >
-            Todas <span className="play-chip-n">{catalogo.total}</span>
-          </button>
+            Todas
+          </Chip>
           {catalogo.categorias.map((c) => (
-            <button
+            <Chip
               key={c.valor}
-              type="button"
               data-categoria={c.valor}
-              aria-pressed={categoria === c.valor}
+              selecionado={categoria === c.valor}
               onClick={() => setCategoria(c.valor === categoria ? SEM_RECORTE : c.valor)}
-              className="play-chip"
+              contagem={c.n}
             >
-              {c.rotulo} <span className="play-chip-n">{c.n}</span>
-            </button>
+              {c.rotulo}
+            </Chip>
           ))}
-        </div>
+        </TrilhoDeChips>
       </section>
 
       {/* ---------------------------------------------- filtro de acessibilidade (D-90) */}
@@ -291,33 +290,33 @@ export function Play({
           você marcar qualquer coisa. Dois dos três não recortam nada — e é por isso que
           eles aparecem com o número, e não escondidos.
         </p>
-        <div role="group" aria-label="Filtrar por recurso de acessibilidade" className="flex flex-wrap gap-1.5">
+        <TrilhoDeChips rotulo="Filtrar por recurso de acessibilidade">
           {DIMENSOES_DO_FILTRO.map((campo) => {
             const d = dimensoes.find((x) => x.campo === campo);
             const n = d?.n ?? 0;
             const marcada = dimensoesMarcadas.includes(campo);
             return (
-              <button
+              <Chip
                 key={campo}
-                type="button"
                 data-acessibilidade-do-play={campo}
                 {...(n === 0 ? { "data-nao-sustenta": "sim" } : {})}
-                aria-pressed={marcada}
+                selecionado={marcada}
                 onClick={() =>
                   setDimensoesMarcadas((atual) =>
                     atual.includes(campo) ? atual.filter((x) => x !== campo) : [...atual, campo],
                   )
                 }
-                className="play-chip"
+                // «3 de 113» inteiro num nó só, e não quebrado em dois: o portão
+                // lê o rótulo com /3\s*de\s*113/ depois de colapsar as quebras de
+                // linha, e dois spans irmãos inserem um separador no innerText.
+                contagem={`${n} de ${catalogo.total}`}
+                chaveDaContagem={campo}
               >
-                {ROTULOS_DE_DIMENSAO[campo]}{" "}
-                <span className="play-chip-n" data-denominador={campo}>
-                  {n} de {catalogo.total}
-                </span>
-              </button>
+                {ROTULOS_DE_DIMENSAO[campo]}
+              </Chip>
             );
           })}
-        </div>
+        </TrilhoDeChips>
       </section>
 
       {/* -------------------------------------------------------------------- a lista */}
