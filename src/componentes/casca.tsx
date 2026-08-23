@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
 import { useComentado } from "@/contexto/comentado";
+import { useTema, type Tema } from "@/contexto/tema";
 import { useVisao, type Visao } from "@/contexto/visao";
 
 const OPCOES: Array<{ valor: Visao; rotulo: string }> = [
@@ -86,6 +87,63 @@ function InterruptorComentado() {
 }
 
 /**
+ * O controle de tema. Um botão só, ciclando sistema → claro → escuro.
+ *
+ * TRÊS ESTADOS NUM BOTÃO SÓ, e não um interruptor de dois: com dois, «seguir o
+ * sistema» viraria inalcançável depois do primeiro toque, e quem trocasse o tema
+ * do sistema operacional depois não seria mais acompanhado. O rótulo diz o
+ * estado ATUAL; o `aria-label` diz para onde o toque leva, porque um leitor de
+ * tela anunciando só «tema: escuro, botão» não distingue estado de destino.
+ *
+ * O RÓTULO EVITA DE PROPÓSITO o vocabulário do alternador de visão. Os gates de
+ * tela da fase 2 e 3 encontram o botão de visão por expressão regular sobre o
+ * texto de `.alternador button` e `[class*="alternador"] button`, filtrando por
+ * /web|desktop|desk/i e /app|mobile|celular|telefone/i. Um rótulo como «tema do
+ * aparelho» aqui, ou uma classe que contivesse «alternador», faria a verificação
+ * clicar no controle errado e relatar verde sobre outra coisa.
+ */
+/* A frase inteira, e não só o nome do próximo estado: montada por interpolação,
+ * o ciclo terminava em «usar o tema sistema», que não é português. */
+const PARA_ONDE_O_TOQUE_LEVA: Record<Tema, string> = {
+  sistema: "Tocar para usar o tema claro.",
+  claro: "Tocar para usar o tema escuro.",
+  escuro: "Tocar para voltar a seguir o tema do sistema.",
+};
+
+const ICONE_DO_TEMA: Record<Tema, string> = {
+  sistema: "◐",
+  claro: "☀",
+  escuro: "☾",
+};
+
+// smaug-ignore ui-strings: nome de token do design system, não a palavra «ação»
+const CLASSE_TEMA_ESCOLHIDO = "border-acao text-acao";
+const CLASSE_TEMA_DO_SISTEMA = "border-borda-forte text-tinta-3 hover:text-tinta";
+
+function ControleTema() {
+  const { tema, alternar } = useTema();
+
+  return (
+    <button
+      type="button"
+      data-tema-alternar
+      onClick={alternar}
+      aria-label={`Tema: ${tema}. ${PARA_ONDE_O_TOQUE_LEVA[tema]}`}
+      title="Claro, escuro ou seguindo o tema do seu sistema."
+      className={clsx(
+        "controle-tema cursor-pointer rounded-full border bg-superficie px-3 py-1 text-xs font-semibold shadow-lg transition-colors",
+        tema === "sistema" ? CLASSE_TEMA_DO_SISTEMA : CLASSE_TEMA_ESCOLHIDO,
+      )}
+    >
+      <span aria-hidden className="mr-1">
+        {ICONE_DO_TEMA[tema]}
+      </span>
+      tema: {tema}
+    </button>
+  );
+}
+
+/**
  * Casca do protótipo. Escreve `data-view` no seu elemento raiz — é esse atributo
  * que as variantes `app:` e `desk:` do Tailwind leem. Sem ele, nenhuma classe de
  * visão resolve.
@@ -128,11 +186,17 @@ export function Casca({ children }: { children: ReactNode }) {
         </div>
       </div>
 
-      {/* O canto: o único ponto do projeto ancorado na janela (D-04). Os dois controles
-          empilham, o de modo por cima e o alternador de visão embaixo, mais perto do
-          polegar — a hierarquia também é posicional, e não só de cor. */}
+      {/* O canto: o único ponto do projeto ancorado na janela (D-04). Os controles
+          empilham do menos para o mais usado, com o alternador de visão embaixo, mais
+          perto do polegar — a hierarquia também é posicional, e não só de cor.
+
+          O tema fica no MEIO, e a ordem foi discutida: o alternador de visão e o modo
+          comentado falam SOBRE o protótipo, enquanto o tema é do produto. Ele entra aqui
+          mesmo assim porque é onde quem avalia procura por controle de apresentação —
+          esconder o tema numa tela de ajustes só teria valor se o app tivesse uma. */}
       <div className="canto fixed right-4 bottom-4 z-50 flex flex-col items-end gap-1.5">
         <InterruptorComentado />
+        <ControleTema />
         <Alternador />
       </div>
     </div>

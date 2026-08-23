@@ -27,9 +27,11 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 2rem 2rem 6rem;
+  padding: 2rem 2rem 8rem;
   /* A folga de baixo é para o canto fixo dos controles (D-04) não cobrir o último
-     bloco: sem ela, o botão do Cenário 5 fica sob o alternador de visão. */
+     bloco: sem ela, o botão do Cenário 5 fica sob o alternador de visão. Subiu de
+     6rem para 8rem quando o controle de tema virou o terceiro item da pilha — a
+     medida acompanha a altura real do canto, não um número escolhido uma vez. */
 }
 
 .rot-cabecalho {
