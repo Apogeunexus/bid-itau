@@ -374,6 +374,15 @@
   color: var(--cor-tinta-3);
 }
 
+/* O número de eventos usa a tinta do laranja para separar «contagem» de
+   «categoria» num relance — as duas ocupam a mesma posição na linha. */
+.mapa-item-eventos {
+  flex: none;
+  font-size: var(--tipo-legenda);
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-acao-tinta);
+}
+
 .mapa-item-seta {
   flex: none;
   font-size: var(--tipo-titulo-3);

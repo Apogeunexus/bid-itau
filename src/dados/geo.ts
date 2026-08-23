@@ -368,6 +368,31 @@ export type PinoIndexado = readonly [
   string,
   string,
   0 | 1,
+  /**
+   * Quantos EVENTOS do acervo se ligam a esta entidade.
+   *
+   * É a ordenação padrão da lista do mapa: alfabética, ela abria em «86» e «A. C.
+   * D'Ávila» — os primeiros do alfabeto, que não são os mais relevantes de nada.
+   * Quem tem mais eventos é quem o acervo mais documenta, e é por onde a pessoa
+   * quer começar a olhar.
+   *
+   * Contado no BUILD, e por isso viaja como número: `mapa.tsx` é componente de
+   * cliente e não alcança o grafo (DP-F). Uma contagem feita no navegador exigiria
+   * as arestas do lado de lá — 13 MB que a fronteira existe para não atravessar.
+   *
+   * O QUE ESTE NÚMERO ALCANÇA, medido no acervo carregado: das 575 pessoas, 56
+   * têm ao menos um evento (10%), com máximo de 8; nos coletivos é a mesma
+   * proporção. Ou seja, a ordenação levanta ao topo as poucas dezenas que o
+   * acervo de fato documenta e deixa os outros 90% empatados em zero, onde o
+   * alfabeto desempata. Não é a ordenação que é rasa — é a ligação pessoa→evento
+   * que o acervo publicado quase não tem, e a lista passa a mostrar isso em vez
+   * de escondê-lo atrás de uma ordem que fingia não ter critério.
+   *
+   * Para uma entidade que É um evento o número NÃO é zero: eventos se ligam a
+   * eventos, e 281 dos 300 têm ao menos um, com máximo de 40. Ali ele lê como
+   * «faz parte de uma série grande», que é outra pergunta e continua verdadeira.
+   */
+  number,
 ];
 
 /**
@@ -443,6 +468,11 @@ export function indiceDePinos(): PinoIndexado[] {
         cor,
         celulaDe(x, y),
         bruto.dentro ? 1 : 0,
+        // A contagem que ordena a lista. `vizinhos` sem relação devolve toda a
+        // adjacência da entidade; filtrar por classe aqui é mais barato que
+        // percorrer relação por relação, e não presume qual relação liga gente a
+        // evento — se o acervo ganhar outra, ela conta sozinha.
+        vizinhos(entidade.id).filter((v) => v.entidade.classe === "evento").length,
       ]);
     }
   }

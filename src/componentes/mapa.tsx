@@ -28,7 +28,7 @@ import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/component
  * que é.
  */
 
-/** `[chave, id, título, classe, x, y, método, via, cor, célula, dentroDoBrasil]` */
+/** `[chave, id, título, classe, x, y, método, via, cor, célula, dentroDoBrasil, eventos]` */
 export type PinoIndexado = readonly [
   string,
   string,
@@ -41,7 +41,13 @@ export type PinoIndexado = readonly [
   string,
   string,
   0 | 1,
+  /** Quantos eventos do acervo se ligam a esta entidade — contado no build. Ver `geo.ts`. */
+  number,
 ];
+
+/** A posição do campo na tupla, nomeada — `p[11]` num `sort` não diz nada a ninguém. */
+const EVENTOS = 11;
+const TITULO = 2;
 
 export interface VoltaPadrao {
   href: string;
@@ -239,11 +245,27 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
   const visiveis = useMemo(() => {
     const classes = FAMILIAS.find((f) => f.id === familia)?.classes ?? [];
     const termo = semAcento(busca.trim());
-    return recorte.posicionados.filter((p) => {
-      if (classes.length && !classes.includes(p[3])) return false;
-      if (termo && !semAcento(p[2]).includes(termo)) return false;
-      return true;
-    });
+    return recorte.posicionados
+      .filter((p) => {
+        if (classes.length && !classes.includes(p[3])) return false;
+        if (termo && !semAcento(p[TITULO]).includes(termo)) return false;
+        return true;
+      })
+      /**
+       * QUEM TEM MAIS EVENTOS PRIMEIRO, e o alfabeto só desempata.
+       *
+       * A ordem alfabética abria a lista em «86» e «A. C. D'Ávila» — os primeiros
+       * do alfabeto, que não são os mais relevantes de nada. Quem tem mais eventos
+       * no acervo é quem ele mais documenta, e é por onde faz sentido começar.
+       *
+       * `localeCompare` com `pt` no desempate porque o alfabeto daqui tem acento:
+       * comparação binária põe «Álvaro» depois de «Zé», e a lista fica com um
+       * bloco de acentuados no fim que ninguém entende.
+       */
+      .sort(
+        (a, b) =>
+          b[EVENTOS] - a[EVENTOS] || a[TITULO].localeCompare(b[TITULO], "pt"),
+      );
   }, [recorte.posicionados, familia, busca]);
 
   /** Quantos de cada família existem no recorte — o número que vai no chip. */
@@ -701,8 +723,17 @@ function ListaDoRecorte({
           const rota = rotaDe(p[3], p[0]);
           const conteudo = (
             <>
-              <span className="mapa-item-nome">{p[2]}</span>
-              <span className="mapa-item-classe">{nomeDaClasse(p[3])}</span>
+              <span className="mapa-item-nome">{p[TITULO]}</span>
+              {/* O NÚMERO QUE ORDENA FICA VISÍVEL. Sem ele a lista pareceria em
+                  ordem arbitrária — nem alfabética nem nada —, e ordem que não se
+                  explica lê como bug. Com ele, a primeira linha já ensina a regra. */}
+              {p[EVENTOS] > 0 ? (
+                <span className="mapa-item-eventos">
+                  {p[EVENTOS]} {p[EVENTOS] === 1 ? "evento" : "eventos"}
+                </span>
+              ) : (
+                <span className="mapa-item-classe">{nomeDaClasse(p[3])}</span>
+              )}
             </>
           );
           return (
