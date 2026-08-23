@@ -26,6 +26,12 @@ import { ATALHOS_BASTIDOR, ATALHOS_CONTA, GRUPOS_APPS, TOTAL_APPS, type Atalho }
  * para baixo da imagem; no largo, que recebe só fotografia limpa e tem 16:9 de
  * folga, ele fica por cima com véu.
  *
+ * O CARTAZ NÃO MOSTRA O CRÉDITO DA FOTO. Aqui a imagem não é a obra, é a
+ * AMOSTRA do que tem dentro do app — e onze «Foto: fulano» empilhados viravam
+ * ruído embaixo de cada rótulo, num lugar onde ninguém está lendo procedência.
+ * O nome de quem fez continua guardado em `src/dados/apps.ts` e continua visível
+ * onde a imagem é o conteúdo: a capa do evento, o player, o catálogo de /play.
+ *
  * CONTA E BASTIDOR NÃO GANHAM CAPA. Ver `src/dados/apps.ts`: os dois são
  * ferramenta, não acervo, e uma foto ali prometeria conteúdo onde não há.
  * Bastidor só aparece na web porque no app cada uma dessas rotas se declara
@@ -41,7 +47,7 @@ function Cartaz({
   href: string;
   rotulo: string;
   descricao: string;
-  capa: { arquivo: string; alt: string; credito: string };
+  capa: { arquivo: string; alt: string };
 }) {
   return (
     <li className="hub-cartaz">
@@ -56,7 +62,6 @@ function Cartaz({
         <span className="hub-cartaz-texto">
           <span className="hub-cartaz-rotulo tipo-titulo-3">{rotulo}</span>
           <span className="hub-cartaz-descricao tipo-legenda">{descricao}</span>
-          <span className="hub-cartaz-credito tipo-micro">Foto: {capa.credito}</span>
         </span>
       </Link>
     </li>

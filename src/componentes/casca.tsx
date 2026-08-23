@@ -70,7 +70,18 @@ function Alternador() {
  * contra a rolagem, `absolute` contra a moldura, nunca `fixed` na janela.
  */
 export function Casca({ children }: { children: ReactNode }) {
-  const { visao, hidratado } = useVisao();
+  const { visao, hidratado, janelaDeTelefone } = useVisao();
+
+  // No telefone, com o app na tela, não há escolha a oferecer: a pessoa já ESTÁ
+  // no aparelho que a visão app imita, e a visão web é desenhada para 1440px.
+  // A condição olha a visão junto com a janela de propósito — se algo puser a
+  // visão web num telefone (o aviso das superfícies de bastidor faz isso), o
+  // controle reaparece, porque senão não haveria caminho de volta.
+  //
+  // Não renderizar, em vez de esconder por CSS: um botão invisível continua
+  // alcançável pelo teclado, e uma armadilha de foco é pior que um botão a mais.
+  // Esperar `hidratado` é o que evita o alternador piscar antes de sumir.
+  const ofereceEscolhaDeVisao = hidratado && !(janelaDeTelefone && visao === "mobile");
 
   return (
     <div
@@ -92,9 +103,11 @@ export function Casca({ children }: { children: ReactNode }) {
       </div>
 
       {/* O canto: o único ponto do projeto ancorado na janela (D-04). */}
-      <div className="canto fixed right-4 bottom-4 z-50 flex flex-col items-end gap-1.5">
-        <Alternador />
-      </div>
+      {ofereceEscolhaDeVisao ? (
+        <div className="canto fixed right-4 bottom-4 z-50 flex flex-col items-end gap-1.5">
+          <Alternador />
+        </div>
+      ) : null}
     </div>
   );
 }

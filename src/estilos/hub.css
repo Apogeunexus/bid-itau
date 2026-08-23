@@ -98,23 +98,6 @@
   color: var(--cor-tinta-2);
 }
 
-/* Cada imagem é de alguém, e o nome veio do próprio acervo.
- *
- * O CRÉDITO QUEBRA LINHA E NUNCA É CORTADO. As duas economias óbvias — caixa
- * alta e uma linha só com reticências — foram testadas e as duas cortavam: num
- * cartaz de ~163px, «Foto: Flavia Ocaranza/Girafa Não Fala» não cabe de jeito
- * nenhum. Um crédito cortado no meio do sobrenome não credita ninguém, e este é
- * o projeto que trata procedência como argumento. Custa uma linha em cinco dos
- * onze cartazes; a linha da grade acompanha o mais alto e nada desalinha.
- *
- * A caixa baixa também é decisão, e não sobra de `tipo-micro`: o crédito é nome
- * próprio, e versal com tracking .06em em nome próprio lê como rótulo. */
-.hub-cartaz-credito {
-  color: var(--cor-tinta-3);
-  letter-spacing: normal;
-  text-transform: none;
-}
-
 /* ---- O cartaz largo: grupo de contagem ímpar ---- */
 .hub-grade > :first-child:nth-last-child(odd) {
   grid-column: 1 / -1;
@@ -156,10 +139,6 @@
 
 .hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-descricao {
   color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
-}
-
-.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-credito {
-  color: color-mix(in srgb, var(--ic-branco) 60%, transparent);
 }
 
 /* ---- Conta e bastidor: linha, não cartaz ---- */
