@@ -151,10 +151,32 @@ export interface DimensaoContada {
   sustentada: boolean;
 }
 
+/**
+ * Uma FILEIRA da vitrine — a coleção, o tema ou a categoria de sobra que reúne
+ * um punhado de mídias. Como ela é derivada está em `prateleiras.ts`.
+ *
+ * Os itens viajam como ÍNDICE em `CatalogoNoFio.itens`, e não como slug: o slug
+ * já viajou uma vez dentro do item, e repeti-lo aqui custaria ~8 KB para dizer
+ * de novo o que a posição diz de graça. A ESTRUTURA É A FILEIRA — não há uma
+ * segunda passada de agrupamento no cliente para divergir da que o build
+ * conferiu.
+ */
+export interface PrateleiraNoFio {
+  /** Chave estável para o estado do recorte e para `data-prateleira`. */
+  valor: string;
+  rotulo: string;
+  /** Índices em `CatalogoNoFio.itens`, na ordem do catálogo (mais recente primeiro). */
+  itens: readonly number[];
+  /** O índice do item que dá a capa da fileira. Ver `rostoDa` em `prateleiras.ts`. */
+  rosto: number;
+}
+
 /** O catálogo inteiro como ele atravessa a fronteira RSC. */
 export interface CatalogoNoFio {
   itens: readonly ItemNoFio[];
   categorias: readonly CategoriaContada[];
+  /** As fileiras da vitrine. Somam `total` e nenhum item aparece em duas. */
+  prateleiras: readonly PrateleiraNoFio[];
   /** O vocabulário de linguagens, indexado pela posição. */
   linguagens: readonly string[];
   /** Quantas mídias o acervo tem, contadas. */

@@ -76,6 +76,12 @@
 @import "../estilos/sem-resultado.css";
 @import "../estilos/play.css";
 
+/* A folha do Cast (23/08): a tela dos podcasts virou app de áudio, no molde da
+ * referência que a reunião mandou, e ganhou vocabulário próprio de prateleira e
+ * atalho. Depois de `play.css` porque as duas telas são irmãs e é o Cast que
+ * diverge — cartão sem moldura contra o cartaz do Play. */
+@import "../estilos/cast.css";
+
 /* ---------------------------------------------------------------------------
  * A base visual (camada base tipográfica, moldura D-03, cartão)
  * vem DEPOIS das folhas de tela, na mesma posição do cascade que essas regras

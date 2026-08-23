@@ -807,10 +807,10 @@ async function gatesEstruturais() {
       r === "agenda-nao-encontrada/index.html" ||
       /^play\/[^/]+\/index\.html$/.test(r),
   );
-  // As 7 rotas da REFORMULAÇÃO do design system (2026-08): a árvore de menu fixada
+  // As 6 rotas da REFORMULAÇÃO do design system (2026-08): a árvore de menu fixada
   // pelo cliente, nascidas como esqueleto rotulado junto com o menu lateral.
   const novasReformulacao = paginas.filter((r) =>
-    ["cast", "noticias", "museu", "museu/exposicoes", "ia", "cursos", "blog"].some(
+    ["cast", "noticias", "museu", "museu/exposicoes", "ia", "cursos"].some(
       (rota) => r === `${rota}/index.html`,
     ),
   );

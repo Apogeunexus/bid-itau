@@ -57,6 +57,11 @@ const ROTAS = [
   { rota: "/ia/", visao: "mobile" }, // entrevista da estrelinha, botão primário
   { rota: "/onboarding/1/", visao: "mobile" }, // botão «Avançar», fora da casca do app
   { rota: "/entrar/", visao: "mobile" }, // seleção de persona
+  // O hub é a tela em que o app ABRE desde 23/08, e a única com texto branco fixo
+  // sobre fotografia em cartaz de largura cheia — exatamente o par que o tema
+  // escuro costuma quebrar. Ficou fora desta lista até 23/08, quando os ritmos de
+  // grade nasceram e ninguém estava medindo o contraste deles.
+  { rota: "/apps/", visao: "mobile" }, // hub de aplicativos, cartaz com texto sobre foto
   { rota: "/noticias/", visao: "mobile" }, // hub editorial, cartão de leitura
   { rota: "/museu/", visao: "mobile" }, // catálogo com capa
   { rota: "/cast/", visao: "mobile" }, // catálogo de podcast

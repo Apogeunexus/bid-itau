@@ -98,22 +98,85 @@
   color: var(--cor-tinta-2);
 }
 
-/* ---- O cartaz largo: grupo de contagem ímpar ---- */
-.hub-grade > :first-child:nth-last-child(odd) {
+/* ---- O cartaz grande: largo (ritmos «aberto» e «fechado») ou alto («lado») ----
+ *
+ * Quem é o grande vem do componente, em `hub-cartaz--largo`/`--alto`, e não mais
+ * de `:first-child:nth-last-child(odd)`: com três ritmos, o seletor que media
+ * «grupo de contagem ímpar» precisaria de uma variante por ritmo e ninguém
+ * conseguiria ler o resultado. A regra de QUEM é grande mora em `hub-apps.tsx`;
+ * aqui mora só a forma. */
+.hub-cartaz--largo {
   grid-column: 1 / -1;
 }
 
-.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-link {
-  position: relative;
+.hub-cartaz--largo .hub-cartaz-quadro {
+  aspect-ratio: 16 / 9;
 }
 
-.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-quadro {
-  aspect-ratio: 16 / 9;
+/* O cartaz em pé ocupa as duas fileiras da coluna e a altura vem dos dois
+   cartazes empilhados ao lado — por isso `aspect-ratio: auto`: qualquer razão
+   fixa aqui brigaria com a altura que a coluna vizinha já definiu. */
+.hub-cartaz--alto {
+  grid-row: span 2;
+}
+
+.hub-cartaz--alto .hub-cartaz-link,
+.hub-cartaz--alto .hub-cartaz-quadro {
+  block-size: 100%;
+}
+
+.hub-cartaz--alto .hub-cartaz-quadro {
+  aspect-ratio: auto;
+  min-block-size: 12rem;
+}
+
+/* O FUNDO PRETO FIXO NOS DOIS TEMAS, e não é decoração: o texto destes dois
+   portes fica POR CIMA da fotografia, e o que está debaixo dele é o véu escuro —
+   não o papel da página. Sem esta linha, o contraste medido do rótulo branco é
+   contra o fundo herdado, que no tema claro é branco: 1,12:1 nos quatro cartazes
+   de largura cheia, medido pelo portão de tema em 23/08. A foto cobre o preto
+   inteiro; ele existe para que o que se mede seja o que se vê. Mesmo mecanismo
+   de `.play-destaque` em `play.css`. */
+.hub-cartaz--largo .hub-cartaz-link,
+.hub-cartaz--alto .hub-cartaz-link {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--raio-m);
+  background: var(--ic-preto);
+}
+
+/* ---- A linha: o miolo do ritmo «sanduíche» ----
+ *
+ * Ela é o que fica ENTRE as duas faixas, e por isso não é um cartaz meia-largura:
+ * sozinho entre dois blocos de largura cheia, um cartaz de meia coluna deixaria a
+ * outra metade vazia. Capa pequena à esquerda, texto à direita — e o texto fica
+ * ABAIXO da imagem no sentido do design system, ou seja com a tinta do tema e não
+ * o branco fixo das faixas. */
+.hub-cartaz--linha {
+  grid-column: 1 / -1;
+}
+
+.hub-cartaz--linha .hub-cartaz-link {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+
+.hub-cartaz--linha .hub-cartaz-quadro {
+  flex: none;
+  inline-size: 6rem;
+  aspect-ratio: 3 / 2;
+}
+
+.hub-cartaz--linha .hub-cartaz-texto {
+  min-inline-size: 0;
 }
 
 /* Sem o véu o rótulo cai sobre o que a fotografia trouxer, e metade do acervo é
  * clara no rodapé. */
-.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-veu {
+.hub-cartaz--largo .hub-cartaz-veu,
+.hub-cartaz--alto .hub-cartaz-veu {
   position: absolute;
   display: block;
   inset: 0;
@@ -125,7 +188,8 @@
   );
 }
 
-.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-texto {
+.hub-cartaz--largo .hub-cartaz-texto,
+.hub-cartaz--alto .hub-cartaz-texto {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -133,11 +197,13 @@
   padding: 1rem;
 }
 
-.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-rotulo {
+.hub-cartaz--largo .hub-cartaz-rotulo,
+.hub-cartaz--alto .hub-cartaz-rotulo {
   color: var(--ic-branco);
 }
 
-.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-descricao {
+.hub-cartaz--largo .hub-cartaz-descricao,
+.hub-cartaz--alto .hub-cartaz-descricao {
   color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
 }
 
@@ -182,6 +248,12 @@
 [data-view="web"] .hub-grade {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem 1rem;
+}
+
+/* O ritmo «lado» volta a DUAS colunas na web: em três, o cartaz em pé ocuparia
+   uma coluna e deixaria a fileira de baixo com dois buracos. */
+[data-view="web"] .hub-grade[data-ritmo="lado"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 [data-view="web"] .hub-atalhos {

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Play } from "@/componentes/play";
 import {
   catalogoNoFioStreaming,
-  CORTE_DO_RESUMO,
   destaqueDoStreaming,
   dimensoesDoStreaming,
   PONTE_COM_EVENTO,
@@ -34,7 +33,6 @@ export default function PaginaPlay() {
       destaque={destaqueDoStreaming()}
       dimensoes={dimensoesDoStreaming()}
       ponte={PONTE_COM_EVENTO}
-      corte={CORTE_DO_RESUMO}
       procedencia={PROCEDENCIA_DAS_MIDIAS}
     />
   );

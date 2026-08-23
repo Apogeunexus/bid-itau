@@ -149,18 +149,6 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
         },
       },
       {
-        id: "blog",
-        rotulo: "Blog",
-        descricao: "Colunas e ensaios assinados",
-        href: "/blog",
-        capa: {
-          arquivo: "42905a43d1a16780.jpg",
-          alt: "Ilustração para a coluna A caminho.",
-          credito: "Flavia Ocaranza/Girafa Não Fala",
-          origem: "Contingência da ironia",
-        },
-      },
-      {
         id: "cursos",
         rotulo: "Cursos",
         descricao: "Formação aberta, on-line e presencial",

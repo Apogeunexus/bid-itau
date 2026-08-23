@@ -962,22 +962,22 @@ async function gatesEstruturais() {
       r === "agenda-nao-encontrada/index.html" ||
       /^play\/[^/]+\/index\.html$/.test(r),
   );
-  // As 7 rotas da REFORMULAÇÃO do design system (2026-08): a árvore de menu fixada
+  // As 6 rotas da REFORMULAÇÃO do design system (2026-08): a árvore de menu fixada
   // pelo cliente, nascidas como esqueleto rotulado junto com o menu lateral.
   const novasReformulacao = paginas.filter((r) =>
-    ["cast", "noticias", "museu", "museu/exposicoes", "ia", "cursos", "blog"].some(
+    ["cast", "noticias", "museu", "museu/exposicoes", "ia", "cursos"].some(
       (rota) => r === `${rota}/index.html`,
     ),
   );
   const linhaBase =
     paginas.length - novasFase3.length - novasFase4.length - novasFase5.length - novasReformulacao.length;
   exigir(
-    linhaBase === LINHA_BASE_DE_PAGINAS && novasFase5.length === ROTAS_DE_PLAY_ESPERADAS + 3 && novasReformulacao.length === 7,
+    linhaBase === LINHA_BASE_DE_PAGINAS && novasFase5.length === ROTAS_DE_PLAY_ESPERADAS + 3 && novasReformulacao.length === 6,
     "total de páginas em out/, com a diferença explicada rota a rota",
     `${paginas.length} páginas · ${novasFase3.length} da fase 3 (129 sessões + 15 cidades + /salvos + /buscar/frase) · ` +
       `${novasFase4.length} da fase 4 (/roteiro) · ${novasFase5.length} da fase 5 (${ROTAS_DE_PLAY_ESPERADAS} de /play/[slug] em 05-07 + 3 becos em 05-06) · ` +
       `${novasReformulacao.length} da reformulação (menu lateral) · resíduo ${linhaBase}`,
-    `resíduo ${LINHA_BASE_DE_PAGINAS} — a linha de base da fase 2 — ${ROTAS_DE_PLAY_ESPERADAS + 3} da fase 5 e 7 da reformulação`,
+    `resíduo ${LINHA_BASE_DE_PAGINAS} — a linha de base da fase 2 — ${ROTAS_DE_PLAY_ESPERADAS + 3} da fase 5 e 6 da reformulação`,
   );
   nota(
     `out/404.html está DENTRO do resíduo de ${LINHA_BASE_DE_PAGINAS} e não na lista de explicáveis: ` +

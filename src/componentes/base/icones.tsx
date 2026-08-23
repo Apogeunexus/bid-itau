@@ -94,13 +94,6 @@ export const ICONE_CURSOS = (
   </Icone>
 );
 
-export const ICONE_BLOG = (
-  <Icone>
-    <path d="M15.5 4.5 19 8l-9.5 9.5-4.5 1 1-4.5L15.5 4.5Z" {...traco} />
-    <path d="M13.5 6.5 17 10" {...traco} />
-  </Icone>
-);
-
 export const ICONE_MAPA = (
   <Icone>
     <path d="M12 20.5s6.5-5.4 6.5-10a6.5 6.5 0 0 0-13 0c0 4.6 6.5 10 6.5 10Z" {...traco} />

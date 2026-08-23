@@ -520,9 +520,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
         <p className="text-sm leading-snug text-tinta-2">
           {descartados === 1
             ? "Um critério do endereço não existe neste índice e foi descartado."
-            : `${milhar(descartados)} critérios do endereço não existem neste índice e foram descartados.`}{" "}
-          O recorte abaixo é o que sobrou — preferimos dizer isso a mostrar um recorte
-          diferente do que foi pedido.
+            : `${milhar(descartados)} critérios do endereço não existem neste índice e foram descartados.`}
         </p>
       ) : null}
 
@@ -654,10 +652,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
                   quero descobrir algo
                 </Chip>
-                <p className="text-xs leading-snug text-tinta-2">
-                  Disposição não é critério de busca: ela pondera a caminhada. Tocar leva
-                  para lá com a disposição já marcada.
-                </p>
                 <TrilhoDeChips rotulo="Ir para Descobrir com uma disposição marcada">
                   {DISPOSICOES.map((disposicao) => (
                     <Chip
@@ -724,10 +718,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     Você ainda não buscou nada neste navegador.
                   </p>
                 )}
-                <p className="text-xs leading-snug text-tinta-2">
-                  O histórico fica só neste navegador, em chave própria, e não vai para lugar
-                  nenhum — nem para os salvos.
-                </p>
               </section>
 
             </div>
@@ -930,10 +920,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   precisa saber é a promessa: o número ao lado é o resultado real,
                   e não há caminho que leve a nada. Os títulos de cada trilho já
                   dizem por que se está recortando. */}
-              <p className="text-sm leading-snug text-tinta-2">
-                O número ao lado de cada opção é quanto ela devolve agora. Nenhuma leva a
-                zero resultado — as que levariam não aparecem.
-              </p>
             </div>
 
             {/* A PORTA PARA `/filtros/`, E O QUE ELA DIZ IMPORTA MAIS QUE ELA EXISTIR.
@@ -1008,21 +994,17 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
               rodape={
                 <p className="text-xs leading-snug text-tinta-2">
                   {milhar(indice.diagnostico.comTerritorioBrasileiro)} das {milhar(indice.total)}{" "}
-                  entradas estão situadas num estado brasileiro. O território vem da hierarquia
-                  `situado_em` do acervo, não de um campo de endereço.
+                  entradas estão situadas num estado brasileiro.
                 </p>
               }
             />
 
-            {/* T-03-24: a gratuidade NÃO é oferecida, e o motivo fica na tela. Um filtro que
-                não filtra e não avisa faria quem avalia concluir que o acervo é todo gratuito. */}
-            <p className="text-sm leading-snug text-tinta-2">
-              <strong>Não há faceta de gratuidade</strong>, e o motivo é do dado: as 2.425 sessões
-              do acervo saem todas gratuitas porque `gratuito` é a negação de um campo de ingresso
-              que nenhum dos 300 eventos declara. Um filtro de gratuidade passaria 100% dos eventos
-              datados — ele não recortaria nada, e oferecê-lo sem dizer isso seria pior do que não
-              tê-lo.
-            </p>
+            {/* T-03-24: a gratuidade NÃO é oferecida como faceta — as 2.425 sessões saem
+                todas gratuitas porque `gratuito` é a negação de um campo de ingresso que
+                nenhum dos 300 eventos declara, e o filtro passaria 100% do acervo. O
+                parágrafo que explicava isso saiu da tela em 23/08 junto com os outros
+                textos de sistema; quem sustenta a declaração com número é a ficha de
+                critério de `busca-frase.tsx`, que o portão da fase 3 lê. */}
           </section>
         </div>
       </div>
@@ -1032,21 +1014,18 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
       {/* ------------------------------------------------------------------ */}
       <section className="busca-bloco">
         <p className="busca-bloco-titulo">ver este recorte no mapa</p>
-        <p className="text-sm leading-snug">
-          O mapa é <strong>lente sobre este resultado</strong>, não uma porta de entrada: ele
-          abre com o conjunto que está aqui e com o endereço de volta para esta busca.
-        </p>
         <Chip href={lente} className="w-fit font-semibold">
           <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
           {idsLente.length
             ? `abrir ${milhar(idsLente.length)} no mapa`
             : "abrir o mapa sem recorte"}
         </Chip>
+        {/* O corte CONTINUA declarado — lista que encolhe em silêncio é defeito, e a
+            regra de fluxo da casa exige dizer —, mas sem o parágrafo que explicava o
+            porquê do limite do endereço. */}
         {total > idsLente.length ? (
           <p className="text-xs leading-snug text-tinta-2">
-            A lente leva os primeiros {milhar(idsLente.length)} de {milhar(total)} — o corte é
-            do endereço, que não comporta a lista inteira, e está declarado aqui em vez de
-            acontecer em silêncio.
+            A lente leva os primeiros {milhar(idsLente.length)} de {milhar(total)}.
           </p>
         ) : null}
       </section>

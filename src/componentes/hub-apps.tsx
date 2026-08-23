@@ -38,19 +38,67 @@ import { ATALHOS_BASTIDOR, ATALHOS_CONTA, GRUPOS_APPS, TOTAL_APPS, type Atalho }
  * «só web» — anunciar no telefone um caminho que termina em aviso é beco.
  */
 
+/**
+ * OS QUATRO RITMOS DE GRUPO, e por que não é um só.
+ *
+ * O ritmo anterior era um só — em grupo de contagem ímpar, o primeiro cartaz
+ * ocupa a largura toda e o resto cai em pares. Como três dos quatro grupos têm
+ * três apps, a tela repetia «um grande em cima, dois pequenos embaixo» três
+ * vezes seguidas, que é a planilha que o ritmo existia para evitar.
+ *
+ * Agora o ritmo gira com a POSIÇÃO do grupo, e nenhum se repete em sequência:
+ *
+ *   · **aberto** — o grande em cima, o resto em pares.
+ *   · **fechado** — o grande embaixo.
+ *   · **sanduíche** — faixa em cima, faixa embaixo, e o que fica no meio vira
+ *     uma linha de capa pequena. É o ritmo de «Ler»: Notícias abre e Cursos
+ *     fecha, com o Blog entre os dois.
+ *   · **lado** — o grande em pé à esquerda, com dois empilhados à direita.
+ *
+ * Grupo de contagem par não recebe cartaz grande: dois cartazes iguais já são um
+ * ritmo, e um deles esticado deixaria um buraco na fileira.
+ */
+const RITMOS = ["aberto", "fechado", "sanduiche", "lado"] as const;
+
+type Ritmo = (typeof RITMOS)[number];
+
+/**
+ * O porte de CADA cartaz do grupo, na ordem em que eles aparecem. Vazio é o
+ * cartaz padrão — capa 4:3 com o texto embaixo, dois por fileira.
+ */
+function portesDoGrupo(quantos: number, ritmo: Ritmo): string[] {
+  const portes = new Array<string>(quantos).fill("");
+  if (ritmo === "sanduiche") {
+    portes[0] = "largo";
+    portes[quantos - 1] = "largo";
+    // O miolo vira LINHA e não cartaz meia-largura: sozinho entre duas faixas,
+    // um cartaz de meia coluna deixaria a outra metade vazia.
+    for (let i = 1; i < quantos - 1; i++) portes[i] = "linha";
+    return portes;
+  }
+  if (quantos % 2 === 0) return portes;
+  if (ritmo === "fechado") portes[quantos - 1] = "largo";
+  else if (ritmo === "lado") portes[0] = "alto";
+  else portes[0] = "largo";
+  return portes;
+}
+
 function Cartaz({
   href,
   rotulo,
   descricao,
   capa,
+  porte,
 }: {
   href: string;
   rotulo: string;
   descricao: string;
   capa: { arquivo: string; alt: string };
+  /** `largo`, `alto` ou vazio. Os dois primeiros levam o texto para cima da foto. */
+  porte: string;
 }) {
   return (
-    <li className="hub-cartaz">
+    <li className={porte ? `hub-cartaz hub-cartaz--${porte}` : "hub-cartaz"}>
       <Link href={href} className="hub-cartaz-link">
         <span className="hub-cartaz-quadro">
           {/* `next/image` está fora do projeto por decisão registrada em
@@ -94,22 +142,29 @@ export function HubApps() {
         </p>
       </header>
 
-      {GRUPOS_APPS.map((grupo) => (
-        <section key={grupo.id} className="hub-grupo">
-          <h2 className="tipo-titulo-3 font-bold">{grupo.rotulo}</h2>
-          <ul className="hub-grade">
-            {grupo.apps.map((app) => (
-              <Cartaz
-                key={app.id}
-                href={app.href}
-                rotulo={app.rotulo}
-                descricao={app.descricao}
-                capa={app.capa}
-              />
-            ))}
-          </ul>
-        </section>
-      ))}
+      {GRUPOS_APPS.map((grupo, i) => {
+        // O ritmo é a POSIÇÃO do grupo, não uma escolha por grupo: acrescentar
+        // um app ou reordenar a lista continua alternando sozinho.
+        const ritmo = RITMOS[i % RITMOS.length];
+        const portes = portesDoGrupo(grupo.apps.length, ritmo);
+        return (
+          <section key={grupo.id} className="hub-grupo">
+            <h2 className="tipo-titulo-3 font-bold">{grupo.rotulo}</h2>
+            <ul className="hub-grade" data-ritmo={ritmo}>
+              {grupo.apps.map((app, n) => (
+                <Cartaz
+                  key={app.id}
+                  href={app.href}
+                  rotulo={app.rotulo}
+                  descricao={app.descricao}
+                  capa={app.capa}
+                  porte={portes[n]}
+                />
+              ))}
+            </ul>
+          </section>
+        );
+      })}
 
       <section className="hub-grupo">
         <h2 className="tipo-titulo-3 font-bold">Sua conta</h2>

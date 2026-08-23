@@ -677,16 +677,17 @@ async function gatesEstruturais() {
       // As 529 páginas do Player (05-07) — uma por mídia do acervo. É de longe o maior
       // acréscimo da fase, e é ele que responde por 529 das 532 páginas novas.
       /^play\/[^/]+\/index\.html$/.test(r) ||
-      // ---- As 7 rotas da REFORMULAÇÃO do design system (2026-08): a árvore de menu
+      // ---- As 6 rotas da REFORMULAÇÃO do design system (2026-08): a árvore de menu
       // fixada pelo cliente. Nascem como esqueleto rotulado no mesmo commit do menu
       // lateral — o LIMIAR de 1.784 não muda, o que muda é a lista do explicável.
+      // Eram 7: `/blog` foi retirada em 23/08 a pedido do cliente, por não ter
+      // conteúdo no acervo — o que ela apontava (colunas e opinião) mora em /noticias.
       r === "cast/index.html" ||
       r === "noticias/index.html" ||
       r === "museu/index.html" ||
       r === "museu/exposicoes/index.html" ||
       r === "ia/index.html" ||
-      r === "cursos/index.html" ||
-      r === "blog/index.html",
+      r === "cursos/index.html",
   );
   const linhaBase = paginas.length - novas.length;
   exigir(

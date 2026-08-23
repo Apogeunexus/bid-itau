@@ -92,14 +92,17 @@ export function NavegacaoBarra() {
           ))}
         </ul>
 
-        <Link
-          href={HREF_APPS}
-          aria-current={dentroDe(HREF_APPS) ? "page" : undefined}
-          className="barra-apps"
-        >
-          {ICONE_APPS}
-          <span className="tipo-micro">Apps</span>
-        </Link>
+        {/* O botão SOME quando a pessoa já está no hub. Ele é uma porta, não uma
+            aba: uma porta que continua acesa depois de atravessada convida a um
+            toque que não leva a lugar nenhum — e, sendo laranja, ela seria a
+            única AÇÃO em destaque da tela sem ter ação para oferecer. As quatro
+            abas continuam, que é por onde se sai daqui. */}
+        {dentroDe(HREF_APPS) ? null : (
+          <Link href={HREF_APPS} className="barra-apps">
+            {ICONE_APPS}
+            <span className="tipo-micro">Apps</span>
+          </Link>
+        )}
       </nav>
     </>
   );

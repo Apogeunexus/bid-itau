@@ -36,17 +36,23 @@ import type { DimensaoAcessibilidade } from "@/dados/tipos";
  *
  * O QUE ESTA TELA COPIA, e o que ela se recusa a copiar:
  *
- * **COPIA A FORMA.** Peça de destaque sangrando no topo, prateleiras horizontais por
- * categoria, cartaz em pé, e a troca de fileira para grade quando alguém escolhe um
- * recorte. É vocabulário que a pessoa já sabe operar sem aprender nada — a regra que a
- * reunião fixou («vamos evitar reinventar a roda»).
+ * **COPIA A FORMA.** Peça de destaque sangrando no topo, prateleiras horizontais, cartaz
+ * em pé, e a troca de fileira para grade quando alguém escolhe um recorte. É vocabulário
+ * que a pessoa já sabe operar sem aprender nada — a regra que a reunião fixou («vamos
+ * evitar reinventar a roda»).
+ *
+ * **TRÊS PORTES DE FILEIRA** (pedido de 23/08: «se não vira lista gigante sem alma»). A
+ * primeira é a maior e ganha cartaz grande; as de menos de {@link LIMIAR_COMPACTO} viram
+ * LISTA; o resto é trilho. Quem entra em cada porte é POSIÇÃO E TAMANHO, os dois
+ * derivados — a referência nunca desenha todas as fileiras iguais, e três fileiras
+ * idênticas de 63, 46 e 4 era o que esta tela tinha antes.
  *
  * **NÃO COPIA O QUE SERIA MENTIRA.** Não há «Top 10», não há «Em alta», não há «porque
  * você assistiu». As três coisas dependem de dado de uso, e este acervo não tem nenhum:
  * inventá-lo para encher fileira seria autorar um fato sobre o Itaú Cultural, que é a
- * linha que este projeto não cruza desde a fase 1. As fileiras que existem saem de campo
- * declarado — categoria — e o destaque é simplesmente A MAIS RECENTE, que é ordem, não
- * curadoria fabricada.
+ * linha que este projeto não cruza desde a fase 1. As fileiras saem de campo declarado —
+ * o nome repetido no título, o tema, a categoria (`prateleiras.ts`) — e o destaque é
+ * simplesmente A MAIS RECENTE, que é ordem, não curadoria fabricada.
  *
  * **AS 113 CONTINUAM TODAS NA TELA.** As prateleiras são uma PARTIÇÃO do recorte de
  * streaming: cada mídia aparece em exatamente uma fileira, e as fileiras somam 113. Não
@@ -60,9 +66,9 @@ import type { DimensaoAcessibilidade } from "@/dados/tipos";
  * COMPOSTO: foto em 3:2, sem crop destrutivo, e uma faixa tipográfica da casa embaixo.
  * A forma é de streaming; a capa é deste design system, e isso se vê.
  *
- * **O BOTÃO NÃO DIZ «ASSISTIR».** O acervo traz a ficha e a capa, não o arquivo — e a
- * página do player explica isso por extenso. Um botão de play sobre nada seria a mentira
- * mais barata desta tela, do mesmo jeito que «ouvir» seria no Cast.
+ * **O BOTÃO NÃO DIZ «ASSISTIR».** O acervo traz a ficha e a capa, não o arquivo — e é a
+ * página do player que explica isso por extenso. Um botão de play sobre nada seria a
+ * mentira mais barata desta tela, do mesmo jeito que «ouvir» seria no Cast.
  * ─────────────────────────────────────────────────────────────────────────────────────
  *
  * ONDE ESTA TELA PODERIA MENTIR MAIS FÁCIL, e o que impede:
@@ -79,9 +85,14 @@ import type { DimensaoAcessibilidade } from "@/dados/tipos";
  *    autorar aresta mídia→evento para inflar o número (T-05-34).
  *
  * 3. **O CORTE DO RESUMO.** O resumo não cabe no orçamento do catálogo e não viaja nele.
- *    O corte é declarado NA TELA, com o motivo — é o padrão que o feed e o índice de busca
- *    já fixaram nesta obra: custo declarado, nunca silencioso. O destaque é a exceção
- *    medida: UM resumo custa ~200 bytes e ele é a peça que abre a tela.
+ *    Ele aparece por inteiro na página de cada mídia; o destaque é a exceção medida — UM
+ *    resumo custa ~200 bytes e ele é a peça que abre a tela. O porquê do corte está em
+ *    `play.ts`, não na tela.
+ *
+ * A TELA NÃO SE EXPLICA (pedido de 23/08). Os números medidos ficam — o total, a
+ * contagem em cada chip, os denominadores da ponte, que são o argumento —, mas os
+ * parágrafos que justificavam o recorte, o custo em bytes e o descarte de storage
+ * saíram do JSX. Eles viviam abaixo do conteúdo e faziam a tela falar de si.
  *
  * DP-F: este é um `"use client"` e por isso NÃO alcança `@/dados/play` nem
  * `@/dados/grafo`, nem transitivamente. O DTO chega por propriedade, e o vocabulário
@@ -125,6 +136,13 @@ export function gravarConcluidas(slugs: string[]) {
 
 /** «Todas» não é uma categoria do acervo — é a ausência de recorte. */
 const SEM_RECORTE = "";
+
+/**
+ * Abaixo disto a fileira vira LISTA em vez de trilho. Oito: até aí a fileira cabe
+ * INTEIRA na lista — quatro linhas em duas colunas na web —, e mostrar tudo de uma vez
+ * é melhor que pedir o gesto de rolar meio palmo. O trilho existe para o que não cabe.
+ */
+const LIMIAR_COMPACTO = 8;
 
 /**
  * O cartaz — a unidade da parede, usada IGUAL no trilho e na grade.
@@ -182,22 +200,64 @@ function Cartaz({ item }: { item: ItemDoPlayNoCliente }) {
   );
 }
 
+/**
+ * A LINHA da fileira compacta — capa pequena à esquerda, título e data à direita.
+ *
+ * O terceiro porte de fileira, e o motivo de ele existir: «playlist» tem 4 mídias e
+ * «quem traduziu?» tem 4. Quatro cartazes num trilho que não rola leem como fileira
+ * quebrada; em lista, quatro itens são quatro itens.
+ */
+function Linha({ item }: { item: ItemDoPlayNoCliente }) {
+  return (
+    <li data-midia={item.slug} data-categoria-do-item={item.categoria}>
+      <Link href={item.rota} className="play-linha">
+        <span className="play-linha-quadro">
+          {item.imagem ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={item.imagem}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="play-linha-foto"
+            />
+          ) : (
+            <CapaSemImagem
+              titulo={item.titulo}
+              classe="midia"
+              rotulo={item.rotuloCategoria}
+              linguagens={item.linguagens}
+              className="size-full"
+            />
+          )}
+        </span>
+        <span className="play-linha-texto">
+          <span className="play-linha-titulo tipo-detalhe">{item.titulo}</span>
+          <span className="play-linha-pe tipo-micro">
+            {item.rotuloCategoria} ·{" "}
+            <time dateTime={diaParaIso(item.dia)}>{diaParaTexto(item.dia)}</time>
+          </span>
+        </span>
+      </Link>
+    </li>
+  );
+}
+
 export function Play({
   catalogo,
   destaque,
   dimensoes,
   ponte,
-  corte,
   procedencia,
 }: {
   catalogo: CatalogoNoFio;
   destaque: DestaqueNoFio;
   dimensoes: readonly DimensaoContada[];
   ponte: { arestas: number; midiasDistintas: number; eventosAlcancados: number; deQuantas: number; declaracao: string };
-  corte: { campo: string; itens: number; motivo: string };
   procedencia: { rotulo: string; n: number };
 }) {
   const [categoria, setCategoria] = useState<string>(SEM_RECORTE);
+  const [fileira, setFileira] = useState<string>(SEM_RECORTE);
   const [dimensoesMarcadas, setDimensoesMarcadas] = useState<DimensaoAcessibilidade[]>([]);
   const [concluidas, setConcluidas] = useState<string[]>([]);
   const [hidratado, setHidratado] = useState(false);
@@ -217,57 +277,73 @@ export function Play({
 
   const porSlug = useMemo(() => new Map(itens.map((i) => [i.slug, i])), [itens]);
 
-  const recortando = categoria !== SEM_RECORTE || dimensoesMarcadas.length > 0;
-
-  const recorte = useMemo(() => {
-    return itens.filter((i) => {
-      if (categoria !== SEM_RECORTE && i.categoria !== categoria) return false;
-      return dimensoesMarcadas.every((d) => i.acessibilidade[d]);
-    });
-  }, [itens, categoria, dimensoesMarcadas]);
-
   /**
-   * As prateleiras — UMA por categoria, na ordem em que o catálogo as contou (a maior
-   * primeiro). É uma PARTIÇÃO: cada mídia cai em exatamente uma fileira, e as fileiras
-   * somam o total. Ver o cabeçalho deste arquivo para por que não há fileira editorial.
+   * As prateleiras, montadas a partir dos ÍNDICES que o build conferiu — coleção pelo
+   * nome no título, tema declarado, e a categoria como fileira de sobra (`prateleiras.ts`).
+   * É uma PARTIÇÃO: cada mídia cai em exatamente uma fileira e elas somam o total.
+   *
+   * TRÊS PORTES, e a regra é POSIÇÃO E TAMANHO — os dois derivados, nenhuma escolha
+   * editorial. A primeira é a maior (o build ordena por tamanho) e ganha cartaz grande;
+   * as de menos de {@link LIMIAR_COMPACTO} viram lista, porque três cartazes soltos num
+   * trilho que não rola leem como fileira quebrada e não como fileira pequena.
    */
   const prateleiras = useMemo(
     () =>
-      catalogo.categorias.map((c) => ({
-        ...c,
-        itens: itens.filter((i) => i.categoria === c.valor),
+      catalogo.prateleiras.map((p, i) => ({
+        ...p,
+        midias: p.itens.map((n) => itens[n]).filter(Boolean),
+        porte: i === 0 ? "grande" : p.itens.length < LIMIAR_COMPACTO ? "compacta" : "trilho",
       })),
-    [catalogo.categorias, itens],
+    [catalogo.prateleiras, itens],
   );
+
+  const recortando =
+    categoria !== SEM_RECORTE || fileira !== SEM_RECORTE || dimensoesMarcadas.length > 0;
+
+  const recorte = useMemo(() => {
+    const base =
+      fileira === SEM_RECORTE
+        ? itens
+        : (prateleiras.find((p) => p.valor === fileira)?.midias ?? []);
+    return base.filter((i) => {
+      if (categoria !== SEM_RECORTE && i.categoria !== categoria) return false;
+      return dimensoesMarcadas.every((d) => i.acessibilidade[d]);
+    });
+  }, [itens, prateleiras, fileira, categoria, dimensoesMarcadas]);
 
   /**
    * O que o Player registrou, resolvido contra o catálogo.
    *
-   * T-05-37 de novo: um slug que NÃO resolve é descartado — e o descarte é DECLARADO, do
-   * mesmo jeito que a prévia de impacto da fase 4 declara o dela. Descartar em silêncio
-   * transformaria storage adulterado numa lista que encolhe sem explicação.
+   * T-05-37: um slug que NÃO resolve em mídia nenhuma é descartado em silêncio. Até
+   * 23/08 o descarte era DECLARADO num parágrafo; ele saiu junto com os outros textos
+   * de sistema — o que sobrou é a lista, que é o produto.
    */
   const retomada = useMemo(() => {
     const vistos = new Set<string>();
     const resolvidas: ItemDoPlayNoCliente[] = [];
-    let descartadas = 0;
     for (const slug of concluidas) {
       if (vistos.has(slug)) continue;
       vistos.add(slug);
       const item = porSlug.get(slug);
       if (item) resolvidas.push(item);
-      else descartadas += 1;
     }
-    return { resolvidas, descartadas, guardadas: vistos.size };
+    return { resolvidas };
   }, [concluidas, porSlug]);
 
-  const rotuloDoRecorte =
+  const rotuloDoRecorte = [
+    fileira === SEM_RECORTE
+      ? ""
+      : (catalogo.prateleiras.find((p) => p.valor === fileira)?.rotulo ?? fileira),
     categoria === SEM_RECORTE
-      ? "todas as categorias"
-      : (catalogo.categorias.find((c) => c.valor === categoria)?.rotulo ?? categoria);
+      ? ""
+      : (catalogo.categorias.find((c) => c.valor === categoria)?.rotulo ?? categoria),
+  ]
+    .filter(Boolean)
+    .join(" · ") || "todas as categorias";
 
   function limparRecorte() {
     setCategoria(SEM_RECORTE);
+    setFileira(SEM_RECORTE);
     setDimensoesMarcadas([]);
   }
 
@@ -303,6 +379,9 @@ export function Play({
           {destaque.resumo ? (
             <p className="play-destaque-resumo tipo-detalhe">{destaque.resumo}</p>
           ) : null}
+          {/* «Abrir» e não «assistir»: o acervo traz a ficha e a capa, não o arquivo.
+              A ressalva por extenso é da página do player — aqui basta o rótulo do
+              botão não prometer o que não existe. */}
           <Link
             href={destaque.rota}
             className="play-destaque-botao tipo-detalhe"
@@ -310,24 +389,15 @@ export function Play({
           >
             Abrir
           </Link>
-          {/* «Abrir» e não «assistir», e a ressalva vem junto: o acervo traz a ficha e a
-              capa, não o arquivo. A página do player explica por extenso; aqui basta a
-              vitrine não prometer o que não existe. */}
-          <p className="play-destaque-nota tipo-legenda">
-            O acervo traz a ficha e a capa de cada mídia — o arquivo de vídeo não faz parte
-            dele, e nada é buscado de fora deste protótipo.
-          </p>
         </div>
       </section>
 
       {/* ------------------------------------------------------ o que a vitrine oferece */}
-      <p className="tipo-detalhe text-tinta-2">
+      <p className="tipo-legenda text-tinta-3">
         <strong data-denominador="midias" className="font-display text-tinta">
           {catalogo.total} mídias
         </strong>{" "}
-        para assistir, de graça, no acervo do {procedencia.rotulo} —{" "}
-        {catalogo.categorias.map((c) => c.rotulo.toLowerCase()).join(", ")}. Os podcasts
-        moram em Cast e o editorial em Notícias.
+        para assistir, de graça · acervo do {procedencia.rotulo}
       </p>
 
       {/* --------------------------------------------------------------- os recortes
@@ -340,7 +410,7 @@ export function Play({
        * lado de cada recurso, antes de qualquer marcação (D-90).
        */}
       <section className="play-recorte">
-        <h2 className="tipo-micro text-tinta-3">Categorias do acervo</h2>
+        <h2 className="tipo-micro text-tinta-3">Categorias</h2>
         <TrilhoDeChips rotulo="Recortar o catálogo por categoria">
           <Chip
             data-categoria={SEM_RECORTE || "todas"}
@@ -392,11 +462,6 @@ export function Play({
             );
           })}
         </TrilhoDeChips>
-        <p className="tipo-legenda text-tinta-2">
-          O número diz quanto cada recurso recorta, medido antes de você marcar qualquer
-          coisa — dois dos três não recortam nada, e é por isso que eles aparecem com o
-          número em vez de escondidos.
-        </p>
       </section>
 
       {/* ------------------------------------------------------------------- a vitrine */}
@@ -433,10 +498,8 @@ export function Play({
               data-recorte-vazio
               className="tipo-detalhe rounded-m border border-dashed border-borda-forte p-4"
             >
-              Nenhuma das {catalogo.total} mídias desta vitrine atende a esse recorte.{" "}
-              {dimensoesMarcadas.some((d) => (dimensoes.find((x) => x.campo === d)?.n ?? 0) === 0)
-                ? "O acervo publicado não declara esse recurso em nenhuma mídia — o vazio aqui é o próprio dado, não uma falha da busca."
-                : "Tente soltar uma das marcações acima."}
+              Nenhuma das {catalogo.total} mídias atende a esse recorte. Solte uma das
+              marcações acima.
             </p>
           ) : (
             <ul className="play-grade">
@@ -450,27 +513,40 @@ export function Play({
         /* SEM RECORTE, AS PRATELEIRAS — e elas somam as 113: cada mídia aparece em
            exatamente uma fileira. Nada de `slice`, nada de teto de exibição. */
         prateleiras.map((p) => (
-          <section key={p.valor} className="play-prateleira">
+          <section
+            key={p.valor}
+            data-prateleira={p.valor}
+            data-porte={p.porte}
+            className="play-prateleira"
+          >
             <div className="play-prateleira-cabecalho">
               <h2 className="play-prateleira-titulo tipo-titulo-3">
                 <Grafismo variacao="barra" className="h-[0.8em] w-auto text-acao-tinta" />
                 {p.rotulo}
-                <span className="play-prateleira-n tipo-detalhe">{p.n}</span>
+                <span className="play-prateleira-n tipo-detalhe">{p.midias.length}</span>
               </h2>
               <button
                 type="button"
                 data-ver-tudo={p.valor}
-                onClick={() => setCategoria(p.valor)}
+                onClick={() => setFileira(p.valor)}
                 className="play-prateleira-tudo tipo-detalhe"
               >
-                Ver {p.n} →
+                Ver {p.midias.length} →
               </button>
             </div>
-            <ul className="play-trilho">
-              {p.itens.map((i) => (
-                <Cartaz key={i.slug} item={i} />
-              ))}
-            </ul>
+            {p.porte === "compacta" ? (
+              <ul className="play-lista">
+                {p.midias.map((i) => (
+                  <Linha key={i.slug} item={i} />
+                ))}
+              </ul>
+            ) : (
+              <ul className="play-trilho">
+                {p.midias.map((i) => (
+                  <Cartaz key={i.slug} item={i} />
+                ))}
+              </ul>
+            )}
           </section>
         ))
       )}
@@ -496,45 +572,27 @@ export function Play({
         {!hidratado ? (
           <p className="tipo-legenda text-tinta-3">Lendo o que ficou guardado neste navegador…</p>
         ) : retomada.resolvidas.length === 0 ? (
-          /* Vazio e EXPLICADO, não sumido: um bloco que desaparece deixa quem avalia sem
+          /* Vazio com saída, não sumido: um bloco que desaparece deixa quem avalia sem
              saber se a funcionalidade existe ou se ela quebrou. */
           <p className="tipo-legenda text-tinta-2">
-            Nada aqui ainda. O que você marcar como concluída na página da mídia aparece
-            nesta lista, guardada só neste navegador.
+            Nada aqui ainda. Marque uma mídia como concluída na página dela.
           </p>
         ) : (
-          <>
-            <ul className="flex flex-col gap-1">
-              {retomada.resolvidas.map((i) => (
-                <li key={i.slug}>
-                  <Link
-                    href={i.rota}
-                    data-retomada={i.slug}
-                    className="tipo-detalhe flex items-baseline gap-2 py-1 underline decoration-borda-forte underline-offset-4 hover:decoration-current"
-                  >
-                    <span className="tipo-micro shrink-0 text-tinta-3">{i.rotuloCategoria}</span>
-                    <span className="min-w-0 truncate">{i.titulo}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <p className="tipo-legenda text-tinta-2">
-              <strong data-denominador="concluidas">{retomada.resolvidas.length}</strong> de{" "}
-              {catalogo.total} concluída{retomada.resolvidas.length > 1 ? "s" : ""} neste
-              navegador.
-            </p>
-          </>
+          <ul className="flex flex-col gap-1">
+            {retomada.resolvidas.map((i) => (
+              <li key={i.slug}>
+                <Link
+                  href={i.rota}
+                  data-retomada={i.slug}
+                  className="tipo-detalhe flex items-baseline gap-2 py-1 underline decoration-borda-forte underline-offset-4 hover:decoration-current"
+                >
+                  <span className="tipo-micro shrink-0 text-tinta-3">{i.rotuloCategoria}</span>
+                  <span className="min-w-0 truncate">{i.titulo}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         )}
-
-        {retomada.descartadas > 0 ? (
-          /* O descarte é DECLARADO. Storage adulterado não pode encolher a lista em
-             silêncio — a pessoa tem de saber que havia algo ali que não resolveu. */
-          <p data-descarte className="tipo-legenda text-tinta-2">
-            <strong>{retomada.descartadas}</strong> registro
-            {retomada.descartadas > 1 ? "s guardados neste navegador não correspondem" : " guardado neste navegador não corresponde"}{" "}
-            a nenhuma mídia do acervo e foi descartado da lista acima.
-          </p>
-        ) : null}
       </section>
 
       {/* -------------------------------------------- não pode ir? veja isto (D-92) */}
@@ -543,6 +601,9 @@ export function Play({
         className="flex flex-col gap-2 rounded-m border border-borda p-3 desk:web-painel"
       >
         <h2 className="tipo-detalhe font-bold">Não pode ir? veja isto</h2>
+        {/* Os quatro denominadores ficam: eles são a COBERTURA REAL da ponte, e o
+            portão D-92 os lê. O parágrafo que explicava por que não autoramos aresta
+            mídia→evento saiu da tela em 23/08 — ele vive em `play.ts`. */}
         <p className="tipo-detalhe">
           <strong data-denominador="com-ponte">{ponte.midiasDistintas}</strong> das{" "}
           <strong data-denominador="total">{ponte.deQuantas}</strong> mídias falam de um
@@ -552,23 +613,8 @@ export function Play({
           páginas desses eventos, essas mídias aparecem como o que dá para ver de casa
           quando não dá para ir.
         </p>
-        <p className="tipo-legenda text-tinta-2">
-          As outras {ponte.deQuantas - ponte.midiasDistintas} não têm essa ligação
-          declarada, e nós não a inventamos. O acervo registra «fala sobre» entre mídia e
-          evento; «semelhante a» liga mídia a mídia e nunca chega a um evento. Afirmar que
-          um vídeo fala de um evento quando a fonte não disse seria inventar um fato sobre
-          o acervo — e é a mesma linha que não cruzamos ao não montar lista de elenco.
-        </p>
       </section>
 
-      {/* ------------------------------------------------------------- o custo declarado */}
-      <p data-corte className="tipo-legenda text-tinta-2">
-        O resumo de cada mídia não viaja nesta lista — ele aparece por inteiro na página
-        dela, e aqui só no destaque, que é um só. {corte.motivo} A vitrine desta tela pesa{" "}
-        <strong>{(catalogo.bytes / 1024).toFixed(1)} KB</strong> de um orçamento de{" "}
-        {(catalogo.teto / 1024).toFixed(0)} KB, com as {catalogo.total} mídias inteiras: o
-        corte é de campo, nunca de item.
-      </p>
     </section>
   );
 }

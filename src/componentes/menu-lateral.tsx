@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   ICONE_ACONTECE,
-  ICONE_BLOG,
   ICONE_BUSCAR,
   ICONE_CAST,
   ICONE_CURSOS,
@@ -72,7 +71,6 @@ const PRINCIPAIS: Item[] = [
   },
   { href: "/ia", rotulo: "IA", icone: ICONE_IA },
   { href: "/cursos", rotulo: "Cursos", icone: ICONE_CURSOS },
-  { href: "/blog", rotulo: "Blog", icone: ICONE_BLOG },
 ];
 
 const PLANEJAR: Item[] = [

@@ -1,4 +1,5 @@
 import { porSlug, slugsPorTipo, vizinhos } from "./grafo";
+import { prateleirasDe, rostoDa } from "./prateleiras";
 import {
   comprimirAcessibilidade,
   DIMENSOES,
@@ -79,6 +80,26 @@ const ROTULOS: Record<string, string> = {
   playlists: "Playlist",
   "agenda-cultural": "Agenda cultural",
   acervos: "Acervo",
+};
+
+/**
+ * O nome da FILEIRA DE SOBRA de cada categoria — a última passada de
+ * `prateleiras.ts`, para o que nenhuma coleção e nenhum tema reuniu.
+ *
+ * «Outras séries» e não «Séries»: as coleções acima também são séries, e uma
+ * fileira chamada «Séries» ao lado delas prometeria o conjunto inteiro. O plural
+ * e o gênero são escritos aqui porque português não os deriva de `ROTULOS`.
+ */
+const ROTULOS_DO_RESTO: Record<string, string> = {
+  podcasts: "Outros podcasts",
+  series: "Outras séries",
+  videos: "Outros vídeos",
+  noticias: "Outras notícias",
+  entrevista: "Outras entrevistas",
+  colunistas: "Outras colunas",
+  playlists: "Outras playlists",
+  "agenda-cultural": "Outras da agenda cultural",
+  acervos: "Outros acervos",
 };
 
 /** O item do catálogo, nomeado e completo. É a verdade de build. */
@@ -297,7 +318,7 @@ function montar(): Montado {
       `disse seria inventar um fato sobre o acervo.`,
   };
 
-  const fio = fioDe(itens);
+  const fio = fioDeItens(itens);
 
   return { itens, porSlugDoPlay, categorias, dimensoes, ponte, midiasPorEvento, eventosPorMidia, fio };
 }
@@ -307,13 +328,50 @@ function montar(): Montado {
  * de `montar()` na reformulação de 2026-08, quando /play passou a servir só o
  * recorte de streaming: o mesmo empacotamento serve o catálogo inteiro e
  * qualquer recorte, com categorias re-contadas sobre o conjunto recebido.
+ *
+ * EXPORTADA em 23/08 para o Cast (`cast.ts`): o recorte de podcast atravessa a
+ * mesma fronteira, com o mesmo formato posicional e o mesmo teto. Uma segunda
+ * cópia deste empacotamento seria a divergência que `play-wire.ts` existe para
+ * impedir — o produtor do fio tem de ser um só.
  */
-function fioDe(itens: ItemDoPlay[]): CatalogoNoFio {
+export function fioDeItens(itens: ItemDoPlay[]): CatalogoNoFio {
   const contagem = new Map<string, number>();
   for (const i of itens) contagem.set(i.categoria, (contagem.get(i.categoria) ?? 0) + 1);
   const categorias: CategoriaContada[] = [...contagem]
     .map(([valor, n]) => ({ valor, rotulo: ROTULOS[valor], n }))
     .sort((a, b) => b.n - a.n || (a.valor < b.valor ? -1 : 1));
+
+  // ---- as fileiras da vitrine, e a conferência de que elas são uma PARTIÇÃO --
+  const posicao = new Map(itens.map((item, i) => [item.slug, i]));
+  const montadas = prateleirasDe(itens, (categoria) => {
+    const rotulo = ROTULOS_DO_RESTO[categoria];
+    if (!rotulo) {
+      quebrar(
+        `a categoria «${categoria}» não tem rótulo de fileira de sobra em ROTULOS_DO_RESTO. ` +
+          `Escreva o rótulo — a fileira não pode mostrar a chave crua do CMS.`,
+      );
+    }
+    return rotulo;
+  });
+  const prateleiras = montadas.map((p) => ({
+    valor: p.valor,
+    rotulo: p.rotulo,
+    itens: p.itens.map((item) => posicao.get(item.slug)!),
+    rosto: posicao.get(rostoDa(p).slug)!,
+  }));
+
+  const emFileiras = prateleiras.reduce((soma, p) => soma + p.itens.length, 0);
+  const distintos = new Set(prateleiras.flatMap((p) => p.itens)).size;
+  if (emFileiras !== itens.length || distintos !== itens.length) {
+    quebrar(
+      `as fileiras somam ${emFileiras} (${distintos} distintas) e o conjunto tem ${itens.length}. ` +
+        `A vitrine é uma PARTIÇÃO: nenhum item pode sumir entre a derivação e a tela, e ` +
+        `nenhum pode aparecer em duas fileiras.`,
+    );
+  }
+  if (new Set(prateleiras.map((p) => p.valor)).size !== prateleiras.length) {
+    quebrar(`duas fileiras dividem a mesma chave — a chave é o que o recorte guarda no estado`);
+  }
 
   const vocabularioDeLinguagens = [...new Set(itens.flatMap((i) => i.linguagens))].sort();
   const indiceDeLinguagem = new Map(vocabularioDeLinguagens.map((l, i) => [l, i]));
@@ -333,7 +391,7 @@ function fioDe(itens: ItemDoPlay[]): CatalogoNoFio {
     ] as const;
   });
 
-  const semFio = { itens: noFio, categorias, linguagens: vocabularioDeLinguagens };
+  const semFio = { itens: noFio, categorias, prateleiras, linguagens: vocabularioDeLinguagens };
   const bytes = JSON.stringify(semFio).length;
 
   if (bytes > TETO_DO_FIO) {
@@ -374,7 +432,7 @@ function itensDeStreaming(): ItemDoPlay[] {
 let fioStreamingMemo: CatalogoNoFio | null = null;
 
 export function catalogoNoFioStreaming(): CatalogoNoFio {
-  if (!fioStreamingMemo) fioStreamingMemo = fioDe(itensDeStreaming());
+  if (!fioStreamingMemo) fioStreamingMemo = fioDeItens(itensDeStreaming());
   return fioStreamingMemo;
 }
 
@@ -474,8 +532,12 @@ export function catalogoNoFio(): CatalogoNoFio {
   return estado().fio;
 }
 
-/**
- * O QUE FOI CORTADO DO FIO, E POR QUÊ — declarado na tela, não escondido no código.
+/*
+ * O QUE FOI CORTADO DO FIO, E POR QUÊ.
+ *
+ * Isto era uma constante exportada, impressa num parágrafo ao pé de /play. O parágrafo
+ * saiu da tela em 23/08 — a tela não se explica —, e a decisão continua aqui, que é onde
+ * ela mora.
  *
  * O `resumo` das 529 não viaja no catálogo. Medido: o fio mede 79 KB sem ele e 131 KB
  * com ele, contra um teto de 100 KB. Sobrariam ~59 bytes por item, ou seja um resumo
@@ -488,16 +550,6 @@ export function catalogoNoFio(): CatalogoNoFio {
  * que quer saber do que se trata já está indo. No catálogo, quem faz o reconhecimento é
  * o título, a capa e a categoria.
  */
-export const CORTE_DO_RESUMO = {
-  campo: "resumo",
-  itens: MIDIAS_ESPERADAS,
-  onde: "no catálogo",
-  ondeAparece: "na página de cada mídia",
-  motivo:
-    "o resumo inteiro das 529 custaria 52 KB do orçamento de 100 KB do catálogo, e cortá-lo " +
-    "nos ~55 caracteres que caberiam entregaria uma frase interrompida em vez de um resumo. " +
-    "Ele aparece por inteiro na página de cada mídia.",
-} as const;
 
 /** As 529 são todas do Itaú Cultural — a procedência é uma constante, não um campo. */
 export const PROCEDENCIA_DAS_MIDIAS = {

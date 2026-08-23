@@ -1,0 +1,461 @@
+/* ===========================================================================
+ * cast.css — Cast — os 336 podcasts do acervo, no molde de um app de áudio
+ *
+ * REFORMULAÇÃO DE 23/08: a tela deixa de ser uma grade única de 336 cartões e
+ * passa a ter a forma que a reunião pediu, a mesma do Spotify. O que mudou de
+ * FORMA, e por quê:
+ *
+ * 1. **ATALHOS EM DUAS COLUNAS NO TOPO.** É a peça mais reconhecível da
+ *    referência, e aqui ela é o índice do acervo: cada programa com a sua
+ *    contagem, numa tela. A parede de 336 capas nunca contou que Mekukradjá tem
+ *    71 episódios; a grade de atalhos conta em uma olhada.
+ *
+ * 2. **PRATELEIRA POR PROGRAMA.** Fileira horizontal, cabeçalho com o número e
+ *    «ver tudo» — o esqueleto de shelf que `DESIGN-SYSTEM.md` §4 já tinha
+ *    fichado a partir do Spotify web e que o Play usa por categoria.
+ *
+ * 3. **CARTÃO SEM MOLDURA, ao contrário do cartaz do Play.** Lá o cartão tem
+ *    borda, superfície e faixa tipográfica, porque imita pôster. Aqui a capa
+ *    flutua sobre o papel e o texto vem solto embaixo, que é como um app de
+ *    áudio desenha a prateleira — e é o que distingue as duas telas à primeira
+ *    vista, sem nenhuma das duas sair do design system.
+ *
+ * 4. **A CAPA CONTINUA EM 3:2, e isso é uma recusa deliberada.** Podcast em app
+ *    de áudio é sempre quadrado. MEDIDO nas 325 capas deste recorte: 207 são
+ *    3:2 ou mais largas, 114 são ~4:3, 4 são quadradas. Um quadrado decepa um
+ *    terço da largura de uma fotografia cujo assunto raramente está no centro.
+ *
+ * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`, e há gate medindo isso.
+ *  - Nenhum hex do manual: use `var(--ic-*)` e `color-mix` para transparência
+ *    (D-06, D-08).
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]`.
+ *  - Nada de `position: fixed` fora de `casca.tsx` — dentro da moldura de
+ *    celular ele escapa e quebra D-03.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * A tela. Mesmo esqueleto de `.play`: gutter pelo token, respiro pelo token, e
+ * a barra inferior já é paga por `.moldura-rolagem` em `barra-inferior.css`.
+ * ------------------------------------------------------------------------ */
+.cast {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+  padding: 0 var(--espaco-tela) var(--espaco-secao);
+  /* A largura do cartão é variável DE FOLHA, não token do DS — trocá-la por
+     visão reflui o trilho e a grade de uma vez. 8.5rem e não as 7.5 do Play: o
+     cartão daqui não tem faixa tipográfica embaixo da foto, então a capa é a
+     peça inteira e ela precisa da área que o cartaz gastava em texto. */
+  --cast-cartao: 8.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * A abertura. Duas linhas e acabou: o cabeçalho alto empurrava a primeira capa
+ * para fora da dobra, e a referência abre com conteúdo, não com título de tela.
+ * ------------------------------------------------------------------------ */
+.cast-topo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-block-start: 0.5rem;
+}
+
+.cast-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
+ * OS ATALHOS — a grade de duas colunas da referência.
+ *
+ * A ALTURA DA FILEIRA É FIXA, e não «o que o conteúdo pedir»: com altura
+ * automática, uma linha com «Escritores-Leitores» ficava mais alta que a de
+ * cima e a grade inteira lia como desalinhada. Fixando a fileira, a capa ocupa
+ * a altura toda e a largura dela sai do 3:2 — sem número de largura escrito à
+ * mão que precise ser refeito quando a fileira mudar de altura.
+ *
+ * A medida que decidiu o resto: dentro da moldura de 390px sobram 358px de
+ * conteúdo, 175px por coluna. Tirando a capa e os recuos ficam ~93px de texto,
+ * que seguram o nome mais longo do acervo em duas linhas.
+ * ------------------------------------------------------------------------ */
+.cast-atalhos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 3.75rem;
+  gap: 0.5rem;
+  min-inline-size: 0;
+}
+
+.cast-atalho {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease-padrao),
+    box-shadow var(--dur-1) var(--ease-padrao);
+}
+
+.cast-atalho:hover {
+  border-color: var(--cor-borda-forte);
+  box-shadow: var(--sombra-1);
+}
+
+.cast-atalho:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.cast-atalho-quadro {
+  position: relative;
+  display: block;
+  flex: none;
+  overflow: hidden;
+  block-size: 100%;
+  inline-size: auto;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie);
+}
+
+.cast-atalho-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.cast-atalho-texto {
+  display: -webkit-box;
+  overflow: hidden;
+  min-inline-size: 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-weight: 700;
+}
+
+/* A contagem um degrau abaixo do nome, como no chip: informa sem competir. */
+.cast-atalho-n {
+  color: var(--cor-tinta-3);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+}
+
+/* ---------------------------------------------------------------------------
+ * A PRATELEIRA — cabeçalho de fileira + trilho que rola.
+ *
+ * O trilho SANGRA até a borda pela mesma razão de `.trilho-chips` em
+ * `base.css`: o primeiro cartão alinha com o texto e os que rolam passam por
+ * baixo da margem, em vez de parecerem cortados no meio do recuo.
+ * ------------------------------------------------------------------------ */
+.cast-prateleira {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cast-prateleira-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+}
+
+.cast-prateleira-titulo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+/* O selo do porte de destaque, em linha própria acima do nome. Ele diz o que a
+   fileira É — a maior do acervo —, que é ordem e não curadoria fabricada. */
+.cast-prateleira-selo {
+  flex-basis: 100%;
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+}
+
+.cast-prateleira-n {
+  color: var(--cor-tinta-3);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+}
+
+.cast-prateleira-tudo {
+  flex: none;
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cast-prateleira-tudo:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cast-trilho {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximate;
+  scrollbar-width: none;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+  padding-block-end: 0.25rem;
+}
+
+.cast-trilho > li {
+  flex: none;
+  inline-size: var(--cast-cartao);
+  scroll-snap-align: start;
+}
+
+/* ---------------------------------------------------------------------------
+ * O CARTÃO DO EPISÓDIO — capa em 3:2 sobre o papel, texto solto embaixo.
+ * ------------------------------------------------------------------------ */
+.cast-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cast-cartao-quadro {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+  box-shadow: var(--sombra-1);
+}
+
+.cast-cartao-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-2) var(--ease-padrao);
+}
+
+.cast-cartao:hover .cast-cartao-foto {
+  transform: scale(1.04);
+}
+
+.cast-cartao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* A capa de marca de `capa-sem-imagem.tsx` preenche o quadro do mesmo jeito.
+   Medido: 11 dos 336 episódios estão sem capa no acervo. */
+.cast-cartao-quadro > .capa-sem-imagem {
+  block-size: 100%;
+}
+
+/* O nome do programa só aparece na GRADE, onde a fileira não o diz. */
+.cast-cartao-programa {
+  color: var(--cor-tinta-3);
+}
+
+.cast-cartao-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  color: var(--cor-tinta);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* Data e crédito no pé. O crédito é obrigatório quando há imagem — o acervo é
+   de terceiros e a procedência é argumento da proposta. Uma linha, com
+   reticências; o crédito inteiro está na página do episódio. */
+.cast-cartao-pe {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  color: var(--cor-tinta-3);
+  font-size: var(--tipo-micro);
+  font-variant-numeric: tabular-nums;
+}
+
+.cast-cartao-credito {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+ * PORTE «DESTAQUE» — a MAIOR fileira do acervo, em painel próprio.
+ *
+ * Por que ela existe: doze fileiras idênticas empilhadas não têm hierarquia
+ * nenhuma, e a tela volta a ser a lista sem alma que esta reformulação veio
+ * desfazer. A referência nunca desenha todas as fileiras iguais.
+ *
+ * O que a distingue: superfície rebaixada sangrando até a borda, nome em corpo
+ * de título de tela e capa maior. Quem entra nela é POSIÇÃO — o build ordena as
+ * fileiras por tamanho, e a primeira é a maior. Nenhuma escolha editorial.
+ * ------------------------------------------------------------------------ */
+.cast-prateleira[data-porte="destaque"] {
+  --cast-cartao: 11rem;
+  gap: 0.75rem;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding: var(--espaco-cartao) var(--espaco-tela);
+  background: var(--cor-superficie-2);
+}
+
+.cast-prateleira[data-porte="destaque"] .cast-prateleira-titulo {
+  font-size: var(--tipo-titulo-2);
+  line-height: 1.25;
+}
+
+/* ---------------------------------------------------------------------------
+ * PORTE «COMPACTA» — a fileira pequena vira LISTA.
+ *
+ * Quatro capas soltas num trilho que não rola leem como fileira quebrada, não
+ * como fileira pequena. Em lista, quatro itens são quatro itens — e a capa
+ * menor deixa o título ser o que a pessoa lê.
+ * ------------------------------------------------------------------------ */
+.cast-lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+}
+
+.cast-linha {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-inline-size: 0;
+  padding: 0.25rem;
+  border-radius: var(--raio-m);
+  transition: background var(--dur-1) var(--ease-padrao);
+}
+
+.cast-linha:hover {
+  background: var(--cor-superficie-2);
+}
+
+.cast-linha:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.cast-linha-quadro {
+  position: relative;
+  display: block;
+  flex: none;
+  overflow: hidden;
+  inline-size: 5rem;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+.cast-linha-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.cast-linha-texto {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cast-linha-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--cor-tinta);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.cast-linha-data {
+  color: var(--cor-tinta-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * A GRADE — o que aparece NO LUGAR das prateleiras quando há recorte.
+ * ------------------------------------------------------------------------ */
+.cast-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 0.75rem;
+  min-inline-size: 0;
+}
+
+.cast-grade > li {
+  min-inline-size: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * A visão web (D-79/D-80): mesma árvore de JSX, outras medidas.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .cast {
+  --cast-cartao: 13rem;
+  max-inline-size: 76rem;
+  margin-inline: auto;
+}
+
+[data-view="web"] .cast-atalhos {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 4.25rem;
+  gap: 0.75rem;
+}
+
+[data-view="web"] .cast-trilho {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+[data-view="web"] .cast-prateleira[data-porte="destaque"] {
+  --cast-cartao: 16rem;
+  margin-inline: 0;
+  padding: var(--espaco-cartao);
+  border-radius: var(--raio-g);
+}
+
+[data-view="web"] .cast-prateleira[data-porte="destaque"] .cast-trilho {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+[data-view="web"] .cast-lista {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+[data-view="web"] .cast-grade {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+}
