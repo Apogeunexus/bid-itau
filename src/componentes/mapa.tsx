@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/componentes/desertos";
 
 /**
@@ -117,10 +118,34 @@ interface Grupo {
   membros: PinoIndexado[];
 }
 
+/**
+ * As classes do acervo agrupadas como a pessoa pensa nelas.
+ *
+ * «pessoa» e «coletivo» são duas classes no modelo e uma só ideia para quem
+ * procura — gente. O mesmo para espaço, instituição e território, que são três
+ * jeitos de dizer lugar. O chip fala a língua de quem lê o mapa; o filtro
+ * traduz para as classes na hora de aplicar.
+ */
+interface Familia {
+  id: string;
+  rotulo: string;
+  classes: readonly string[];
+}
+
+const FAMILIAS: readonly Familia[] = [
+  { id: "", rotulo: "Tudo", classes: [] },
+  { id: "gente", rotulo: "Pessoas", classes: ["pessoa", "coletivo"] },
+  { id: "lugares", rotulo: "Lugares", classes: ["espaco", "instituicao", "territorio"] },
+  { id: "eventos", rotulo: "Eventos", classes: ["evento"] },
+  { id: "obras", rotulo: "Obras", classes: ["obra"] },
+];
+
 export function Mapa({ dados }: { dados: DadosDoMapa }) {
   const [lente, definirLente] = useState<Lente | null>(null);
   const [selecionada, definirSelecionada] = useState<string | null>(null);
   const [desertos, definirDesertos] = useState(false);
+  const [familia, definirFamilia] = useState<string>("");
+  const [busca, definirBusca] = useState("");
 
   // O hash só é lido no cliente: sob export estático o HTML é o mesmo para todo recorte, e
   // ler `location` durante a renderização de servidor produziria divergência de hidratação.
@@ -154,13 +179,48 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
   }, [lente, dados.padrao, indice]);
 
   /**
+   * O RECORTE DE TELA — família e texto — aplicado sobre o que já está posicionado.
+   *
+   * Ele NÃO toca `recorte`, e essa separação importa: `recorte` é o conjunto que a lente
+   * trouxe, e é dele que a legenda tira «quantos ficaram sem posição». Filtrar aquilo aqui
+   * faria o número de ausências mudar conforme o usuário digita — a declaração de
+   * procedência é sobre o conjunto, não sobre a vista.
+   *
+   * Normaliza acento nos dois lados: quem procura «belem» tem de achar «Belém».
+   */
+  const semAcento = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const visiveis = useMemo(() => {
+    const classes = FAMILIAS.find((f) => f.id === familia)?.classes ?? [];
+    const termo = semAcento(busca.trim());
+    return recorte.posicionados.filter((p) => {
+      if (classes.length && !classes.includes(p[3])) return false;
+      if (termo && !semAcento(p[2]).includes(termo)) return false;
+      return true;
+    });
+  }, [recorte.posicionados, familia, busca]);
+
+  /** Quantos de cada família existem no recorte — o número que vai no chip. */
+  const porFamilia = useMemo(() => {
+    const conta = new Map<string, number>();
+    for (const f of FAMILIAS) {
+      conta.set(
+        f.id,
+        f.classes.length
+          ? recorte.posicionados.filter((p) => f.classes.includes(p[3])).length
+          : recorte.posicionados.length,
+      );
+    }
+    return conta;
+  }, [recorte.posicionados]);
+
+  /**
    * O agrupamento é uma CONSULTA pela célula que o servidor já calculou, e não um segundo
    * cálculo de geometria. É isso que garante que dois pinos fundidos aqui seriam fundidos
    * em qualquer outro recorte que os contivesse.
    */
   const grupos = useMemo<Grupo[]>(() => {
     const mapa = new Map<string, PinoIndexado[]>();
-    for (const p of recorte.posicionados) {
+    for (const p of visiveis) {
       const lista = mapa.get(p[9]);
       if (lista) lista.push(p);
       else mapa.set(p[9], [p]);
@@ -174,7 +234,7 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
       }))
       // Os menores por último: um grupo grande nunca cobre um pino solitário.
       .sort((a, b) => b.membros.length - a.membros.length);
-  }, [recorte.posicionados]);
+  }, [visiveis]);
 
   const grupoSelecionado = grupos.find((g) => g.celula === selecionada) ?? null;
   const voltas = lente?.volta
@@ -183,43 +243,90 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
 
   return (
     <div className="mapa-tela">
-      <header className="flex flex-col gap-0.5">
-        <h1 className="text-lg leading-tight font-semibold">Mapa</h1>
+      {/* O CABEÇALHO TEM DUAS VOZES, e a diferença é o estado da tela.
+          COM LENTE ele nomeia o recorte de onde a pessoa veio — «Lente sobre X» —
+          porque aí o mapa é ferramenta a serviço de um conjunto que já existia.
+          SEM LENTE ele é a porta do acervo por território, e fala como tal: quem
+          chega aqui pelo menu não veio consertar um recorte, veio explorar. A
+          versão anterior dizia «Você chegou sem recorte» nos dois casos — abrir
+          uma tela avisando o que ela NÃO é começa pedindo desculpa. */}
+      <header className="mapa-cabecalho">
         {lente ? (
-          <p className="text-xs leading-snug text-tinta-2">
-            Lente sobre{" "}
-            <strong className="font-semibold text-tinta">{lente.titulo}</strong>{" "}
-            — {recorte.total} {recorte.total === 1 ? "item" : "itens"} do conjunto que você
-            já estava vendo.
-          </p>
+          <>
+            {/* SEM `uppercase` aqui, e a razão é de contrato: `innerText` devolve o
+                texto TRANSFORMADO, então caixa alta faria o cabeçalho dizer «LENTE
+                SOBRE» — e `verificar-fase3.mjs:1213` compara com
+                `.includes("Lente sobre")`, que diferencia maiúscula de minúscula.
+                O portão passaria a reprovar uma tela correta. O «ACERVO» do outro
+                estado continua em caixa alta: lá não há string a honrar. */}
+            <p className="mapa-sobretitulo mapa-sobretitulo-lente">Lente sobre</p>
+            <h1 className="mapa-titulo">{lente.titulo}</h1>
+            <p className="mapa-linha">
+              {recorte.total} {recorte.total === 1 ? "item" : "itens"} do conjunto que você já
+              estava vendo, situados no Brasil.
+            </p>
+          </>
         ) : (
-          <p className="text-xs leading-snug text-tinta-2">
-            Você chegou <strong className="font-semibold">sem recorte</strong>: o mapa é
-            lente sobre um resultado, não porta de entrada. Sem conjunto, ele mostra
-            todo o acervo que consegue situar no Brasil.
-          </p>
+          <>
+            <p className="mapa-sobretitulo">Acervo</p>
+            <h1 className="mapa-titulo">Descubra a cultura brasileira por território</h1>
+            <p className="mapa-linha">
+              Pessoas, lugares, obras e eventos de todo o país — no ponto do mapa onde cada
+              um acontece.
+            </p>
+          </>
         )}
       </header>
 
-      <div className="mapa-controles">
-        {/* A camada liga e desliga SEM NAVEGAR: o recorte que a pessoa estava vendo
-            continua na tela, e é a sobreposição que faz a leitura. Sair para outra rota
-            perderia o conjunto, que é justamente o que D-59 protege. */}
-        <button
-          type="button"
-          data-ligar-desertos
-          aria-pressed={desertos}
-          onClick={() => definirDesertos((ligada) => !ligada)}
-          className="mapa-botao mapa-botao-camada"
-        >
-          {desertos ? "✓ " : ""}Desertos culturais
-        </button>
-        {voltas.map((v) => (
-          <Link key={v.href} href={v.href} className="mapa-botao">
-            {v.rotulo}
-          </Link>
+      <label className="mapa-busca">
+        <span className="sr-only">Buscar no que está no mapa</span>
+        <svg aria-hidden viewBox="0 0 20 20" className="mapa-busca-lupa">
+          <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M13.5 13.5 L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+        <input
+          type="search"
+          value={busca}
+          onChange={(e) => definirBusca(e.target.value)}
+          placeholder="Buscar no mapa…"
+          className="mapa-busca-campo"
+        />
+      </label>
+
+      {/* Os controles viraram UM trilho de chips, do mesmo vocabulário do resto do
+          app. Antes eram três botões de aparência técnica — «Desertos culturais»,
+          «Voltar para Acontece» — que liam como comandos de sistema no meio de uma
+          tela de conteúdo. A camada e a volta continuam aqui porque pertencem a
+          esta tela; o que mudou é que agora se parecem com filtro, que é o que
+          elas são para quem usa. */}
+      <TrilhoDeChips rotulo="Recortar o mapa">
+        {FAMILIAS.map((f) => (
+          <Chip
+            key={f.id || "tudo"}
+            data-familia={f.id || "tudo"}
+            selecionado={familia === f.id}
+            onClick={() => definirFamilia(f.id === familia ? "" : f.id)}
+            contagem={porFamilia.get(f.id) ?? 0}
+          >
+            {f.rotulo}
+          </Chip>
         ))}
-      </div>
+        <Chip
+          data-ligar-desertos
+          selecionado={desertos}
+          onClick={() => definirDesertos((ligada) => !ligada)}
+        >
+          Desertos culturais
+        </Chip>
+        {/* `a.mapa-botao` com «Voltar» no texto é contrato de portão
+            (`verificar-fase3.mjs:1237`): é por ele que a verificação prova que a
+            volta preserva o recorte de origem. O chip carrega a classe junto. */}
+        {voltas.map((v) => (
+          <Chip key={v.href} href={v.href} className="mapa-botao">
+            {v.rotulo}
+          </Chip>
+        ))}
+      </TrilhoDeChips>
 
       <div className="mapa-quadro">
         <svg
@@ -232,27 +339,50 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
           <path className="mapa-contorno" d={dados.contorno} />
           {desertos ? <CamadaDesertos dados={dados.desertos} /> : null}
           <g className="mapa-pinos" data-sob-camada={desertos ? "sim" : "nao"}>
+            {/* O PINO É LARANJA, SEMPRE — e a cor de linguagem saiu do mapa.
+                Ela é dado (D-08) e continua no selo, na capa e no chip de filtro,
+                onde há um item por vez e a cor ENSINA. Aqui são oitenta pontos na
+                mesma vista: seis cores simultâneas viravam um arco-íris em que
+                nenhuma significava nada, e o olho parava de procurar o que
+                importa, que é ONDE as coisas estão. O que cada ponto É está na
+                lista logo abaixo, escrito. */}
             {grupos.map((g) => {
               const n = g.membros.length;
-              const cor = g.membros.map((m) => m[8]).find(Boolean);
+              const raio = 3 + Math.min(7, Math.sqrt(n) * 1.6);
+              // O número só entra quando o disco comporta: abaixo disso ele vira
+              // borrão e piora a leitura em vez de melhorar.
+              const cabeONumero = n > 1 && raio >= 6;
               return (
-                <circle
-                  key={g.celula}
-                  data-pino={g.membros[0][1]}
-                  data-pinos={n}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`${n} ${n === 1 ? "registro" : "registros"} — ${g.membros[0][2]}`}
-                  className="mapa-pino"
-                  style={cor ? ({ "--cor-pino": `var(${cor})` } as React.CSSProperties) : undefined}
-                  cx={g.x}
-                  cy={g.y}
-                  r={3 + Math.min(7, Math.sqrt(n) * 1.6)}
-                  onClick={() => definirSelecionada(g.celula === selecionada ? null : g.celula)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") definirSelecionada(g.celula);
-                  }}
-                />
+                <g key={g.celula}>
+                  <circle
+                    data-pino={g.membros[0][1]}
+                    data-pinos={n}
+                    data-selecionado={g.celula === selecionada ? "sim" : undefined}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${n} ${n === 1 ? "registro" : "registros"} — ${g.membros[0][2]}`}
+                    className="mapa-pino"
+                    cx={g.x}
+                    cy={g.y}
+                    r={raio}
+                    onClick={() => definirSelecionada(g.celula === selecionada ? null : g.celula)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") definirSelecionada(g.celula);
+                    }}
+                  />
+                  {cabeONumero ? (
+                    <text
+                      aria-hidden
+                      className="mapa-cluster-n"
+                      x={g.x}
+                      y={g.y}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                    >
+                      {n}
+                    </text>
+                  ) : null}
+                </g>
               );
             })}
           </g>
@@ -263,7 +393,13 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
           na mesma vista do desenho, sem rolar, porque é uma imagem para ser projetada; as
           listas suplementares da legenda voltam quando a camada sai. O que NÃO sai é a
           declaração de procedência das coordenadas — ela vale nos dois estados da tela. */}
-      <div className="mapa-painel">
+      {/* A FOLHA DE RESULTADOS. Ela sobe sobre o mapa quando um ponto é tocado e
+          fica embaixo dele quando não há seleção — o mesmo bloco, dois estados, em
+          vez de um cartão que aparecia solto no meio da tela empurrando a legenda
+          para longe. O puxador de cima é o que diz «isto se move». */}
+      <div className="mapa-folha" data-aberta={grupoSelecionado ? "sim" : "nao"}>
+        <div aria-hidden className="mapa-folha-puxador" />
+
         {desertos ? (
           <>
             <LeituraDesertos dados={dados.desertos} />
@@ -278,10 +414,15 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
             {grupoSelecionado ? (
               <CartaoItem
                 grupo={grupoSelecionado}
-                dados={dados}
                 aoFechar={() => definirSelecionada(null)}
               />
-            ) : null}
+            ) : (
+              <ListaDoRecorte
+                visiveis={visiveis}
+                total={recorte.posicionados.length}
+                filtrando={Boolean(familia || busca.trim())}
+              />
+            )}
 
             <Legenda
               dados={dados}
@@ -295,6 +436,98 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
         )}
       </div>
     </div>
+  );
+}
+
+/** O nome que a classe tem para quem lê, e não o que ela tem no modelo. */
+const NOME_DA_CLASSE: Record<string, string> = {
+  pessoa: "Pessoa",
+  coletivo: "Coletivo",
+  espaco: "Espaço",
+  instituicao: "Instituição",
+  territorio: "Território",
+  evento: "Evento",
+  obra: "Obra",
+};
+
+function nomeDaClasse(classe: string): string {
+  return NOME_DA_CLASSE[classe] ?? classe;
+}
+
+/**
+ * A lista do que está no mapa agora — o estado de repouso da folha.
+ *
+ * Antes desta tela não haver lista, o único jeito de saber o que o mapa tinha era
+ * tocar ponto por ponto. Um mapa com 165 registros e nenhuma lista obriga a caçar.
+ *
+ * O TETO É DECLARADO, e não silencioso: mostrar 40 de 165 sem dizer seria a
+ * mesma mentira que um filtro que não filtra. Quem quer estreitar tem o campo de
+ * busca e os chips logo acima.
+ */
+const TETO_DA_LISTA = 40;
+
+function ListaDoRecorte({
+  visiveis,
+  total,
+  filtrando,
+}: {
+  visiveis: PinoIndexado[];
+  total: number;
+  filtrando: boolean;
+}) {
+  if (visiveis.length === 0) {
+    return (
+      <section className="mapa-lista">
+        <p className="mapa-lista-titulo">Nenhum resultado</p>
+        <p className="tipo-legenda text-tinta-2">
+          {filtrando
+            ? "Nada no mapa corresponde a este recorte. Toque em «Tudo» ou limpe a busca."
+            : "Este conjunto não tem nada que o mapa consiga situar no Brasil."}
+        </p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="mapa-lista">
+      <p className="mapa-lista-titulo">
+        {visiveis.length} {visiveis.length === 1 ? "resultado" : "resultados"}
+        {filtrando && visiveis.length !== total ? (
+          <span className="mapa-lista-de"> de {total}</span>
+        ) : null}
+      </p>
+      <ul className="mapa-lista-itens">
+        {visiveis.slice(0, TETO_DA_LISTA).map((p) => {
+          const rota = rotaDe(p[3], p[0]);
+          const conteudo = (
+            <>
+              <span className="mapa-item-nome">{p[2]}</span>
+              <span className="mapa-item-classe">{nomeDaClasse(p[3])}</span>
+            </>
+          );
+          return (
+            <li key={p[0]} className="mapa-item">
+              {rota ? (
+                <Link href={rota} className="mapa-item-alvo">
+                  {conteudo}
+                  <span aria-hidden className="mapa-item-seta">
+                    ›
+                  </span>
+                </Link>
+              ) : (
+                <div className="mapa-item-alvo">{conteudo}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      {visiveis.length > TETO_DA_LISTA ? (
+        <p className="tipo-legenda text-tinta-3">
+          Mostrando os primeiros {TETO_DA_LISTA} de {visiveis.length} — use a busca acima
+          para estreitar.
+        </p>
+      ) : null}
+    </section>
   );
 }
 
@@ -316,11 +549,9 @@ function rotaDe(classe: string, chave: string): string | null {
  */
 function CartaoItem({
   grupo,
-  dados,
   aoFechar,
 }: {
   grupo: Grupo;
-  dados: DadosDoMapa;
   aoFechar: () => void;
 }) {
   const n = grupo.membros.length;
@@ -334,28 +565,33 @@ function CartaoItem({
           fechar
         </button>
       </div>
-      <ul className="flex flex-col gap-1.5">
+      {/* O MÉTODO DA COORDENADA SAIU DA LINHA DE CADA ITEM. Ele dizia «coordenada
+          derivada por centroide-estado, resolvida pelo território a que se liga» —
+          uma frase de geoprocessamento repetida oito vezes numa lista que a pessoa
+          abriu para saber O QUE tem ali. A informação não se perdeu: a legenda
+          logo abaixo declara que NENHUMA coordenada foi lida da fonte e nomeia os
+          três métodos, que é onde a afirmação vale, dita uma vez. */}
+      <ul className="mapa-lista-itens">
         {grupo.membros.slice(0, 8).map((m) => {
           const rota = rotaDe(m[3], m[0]);
-          const metodo = dados.metodos[m[6]] ?? "método não declarado";
-          const via = dados.vias[m[7]] ?? "";
+          const conteudo = (
+            <>
+              <span className="mapa-item-nome">{m[2]}</span>
+              <span className="mapa-item-classe">{nomeDaClasse(m[3])}</span>
+            </>
+          );
           return (
-            <li key={m[0]} className="flex flex-col">
-              <span className="text-sm leading-tight font-semibold">
-                {rota ? (
-                  <Link href={rota} className="underline decoration-borda-forte underline-offset-2">
-                    {m[2]}
-                  </Link>
-                ) : (
-                  m[2]
-                )}
-              </span>
-              <span className="text-xs text-tinta-2">
-                {m[3]} · coordenada derivada por {metodo}
-                {via === "espaco" ? ", resolvida pelo espaço a que se liga" : null}
-                {via === "territorio" ? ", resolvida pelo território a que se liga" : null}
-                {via === "propria" ? ", própria da entidade" : null}
-              </span>
+            <li key={m[0]} className="mapa-item">
+              {rota ? (
+                <Link href={rota} className="mapa-item-alvo">
+                  {conteudo}
+                  <span aria-hidden className="mapa-item-seta">
+                    ›
+                  </span>
+                </Link>
+              ) : (
+                <div className="mapa-item-alvo">{conteudo}</div>
+              )}
             </li>
           );
         })}
