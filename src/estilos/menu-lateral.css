@@ -1,0 +1,141 @@
+/* ---------------------------------------------------------------------------
+ * MENU LATERAL — a navegação principal nas duas visões (reformulação 2026-08).
+ *
+ * Decisão de produto registrada em docs/DESIGN-SYSTEM.md §4 («Menu lateral»,
+ * referência Google Arts & Culture): na web, trilho permanente à esquerda; no
+ * app, gaveta sobreposta aberta pelo cabeçalho. A barra inferior de abas foi
+ * aposentada pelo cliente — o produto vai ganhar muitas seções e o menu
+ * categorizado é quem carrega a árvore inteira.
+ *
+ * REGRA 3 (revisada): a gaveta posiciona `absolute` CONTRA A MOLDURA, que é
+ * `position: relative` e não rola — quem rola é `.moldura-rolagem`, filho dela.
+ * `fixed` continua proibido fora do `.canto` (D-03/D-04).
+ *
+ * Folha nascida migrada: só tokens e múltiplos da grade de 0.25rem.
+ * ------------------------------------------------------------------------- */
+
+/* ---- O painel (compartilhado pelas duas visões) ---- */
+.menu-lateral {
+  display: flex;
+  flex-direction: column;
+  background: var(--cor-superficie);
+}
+
+.menu-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem var(--espaco-tela);
+  font-family: var(--fonte-display);
+  font-weight: 700;
+}
+
+.menu-grupos {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 0.75rem 1rem;
+}
+
+.menu-rotulo-grupo {
+  padding: 1rem 0.75rem 0.5rem;
+  color: var(--cor-tinta-3);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--raio-m);
+  font-weight: 600;
+  color: var(--cor-tinta-2);
+  transition: background-color var(--dur-1) var(--ease-padrao), color var(--dur-1) var(--ease-padrao);
+}
+
+.menu-item:hover {
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta);
+}
+
+.menu-item[aria-current="page"] {
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao);
+}
+
+/* Subitem (Exposições dentro de Museu, seções de Notícias): mesma linha, um
+ * degrau para dentro e sem ícone próprio. */
+.menu-subitem {
+  min-height: 2.5rem;
+  padding-left: 3rem;
+  font-weight: 500;
+}
+
+.menu-rodape {
+  border-top: 1px solid var(--cor-borda);
+  padding: 0.75rem var(--espaco-tela) 1rem;
+}
+
+/* ---- Visão web: trilho permanente ---- */
+[data-view="web"] .menu-lateral {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  width: 15rem;
+  height: 100vh;
+  height: 100dvh;
+  border-right: 1px solid var(--cor-borda);
+}
+
+[data-view="web"] .menu-cabecalho,
+[data-view="web"] .menu-scrim,
+[data-view="web"] .menu-fechar {
+  display: none;
+}
+
+/* ---- Visão app: cabeçalho fino + gaveta sobreposta ---- */
+[data-view="mobile"] .menu-cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3.5rem;
+  padding: 0 0.75rem;
+  border-bottom: 1px solid var(--cor-borda);
+  background: var(--cor-superficie);
+}
+
+[data-view="mobile"] .menu-lateral {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 45;
+  width: 18rem;
+  max-width: calc(100% - 3rem);
+  box-shadow: var(--sombra-3);
+  transform: translateX(-110%);
+  transition: transform var(--dur-3) var(--ease-padrao);
+}
+
+[data-view="mobile"] .menu-lateral[data-aberto="sim"] {
+  transform: translateX(0);
+}
+
+[data-view="mobile"] .menu-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--ic-preto) 40%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-2) var(--ease-padrao);
+}
+
+[data-view="mobile"] .menu-scrim[data-aberto="sim"] {
+  opacity: 1;
+  pointer-events: auto;
+}

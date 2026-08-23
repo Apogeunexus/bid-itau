@@ -13,6 +13,7 @@ import {
 } from "@/dados/geo";
 import type { MetodoCoordenada } from "@/dados/tipos";
 import { montarAgenda, type TempoDoDia } from "@/dados/agenda";
+import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { porSlug, slugsPorTipo } from "@/dados/grafo";
 import {
   FORA_DO_DESENHO,
@@ -448,7 +449,7 @@ export function montarMapaDaAgenda({ hoje }: { hoje: string }): MapaDaAgenda {
  * data, então esta chamada não repete travessia nenhuma.
  */
 export const NUMEROS_DO_MAPA_DA_AGENDA = (() => {
-  const m = montarMapaDaAgenda({ hoje: new Date().toISOString().slice(0, 10) });
+  const m = montarMapaDaAgenda({ hoje: DATA_DE_REFERENCIA });
   const porData = m.recortes.find((r) => r.id === "data")!;
   const porLugar = m.recortes.find((r) => r.id === "lugar")!;
   return {

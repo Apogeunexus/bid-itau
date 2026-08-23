@@ -962,13 +962,22 @@ async function gatesEstruturais() {
       r === "agenda-nao-encontrada/index.html" ||
       /^play\/[^/]+\/index\.html$/.test(r),
   );
-  const linhaBase = paginas.length - novasFase3.length - novasFase4.length - novasFase5.length;
+  // As 7 rotas da REFORMULAÇÃO do design system (2026-08): a árvore de menu fixada
+  // pelo cliente, nascidas como esqueleto rotulado junto com o menu lateral.
+  const novasReformulacao = paginas.filter((r) =>
+    ["cast", "noticias", "museu", "museu/exposicoes", "ia", "cursos", "blog"].some(
+      (rota) => r === `${rota}/index.html`,
+    ),
+  );
+  const linhaBase =
+    paginas.length - novasFase3.length - novasFase4.length - novasFase5.length - novasReformulacao.length;
   exigir(
-    linhaBase === LINHA_BASE_DE_PAGINAS && novasFase5.length === ROTAS_DE_PLAY_ESPERADAS + 3,
+    linhaBase === LINHA_BASE_DE_PAGINAS && novasFase5.length === ROTAS_DE_PLAY_ESPERADAS + 3 && novasReformulacao.length === 7,
     "total de páginas em out/, com a diferença explicada rota a rota",
     `${paginas.length} páginas · ${novasFase3.length} da fase 3 (129 sessões + 15 cidades + /salvos + /buscar/frase) · ` +
-      `${novasFase4.length} da fase 4 (/roteiro) · ${novasFase5.length} da fase 5 (${ROTAS_DE_PLAY_ESPERADAS} de /play/[slug] em 05-07 + 3 becos em 05-06) · resíduo ${linhaBase}`,
-    `resíduo ${LINHA_BASE_DE_PAGINAS} — a linha de base da fase 2 — e ${ROTAS_DE_PLAY_ESPERADAS + 3} páginas novas na fase 5`,
+      `${novasFase4.length} da fase 4 (/roteiro) · ${novasFase5.length} da fase 5 (${ROTAS_DE_PLAY_ESPERADAS} de /play/[slug] em 05-07 + 3 becos em 05-06) · ` +
+      `${novasReformulacao.length} da reformulação (menu lateral) · resíduo ${linhaBase}`,
+    `resíduo ${LINHA_BASE_DE_PAGINAS} — a linha de base da fase 2 — ${ROTAS_DE_PLAY_ESPERADAS + 3} da fase 5 e 7 da reformulação`,
   );
   nota(
     `out/404.html está DENTRO do resíduo de ${LINHA_BASE_DE_PAGINAS} e não na lista de explicáveis: ` +
@@ -1496,62 +1505,42 @@ const PRELUDIO5 =
   const visiveisSvg = (s) => todos(s).filter(visivelSvg);
 
   /**
-   * DEFEITO 4, e a régua desta fase — DECLARADA antes de ser usada, e CONSERTADA.
+   * DEFEITO 4, e a régua desta fase — DECLARADA antes de ser usada.
    *
-   * «Cabe na primeira vista» mede contra a moldura MENOS a barra de abas grudada. A versão
-   * herdada de «verificar-fase4.mjs» subtraía a barra SEMPRE que ela existisse e devolvia
-   * «barra.top» como limite. Medido nas cinco rotas de (app): na visão APP a barra é
-   * «sticky; bottom: 0» e fica no PÉ — «barra.top» é o limite certo, 807. Na visão WEB a
-   * MESMA barra é «sticky; top: 0» e fica no TOPO — ali «barra.top» é ZERO, e o gate
-   * herdado devolvia limite 0, reprovando toda tela da visão web por não caber acima de uma
-   * linha inexistente. Uma barra no topo não cobre o pé, e nada deve ser subtraído por ela.
+   * A história desta função: «cabe na primeira vista» já foi medido contra a moldura
+   * MENOS a barra de abas, e a versão herdada subtraía a barra até quando ela ficava
+   * no topo (visão web), devolvendo limite 0. A lição que fica é a mesma de então:
+   * MEDIR onde a navegação está em vez de presumir, e nunca subtrair uma altura.
    *
-   * O conserto é medir ONDE a barra está em vez de presumir que ela está no pé. Em fase 4 o
-   * defeito nunca disparou porque as três telas daquela fase são de bastidor e não montam
-   * barra nenhuma; ele só aparece com uma rota de (app) aberta na visão web, que é
-   * exatamente o que esta fase criou.
-   *
-   * OS TRÊS NÚMEROS QUE OS PLANOS DISCUTIRAM, e o que cada um é de verdade:
-   *   · 59 px — a altura da barra na visão WEB, onde ela fica no topo (05-03, 04-05);
-   *   · 60 px — a altura da caixa da barra na visão APP;
-   *   · ~70 px — «moldura.base menos o limite» na visão app (876 − 807 = 69), que é o que
-   *     05-06 chamou de barra. O LIMITE de 05-06 (807) é o mesmo que este bloco mede.
-   * Os três são medidas reais de coisas diferentes. Por isso esta suíte nunca subtrai uma
-   * altura: ela usa o LIMITE medido, e imprime os quatro números ao lado.
+   * Desde a reformulação do design system (menu lateral, 2026-08) a barra de abas não
+   * existe: o app tem cabeçalho grudado no TOPO da moldura e a web tem trilho à
+   * ESQUERDA — nenhum dos dois cobre o pé, e o limite útil das duas visões é o fundo
+   * visível da moldura. O gateDaRegua imprime as medidas reais dos dois antes de
+   * qualquer gate de dobra usá-las.
    */
   const limiteUtil = () => {
+    // DESDE A REFORMULAÇÃO DO DESIGN SYSTEM (menu lateral, 2026-08) nenhuma navegação
+    // cobre o PÉ: o cabeçalho do app fica no TOPO da moldura e o trilho da web fica à
+    // ESQUERDA. O limite útil é o fundo visível da moldura — medido, nunca subtraído.
+    // As chaves barra/barraTopo/folgaAteAMoldura sobrevivem para os consumidores que
+    // imprimem a régua; barra é sempre 0 porque não existe mais caixa no pé.
     const m = document.querySelector('.moldura');
-    const b = document.querySelector('.barra-abas');
     const rm = m ? m.getBoundingClientRect() : null;
     const fundo = rm ? Math.round(Math.min(rm.bottom, innerHeight)) : innerHeight;
-    if (b && visivel(b)) {
-      const rb = b.getBoundingClientRect();
-      const noPe = rb.top > rb.height;
-      if (noPe) {
-        return {
-          limite: Math.round(rb.top),
-          contra: 'moldura menos a barra de abas, que está no PÉ (visão app)',
-          barra: Math.round(rb.height),
-          barraTopo: Math.round(rb.top),
-          moldura: rm ? Math.round(rm.bottom) : null,
-          folgaAteAMoldura: rm ? Math.round(rm.bottom - rb.top) : null,
-        };
-      }
-      return {
-        limite: fundo,
-        contra: 'moldura inteira — a barra está no TOPO e não cobre o pé (visão web)',
-        barra: Math.round(rb.height),
-        barraTopo: Math.round(rb.top),
-        moldura: rm ? Math.round(rm.bottom) : null,
-        folgaAteAMoldura: 0,
-      };
-    }
+    const cab = document.querySelector('.menu-cabecalho');
+    const trilho = document.querySelector('.menu-lateral');
     return {
       limite: fundo,
-      contra: m ? 'moldura sem barra de abas (bastidor)' : 'janela (sem moldura, como /404)',
+      contra: m
+        ? 'fundo visível da moldura — navegação no topo (app) ou à esquerda (web), nada cobre o pé'
+        : 'janela (sem moldura, como /404)',
       barra: 0,
+      cabecalho: cab && visivel(cab) ? Math.round(cab.getBoundingClientRect().height) : 0,
+      cabecalhoTopo: cab && visivel(cab) ? Math.round(cab.getBoundingClientRect().top) : null,
+      trilho: trilho && visivel(trilho) ? Math.round(trilho.getBoundingClientRect().width) : 0,
       barraTopo: null,
       moldura: rm ? Math.round(rm.bottom) : null,
+      molduraTopo: rm ? Math.round(rm.top) : null,
       folgaAteAMoldura: 0,
     };
   };
@@ -1697,7 +1686,7 @@ async function fotografar(cdp, nome) {
 // ---------------------------------------------------------------------------
 
 async function gateDaRegua(cdp, base) {
-  titulo("── a régua: a barra de abas, MEDIDA nas duas visões, antes de qualquer gate de dobra ──");
+  titulo("── a régua: a NAVEGAÇÃO, MEDIDA nas duas visões, antes de qualquer gate de dobra ──");
 
   await porVisao(cdp, base, "/acontece/", "mobile");
   const app = await cdp.avaliar(naPagina5(`return limiteUtil();`));
@@ -1706,37 +1695,37 @@ async function gateDaRegua(cdp, base) {
   await porVisao(cdp, base, "/redacao/fila/", "web");
   const bastidor = await cdp.avaliar(naPagina5(`return limiteUtil();`));
 
+  // Desde a reformulação (menu lateral, 2026-08) a navegação nunca cobre o pé: no app
+  // é um cabeçalho grudado no TOPO da moldura; na web é o trilho à ESQUERDA. O limite
+  // útil das duas visões é o fundo visível da moldura — e a régua agora prova ISSO.
   exigir(
-    app.barra > 0 && app.barraTopo > app.barra && app.limite === app.barraTopo && app.limite < ALTURA,
-    "visão APP · a barra de abas está no PÉ, e o limite útil é o TOPO dela — medido, não presumido",
-    `barra ${app.barra} px de altura, topo em ${app.barraTopo} · limite ${app.limite} · «${app.contra}» · ` +
-      `moldura até ${app.moldura} · folga do limite até a base da moldura ${app.folgaAteAMoldura} px · janela ${ALTURA}`,
-    "barra no pé, limite = topo da barra, menor que a janela",
+    app.cabecalho > 0 &&
+      app.cabecalhoTopo !== null &&
+      Math.abs(app.cabecalhoTopo - app.molduraTopo) <= 12 &&
+      app.limite === app.moldura &&
+      app.limite < ALTURA,
+    "visão APP · o cabeçalho do menu está no TOPO da moldura, e o limite útil é o fundo dela",
+    `cabeçalho ${app.cabecalho} px, topo em ${app.cabecalhoTopo} (moldura começa em ${app.molduraTopo}) · ` +
+      `limite ${app.limite} · «${app.contra}» · janela ${ALTURA}`,
+    "cabeçalho grudado no topo, limite = base da moldura, menor que a janela",
   );
   exigir(
-    web.barraTopo === 0 && web.limite === ALTURA,
-    "visão WEB · a MESMA barra está no TOPO e não cobre o pé — nada se subtrai por ela",
-    `barra ${web.barra} px de altura, topo em ${web.barraTopo} · limite ${web.limite} · «${web.contra}»`,
-    "barra no topo, e o limite é a janela inteira",
+    web.trilho > 0 && web.cabecalho === 0 && web.limite === ALTURA,
+    "visão WEB · o trilho lateral fica à ESQUERDA (cabeçalho do app escondido) e não cobre o pé",
+    `trilho ${web.trilho} px de largura · cabeçalho ${web.cabecalho} · limite ${web.limite} · «${web.contra}»`,
+    "trilho visível, sem cabeçalho, e o limite é a janela inteira",
   );
   info(
-    "e uma rota de BASTIDOR, que não monta barra nenhuma",
-    `/redacao/fila/: barra ${bastidor.barra} px · limite ${bastidor.limite} · «${bastidor.contra}»`,
-  );
-  nota(
-    `OS TRÊS NÚMEROS QUE OS PLANOS DISCUTIRAM, reconciliados por medição em vez de escolha: ` +
-      `05-03 e 04-05 usaram 59 — é a altura da barra na visão WEB (medida aqui: ${web.barra}), onde ela fica ` +
-      `no topo; a caixa da barra na visão APP mede ${app.barra}; e os 70 de 05-06 são «base da moldura menos ` +
-      `o limite» (${app.moldura} − ${app.limite} = ${app.folgaAteAMoldura}). O LIMITE de 05-06 é ${app.limite}, ` +
-      `exatamente o que este bloco mede. Nenhum dos três estava errado sobre o que mediu; o que estava errado ` +
-      `era subtrair uma ALTURA. Esta suíte usa o LIMITE medido, e nunca uma subtração.`,
+    "e uma rota de BASTIDOR, que não monta navegação nenhuma",
+    `/redacao/fila/: trilho ${bastidor.trilho} px · limite ${bastidor.limite} · «${bastidor.contra}»`,
   );
 
   resumo.push([
     "régua",
-    `a barra de abas mede ${app.barra} px e fica no PÉ na visão app — limite útil ${app.limite} de ${ALTURA}; ` +
-      `na visão web a mesma barra mede ${web.barra} px e fica no TOPO, e o limite é a janela inteira; ` +
-      `em bastidor e em /404 não há barra. Todo gate de dobra desta suíte imprime o limite que usou`,
+    `no app o cabeçalho do menu mede ${app.cabecalho} px e fica no TOPO — o limite útil é a base da ` +
+      `moldura, ${app.limite} de ${ALTURA}; na web o trilho lateral mede ${web.trilho} px de largura e o ` +
+      `limite é a janela inteira; em bastidor e em /404 não há navegação do app. Todo gate de dobra ` +
+      `desta suíte imprime o limite que usou`,
   ]);
   return { app, web, bastidor };
 }
@@ -1781,7 +1770,7 @@ async function blocoAcontece(cdp, base, regua) {
   exigir(
     layout.mapa.base <= layout.limite.limite,
     "D-80 · o mapa INTEIRO cabe na primeira vista — não só o topo dele (o defeito de 05-01)",
-    `mapa de ${layout.mapa.y} a ${layout.mapa.base} · limite ${layout.limite.limite} (${layout.limite.contra}, barra ${layout.limite.barra} px) · janela ${layout.janela}`,
+    `mapa de ${layout.mapa.y} a ${layout.mapa.base} · limite ${layout.limite.limite} (${layout.limite.contra}) · janela ${layout.janela}`,
     "a BASE do mapa acima do limite útil",
   );
 
@@ -3115,7 +3104,7 @@ async function blocoFiltros(cdp, base) {
     inicial.contadorRet.base <= inicial.limite.limite,
     "o contador ao vivo cabe INTEIRO na primeira vista, contra o limite medido",
     `contador de ${inicial.contadorRet.y} a ${inicial.contadorRet.base} · limite ${inicial.limite.limite} ` +
-      `(${inicial.limite.contra}, barra ${inicial.limite.barra} px) · janela ${ALTURA}`,
+      `(${inicial.limite.contra}) · janela ${ALTURA}`,
     "a base do contador acima do limite útil",
   );
   exigir(
@@ -3294,7 +3283,11 @@ async function blocoBecos(cdp, base) {
           trilhas: trilhas.length,
           baseDaSaida: bloco ? Math.round(bloco.getBoundingClientRect().bottom) : null,
           limite: limiteUtil(),
-          barraPresente: Boolean(document.querySelector('.barra-abas')) && visivel(document.querySelector('.barra-abas')),
+          navPresente: (() => {
+            const cab = document.querySelector('.menu-cabecalho');
+            const trilho = document.querySelector('.menu-lateral');
+            return Boolean((cab && visivel(cab)) || (trilho && visivel(trilho)));
+          })(),
           links: links.length,
           transborda: transbordaNaHorizontal(),
         };
@@ -3310,15 +3303,15 @@ async function blocoBecos(cdp, base) {
     exigir(
       beco.baseDaSaida !== null && beco.baseDaSaida <= beco.limite.limite,
       `${id} · a SAÍDA está na primeira vista — ela vem antes da explicação`,
-      `base do bloco de saída ${beco.baseDaSaida} · limite ${beco.limite.limite} (${beco.limite.contra}, barra ${beco.limite.barra} px)`,
+      `base do bloco de saída ${beco.baseDaSaida} · limite ${beco.limite.limite} (${beco.limite.contra})`,
       "a base da saída acima do limite útil",
     );
     exigir(
-      (id === "404") === (beco.barraPresente === false) && beco.transborda.transborda === false,
-      `${id} · a barra de abas está onde o grupo de rotas manda, e nada corre para fora`,
-      `barra presente=${beco.barraPresente} (esperada ${id === "404" ? "AUSENTE — /404 fica fora de (app)" : "presente"}) · ` +
+      (id === "404") === (beco.navPresente === false) && beco.transborda.transborda === false,
+      `${id} · a navegação do app (menu lateral) está onde o grupo de rotas manda, e nada corre para fora`,
+      `navegação presente=${beco.navPresente} (esperada ${id === "404" ? "AUSENTE — /404 fica fora de (app)" : "presente"}) · ` +
         `documento ${beco.transborda.scrollWidth}/${beco.transborda.clientWidth}`,
-      id === "404" ? "sem barra" : "com barra",
+      id === "404" ? "sem navegação do app" : "com navegação do app",
     );
 
     if (id !== "404") {
@@ -3354,7 +3347,7 @@ async function blocoBecos(cdp, base) {
     "APPX-04",
     `os três becos declaram qual beco são, oferecem afrouxamento numerado e trilha relacionada, e a saída ` +
       `cabe na primeira vista; clicar num afrouxamento entrega exatamente o número prometido sem navegar; ` +
-      `/404 fica fora de (app) e monta a própria navegação, sem barra de abas`,
+      `/404 fica fora de (app) e monta a própria navegação, sem o menu lateral do app`,
   ]);
 }
 

@@ -2,7 +2,6 @@ import { Comentario } from "@/componentes/comentario";
 import { Feed } from "@/componentes/feed";
 import { Grafismo } from "@/componentes/grafismo";
 import { SeletorDisposicao } from "@/componentes/seletor-disposicao";
-import { TrocaPersona } from "@/componentes/troca-persona";
 import { PRECOMPUTO } from "@/dados/feeds";
 
 /**
@@ -45,24 +44,12 @@ export default function Descobrir() {
         </Comentario>
       </header>
 
-      {/* A FAIXA DE CONTROLE, que na web atravessa a largura toda em vez de empilhar.
-          Na visão app os dois seguem um sobre o outro exatamente como na fase 2: o
-          contêiner é `flex flex-col gap-4`, e os dois invólucros são caixas de bloco sem
-          regra própria, então o empilhamento e o respiro são os mesmos de antes. Na web
-          `desk:flex-row` põe os dois lado a lado, e a grade de cartões começa logo abaixo
-          — em vez de depois de duas faixas empilhadas que empurrariam a primeira linha de
-          cartões para fora da primeira vista, que é a foto do slide. */}
-      <div className="flex flex-col gap-4 desk:flex-row desk:items-start desk:gap-6">
-        {/* D-32 — a disposição visível em texto e editável em um toque. */}
-        <div className="desk:min-w-0 desk:flex-1">
-          <SeletorDisposicao />
-        </div>
-
-        {/* D-45 — trocar de persona é um toque, e é requisito de demonstração. */}
-        <div className="desk:w-80 desk:shrink-0">
-          <TrocaPersona />
-        </div>
-      </div>
+      {/* D-32 — a disposição visível em texto e editável em um toque. A troca de
+          persona saiu desta tela na reformulação de 2026-08 (feedback do cliente:
+          a visualização de personas não pode afetar a experiência na tela) — ela
+          mora em /meu e no rodapé do menu lateral; o feed continua lendo a sessão
+          e trocando instantaneamente. */}
+      <SeletorDisposicao />
 
       <Feed
         ordemDisposicoes={PRECOMPUTO.ordemDisposicoes}

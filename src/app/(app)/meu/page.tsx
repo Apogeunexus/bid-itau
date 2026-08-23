@@ -61,6 +61,11 @@ export default function Meu() {
         </Link>
       </header>
 
+      {/* D-45 — a troca de persona mora SÓ AQUI desde a reformulação de 2026-08
+          (feedback do cliente: a visualização de personas não pode afetar a
+          experiência na tela de Descobrir). Quem a renderiza é a própria
+          TelaRepertorio, logo no topo; o mecanismo não mudou — as três personas
+          continuam pré-computadas e o feed lê a sessão. */}
       <TelaRepertorio repertorios={repertorios} indice={indice} />
     </div>
   );

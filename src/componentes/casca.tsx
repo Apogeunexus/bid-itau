@@ -95,9 +95,10 @@ function InterruptorComentado() {
  * media query legítima do projeto: ela é sobre o tamanho real da janela, não
  * sobre a visão escolhida. Mora em `globals.css`, na classe `.moldura`.
  *
- * A moldura tem ALTURA e rola por dentro. Isso é requisito da barra de abas, não
- * capricho: é o que permite a barra ficar contida no telefone em vez de escapar
- * para a largura da janela.
+ * A moldura tem ALTURA; desde a reformulação do design system quem rola é o
+ * filho `.moldura-rolagem`, e a moldura em si é `relative; overflow: hidden`.
+ * É o que mantém cabeçalho e gaveta do menu contidos no telefone — `sticky`
+ * contra a rolagem, `absolute` contra a moldura, nunca `fixed` na janela.
  */
 export function Casca({ children }: { children: ReactNode }) {
   const { visao, hidratado } = useVisao();
@@ -118,7 +119,13 @@ export function Casca({ children }: { children: ReactNode }) {
       className="min-h-screen bg-[var(--ic-branco)] text-[var(--ic-preto)] app:bg-neutral-100 desk:bg-[var(--ic-branco)]"
     >
       <div className="palco">
-        <div className="moldura desk:mx-auto desk:w-full desk:max-w-6xl">{children}</div>
+        {/* A moldura deixou de ser o contêiner de rolagem na reformulação do design
+            system: ela é `relative; overflow: hidden` e quem rola é `.moldura-rolagem`,
+            filho dela. É isso que permite à gaveta do menu lateral posicionar `absolute`
+            contra o telefone — sobreposta, sem rolar junto e sem `fixed` (D-03/D-04). */}
+        <div className="moldura desk:mx-auto desk:w-full desk:max-w-6xl">
+          <div className="moldura-rolagem">{children}</div>
+        </div>
       </div>
 
       {/* O canto: o único ponto do projeto ancorado na janela (D-04). Os dois controles

@@ -49,6 +49,22 @@ await mkdir(DESTINO, { recursive: true });
 
 let escritas = 0;
 try {
+  // A gaveta do menu ABERTA na visão app — estado que nenhuma rota fotografa sozinha.
+  await cdp.navegar(`${servidor.url}/descobrir/`);
+  await cdp.avaliar(`localStorage.setItem("agenda-cultural:visao", "mobile")`);
+  await cdp.recarregar();
+  await cdp.avaliar(
+    `new Promise((r) => { const t = () => document.querySelector('[data-hidratado="sim"]') ? r(1) : setTimeout(t, 50); t(); })`,
+  );
+  await cdp.clicar(`document.querySelector('[aria-label="Abrir menu"]')`);
+  await new Promise((r) => setTimeout(r, 500));
+  await writeFile(
+    path.join(DESTINO, "mobile-menu-aberto.png"),
+    Buffer.from(await cdp.capturar(), "base64"),
+  );
+  escritas += 1;
+  console.log("  foto  mobile-menu-aberto.png");
+
   for (const visao of VISOES) {
     for (const rota of ROTAS) {
       await cdp.navegar(`${servidor.url}${rota}`);

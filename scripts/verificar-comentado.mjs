@@ -183,7 +183,8 @@ const MARCADORES = [
 
 /** A altura REAL do conteúdo dentro da moldura — é ela que denuncia buraco sobrando. */
 const LER_MOLDURA = naPagina(`
-  const m = document.querySelector('.moldura');
+  // Desde a reformulação (2026-08) quem rola é .moldura-rolagem, filha da moldura.
+  const m = document.querySelector('.moldura-rolagem') || document.querySelector('.moldura');
   const filhos = Array.from(m.querySelectorAll(':scope > * > *'));
   return {
     conteudo: Math.round(m.scrollHeight),
@@ -201,7 +202,7 @@ const LER_MOLDURA = naPagina(`
  * vão máximo tem de continuar da ordem do espaçamento de projeto da tela.
  */
 const LER_VAOS = naPagina(`
-  const raiz = document.querySelector('.moldura main > div') || document.querySelector('.moldura');
+  const raiz = document.querySelector('.moldura main > div') || document.querySelector('.moldura-rolagem') || document.querySelector('.moldura');
   const irmaos = Array.from(raiz.children).filter(visivel);
   const vaos = [];
   for (let i = 1; i < irmaos.length; i++) {
@@ -488,38 +489,38 @@ async function gates(cdp, base) {
 // ---------------------------------------------------------------------------
 
 async function gateJanelaEstreita(base) {
-  titulo("── janela estreita (400px) · a media query de 430px mudou de alvo ──");
+  titulo("── janela estreita (400px) · o canto continua inteiro na janela ──");
   const cdp = await abrirNavegador({ largura: 400, altura: 860 });
   try {
     await cdp.navegar(`${base}/descobrir/`);
+    // Desde a reformulação (menu lateral, 2026-08) não existe barra no pé para o canto
+    // desviar — a pergunta que resta é se os dois controles seguem fixos, visíveis e
+    // inteiramente dentro da janela estreita.
     const m = await cdp.avaliar(
       naPagina(`
         const canto = document.querySelector('.canto');
-        const barra = document.querySelector('.barra-abas');
         const alternador = document.querySelector('.alternador');
         const interruptor = document.querySelector('[data-comentado-alternar]');
         const rc = canto.getBoundingClientRect();
-        const rb = barra.getBoundingClientRect();
         return {
           cantoBase: Math.round(rc.bottom),
           cantoTopo: Math.round(rc.top),
-          barraTopo: Math.round(rb.top),
           posicao: getComputedStyle(canto).position,
-          folga: Math.round(rb.top - rc.bottom),
+          folga: Math.round(innerHeight - rc.bottom),
           ambosVisiveis: visivel(alternador) && visivel(interruptor),
         };
       `),
     );
     exigir(
-      m.posicao === "fixed" && m.ambosVisiveis && m.folga >= 0,
-      "os dois controles ficam ACIMA da barra de abas em 400px",
-      `canto (position: ${m.posicao}) termina em ${m.cantoBase}px, barra começa em ${m.barraTopo}px ` +
-        `· folga ${m.folga}px · alternador e interruptor visíveis: ${m.ambosVisiveis}`,
-      "canto fixo, os dois visíveis e a base acima do topo da barra",
+      m.posicao === "fixed" && m.ambosVisiveis && m.folga >= 0 && m.cantoTopo >= 0,
+      "os dois controles do canto ficam inteiros na janela em 400px",
+      `canto (position: ${m.posicao}) de ${m.cantoTopo} a ${m.cantoBase}px · folga até o fundo ${m.folga}px ` +
+        `· alternador e interruptor visíveis: ${m.ambosVisiveis}`,
+      "canto fixo, os dois visíveis e dentro da janela",
     );
     resumo.push([
       "400px",
-      `a regra de 430px alcança .canto: folga de ${m.folga}px entre os controles e a barra de abas`,
+      `o canto fica inteiro na janela estreita: folga de ${m.folga}px até o fundo`,
     ]);
     return cdp.consola.filter((c) => c.nivel === "erro" || c.nivel === "aviso").length;
   } finally {

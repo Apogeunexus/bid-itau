@@ -1,5 +1,6 @@
 import { Acontece } from "@/componentes/acontece";
 import { montarAgenda } from "@/dados/agenda";
+import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { montarMapaDaAgenda } from "@/dados/mapa-agenda";
 
 /**
@@ -16,11 +17,12 @@ import { montarMapaDaAgenda } from "@/dados/mapa-agenda";
  * prerenderizada; um relógio de runtime faria o HTML exportado e a hidratação divergirem
  * e ainda vazaria o fuso de quem avalia.
  *
- * `toISOString().slice(0, 10)` e não uma data local: o grafo grava toda ocorrência com
- * deslocamento `-03:00` explícito, e a comparação de dia acontece por string ISO, do
- * mesmo jeito nos dois lados.
+ * A DATA VEM DE `alerta.ts`, NUNCA DO RELÓGIO. Um `new Date()` aqui fazia o «hoje»
+ * depender da hora do build: qualquer build depois da meia-noite UTC divergia da data
+ * de referência que as suítes e o restante do produto pinam — medido em 22/08/2026,
+ * quando a fase 3 quebrou às 21h locais (00h UTC do dia 23).
  */
-const HOJE = new Date().toISOString().slice(0, 10);
+const HOJE = DATA_DE_REFERENCIA;
 
 export default function PaginaAcontece() {
   /* `montarMapaDaAgenda` corre AQUI, ao lado de `montarAgenda`, no mesmo escopo de

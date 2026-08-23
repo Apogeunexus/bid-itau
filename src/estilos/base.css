@@ -38,12 +38,14 @@ body {
  * Tailwind, porque `app:` só se aplica a utilitários — não a classes semânticas.
  * O gatilho continua sendo a visão escolhida, não o tamanho da janela.
  *
- * A MOLDURA TEM ALTURA E ROLA POR DENTRO, e isso não é detalhe estético: é o que
- * permite a barra de abas ficar contida nela. Barra com `position: fixed` se
- * ancoraria na JANELA, não no telefone, e escaparia para a largura toda da tela
- * — destruindo exatamente a ilusão que D-03 existe para criar. Com a moldura
- * como contêiner de rolagem, a barra usa `sticky` e fica presa ao pé do
- * telefone. 390×844 é o tamanho lógico de um iPhone 14/15.
+ * A MOLDURA TEM ALTURA, E QUEM ROLA É O FILHO `.moldura-rolagem` (reformulação
+ * do design system, 2026-08). A moldura em si é `relative; overflow: hidden`:
+ * é contra ela que a gaveta do menu lateral posiciona `absolute` — sobreposta,
+ * sem rolar junto com o conteúdo. `fixed` se ancoraria na JANELA, não no
+ * telefone, e escaparia para a largura toda da tela — destruindo a ilusão que
+ * D-03 existe para criar; continua proibido fora do `.canto`. O que precisa
+ * grudar no topo (cabeçalho do menu) usa `sticky` contra a rolagem.
+ * 390×844 é o tamanho lógico de um iPhone 14/15.
  * ------------------------------------------------------------------------- */
 [data-view="mobile"] .palco {
   display: flex;
@@ -54,16 +56,22 @@ body {
 }
 
 [data-view="mobile"] .moldura {
+  position: relative;
   width: 390px;
   height: min(844px, calc(100vh - 4rem));
   flex: none;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  overflow: hidden;
   border: 10px solid var(--ic-preto);
   border-radius: 2.5rem;
   background: var(--ic-branco);
   box-shadow: 0 24px 60px rgb(0 0 0 / 0.25);
+}
+
+[data-view="mobile"] .moldura-rolagem {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 /* A media query do colapso da moldura. É sobre o tamanho real da janela — num
@@ -84,13 +92,8 @@ body {
     box-shadow: none;
   }
 
-  /* Sem moldura, os controles fixos cairiam em cima da barra de abas. Eles continuam
-   * presos à janela de propósito (D-04) — só sobem o suficiente para não brigar.
-   * O alvo é o CANTO, que é quem carrega o `fixed`; o alternador e o interruptor de modo
-   * comentado viajam dentro dele, empilhados. */
-  [data-view="mobile"] .canto {
-    bottom: 5.5rem;
-  }
+  /* O canto segue preso à janela (D-04). Sem a barra de abas no pé — aposentada
+   * pelo menu lateral na reformulação de 2026-08 — ele não precisa mais subir. */
 }
 
 /* ---------------------------------------------------------------------------

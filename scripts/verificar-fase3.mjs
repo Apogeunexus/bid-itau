@@ -327,21 +327,21 @@ const PRELUDIO3 =
   const visiveisSvg = (s) => todos(s).filter(visivelSvg);
 
   /**
-   * DEFEITO 4, corrigido. A primeira vista NÃO é a moldura inteira nem innerHeight: a
-   * barra de abas é sticky no pé e cobre os últimos ~59px. O limite útil é o TOPO da barra.
+   * DEFEITO 4, corrigido — e reancorado na reformulação do design system (2026-08):
+   * a barra de abas não existe mais. O cabeçalho do menu fica no TOPO e não cobre o
+   * pé, então a primeira vista vai até o fundo visível da moldura. As chaves da barra
+   * sobrevivem zeradas para os relatórios que as imprimem.
    */
   const molduraUtil = () => {
     const m = document.querySelector('.moldura');
-    const b = document.querySelector('.barra-abas');
-    if (!m || !b) return null;
+    if (!m) return null;
     const rm = m.getBoundingClientRect();
-    const rb = b.getBoundingClientRect();
     return {
       topo: Math.round(rm.top),
       base: Math.round(rm.bottom),
-      topoDaBarra: Math.round(rb.top),
-      alturaDaBarra: Math.round(rb.height),
-      limiteUtil: Math.round(rb.top),
+      topoDaBarra: null,
+      alturaDaBarra: 0,
+      limiteUtil: Math.round(Math.min(rm.bottom, innerHeight)),
     };
   };
 
@@ -676,7 +676,17 @@ async function gatesEstruturais() {
       r === "agenda-nao-encontrada/index.html" ||
       // As 529 páginas do Player (05-07) — uma por mídia do acervo. É de longe o maior
       // acréscimo da fase, e é ele que responde por 529 das 532 páginas novas.
-      /^play\/[^/]+\/index\.html$/.test(r),
+      /^play\/[^/]+\/index\.html$/.test(r) ||
+      // ---- As 7 rotas da REFORMULAÇÃO do design system (2026-08): a árvore de menu
+      // fixada pelo cliente. Nascem como esqueleto rotulado no mesmo commit do menu
+      // lateral — o LIMIAR de 1.784 não muda, o que muda é a lista do explicável.
+      r === "cast/index.html" ||
+      r === "noticias/index.html" ||
+      r === "museu/index.html" ||
+      r === "museu/exposicoes/index.html" ||
+      r === "ia/index.html" ||
+      r === "cursos/index.html" ||
+      r === "blog/index.html",
   );
   const linhaBase = paginas.length - novas.length;
   exigir(
@@ -705,39 +715,44 @@ async function gatesDaCasca(cdp, base) {
     `${LARGURA}×${ALTURA}`,
   );
 
-  const medirBarra = () =>
+  // A regressão que este bloco media era a barra de abas escapando do telefone; desde a
+  // reformulação (menu lateral) o elemento grudado é o CABEÇALHO do menu, sticky no TOPO
+  // do contêiner de rolagem `.moldura-rolagem` — a pergunta continua a mesma: contido
+  // na moldura antes e depois de rolar.
+  const medirCabecalho = () =>
     cdp.avaliar(
       naPagina3(`
         const m = document.querySelector('.moldura');
-        const b = document.querySelector('.barra-abas');
-        if (!m || !b) return { erro: !m ? 'moldura ausente' : 'barra ausente' };
-        const rm = m.getBoundingClientRect(), rb = b.getBoundingClientRect();
+        const r = document.querySelector('.moldura-rolagem');
+        const c = document.querySelector('.menu-cabecalho');
+        if (!m || !r || !c) return { erro: !m ? 'moldura ausente' : !r ? 'rolagem ausente' : 'cabeçalho ausente' };
+        const rm = m.getBoundingClientRect(), rc = c.getBoundingClientRect();
         return {
-          molduraLargura: Math.round(rm.width), molduraBase: Math.round(rm.bottom),
-          barraLargura: Math.round(rb.width), barraBase: Math.round(rb.bottom),
-          barraVisivel: visivel(b), rolagem: Math.round(m.scrollTop),
+          molduraLargura: Math.round(rm.width), molduraTopo: Math.round(rm.top),
+          cabecalhoLargura: Math.round(rc.width), cabecalhoTopo: Math.round(rc.top),
+          cabecalhoVisivel: visivel(c), rolagem: Math.round(r.scrollTop),
         };
       `),
     );
 
-  const antes = await medirBarra();
+  const antes = await medirCabecalho();
   exigir(
-    !antes.erro && antes.barraVisivel && antes.barraLargura <= antes.molduraLargura &&
-      antes.barraBase <= antes.molduraBase + 1,
-    "moldura contém a barra de abas (antes de rolar)",
-    `barra ${antes.barraLargura}px base ${antes.barraBase} · moldura ${antes.molduraLargura}px base ${antes.molduraBase}`,
-    "barra contida na moldura",
+    !antes.erro && antes.cabecalhoVisivel && antes.cabecalhoLargura <= antes.molduraLargura &&
+      Math.abs(antes.cabecalhoTopo - antes.molduraTopo) <= 12,
+    "moldura contém o cabeçalho do menu, grudado no topo (antes de rolar)",
+    `cabeçalho ${antes.cabecalhoLargura}px topo ${antes.cabecalhoTopo} · moldura ${antes.molduraLargura}px topo ${antes.molduraTopo}`,
+    "cabeçalho contido e no topo da moldura",
   );
 
-  await cdp.avaliar("document.querySelector('.moldura').scrollTop = 999999");
+  await cdp.avaliar("document.querySelector('.moldura-rolagem').scrollTop = 999999");
   await respirar(300);
-  const depois = await medirBarra();
+  const depois = await medirCabecalho();
   exigir(
-    depois.barraVisivel && depois.barraLargura <= depois.molduraLargura &&
-      depois.barraBase <= depois.molduraBase + 1,
-    "moldura contém a barra de abas (rolada até o fim de Acontece)",
-    `rolagem ${depois.rolagem}px · barra base ${depois.barraBase} · moldura base ${depois.molduraBase}`,
-    "barra ainda contida",
+    depois.cabecalhoVisivel && depois.cabecalhoLargura <= depois.molduraLargura &&
+      Math.abs(depois.cabecalhoTopo - depois.molduraTopo) <= 12,
+    "moldura contém o cabeçalho do menu (rolada até o fim de Acontece)",
+    `rolagem ${depois.rolagem}px · cabeçalho topo ${depois.cabecalhoTopo} · moldura topo ${depois.molduraTopo}`,
+    "cabeçalho ainda grudado no topo",
   );
 
   const visaoAtual = () => cdp.avaliar("document.querySelector('[data-view]').getAttribute('data-view')");
@@ -1166,7 +1181,7 @@ async function bloco4Mapa(cdp, base) {
     naPagina3(`const c = visiveis('[data-dia]').find(c => c.getAttribute('aria-pressed') === 'true');
                return c ? c.getAttribute('data-dia') : null;`),
   );
-  const hrefLente = await cdp.avaliar(`document.querySelector('a[href*="mapa"]').getAttribute('href')`);
+  const hrefLente = await cdp.avaliar(`document.querySelector('main a[href*="mapa"]').getAttribute('href')`);
   exigir(
     /\/mapa\/?#r=/.test(hrefLente) && /&t=/.test(hrefLente) && /&v=/.test(hrefLente),
     "a gramática da lente é /mapa/#r=…&t=…&v= (COM a barra — trailingSlash normaliza)",
@@ -1176,7 +1191,7 @@ async function bloco4Mapa(cdp, base) {
 
   const idaMapa = await clicarPara(
     cdp,
-    `document.querySelector('a[href*="mapa"]')`,
+    `document.querySelector('main a[href*="mapa"]')`,
     (p) => p.includes("/mapa"),
     "Acontece → mapa",
   );
@@ -1184,7 +1199,7 @@ async function bloco4Mapa(cdp, base) {
     naPagina3(`
       const pinos = visiveisSvg('[data-pino]');
       const corpo = document.querySelector('.moldura').innerText;
-      const cab = document.querySelector('header').innerText.replace(/\\n+/g, ' ');
+      const cab = document.querySelector('main header').innerText.replace(/\\n+/g, ' ');
       const semPos = corpo.match(/Fora do desenho: (\\d+) sem coordenada/);
       return { pinos: pinos.length,
                registros: pinos.reduce((a, p) => a + Number(p.getAttribute('data-pinos')), 0),
@@ -1239,7 +1254,7 @@ async function bloco4Mapa(cdp, base) {
   await digitar(cdp, "#busca-campo", "bienal");
   const idaMapa2 = await clicarPara(
     cdp,
-    `document.querySelector('a[href*="mapa"]')`,
+    `document.querySelector('main a[href*="mapa"]')`,
     (p) => p.includes("/mapa"),
     "Buscar → mapa",
   );
@@ -1248,7 +1263,7 @@ async function bloco4Mapa(cdp, base) {
       const pinos = visiveisSvg('[data-pino]');
       return { pinos: pinos.length,
                registros: pinos.reduce((a, p) => a + Number(p.getAttribute('data-pinos')), 0),
-               cabecalho: document.querySelector('header').innerText.replace(/\\n+/g, ' ').slice(0, 90) };
+               cabecalho: document.querySelector('main header').innerText.replace(/\\n+/g, ' ').slice(0, 90) };
     `),
   );
   exigir(
@@ -1302,13 +1317,14 @@ async function bloco4Mapa(cdp, base) {
     `visível: ${camada.leituraVisivel} · «${camada.leituraTexto}…»`,
     "visível e numerada",
   );
-  // DEFEITO 4: contra o TOPO DA BARRA, não contra a moldura nem innerHeight.
+  // DEFEITO 4: contra o LIMITE ÚTIL medido (desde a reformulação, o fundo visível da
+  // moldura — o menu lateral não cobre o pé), não contra innerHeight.
   exigir(
     camada.svgBase <= camada.limiteUtil,
-    "a camada CABE na moldura, medida contra o topo da barra de abas (não contra a moldura inteira)",
-    `desenho termina em ${camada.svgBase}px · barra começa em ${camada.limiteUtil}px ` +
-      `(moldura vai até ${camada.molduraBase}px; a barra ocupa ${camada.alturaDaBarra}px)`,
-    "o desenho acima do topo da barra",
+    "a camada CABE na moldura, medida contra o limite útil (não contra innerHeight)",
+    `desenho termina em ${camada.svgBase}px · limite útil ${camada.limiteUtil}px ` +
+      `(moldura vai até ${camada.molduraBase}px)`,
+    "o desenho acima do limite útil",
   );
 
   resumo.push([

@@ -4,6 +4,7 @@ import {
   type SessaoExibivel,
 } from "@/componentes/selecao-ocorrencia";
 import { DIMENSOES, ROTULO_DIMENSAO, montarAgenda, type TempoDoDia } from "@/dados/agenda";
+import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { ocorrenciasDe, porId, porSlug, slugsPorTipo, temporadasDe } from "@/dados/grafo";
 import type { Entidade } from "@/dados/tipos";
 
@@ -21,8 +22,9 @@ import type { Entidade } from "@/dados/tipos";
  * traduzida em rótulos, e o `passado`/`hoje`/`futuro` já decidido contra a data do build.
  */
 
-/** A data do build, avaliada UMA VEZ por execução, como na página do evento (T-03-04). */
-const HOJE = new Date().toISOString().slice(0, 10);
+/** A data de referência de `alerta.ts`, nunca o relógio: um build depois da meia-noite
+ * UTC divergiria da data que o resto do produto e as suítes pinam (T-03-04). */
+const HOJE = DATA_DE_REFERENCIA;
 
 /**
  * A agenda inteira, montada UMA VEZ no carregamento do módulo e reaproveitada pelas 129

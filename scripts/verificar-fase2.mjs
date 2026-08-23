@@ -465,41 +465,45 @@ async function gatesDeTela(cdp, base) {
     `${LARGURA}×${ALTURA}`,
   );
 
-  // A regressão mais cara da fase 1: a barra de abas escapando do telefone.
-  const medirBarra = () =>
+  // A regressão mais cara da fase 1 era a barra de abas escapando do telefone; desde a
+  // reformulação (menu lateral, 2026-08) o elemento grudado é o CABEÇALHO do menu,
+  // sticky no TOPO do contêiner de rolagem `.moldura-rolagem`. A pergunta é a mesma:
+  // contido na moldura, antes e depois de rolar.
+  const medirCabecalho = () =>
     cdp.avaliar(
       naPagina(`
         const m = document.querySelector('.moldura');
-        const b = document.querySelector('.barra-abas');
-        if (!m || !b) return { erro: !m ? 'moldura ausente' : 'barra ausente' };
+        const r = document.querySelector('.moldura-rolagem');
+        const c = document.querySelector('.menu-cabecalho');
+        if (!m || !r || !c) return { erro: !m ? 'moldura ausente' : !r ? 'rolagem ausente' : 'cabeçalho ausente' };
         const rm = m.getBoundingClientRect();
-        const rb = b.getBoundingClientRect();
+        const rc = c.getBoundingClientRect();
         return {
-          molduraLargura: Math.round(rm.width), molduraBase: Math.round(rm.bottom),
-          barraLargura: Math.round(rb.width), barraBase: Math.round(rb.bottom),
-          barraVisivel: visivel(b),
-          rolagem: Math.round(m.scrollTop), alturaConteudo: Math.round(m.scrollHeight),
-          alturaUtil: Math.round(m.clientHeight),
+          molduraLargura: Math.round(rm.width), molduraTopo: Math.round(rm.top),
+          cabecalhoLargura: Math.round(rc.width), cabecalhoTopo: Math.round(rc.top),
+          cabecalhoVisivel: visivel(c),
+          rolagem: Math.round(r.scrollTop), alturaConteudo: Math.round(r.scrollHeight),
+          alturaUtil: Math.round(r.clientHeight),
         };
       `),
     );
 
-  const antes = await medirBarra();
+  const antes = await medirCabecalho();
   exigir(
-    !antes.erro && antes.barraVisivel && antes.barraLargura <= antes.molduraLargura && antes.barraBase <= antes.molduraBase + 1,
-    "moldura contém a barra de abas (antes de rolar)",
-    `barra ${antes.barraLargura}px base ${antes.barraBase} · moldura ${antes.molduraLargura}px base ${antes.molduraBase}`,
-    "barra mais estreita que a moldura e com a base dentro dela",
+    !antes.erro && antes.cabecalhoVisivel && antes.cabecalhoLargura <= antes.molduraLargura && Math.abs(antes.cabecalhoTopo - antes.molduraTopo) <= 12,
+    "moldura contém o cabeçalho do menu, grudado no topo (antes de rolar)",
+    `cabeçalho ${antes.cabecalhoLargura}px topo ${antes.cabecalhoTopo} · moldura ${antes.molduraLargura}px topo ${antes.molduraTopo}`,
+    "cabeçalho mais estreito que a moldura e grudado no topo dela",
   );
 
-  await cdp.avaliar("document.querySelector('.moldura').scrollTop = 999999");
+  await cdp.avaliar("document.querySelector('.moldura-rolagem').scrollTop = 999999");
   await new Promise((r) => setTimeout(r, 300));
-  const depois = await medirBarra();
+  const depois = await medirCabecalho();
   exigir(
-    depois.barraVisivel && depois.barraLargura <= depois.molduraLargura && depois.barraBase <= depois.molduraBase + 1,
-    "moldura contém a barra de abas (rolada até o fim)",
-    `rolagem ${depois.rolagem}px · barra base ${depois.barraBase} · moldura base ${depois.molduraBase}`,
-    "barra ainda contida",
+    depois.cabecalhoVisivel && depois.cabecalhoLargura <= depois.molduraLargura && Math.abs(depois.cabecalhoTopo - depois.molduraTopo) <= 12,
+    "moldura contém o cabeçalho do menu (rolada até o fim)",
+    `rolagem ${depois.rolagem}px · cabeçalho topo ${depois.cabecalhoTopo} · moldura topo ${depois.molduraTopo}`,
+    "cabeçalho ainda grudado no topo",
   );
 
   // `data-view` responde ao alternador E sobrevive a recarregar, nas DUAS direções.
@@ -638,10 +642,17 @@ async function abrirSeletor(cdp) {
 }
 
 async function trocarPersona(cdp, nome) {
+  // A troca de persona mora em /meu desde a reformulação de 2026-08 (feedback do
+  // cliente: persona fora da tela de Descobrir). O helper vai até lá, troca e volta —
+  // a sessão viaja pelo localStorage, então a página de origem reflete a troca.
+  const origem = await cdp.avaliar("location.href");
+  await cdp.navegar(new URL("/meu/", origem).href);
   await cdp.clicar(
     `Array.from(document.querySelectorAll('[aria-label="Trocar de persona"] button'))
        .find(b => (b.textContent || '').trim() === ${JSON.stringify(nome)})`,
   );
+  await new Promise((r) => setTimeout(r, 300));
+  await cdp.navegar(origem);
   await new Promise((r) => setTimeout(r, 450));
 }
 
@@ -839,23 +850,22 @@ async function cenario1(cdp, base) {
   const explicacao = await cdp.avaliar(
     naPagina(`
       const passos = visiveis('[data-passo]');
-      const m = document.querySelector('.moldura');
+      const r = document.querySelector('.moldura-rolagem');
+      const cab = document.querySelector('.menu-cabecalho');
       return {
         passos: passos.length,
         passosSemMotivo: passos.filter(p => (p.textContent || '').trim().length === 0).length,
         textos: passos.map(p => (p.textContent || '').trim().replace(/\\s+/g, ' ').slice(0, 70)),
         limiteIa: visiveis('[data-limite-ia]').length,
         criterios: visiveis('[data-criterio]').length,
-        alturaConteudo: Math.round(m.scrollHeight),
-        alturaUtil: Math.round(m.clientHeight),
+        alturaConteudo: Math.round(r.scrollHeight),
+        alturaUtil: Math.round(r.clientHeight),
         // scrollHeight NUNCA é menor que clientHeight: sozinho ele só sabe dizer «estourou»
         // ou «não estourou», e imprimiria folga 0 mesmo numa tela metade vazia. A folga real
-        // é do CONTEÚDO até o topo da barra de abas — foi assim que o 02-02 mediu as 72
-        // páginas (739px de conteúdo contra 764px úteis), e é o número comparável.
+        // é do CONTEÚDO contra o espaço útil — a altura da rolagem menos o cabeçalho do
+        // menu, que é sticky no topo desde a reformulação (a barra de abas não existe mais).
         alturaReal: Math.round(document.querySelector('[data-explicacao]').getBoundingClientRect().height),
-        ateBarra: Math.round(
-          document.querySelector('.barra-abas').getBoundingClientRect().top - m.getBoundingClientRect().top,
-        ),
+        espacoUtil: Math.round(r.clientHeight - (cab ? cab.getBoundingClientRect().height : 0)),
       };
     `),
   );
@@ -868,13 +878,13 @@ async function cenario1(cdp, base) {
 
   // A MEDIDA QUE DECIDE A TELA: a foto de slide de D-33.
   const estouro = explicacao.alturaConteudo - explicacao.alturaUtil;
-  const folga = explicacao.ateBarra - explicacao.alturaReal;
+  const folga = explicacao.espacoUtil - explicacao.alturaReal;
   exigir(
     explicacao.alturaConteudo <= explicacao.alturaUtil + 8,
     "D-33 · a explicação CABE na moldura sem rolar",
-    `moldura: scrollHeight ${explicacao.alturaConteudo}px ≤ clientHeight ${explicacao.alturaUtil}px ` +
+    `rolagem: scrollHeight ${explicacao.alturaConteudo}px ≤ clientHeight ${explicacao.alturaUtil}px ` +
       (estouro <= 0 ? "(não estoura)" : `(ESTOURA POR ${estouro}px)`) +
-      ` · conteúdo real ${explicacao.alturaReal}px contra ${explicacao.ateBarra}px até a barra · folga ${folga}px`,
+      ` · conteúdo real ${explicacao.alturaReal}px contra ${explicacao.espacoUtil}px úteis · folga ${folga}px`,
     "scrollHeight ≤ clientHeight + 8px",
   );
 
@@ -914,14 +924,13 @@ async function cenario1(cdp, base) {
     await cdp.navegar(`${base}${c.explicacaoHref}`);
     const m = await cdp.avaliar(
       naPagina(`
-        const mo = document.querySelector('.moldura');
+        const ro = document.querySelector('.moldura-rolagem');
+        const cab = document.querySelector('.menu-cabecalho');
         return {
           passos: visiveis('[data-passo]').length,
-          estoura: Math.round(mo.scrollHeight) - Math.round(mo.clientHeight),
+          estoura: Math.round(ro.scrollHeight) - Math.round(ro.clientHeight),
           real: Math.round(document.querySelector('[data-explicacao]').getBoundingClientRect().height),
-          ateBarra: Math.round(
-            document.querySelector('.barra-abas').getBoundingClientRect().top - mo.getBoundingClientRect().top,
-          ),
+          espacoUtil: Math.round(ro.clientHeight - (cab ? cab.getBoundingClientRect().height : 0)),
           limiteIa: visiveis('[data-limite-ia]').length,
         };
       `),
@@ -957,8 +966,8 @@ async function cenario1(cdp, base) {
   );
 
   const estouram = cadeias.filter((c) => c.estoura > 8);
-  const folgaMinima = Math.min(...cadeias.map((c) => c.ateBarra - c.real));
-  const maisAlta = cadeias.reduce((a, c) => (c.ateBarra - c.real < a.ateBarra - a.real ? c : a));
+  const folgaMinima = Math.min(...cadeias.map((c) => c.espacoUtil - c.real));
+  const maisAlta = cadeias.reduce((a, c) => (c.espacoUtil - c.real < a.espacoUtil - a.real ? c : a));
   exigir(
     estouram.length === 0 && cadeias.every((c) => c.limiteIa >= 1),
     "D-33/D-35 · as 12 explicações do feed cabem na moldura e trazem o limite da IA",

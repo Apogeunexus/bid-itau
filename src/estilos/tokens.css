@@ -55,10 +55,10 @@
   --espaco-cartao: 0.75rem; /* padding interno de cartão/painel */
   --espaco-pilha: 0.5rem; /* gap padrão de pilha/fileira */
 
-  /* ---- Raio ---- */
-  --raio-s: 0.5rem; /* capa, chip quadrado */
+  /* ---- Raio (p/m/g: «s»/«l» colidiriam com rounded-s/rounded-l de lado) ---- */
+  --raio-p: 0.5rem; /* capa, chip quadrado */
   --raio-m: 0.75rem; /* cartão */
-  --raio-l: 1rem; /* painel, folha */
+  --raio-g: 1rem; /* painel, folha */
   --raio-pilula: 999px;
 
   /* ---- Elevação: preto em alfa baixo, nunca cor ---- */
@@ -117,9 +117,9 @@
   --font-texto: var(--fonte-texto);
   --font-display: var(--fonte-display);
 
-  --radius-s: var(--raio-s);
+  --radius-p: var(--raio-p);
   --radius-m: var(--raio-m);
-  --radius-l: var(--raio-l);
+  --radius-g: var(--raio-g);
   --radius-pilula: var(--raio-pilula);
 
   --shadow-1: var(--sombra-1);

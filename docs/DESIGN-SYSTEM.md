@@ -65,8 +65,10 @@ utilitário fixa a família junto com o tamanho, então não há como errar.
 - Grade: múltiplos de 0.25rem. Quatro tokens semânticos que variam por visão:
   `--espaco-tela` 1rem app / 1.5rem web · `--espaco-secao` 2rem / 3rem ·
   `--espaco-cartao` 0.75rem / 1.25rem · `--espaco-pilha` 0.5rem / 0.75rem.
-- Raios: `--radius-s` 0.5rem (capa, chip quadrado) · `--radius-m` 0.75rem
-  (cartão) · `--radius-l` 1rem (painel, folha) · `--radius-pilula` 999px.
+- Raios: `--raio-p` 0.5rem (capa, chip quadrado) · `--raio-m` 0.75rem
+  (cartão) · `--raio-g` 1rem (painel, folha) · `--raio-pilula` 999px.
+  (p/m/g e não s/m/l: `rounded-s`/`rounded-l` já são utilitários de LADO no
+  Tailwind — start e left — e os nomes colidiriam.)
 - Sombras: `--shadow-1` cartão em hover · `--shadow-2` sticky/dropdown ·
   `--shadow-3` drawer/folha. Todas preto em alfa baixo, nunca cor.
 - Motion: `--dur-1` 120ms (micro) · `--dur-2` 200ms (entrada de painel) ·

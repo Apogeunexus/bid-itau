@@ -1,3 +1,4 @@
+import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { coordenadaDe, distanciaKm, type ViaCoordenada } from "@/dados/geo";
 import { ocorrenciasDe, porId, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "@/dados/grafo";
 import type { ClasseEntidade, Coordenada, Entidade, MetodoCoordenada } from "@/dados/tipos";
@@ -65,8 +66,10 @@ import type { ClasseEntidade, Coordenada, Entidade, MetodoCoordenada } from "@/d
  *
  * Ele NÃO é usado para filtrar nada — usá-lo como filtro seria a janela temporal que D-48
  * proíbe. Ele existe só para uma asserção: nenhuma data que sai daqui é posterior a ele.
+ * Derivado da data fixa de `alerta.ts`, nunca do relógio: um build depois da virada de
+ * ano UTC mudaria a asserção sem ninguém tocar em nada.
  */
-export const ANO_DE_REFERENCIA = new Date().getUTCFullYear();
+export const ANO_DE_REFERENCIA = Number(DATA_DE_REFERENCIA.slice(0, 4));
 
 /**
  * Quilômetros escritos em português: vírgula decimal, uma casa.

@@ -338,15 +338,14 @@ const PRELUDIO4 =
    * usou, para o relatório imprimir a medida em vez de reaproveitar a da visão app.
    */
   const limiteUtil = () => {
+    // Desde a reformulação do design system (menu lateral, 2026-08) nenhuma navegação
+    // cobre o pé — cabeçalho no topo (app), trilho à esquerda (web). O limite útil é
+    // o fundo visível da moldura; as três telas desta fase são de bastidor e nunca
+    // montaram navegação nenhuma.
     const m = document.querySelector('.moldura');
-    const b = document.querySelector('.barra-abas');
-    if (b && visivel(b)) {
-      const rb = b.getBoundingClientRect();
-      return { limite: Math.round(rb.top), contra: 'moldura menos a barra de abas', barra: Math.round(rb.height) };
-    }
     if (m) {
       const rm = m.getBoundingClientRect();
-      return { limite: Math.round(Math.min(rm.bottom, innerHeight)), contra: 'moldura sem barra de abas (visão web)', barra: 0 };
+      return { limite: Math.round(Math.min(rm.bottom, innerHeight)), contra: 'fundo visível da moldura', barra: 0 };
     }
     return { limite: innerHeight, contra: 'janela (sem moldura)', barra: 0 };
   };
@@ -811,13 +810,21 @@ async function gatesEstruturais() {
       r === "agenda-nao-encontrada/index.html" ||
       /^play\/[^/]+\/index\.html$/.test(r),
   );
-  const linhaBase = paginas.length - novasFase3.length - novasFase4.length - novasFase5.length;
+  // As 7 rotas da REFORMULAÇÃO do design system (2026-08): a árvore de menu fixada
+  // pelo cliente, nascidas como esqueleto rotulado junto com o menu lateral.
+  const novasReformulacao = paginas.filter((r) =>
+    ["cast", "noticias", "museu", "museu/exposicoes", "ia", "cursos", "blog"].some(
+      (rota) => r === `${rota}/index.html`,
+    ),
+  );
+  const linhaBase =
+    paginas.length - novasFase3.length - novasFase4.length - novasFase5.length - novasReformulacao.length;
   exigir(
     linhaBase === 1784 && novasFase4.length === 1,
     "total de páginas em out/, com a diferença explicada rota a rota",
     `${paginas.length} páginas · ${novasFase3.length} da fase 3 (129 sessões + 15 cidades + /salvos + /buscar/frase) · ` +
       `${novasFase4.length} da fase 4 (/roteiro) · ${novasFase5.length} da fase 5 (529 de /play/[slug] + /filtros + os 2 becos de D-93) · ` +
-      `resíduo ${linhaBase}`,
+      `${novasReformulacao.length} da reformulação (menu lateral) · resíduo ${linhaBase}`,
     "resíduo 1784 e exatamente 1 página nova na fase 4",
   );
 

@@ -7,6 +7,9 @@
  * ------------------------------------------------------------------------- */
 @import "../estilos/tokens.css";
 
+/* A navegação principal das duas visões (menu lateral + cabeçalho + gaveta). */
+@import "../estilos/menu-lateral.css";
+
 /* ---------------------------------------------------------------------------
  * As folhas por tela, reunidas aqui.
  *

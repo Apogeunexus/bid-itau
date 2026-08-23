@@ -10,6 +10,7 @@ import {
 import { BlocoAusenciaDeclarada, BlocoPonte } from "@/componentes/ponte";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
 import { Verbete } from "@/componentes/verbete";
+import { DATA_DE_REFERENCIA as DATA_FIXA } from "@/dados/alerta";
 import { ocorrenciasDe, porId, porSlug, slugsPorTipo, temporadasDe } from "@/dados/grafo";
 import { vinculosDe, type GrupoVinculo } from "@/dados/ponte";
 import type { Entidade } from "@/dados/tipos";
@@ -45,7 +46,9 @@ export function generateStaticParams() {
  * A data do build, avaliada UMA VEZ por execução. É ela que a lista de ocorrências usa
  * para dizer qual é «a próxima» (T-02-18) — nunca um relógio dentro do componente.
  */
-const DATA_DE_REFERENCIA = new Date().toISOString();
+/* De `alerta.ts`, nunca do relógio: um build depois da meia-noite UTC divergiria da
+ * data que o resto do produto e as suítes pinam. */
+const DATA_DE_REFERENCIA = DATA_FIXA;
 
 // ---------------------------------------------------------------------------
 // Espaço: três caminhos, nesta ordem, e o terceiro é uma frase
