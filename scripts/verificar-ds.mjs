@@ -34,11 +34,13 @@ const SRC = path.join(RAIZ, "src");
 const FOLHAS_MIGRADAS = [
   "acontece-web.css",
   "agenda.css",
+  "barra-inferior.css",
   "base.css",
   "busca.css",
   "cidade.css",
   "filtros.css",
   "frase.css",
+  "hub.css",
   "mapa.css",
   "menu-lateral.css",
   "observatorio.css",

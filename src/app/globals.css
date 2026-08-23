@@ -7,8 +7,13 @@
  * ------------------------------------------------------------------------- */
 @import "../estilos/tokens.css";
 
-/* A navegação principal das duas visões (menu lateral + cabeçalho + gaveta). */
+/* A navegação da visão web: o trilho lateral. */
 @import "../estilos/menu-lateral.css";
+
+/* A navegação da visão app: quatro abas numa pílula flutuante + o quinto botão
+ * que abre `/apps`, e a folha do hub que ele abre. */
+@import "../estilos/barra-inferior.css";
+@import "../estilos/hub.css";
 
 /* ---------------------------------------------------------------------------
  * As folhas por tela, reunidas aqui.

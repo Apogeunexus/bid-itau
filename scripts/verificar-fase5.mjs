@@ -1517,36 +1517,44 @@ const PRELUDIO5 =
    * no topo (visão web), devolvendo limite 0. A lição que fica é a mesma de então:
    * MEDIR onde a navegação está em vez de presumir, e nunca subtrair uma altura.
    *
-   * Desde a reformulação do design system (menu lateral, 2026-08) a barra de abas não
-   * existe: o app tem cabeçalho grudado no TOPO da moldura e a web tem trilho à
-   * ESQUERDA — nenhum dos dois cobre o pé, e o limite útil das duas visões é o fundo
-   * visível da moldura. O gateDaRegua imprime as medidas reais dos dois antes de
-   * qualquer gate de dobra usá-las.
+   * Desde 2026-08-23 a visão APP voltou a ter algo no pé: a barra inferior flutuante,
+   * posicionada contra a moldura, com o quinto botão que abre o hub de aplicativos. O
+   * limite útil do app é o TOPO DELA — lido do retângulo, não deduzido da altura, que
+   * é exatamente o erro que esta função já pagou uma vez. Na WEB não há barra: o
+   * trilho fica à ESQUERDA e o limite continua sendo o fundo visível da moldura. O
+   * gateDaRegua imprime as medidas reais das duas antes de qualquer gate de dobra
+   * usá-las.
+   *
+   * SEM CRASE NESTE BLOCO: ele mora dentro do template literal do prelúdio, e uma
+   * crase de comentário fecha a string no meio do arquivo.
    */
   const limiteUtil = () => {
-    // DESDE A REFORMULAÇÃO DO DESIGN SYSTEM (menu lateral, 2026-08) nenhuma navegação
-    // cobre o PÉ: o cabeçalho do app fica no TOPO da moldura e o trilho da web fica à
-    // ESQUERDA. O limite útil é o fundo visível da moldura — medido, nunca subtraído.
-    // As chaves barra/barraTopo/folgaAteAMoldura sobrevivem para os consumidores que
-    // imprimem a régua; barra é sempre 0 porque não existe mais caixa no pé.
     const m = document.querySelector('.moldura');
     const rm = m ? m.getBoundingClientRect() : null;
     const fundo = rm ? Math.round(Math.min(rm.bottom, innerHeight)) : innerHeight;
-    const cab = document.querySelector('.menu-cabecalho');
+    const cab = document.querySelector('.barra-topo');
     const trilho = document.querySelector('.menu-lateral');
+    const barra = document.querySelector('.barra-inferior');
+    const rb = barra && visivel(barra) ? barra.getBoundingClientRect() : null;
+    // O TOPO DA BARRA É LIDO, NUNCA SUBTRAÍDO. O mínimo contra o fundo existe porque
+    // numa rota sem moldura (/404) a barra também não existe, e o limite tem de
+    // continuar sendo a janela em vez de virar NaN.
+    const topoDaBarra = rb ? Math.round(rb.top) : null;
     return {
-      limite: fundo,
-      contra: m
-        ? 'fundo visível da moldura — navegação no topo (app) ou à esquerda (web), nada cobre o pé'
-        : 'janela (sem moldura, como /404)',
-      barra: 0,
+      limite: topoDaBarra === null ? fundo : Math.min(topoDaBarra, fundo),
+      contra: !m
+        ? 'janela (sem moldura, como /404)'
+        : rb
+          ? 'topo da barra inferior — é ela que cobre o pé da moldura na visão app'
+          : 'fundo visível da moldura — sem barra no pé (web, onde a navegação é o trilho à esquerda, ou bastidor, que não monta navegação)',
+      barra: rb ? Math.round(rb.height) : 0,
       cabecalho: cab && visivel(cab) ? Math.round(cab.getBoundingClientRect().height) : 0,
       cabecalhoTopo: cab && visivel(cab) ? Math.round(cab.getBoundingClientRect().top) : null,
       trilho: trilho && visivel(trilho) ? Math.round(trilho.getBoundingClientRect().width) : 0,
-      barraTopo: null,
+      barraTopo: topoDaBarra,
       moldura: rm ? Math.round(rm.bottom) : null,
       molduraTopo: rm ? Math.round(rm.top) : null,
-      folgaAteAMoldura: 0,
+      folgaAteAMoldura: rb && rm ? Math.round(rm.bottom - rb.bottom) : 0,
     };
   };
 
@@ -1700,25 +1708,29 @@ async function gateDaRegua(cdp, base) {
   await porVisao(cdp, base, "/redacao/fila/", "web");
   const bastidor = await cdp.avaliar(naPagina5(`return limiteUtil();`));
 
-  // Desde a reformulação (menu lateral, 2026-08) a navegação nunca cobre o pé: no app
-  // é um cabeçalho grudado no TOPO da moldura; na web é o trilho à ESQUERDA. O limite
-  // útil das duas visões é o fundo visível da moldura — e a régua agora prova ISSO.
+  // Desde 2026-08-23 as duas visões divergem no pé, e a régua prova ISSO: no app a
+  // barra inferior cobre o fundo da moldura e o limite útil é o TOPO dela; na web não
+  // há barra — o trilho fica à ESQUERDA — e o limite continua sendo o fundo da moldura.
   exigir(
     app.cabecalho > 0 &&
       app.cabecalhoTopo !== null &&
       Math.abs(app.cabecalhoTopo - app.molduraTopo) <= 12 &&
-      app.limite === app.moldura &&
-      app.limite < ALTURA,
-    "visão APP · o cabeçalho do menu está no TOPO da moldura, e o limite útil é o fundo dela",
+      app.barra > 0 &&
+      app.barraTopo !== null &&
+      app.limite === app.barraTopo &&
+      app.limite < app.moldura,
+    "visão APP · cabeçalho no TOPO da moldura, barra no PÉ, e o limite útil é o topo da barra",
     `cabeçalho ${app.cabecalho} px, topo em ${app.cabecalhoTopo} (moldura começa em ${app.molduraTopo}) · ` +
-      `limite ${app.limite} · «${app.contra}» · janela ${ALTURA}`,
-    "cabeçalho grudado no topo, limite = base da moldura, menor que a janela",
+      `barra ${app.barra} px, topo em ${app.barraTopo}, folga de ${app.folgaAteAMoldura} px até a base da ` +
+      `moldura (${app.moldura}) · limite ${app.limite} · «${app.contra}» · janela ${ALTURA}`,
+    "cabeçalho grudado no topo, barra medida no pé, limite = topo da barra, acima da base da moldura",
   );
   exigir(
-    web.trilho > 0 && web.cabecalho === 0 && web.limite === ALTURA,
-    "visão WEB · o trilho lateral fica à ESQUERDA (cabeçalho do app escondido) e não cobre o pé",
-    `trilho ${web.trilho} px de largura · cabeçalho ${web.cabecalho} · limite ${web.limite} · «${web.contra}»`,
-    "trilho visível, sem cabeçalho, e o limite é a janela inteira",
+    web.trilho > 0 && web.cabecalho === 0 && web.barra === 0 && web.limite === ALTURA,
+    "visão WEB · o trilho lateral fica à ESQUERDA (sem cabeçalho e sem barra) e não cobre o pé",
+    `trilho ${web.trilho} px de largura · cabeçalho ${web.cabecalho} · barra ${web.barra} · ` +
+      `limite ${web.limite} · «${web.contra}»`,
+    "trilho visível, sem cabeçalho e sem barra, e o limite é a janela inteira",
   );
   info(
     "e uma rota de BASTIDOR, que não monta navegação nenhuma",
@@ -1727,10 +1739,10 @@ async function gateDaRegua(cdp, base) {
 
   resumo.push([
     "régua",
-    `no app o cabeçalho do menu mede ${app.cabecalho} px e fica no TOPO — o limite útil é a base da ` +
-      `moldura, ${app.limite} de ${ALTURA}; na web o trilho lateral mede ${web.trilho} px de largura e o ` +
-      `limite é a janela inteira; em bastidor e em /404 não há navegação do app. Todo gate de dobra ` +
-      `desta suíte imprime o limite que usou`,
+    `no app o cabeçalho fino mede ${app.cabecalho} px no TOPO e a barra inferior mede ${app.barra} px no ` +
+      `PÉ — o limite útil é o topo dela, ${app.limite} de ${ALTURA}; na web o trilho lateral mede ` +
+      `${web.trilho} px de largura, nada cobre o pé e o limite é a janela inteira; em bastidor e em /404 ` +
+      `não há navegação do app. Todo gate de dobra desta suíte imprime o limite que usou`,
   ]);
   return { app, web, bastidor };
 }
@@ -3272,10 +3284,16 @@ async function blocoBecos(cdp, base) {
           trilhas: trilhas.length,
           baseDaSaida: bloco ? Math.round(bloco.getBoundingClientRect().bottom) : null,
           limite: limiteUtil(),
+          // A navegação da visão app são DOIS elementos desde 23/08 (cabeçalho fino e
+          // barra inferior) e a da web é o trilho. Basta um deles: a pergunta aqui é
+          // «desta tela dá para sair pela navegação», não qual navegação está montada.
           navPresente: (() => {
-            const cab = document.querySelector('.menu-cabecalho');
+            const cab = document.querySelector('.barra-topo');
+            const barra = document.querySelector('.barra-inferior');
             const trilho = document.querySelector('.menu-lateral');
-            return Boolean((cab && visivel(cab)) || (trilho && visivel(trilho)));
+            return Boolean(
+              (cab && visivel(cab)) || (barra && visivel(barra)) || (trilho && visivel(trilho)),
+            );
           })(),
           links: links.length,
           transborda: transbordaNaHorizontal(),

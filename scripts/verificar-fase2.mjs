@@ -465,45 +465,70 @@ async function gatesDeTela(cdp, base) {
     `${LARGURA}×${ALTURA}`,
   );
 
-  // A regressão mais cara da fase 1 era a barra de abas escapando do telefone; desde a
-  // reformulação (menu lateral, 2026-08) o elemento grudado é o CABEÇALHO do menu,
-  // sticky no TOPO do contêiner de rolagem `.moldura-rolagem`. A pergunta é a mesma:
-  // contido na moldura, antes e depois de rolar.
-  const medirCabecalho = () =>
+  // A regressão mais cara da fase 1 era a barra de abas escapando do telefone. Desde
+  // 2026-08-23 a visão app tem DOIS elementos grudados: o cabeçalho fino, `sticky` no
+  // topo de `.moldura-rolagem`, e a barra inferior, `absolute` contra a `.moldura`
+  // (nunca `fixed`, D-03/D-04 — `fixed` se ancoraria na janela e escaparia para a
+  // largura toda). A pergunta é a mesma de sempre, agora nas duas pontas: contidos na
+  // moldura, antes e depois de rolar.
+  const medirNavegacao = () =>
     cdp.avaliar(
       naPagina(`
         const m = document.querySelector('.moldura');
         const r = document.querySelector('.moldura-rolagem');
-        const c = document.querySelector('.menu-cabecalho');
-        if (!m || !r || !c) return { erro: !m ? 'moldura ausente' : !r ? 'rolagem ausente' : 'cabeçalho ausente' };
+        const t = document.querySelector('.barra-topo');
+        const b = document.querySelector('.barra-inferior');
+        if (!m || !r || !t || !b) {
+          return { erro: !m ? 'moldura ausente' : !r ? 'rolagem ausente' : !t ? 'cabeçalho ausente' : 'barra ausente' };
+        }
         const rm = m.getBoundingClientRect();
-        const rc = c.getBoundingClientRect();
+        const rt = t.getBoundingClientRect();
+        const rb = b.getBoundingClientRect();
         return {
           molduraLargura: Math.round(rm.width), molduraTopo: Math.round(rm.top),
-          cabecalhoLargura: Math.round(rc.width), cabecalhoTopo: Math.round(rc.top),
-          cabecalhoVisivel: visivel(c),
+          molduraBase: Math.round(rm.bottom), molduraEsquerda: Math.round(rm.left),
+          molduraDireita: Math.round(rm.right),
+          topoLargura: Math.round(rt.width), topoTopo: Math.round(rt.top), topoVisivel: visivel(t),
+          barraLargura: Math.round(rb.width), barraBase: Math.round(rb.bottom),
+          barraEsquerda: Math.round(rb.left), barraDireita: Math.round(rb.right),
+          barraVisivel: visivel(b),
           rolagem: Math.round(r.scrollTop), alturaConteudo: Math.round(r.scrollHeight),
           alturaUtil: Math.round(r.clientHeight),
         };
       `),
     );
 
-  const antes = await medirCabecalho();
+  const conteveNavegacao = (m) =>
+    !m.erro &&
+    m.topoVisivel &&
+    m.barraVisivel &&
+    m.topoLargura <= m.molduraLargura &&
+    Math.abs(m.topoTopo - m.molduraTopo) <= 12 &&
+    m.barraLargura <= m.molduraLargura &&
+    m.barraEsquerda >= m.molduraEsquerda - 1 &&
+    m.barraDireita <= m.molduraDireita + 1 &&
+    Math.abs(m.barraBase - m.molduraBase) <= 12;
+
+  const antes = await medirNavegacao();
   exigir(
-    !antes.erro && antes.cabecalhoVisivel && antes.cabecalhoLargura <= antes.molduraLargura && Math.abs(antes.cabecalhoTopo - antes.molduraTopo) <= 12,
-    "moldura contém o cabeçalho do menu, grudado no topo (antes de rolar)",
-    `cabeçalho ${antes.cabecalhoLargura}px topo ${antes.cabecalhoTopo} · moldura ${antes.molduraLargura}px topo ${antes.molduraTopo}`,
-    "cabeçalho mais estreito que a moldura e grudado no topo dela",
+    conteveNavegacao(antes),
+    "moldura contém cabeçalho e barra inferior (antes de rolar)",
+    antes.erro
+      ? antes.erro
+      : `cabeçalho ${antes.topoLargura}px topo ${antes.topoTopo} · barra ${antes.barraLargura}px base ${antes.barraBase} · moldura ${antes.molduraLargura}px topo ${antes.molduraTopo} base ${antes.molduraBase}`,
+    "cabeçalho grudado no topo da moldura e barra grudada na base, ambos mais estreitos que ela",
   );
 
   await cdp.avaliar("document.querySelector('.moldura-rolagem').scrollTop = 999999");
   await new Promise((r) => setTimeout(r, 300));
-  const depois = await medirCabecalho();
+  const depois = await medirNavegacao();
   exigir(
-    depois.cabecalhoVisivel && depois.cabecalhoLargura <= depois.molduraLargura && Math.abs(depois.cabecalhoTopo - depois.molduraTopo) <= 12,
-    "moldura contém o cabeçalho do menu (rolada até o fim)",
-    `rolagem ${depois.rolagem}px · cabeçalho topo ${depois.cabecalhoTopo} · moldura topo ${depois.molduraTopo}`,
-    "cabeçalho ainda grudado no topo",
+    conteveNavegacao(depois),
+    "moldura contém cabeçalho e barra inferior (rolada até o fim)",
+    depois.erro
+      ? depois.erro
+      : `rolagem ${depois.rolagem}px · cabeçalho topo ${depois.topoTopo} · barra base ${depois.barraBase} · moldura topo ${depois.molduraTopo} base ${depois.molduraBase}`,
+    "cabeçalho e barra ainda grudados nas duas pontas da moldura",
   );
 
   // `data-view` responde ao alternador E sobrevive a recarregar, nas DUAS direções.
@@ -851,7 +876,8 @@ async function cenario1(cdp, base) {
     naPagina(`
       const passos = visiveis('[data-passo]');
       const r = document.querySelector('.moldura-rolagem');
-      const cab = document.querySelector('.menu-cabecalho');
+      const cab = document.querySelector('.barra-topo');
+      const barra = document.querySelector('.barra-inferior');
       return {
         passos: passos.length,
         passosSemMotivo: passos.filter(p => (p.textContent || '').trim().length === 0).length,
@@ -862,10 +888,15 @@ async function cenario1(cdp, base) {
         alturaUtil: Math.round(r.clientHeight),
         // scrollHeight NUNCA é menor que clientHeight: sozinho ele só sabe dizer «estourou»
         // ou «não estourou», e imprimiria folga 0 mesmo numa tela metade vazia. A folga real
-        // é do CONTEÚDO contra o espaço útil — a altura da rolagem menos o cabeçalho do
-        // menu, que é sticky no topo desde a reformulação (a barra de abas não existe mais).
+        // é do CONTEÚDO contra o espaço útil — a altura da rolagem menos as DUAS pontas
+        // ocupadas pela navegação da visão app: o cabeçalho fino, sticky no topo, e a barra
+        // inferior, que desde 23/08 cobre o pé da moldura.
         alturaReal: Math.round(document.querySelector('[data-explicacao]').getBoundingClientRect().height),
-        espacoUtil: Math.round(r.clientHeight - (cab ? cab.getBoundingClientRect().height : 0)),
+        espacoUtil: Math.round(
+          r.clientHeight
+            - (cab ? cab.getBoundingClientRect().height : 0)
+            - (barra ? barra.getBoundingClientRect().height : 0),
+        ),
       };
     `),
   );
@@ -925,12 +956,17 @@ async function cenario1(cdp, base) {
     const m = await cdp.avaliar(
       naPagina(`
         const ro = document.querySelector('.moldura-rolagem');
-        const cab = document.querySelector('.menu-cabecalho');
+        const cab = document.querySelector('.barra-topo');
+        const barra = document.querySelector('.barra-inferior');
         return {
           passos: visiveis('[data-passo]').length,
           estoura: Math.round(ro.scrollHeight) - Math.round(ro.clientHeight),
           real: Math.round(document.querySelector('[data-explicacao]').getBoundingClientRect().height),
-          espacoUtil: Math.round(ro.clientHeight - (cab ? cab.getBoundingClientRect().height : 0)),
+          espacoUtil: Math.round(
+            ro.clientHeight
+              - (cab ? cab.getBoundingClientRect().height : 0)
+              - (barra ? barra.getBoundingClientRect().height : 0),
+          ),
           limiteIa: visiveis('[data-limite-ia]').length,
         };
       `),

@@ -23,6 +23,9 @@ const DESTINO = path.join(RAIZ, "verificacao", "capturas");
 /** Rotas-chave: as superfícies que o cliente vê primeiro + uma por família. */
 const ROTAS = [
   "/descobrir/",
+  // O hub do quinto botão da barra: na visão app é a porta para tudo que não é uma das
+  // quatro abas, então é superfície de primeira ordem e não «mais uma rota».
+  "/apps/",
   "/acontece/",
   "/play/",
   "/buscar/",
@@ -49,22 +52,12 @@ await mkdir(DESTINO, { recursive: true });
 
 let escritas = 0;
 try {
-  // A gaveta do menu ABERTA na visão app — estado que nenhuma rota fotografa sozinha.
-  await cdp.navegar(`${servidor.url}/descobrir/`);
-  await cdp.avaliar(`localStorage.setItem("agenda-cultural:visao", "mobile")`);
-  await cdp.recarregar();
-  await cdp.avaliar(
-    `new Promise((r) => { const t = () => document.querySelector('[data-hidratado="sim"]') ? r(1) : setTimeout(t, 50); t(); })`,
-  );
-  await cdp.clicar(`document.querySelector('[aria-label="Abrir menu"]')`);
-  await new Promise((r) => setTimeout(r, 500));
-  await writeFile(
-    path.join(DESTINO, "mobile-menu-aberto.png"),
-    Buffer.from(await cdp.capturar(), "base64"),
-  );
-  escritas += 1;
-  console.log("  foto  mobile-menu-aberto.png");
-
+  // NÃO HÁ MAIS ESTADO AVULSO A FOTOGRAFAR. Até 23/08 existia aqui uma foto extra da
+  // gaveta do menu ABERTA na visão app — o único estado que nenhuma rota capturava
+  // sozinha, porque dependia de um clique no hambúrguer. A visão app passou a usar a
+  // barra inferior, que está sempre na tela, e o que a gaveta escondia virou a rota
+  // `/apps/`, já na lista acima. Na web o menu é trilho permanente e nunca esteve
+  // fechado. Sem clique nenhum, o roteiro é só o laço.
   for (const visao of VISOES) {
     for (const rota of ROTAS) {
       await cdp.navegar(`${servidor.url}${rota}`);

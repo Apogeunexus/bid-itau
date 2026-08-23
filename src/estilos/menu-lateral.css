@@ -1,11 +1,14 @@
 /* ---------------------------------------------------------------------------
- * MENU LATERAL — a navegação principal nas duas visões (reformulação 2026-08).
+ * MENU LATERAL — a navegação da VISÃO WEB (reformulação 2026-08).
  *
  * Decisão de produto registrada em docs/DESIGN-SYSTEM.md §4 («Menu lateral»,
- * referência Google Arts & Culture): na web, trilho permanente à esquerda; no
- * app, gaveta sobreposta aberta pelo cabeçalho. A barra inferior de abas foi
- * aposentada pelo cliente — o produto vai ganhar muitas seções e o menu
- * categorizado é quem carrega a árvore inteira.
+ * referência Google Arts & Culture): trilho permanente à esquerda, 240px.
+ *
+ * As regras sob `[data-view="mobile"]` — cabeçalho fino, scrim e gaveta —
+ * continuam nesta folha e não pintam mais nada: desde 23/08 a visão app usa a
+ * barra inferior (`barra-inferior.css`) e o menu não é montado lá. Ficaram
+ * porque as suítes das fases 2, 3 e 5 ainda medem `.menu-cabecalho`; apagá-las
+ * antes de reescrever esses gates troca CSS morto por relatório vermelho.
  *
  * REGRA 3 (revisada): a gaveta posiciona `absolute` CONTRA A MOLDURA, que é
  * `position: relative` e não rola — quem rola é `.moldura-rolagem`, filho dela.
@@ -86,66 +89,4 @@
   height: 100vh;
   height: 100dvh;
   border-right: 1px solid var(--cor-borda);
-}
-
-[data-view="web"] .menu-cabecalho,
-[data-view="web"] .menu-scrim,
-[data-view="web"] .menu-fechar {
-  display: none;
-}
-
-/* ---- Visão app: cabeçalho fino + gaveta sobreposta ---- */
-[data-view="mobile"] .menu-cabecalho {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 3.5rem;
-  padding: 0 0.75rem;
-  border-bottom: 1px solid var(--cor-borda);
-  background: var(--cor-superficie);
-}
-
-[data-view="mobile"] .menu-lateral {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 45;
-  width: 18rem;
-  max-width: calc(100% - 3rem);
-  box-shadow: var(--sombra-3);
-  transform: translateX(-110%);
-  /* `visibility: hidden` com atraso igual ao da saída: a gaveta fechada sai da
-   * ordem de tabulação e da árvore de acessibilidade — um Tab a partir do
-   * hambúrguer não pode entrar num menu que não está na tela (flow-critic). */
-  visibility: hidden;
-  transition:
-    transform var(--dur-3) var(--ease-padrao),
-    visibility 0s var(--dur-3);
-}
-
-[data-view="mobile"] .menu-lateral[data-aberto="sim"] {
-  transform: translateX(0);
-  visibility: visible;
-  transition:
-    transform var(--dur-3) var(--ease-padrao),
-    visibility 0s;
-}
-
-[data-view="mobile"] .menu-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 40;
-  background: color-mix(in srgb, var(--ic-preto) 40%, transparent);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--dur-2) var(--ease-padrao);
-}
-
-[data-view="mobile"] .menu-scrim[data-aberto="sim"] {
-  opacity: 1;
-  pointer-events: auto;
 }

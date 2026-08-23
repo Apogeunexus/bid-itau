@@ -1,0 +1,210 @@
+/* ---------------------------------------------------------------------------
+ * HUB — a tela `/apps`: os aplicativos que moram dentro deste aplicativo.
+ *
+ * A decisão (capa em vez de ícone, e por quê) está no cabeçalho de
+ * `src/componentes/hub-apps.tsx`. Aqui mora só a forma.
+ *
+ * O RITMO É A REGRA CENTRAL DESTA FOLHA. Quinze retângulos idênticos empilhados
+ * cansam antes do quinto — foi a objeção levantada na reunião de 23/08. Em
+ * grupo de contagem ÍMPAR o primeiro cartaz ocupa a largura toda em 16:9, com o
+ * texto POR CIMA da foto; os demais caem em pares 4:3 com o texto EMBAIXO da
+ * imagem. É `:first-child:nth-last-child(odd)` que mede isso: para o primeiro
+ * filho, a posição contada do fim é o total, então casar «ímpar» ali é casar «o
+ * grupo tem contagem ímpar».
+ *
+ * O TEXTO SOBRE A FOTO É BRANCO NOS DOIS TEMAS, e isso não é descuido: ele está
+ * por cima de uma fotografia, que não inverte quando o sistema vira para o
+ * escuro. Mesma razão que o crédito sobre a capa em `capa-sem-imagem.tsx`. O
+ * texto que fica ABAIXO da imagem, esse sim, usa a tinta do tema.
+ *
+ * Folha nascida migrada: só tokens e múltiplos da grade de 0.25rem.
+ * ------------------------------------------------------------------------- */
+
+.hub {
+  padding: 0 var(--espaco-tela) var(--espaco-secao);
+}
+
+.hub-cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--espaco-secao) 0 0;
+}
+
+.hub-grupo {
+  margin-top: var(--espaco-secao);
+}
+
+.hub-grupo > h2 {
+  margin-bottom: 0.75rem;
+}
+
+/* ---- A grade de cartazes ---- */
+.hub-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 0.75rem;
+}
+
+.hub-cartaz-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hub-cartaz-quadro {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+  box-shadow: var(--sombra-1);
+}
+
+.hub-cartaz-foto {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-2) var(--ease-padrao);
+}
+
+.hub-cartaz-link:hover .hub-cartaz-foto {
+  transform: scale(1.04);
+}
+
+/* O véu só existe no cartaz largo — é lá que o texto sobe para cima da foto. */
+.hub-cartaz-veu {
+  display: none;
+}
+
+.hub-cartaz-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hub-cartaz-rotulo {
+  color: var(--cor-tinta);
+  font-weight: 700;
+}
+
+.hub-cartaz-descricao {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--cor-tinta-2);
+}
+
+/* Cada imagem é de alguém, e o nome veio do próprio acervo.
+ *
+ * O CRÉDITO QUEBRA LINHA E NUNCA É CORTADO. As duas economias óbvias — caixa
+ * alta e uma linha só com reticências — foram testadas e as duas cortavam: num
+ * cartaz de ~163px, «Foto: Flavia Ocaranza/Girafa Não Fala» não cabe de jeito
+ * nenhum. Um crédito cortado no meio do sobrenome não credita ninguém, e este é
+ * o projeto que trata procedência como argumento. Custa uma linha em cinco dos
+ * onze cartazes; a linha da grade acompanha o mais alto e nada desalinha.
+ *
+ * A caixa baixa também é decisão, e não sobra de `tipo-micro`: o crédito é nome
+ * próprio, e versal com tracking .06em em nome próprio lê como rótulo. */
+.hub-cartaz-credito {
+  color: var(--cor-tinta-3);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* ---- O cartaz largo: grupo de contagem ímpar ---- */
+.hub-grade > :first-child:nth-last-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-link {
+  position: relative;
+}
+
+.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-quadro {
+  aspect-ratio: 16 / 9;
+}
+
+/* Sem o véu o rótulo cai sobre o que a fotografia trouxer, e metade do acervo é
+ * clara no rodapé. */
+.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-veu {
+  position: absolute;
+  display: block;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--ic-preto) 84%, transparent) 0%,
+    color-mix(in srgb, var(--ic-preto) 38%, transparent) 46%,
+    transparent 78%
+  );
+}
+
+.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-texto {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+}
+
+.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-rotulo {
+  color: var(--ic-branco);
+}
+
+.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-descricao {
+  color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
+}
+
+.hub-grade > :first-child:nth-last-child(odd) .hub-cartaz-credito {
+  color: color-mix(in srgb, var(--ic-branco) 60%, transparent);
+}
+
+/* ---- Conta e bastidor: linha, não cartaz ---- */
+.hub-atalhos {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.hub-atalho {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  transition:
+    background-color var(--dur-1) var(--ease-padrao),
+    border-color var(--dur-1) var(--ease-padrao);
+}
+
+.hub-atalho:hover {
+  border-color: var(--cor-borda-forte);
+  background: var(--cor-superficie-2);
+}
+
+.hub-atalho-rotulo {
+  color: var(--cor-tinta);
+  font-weight: 600;
+}
+
+.hub-atalho-descricao {
+  color: var(--cor-tinta-3);
+}
+
+/* ---- Visão web: a mesma grade, com o ar que a janela permite ---- */
+[data-view="web"] .hub {
+  max-width: 64rem;
+}
+
+[data-view="web"] .hub-grade {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+}
+
+[data-view="web"] .hub-atalhos {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
