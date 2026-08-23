@@ -14,6 +14,9 @@
  * Uma folha vazia importada não custa byte no bundle final.
  *
  * O QUE ELA COBRE: a grade de cartões com o destaque curado ocupando mais colunas, e a serendipidade na densidade da web. Reuse .web-grade e .web-grade-largo.
+ * Desde o redesenho de 2026-08, também o destaque curado içado para fora da
+ * grade (`.descobrir-destaque`) — as vitrines novas da tela vivem de utilitário
+ * no JSX e não precisaram de regra aqui.
  *
  * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
  *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
@@ -102,6 +105,29 @@
 
 /* A tipografia do título acompanha a largura pelo mesmo motivo. */
 [data-view="web"] [data-grade-web] > [data-destaque-curado] .cartao h3 {
+  font-size: var(--tipo-titulo-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * O DESTAQUE CURADO FORA DA GRADE (redesenho 2026-08 da área Descobrir).
+ *
+ * `feed.tsx` passou a abrir o feed com o cartão curado em bloco próprio, antes
+ * de «Para você» — a MESMA carta da mesma combinação, içada da grade. As duas
+ * regras acima continuam vivas para quem FICA na grade largo: a serendipidade
+ * (D-30) também carrega `data-destaque-curado` e segue no rodízio.
+ *
+ * Fora da grade o destaque ocupa a largura inteira do bloco — que é o que o
+ * gate WEB-01 mede («mais largo que um cartão comum») — e a tipografia cresce
+ * na mesma medida do cartão largo, pelo mesmo motivo de lá: numa caixa de
+ * 1.088px o selo de corpo pequeno lê como legenda, e o selo é o argumento da
+ * tela (D-28).
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .descobrir-destaque .selo-motivo {
+  padding: 0.75rem 0.75rem;
+  font-size: var(--tipo-corpo);
+}
+
+[data-view="web"] .descobrir-destaque .cartao h3 {
   font-size: var(--tipo-titulo-3);
 }
 

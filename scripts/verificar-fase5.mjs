@@ -2066,7 +2066,11 @@ async function blocoDescobrir(cdp, base) {
         selos: selos.length,
         selosComAltura: selos.filter((s) => s.getBoundingClientRect().height > 0).length,
         selosDentroDoCartao: selos.filter((s) => {
-          const c = s.closest('[data-grade-web] > *');
+          // O redesenho de 2026-08 içou o destaque curado para fora da grade
+          // (`.descobrir-destaque`, irmão de [data-grade-web]); o invólucro dele
+          // é contêiner tão legítimo quanto um item da grade — o que a asserção
+          // mede é que nenhum selo VAZA do retângulo do próprio cartão.
+          const c = s.closest('[data-grade-web] > *, .descobrir-destaque');
           if (!c) return false;
           const rs = s.getBoundingClientRect(), rc = c.getBoundingClientRect();
           return rs.left >= rc.left - 1 && rs.right <= rc.right + 1;

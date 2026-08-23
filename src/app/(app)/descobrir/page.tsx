@@ -1,8 +1,23 @@
+import { AtalhosDaSessao } from "@/componentes/descobrir-atalhos";
+import {
+  BuscaDeDescobrir,
+  ConteudoParaInspirar,
+  ExplorePorLinguagens,
+  MapaCultural,
+  ProgramacaoDoDia,
+  type ProgramacaoDaVitrine,
+} from "@/componentes/descobrir-vitrines";
 import { Feed } from "@/componentes/feed";
 import { Grafismo } from "@/componentes/grafismo";
 import { ANCORA_DO_FEED, Heroi } from "@/componentes/heroi";
 import { SeletorDisposicao } from "@/componentes/seletor-disposicao";
+import { montarAgenda } from "@/dados/agenda";
+import { DATA_DE_REFERENCIA } from "@/dados/alerta";
+import { cidadesComAcervo } from "@/dados/cidade";
 import { PRECOMPUTO } from "@/dados/feeds";
+import { porSlug, slugsPorTipo, vizinhos } from "@/dados/grafo";
+import { montarIndice } from "@/dados/indice";
+import { leituras } from "@/dados/leituras";
 
 /**
  * Descobrir — DESC-02, `docs/telas.md` tela 5. A tela mais importante do produto.
@@ -16,7 +31,59 @@ import { PRECOMPUTO } from "@/dados/feeds";
  * O feed NÃO é lista ordenada por relevância (D-26). Cada cartão chegou por uma aresta do
  * grafo, e o selo laranja é o texto dessa aresta. Popularidade não entra em lugar nenhum —
  * nem aqui, nem em `caminhada.ts`.
+ *
+ * AS VITRINES DO REDESENHO (2026-08) SÃO MEDIDAS AQUI, no mesmo escopo de build, e descem
+ * como recortes mínimos: a agenda inteira tem 192 KB e as vitrines levam só o dia em foco;
+ * o índice de busca empresta as facetas de linguagem, com contagem e cor que o vocabulário
+ * gerou (D-08). Nenhum número de vitrine é escrito à mão.
  */
+
+const HOJE = DATA_DE_REFERENCIA;
+
+/** Quantas sessões a vitrine do dia mostra. O restante é declarado contra o total. */
+const TETO_DE_SESSOES = 5;
+
+/** Quantas linguagens entram no trilho. As demais ficam atrás do chip «Todas». */
+const TETO_DE_LINGUAGENS = 10;
+
+/** Quantas leituras a vitrine editorial leva — a dupla mais recente do acervo. */
+const TETO_DE_LEITURAS = 2;
+
+const agenda = montarAgenda({ hoje: HOJE });
+
+/* O dia em foco: o de referência quando ele tem sessão, senão o primeiro com sessão
+ * depois dele — e a seção DIZ qual dos dois é. Todas as sessões no passado → sem vitrine,
+ * em vez de uma vitrine anunciando «hoje» sobre um dia que já passou. */
+const diaEmFoco = agenda.dias.find((d) => d.data >= agenda.hoje) ?? null;
+
+const PROGRAMACAO: ProgramacaoDaVitrine | null = diaEmFoco
+  ? {
+      data: diaEmFoco.data,
+      eHoje: diaEmFoco.data === agenda.hoje,
+      totalSessoes: diaEmFoco.totalSessoes,
+      sessoes: diaEmFoco.eventos.slice(0, TETO_DE_SESSOES).map((indice, i) => ({
+        hora: diaEmFoco.horas[i],
+        titulo: agenda.eventos[indice].titulo,
+        slug: agenda.eventos[indice].slug,
+      })),
+    }
+  : null;
+
+const SESSOES_DE_HOJE = diaEmFoco?.data === agenda.hoje ? diaEmFoco.totalSessoes : 0;
+
+const facetasDeLinguagem = [...montarIndice({ slugsPorTipo, porSlug, vizinhos }).facetas.linguagem]
+  .sort((a, b) => b.n - a.n || (a.valor < b.valor ? -1 : 1));
+
+const LINGUAGENS = facetasDeLinguagem
+  .slice(0, TETO_DE_LINGUAGENS)
+  .map(({ valor, rotulo, n, cor }) => ({ valor, rotulo, n, cor }));
+
+const TOTAL_DE_LINGUAGENS = facetasDeLinguagem.length;
+
+const CIDADES = cidadesComAcervo().map(({ slug, titulo, total }) => ({ slug, titulo, total }));
+
+const INSPIRAR = leituras().slice(0, TETO_DE_LEITURAS);
+
 export default function Descobrir() {
   return (
     <>
@@ -34,35 +101,34 @@ export default function Descobrir() {
         id={ANCORA_DO_FEED}
         className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-6xl desk:gap-6 desk:p-8"
       >
-      {/* O selo «C1» saiu daqui e das outras oito telas que o traziam. Ele nomeava a
-          camada do produto no vocabulário interno do projeto — informação para quem
-          escreveu a especificação, não para quem usa o app, e ocupando o canto mais
-          nobre do cabeçalho. Nenhum portão dependia dele. */}
-      <header className="flex flex-col gap-1">
-        <div className="flex items-baseline gap-2">
+        <header className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="tipo-titulo-1 font-bold">Descobrir</h1>
-        </div>
-        {/* A tese da tela, escrita para quem AVALIA a proposta: ela nomeia o mecanismo
-            («uma aresta do acervo»), aponta para o próprio componente («o selo laranja») e
-            se posiciona contra uma alternativa de projeto («ordenado por popularidade»).
-            Nada disso é dito a quem usa o app — para essa pessoa, quem faz o trabalho é o
-            selo de motivo de cada cartão, que continua na tela nos dois modos. */}
-      </header>
+        </header>
 
-      {/* D-32 — a disposição visível em texto e editável em um toque. A troca de
-          persona saiu desta tela na reformulação de 2026-08 (feedback do cliente:
-          a visualização de personas não pode afetar a experiência na tela) — ela
-          mora em /meu e no rodapé do menu lateral; o feed continua lendo a sessão
-          e trocando instantaneamente. */}
-      <SeletorDisposicao />
+        <BuscaDeDescobrir sessoesDeHoje={SESSOES_DE_HOJE} />
 
-      <Feed
-        ordemDisposicoes={PRECOMPUTO.ordemDisposicoes}
-        listas={PRECOMPUTO.listas}
-        porPersona={PRECOMPUTO.porPersona}
-        personaPadrao={PRECOMPUTO.personaPadrao}
+        {/* D-32 — a disposição visível em texto e editável em um toque, no topo do feed. */}
+        <SeletorDisposicao />
+
+        {/* O destaque curado abre o feed como seção própria e o restante segue sob
+            «Para você» — a partição acontece em `feed.tsx`, sobre a MESMA combinação. */}
+        <Feed
+          ordemDisposicoes={PRECOMPUTO.ordemDisposicoes}
+          listas={PRECOMPUTO.listas}
+          porPersona={PRECOMPUTO.porPersona}
+          personaPadrao={PRECOMPUTO.personaPadrao}
         />
+
+        <MapaCultural cidades={CIDADES} />
+
+        <ExplorePorLinguagens linguagens={LINGUAGENS} total={TOTAL_DE_LINGUAGENS} />
+
+        <ProgramacaoDoDia programacao={PROGRAMACAO} />
+
+        <ConteudoParaInspirar itens={INSPIRAR} />
+
+        <AtalhosDaSessao />
       </div>
     </>
   );

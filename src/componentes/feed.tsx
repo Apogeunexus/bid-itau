@@ -63,6 +63,14 @@ export function Feed({
   const combinacao = doPersona[mascara] ?? doPersona[0];
   const cartoes = combinacao ? (listas[combinacao.lista] ?? []) : [];
 
+  // Redesenho 2026-08: o destaque curado (D-29) sai da grade e abre a seção — a
+  // MESMA carta da mesma combinação, só que fora do rodízio visual. A faixa do
+  // próprio cartão («Destaque curado») é o rótulo da seção; um h2 por cima
+  // repetiria a frase a dois dedos de distância. A serendipidade (D-30) continua
+  // dentro da grade, na posição que a caminhada lhe deu.
+  const destaque = cartoes.find((c) => c.especial === "curado");
+  const paraVoce = destaque ? cartoes.filter((c) => c !== destaque) : cartoes;
+
   return (
     <div className="flex flex-col gap-3">
       {/* Os avisos do motor. NÃO são opcionais: quando um corte marcado não pôde filtrar
@@ -82,6 +90,25 @@ export function Feed({
         </ul>
       ) : null}
 
+      {destaque ? (
+        // `data-destaque-curado` e `data-classe` continuam no invólucro: são os
+        // contratos que os gates leem. WEB-01 exige o destaque MAIS LARGO que um
+        // cartão comum — fora da grade ele ocupa a largura inteira do bloco — e a
+        // asserção de contenção dos selos passou a aceitar `.descobrir-destaque`
+        // como contêiner na MESMA mudança (verificar-fase5.mjs, WEB-01).
+        <div
+          data-classe={destaque.classe}
+          data-destaque-curado={destaque.especial}
+          className="descobrir-destaque"
+        >
+          <Cartao cartao={destaque} />
+        </div>
+      ) : null}
+
+      {cartoes.length ? (
+        <h2 className="tipo-titulo-3 font-bold">Para você</h2>
+      ) : null}
+
       {cartoes.length ? (
         // A GRADE DA VISÃO WEB MORA AQUI E É SÓ LAYOUT (D-79, D-80, plano 05-02).
         //
@@ -97,7 +124,7 @@ export function Feed({
         // `.web-grade` ganha por ser regra sem camada — os utilitários do Tailwind moram
         // em `@layer utilities` e perdem para qualquer declaração fora de camada.
         <div data-feed data-grade-web="sim" className="web-grade flex flex-col gap-3">
-          {cartoes.map((cartao) => (
+          {paraVoce.map((cartao) => (
             // `data-classe` no invólucro é contrato de verificação da fase: os gates leem
             // a heterogeneidade daqui, sem depender de texto visível nem de classe de CSS.
             //

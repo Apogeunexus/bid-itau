@@ -114,6 +114,15 @@ export const ICONE_PERFIL = (
   </Icone>
 );
 
+/** Os cursores deslizantes dos filtros — a porta de /filtros na busca de Descobrir. */
+export const ICONE_FILTROS = (
+  <Icone>
+    <path d="M4 7.5h9M17 7.5h3M4 16.5h3M11 16.5h9" {...traco} />
+    <circle cx="15" cy="7.5" r="2" {...traco} />
+    <circle cx="9" cy="16.5" r="2" {...traco} />
+  </Icone>
+);
+
 /* ---------------------------------------------------------------------------
  * Os três glifos do SELO dos cartazes do hub (referência de 23/08).
  *
