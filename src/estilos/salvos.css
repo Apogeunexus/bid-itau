@@ -14,9 +14,8 @@
  * O ORÇAMENTO DE ALTURA É REGRA, NÃO GOSTO. A caixa de conteúdo da moldura mede 824px e a
  * barra de abas come 59px: sobram 765px. O bloco de alerta e as duas linhas do par
  * precisam caber JUNTOS nessa vista, porque é essa a imagem que fecha o Cenário 4. Daí a
- * densidade agressiva daqui — e daí a regra de corte ser por procedência: o parágrafo
- * longo que NÓS compusemos vai para dentro de `<Comentario>`, o dado do acervo e o rótulo
- * de procedência ficam sempre visíveis.
+ * densidade agressiva daqui — e daí a regra de corte ser por procedência: o dado do
+ * acervo e o rótulo de procedência ficam sempre visíveis.
  * ------------------------------------------------------------------------- */
 
 /* --- O bloco de alerta (D-57) ------------------------------------------- */
@@ -138,9 +137,8 @@
   line-height: 1.35;
 }
 
-/* A explicação curta do que «autorado» significa. Produto, não comentário: é o argumento
- * da proposta e não pode sumir com o interruptor. O parágrafo LONGO é que vai para dentro
- * de `<Comentario>`, e é ele quem paga o orçamento de altura. */
+/* A explicação curta do que «autorado» significa: é o argumento da proposta, e por isso
+ * fica sempre na tela. */
 .alerta-rotulo-curto {
   font-size: var(--tipo-micro);
   line-height: 1.35;

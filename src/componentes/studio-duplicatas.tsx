@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Comentario } from "@/componentes/comentario";
 import type {
   ComponenteDoCriterio,
   GrupoDeDuplicatas,
@@ -18,11 +17,9 @@ import type {
  * tela escreve o critério, mostra a chave literal dos dois lados e diz em qual estágio o
  * grupo foi pego — é o contrário de um deduplicador que devolve um número e pede confiança.
  *
- * O QUE FICA VISÍVEL COM O MODO COMENTADO DESLIGADO. O critério escrito, a chave literal, o
- * estágio, os campos divergentes marcados, a declaração do que o acervo NÃO sustenta e o par
- * que o humano tem de separar. Nenhum deles entra em `<Comentario>`: essas frases SÃO o
- * argumento da proposta, não o comentário sobre ele, e escondê-las esvaziaria exatamente a
- * tela que se quer mostrar. `<Comentario>` aqui envolve só a citação de número de decisão.
+ * O QUE A TELA DECLARA. O critério escrito, a chave literal, o estágio, os campos
+ * divergentes marcados, a declaração do que o acervo NÃO sustenta e o par que o humano tem
+ * de separar. Essas frases SÃO o argumento da proposta, não o comentário sobre ele.
  *
  * A FILA INTEIRA VIVE NO CLIENTE, E ISSO É DE PROPÓSITO. Escolher outro grupo troca o painel
  * SEM NAVEGAR: a URL não muda, o build não gera 84 páginas e quem opera não perde o lugar na
@@ -563,9 +560,6 @@ export function StudioDuplicatas({
           <section className="studio-painel dup-criterio" data-criterio>
             <div className="studio-painel-cabeca">
               <span className="studio-painel-nome">O critério que disparou a suspeita</span>
-              <Comentario como="span" className="studio-rotulo">
-                D-68 · D-22
-              </Comentario>
             </div>
 
             <p className="studio-nota">{criterio}</p>
@@ -596,7 +590,6 @@ export function StudioDuplicatas({
               ))}
             </div>
 
-            {/* PRODUTO, e não comentário: fica visível com o modo comentado desligado. */}
             <div className="studio-nao-sustenta" data-nao-sustenta>
               <span className="studio-nao-sustenta-rotulo">o que o acervo não sustenta</span>
               <p>{naoSustenta}</p>
@@ -610,9 +603,6 @@ export function StudioDuplicatas({
           <section className="studio-painel dup-colapso">
             <div className="studio-painel-cabeca">
               <span className="studio-painel-nome">O colapso, contado</span>
-              <Comentario como="span" className="studio-rotulo">
-                cenário 3 · D-77
-              </Comentario>
             </div>
 
             <p className="studio-nota">
@@ -699,9 +689,6 @@ export function StudioDuplicatas({
           <section className="studio-painel dup-decisao">
             <div className="studio-painel-cabeca">
               <span className="studio-painel-nome">A decisão é humana, por desenho</span>
-              <Comentario como="span" className="studio-rotulo">
-                D-71 · D-72
-              </Comentario>
             </div>
 
             <p className="studio-nota">

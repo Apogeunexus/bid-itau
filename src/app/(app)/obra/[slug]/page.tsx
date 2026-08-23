@@ -1,5 +1,4 @@
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { BlocoPonte } from "@/componentes/ponte";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
@@ -106,11 +105,6 @@ export default async function PaginaObra({ params }: { params: Promise<{ slug: s
           autoria no acervo, e por isso esta página não atribui a obra a ninguém.
           Inferir o autor do título seria inventar um fato em nome do Itaú Cultural.
         </p>
-        <Comentario className="pt-1 text-xs leading-snug text-tinta-2">
-          Medido sobre as ligações do acervo: zero ligações obra↔pessoa em toda a classe. A
-          Enciclopédia tem a autoria em prosa no verbete acima, quando o verbete existe —
-          transcrita da fonte, nunca estruturada por nós.
-        </Comentario>
       </section>
 
       <p className="border-t border-borda pt-3 text-xs leading-relaxed text-tinta-3">

@@ -57,7 +57,6 @@ export interface VoltaPadrao {
 export interface DadosDoMapa {
   viewBox: string;
   contorno: string;
-  rotuloContorno: string;
   pinos: readonly PinoIndexado[];
   /** As chaves do recorte padrão — o acervo situado no Brasil. */
   padrao: readonly string[];
@@ -647,11 +646,8 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
             )}
 
             <Legenda
-              dados={dados}
               semCoordenada={recorte.semCoordenada}
               foraDoBrasil={recorte.foraDoBrasil}
-              posicionados={recorte.posicionados.length}
-              grupos={grupos.length}
               voltaRecusada={Boolean(lente?.voltaRecusada)}
             />
           </>
@@ -835,74 +831,62 @@ function CartaoItem({
 }
 
 /**
- * A legenda (D-61). Quatro declarações, e as quatro são o argumento da proposta:
- * de onde vem a coordenada, de onde vem o desenho, o que foi agrupado, e o que o mapa NÃO
- * conseguiu posicionar. É texto de PRODUTO — fica fora do modo comentado, porque é
- * exatamente isto que a banca precisa ler.
+ * A legenda (D-61) — reduzida à AUSÊNCIA em 23/08, e a redução é o ponto.
+ *
+ * Havia quatro parágrafos permanentes debaixo de todo mapa: de onde vem a coordenada, de
+ * onde vem o desenho, quantos pinos foram fundidos e «nada ficou sem posição». Eles
+ * explicavam COMO o mapa foi feito, e o pé da tela virou uma nota de rodapé metodológica
+ * competindo com a lista de resultados. Saíram.
+ *
+ * O QUE CONTINUA É A AUSÊNCIA. «Fora do desenho: N sem coordenada» não explica o método:
+ * ela avisa que a lista na tela é menor que o recorte, e quem lê precisa disso para não
+ * tomar o mapa por completo. Este bloco só aparece quando há de fato algo fora — e quando
+ * não há, não sobra nem a moldura, porque «nada ficou sem posição» é o silêncio esperado,
+ * não uma notícia.
  */
 function Legenda({
-  dados,
   semCoordenada,
   foraDoBrasil,
-  posicionados,
-  grupos,
   voltaRecusada,
 }: {
-  dados: DadosDoMapa;
   semCoordenada: string[];
   foraDoBrasil: readonly PinoIndexado[];
-  posicionados: number;
-  grupos: number;
   voltaRecusada: boolean;
 }) {
+  const foraDoDesenho = semCoordenada.length > 0 || foraDoBrasil.length > 0;
+
   return (
-    <section data-legenda-mapa className="mapa-legenda">
-      <p>
-        <strong className="font-semibold text-tinta">
-          Nenhuma coordenada deste mapa foi lida da fonte.
-        </strong>{" "}
-        Elas são derivadas: centroide de município, centroide de estado, ou deslocamento a
-        partir do espaço onde a coisa acontece. O cartão de cada ponto diz qual dos três.
-      </p>
-      <p>{dados.rotuloContorno}</p>
-      <p>
-        {posicionados} {posicionados === 1 ? "registro posicionado" : "registros posicionados"}{" "}
-        em {grupos} {grupos === 1 ? "ponto" : "pontos"}: pinos na mesma célula de{" "}
-        {(dados.raio / 10).toFixed(0)} grau (cerca de {dados.raioKm} km) foram fundidos, com a
-        contagem no tamanho do disco.
-      </p>
-      <p>
-        {semCoordenada.length === 0 && foraDoBrasil.length === 0 ? (
-          <>Todo o recorte coube no desenho: nada ficou sem posição.</>
-        ) : (
-          <>
-            <strong className="font-semibold text-tinta">
-              Fora do desenho:
-            </strong>{" "}
-            {semCoordenada.length} sem coordenada que o acervo sustente e{" "}
-            {foraDoBrasil.length} com coordenada fora do Brasil. Nenhuma delas foi
-            empurrada para a borda — um ponto sem dado não vira posição.
-          </>
-        )}
-      </p>
-      {semCoordenada.length ? (
-        <p className="text-tinta-3">
-          Sem posição: {semCoordenada.slice(0, 12).join(", ")}
-          {semCoordenada.length > 12 ? ` e mais ${semCoordenada.length - 12}` : ""}.
-        </p>
+    <>
+      {foraDoDesenho || voltaRecusada ? (
+        <section data-legenda-mapa className="mapa-legenda">
+          {foraDoDesenho ? (
+            <p>
+              <strong className="font-semibold text-tinta">Fora do desenho:</strong>{" "}
+              {semCoordenada.length} sem coordenada que o acervo sustente e{" "}
+              {foraDoBrasil.length} com coordenada fora do Brasil. Nenhuma delas foi empurrada
+              para a borda — um ponto sem dado não vira posição.
+            </p>
+          ) : null}
+          {semCoordenada.length ? (
+            <p className="text-tinta-3">
+              Sem posição: {semCoordenada.slice(0, 12).join(", ")}
+              {semCoordenada.length > 12 ? ` e mais ${semCoordenada.length - 12}` : ""}.
+            </p>
+          ) : null}
+          {foraDoBrasil.length ? (
+            <p className="text-tinta-3">
+              Fora do Brasil: {foraDoBrasil.slice(0, 8).map((p) => p[2]).join(", ")}
+              {foraDoBrasil.length > 8 ? ` e mais ${foraDoBrasil.length - 8}` : ""}.
+            </p>
+          ) : null}
+          {voltaRecusada ? (
+            <p className="text-tinta-3">
+              O endereço de volta que veio na URL não é um caminho interno e foi recusado; as
+              voltas acima são as da própria tela.
+            </p>
+          ) : null}
+        </section>
       ) : null}
-      {foraDoBrasil.length ? (
-        <p className="text-tinta-3">
-          Fora do Brasil: {foraDoBrasil.slice(0, 8).map((p) => p[2]).join(", ")}
-          {foraDoBrasil.length > 8 ? ` e mais ${foraDoBrasil.length - 8}` : ""}.
-        </p>
-      ) : null}
-      {voltaRecusada ? (
-        <p className="text-tinta-3">
-          O endereço de volta que veio na URL não é um caminho interno e foi recusado; as
-          voltas acima são as da própria tela.
-        </p>
-      ) : null}
-    </section>
+    </>
   );
 }

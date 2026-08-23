@@ -1,5 +1,4 @@
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { BlocoPonte } from "@/componentes/ponte";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
@@ -113,7 +112,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
                 {/* A frase é produto — declara uma ausência do acervo, da mesma família
                     dos rótulos de procedência. Só o número da decisão sai de cena. */}
                 O acervo não atribui nenhum papel a esta entrada: papel é propriedade da
-                ligação de atuação<Comentario como="span"> (D-41)</Comentario>, e não há
+                ligação de atuação, e não há
                 nenhuma partindo daqui.
               </p>
             )}

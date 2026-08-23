@@ -77,7 +77,6 @@ export interface SecaoEditorial {
 interface Montado {
   itens: Leitura[];
   secoes: SecaoEditorial[];
-  semData: number;
 }
 
 let memo: Montado | null = null;
@@ -153,7 +152,7 @@ function montar(): Montado {
     if (s.n === 0) quebrar(`a seção «${s.slug}» recorta ZERO conteúdos — seção vazia é beco (D-66)`);
   }
 
-  return { itens, secoes, semData: itens.filter((i) => i.dia === 0).length };
+  return { itens, secoes };
 }
 
 function estado(): Montado {
@@ -176,11 +175,6 @@ export function secaoPorSlug(slug: string): { secao: SecaoEditorial; itens: Leit
   const secao = estado().secoes.find((s) => s.slug === slug);
   if (!secao) return null;
   return { secao, itens: estado().itens.filter((i) => secao.categorias.includes(i.categoria)) };
-}
-
-/** Quantos itens não declaram data — impresso na tela junto do denominador. */
-export function conteudosSemData(): number {
-  return estado().semData;
 }
 
 export const TOTAL_DE_CONTEUDOS = CONTEUDOS_ESPERADOS;

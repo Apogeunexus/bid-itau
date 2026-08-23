@@ -572,14 +572,3 @@
   font-size: var(--tipo-destaque);
 }
 
-[data-view="web"] .obs-comentario {
-  margin: 0;
-  font-size: var(--tipo-micro);
-  line-height: 1.4;
-  color: var(--cor-tinta-3);
-}
-
-[data-view="web"] .obs-comentario code {
-  font-size: 0.95em;
-  color: var(--cor-tinta-2);
-}

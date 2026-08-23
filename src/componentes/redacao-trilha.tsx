@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { Comentario } from "@/componentes/comentario";
 import type {
   CandidatoDoCatalogo,
   CatalogoDeArrasto,
@@ -521,12 +520,6 @@ export function RedacaoTrilha({
               ))}
             </ol>
 
-            <Comentario className="studio-nota">
-              `origemMotivo` está na tela porque um motivo escrito no acervo e um composto a
-              partir da relação não são a mesma coisa, e a distinção já existe no tipo
-             . Apagá-la aqui faria a curadoria assinar como escrito o que foi
-              derivado.
-            </Comentario>
           </section>
 
           {/* ---- D-86: a sugestão da IA, sempre descartável ---- */}
@@ -639,7 +632,7 @@ export function RedacaoTrilha({
       </div>
 
       {/* ================================================================== */}
-      {/* D-86 — OS TRÊS LIMITES, fora de <Comentario>                        */}
+      {/* D-86 — OS TRÊS LIMITES                                              */}
       {/* ================================================================== */}
       <footer className="redacao-limites" data-limites-ia>
         <span className="studio-nao-sustenta-rotulo">onde a IA não é utilizada</span>

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
 import type { Agenda, DiaDaAgenda, EventoDaAgenda } from "@/dados/agenda";
@@ -329,8 +328,8 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
       {/* ================================================================== */}
       {/* 1 — ENQUADRAMENTO. Texto de PRODUTO: diz o que esta agenda é e o    */}
-      {/*     que ela deliberadamente não contém. Fica fora do modo comentado */}
-      {/*     porque procedência é o argumento da proposta, não a nota dele.  */}
+      {/*     que ela deliberadamente não contém — procedência é o argumento  */}
+      {/*     da proposta, não a nota de rodapé sobre ele.                    */}
       {/* ================================================================== */}
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
@@ -341,14 +340,6 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
         <p className="max-w-prose text-sm leading-relaxed text-tinta-2">
           {`${milhar(diagnostico.eventosComSessao)} dos ${milhar(diagnostico.eventosNoAcervo)} eventos do acervo têm sessão datada, e são eles que aparecem aqui. Os outros ${milhar(diagnostico.eventosSemSessao)} — ${milhar(diagnostico.eventosSemSessaoDaEnciclopedia)} da Enciclopédia Itaú Cultural e ${milhar(diagnostico.eventosSemSessaoDoCms)} da agenda, sem período declarado — têm ano, não sessão: eles existem no acervo do território e na busca, e não nesta agenda.`}
         </p>
-
-        <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
-          A lista abaixo é de EVENTOS, com a contagem de ocorrências no cartão.
-          Ocorrência é registro próprio, com id próprio, e não um array aninhado dentro do
-          evento — é essa separação que permite um alerta chegar a quem salvou uma sessão
-          específica, e é ela que impede a agenda de virar catálogo de calendário. A
-          travessia rodou no build; trocar de dia aqui troca um índice em memória.
-        </Comentario>
 
         <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
           {`data de referência · ${curta(agenda.hoje)} · o protótipo é estático e «passado» e «futuro» são calculados contra a data em que ele foi gerado`}
@@ -388,9 +379,8 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
           </Segmento>
         </div>
 
-        {/* D-90. TEXTO DE PRODUTO, FORA DO <Comentario>: é a resposta da tela ao
-            que o acervo não sustenta, e ela tem de continuar visível com o modo
-            comentado desligado, que é o padrão. Nenhum destes números é literal —
+        {/* D-90. TEXTO DE PRODUTO: é a resposta da tela ao que o acervo não
+            sustenta. Nenhum destes números é literal —
             todos vêm da contagem feita no build, e `mapa-agenda.ts` derruba o
             build se a interseção medida deixar de ser a que esta frase afirma. */}
         <div data-interseccao className="web-declaracao acontece-web-interseccao">
@@ -601,12 +591,6 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
               </p>
             ) : null}
 
-            <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
-              Não existe nesta tela nenhum filtro que remova o passado, nem desligado por
-              padrão. Também não existe atalho para filtros: filtros são Camada 2,
-              da fase 5, e o atalho seria link morto na demonstração.
-            </Comentario>
-
             {/* 6 — A LENTE PARA O MAPA (D-59). O mapa é lente sobre um resultado,
                    alcançado daqui, preservando o conjunto — nunca porta de entrada.
                    `<a>` e não `<Link>`: `trailingSlash: true` faz o Link reescrever
@@ -708,9 +692,9 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
 
       {/* ================================================================== */}
       {/* 5 — AS QUATRO AUSÊNCIAS MEDIDAS.                                    */}
-      {/*     Texto de PRODUTO, fora do <Comentario>: são elas que sustentam  */}
-      {/*     a promessa de procedência honesta, e escondê-las no modo         */}
-      {/*     desligado esvaziaria exatamente a tela que se quer mostrar.     */}
+      {/*     Texto de PRODUTO: são elas que sustentam a promessa de          */}
+      {/*     procedência honesta, e escondê-las esvaziaria exatamente a tela */}
+      {/*     que se quer mostrar.                                            */}
       {/* ================================================================== */}
       <section className="flex flex-col gap-2">
         <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
@@ -733,9 +717,6 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
         </ul>
       </section>
 
-      <Comentario className="max-w-prose border-t border-borda pt-3 text-[0.65rem] leading-relaxed text-tinta-3">
-        {`DTO desta tela: ${milhar(Math.round(diagnostico.bytesDoDto / 1024))} KB, montados no build sobre ${milhar(diagnostico.totalSessoes)} ocorrências e ${milhar(diagnostico.diasDistintos)} dias. O grafo de 23 MB não atravessa a fronteira do cliente (DP-F): o que chegou ao navegador foi este índice, e nada mais.`}
-      </Comentario>
     </div>
   );
 }

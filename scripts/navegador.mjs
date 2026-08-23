@@ -2,9 +2,9 @@
  * navegador.mjs — o cliente CDP da verificação, compartilhado.
  *
  * POR QUE ELE FOI EXTRAÍDO DE `verificar-fase2.mjs`. Este bloco é a única forma que o
- * projeto tem de medir o que APARECE NA TELA, e não o que está no arquivo. Quando o modo
- * comentado precisou da mesma medição, havia duas saídas: copiar 300 linhas de cliente CDP
- * para um segundo arquivo, ou movê-las para cá. Cópia é a saída errada — as duas cópias
+ * projeto tem de medir o que APARECE NA TELA, e não o que está no arquivo. Quando uma
+ * segunda suíte precisou da mesma medição, havia duas saídas: copiar 300 linhas de cliente
+ * CDP para um segundo arquivo, ou movê-las para cá. Cópia é a saída errada — as duas cópias
  * divergem na primeira correção, e o sintoma seria uma verificação medindo um viewport e a
  * outra medindo outro, com as duas relatando verde.
  *
@@ -263,6 +263,24 @@ export async function abrirNavegador({
         ws.close();
       } catch {}
       await matarChrome();
+    },
+
+    /**
+     * Finge, para a página, que o SISTEMA está em claro ou em escuro.
+     *
+     * Desde 23/08 o tema do produto não tem interruptor: quem decide é
+     * `prefers-color-scheme`, e a única forma de um portão exercitar os dois lados
+     * é emular a preferência do sistema operacional. `null` devolve o padrão do
+     * Chrome sem tela — que é o claro.
+     */
+    async emularEsquemaDeCor(esquema) {
+      await enviar(
+        "Emulation.setEmulatedMedia",
+        esquema
+          ? { features: [{ name: "prefers-color-scheme", value: esquema }] }
+          : { features: [] },
+        sessionId,
+      );
     },
 
     /** Avalia no contexto da página. `awaitPromise` + `returnByValue`: valor de verdade. */

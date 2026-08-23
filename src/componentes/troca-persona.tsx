@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import { Comentario } from "@/componentes/comentario";
 import { useSessao } from "@/contexto/sessao";
 import { PERSONAS } from "@/dados/personas";
 
@@ -57,11 +56,6 @@ export function TrocaPersona({ className }: { className?: string }) {
           persona. */}
       <p className="text-[0.65rem] leading-snug text-tinta-3">
         Persona é dado escrito pela curadoria.
-        <Comentario como="span">
-          {" "}
-          Trocar aqui remonta o feed na hora — as três caminhadas foram montadas no build,
-          não no navegador.
-        </Comentario>
       </p>
     </div>
   );

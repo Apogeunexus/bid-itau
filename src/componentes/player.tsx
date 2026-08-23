@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import { FichaDeAcessibilidade } from "@/componentes/ficha-acessibilidade";
-import { CHAVE_CONCLUIDAS, gravarConcluidas, lerConcluidas } from "@/componentes/play";
+import { gravarConcluidas, lerConcluidas } from "@/componentes/play";
 import {
   diaParaIso,
   diaParaTexto,
@@ -293,13 +292,6 @@ export function Player({
           </>
         )}
 
-        <Comentario className="text-xs leading-relaxed text-tinta-2">
-          O registro fica no `localStorage` deste navegador, sob a chave{" "}
-          <code>{CHAVE_CONCLUIDAS}</code>, e alimenta «continue de onde parou» no Play. Ele
-          é um conjunto: concluir duas vezes a mesma mídia deixa uma entrada. O carimbo usa
-          a data de referência do build, e não o relógio de quem abre — sob exportação
-          estática um relógio de runtime faria o HTML e a hidratação divergirem.
-        </Comentario>
       </section>
 
       {/* ------------------------------------------------ o que isto aprofunda (tela 20) */}

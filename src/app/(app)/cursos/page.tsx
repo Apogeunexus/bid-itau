@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
 import { porSlug, slugsPorTipo } from "@/dados/grafo";
@@ -36,11 +35,6 @@ export default function Cursos() {
           As <strong>{milhar(cursos.length)} formações</strong> da Escola Itaú Cultural no
           acervo — cursos e oficinas, com a inscrição na fonte.
         </p>
-        <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-          A classe `formacao` inteira, varrida do acervo no build. O acervo exportado não
-          declara período nem vagas — o que existe é título, resumo, linguagem e fonte, e é
-          isso que a vitrine mostra, sem inventar campos.
-        </Comentario>
       </header>
 
       <div className="grid grid-cols-1 gap-4 desk:grid-cols-3">

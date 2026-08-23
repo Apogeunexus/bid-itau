@@ -86,9 +86,8 @@ export const CARIMBO_DA_DECISAO = `${dataCurta(DATA_DE_REFERENCIA)}, ${HORA_DO_C
 // ---------------------------------------------------------------------------
 
 /**
- * Os três limites, escritos como produto e não como nota de rodapé. Eles vão para a tela
- * FORA de `<Comentario>`: continuam visíveis com o modo comentado desligado, porque são a
- * resposta do produto à pergunta do RFP, e não um comentário sobre o protótipo.
+ * Os três limites, escritos como produto e não como nota de rodapé: são a resposta do
+ * produto à pergunta do RFP, e não um comentário sobre o protótipo.
  */
 export const LIMITES_DA_IA: readonly string[] = [
   "A IA não publica. Nenhuma sugestão vira dado público sem um humano aprovar, e a " +

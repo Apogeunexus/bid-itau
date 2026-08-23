@@ -361,10 +361,8 @@ export function Produtor({
       {/* D-90 em estado puro, e o bloco mais difícil desta tela: ele é       */}
       {/* obrigatório na tela 24, o acervo não o sustenta em NENHUMA das 359  */}
       {/* páginas, e ele não pode sumir nem aparecer zerado sem explicação.   */}
-      {/*                                                                    */}
-      {/* Ele fica FORA de <Comentario>: é produto, não nota de protótipo, e  */}
-      {/* tem de continuar na tela com o modo comentado desligado, como as    */}
-      {/* declarações de honestidade da fase 4.                              */}
+      {/* Ele é produto, não nota de protótipo — como as declarações de      */}
+      {/* honestidade da fase 4.                                             */}
       <section
         data-bloco-produtor="em-cartaz"
         data-nao-sustenta="programacao-futura"

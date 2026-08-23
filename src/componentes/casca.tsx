@@ -2,8 +2,6 @@
 
 import clsx from "clsx";
 import type { ReactNode } from "react";
-import { useComentado } from "@/contexto/comentado";
-import { useTema, type Tema } from "@/contexto/tema";
 import { useVisao, type Visao } from "@/contexto/visao";
 
 const OPCOES: Array<{ valor: Visao; rotulo: string }> = [
@@ -12,12 +10,16 @@ const OPCOES: Array<{ valor: Visao; rotulo: string }> = [
 ];
 
 /**
- * Par de botões no canto, fora do fluxo do conteúdo e visível nas duas visões (D-04).
+ * O alternador de visão, no canto, fora do fluxo do conteúdo (D-04).
+ *
+ * É o ÚNICO controle do canto desde 23/08. O modo comentado foi retirado do produto — a
+ * explicação sobre o protótipo deixou de existir na tela — e o tema deixou de ter botão:
+ * ele segue o sistema operacional e mais nada, o que tira dois controles de cima do
+ * conteúdo e uma decisão da frente de quem lê.
  *
  * A ancoragem à janela mora no `.canto` que envolve este bloco — ver `Canto` abaixo. É o
- * ÚNICO `fixed` legítimo do projeto: os controles de apresentação são deliberadamente
- * externos ao conteúdo e devem mesmo se ancorar na janela. A barra de abas, que pertence ao
- * telefone, não pode usar o mesmo mecanismo — ver `globals.css`.
+ * ÚNICO `fixed` legítimo do projeto: o controle de apresentação é deliberadamente externo
+ * ao conteúdo e deve mesmo se ancorar na janela.
  */
 function Alternador() {
   const { visao, definirVisao } = useVisao();
@@ -52,98 +54,6 @@ function Alternador() {
 }
 
 /**
- * O interruptor do modo comentado. MESMA FAMÍLIA VISUAL DO ALTERNADOR — pastilha branca,
- * borda, sombra — e CLARAMENTE SECUNDÁRIO A ELE: um botão só em vez de dois, tipografia
- * menor, e ligado ele apenas contorna de laranja em vez de preencher. Empatar os dois faria
- * o avaliador achar que a escolha app/web e a de modo têm o mesmo peso, e elas não têm.
- *
- * O rótulo é deliberadamente distante do vocabulário do alternador («App», «Web»): o gate
- * de tela da fase 2 encontra o botão de visão por expressão regular sobre o texto, e um
- * rótulo como «modo desktop» aqui faria o gate clicar no controle errado.
- */
-function InterruptorComentado() {
-  const { comentado, alternar } = useComentado();
-
-  return (
-    <button
-      type="button"
-      data-comentado-alternar
-      aria-pressed={comentado}
-      onClick={alternar}
-      title="Mostra as notas que explicam o protótipo: o raciocínio de cada tela e as decisões citadas."
-      className={clsx(
-        "controle-comentado cursor-pointer rounded-full border bg-superficie px-3 py-1 text-xs font-semibold shadow-lg transition-colors",
-        comentado
-          ? "border-acao text-acao-tinta"
-          : "border-borda-forte text-tinta-3 hover:text-tinta",
-      )}
-    >
-      <span aria-hidden className="mr-1">
-        {comentado ? "✓" : "＋"}
-      </span>
-      modo comentado
-    </button>
-  );
-}
-
-/**
- * O controle de tema. Um botão só, ciclando sistema → claro → escuro.
- *
- * TRÊS ESTADOS NUM BOTÃO SÓ, e não um interruptor de dois: com dois, «seguir o
- * sistema» viraria inalcançável depois do primeiro toque, e quem trocasse o tema
- * do sistema operacional depois não seria mais acompanhado. O rótulo diz o
- * estado ATUAL; o `aria-label` diz para onde o toque leva, porque um leitor de
- * tela anunciando só «tema: escuro, botão» não distingue estado de destino.
- *
- * O RÓTULO EVITA DE PROPÓSITO o vocabulário do alternador de visão. Os gates de
- * tela da fase 2 e 3 encontram o botão de visão por expressão regular sobre o
- * texto de `.alternador button` e `[class*="alternador"] button`, filtrando por
- * /web|desktop|desk/i e /app|mobile|celular|telefone/i. Um rótulo como «tema do
- * aparelho» aqui, ou uma classe que contivesse «alternador», faria a verificação
- * clicar no controle errado e relatar verde sobre outra coisa.
- */
-/* A frase inteira, e não só o nome do próximo estado: montada por interpolação,
- * o ciclo terminava em «usar o tema sistema», que não é português. */
-const PARA_ONDE_O_TOQUE_LEVA: Record<Tema, string> = {
-  sistema: "Tocar para usar o tema claro.",
-  claro: "Tocar para usar o tema escuro.",
-  escuro: "Tocar para voltar a seguir o tema do sistema.",
-};
-
-const ICONE_DO_TEMA: Record<Tema, string> = {
-  sistema: "◐",
-  claro: "☀",
-  escuro: "☾",
-};
-
-// smaug-ignore ui-strings: nome de token do design system, não a palavra «ação»
-const CLASSE_TEMA_ESCOLHIDO = "border-acao text-acao-tinta";
-const CLASSE_TEMA_DO_SISTEMA = "border-borda-forte text-tinta-3 hover:text-tinta";
-
-function ControleTema() {
-  const { tema, alternar } = useTema();
-
-  return (
-    <button
-      type="button"
-      data-tema-alternar
-      onClick={alternar}
-      aria-label={`Tema: ${tema}. ${PARA_ONDE_O_TOQUE_LEVA[tema]}`}
-      title="Claro, escuro ou seguindo o tema do seu sistema."
-      className={clsx(
-        "controle-tema cursor-pointer rounded-full border bg-superficie px-3 py-1 text-xs font-semibold shadow-lg transition-colors",
-        tema === "sistema" ? CLASSE_TEMA_DO_SISTEMA : CLASSE_TEMA_ESCOLHIDO,
-      )}
-    >
-      <span aria-hidden className="mr-1">
-        {ICONE_DO_TEMA[tema]}
-      </span>
-      tema: {tema}
-    </button>
-  );
-}
-
-/**
  * Casca do protótipo. Escreve `data-view` no seu elemento raiz — é esse atributo
  * que as variantes `app:` e `desk:` do Tailwind leem. Sem ele, nenhuma classe de
  * visão resolve.
@@ -160,20 +70,14 @@ function ControleTema() {
  */
 export function Casca({ children }: { children: ReactNode }) {
   const { visao, hidratado } = useVisao();
-  const { comentado, hidratado: comentadoHidratado } = useComentado();
 
   return (
     <div
       data-view={visao}
-      // O MESMO ELEMENTO RAIZ que carrega `data-view`, de propósito: a regra de
-      // `[data-comentado="nao"] .comentario` em `globals.css` precisa alcançar a árvore
-      // inteira, e um segundo portador criaria dois escopos que divergem.
-      data-comentado={comentado ? "sim" : "nao"}
-      // `data-hidratado` agora significa «os DOIS espelhos de localStorage foram lidos». Os
-      // gates da fase 2 esperam por este sinalizador antes de medir; se ele subisse com
-      // apenas a visão lida, uma medição do modo comentado pegaria o quadro anterior à
+      // Os gates da fase 2 esperam por este sinalizador antes de medir: ele sobe quando o
+      // espelho de localStorage da visão foi lido. Medir antes pegaria o quadro anterior à
       // leitura da chave — e o defeito seria intermitente, que é o pior tipo.
-      data-hidratado={hidratado && comentadoHidratado ? "sim" : "nao"}
+      data-hidratado={hidratado ? "sim" : "nao"}
       className="min-h-screen bg-superficie text-tinta app:bg-superficie-2 desk:bg-superficie"
     >
       <div className="palco">
@@ -186,17 +90,8 @@ export function Casca({ children }: { children: ReactNode }) {
         </div>
       </div>
 
-      {/* O canto: o único ponto do projeto ancorado na janela (D-04). Os controles
-          empilham do menos para o mais usado, com o alternador de visão embaixo, mais
-          perto do polegar — a hierarquia também é posicional, e não só de cor.
-
-          O tema fica no MEIO, e a ordem foi discutida: o alternador de visão e o modo
-          comentado falam SOBRE o protótipo, enquanto o tema é do produto. Ele entra aqui
-          mesmo assim porque é onde quem avalia procura por controle de apresentação —
-          esconder o tema numa tela de ajustes só teria valor se o app tivesse uma. */}
+      {/* O canto: o único ponto do projeto ancorado na janela (D-04). */}
       <div className="canto fixed right-4 bottom-4 z-50 flex flex-col items-end gap-1.5">
-        <InterruptorComentado />
-        <ControleTema />
         <Alternador />
       </div>
     </div>

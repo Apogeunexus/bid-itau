@@ -4,8 +4,8 @@
  * voltou a ser só `:root` da marca + @import, como a regra de ARQUITETURA §5
  * sempre pediu. Nenhum valor mudou na mudança de endereço.
  *
- * Conteúdo: camada base tipográfica, moldura de celular (D-03), modo comentado,
- * cartão de Descobrir e capa sem imagem.
+ * Conteúdo: camada base tipográfica, moldura de celular (D-03), cartão de
+ * Descobrir e capa sem imagem.
  * ------------------------------------------------------------------------- */
 
 @layer base {
@@ -170,28 +170,6 @@ body {
 
   /* O canto segue preso à janela (D-04). Sem a barra de abas no pé — aposentada
    * pelo menu lateral na reformulação de 2026-08 — ele não precisa mais subir. */
-}
-
-/* ---------------------------------------------------------------------------
- * MODO COMENTADO — o interruptor que separa produto de especificação anotada.
- *
- * `<Comentario>` marca todo texto que fala SOBRE o protótipo — o parágrafo que explica a
- * tela, o mecanismo, a citação de número de decisão. A casca escreve `data-comentado` no
- * MESMO elemento raiz que carrega `data-view`, e a regra abaixo responde a ele: nenhum dos
- * componentes precisa assinar o contexto para saber se deve renderizar.
- *
- * CSS PURO, e não uma variante Tailwind, pelo limite conhecido: `app:`/`desk:`
- * e qualquer variante só prefixam UTILITÁRIO. `.comentario` é classe semântica nossa e
- * nunca aceitaria `comentado:comentario`.
- *
- * `display: none` E NÃO «ESCONDIDO VISUALMENTE». Um comentário que continuasse no fluxo
- * ocupando altura deixaria a tela furada exatamente onde o texto foi tirado — e o modo
- * desligado, que é o padrão, pareceria uma tela quebrada. Como `display: none` remove a
- * caixa, os contêineres em `flex … gap-N` também não abrem espaço entre os irmãos: o gap do
- * flexbox só existe entre caixas geradas.
- * ------------------------------------------------------------------------- */
-[data-comentado="nao"] .comentario {
-  display: none;
 }
 
 /* ---------------------------------------------------------------------------
@@ -465,18 +443,6 @@ body {
 
 .heroi-botao:hover {
   opacity: 0.9;
-}
-
-.heroi-nota {
-  position: relative;
-  z-index: 1;
-  align-self: flex-end;
-  margin-block-start: auto;
-  padding: var(--espaco-tela);
-  max-inline-size: 26rem;
-  color: color-mix(in srgb, transparent 25%, var(--ic-branco));
-  font-size: var(--tipo-legenda);
-  line-height: 1.4;
 }
 
 /* ---------------------------------------------------------------------------

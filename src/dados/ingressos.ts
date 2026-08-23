@@ -49,9 +49,3 @@ const POR_SLUG = new Map(INGRESSOS.map((i) => [i.eventoSlug, i]));
 export function ingressoDe(eventoSlug: string): IngressoAutorado | undefined {
   return POR_SLUG.get(eventoSlug);
 }
-
-/** A ausência, com denominador — impressa nos eventos SEM link. */
-export const AUSENCIA_DE_INGRESSO =
-  "Nenhum dos 300 eventos do acervo publica link de ingresso — a fonte só tem um " +
-  "booleano, sempre falso. Quando o produtor publicar o link pelo Studio, o botão de " +
-  "compra aparece aqui.";

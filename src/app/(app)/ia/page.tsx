@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { Comentario } from "@/componentes/comentario";
 import { EntrevistaEstrelinha, RoteirosSalvos } from "@/componentes/entrevista-estrelinha";
 import { Grafismo } from "@/componentes/grafismo";
 import { cidadesComAcervo } from "@/dados/cidade";
 import { COMPANHIAS, GOSTOS, OPCOES_DE_DIAS } from "@/dados/estrelinha";
-import { milhar } from "@/dados/leituras";
 
 export const metadata: Metadata = { title: "IA — Agenda Cultural BR" };
 
@@ -35,12 +33,6 @@ export default function Ia() {
           roteiro por regras fixas, e as regras vêm escritas no resultado — dá para conferir
           por que cada item entrou, em vez de aceitar uma caixa-preta.
         </p>
-        <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-          São {milhar(cidades.length * OPCOES_DE_DIAS.length * GOSTOS.length)} combinações
-          pré-computadas ({cidades.length} cidades × {OPCOES_DE_DIAS.length} janelas ×{" "}
-          {GOSTOS.length} gostos) — o mesmo princípio dos 96 feeds de Descobrir: a resposta
-          existe antes da pergunta, e por isso é conferível.
-        </Comentario>
       </header>
 
       <EntrevistaEstrelinha

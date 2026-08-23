@@ -63,10 +63,12 @@ O feed da Maria e o do Carlos compartilham **1 item em 12**. A personalização 
 
 **Duas melhorias que fiz por conta própria:**
 
-*Modo comentado.* As telas estavam se explicando em vez de serem — cada uma abria com um
-parágrafo dizendo o que era, com notas citando números de decisão. Isso é anotação de spec,
-não produto. Virou um interruptor no canto: a banca vê o produto limpo, vocês ligam as
-anotações para mostrar o raciocínio. Nada se perdeu, ganhou um botão.
+*Modo comentado — feito em 22/08 e RETIRADO em 23/08.* As telas estavam se explicando em
+vez de serem, então as anotações de spec viraram um interruptor no canto: produto limpo por
+padrão, raciocínio a um toque. No dia seguinte você pediu para tirar — o interruptor
+competia com o conteúdo e o protótipo precisa parecer produto, não spec anotada. As
+anotações saíram junto; o que sustenta a proposta (selo de motivo, rótulo de procedência,
+declaração de ausência com denominador) nunca esteve lá dentro e continua na tela.
 
 *Cobertura de imagem de 22% para 62%.* Regenerei o grafo com as 2.382 capas baixadas. O
 feed passou a ler como produto — fotografia real com crédito, misturada com as capas na cor

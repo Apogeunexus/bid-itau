@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
 import { useSessao } from "@/contexto/sessao";
@@ -28,7 +27,6 @@ import {
   consultar,
   expandirIndice,
   facetasDe,
-  REGRA_ORDENACAO,
   type CampoCriterio,
   type Criterio,
   type EntradaIndice,
@@ -52,8 +50,8 @@ import type { ClasseEntidade } from "@/dados/tipos";
  *
  * 2. D-63 — SEM BIBLIOTECA DE BUSCA. `consultar` é filtro linear em memória sobre o DTO
  *    colunar que chegou por props. Nenhuma chamada de rede, nenhum serviço por trás, e a
- *    tela DIZ isso em texto de produto — fora do `<Comentario>`, porque a afirmação de
- *    que não há caixa preta é argumento da proposta e não anotação sobre ela.
+ *    tela DIZ isso em texto de produto: a afirmação de que não há caixa preta é
+ *    argumento da proposta e não anotação sobre ela.
  *
  * 3. D-66 — ZERO-RESULTADO NUNCA É BECO. Quando não há resultado, a tela lista qual
  *    critério soltar e QUANTOS resultados aquilo traria, em um toque. O site de hoje tem
@@ -406,24 +404,14 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
         {/* O QUE ESTA FRASE PRECISA DIZER é o que a pessoa ganha: um campo só
             para tudo. A versão anterior dizia «um índice único do grafo … roda no
             seu navegador, em memória: não há serviço de busca por trás» — três
-            afirmações de arquitetura na primeira linha de uma tela de busca. Isso
-            é argumento de proposta, e argumento de proposta mora no modo
-            comentado, junto com o resto da prova. Quem usa quer saber que
+            afirmações de arquitetura na primeira linha de uma tela de busca. Quem
+            usa quer saber que
             procurar «Lygia Clark» acha a artista, a obra e o verbete de uma vez. */}
         <p className="text-sm leading-snug">
           Uma busca só para o acervo inteiro: eventos, artistas, obras, vídeos e verbetes
           aparecem no mesmo resultado, cada um com o seu tipo.
         </p>
 
-        <Comentario className="text-sm leading-snug text-tinta-2">
-          Índice único sobre o grafo, filtrado no navegador e em memória — não há serviço de
-          busca por trás. São {milhar(indice.total)} entidades de {indice.facetas.classe.length}{" "}
-          classes, em forma colunar com classe, linguagem, tema, procedência e território
-          internados — {milhar(Math.round(indice.diagnostico.bytes / 1024))} KB medidos contra
-          um teto de {milhar(Math.round(indice.diagnostico.tetoBytes / 1024))} KB. Ficam de fora
-          ocorrência e temporada, que chegam pelo evento, e as personas, que são estado de
-          sessão. Ordem: {REGRA_ORDENACAO}.
-        </Comentario>
       </header>
 
       {/* ------------------------------------------------------------------ */}
@@ -622,9 +610,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     </Chip>
                   ))}
                 </TrilhoDeChips>
-                <Comentario className="text-xs leading-snug text-tinta-2">
-                  A cor de cada linguagem veio do vocabulário gerado, não deste arquivo.
-                </Comentario>
               </section>
 
               <section className="busca-bloco">
@@ -827,11 +812,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                       </button>
                     ))}
                   </div>
-                  <Comentario className="text-xs leading-snug text-tinta-2">
-                    Cada número acima foi medido sobre o índice inteiro no momento em que a tela
-                    desenhou, e não estimado. A tela de zero-resultado completa é Camada 2 (fase
-                    5); aqui é o estado vazio de Buscar, e ele já oferece saída medida.
-                  </Comentario>
                 </section>
               ) : null}
             </section>

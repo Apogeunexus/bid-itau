@@ -342,20 +342,6 @@
   color: var(--cor-tinta-2);
 }
 
-.rot-constantes-nota {
-  max-width: 74ch;
-}
-
-.rot-constantes-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin: 0.5rem 0 0;
-  padding-left: 1rem;
-  font-size: var(--tipo-legenda);
-  line-height: 1.45;
-}
-
 /* ---------------------------------------------------------------------------
  * O ÍNDICE GRUDADO NO TOPO
  *

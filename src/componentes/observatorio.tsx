@@ -3,7 +3,6 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
-import { Comentario } from "@/componentes/comentario";
 import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/componentes/desertos";
 import type {
   DadosDoObservatorio,
@@ -40,10 +39,8 @@ import type {
  * módulo alcança 23 MB de grafo; o que chega aqui é o DTO, montado no build pela página de
  * servidor.
  *
- * O QUE NÃO ENTRA EM `<Comentario>`: o painel, os números, os denominadores e as
- * declarações de D-90. Tudo isso é PRODUTO e sobrevive ao modo comentado desligado. Dentro
- * de `<Comentario>` vai só o que fala SOBRE o protótipo — a explicação do princípio 9, a
- * citação de decisão, a nota sobre como o recorte de público responde ao RFP.
+ * O painel, os números, os denominadores e as declarações de D-90 são PRODUTO: eles
+ * respondem ao RFP, e nenhum deles é nota sobre o protótipo.
  */
 
 export interface TelaDoObservatorio {
@@ -373,19 +370,6 @@ export function Observatorio({
           {painel.conferencia.geradoEm}.
         </p>
 
-        <Comentario como="p" className="obs-comentario">
-          Este painel é o princípio 9 virando interface. Ele é tela de primeira classe
-          e não rodapé de propósito: em cinza, no pé da página, «procedência» é uma
-          formalidade; no topo, com o número grande, ela é o que torna verificável tudo o que
-          a tela afirma depois. Nenhum número aqui é literal — todos saem de{" "}
-          <code>contagens()</code> de <code>grafo.ts</code>, da varredura das{" "}
-          {milhar(numeros.arestas)} ligações e de <code>meta.json</code>, e o módulo quebra
-          alto se as três não fecharem. O exemplo de cada procedência também sai de regra e
-          não de escolha: em entidade é <strong>a de maior grau</strong> daquela procedência,
-          desempatada pelo id; em ligação é <strong>a relação mais frequente</strong>. Uma
-          entidade escolhida à mão seria literal disfarçado, e trocaria de sentido em
-          silêncio na primeira regeração do acervo.
-        </Comentario>
       </section>
 
       {/* ---------------------------------------------------------------
@@ -415,15 +399,6 @@ export function Observatorio({
           quatro públicos veem <strong>os mesmos {indicadores.length} indicadores</strong>:
           muda a ordem e a ênfase, não o conjunto.
         </p>
-
-        <Comentario como="p" className="obs-comentario">
-          D-89, e é a mesma lógica do escopo do curador em D-84: uma superfície servindo
-          escopos diferentes em vez de quatro telas que divergem na primeira correção. É esta
-          a resposta ao «como crescer sem reescrever» do RFP — e o seletor não esconde
-          indicador nenhum de propósito, porque um recorte que faz sumir o número inconveniente
-          é filtro, não escopo. O público institucional é justamente o que mais precisa ver
-          que gratuidade não sustenta.
-        </Comentario>
 
         <ul className="web-grade obs-indicadores" data-publico-ativo={publico.id}>
           {ordenados.map((i, pos) => (
@@ -456,11 +431,6 @@ export function Observatorio({
         </div>
         <div className="obs-desertos-leitura">
           <LeituraDesertos dados={desertos} />
-          <Comentario como="p" className="obs-comentario">
-            A camada é a mesma da fase 3, sem uma linha alterada — os polígonos são
-            esquemáticos e a contagem vem de <code>densidadePorUf()</code>, no build. Junto
-            com o painel de procedência, esta é a imagem que a proposta existe para mostrar.
-          </Comentario>
         </div>
       </section>
     </section>

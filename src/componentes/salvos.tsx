@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { useSessao } from "@/contexto/sessao";
 import type { AlteracaoAutorada, ParDeDemonstracao } from "@/dados/alerta";
@@ -26,9 +25,8 @@ import type { IndiceSalvaveis } from "@/dados/repertorio";
  *
  * O QUE É AUTORADO E O QUE NÃO É (D-57, D-37). A alteração é escrita por nós e carrega o
  * rótulo na tela. A sessão, a data, o horário e o evento são reais, do acervo. A regra de
- * corte quando o conteúdo não cabe na moldura é essa mesma: o parágrafo longo que
- * compusemos pode ir para dentro de `<Comentario>`; o dado do acervo e o rótulo de
- * procedência ficam sempre visíveis.
+ * corte quando o conteúdo não cabe na moldura é essa mesma: o dado do acervo e o rótulo
+ * de procedência ficam sempre visíveis.
  *
  * T-03-09: todo id vindo de `localStorage` é resolvido contra o índice do build antes de
  * virar linha. Id desconhecido é descartado e CONTADO — a contagem aparece declarada em
@@ -48,10 +46,8 @@ import type { IndiceSalvaveis } from "@/dados/repertorio";
  * A explicação curta do rótulo, em PRODUTO e não em comentário.
  *
  * Mora no componente pelo mesmo caminho que `ROTULO_PROCEDENCIA` mora em `trilha.tsx`: o
- * dado diz que a alteração é autorada, a tela diz o que isso significa para quem lê. E ela
- * NÃO entra em `<Comentario>` — a honestidade do dado é o argumento da proposta, não a nota
- * de rodapé sobre ele, e esconder este texto com o interruptor esvaziaria a tela que se
- * quer mostrar.
+ * dado diz que a alteração é autorada, a tela diz o que isso significa para quem lê. A
+ * honestidade do dado é o argumento da proposta, não a nota de rodapé sobre ele.
  */
 const ROTULO_CURTO =
   "«autorado»: escrito por nós, sobre sessão real. O acervo não publica histórico de " +
@@ -122,11 +118,6 @@ function BlocoAlerta({ alteracao }: { alteracao: AlteracaoAutorada }) {
       <p className="alerta-cenario">{alteracao.fraseDoCenario}</p>
 
       <p className="alerta-rotulo-curto">{ROTULO_CURTO}</p>
-
-      {/* O parágrafo longo — a razão inteira, com os números medidos — é o que paga o
-          orçamento de altura da moldura quando o modo comentado está desligado. O rótulo
-          acima já entrega o argumento; este entrega a medição. */}
-      <Comentario className="alerta-rotulo-curto">{alteracao.frase}</Comentario>
     </article>
   );
 }
@@ -367,11 +358,6 @@ export function Salvos({
             afirmação verificável em vez de dita.
           </p>
 
-          <Comentario className="text-[0.68rem] leading-snug text-tinta-3">
-            O par é fixo no dado, escolhido por regra declarada e travado em constante: uma
-            regeração do acervo que mude o conjunto faz o build quebrar com mensagem nomeada,
-            em vez de trocar o roteiro da banca em silêncio.
-          </Comentario>
         </div>
       )}
 

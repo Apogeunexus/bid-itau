@@ -105,19 +105,3 @@
   font-size: var(--tipo-titulo-3);
 }
 
-/* ---------------------------------------------------------------------------
- * O MODO COMENTADO DESLIGADO NÃO PODE FURAR A GRADE.
- *
- * `<Diagnostico>` mora inteiro dentro de `<Comentario>` e é IRMÃO da grade, não filho —
- * então `display: none` o remove sem deixar buraco nenhum, e o gate mede que a grade não
- * tem um único `.comentario` dentro.
- *
- * Esta regra é a rede para o dia em que um `<Comentario>` cair DENTRO da grade: a regra do
- * `globals.css` só o esconde com o modo desligado, e com o modo LIGADO ele viraria uma
- * célula da grade, roubando uma coluna de uma linha de cartões. Aqui ele sai do fluxo de
- * grade nos dois modos. `display: none` remove a caixa, e o `gap` da grade não abre espaço
- * entre irmãos ausentes — só entre caixas geradas.
- * ------------------------------------------------------------------------ */
-[data-view="web"] [data-grade-web] > .comentario {
-  display: none;
-}

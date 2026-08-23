@@ -27,9 +27,8 @@ export type ParGeografico = readonly [number, number];
  * O rótulo que a legenda do mapa exibe (D-61). Mora aqui, junto do dado que ele descreve,
  * para que ninguém consiga usar o traçado sem ter a declaração à mão.
  *
- * TEXTO DE PRODUTO, e não comentário: sai fora do modo comentado, porque quem avalia a
- * proposta precisa ler que o desenho é nosso. É a frase que separa «protótipo honesto» de
- * «mapa que finge ser mapa».
+ * A frase que separa «protótipo honesto» de «mapa que finge ser mapa»: quem avalia a
+ * proposta precisa ler que o desenho é nosso.
  */
 export const ROTULO_CONTORNO =
   "Contorno do Brasil e limites estaduais traçados à mão para este protótipo — " +

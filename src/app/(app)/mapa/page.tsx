@@ -1,9 +1,7 @@
-import { Comentario } from "@/componentes/comentario";
 import { Mapa, type DadosDoMapa } from "@/componentes/mapa";
 import type { DadosDesertos } from "@/componentes/desertos";
 import {
   CONTORNO_BRASIL,
-  ROTULO_CONTORNO,
   ROTULO_UNIDADES_FEDERATIVAS,
   UNIDADES_FEDERATIVAS,
 } from "@/dados/contorno-brasil";
@@ -69,7 +67,6 @@ export default function PaginaMapa() {
   const dados: DadosDoMapa = {
     viewBox: LIMITES.viewBox,
     contorno: caminhoDe(CONTORNO_BRASIL),
-    rotuloContorno: ROTULO_CONTORNO,
     pinos: indiceDePinos(),
     padrao: acervoSituadoNoBrasil(),
     metodos: METODOS_INDEXADOS,
@@ -85,14 +82,5 @@ export default function PaginaMapa() {
     desertos: montarDesertos(),
   };
 
-  return (
-    <>
-      <Mapa dados={dados} />
-      <Comentario className="px-3 pb-3 text-xs text-tinta-3">
-        O índice de coordenadas é calculado no build e atravessa inteiro para o navegador:
-        nenhuma travessia de grafo acontece na máquina de quem avalia, e nenhuma requisição
-        de rede é feita.
-      </Comentario>
-    </>
-  );
+  return <Mapa dados={dados} />;
 }

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 import { SELO_GRATUIDADE, curta, milhar, plural, porExtenso } from "@/componentes/acontece";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { useSessao } from "@/contexto/sessao";
 import type { AusenciaMedida, TempoDoDia } from "@/dados/agenda";
@@ -171,12 +170,6 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
           aquela sessão, e não a todo mundo que se interessou pelo evento.
         </p>
 
-        <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
-          Evento, temporada e ocorrência são três registros próprios, cada um com id no
-          grafo (DADO-02). Colapsá-los num array aninhado dentro do evento é o que faz
-          agenda cultural virar catálogo — e é o que tornaria o cenário 4 do RFP
-          impossível de demonstrar, porque não haveria a quem dirigir o alerta.
-        </Comentario>
       </header>
 
       {/* ================================================================== */}
@@ -309,7 +302,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
 
       {/* ================================================================== */}
       {/* 3 — AS AUSÊNCIAS, CADA UMA ONDE A PESSOA A PROCURARIA.              */}
-      {/*     Texto de PRODUTO, fora do modo comentado.                       */}
+      {/*     Texto de PRODUTO.                                               */}
       {/* ================================================================== */}
       <section className="flex flex-col gap-2">
         <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
@@ -334,11 +327,6 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
             : `Neste evento a acessibilidade é idêntica nas ${plural(evento.totalSessoes, "sessão", "sessões")}: ela aparece por sessão porque o modelo permite que varie, e no acervo carregado ela não varia.`}
         </p>
 
-        <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
-          Estes quatro campos existem no modelo e continuam visíveis mesmo vazios.
-          Campo que some vira bloco que some, e bloco que some faz parecer que a categoria
-          não existe no produto — quando o que não existe é o dado na fonte.
-        </Comentario>
       </section>
     </div>
   );

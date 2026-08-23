@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { consultar, type IndiceDTO, type ResultadoBusca } from "@/dados/indice";
 import type { Beco, SaidaDoBeco } from "@/dados/filtros";
@@ -215,13 +214,6 @@ export function SemResultado({ beco, indice, comNavegacaoPropria = false }: SemR
           ))}
         </ul>
 
-        <Comentario className="beco-comentario">
-          D-93: o site atual do Itaú Cultural tem três becos sem saída — `/404`,
-          `/busca-nao-encontrada` e `/agenda-nao-encontrada`. Neste protótipo nenhum dos três
-          existe como fim de caminho. A consulta desta tela foi escolhida por regra e
-          congelada: {beco.regra}. Os números de cada saída vêm de `Afrouxamento.resultados`
-          de `indice.ts`, medidos no build sobre o índice inteiro — nunca estimados.
-        </Comentario>
       </div>
 
       {/* ---------------------------------------------------------------- */}

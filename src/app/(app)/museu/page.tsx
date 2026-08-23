@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { porSlug, slugsPorTipo } from "@/dados/grafo";
 import { milhar } from "@/dados/leituras";
@@ -47,11 +46,6 @@ export default function Museu() {
           </Link>
           .
         </p>
-        <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-          Não existe classe «museu» na ontologia — o recorte é medido: espaços com «museu» no
-          título e eventos com categoria expositiva. O denominador fica na tela para o hub
-          não parecer maior do que o acervo sustenta.
-        </Comentario>
       </header>
 
       <section className="flex flex-col gap-3">

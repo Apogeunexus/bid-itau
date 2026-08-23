@@ -441,8 +441,8 @@ async function tamanhoDe(dir) {
 // ---------------------------------------------------------------------------
 // (a) CLIENTE CDP — mora em `navegador.mjs`.
 //
-// Foi extraído daqui quando a verificação do modo comentado precisou do MESMO navegador,
-// no MESMO viewport. Copiar o cliente para um segundo arquivo faria as duas cópias
+// Foi extraído daqui quando uma segunda verificação precisou do MESMO navegador, no
+// MESMO viewport. Copiar o cliente para um segundo arquivo faria as duas cópias
 // divergirem na primeira correção, e as duas relatariam verde sobre medições diferentes.
 // Os padrões de `abrirNavegador()` são os valores que este arquivo usava — 1440×960, 30s
 // por navegação, 15s de hidratação —, então o que é medido aqui não mudou.

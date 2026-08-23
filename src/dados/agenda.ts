@@ -24,8 +24,8 @@
  * AUSÊNCIA MEDIDA VIRA CAMPO DECLARADO, nunca campo que some. Campo que desaparece vira
  * bloco que desaparece, e bloco que desaparece faz parecer que a categoria não existe no
  * produto. As quatro ausências desta tela viajam no DTO como dado de primeira classe,
- * com numerador, denominador e frase — e a frase é TEXTO DE PRODUTO, que fica fora do
- * modo comentado, porque procedência é o argumento da proposta e não a anotação dele.
+ * com numerador, denominador e frase — e a frase é TEXTO DE PRODUTO, porque procedência
+ * é o argumento da proposta e não a anotação dele.
  */
 
 import { ocorrenciasDe, porSlug, slugsPorTipo } from "./grafo";
@@ -125,7 +125,7 @@ export interface AusenciaMedida {
   rotulo: string;
   numerador: number;
   denominador: number;
-  /** Texto de PRODUTO. Fica fora de `<Comentario>`. Nunca vazio. */
+  /** Texto de PRODUTO. Nunca vazio. */
   frase: string;
 }
 

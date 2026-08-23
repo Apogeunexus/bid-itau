@@ -72,7 +72,7 @@
 @import "../estilos/play.css";
 
 /* ---------------------------------------------------------------------------
- * A base visual (camada base tipográfica, moldura D-03, modo comentado, cartão)
+ * A base visual (camada base tipográfica, moldura D-03, cartão)
  * vem DEPOIS das folhas de tela, na mesma posição do cascade que essas regras
  * ocupavam quando moravam neste arquivo. Movidas na consolidação do design
  * system de 2026-08 — desde ela, `globals.css` é só a paleta da marca + @import,

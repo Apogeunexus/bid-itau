@@ -452,9 +452,9 @@ export function numerosDoAcervo(): NumerosDoAcervo {
 /**
  * As quatro declarações, calculadas sobre o dado.
  *
- * Elas ficam VISÍVEIS com o modo comentado desligado, como a declaração honesta da tela de
- * duplicatas: a honestidade sobre o dado é o argumento da proposta, não a nota de rodapé
- * sobre ele. Os números são interpolados do que `numerosDoAcervo()` mediu — um literal
+ * Elas ficam na tela, como a declaração honesta da tela de duplicatas: a honestidade sobre
+ * o dado é o argumento da proposta, não a nota de rodapé sobre ele. Os números são
+ * interpolados do que `numerosDoAcervo()` mediu — um literal
  * digitado na tela faria a apresentação afirmar, na primeira regeração do grafo, número que
  * o acervo não sustenta.
  */

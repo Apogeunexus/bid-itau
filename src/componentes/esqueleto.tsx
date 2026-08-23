@@ -1,4 +1,3 @@
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 
 /**
@@ -121,13 +120,6 @@ export function TelaEsqueleto({
         {acoes ? <div className="flex flex-wrap gap-2 pt-1">{acoes}</div> : null}
       </header>
       {children}
-      {/* O rodapé fala do CRONOGRAMA DE CONSTRUÇÃO — «fase 1», «fases 2 a 6» — que é o
-          vocabulário do nosso plano de trabalho e não existe para ninguém de fora. A linha
-          de objetivo logo acima continua nas duas modalidades: ela descreve o que a tela
-          entrega, e sem ela um esqueleto vira um retângulo cinza sem nome. */}
-      <Comentario className="mt-2 border-t border-borda pt-3 text-xs text-tinta-3">
-        Fase 1 — a rota existe, navega e declara o que será. O conteúdo entra nas fases 2 a 6.
-      </Comentario>
     </div>
   );
 }

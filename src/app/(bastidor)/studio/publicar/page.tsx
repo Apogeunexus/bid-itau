@@ -1,5 +1,4 @@
 import { Grafismo } from "@/componentes/grafismo";
-import { Comentario } from "@/componentes/comentario";
 import { FormularioPublicar, type EventoExistente } from "@/componentes/studio-publicar";
 import { CRITERIO_DE_IDENTIDADE } from "@/dados/duplicatas";
 import { porSlug, slugsPorTipo } from "@/dados/grafo";
@@ -36,12 +35,6 @@ export default function StudioPublicar() {
           duplicata avisa antes de salvar, e a descrição alternativa de imagem é
           obrigatória.
         </p>
-        <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-          A checagem de duplicata roda contra os {eventos.length} eventos reais do acervo,
-          com a normalização do índice de busca — digite «Bienal» no título para vê-la
-          disparar. Publicar não persiste: o protótipo é estático, e o registro que seria
-          enviado aparece na tela com o limite declarado.
-        </Comentario>
       </header>
 
       <FormularioPublicar eventos={eventos} criterioDeIdentidade={CRITERIO_DE_IDENTIDADE} />

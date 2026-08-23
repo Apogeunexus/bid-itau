@@ -689,7 +689,7 @@ export interface Beco {
   oQueFoiBuscado: string;
   /** Por que não achou — a causa medida, com o denominador. */
   porQueNaoAchou: string;
-  /** A regra que escolheu a consulta. Vai para o modo comentado. */
+  /** A regra que escolheu a consulta. */
   regra: string;
   saidas: SaidaDoBeco[];
   vizinhos: VizinhoDoBeco[];

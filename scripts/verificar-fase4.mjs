@@ -75,8 +75,8 @@
  * `data-cenario-abrir`, que continua em exatamente 5.
  *
  * ZERO DEPENDÊNCIA NOVA. O cliente CDP mora em `navegador.mjs` e é ~120 linhas sobre o
- * `WebSocket` global do Node. `verificar-fase2.mjs`, `verificar-comentado.mjs`,
- * `navegador.mjs` e `servir-out.mjs` são LEITURA para este arquivo: alterá-los invalidaria
+ * `WebSocket` global do Node. `verificar-fase2.mjs`, `navegador.mjs` e `servir-out.mjs`
+ * são LEITURA para este arquivo: alterá-los invalidaria
  * a linha de base das fases anteriores, que é o que a não-regressão compara.
  */
 
@@ -659,21 +659,18 @@ async function gatesEstruturais() {
   );
 
   // Desde a consolidação do design system (2026-08) as variantes moram em
-  // `src/estilos/tokens.css` e a regra do modo comentado em `src/estilos/base.css` —
-  // ambos importados por globals.css, mesmo bundle. O gate segue provando a EXISTÊNCIA;
-  // só o endereço mudou junto com a arquitetura (docs/DESIGN-SYSTEM.md §5).
+  // `src/estilos/tokens.css`, importado por globals.css, mesmo bundle. O gate segue
+  // provando a EXISTÊNCIA; só o endereço mudou junto com a arquitetura
+  // (docs/DESIGN-SYSTEM.md §5). A regra do modo comentado que este gate media junto
+  // deixou de existir em 23/08 — o modo saiu do produto.
   const tokensCss = await readFile(path.join(SRC, "estilos", "tokens.css"), "utf8");
-  const baseCss = await readFile(path.join(SRC, "estilos", "base.css"), "utf8");
   const variantes = ["@custom-variant app", "@custom-variant desk"];
   const faltamVariantes = variantes.filter((v) => !tokensCss.includes(v));
-  const regraComentada = /\[data-comentado="nao"\]\s*\.comentario/.test(baseCss);
   exigir(
-    faltamVariantes.length === 0 && regraComentada,
-    "as variantes app:/desk: (tokens.css) e a regra do modo comentado (base.css) presentes",
-    faltamVariantes.length === 0 && regraComentada
-      ? `app: e desk: presentes · [data-comentado="nao"] .comentario presente`
-      : `faltam ${faltamVariantes.join(", ")}${regraComentada ? "" : " · regra do modo comentado AUSENTE"}`,
-    "as duas variantes e a regra presentes",
+    faltamVariantes.length === 0,
+    "as variantes app:/desk: presentes em tokens.css",
+    faltamVariantes.length === 0 ? "app: e desk: presentes" : `faltam ${faltamVariantes.join(", ")}`,
+    "as duas variantes presentes",
   );
 
   // ---- 6. Peso dos chunks ----
@@ -1192,8 +1189,8 @@ async function blocoDuplicatas(cdp, base) {
     "6 do acervo e 27 encenados",
   );
 
-  // O critério de identidade, VISÍVEL com o modo comentado desligado, e impresso por
-  // inteiro: ele vai ser lido em voz alta, e o relatório é onde quem apresenta o encontra.
+  // O critério de identidade, VISÍVEL na tela, e impresso por inteiro: ele vai ser lido
+  // em voz alta, e o relatório é onde quem apresenta o encontra.
   const criterio = await cdp.avaliar(
     naPagina4(`
       const bloco = document.querySelector('[data-criterio]');
@@ -1202,7 +1199,6 @@ async function blocoDuplicatas(cdp, base) {
         sustentado: c.getAttribute('data-sustentado'),
       }));
       return {
-        comentado: document.querySelector('[data-comentado]')?.getAttribute('data-comentado') ?? null,
         visivel: visivel(bloco),
         altura: alturaDe(bloco),
         texto: bloco ? bloco.innerText.trim() : null,
@@ -1211,9 +1207,9 @@ async function blocoDuplicatas(cdp, base) {
     `),
   );
   exigir(
-    criterio.visivel && criterio.comentado === "nao" && criterio.altura > 0 && criterio.comps.length === 3,
-    "D-68 · o critério de identidade VISÍVEL com o modo comentado desligado",
-    `${criterio.altura}px · data-comentado=${criterio.comentado} · ${criterio.comps.length} componentes: ` +
+    criterio.visivel && criterio.altura > 0 && criterio.comps.length === 3,
+    "D-68 · o critério de identidade VISÍVEL na tela",
+    `${criterio.altura}px · ${criterio.comps.length} componentes: ` +
       criterio.comps.map((c) => `${c.campo}=${c.sustentado}`).join(", "),
     "visível, com os 3 componentes marcados",
   );
@@ -1353,7 +1349,7 @@ async function blocoDuplicatas(cdp, base) {
   );
   exigir(
     naoSustenta.length === 3 && naoSustenta.every((t) => /\d/.test(t)),
-    "os TRÊS blocos do que o acervo não sustenta, visíveis com o modo comentado desligado, cada um com número",
+    "os TRÊS blocos do que o acervo não sustenta, visíveis, cada um com número",
     `${naoSustenta.length} blocos · ${naoSustenta.map((t) => `${t.length} car.`).join(" · ")}`,
     "3 blocos, todos com dígito",
   );
@@ -1388,7 +1384,7 @@ async function blocoDuplicatas(cdp, base) {
   resumo.push([
     "STUD-01",
     `Duplicatas: 84 grupos declarados e 84 na tela (33 determinísticos, dos quais 6 REAIS do acervo, + 51 probabilísticos com score); ` +
-      `critério de identidade visível com o modo comentado desligado, 1 de 3 componentes sustentado; escolher grupo troca o painel sem mudar a URL; ` +
+      `critério de identidade visível, 1 de 3 componentes sustentado; escolher grupo troca o painel sem mudar a URL; ` +
       `${aposEscolha.campos.length} campos comparados com ${aposEscolha.divergentes} divergentes marcados; 3 ações, 0 decisão antes do clique e 1 depois, com autor e carimbo; ` +
       `colapso 80 registros → 40 eventos com 1.304 ocorrências preservadas`,
   ]);
@@ -1773,15 +1769,14 @@ async function blocoRoteiro(cdp, base) {
   const naoSustentam = await cdp.avaliar(
     naPagina4(`
       return {
-        comentado: document.querySelector('[data-comentado]').getAttribute('data-comentado'),
         blocos: visiveis('[data-cenario-nao-sustenta]').map(b => ({ n: b.getAttribute('data-cenario-nao-sustenta'), texto: b.innerText.trim() })),
       };
     `),
   );
   exigir(
-    naoSustentam.blocos.length === 5 && naoSustentam.comentado === "nao" && naoSustentam.blocos.every((b) => /\d/.test(b.texto)),
-    "D-77 · os CINCO blocos do que o acervo não sustenta, visíveis com o modo comentado desligado, cada um com número",
-    `${naoSustentam.blocos.length} blocos · data-comentado=${naoSustentam.comentado} · ` +
+    naoSustentam.blocos.length === 5 && naoSustentam.blocos.every((b) => /\d/.test(b.texto)),
+    "D-77 · os CINCO blocos do que o acervo não sustenta, visíveis, cada um com número",
+    `${naoSustentam.blocos.length} blocos · ` +
       naoSustentam.blocos.map((b) => `Cenário ${b.n}: ${b.texto.length} car.`).join(" · "),
     "5 blocos, todos com dígito",
   );
@@ -1935,7 +1930,7 @@ async function blocoRoteiro(cdp, base) {
 
   resumo.push([
     "STUD-03",
-    `Roteiro: 5 cenários declarados e 5 na tela, 13 rotas escritas, os 5 blocos do que o acervo NÃO sustenta visíveis com o modo comentado desligado ` +
+    `Roteiro: 5 cenários declarados e 5 na tela, 13 rotas escritas, os 5 blocos do que o acervo NÃO sustenta visíveis ` +
       `(${naoSustentam.blocos.map((b) => `${b.texto.length}`).join("/")} caracteres, todos com número), índice grudado no topo com os 5 atalhos dentro da janela`,
   ]);
   resumo.push([
@@ -1946,11 +1941,13 @@ async function blocoRoteiro(cdp, base) {
 }
 
 // ---------------------------------------------------------------------------
-// (g) MODO COMENTADO nas três telas novas.
+// (g) A DECLARAÇÃO DE HONESTIDADE nas três telas novas.
 //
-// A metade que importa não é «os comentários somem»: é que a DECLARAÇÃO DE HONESTIDADE
-// continua na tela nos dois estados. Esconder o argumento junto com o comentário sobre ele
-// esvaziaria justamente a tela que o interruptor existe para salvar.
+// Este bloco media o modo comentado — os comentários somem, o argumento fica. O modo saiu
+// do produto em 23/08 e a primeira metade deixou de existir; a SEGUNDA continua sendo o
+// que importava: cada uma das três telas do bastidor tem de mostrar, sem depender de
+// interruptor nenhum, o que o acervo NÃO sustenta. Uma tela que perde esse bloco vira
+// exatamente o painel opaco contra o qual a proposta argumenta.
 // ---------------------------------------------------------------------------
 
 const HONESTIDADE_POR_ROTA = {
@@ -1959,49 +1956,22 @@ const HONESTIDADE_POR_ROTA = {
   "/roteiro/": "[data-cenario-nao-sustenta], [data-cenario-sustenta]",
 };
 
-async function blocoModoComentado(cdp, base) {
-  titulo("── (g) modo comentado nas três telas novas: os comentários somem, o argumento fica ──");
+async function blocoDeHonestidade(cdp, base) {
+  titulo("── (g) a declaração de honestidade nas três telas novas ──");
 
   for (const [rota, seletorHonesto] of Object.entries(HONESTIDADE_POR_ROTA)) {
     await cdp.avaliar(`localStorage.setItem('agenda-cultural:visao', 'web')`);
-    await cdp.avaliar(`localStorage.setItem('agenda-cultural:comentado', 'nao')`);
     await irPara(cdp, `${base}${rota}`);
 
-    const medir = (seletor) =>
-      cdp.avaliar(
-        naPagina4(`
-        const cs = todos('.comentario');
-        return {
-          estado: document.querySelector('[data-comentado]').getAttribute('data-comentado'),
-          comentarios: cs.length,
-          comentariosVisiveis: cs.filter(visivel).length,
-          alturaTotal: cs.reduce((s, c) => s + alturaDe(c), 0),
-          honestos: contaVisiveis(${JSON.stringify(seletor)}),
-        };
-      `),
-      );
-
-    const desligado = await medir(seletorHonesto);
-    exigir(
-      desligado.estado === "nao" && desligado.comentariosVisiveis === 0 && desligado.alturaTotal === 0 && desligado.honestos > 0,
-      `${rota} · com o modo comentado DESLIGADO os comentários têm altura 0 e o argumento fica`,
-      `data-comentado=${desligado.estado} · ${desligado.comentarios} blocos de comentário, ${desligado.comentariosVisiveis} visíveis, altura somada ${desligado.alturaTotal}px · ` +
-        `${desligado.honestos} blocos de honestidade/procedência visíveis`,
-      "0 visíveis, 0px, e a honestidade > 0",
+    const honestos = await cdp.avaliar(
+      naPagina4(`return contaVisiveis(${JSON.stringify(seletorHonesto)});`),
     );
-
-    await cdp.avaliar(`localStorage.setItem('agenda-cultural:comentado', 'sim')`);
-    await cdp.recarregar();
-    await coletarRede(cdp);
-    const ligado = await medir(seletorHonesto);
     exigir(
-      ligado.estado === "sim" && ligado.comentariosVisiveis > 0 && ligado.honestos === desligado.honestos,
-      `${rota} · LIGADO os comentários aparecem e a honestidade continua a MESMA`,
-      `data-comentado=${ligado.estado} · ${ligado.comentariosVisiveis} comentários visíveis (${ligado.alturaTotal}px) · ` +
-        `honestidade ${desligado.honestos} → ${ligado.honestos}`,
-      "comentários visíveis e honestidade inalterada",
+      honestos > 0,
+      `${rota} · o que o acervo NÃO sustenta está na tela`,
+      `${honestos} blocos de honestidade/procedência visíveis · seletor ${seletorHonesto}`,
+      "> 0",
     );
-    await cdp.avaliar(`localStorage.setItem('agenda-cultural:comentado', 'nao')`);
   }
 }
 
@@ -2211,7 +2181,7 @@ async function principal() {
     await blocoDuplicatas(cdp, servidor.url);
     await blocoOcorrencias(cdp, servidor.url, sonda);
     await blocoRoteiro(cdp, servidor.url);
-    await blocoModoComentado(cdp, servidor.url);
+    await blocoDeHonestidade(cdp, servidor.url);
     await gatesDeAmeaca(cdp, servidor.url);
 
     gateConsole(cdp);

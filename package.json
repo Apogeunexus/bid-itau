@@ -14,7 +14,6 @@
     "verificar-fase3": "node scripts/verificar-fase3.mjs",
     "verificar-fase4": "node scripts/verificar-fase4.mjs",
     "verificar-fase5": "node scripts/verificar-fase5.mjs",
-    "verificar-comentado": "node scripts/verificar-comentado.mjs",
     "verificar-ds": "node scripts/verificar-ds.mjs",
     "verificar-tema": "node scripts/verificar-tema.mjs",
     "capturar-telas": "node scripts/capturar-telas.mjs"

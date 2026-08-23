@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { TrocaPersona } from "@/componentes/troca-persona";
 import { repertorioDe } from "@/dados/repertorio";
@@ -32,19 +31,10 @@ export default function Meu() {
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Meu perfil</h1>
         </div>
-        <Comentario className="max-w-prose text-sm text-tinta-2">
-          O perfil como hub: a persona no topo, e cada área do produto como porta com o que
-          ela entrega dito na frente — em vez de uma tela única com tudo empilhado.
-        </Comentario>
       </header>
 
       {/* D-45 — trocar de persona é um toque, e vale para o produto inteiro. */}
       <TrocaPersona />
-
-      <Comentario className="max-w-prose text-sm text-tinta-2">
-        Os números dos cartões abaixo são medidos no build — o resumo do repertório vem da
-        mesma travessia de um salto que alimenta o mapa, nunca de contagem escrita à mão.
-      </Comentario>
 
       <nav aria-label="Atalhos do perfil" className="grid gap-3 desk:grid-cols-2">
         <Link href="/meu/repertorio" className="cartao no-underline">

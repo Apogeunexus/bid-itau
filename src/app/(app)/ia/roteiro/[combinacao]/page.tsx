@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import {
   AvisoDaCompanhia,
   LinkDaCombinacao,
@@ -179,11 +178,6 @@ export default async function RoteiroDaIa({ params }: PageProps<"/ia/roteiro/[co
         </ul>
       </section>
 
-      <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-        A troca de item parada a parada, com o deslocamento re-medido, vive no Modo Cidade
-        (`/cidade/{cidade.slug}/`) — o roteiro da estrelinha aponta para lá quem quiser
-        mexer no percurso item a item.
-      </Comentario>
     </div>
   );
 }

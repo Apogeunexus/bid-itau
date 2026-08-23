@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { TelaRepertorio } from "@/componentes/repertorio";
 import { PERSONAS } from "@/dados/personas";
@@ -29,11 +28,6 @@ export default function MapaDeRepertorio() {
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Mapa de repertório</h1>
         </div>
-        <Comentario className="max-w-prose text-sm text-tinta-2">
-          O perfil como mapa do que a pessoa atravessou, não como configurações: as
-          linguagens já experimentadas, com peso, e o que está adjacente a exatamente um
-          passo — calculado no acervo, não escrito à mão.
-        </Comentario>
         <Link
           href="/meu/"
           className="w-fit rounded-full border border-borda-forte px-3 py-1 text-xs font-bold no-underline"

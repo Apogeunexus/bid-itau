@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { MapaDoDia } from "@/componentes/mapa-do-dia";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
@@ -29,11 +28,9 @@ import type { AlternativaCompacta, DadosDaCidade, DiaCompacto } from "@/dados/ci
  * data para funcionar, o desenho estaria errado.
  *
  * **A frase de enquadramento (D-52) é CONTEÚDO DE PRODUTO e fica sempre.** Ela não é
- * rodapé, não é `<Comentario>` e não some com o modo comentado desligado: é ela que
- * converte a limitação do acervo em demonstração do produto, apontando para o Studio que a
- * fase 4 constrói. Quem conduzir a apresentação vai lê-la em voz alta e usá-la como
- * transição. O `<Comentario>` ao lado conta a MEDIÇÃO que levou até ela; a frase de cima
- * fica em qualquer modo.
+ * rodapé: é ela que converte a limitação do acervo em demonstração do produto, apontando
+ * para o Studio que a fase 4 constrói. Quem conduzir a apresentação vai lê-la em voz alta
+ * e usá-la como transição.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * DP-F — ESTE ARQUIVO NÃO ALCANÇA O GRAFO
@@ -316,7 +313,7 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
 
       {/* ================================================================== */}
       {/* 2 — A FRASE DE ENQUADRAMENTO (D-49, D-52).                          */}
-      {/*     TEXTO DE PRODUTO, fora do modo comentado. É a frase mais         */}
+      {/*     TEXTO DE PRODUTO. É a frase mais                                */}
       {/*     importante da fase e a ponte narrativa para o Studio.            */}
       {/* ================================================================== */}
       <section className="cidade-enquadramento" data-enquadramento={dados.slug}>
@@ -326,10 +323,6 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
           <p className="cidade-enquadramento-adiante">{enquadramento.fraseDoStudio}</p>
         </div>
       </section>
-
-      <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
-        {`A medição que levou a este enquadramento: os 100 eventos da agenda do CMS têm data e nenhum território; os 160 eventos da Enciclopédia têm território e data histórica. Nenhum registro do acervo tem as duas coisas, e por isso a consulta desta tela é «o que existe culturalmente aqui» e não «o que acontece nesta semana». Nenhuma data foi produzida: ${enquadramento.comData} dos ${enquadramento.total} registros trazem o texto de data que a fonte escreveu, e os outros ${enquadramento.semData} dizem que não trazem. O roteiro por dia continua existindo como estrutura — o que mudou foi a natureza do item.`}
-      </Comentario>
 
       {/* ================================================================== */}
       {/* 3 — UM CARTÃO POR DIA (D-50).                                       */}

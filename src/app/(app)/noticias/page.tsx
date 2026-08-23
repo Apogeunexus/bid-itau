@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CartaoLeitura } from "@/componentes/cartao-leitura";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
-import { conteudosSemData, leituras, milhar, secoesEditoriais, TOTAL_DE_CONTEUDOS } from "@/dados/leituras";
+import { leituras, milhar, secoesEditoriais, TOTAL_DE_CONTEUDOS } from "@/dados/leituras";
 
 export const metadata: Metadata = { title: "Notícias — Agenda Cultural BR" };
 
@@ -32,11 +31,6 @@ export default function Noticias() {
           dos quais estas quatro seções recortam o que o cliente pediu como submenu. Cada
           texto abre na fonte, no site do Itaú Cultural.
         </p>
-        <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-          As seções e contagens saem de `extra.categoria` do CMS, medidas no build —
-          nenhuma lista escrita à mão. {conteudosSemData()} conteúdos não declaram data de
-          publicação e ficam no fim da ordenação, com a ausência dita.
-        </Comentario>
       </header>
 
       {/* As seções como chips selecionáveis — o padrão de filtro da reformulação. */}

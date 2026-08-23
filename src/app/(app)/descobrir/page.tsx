@@ -1,4 +1,3 @@
-import { Comentario } from "@/componentes/comentario";
 import { Feed } from "@/componentes/feed";
 import { Grafismo } from "@/componentes/grafismo";
 import { ANCORA_DO_FEED, Heroi } from "@/componentes/heroi";
@@ -49,10 +48,6 @@ export default function Descobrir() {
             se posiciona contra uma alternativa de projeto («ordenado por popularidade»).
             Nada disso é dito a quem usa o app — para essa pessoa, quem faz o trabalho é o
             selo de motivo de cada cartão, que continua na tela nos dois modos. */}
-        <Comentario className="text-sm leading-snug text-tinta-2">
-          Levar, não fazer buscar. Cada cartão abaixo chegou por uma ligação do acervo, e o selo
-          laranja é o texto dessa ligação — nada aqui é ordenado por popularidade.
-        </Comentario>
       </header>
 
       {/* D-32 — a disposição visível em texto e editável em um toque. A troca de

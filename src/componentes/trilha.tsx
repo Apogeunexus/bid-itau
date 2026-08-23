@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
 import { useSessao } from "@/contexto/sessao";
@@ -207,11 +206,6 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
         <p className="text-[0.65rem] leading-snug text-tinta-3">
           Medido: {final.sessoesSemEspaco} de {final.sessoes.length}{" "}
           {final.sessoes.length === 1 ? "sessão" : "sessões"} sem espaço declarado.
-          <Comentario como="span">
-            {" "}
-            Nenhuma das 2.425 ocorrências do acervo tem espaço — é a mesma disjunção entre
-            território e data que a fase 1 registrou, e ela alcança esta tela.
-          </Comentario>
         </p>
         {final.evento.fonte ? (
           <a
@@ -365,10 +359,6 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
           {/* Guia de leitura escrito no vocabulário do grafo. Cada passo já traz «de onde
               veio» e «para onde vai» rotulados na própria caixa — a frase é redundante para
               quem usa e informativa só para quem avalia o modelo. */}
-          <Comentario como="span">
-            {" "}
-            Cada passo abaixo é uma ligação do acervo: de onde veio, para onde vai e por quê.
-          </Comentario>
         </p>
       </header>
 
@@ -423,7 +413,7 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
       {/* A frase de privacidade é produto: quem clica «salvar» tem direito de saber onde
           aquilo foi parar. Só a citação da decisão sai de cena. */}
       <p className="-mt-3 text-[0.65rem] leading-snug text-tinta-3">
-        Salvar grava no navegador<Comentario como="span"> (D-46)</Comentario>. Não há conta,
+        Salvar grava no navegador. Não há conta,
         não há autenticação e nenhum dado pessoal sai daqui.
       </p>
     </div>

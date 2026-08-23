@@ -359,49 +359,49 @@ console.log("\nverificar-ds — regras estruturais do design system");
   );
 }
 
-// ---- 6. Os dois blocos do tema escuro declaram o MESMO conjunto ---------
+// ---- 6. O tema escuro tem UM DONO SÓ, e o dono é o sistema --------------
 //
-// O tema escuro mora em dois seletores — `@media (prefers-color-scheme: dark)`
-// para o escuro do sistema e `:root[data-tema="escuro"]` para o escolhido à
-// mão. CSS não tem mixin e os dois não cabem numa lista de seletores (a @media
-// precisa do `:not([data-tema="claro"])`, o outro não pode tê-lo), então a
-// lista é escrita duas vezes. O defeito previsível é alguém acrescentar um
-// token num bloco e esquecer o outro: o tema passaria a se comportar diferente
-// conforme tivesse sido escolhido ou herdado do sistema, que é o pior tipo de
-// bug de tema — o que só aparece na máquina de outra pessoa.
+// Até 23/08 o escuro morava em dois seletores — a @media do sistema e um
+// `:root[data-tema="escuro"]` para a escolha manual —, e o gate daqui existia
+// para impedir que as duas listas divergissem. O botão de tema saiu do produto:
+// o tema acompanha o sistema operacional e mais nada.
 //
-// O gate compara NOMES DE PROPRIEDADE, não valores. Valor divergente é decisão
-// legítima (um bloco pode um dia querer outro degrau); nome faltando nunca é.
+// O QUE ESTE GATE TRAVA AGORA é o caminho de volta. Um `[data-tema]` reaparecer
+// em qualquer folha significa que alguém recriou meio interruptor — uma folha
+// respondendo a um atributo que nenhum código escreve mais, e portanto CSS que
+// nunca casa. É o tipo de resíduo que passa despercebido justamente porque não
+// quebra nada: ele só não faz efeito.
 {
-  const fonte = semComentarios(await readFile(path.join(SRC, "estilos", "tokens.css"), "utf8"));
-  // Casa INÍCIO DE LINHA, e não qualquer `nome:`, por dois motivos: pega
-  // `color-scheme` junto das custom properties (um `--?` no começo o deixaria
-  // de fora, e ele é justamente a declaração que o navegador usa para pintar
-  // canvas e barra de rolagem), e não confunde o `in srgb,` de dentro de um
-  // color-mix multilinha com uma declaração nova.
-  // `[a-z0-9-]` e não `[a-z-]`: metade dos tokens do DS termina em dígito
-  // (`--cor-tinta-2`, `--cor-superficie-2`, `--sombra-1`), e um nome sem
-  // dígito deixaria justamente esses fora da comparação — um gate cego para os
-  // tokens que mais divergem é pior que nenhum, porque relata verde.
-  const nomesDe = (corpo) => [...corpo.matchAll(/^\s*([a-z0-9-]+)\s*:/gm)].map((m) => m[1]).sort();
+  const folhas = await arquivosDe(path.join(SRC, "estilos"), /\.css$/);
+  const comAtributo = [];
+  let corpoDaMedia = null;
 
-  const daMedia = fonte.match(/@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-tema="claro"\]\)\s*\{([\s\S]*?)\n {2}\}/);
-  const daEscolha = fonte.match(/:root\[data-tema="escuro"\]\s*\{([\s\S]*?)\n\}/);
+  for (const folha of folhas) {
+    const fonte = semComentarios(await readFile(folha, "utf8"));
+    if (/\[data-tema/.test(fonte)) comAtributo.push(path.basename(folha));
+    if (path.basename(folha) === "tokens.css") {
+      const m = fonte.match(/@media \(prefers-color-scheme: dark\)\s*\{\s*:root\s*\{([\s\S]*?)\n {2}\}/);
+      corpoDaMedia = m ? m[1] : null;
+    }
+  }
 
-  const nomesMedia = daMedia ? nomesDe(daMedia[1]) : [];
-  const nomesEscolha = daEscolha ? nomesDe(daEscolha[1]) : [];
-  const soNaMedia = nomesMedia.filter((n) => !nomesEscolha.includes(n));
-  const soNaEscolha = nomesEscolha.filter((n) => !nomesMedia.includes(n));
+  // Casa INÍCIO DE LINHA, e não qualquer `nome:`: pega `color-scheme` junto das
+  // custom properties (um `--?` no começo o deixaria de fora, e ele é justamente
+  // a declaração que o navegador usa para pintar canvas e barra de rolagem), e
+  // não confunde o `in srgb,` de dentro de um color-mix multilinha com uma
+  // declaração nova.
+  const propriedades = corpoDaMedia
+    ? [...corpoDaMedia.matchAll(/^\s*([a-z0-9-]+)\s*:/gm)].map((m) => m[1])
+    : [];
 
   exigir(
-    nomesMedia.length > 0 && soNaMedia.length === 0 && soNaEscolha.length === 0,
-    "os dois blocos do tema escuro declaram o mesmo conjunto de propriedades",
-    nomesMedia.length === 0
-      ? "não achei o bloco @media do tema escuro em tokens.css"
-      : `${nomesMedia.length} propriedades nos dois` +
-        (soNaMedia.length ? ` · só na @media: ${soNaMedia.join(", ")}` : "") +
-        (soNaEscolha.length ? ` · só no [data-tema]: ${soNaEscolha.join(", ")}` : ""),
-    "conjuntos idênticos",
+    propriedades.length > 0 && comAtributo.length === 0,
+    "o tema escuro mora só na @media do sistema — nenhum [data-tema] em folha nenhuma",
+    corpoDaMedia === null
+      ? "não achei `@media (prefers-color-scheme: dark) { :root { … } }` em tokens.css"
+      : `${propriedades.length} propriedades na @media` +
+        (comAtributo.length ? ` · [data-tema] ressurgiu em: ${comAtributo.join(", ")}` : ""),
+    "um bloco só, zero [data-tema]",
   );
 }
 

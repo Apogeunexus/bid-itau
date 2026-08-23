@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
-import { Comentario } from "@/componentes/comentario";
 import {
   diaParaIso,
   diaParaTexto,
@@ -170,12 +169,6 @@ export function Play({
           lista, com o tipo etiquetado em cada uma. Os podcasts moram em Cast e o
           editorial em Notícias.
         </p>
-        <Comentario className="text-xs leading-relaxed text-tinta-2">
-          O acervo não tem campo de «tipo» nem de «formato»: o que ele tem é a categoria do
-          CMS, e é dela que sai o recorte abaixo. As {catalogo.total} são todas do{" "}
-          {procedencia.rotulo} — a procedência é constante aqui, e por isso é declarada uma
-          vez em vez de repetida em cada item.
-        </Comentario>
       </header>
 
       {/* ------------------------------------------------- continue de onde parou */}

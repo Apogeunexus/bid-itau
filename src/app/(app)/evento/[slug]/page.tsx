@@ -9,11 +9,10 @@ import {
 } from "@/componentes/lista-ocorrencias";
 import { BlocoAusenciaDeclarada, BlocoPonte } from "@/componentes/ponte";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
-import { Comentario } from "@/componentes/comentario";
 import { Verbete } from "@/componentes/verbete";
 import { DATA_DE_REFERENCIA as DATA_FIXA } from "@/dados/alerta";
 import { ocorrenciasDe, porId, porSlug, slugsPorTipo, temporadasDe } from "@/dados/grafo";
-import { AUSENCIA_DE_INGRESSO, ingressoDe } from "@/dados/ingressos";
+import { ingressoDe } from "@/dados/ingressos";
 import { vinculosDe, type GrupoVinculo } from "@/dados/ponte";
 import type { Entidade } from "@/dados/tipos";
 
@@ -254,11 +253,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
           </a>
           <p className="text-xs italic leading-snug text-tinta-2">{ingresso.rotulo}.</p>
         </div>
-      ) : (
-        <Comentario className="max-w-prose text-xs leading-snug text-tinta-2">
-          {AUSENCIA_DE_INGRESSO}
-        </Comentario>
-      )}
+      ) : null}
 
       {/* 3 — o verbete, embutido, com crédito e link de procedência (D-39) */}
       <Verbete entidade={entidade} />

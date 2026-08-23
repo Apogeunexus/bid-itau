@@ -66,8 +66,8 @@
  * quando `DIR_CAPTURAS` está definida, e nunca dentro do repositório.
  *
  * ZERO DEPENDÊNCIA NOVA. O cliente CDP mora em `navegador.mjs` e é ~120 linhas sobre o
- * `WebSocket` global do Node. `verificar-fase2.mjs`, `verificar-comentado.mjs`,
- * `verificar-fase3.mjs`, `verificar-fase4.mjs`, `navegador.mjs` e `servir-out.mjs` são
+ * `WebSocket` global do Node. `verificar-fase2.mjs`, `verificar-fase3.mjs`,
+ * `verificar-fase4.mjs`, `navegador.mjs` e `servir-out.mjs` são
  * LEITURA para este arquivo: alterá-los invalidaria a linha de base das fases anteriores,
  * que é exatamente o que a não-regressão compara.
  */
@@ -1757,7 +1757,6 @@ async function blocoAcontece(cdp, base, regua) {
       const mapa = document.querySelector('[data-mapa-acontece]');
       return {
         view: attr('[data-view]', 'data-view'),
-        comentado: attr('[data-comentado]', 'data-comentado'),
         blocoWeb: visivel(document.querySelector('[data-acontece-web]')),
         lista: ret(lista), mapa: ret(mapa),
         disjuntos: disjuntos(lista, mapa),
@@ -1962,8 +1961,6 @@ async function blocoAcontece(cdp, base, regua) {
         interseccaoVisivel: visivel(bloco),
         denominadores: valores('[data-denominador]', 'data-denominador'),
         numeros: todos('[data-denominador]').map((e) => (e.innerText || '').trim().split('\\n')[0]),
-        comentado: attr('[data-comentado]', 'data-comentado'),
-        dentroDeComentario: bloco ? Boolean(bloco.closest('.comentario')) : null,
       };
     `),
   );
@@ -1972,13 +1969,11 @@ async function blocoAcontece(cdp, base, regua) {
       porData.itens === 129 &&
       porData.comPar === 0 &&
       porData.pinos === 0 &&
-      porData.interseccaoVisivel === true &&
-      porData.dentroDeComentario === false &&
-      porData.comentado === "nao",
+      porData.interseccaoVisivel === true,
     "D-90 · no recorte «por data» nenhum item tem par, o mapa não desenha nada, e a interseção é PRODUTO",
     `recorte «${porData.recorte}» · ${porData.itens} itens · ${porData.comPar} com par · ${porData.pinos} pinos · ` +
-      `bloco de interseção visível=${porData.interseccaoVisivel}, dentro de <Comentario>=${porData.dentroDeComentario}, modo comentado=${porData.comentado}`,
-    "129 itens, 0 pares, 0 pinos, e a declaração visível fora de <Comentario>",
+      `bloco de interseção visível=${porData.interseccaoVisivel}`,
+    "129 itens, 0 pares, 0 pinos, e a declaração visível",
   );
   exigir(
     porData.denominadores.length === 5 &&
@@ -2434,9 +2429,7 @@ async function blocoRedacaoFila(cdp, base) {
         acoes: valores('[data-acao-redacao]', 'data-acao-redacao'),
         escopos: valores('[data-escopo-curador]', 'data-escopo-curador'),
         limitesVisivel: visivel(limites),
-        limitesDentroDeComentario: limites ? Boolean(limites.closest('.comentario')) : null,
         limitesItens: limites ? limites.querySelectorAll('li').length : 0,
-        comentado: attr('[data-comentado]', 'data-comentado'),
       };
     `),
   );
@@ -2459,14 +2452,10 @@ async function blocoRedacaoFila(cdp, base) {
     "0 decisões e 4 ações",
   );
   exigir(
-    aoChegar.limitesVisivel === true &&
-      aoChegar.limitesDentroDeComentario === false &&
-      aoChegar.limitesItens === 3 &&
-      aoChegar.comentado === "nao",
-    "D-86 · os TRÊS limites da IA são PRODUTO — visíveis com o modo comentado desligado",
-    `data-limites-ia visível=${aoChegar.limitesVisivel} · ${aoChegar.limitesItens} limites · ` +
-      `dentro de <Comentario>=${aoChegar.limitesDentroDeComentario} · modo comentado=${aoChegar.comentado}`,
-    "visível, fora de <Comentario>, com 3 limites",
+    aoChegar.limitesVisivel === true && aoChegar.limitesItens === 3,
+    "D-86 · os TRÊS limites da IA são PRODUTO — visíveis na tela",
+    `data-limites-ia visível=${aoChegar.limitesVisivel} · ${aoChegar.limitesItens} limites`,
+    "visível, com 3 limites",
   );
 
   // ---- O VETO, com o campo VAZIO. As três formas de forçar, e o zero exigido. ----
@@ -2629,7 +2618,6 @@ async function blocoRedacaoTrilha(cdp, base) {
         publicarDisabled: publicar ? publicar.disabled : null,
         sugestoes: conta('[data-sugestao-ia]'),
         candidatos: conta('[data-candidato-catalogo]'),
-        comentado: attr('[data-comentado]', 'data-comentado'),
       };
     `),
   );
@@ -2853,8 +2841,6 @@ async function blocoObservatorio(cdp, base) {
       return {
         rolagem: Math.round(scrollY),
         visivel: visivel(p), ret: ret(p), janela: innerHeight,
-        dentroDeComentario: p ? Boolean(p.closest('.comentario')) : null,
-        comentado: attr('[data-comentado]', 'data-comentado'),
         fatias: fatias.length,
         detalhe: fatias,
         deEntidades: fatias.filter((f) => f.leitura === 'entidades'),
@@ -2867,8 +2853,7 @@ async function blocoObservatorio(cdp, base) {
   exigir(
     painel.visivel && painel.rolagem === 0 && painel.ret.y < ALTURA && painel.ret.base <= ALTURA,
     "D-88 · o painel de procedência está INTEIRO na primeira vista, sem rolar — não é rodapé",
-    `sem rolar (scrollY ${painel.rolagem}): topo ${painel.ret.y}, base ${painel.ret.base}, altura ${painel.ret.h} · janela ${painel.janela} · ` +
-      `dentro de <Comentario>=${painel.dentroDeComentario} · modo comentado=${painel.comentado}`,
+    `sem rolar (scrollY ${painel.rolagem}): topo ${painel.ret.y}, base ${painel.ret.base}, altura ${painel.ret.h} · janela ${painel.janela}`,
     "topo e BASE dentro da janela, sem rolar",
   );
 
@@ -3068,7 +3053,6 @@ async function blocoFiltros(cdp, base) {
       const faixa = document.querySelector('[data-criterio-inexistente]');
       const botaoDaFaixa = faixa ? faixa.querySelector('button') : null;
       return {
-        comentado: attr('[data-comentado]', 'data-comentado'),
         dims: dims.length,
         alturas: dims.map((d) => Math.round(d.getBoundingClientRect().height)),
         marcaveis: dims.filter((d) => { const b = d.querySelector('button'); return b && !b.disabled; }).length,
@@ -3397,10 +3381,8 @@ async function blocoPlay(cdp, base) {
           marcado: r.getAttribute('aria-pressed'),
         })),
         ponteVisivel: visivel(ponte),
-        ponteDentroDeComentario: ponte ? Boolean(ponte.closest('.comentario')) : null,
         ponteDenominadores: ponte ? Array.from(ponte.querySelectorAll('[data-denominador]')).map((d) => d.getAttribute('data-denominador') + '=' + (d.innerText || '').trim()) : [],
         continue: attr('[data-continue]', 'data-continue'),
-        comentado: attr('[data-comentado]', 'data-comentado'),
         transborda: transbordaNaHorizontal(),
       };
     `),
@@ -3426,11 +3408,10 @@ async function blocoPlay(cdp, base) {
     "3 recursos com número, 2 declarando o zero, 0 marcados",
   );
   exigir(
-    catalogo.ponteVisivel && catalogo.ponteDentroDeComentario === false && catalogo.ponteDenominadores.length >= 2,
+    catalogo.ponteVisivel && catalogo.ponteDenominadores.length >= 2,
     "D-92 · «não pode ir? veja isto» é PRODUTO, e declara a cobertura REAL com denominador",
-    `visível=${catalogo.ponteVisivel} · dentro de <Comentario>=${catalogo.ponteDentroDeComentario} · ` +
-      `denominadores ${JSON.stringify(catalogo.ponteDenominadores)} · modo comentado=${catalogo.comentado}`,
-    "visível, fora de <Comentario>, com denominadores",
+    `visível=${catalogo.ponteVisivel} · denominadores ${JSON.stringify(catalogo.ponteDenominadores)}`,
+    "visível, com denominadores",
   );
 
   const recortar = await cdp.avaliar(
@@ -3495,7 +3476,6 @@ async function blocoPlay(cdp, base) {
         dimensoes: contaVisiveis('[data-dimensao]'),
         recursos: conta('[data-recurso-em-evidencia]'),
         semArquivoVisivel: visivel(semArquivo),
-        semArquivoDentroDeComentario: semArquivo ? Boolean(semArquivo.closest('.comentario')) : null,
         remotos: remotos.length,
         preconnect: conta('link[rel="preconnect"], link[rel="dns-prefetch"]'),
         concluirRet: ret(document.querySelector('[data-concluir]')),
@@ -3511,11 +3491,10 @@ async function blocoPlay(cdp, base) {
   );
   exigir(
     antesDoClique.semArquivoVisivel &&
-      antesDoClique.semArquivoDentroDeComentario === false &&
       antesDoClique.remotos === 0 &&
       antesDoClique.preconnect === 0,
     "T-05-33 · o bloco «sem arquivo» é PRODUTO, e a página não carrega UM recurso remoto",
-    `bloco visível=${antesDoClique.semArquivoVisivel}, fora de <Comentario>=${antesDoClique.semArquivoDentroDeComentario} · ` +
+    `bloco visível=${antesDoClique.semArquivoVisivel} · ` +
       `${antesDoClique.remotos} elementos com src remoto · ${antesDoClique.preconnect} preconnect/dns-prefetch · ` +
       `${antesDoClique.dimensoes} dimensões na ficha · ${antesDoClique.recursos} recursos em evidência`,
     "visível, e 0 recursos remotos",
@@ -3627,9 +3606,7 @@ async function blocoProdutor(cdp, base) {
           chaves: valores('[data-bloco-produtor]', 'data-bloco-produtor'),
           visiveis: blocos.filter((b) => visivel(b)).length,
           emCartazVisivel: visivel(emCartaz),
-          emCartazDentroDeComentario: emCartaz ? Boolean(emCartaz.closest('.comentario')) : null,
           denominadores: dens.map((d) => d.getAttribute('data-denominador') + '=' + (d.innerText || '').trim().split('\\n')[0]),
-          comentado: attr('[data-comentado]', 'data-comentado'),
           esqueleto: /TelaEsqueleto|em construção/i.test(texto(document.body)),
           transborda: transbordaNaHorizontal(),
         };
@@ -3643,21 +3620,17 @@ async function blocoProdutor(cdp, base) {
       "7 blocos visíveis",
     );
     exigir(
-      p.emCartazVisivel &&
-        p.emCartazDentroDeComentario === false &&
-        p.denominadores.length >= 3 &&
-        p.comentado === "nao",
+      p.emCartazVisivel && p.denominadores.length >= 3,
       `${slug.slice(0, 34)} · D-90 · «o que está em cartaz agora» é PRODUTO, com os denominadores medidos`,
-      `visível=${p.emCartazVisivel}, fora de <Comentario>=${p.emCartazDentroDeComentario}, modo comentado=${p.comentado} · ` +
-        `denominadores ${JSON.stringify(p.denominadores)}`,
-      "visível fora de <Comentario>, com denominadores",
+      `visível=${p.emCartazVisivel} · denominadores ${JSON.stringify(p.denominadores)}`,
+      "visível, com denominadores",
     );
   }
 
   resumo.push([
     "APPX-05",
     `/produtor/[slug] traz os sete blocos da tela 24 nas três rotas de amostra, e «o que está em cartaz agora» ` +
-      `aparece com data-nao-sustenta e os denominadores medidos, com o modo comentado desligado`,
+      `aparece com data-nao-sustenta e os denominadores medidos`,
   ]);
 }
 
@@ -3772,16 +3745,16 @@ async function blocoContratosCruzados(cdp, base) {
 }
 
 // ---------------------------------------------------------------------------
-// O MODO COMENTADO NAS TELAS NOVAS — o padrão que a fase 4 fixou.
+// A HONESTIDADE NAS TELAS NOVAS — o que sobrou do gate do modo comentado.
 //
-// Desligado, os comentários têm altura somada ZERO e os blocos de honestidade continuam no
-// MESMO número; ligado, os comentários aparecem e a honestidade continua a mesma. O ponto do
-// gate é que o modo comentado é uma CAMADA sobre o produto, e nunca o produto: se ligar o
-// modo mudasse a contagem de blocos de honestidade, um deles seria comentário disfarçado.
+// Este bloco media duas coisas: que os comentários somem com o interruptor desligado e que
+// os blocos de honestidade NÃO somem junto. O modo comentado saiu do produto em 23/08 e a
+// primeira metade deixou de existir; a segunda continua sendo o ponto — cada tela nova tem
+// de declarar o que o acervo não sustenta, com denominador, sem depender de estado nenhum.
 // ---------------------------------------------------------------------------
 
-async function blocoModoComentado(cdp, base) {
-  titulo("── o modo comentado nas telas novas: camada sobre o produto, nunca o produto ──");
+async function blocoDeHonestidade(cdp, base) {
+  titulo("── a declaração de honestidade nas telas novas ──");
 
   for (const [rota, visao] of [
     ["/filtros/", "mobile"],
@@ -3791,45 +3764,18 @@ async function blocoModoComentado(cdp, base) {
     ["/acontece/", "web"],
   ]) {
     await porVisao(cdp, base, rota, visao);
-    await cdp.avaliar(`localStorage.setItem('agenda-cultural:comentado', 'nao')`);
-    await cdp.recarregar();
-    await coletarRede(cdp);
-    const desligado = await cdp.avaliar(
+    const medida = await cdp.avaliar(
       naPagina5(`return {
-        comentado: attr('[data-comentado]', 'data-comentado'),
-        alturaDosComentarios: todos('.comentario').reduce((s, c) => s + Math.round(c.getBoundingClientRect().height), 0),
-        comentarios: conta('.comentario'),
-        honestidade: conta('[data-nao-sustenta]') + conta('[data-denominador]'),
+        naoSustenta: conta('[data-nao-sustenta]'),
+        denominadores: conta('[data-denominador]'),
       };`),
     );
-
-    await cdp.avaliar(`localStorage.setItem('agenda-cultural:comentado', 'sim')`);
-    await cdp.recarregar();
-    await coletarRede(cdp);
-    const ligado = await cdp.avaliar(
-      naPagina5(`return {
-        comentado: attr('[data-comentado]', 'data-comentado'),
-        alturaDosComentarios: todos('.comentario').reduce((s, c) => s + Math.round(c.getBoundingClientRect().height), 0),
-        comentarios: conta('.comentario'),
-        honestidade: conta('[data-nao-sustenta]') + conta('[data-denominador]'),
-      };`),
-    );
-
     exigir(
-      desligado.comentado === "nao" &&
-        desligado.alturaDosComentarios === 0 &&
-        ligado.comentado === "sim" &&
-        ligado.alturaDosComentarios > 0 &&
-        desligado.honestidade === ligado.honestidade &&
-        desligado.honestidade > 0,
-      `${rota} · o modo comentado liga e desliga sem mexer nos blocos de honestidade`,
-      `desligado: ${desligado.comentarios} comentários somando ${desligado.alturaDosComentarios}px, ` +
-        `${desligado.honestidade} blocos de honestidade · ` +
-        `ligado: ${ligado.comentarios} comentários somando ${ligado.alturaDosComentarios}px, ` +
-        `${ligado.honestidade} blocos de honestidade`,
-      "altura 0 desligado, > 0 ligado, e a honestidade no mesmo número nos dois",
+      medida.naoSustenta + medida.denominadores > 0,
+      `${rota} · a tela declara o que o acervo não sustenta, com denominador`,
+      `${medida.naoSustenta} blocos [data-nao-sustenta] · ${medida.denominadores} [data-denominador]`,
+      "> 0",
     );
-    await cdp.avaliar(`localStorage.setItem('agenda-cultural:comentado', 'nao')`);
   }
 }
 
@@ -4013,7 +3959,7 @@ async function principal() {
     await blocoPlay(cdp, servidor.url);
     await blocoProdutor(cdp, servidor.url);
     await blocoContratosCruzados(cdp, servidor.url);
-    await blocoModoComentado(cdp, servidor.url);
+    await blocoDeHonestidade(cdp, servidor.url);
 
     gateConsole(cdp);
     await coletarRede(cdp);

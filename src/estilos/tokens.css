@@ -157,11 +157,10 @@
  * versão sobre fundo branco — usamos Fix/Free, que é também o que o mockup do
  * site institucional do manual (p.31) faz, com trilho e topo pretos.
  *
- * DOIS SELETORES COM A MESMA LISTA, e não um só, porque o override manual
- * precisa vencer NOS DOIS SENTIDOS: forçar claro num sistema escuro (é o
- * `:not([data-tema="claro"])` dentro da @media que devolve o claro) e forçar
- * escuro num sistema claro (é o segundo bloco). Os dois pesam 0,2,0 — quem
- * vier depois na folha ganha, e o escolhido à mão vem depois de propósito.
+ * UM SELETOR SÓ, E ELE É O DO SISTEMA (23/08). Havia um segundo bloco, com a
+ * mesma lista, para a escolha manual de tema; o produto deixou de ter esse
+ * botão — o tema acompanha o sistema operacional e mais nada. Uma lista só
+ * significa que não existe uma segunda cópia para divergir na primeira correção.
  *
  * O LARANJA NÃO CLAREIA. `--ic-laranja` mede 7,9:1 contra preto: o escuro
  * MELHORA a cor de ação. O problema de contraste do projeto é o inverso e é
@@ -169,7 +168,7 @@
  * controles hoje. Quem resolve isso é o chip preto-cheio, não o tema.
  * ------------------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-tema="claro"]) {
+  :root {
     color-scheme: dark;
 
     --cor-tinta-crua: var(--ic-branco);
@@ -193,22 +192,6 @@
     /* No escuro o laranja cheio mede 7,94:1 contra preto — nada a corrigir. */
     --cor-acao-tinta: var(--ic-laranja);
   }
-}
-
-:root[data-tema="escuro"] {
-  color-scheme: dark;
-
-  --cor-tinta-crua: var(--ic-branco);
-  --cor-papel-cru: var(--ic-preto);
-
-  --cor-superficie: color-mix(in srgb, var(--ic-preto) 93%, var(--ic-branco));
-  --cor-superficie-2: color-mix(in srgb, var(--ic-preto) 88%, var(--ic-branco));
-
-  --cor-borda: color-mix(in srgb, var(--ic-branco) 20%, transparent);
-  --cor-borda-forte: color-mix(in srgb, var(--ic-branco) 38%, transparent);
-
-  --cor-acao-lavada: color-mix(in srgb, transparent 82%, var(--ic-laranja));
-  --cor-acao-tinta: var(--ic-laranja);
 }
 
 /* Exposição ao Tailwind: os utilitários leem o token, e trocar o token troca a

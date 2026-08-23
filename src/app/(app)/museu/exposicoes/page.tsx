@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CartaoLeitura } from "@/componentes/cartao-leitura";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { leituras, milhar } from "@/dados/leituras";
 
@@ -47,11 +46,6 @@ export default function Exposicoes() {
         ))}
       </div>
 
-      <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-        O recorte soma as categorias museais de `extra.categoria` do acervo editorial,
-        medidas no build. As exposições EM CARTAZ são eventos e vivem no hub de Museu, com
-        página própria e ficha de acessibilidade.
-      </Comentario>
     </div>
   );
 }

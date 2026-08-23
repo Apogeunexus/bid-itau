@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Comentario } from "@/componentes/comentario";
 import type {
   AcaoDeclarada,
   AcaoDaRedacao,
@@ -374,12 +373,6 @@ export function RedacaoFila({
 
         <p className="redacao-escopo-descricao">{escopoAtivo.descricao}</p>
 
-        <Comentario className="studio-nota">
-          O escopo troca o RECORTE, não a tela e não a URL — é a mesma superfície servindo
-          cortes diferentes, e é essa propriedade que responde ao «como crescer sem
-          reescrever a plataforma» do RFP. Uma redação regional e uma redação
-          nacional operam este mesmo arquivo.
-        </Comentario>
       </header>
 
       <div className="redacao-colunas">
@@ -535,8 +528,8 @@ export function RedacaoFila({
                     componentes={componentesDoScore}
                     atendidos={item.componentes}
                   />
-                  {/* PRODUTO, e não comentário: a regra fica na tela com o modo
-                      comentado desligado. Score sem regra é o recomendador opaco. */}
+                  {/* A regra fica na tela junto do número: score sem regra é o
+                      recomendador opaco. */}
                   <p className="studio-nota redacao-regra-score">{regraDoScore}</p>
                 </div>
               ) : (
@@ -775,8 +768,8 @@ export function RedacaoFila({
       </section>
 
       {/* ================================================================== */}
-      {/* D-86 — OS TRÊS LIMITES. Fora de <Comentario>: é produto, e continua */}
-      {/* na tela com o modo comentado desligado.                             */}
+      {/* D-86 — OS TRÊS LIMITES. É produto: a resposta ao RFP, não uma nota */}
+      {/* sobre o protótipo.                                                  */}
       {/* ================================================================== */}
       <footer className="redacao-limites" data-limites-ia>
         <span className="studio-nao-sustenta-rotulo">onde a IA não é utilizada</span>

@@ -25,9 +25,8 @@ npm run build     # gera out/, export estático, 2.463 páginas
 npx http-server out -p 3000
 ```
 
-**Dois controles no canto inferior direito mudam tudo.** O par **App / Web** alterna as duas
-visões ao vivo. **Modo comentado** liga as anotações que explicam o raciocínio de cada tela —
-desligado, você vê o produto; ligado, vê a argumentação.
+**Um controle no canto inferior direito.** O par **App / Web** alterna as duas visões ao
+vivo. O tema acompanha o sistema operacional — claro ou escuro, sem botão.
 
 **Comece por `/roteiro`** (visão Web). É a tela feita para conduzir uma apresentação: os cinco
 cenários do RFP, cada um com um botão que põe a visão certa, semeia a persona e leva à
@@ -102,7 +101,9 @@ src/
   estilos/        21 folhas, todas importadas de globals.css (bundle único)
 scripts/
   gerar-grafo.mjs      transforma dados/ em src/dados/gerado/
-  verificar-fase*.mjs  as cinco suítes, 468 portões
+  verificar-fase*.mjs  as quatro suítes que dirigem Chrome sobre o out/
+  verificar-ds.mjs     regras estruturais do design system (estática)
+  verificar-tema.mjs   contraste medido nos dois temas (contra next dev)
   navegador.mjs        cliente CDP compartilhado pelas suítes
 dados/
   bruto/          o que foi coletado, sem tratamento

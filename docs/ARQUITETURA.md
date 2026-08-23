@@ -172,15 +172,21 @@ para isso.
 
 ## 6. Verificação
 
-Cinco suítes, **468 portões**, todas dirigindo Chrome headless sobre o `out/` estático a
-1440×960 — largura deliberada, para que nenhuma media query participe.
+Quatro suítes dirigindo Chrome headless sobre o `out/` estático a 1440×960 — largura
+deliberada, para que nenhuma media query participe.
 
 ```bash
 node scripts/verificar-fase2.mjs       #  67
-node scripts/verificar-comentado.mjs   #  43
 node scripts/verificar-fase3.mjs       #  94
 node scripts/verificar-fase4.mjs       #  99
 node scripts/verificar-fase5.mjs       # 165
+```
+
+Duas suítes estáticas completam o conjunto e não precisam de `out/`:
+
+```bash
+node scripts/verificar-ds.mjs          # regras estruturais do design system
+node scripts/verificar-tema.mjs        # contraste medido nos dois temas (contra `next dev`)
 ```
 
 Elas medem **pixels e DOM vivo**, não HTML. Retângulos contra contêineres, cliques com
@@ -240,10 +246,11 @@ forçando `Enter` e forçando `submit`.
 - **Commits atômicos por tarefa**, em português, explicando o *porquê* e não só o *quê*.
 - **`dados/` é somente leitura** para o código da aplicação. Só os scripts de coleta e
   geração escrevem lá.
-- **Modo comentado:** texto que explica o protótipo, o raciocínio ou cita número de decisão
-  vai dentro de `<Comentario>`. Texto endereçado a quem usa o produto — selo de motivo,
-  rótulo de procedência, declaração de ausência — fica sempre visível. Na dúvida, deixe
-  visível: esconder produto é pior que mostrar anotação.
+- **A tela não fala do protótipo.** O modo comentado — o interruptor que ligava as
+  anotações de spec sobre cada tela — foi removido do produto em 23/08. Selo de motivo,
+  rótulo de procedência e declaração de ausência continuam sempre visíveis: eles são o
+  argumento da proposta. Explicação sobre COMO a tela foi feita mora no comentário de
+  código, não na interface.
 
 ---
 

@@ -35,9 +35,9 @@ import type { Entidade } from "./tipos";
 /**
  * O critério de identidade da ontologia, em texto corrido e não em sigla.
  *
- * Ele é DADO e aparece no produto com o modo comentado desligado (D-68). Um critério que
- * só existisse em comentário de código seria indistinguível, para quem avalia, de um
- * deduplicador que compara strings e não explica nada.
+ * Ele é DADO e aparece no produto (D-68). Um critério que só existisse em comentário de
+ * código seria indistinguível, para quem avalia, de um deduplicador que compara strings e
+ * não explica nada.
  */
 export const CRITERIO_DE_IDENTIDADE =
   "Dois registros são o mesmo evento quando têm o mesmo título normalizado, o mesmo " +
@@ -749,7 +749,7 @@ export function parQueOHumanoSepara(): GrupoDeDuplicatas {
 // ---------------------------------------------------------------------------
 
 /**
- * A frase que a tela mostra com o modo comentado desligado (D-68).
+ * A frase que a tela mostra (D-68).
  *
  * O critério da ontologia tem três componentes e o acervo preenche UM. Nenhum dos 300
  * eventos traz agente realizador nem obra na chave de identidade: toda chave tem a forma
@@ -757,9 +757,8 @@ export function parQueOHumanoSepara(): GrupoDeDuplicatas {
  * mock — é a fonte, e é exatamente por isso que existe um segundo estágio.
  *
  * ESCONDER ISSO SERIA O MESMO ERRO QUE A PROPOSTA ARGUMENTA CONTRA. A tela que declara o
- * limite do próprio dado é a que se pode auditar; a que não declara pede confiança. Por isso
- * este parágrafo não entra em `<Comentario>`: a honestidade sobre o dado é o argumento, não
- * a nota de rodapé sobre ele.
+ * limite do próprio dado é a que se pode auditar; a que não declara pede confiança — a
+ * honestidade sobre o dado é o argumento, não a nota de rodapé sobre ele.
  */
 export function declaracaoDoQueNaoSustenta(): string {
   const n = numerosDaDeduplicacao();

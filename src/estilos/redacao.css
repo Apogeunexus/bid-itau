@@ -272,8 +272,7 @@
 }
 
 /* A regra por extenso, ao lado do número. Score sem regra é o recomendador opaco
- * contra o qual a proposta inteira se posiciona; ela é PRODUTO e fica na tela com
- * o modo comentado desligado. */
+ * contra o qual a proposta inteira se posiciona. */
 .redacao-regra-score {
   max-width: 92ch;
 }
@@ -415,9 +414,8 @@
 /* ---------------------------------------------------------------------------
  * OS TRÊS LIMITES DA IA — D-86
  *
- * Rodapé de PRODUTO, fora de `<Comentario>`: ele continua na tela com o modo
- * comentado desligado, porque é a resposta à pergunta do RFP e não uma nota sobre
- * o protótipo.
+ * Rodapé de PRODUTO: é a resposta à pergunta do RFP, não uma nota sobre o
+ * protótipo.
  * ------------------------------------------------------------------------- */
 
 /* PAINEL ESCURO NOS DOIS TEMAS, e não invertido pela tinta corrente.

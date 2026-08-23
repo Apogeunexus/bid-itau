@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { HEROIS } from "@/dados/heroi";
 
@@ -87,12 +86,6 @@ export function Heroi() {
         </Link>
       </div>
 
-      <Comentario className="heroi-nota">
-        A foto muda a cada carregamento, sorteada entre oito imagens do próprio acervo. As
-        oito foram medidas por script — proporção, tamanho e quanto o canto inferior esquerdo
-        varia, que é onde este texto entra — e depois olhadas uma a uma. O crédito de cada uma
-        vem do acervo, não de um palpite.
-      </Comentario>
     </section>
   );
 }

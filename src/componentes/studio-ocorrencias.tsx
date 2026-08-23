@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { Comentario } from "@/componentes/comentario";
 import { useSessao } from "@/contexto/sessao";
 import { PERSONAS, personaPorId } from "@/dados/personas";
 import type {
@@ -848,9 +847,6 @@ export function StudioOcorrencias({
       <section className="studio-painel oco-honesto">
         <div className="studio-painel-cabeca">
           <span className="studio-painel-nome">O que o acervo não sustenta</span>
-          <Comentario como="span" className="studio-rotulo">
-            D-77 · medido em {numeros.eventos} eventos e {comSeparador(numeros.ocorrencias)} sessões
-          </Comentario>
         </div>
 
         <ul className="oco-honesto-lista">

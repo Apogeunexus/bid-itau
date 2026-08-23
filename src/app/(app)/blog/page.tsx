@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 
 export const metadata: Metadata = { title: "Blog — Agenda Cultural BR" };
@@ -43,11 +42,6 @@ export default function Blog() {
         </div>
       </section>
 
-      <Comentario className="max-w-prose text-sm text-tinta-2">
-        A tela existe porque o item de menu existe — e um item que levasse a um 404 seria
-        indistinguível de rota quebrada. Quando a redação publicar textos próprios pelo Studio,
-        eles aparecem aqui; até lá, a ausência fica dita com o denominador, no padrão de D-93.
-      </Comentario>
     </div>
   );
 }

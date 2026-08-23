@@ -248,23 +248,18 @@ exigir(
 // caso do projeto (o laranja da marca como texto, 2,36:1 sobre o creme) é do tema
 // CLARO e existia antes de haver escuro. Medir só o escuro deixaria passar metade.
 //
-// O TEMA É ESCOLHIDO PELO CAMINHO DO PRODUTO — grava a preferência e navega — e
-// não por `setAttribute` de fora. A primeira versão fazia isso e media errado de
-// forma intermitente: o efeito do TemaProvider roda quando ele hidrata e, como o
-// estado dele continuava «sistema», ele apagava o atributo que o teste tinha
-// acabado de escrever. O sintoma era uma rota reprovando com números do tema
-// oposto. Gravando a escolha, o script de antes da pintura e o provider leem o
-// MESMO valor e não há corrida — e de quebra o portão passa a exercitar o
-// mecanismo real de persistência em vez de simular o resultado dele.
+// O TEMA VEM DO SISTEMA, E O PORTÃO EMULA O SISTEMA (23/08). O produto deixou de
+// ter interruptor de tema: quem decide é `prefers-color-scheme`, e não há mais
+// preferência gravada para o script escrever. `Emulation.setEmulatedMedia` é o
+// caminho equivalente — ele mente para a PÁGINA sobre o que o sistema
+// operacional prefere, que é exatamente a entrada que o produto lê.
 for (const { rota, visao } of ROTAS) {
   for (const tema of ["claro", "escuro"]) {
-    // A visão viaja pelo mesmo caminho do tema — localStorage antes de navegar —
-    // porque `casca.tsx` a lê de lá. Sem isso, as rotas de bastidor renderizam o
-    // aviso de superfície e o portão mede uma tela que não é a tela.
-    await cdp.avaliar(
-      `localStorage.setItem('agenda-cultural:tema', '${tema}');` +
-        `localStorage.setItem('agenda-cultural:visao', '${visao}')`,
-    );
+    await cdp.emularEsquemaDeCor(tema === "escuro" ? "dark" : "light");
+    // A visão continua viajando por localStorage, porque `casca.tsx` a lê de lá.
+    // Sem isso, as rotas de bastidor renderizam o aviso de superfície e o portão
+    // mede uma tela que não é a tela.
+    await cdp.avaliar(`localStorage.setItem('agenda-cultural:visao', '${visao}')`);
     await cdp.navegar(ALVO + rota);
     await cdp.assentar();
     // SANIDADE ANTES DE MEDIR — o oitavo defeito da casa, na versão deste portão.
@@ -274,7 +269,7 @@ for (const { rota, visao } of ROTAS) {
     // página que não existia. Contar o que se vai medir, ANTES de medir, é o que
     // separa «passou» de «não havia nada para reprovar».
     const estado = await cdp.avaliar(`(() => ({
-      tema: document.documentElement.getAttribute('data-tema'),
+      tema: matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro',
       alvos: document.querySelectorAll('.moldura-rolagem *').length,
       titulo: document.title,
     }))()`);
@@ -288,7 +283,9 @@ for (const { rota, visao } of ROTAS) {
     }
     if (estado.tema !== tema) {
       falhas.push(`${rota} ${tema} · o tema não foi aplicado`);
-      console.log(`  FALHA ${rota} ${tema}: data-tema ficou «${estado.tema}» — medição abortada`);
+      console.log(
+        `  FALHA ${rota} ${tema}: a página vê o sistema em «${estado.tema}» — medição abortada`,
+      );
       continue;
     }
     const r = await cdp.avaliar(sonda(EXCECOES));

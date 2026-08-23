@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Comentario } from "@/componentes/comentario";
 import { useSessao } from "@/contexto/sessao";
 import { useVisao } from "@/contexto/visao";
 import type { Cenario, PassoDoRoteiro, RoteiroDTO } from "@/dados/roteiro";
@@ -83,12 +82,11 @@ function Passo({ passo }: { passo: PassoDoRoteiro }) {
 // ---------------------------------------------------------------------------
 
 /**
- * O bloco do que o acervo NÃO sustenta não é letra miúda, e não entra em `<Comentario>`.
+ * O bloco do que o acervo NÃO sustenta não é letra miúda.
  *
  * A banca vai perguntar. A resposta chegar DEPOIS da pergunta custa exatamente a
  * credibilidade que a resposta antes dela compra — e essa declaração É o argumento da
- * proposta, não um comentário sobre ele. Escondê-la atrás do interruptor do modo comentado
- * esvaziaria a tela que se quer mostrar.
+ * proposta, não um comentário sobre ele.
  */
 function Honestidade({ cenario }: { cenario: Cenario }) {
   return (
@@ -232,11 +230,6 @@ export function Roteiro({ roteiro }: { roteiro: RoteiroDTO }) {
           tela. Peça-os em qualquer ordem — não há preparação entre um e outro. Ao lado de
           cada botão fica a rota escrita, porque o botão é conveniência e a rota é o contrato.
         </p>
-        <Comentario>
-          D-76 — o roteiro é o app com um guia por cima, e não um slide. D-78 — ele vive na
-          visão web porque é ferramenta de apresentação, como as duas telas do Studio.
-          STUD-03 e STUD-04.
-        </Comentario>
       </header>
 
       {/*
@@ -281,23 +274,6 @@ export function Roteiro({ roteiro }: { roteiro: RoteiroDTO }) {
         <p className="rot-fecho-linha">{roteiro.fecho}</p>
         <p className="rot-fecho-limite">{roteiro.limiteDoRoteiro}</p>
 
-        <Comentario como="div" className="rot-constantes">
-          <p className="rot-constantes-nota">
-            Os números dos Cenários 3 e 4 que este módulo não deriva do acervo estão declarados
-            como constante medida, com o arquivo que os calcula nomeado ao lado. O plano 04-04
-            não importa <code>duplicatas.ts</code> nem <code>ocorrencias-studio.ts</code> de
-            propósito — eles são escritos na mesma onda, e um import os tornaria dependência de
-            build. Acoplar no build, desacoplar na verificação.
-          </p>
-          <ul className="rot-constantes-lista">
-            {roteiro.constantesDaOnda.map((constante) => (
-              <li key={constante.chave}>
-                <code>{constante.chave}</code> = <strong>{constante.texto}</strong> ·{" "}
-                {constante.origem}
-              </li>
-            ))}
-          </ul>
-        </Comentario>
       </footer>
     </div>
   );

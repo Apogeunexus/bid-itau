@@ -950,8 +950,8 @@ export interface Enquadramento {
 /**
  * A frase que carrega a decisão da fase (D-49, D-52).
  *
- * ELA É CONTEÚDO DE PRODUTO, e não rodapé nem comentário: fica na tela com o modo comentado
- * desligado, e é ela que quem conduzir a demonstração vai ler em voz alta. O tom é o de
+ * ELA É CONTEÚDO DE PRODUTO, e não rodapé: é ela que quem conduzir a demonstração vai ler
+ * em voz alta. O tom é o de
  * `3-CONTEXT` — projeto, não desculpa: nenhuma palavra que peça licença, e o fecho aponta
  * para adiante, porque programação futura é exatamente o que o Studio da fase 4 traz.
  *

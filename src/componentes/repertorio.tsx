@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { Cartao } from "@/componentes/cartao";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { SeloLinguagem, linguagemPorId } from "@/componentes/selo-linguagem";
 import { TrocaPersona } from "@/componentes/troca-persona";
@@ -49,83 +48,25 @@ const TETO_EXIBIDO = 12;
 // Blocos auxiliares
 // ---------------------------------------------------------------------------
 
-/**
- * `apoio` é a linha que quem USA a tela precisa para ler a seção; `comentario` é a nota que
- * explica o mecanismo ou cita uma decisão, e só aparece no modo comentado. As duas são props
- * separadas de propósito: emendar as duas numa string só obrigaria a esconder a primeira
- * junto com a segunda, e a primeira é produto.
- */
+/** `apoio` é a linha que quem USA a tela precisa para ler a seção. */
 function Secao({
   titulo,
   apoio,
-  comentario,
-  /** A seção INTEIRA é comentário — cabeçalho, apoio e miolo somem juntos. */
-  apenasComentado,
   children,
 }: {
   titulo: string;
   apoio?: string;
-  comentario?: React.ReactNode;
-  apenasComentado?: boolean;
   children: React.ReactNode;
 }) {
-  const Envolucro = apenasComentado ? SecaoComentada : "section";
   return (
-    <Envolucro className="flex flex-col gap-2">
+    <section className="flex flex-col gap-2">
       <h2 className="flex items-center gap-1.5 text-sm font-bold tracking-wide text-tinta-2 uppercase">
         <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
         {titulo}
       </h2>
       {apoio ? <p className="text-xs leading-snug text-tinta-3">{apoio}</p> : null}
-      {comentario ? (
-        <Comentario className="text-xs leading-snug text-tinta-3">{comentario}</Comentario>
-      ) : null}
       {children}
-    </Envolucro>
-  );
-}
-
-/** `<Comentario como="section">` com a assinatura de um elemento, para trocar a raiz acima. */
-function SecaoComentada({
-  className,
-  children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Comentario como="section" className={className}>
-      {children}
-    </Comentario>
-  );
-}
-
-/**
- * Bloco que a tela 21 lista e o grafo não tem dado para preencher.
- *
- * Declarado, e não omitido: um bloco que some faz a tela parecer menor do que a
- * proposta, e quem avalia não tem como saber se o recurso foi esquecido ou se o dado
- * é que não existe. Dizer as duas coisas é o mesmo tratamento que D-43 dá à
- * acessibilidade e que D-20 dá à coordenada.
- */
-function BlocoDeclarado({
-  titulo,
-  mostraria,
-  porque,
-}: {
-  titulo: string;
-  mostraria: string;
-  porque: string;
-}) {
-  return (
-    <div
-      data-bloco-declarado={titulo}
-      className="flex flex-col gap-1 rounded-xl border border-dashed border-borda-forte p-3"
-    >
-      <p className="text-xs font-bold tracking-wide text-tinta-2 uppercase">{titulo}</p>
-      <p className="text-sm leading-snug">{mostraria}</p>
-      <p className="text-[0.7rem] leading-snug text-tinta-3">{porque}</p>
-    </div>
+    </section>
   );
 }
 
@@ -270,12 +211,6 @@ export function TelaRepertorio({
     return saida.sort((a, b) => a.ocorrenciaId.localeCompare(b.ocorrenciaId));
   }, [hidratado, salvos, indice, repertorio.salvos]);
 
-  /** Trilhas salvas nesta sessão: o botão de `/trilha/[slug]` grava o id da trilha. */
-  const trilhasSalvas = useMemo(
-    () => (hidratado ? salvos.filter((id) => id.startsWith("trilha:")) : []),
-    [hidratado, salvos],
-  );
-
   const todosSalvos = [...repertorio.salvos, ...salvosDaSessao];
 
   return (
@@ -309,50 +244,28 @@ export function TelaRepertorio({
             })}
           </div>
         ) : null}
-        {/* Comentário: define «um passo» em vocabulário de grafo («aresta», «vizinhos
-            diretos») e contrasta com o motor da outra tela. A frase em destaque acima já diz
-            a mesma coisa em português para quem usa; esta diz COMO ela foi calculada. */}
-        <Comentario className="text-[0.7rem] leading-snug text-tinta-2">
-          {`Um passo quer dizer UMA aresta a partir do que você já atravessou: ${repertorio.diagnostico.adjacentesBrutos} vizinhos diretos no acervo, dos quais ${repertorio.diagnostico.adjacentesExibidos} entram neste repertório adjacente, no máximo 10 por linguagem. `}
-          Não é a caminhada de dois saltos de Descobrir: aquela responde «o que te
-          interessaria agora», esta responde «o que está encostado em você».
-        </Comentario>
       </div>
 
       {/* ---- 1. As linguagens já experimentadas, com peso visual ---- */}
       <Secao
         titulo="Linguagens que você atravessou"
         apoio={`${repertorio.diagnostico.entidadesNoRepertorio} entidades no repertório, agrupadas pela linguagem que cada uma declara.`}
-        comentario="A cor de cada linguagem vem do vocabulário do acervo, não do componente."
       >
         <ul className="flex flex-col gap-2">
           {repertorio.atravessado.map((grupo) => (
             <LinguagemAtravessada key={grupo.linguagemId} grupo={grupo} />
           ))}
         </ul>
-        {/* A primeira frase é dado sobre o repertório de quem está olhando, e fica sempre. A
-            segunda fala sobre O QUE A TELA FAZ («a tela diz de qual delas cada grupo veio»),
-            que é justificativa de projeto. */}
         <p className="text-[0.65rem] leading-snug text-tinta-3">
           Declaradas no repertório: {repertorio.linguagensDeclaradas.join(", ") || "nenhuma"}.
           As demais chegaram pelas entidades atravessadas.
-          <Comentario como="span">
-            {" "}
-            As duas metades são evidência de travessia, e a tela diz de qual delas cada grupo
-            veio em vez de somar tudo em silêncio.
-          </Comentario>
         </p>
       </Secao>
 
       {/* ---- 2. O adjacente a um passo ---- */}
-      {/* «Cada item chegou por uma aresta que sai de algo do seu repertório» FICA: é a
-          promessa do produto, a mesma que o selo de motivo de cada cartão cumpre item a item.
-          O que vira comentário é a nota de consistência entre telas — quem usa o app não
-          precisa saber que Descobrir e esta tela compartilham a regra. */}
       <Secao
         titulo="A um passo, e você ainda não foi"
         apoio="Cada item chegou por uma ligação que sai de algo do seu repertório."
-        comentario="O selo laranja é o texto dessa ligação — a mesma regra do cartão de Descobrir, para não haver dois vocabulários para a mesma ideia."
       >
         {repertorio.adjacente.length ? (
           <>
@@ -366,12 +279,6 @@ export function TelaRepertorio({
             {repertorio.adjacente.length > TETO_EXIBIDO ? (
               <p className="text-[0.7rem] leading-snug text-tinta-3">
                 Mostrando {TETO_EXIBIDO} de {repertorio.adjacente.length} vizinhos a um passo.
-                <Comentario como="span">
-                  {" "}
-                  A contagem de linguagens novas acima usa TODOS os{" "}
-                  {repertorio.adjacente.length} — a lista é recortada para a tela não virar
-                  catálogo, e a métrica não é recortada junto.
-                </Comentario>
               </p>
             ) : null}
           </>
@@ -384,10 +291,7 @@ export function TelaRepertorio({
       </Secao>
 
       {/* ---- 3. Salvos ---- */}
-      <Secao
-        titulo="Salvos"
-        comentario="Sessões salvas isoladamente. O que está no repertório da persona veio do dado autorado; o que você salvar nesta demonstração aparece junto."
-      >
+      <Secao titulo="Salvos">
         {todosSalvos.length ? (
           <ul className="flex flex-col gap-2">
             {todosSalvos.map((salvo) => (
@@ -403,44 +307,6 @@ export function TelaRepertorio({
         )}
       </Secao>
 
-      {/* ---- 4. O que a tela 21 lista e o grafo não tem ----
-           A SEÇÃO INTEIRA É COMENTÁRIO, e é a maior peça de especificação desta tela: ela
-           fala do que ESTE PROTÓTIPO não tem, cita a numeração das telas do documento e
-           justifica cada lacuna por uma decisão (D-24, D-25, D-43, D-46). Para quem usa o
-           produto ela não descreve nada que exista; para quem avalia, é a prova de que as
-           lacunas foram medidas em vez de escondidas. É o caso exato do interruptor. */}
-      <Secao
-        apenasComentado
-        titulo="O que esta tela mostraria, e o protótipo não tem"
-        apoio="Cada bloco abaixo está na especificação da tela 21. Nenhum deles tem dado no acervo, e por isso aparecem declarados em vez de omitidos."
-      >
-        <div className="flex flex-col gap-2">
-          <BlocoDeclarado
-            titulo="Histórico de «eu fui»"
-            mostraria="A lista do que a pessoa marcou como ido, em ordem cronológica, e a comparação com o que ela salvou e não foi."
-            porque="O grafo não tem registro de presença: «eu fui» é um evento de uso, e o protótipo não tem conta, não tem autenticação e não coleta comportamento."
-          />
-          <BlocoDeclarado
-            titulo="Trilhas próprias"
-            mostraria="As trilhas que a própria pessoa montou, editáveis e compartilháveis."
-            porque={
-              trilhasSalvas.length
-                ? `Há ${trilhasSalvas.length} trilha salva neste navegador, mas montar trilha própria é escrita no acervo — e o protótipo é export estático, sem servidor e sem gravação.`
-                : "Montar trilha própria é escrita no acervo, e o protótipo é export estático: sem servidor, sem gravação. O grafo tem uma trilha, e ela é autorada e assinada."
-            }
-          />
-          <BlocoDeclarado
-            titulo="Preferências de acessibilidade"
-            mostraria="As 8 dimensões do CMS como preferência persistente, filtrando a agenda para quem depende de libras, audiodescrição ou legenda."
-            porque="A preferência existiria; o dado para atendê-la, não. As 8 dimensões chegam quase todas em zero no acervo, e filtrar por elas devolveria lista vazia — a ficha da página do evento mostra declarado contra não declarado em vez de fingir cobertura."
-          />
-          <BlocoDeclarado
-            titulo="Privacidade — exportar e excluir"
-            mostraria="Baixar tudo o que o produto guarda sobre a pessoa e apagar a conta em um toque."
-            porque="Não há o que exportar nem o que excluir além do que está neste navegador: persona, disposições e salvos vivem em localStorage e somem ao limpar o site. Nenhum dado pessoal sai daqui."
-          />
-        </div>
-      </Secao>
     </div>
   );
 }

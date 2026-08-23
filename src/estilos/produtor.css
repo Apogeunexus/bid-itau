@@ -48,10 +48,6 @@
  * `.web-declaracao` de `web.css` repete na visão web: barra laranja à esquerda,
  * fundo de laranja diluído por `color-mix`. O leitor já sabe que aquela barra
  * quer dizer «a tela está te dizendo por quê».
- *
- * NÃO é `.comentario`: com o modo comentado desligado ele CONTINUA na tela. É
- * produto, e a regra `[data-comentado="nao"] .comentario` de `globals.css` não
- * o alcança porque ele nunca teve essa classe.
  * ------------------------------------------------------------------------ */
 .pr-cartaz {
   padding: 0.75rem 1rem;

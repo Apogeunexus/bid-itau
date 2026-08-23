@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import {
   consultar,
@@ -261,14 +260,6 @@ export function Filtros({
           {" "}{milhar(indice.total)} registros — sem trocar de tela e sem esperar servidor.
         </p>
 
-        <Comentario className="filtros-comentario">
-          Tela 9 (APPX-01). D-91 põe as 8 dimensões de acessibilidade como critério de
-          primeira classe; D-90 manda declarar a ausência com o denominador em vez de
-          oferecer controle que não corta; D-43 separa declarado-ausente de não-declarado.
-          As contagens de acessibilidade não vêm de `indice.ts`, que não as indexa: elas são
-          calculadas no build por `filtros.ts`, direto do acervo, e descem em{" "}
-          {milhar(acessibilidade.bytesDoDto)} bytes de contagens.
-        </Comentario>
       </header>
 
       {/* ------------------------------------------------------------------ */}

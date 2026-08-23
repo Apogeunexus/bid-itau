@@ -50,11 +50,19 @@ function Textura({ className }: { className: string }) {
 export function CapaSemImagem({
   titulo,
   classe,
+  rotulo,
   linguagens,
   className,
 }: {
   titulo: string;
   classe: ClasseEntidade;
+  /**
+   * O que a pastilha DIZ, quando o nome da classe no modelo não é o que a tela
+   * quer mostrar. Em Cast as 336 são todas mídia, e «MIDIA» sobre a capa é o
+   * vocabulário do banco vazando para a tela: ali a pastilha diz «Podcast».
+   * Ausente, continua dizendo a classe — que é o que o feed e a busca precisam.
+   */
+  rotulo?: string;
   linguagens: string[];
   className?: string;
 }) {
@@ -81,7 +89,7 @@ export function CapaSemImagem({
       <Textura className="translate-x-px translate-y-px text-[var(--ic-preto)] opacity-[0.16]" />
 
       <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
-        {classe}
+        {rotulo ?? classe}
       </span>
     </div>
   );
@@ -96,6 +104,7 @@ export function CapaSemImagem({
 export function CapaDeCartao({
   titulo,
   classe,
+  rotulo,
   linguagens,
   imagem,
   creditoImagem,
@@ -103,6 +112,8 @@ export function CapaDeCartao({
 }: {
   titulo: string;
   classe: ClasseEntidade;
+  /** O texto da pastilha quando a classe do modelo não é o que a tela diz — ver `CapaSemImagem`. */
+  rotulo?: string;
   linguagens: string[];
   imagem?: string;
   creditoImagem?: string;
@@ -113,6 +124,7 @@ export function CapaDeCartao({
       <CapaSemImagem
         titulo={titulo}
         classe={classe}
+        rotulo={rotulo}
         linguagens={linguagens}
         className={className}
       />
@@ -132,7 +144,7 @@ export function CapaDeCartao({
         className="absolute inset-0 size-full object-cover"
       />
       <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
-        {classe}
+        {rotulo ?? classe}
       </span>
       {creditoImagem ? (
         <span className="absolute right-0 bottom-0 max-w-[70%] truncate bg-[var(--ic-preto)]/70 px-1.5 py-0.5 text-[0.6rem] text-[var(--ic-branco)]">

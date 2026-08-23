@@ -3,7 +3,7 @@
  * desertos.tsx — a camada de desertos culturais (D-62).
  *
  * ESTA É A IMAGEM MAIS FORTE DA PROPOSTA INTEIRA, e o arquivo foi escrito como peça de
- * projeto e não como interruptor no canto. Numa tela só ela mostra que a documentação da
+ * projeto. Numa tela só ela mostra que a documentação da
  * cultura brasileira está concentrada no Sudeste: 274 registros em São Paulo e 184 no Rio,
  * 59% de tudo em dois estados de vinte e sete; cinco estados com um registro; e dois —
  * Sergipe e Tocantins — que o acervo carregado não sabe que existem.
@@ -151,7 +151,7 @@ export function CamadaDesertos({ dados }: { dados: DadosDesertos }) {
 }
 
 /**
- * A leitura, em texto de produto e FORA do modo comentado.
+ * A leitura, em texto de produto.
  *
  * Escrita para ser lida em voz alta na apresentação. Ela diz o que está sendo medido antes
  * de dizer o que foi medido — porque a ordem inversa deixaria o número sozinho por um

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CartaoLeitura } from "@/componentes/cartao-leitura";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import { milhar, secaoPorSlug, secoesEditoriais } from "@/dados/leituras";
 
@@ -82,11 +81,6 @@ export default async function Secao({ params }: PageProps<"/noticias/[secao]">) 
         ))}
       </div>
 
-      <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-        A seção recorta `extra.categoria` do CMS, medida no build. Para achar algo
-        específico do editorial, a Busca cobre as 5.092 entidades do índice — inclusive
-        estes conteúdos.
-      </Comentario>
     </div>
   );
 }

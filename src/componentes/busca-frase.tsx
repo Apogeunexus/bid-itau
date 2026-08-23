@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import {
   consultar,
@@ -38,8 +37,8 @@ import type { ClasseEntidade } from "@/dados/tipos";
  *
  * 2. D-65 — SEM MODELO, E A TELA DIZ ISSO. Nenhuma chamada de IA, nenhuma chamada de
  *    rede, nenhum pacote de PLN. O casamento é por regra declarada, e a lista inteira das
- *    regras abre aqui dentro: a lista É o argumento. A declaração fica FORA do
- *    `<Comentario>` porque é produto, não anotação sobre o produto.
+ *    regras abre aqui dentro: a lista É o argumento, e por isso ela é produto e não
+ *    anotação sobre o produto.
  *
  * 3. D-66 — ZERO-RESULTADO NUNCA É BECO. Quando a combinação não devolve nada, a tela
  *    lista qual critério soltar e QUANTOS resultados aquilo traria, em um toque.
@@ -732,17 +731,12 @@ export function BuscaFrase({
                 </button>
               ),
             )}
-            <Comentario className="text-xs leading-snug text-tinta-2">
-              Cada número acima foi medido sobre o índice inteiro no momento em que a tela
-              desenhou, e não estimado. Soltar a ficha aqui é a MESMA operação de tirar a
-              ficha lá em cima — por isso o número prometido é o número entregue.
-            </Comentario>
           </div>
         ) : null}
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* 5. A declaração de D-65 — produto, fora do modo comentado           */}
+      {/* 5. A declaração de D-65 — texto de produto                         */}
       {/* ------------------------------------------------------------------ */}
       <section className="frase-sem-ia" data-sem-ia>
         <p>
@@ -776,12 +770,6 @@ export function BuscaFrase({
           </div>
         ) : null}
 
-        <Comentario className="text-xs leading-snug text-tinta-2">
-          A honestidade aqui é mais forte que uma simulação: o que a proposta vende não é o
-          modelo, é o controle. Uma tradução que acertasse e não se mostrasse seria pior
-          para quem avalia do que uma regra que erra e se explica — a regra se corrige em
-          um toque.
-        </Comentario>
       </section>
 
       {/* ------------------------------------------------------------------ */}
@@ -817,12 +805,6 @@ export function BuscaFrase({
           do alcance deste critério. Buscar pela vizinhança inteira é Camada 2 — e dizer o
           número é o que impede esta tela de parecer mais do que é.
         </p>
-        <Comentario className="text-xs leading-snug text-tinta-2">
-          Levar a vizinhança inteira ao navegador exigiria o grafo do lado do cliente:
-          `entidades.json` tem 9,4 MB e `arestas.json` 13,6 MB, e DP-F proíbe o alcance
-          inclusive transitivamente. O que atravessa a fronteira é o mapa de{" "}
-          {milhar(vizinhanca.alcancaveis)} motivos escritos, lido no build.
-        </Comentario>
       </section>
     </div>
   );
