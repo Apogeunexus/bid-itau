@@ -36,6 +36,72 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
+ * BARRA DE ROLAGEM — a única superfície do produto que ainda era do sistema.
+ *
+ * Havia treze contêineres roláveis no projeto (a moldura, o menu, o trilho de
+ * chips, as colunas de facetas, os painéis do bastidor) e nenhum tinha barra
+ * desenhada: cada um mostrava a barra padrão do sistema operacional, cinza-azul
+ * do Windows, que não pertence a paleta nenhuma. No tema escuro ficava pior — a
+ * barra continuava clara sobre a tela preta, e era o único elemento da tela que
+ * não tinha virado.
+ *
+ * REGRA GLOBAL, e não uma por contêiner. A barra é vocabulário, como a borda e o
+ * raio: aplicá-la treze vezes garantiria que a décima quarta viesse errada.
+ *
+ * DUAS SINTAXES, porque nenhuma cobre tudo sozinha. `scrollbar-color` é o padrão
+ * e o único caminho no Firefox; `::-webkit-scrollbar` dá controle de raio e de
+ * estado, e é o que o Chrome e o Safari respeitam melhor. Quando as duas valem,
+ * a de webkit ganha — então ela é a que define o desenho, e a padrão é a rede de
+ * segurança que garante a COR certa em qualquer navegador.
+ * ------------------------------------------------------------------------- */
+/* `*` e não `html`, e a diferença foi MEDIDA: `scrollbar-color` é herdado, mas
+ * `scrollbar-width` NÃO é. Declarados só na raiz, a cor chegava em todo painel e
+ * a largura ficava para trás — a moldura do telefone continuava com a barra
+ * cheia de 15px do sistema enquanto o trilho de chips tinha 10px. Duas barras
+ * diferentes na mesma tela é pior do que uma barra feia consistente.
+ *
+ * O seletor universal não custa aqui: as duas propriedades só têm efeito em
+ * elemento que rola, e são o tipo de vocabulário que precisa valer em todo
+ * contêiner — há treze no projeto, e o décimo quarto herda em vez de esquecer. */
+* {
+  scrollbar-color: var(--cor-borda-forte) transparent;
+  scrollbar-width: thin;
+}
+
+/* O caminho de webkit fica como RESERVA, e é bom saber que é só isso: medido
+ * neste Chrome, `::-webkit-scrollbar` sozinho não muda nada (a barra continua em
+ * 15px) e, quando as duas sintaxes existem, `scrollbar-width` vence. Ele serve
+ * ao Safari anterior ao 18.2, que ainda não conhece `scrollbar-color` — ali é o
+ * único jeito de a barra sair da cor do sistema. */
+::-webkit-scrollbar {
+  /* 8px: o mesmo teto de «medida física» que o portão de design system usa para
+     distinguir detalhe de layout. Uma barra mais larga vira elemento. */
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  /* Transparente, e não uma superfície: um trilho pintado desenharia uma calha
+     permanente ao lado de todo painel rolável, e o produto ficaria com listras
+     que ninguém pediu. O que precisa ser visto é o polegar. */
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: var(--raio-pilula);
+  background: var(--cor-borda-forte);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cor-tinta-3);
+}
+
+/* O canto onde as duas barras se encontram — sem isto ele fica branco no escuro. */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ---------------------------------------------------------------------------
  * Moldura de celular da visão mobile (D-03).
  *
  * Escrita em CSS puro e presa ao atributo data-view, e não a uma variante
@@ -430,8 +496,24 @@ body {
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximate;
-  scrollbar-width: thin;
+
+  /* AQUI A BARRA SOME, e só aqui. Medido neste Chrome: `::-webkit-scrollbar` é
+     inerte — a barra nativa `thin` do Windows continua desenhando os botões de
+     seta nas duas pontas, e não há CSS que os remova. Numa fileira de chips de
+     36px, dois botões de seta cinza são um controle estranho colado noutro.
+     Nos painéis de CONTEÚDO a barra fina fica: lá ela é esperada e útil.
+
+     O sinal de «tem mais à direita» passa a ser a máscara abaixo, que é do
+     design system em vez de ser do sistema operacional. */
+  scrollbar-width: none;
   padding-bottom: 0.25rem;
+
+  /* O ÚLTIMO CHIP DESBOTA quando há mais depois dele. A máscara é estática de
+     propósito: quando os chips CABEM, a fileira termina antes da borda e o fade
+     cai sobre espaço vazio, invisível. Não precisa saber se rola — a geometria
+     já responde. */
+  --fim-do-trilho: calc(100% - var(--espaco-tela));
+  mask-image: linear-gradient(to right, black var(--fim-do-trilho), transparent 100%);
   /* SANGRA ATÉ A BORDA DA TELA. O trilho recua o gutter lateral e devolve como
      padding, então o primeiro chip alinha com o texto mas os que rolam passam
      por baixo da margem — é o que faz o trilho PARECER que continua em vez de
@@ -448,6 +530,9 @@ body {
   overflow-x: visible;
   margin-inline: 0;
   padding-inline: 0;
+  /* Sem rolagem não há o que sinalizar, e a máscara desbotaria o último chip de
+     cada linha por nada. */
+  mask-image: none;
 }
 
 .chip {

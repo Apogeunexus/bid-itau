@@ -36,10 +36,18 @@
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximate;
-  padding-bottom: 0.5rem;
-  /* A barra de rolagem fina não é enfeite: sem ela o navegador de mesa desenha uma barra
-   * grossa que come um terço da altura do chip dentro da moldura de 390 px. */
-  scrollbar-width: thin;
+  padding-bottom: 0.25rem;
+  /* Mesmo tratamento do trilho de chips, pelo mesmo motivo: a barra nativa `thin`
+   * do Windows desenha botões de seta que não há CSS que remova, e dois botões
+   * cinza colados numa fileira de chips de data leem como outro controle. O
+   * sinal de continuação vira a máscara, que é do design system. A barra fina
+   * continua nos painéis de conteúdo — a regra universal está em `base.css`. */
+  scrollbar-width: none;
+  mask-image: linear-gradient(
+    to right,
+    black calc(100% - var(--espaco-tela)),
+    transparent 100%
+  );
 }
 
 .dia-chip {
