@@ -114,6 +114,43 @@ export const ICONE_PERFIL = (
   </Icone>
 );
 
+/* ---------------------------------------------------------------------------
+ * Os três glifos do SELO dos cartazes do hub (referência de 23/08).
+ *
+ * O selo é o disco no canto de cada cartaz, e ele diz — antes do toque — o que
+ * acontece do outro lado. Quem escolhe qual vai em qual cartaz é `apps.ts`, no
+ * campo `selo`; aqui mora só o traço.
+ * ------------------------------------------------------------------------- */
+
+/** «Entrar»: a seta que não promete nada além de atravessar. */
+export const ICONE_SETA = (
+  <Icone>
+    <path d="M4.5 12h14M12.8 6.2 18.5 12l-5.7 5.8" {...traco} />
+  </Icone>
+);
+
+/** «Tocar»: o triângulo CHEIO. `ICONE_PLAY` desenha o círculo junto, e dentro do
+ *  selo — que já é um disco — ele viraria um segundo anel concêntrico. */
+export const ICONE_TOCAR = (
+  <Icone>
+    <path
+      d="M8.8 5.9 18.6 12l-9.8 6.1V5.9Z"
+      fill="currentColor"
+      stroke="currentColor"
+      strokeWidth={2.4}
+      strokeLinejoin="round"
+    />
+  </Icone>
+);
+
+/** «Ouvir»: a onda do áudio. É o selo do Cast, e não o microfone de
+ *  `ICONE_CAST` — o cartaz não convida a gravar, convida a dar play. */
+export const ICONE_ONDA = (
+  <Icone>
+    <path d="M4 10.5v3M8 7.2v9.6M12 4.5v15M16 7.2v9.6M20 10.5v3" {...traco} />
+  </Icone>
+);
+
 /** O botão que abre o hub — quatro campos, que é o que o hub mostra. */
 export const ICONE_APPS = (
   <Icone>

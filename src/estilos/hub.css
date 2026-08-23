@@ -4,18 +4,21 @@
  * A decisão (capa em vez de ícone, e por quê) está no cabeçalho de
  * `src/componentes/hub-apps.tsx`. Aqui mora só a forma.
  *
- * O RITMO É A REGRA CENTRAL DESTA FOLHA. Quinze retângulos idênticos empilhados
- * cansam antes do quinto — foi a objeção levantada na reunião de 23/08. Em
- * grupo de contagem ÍMPAR o primeiro cartaz ocupa a largura toda em 16:9, com o
- * texto POR CIMA da foto; os demais caem em pares 4:3 com o texto EMBAIXO da
- * imagem. É `:first-child:nth-last-child(odd)` que mede isso: para o primeiro
- * filho, a posição contada do fim é o total, então casar «ímpar» ali é casar «o
- * grupo tem contagem ímpar».
+ * O CARTAZ É UMA COISA SÓ, e essa é a mudança da referência de 23/08. Antes o
+ * cartaz era foto EM CIMA e texto EMBAIXO, com o texto na tinta do tema; agora a
+ * foto ocupa o cartão inteiro e o texto entra por cima dela, no rodapé, com um
+ * disco no canto oposto. É o que apaga a leitura de «grade de miniaturas com
+ * legenda» e faz cada app parecer uma porta.
  *
  * O TEXTO SOBRE A FOTO É BRANCO NOS DOIS TEMAS, e isso não é descuido: ele está
  * por cima de uma fotografia, que não inverte quando o sistema vira para o
- * escuro. Mesma razão que o crédito sobre a capa em `capa-sem-imagem.tsx`. O
- * texto que fica ABAIXO da imagem, esse sim, usa a tinta do tema.
+ * escuro. Mesma razão que o crédito sobre a capa em `capa-sem-imagem.tsx`. O que
+ * ele mede é contra o VÉU, não contra o papel da página — daí o preto fixo no
+ * fundo de cada cartaz (ver o bloco do véu, mais abaixo).
+ *
+ * QUEM É DE QUE PORTE vem de `hub-apps.tsx`, derivado do ritmo que cada grupo
+ * declara em `apps.ts`. Aqui cada `hub-cartaz--*` só diz a razão do retângulo e
+ * quantas colunas ele ocupa.
  *
  * Folha nascida migrada: só tokens e múltiplos da grade de 0.25rem.
  * ------------------------------------------------------------------------- */
@@ -24,13 +27,84 @@
   padding: 0 var(--espaco-tela) var(--espaco-secao);
 }
 
-.hub-cabecalho {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: var(--espaco-secao) 0 0;
+/* ---- A abertura: o cartaz que não é link ----------------------------------
+ *
+ * Ele diz «toque para entrar em um deles», e quem cumpre isso são os cartazes
+ * abaixo — por isso ele é `<header>` e não `<a>`. Um cartaz de abertura
+ * clicável mandaria o dedo para algum lugar que a própria frase não promete. */
+.hub-abertura {
+  position: relative;
+  overflow: hidden;
+  margin-block-start: var(--espaco-tela);
+  aspect-ratio: 16 / 9;
+  border-radius: var(--raio-g);
+  /* Preto fixo nos dois temas: é o que está DEBAIXO do véu e da foto, e é contra
+     ele que o branco do título mede. Sem esta linha o fundo herdado no tema
+     claro é papel, e o contraste medido do título deixa de ser o que se vê. */
+  background: var(--ic-preto);
+  box-shadow: var(--sombra-2);
 }
 
+/* A foto ocupa a metade direita e o véu apaga a borda dela na esquerda, onde o
+   título entra. `alt` vazio no TSX: ela é cenário do título, não conteúdo. */
+.hub-abertura-foto {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  display: block;
+  inline-size: 60%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.hub-abertura-veu {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    var(--ic-preto) 0%,
+    color-mix(in srgb, var(--ic-preto) 86%, transparent) 42%,
+    color-mix(in srgb, var(--ic-preto) 26%, transparent) 60%,
+    transparent 78%
+  );
+}
+
+.hub-abertura-texto {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  /* A coluna do texto é o que decide a quebra do título: mais estreita e «Tudo
+     num lugar só» cai em três linhas, mais larga e ele invade a parte clara da
+     foto. 62% menos o respiro é a medida em que ele quebra em duas, como na
+     referência, e ainda termina dentro da parte escura do véu. */
+  max-inline-size: 62%;
+  padding-inline: 1.25rem;
+}
+
+.hub-abertura-texto h1 {
+  color: var(--ic-branco);
+}
+
+.hub-abertura-texto p {
+  color: color-mix(in srgb, var(--ic-branco) 88%, transparent);
+}
+
+/* O risco de ação no pé da abertura: a única marca laranja da tela, e ela não é
+   decoração — é a mesma cor que acende o botão do hub na barra inferior. */
+.hub-abertura-risco {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  inline-size: 28%;
+  block-size: 0.25rem;
+  background: var(--cor-acao);
+}
+
+/* ---- Os grupos ---- */
 .hub-grupo {
   margin-top: var(--espaco-secao);
 }
@@ -39,33 +113,30 @@
   margin-bottom: 0.75rem;
 }
 
-/* ---- A grade de cartazes ---- */
 .hub-grade {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem 0.75rem;
+  gap: 0.75rem;
+}
+
+/* ---- O cartaz ---- */
+.hub-cartaz {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--raio-g);
+  background: var(--ic-preto);
+  box-shadow: var(--sombra-1);
 }
 
 .hub-cartaz-link {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.hub-cartaz-quadro {
-  position: relative;
   display: block;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--raio-m);
-  background: var(--cor-superficie-2);
-  box-shadow: var(--sombra-1);
+  block-size: 100%;
 }
 
 .hub-cartaz-foto {
   display: block;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
   object-fit: cover;
   transition: transform var(--dur-2) var(--ease-padrao);
 }
@@ -74,140 +145,190 @@
   transform: scale(1.04);
 }
 
-/* O véu só existe no cartaz largo — é lá que o texto sobe para cima da foto. */
-.hub-cartaz-veu {
-  display: none;
+/* Por onde o corte segura. O PORQUÊ de cada capa está em `apps.ts`, no campo
+   `foco` — é propriedade da imagem, não do porte do cartaz. */
+.hub-cartaz-foto[data-foco="direita"] {
+  object-position: right center;
 }
 
-.hub-cartaz-texto {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.hub-cartaz-rotulo {
-  color: var(--cor-tinta);
-  font-weight: 700;
-}
-
-.hub-cartaz-descricao {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  color: var(--cor-tinta-2);
-}
-
-/* ---- O cartaz grande: largo (ritmos «aberto» e «fechado») ou alto («lado») ----
- *
- * Quem é o grande vem do componente, em `hub-cartaz--largo`/`--alto`, e não mais
- * de `:first-child:nth-last-child(odd)`: com três ritmos, o seletor que media
- * «grupo de contagem ímpar» precisaria de uma variante por ritmo e ninguém
- * conseguiria ler o resultado. A regra de QUEM é grande mora em `hub-apps.tsx`;
- * aqui mora só a forma. */
-.hub-cartaz--largo {
-  grid-column: 1 / -1;
-}
-
-.hub-cartaz--largo .hub-cartaz-quadro {
-  aspect-ratio: 16 / 9;
-}
-
-/* O cartaz em pé ocupa as duas fileiras da coluna e a altura vem dos dois
-   cartazes empilhados ao lado — por isso `aspect-ratio: auto`: qualquer razão
-   fixa aqui brigaria com a altura que a coluna vizinha já definiu. */
-.hub-cartaz--alto {
-  grid-row: span 2;
-}
-
-.hub-cartaz--alto .hub-cartaz-link,
-.hub-cartaz--alto .hub-cartaz-quadro {
-  block-size: 100%;
-}
-
-.hub-cartaz--alto .hub-cartaz-quadro {
-  aspect-ratio: auto;
-  min-block-size: 12rem;
-}
-
-/* O FUNDO PRETO FIXO NOS DOIS TEMAS, e não é decoração: o texto destes dois
-   portes fica POR CIMA da fotografia, e o que está debaixo dele é o véu escuro —
-   não o papel da página. Sem esta linha, o contraste medido do rótulo branco é
-   contra o fundo herdado, que no tema claro é branco: 1,12:1 nos quatro cartazes
-   de largura cheia, medido pelo portão de tema em 23/08. A foto cobre o preto
-   inteiro; ele existe para que o que se mede seja o que se vê. Mesmo mecanismo
-   de `.play-destaque` em `play.css`. */
-.hub-cartaz--largo .hub-cartaz-link,
-.hub-cartaz--alto .hub-cartaz-link {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--raio-m);
-  background: var(--ic-preto);
-}
-
-/* ---- A linha: o miolo do ritmo «sanduíche» ----
- *
- * Ela é o que fica ENTRE as duas faixas, e por isso não é um cartaz meia-largura:
- * sozinho entre dois blocos de largura cheia, um cartaz de meia coluna deixaria a
- * outra metade vazia. Capa pequena à esquerda, texto à direita — e o texto fica
- * ABAIXO da imagem no sentido do design system, ou seja com a tinta do tema e não
- * o branco fixo das faixas. */
-.hub-cartaz--linha {
-  grid-column: 1 / -1;
-}
-
-.hub-cartaz--linha .hub-cartaz-link {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.75rem;
-  min-inline-size: 0;
-}
-
-.hub-cartaz--linha .hub-cartaz-quadro {
-  flex: none;
-  inline-size: 6rem;
-  aspect-ratio: 3 / 2;
-}
-
-.hub-cartaz--linha .hub-cartaz-texto {
-  min-inline-size: 0;
+.hub-cartaz-foto[data-foco="esquerda"] {
+  object-position: left center;
 }
 
 /* Sem o véu o rótulo cai sobre o que a fotografia trouxer, e metade do acervo é
- * clara no rodapé. */
-.hub-cartaz--largo .hub-cartaz-veu,
-.hub-cartaz--alto .hub-cartaz-veu {
+   clara no rodapé. */
+.hub-cartaz-veu {
   position: absolute;
-  display: block;
   inset: 0;
   background: linear-gradient(
     to top,
-    color-mix(in srgb, var(--ic-preto) 84%, transparent) 0%,
-    color-mix(in srgb, var(--ic-preto) 38%, transparent) 46%,
-    transparent 78%
+    color-mix(in srgb, var(--ic-preto) 88%, transparent) 0%,
+    color-mix(in srgb, var(--ic-preto) 44%, transparent) 42%,
+    transparent 76%
   );
 }
 
-.hub-cartaz--largo .hub-cartaz-texto,
-.hub-cartaz--alto .hub-cartaz-texto {
+.hub-cartaz-texto {
   position: absolute;
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--espaco-cartao);
 }
 
-.hub-cartaz--largo .hub-cartaz-rotulo,
-.hub-cartaz--alto .hub-cartaz-rotulo {
+.hub-cartaz-rotulo {
   color: var(--ic-branco);
+  font-weight: 700;
 }
 
-.hub-cartaz--largo .hub-cartaz-descricao,
-.hub-cartaz--alto .hub-cartaz-descricao {
+/* QUEM ABRE ESPAÇO PARA O SELO É A DESCRIÇÃO, não o bloco de texto inteiro.
+   O selo é um disco de 2rem no canto de baixo, e a descrição é a única linha que
+   passa por ali. Reservando o espaço no bloco todo, o RÓTULO também encolhia: em
+   «Roteiros com IA», num cartaz de 16:9, sobravam menos de 8rem e o título caía
+   em duas linhas por cima do grafismo da capa. */
+.hub-cartaz-descricao {
+  display: -webkit-box;
+  overflow: hidden;
+  padding-inline-end: 2.5rem;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
 }
 
-/* ---- Conta e bastidor: linha, não cartaz ---- */
+/* O selo: o disco que diz, em desenho, o que acontece do outro lado. */
+.hub-cartaz-selo {
+  position: absolute;
+  right: var(--espaco-cartao);
+  bottom: var(--espaco-cartao);
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: var(--raio-pilula);
+  background: color-mix(in srgb, var(--ic-branco) 14%, transparent);
+  color: var(--cor-acao);
+  backdrop-filter: blur(0.5rem);
+}
+
+.hub-cartaz-selo svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+/* ---- Os portes: só a razão do retângulo e quantas colunas ele ocupa ---- */
+.hub-cartaz--retrato {
+  aspect-ratio: 5 / 6;
+}
+
+.hub-cartaz--paisagem {
+  aspect-ratio: 5 / 4;
+}
+
+.hub-cartaz--larga {
+  aspect-ratio: 16 / 9;
+}
+
+.hub-cartaz--faixa {
+  grid-column: 1 / -1;
+  aspect-ratio: 15 / 7;
+}
+
+/* O cartaz em pé ocupa as duas fileiras da coluna e a altura vem dos dois
+   cartazes empilhados ao lado — por isso nenhuma razão fixa aqui: qualquer uma
+   brigaria com a altura que a coluna vizinha já definiu. */
+.hub-cartaz--alto {
+  grid-row: span 2;
+}
+
+/* ---- O cartaz de temporada: chamada de navegação, não app ----------------
+ *
+ * Ele não entra na grade porque não é um app: vem depois dela, na largura toda,
+ * e leva para a agenda inteira. O texto dele é NOSSO e isso está declarado em
+ * `apps.ts` — daí o fundo ser textura e não fotografia do acervo. */
+.hub-temporada {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-pilha);
+  overflow: hidden;
+  margin-top: 0.75rem;
+  padding: var(--espaco-cartao) 1rem;
+  aspect-ratio: 19 / 7;
+  border-radius: var(--raio-g);
+  background: var(--ic-preto);
+  box-shadow: var(--sombra-1);
+}
+
+.hub-temporada-fundo {
+  position: absolute;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.hub-temporada-veu {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--ic-preto) 66%, transparent) 0%,
+    color-mix(in srgb, var(--ic-preto) 30%, transparent) 58%,
+    color-mix(in srgb, var(--ic-preto) 12%, transparent) 100%
+  );
+}
+
+/* `relative` nos dois filhos de conteúdo: o véu é posicionado e, sem isto,
+   pintaria por cima do texto e do botão, que estão no fluxo. */
+.hub-temporada-texto {
+  position: relative;
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hub-temporada-rotulo {
+  color: var(--ic-branco);
+  font-weight: 700;
+}
+
+.hub-temporada-descricao {
+  color: color-mix(in srgb, var(--ic-branco) 88%, transparent);
+}
+
+/* A pílula clara com tinta preta: 21:1 contra o branco. O laranja de ação não
+   entra aqui porque o cartaz inteiro já é o link — dois níveis de destaque no
+   mesmo alvo competiriam entre si. */
+.hub-temporada-botao {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--raio-pilula);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+  font-weight: 600;
+  transition: transform var(--dur-1) var(--ease-padrao);
+}
+
+.hub-temporada:hover .hub-temporada-botao {
+  transform: translateX(0.25rem);
+}
+
+.hub-temporada-botao svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+/* ---- Bastidor: linha, não cartaz ---- */
 .hub-atalhos {
   display: grid;
   gap: 0.5rem;
@@ -240,20 +361,33 @@
   color: var(--cor-tinta-3);
 }
 
-/* ---- Visão web: a mesma grade, com o ar que a janela permite ---- */
+/* ---- Visão web: a MESMA grade, com um teto de largura -------------------
+ *
+ * A grade não vira três colunas como era antes. Os portes desta folha são de
+ * duas colunas — a faixa atravessa `1 / -1` e o cartaz em pé conta com um
+ * vizinho só —, e em três colunas a faixa viraria uma tarja de 64rem e o ritmo
+ * «lado» abriria dois buracos na fileira. O que a janela larga ganha é ar em
+ * volta, não uma coluna a mais. */
 [data-view="web"] .hub {
-  max-width: 64rem;
+  max-width: 48rem;
 }
 
-[data-view="web"] .hub-grade {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem 1rem;
+/* AS FORMAS DE LARGURA CHEIA ACHATAM, e as de meia coluna não. A razão de um
+   cartaz é desenhada para 11rem de largura; na web a faixa e a abertura passam a
+   ter 48rem, e a mesma razão as faz ocupar meia janela de altura cada uma. As
+   duas achatam. O RETRATO fica como está de propósito: ele é o corte mais
+   estreito da folha, e é ele que tira da capa do Cast o letreiro gravado na
+   foto — um retrato mais largo devolve o «Mekukradjá» para dentro do quadro. */
+[data-view="web"] .hub-abertura {
+  aspect-ratio: 21 / 9;
 }
 
-/* O ritmo «lado» volta a DUAS colunas na web: em três, o cartaz em pé ocuparia
-   uma coluna e deixaria a fileira de baixo com dois buracos. */
-[data-view="web"] .hub-grade[data-ritmo="lado"] {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+[data-view="web"] .hub-cartaz--faixa {
+  aspect-ratio: 3 / 1;
+}
+
+[data-view="web"] .hub-temporada {
+  aspect-ratio: 4 / 1;
 }
 
 [data-view="web"] .hub-atalhos {

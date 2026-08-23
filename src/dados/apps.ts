@@ -27,9 +27,24 @@
  * ferramenta.
  */
 
+/**
+ * Por onde o corte da capa deve segurar quando o cartaz é mais estreito que a
+ * foto — e por que isso é dado da CAPA e não medida de layout.
+ *
+ * Parte do acervo tem TIPOGRAFIA GRAVADA na imagem: a foto do Cast é a thumb do
+ * Mekukradjá e traz o letreiro do programa e o grafismo do Itaú Cultural no
+ * terço esquerdo. Num cartaz em retrato o corte centralizado guarda justamente
+ * essa faixa, e o rótulo «Cast» cai por cima de um segundo título. Onde segurar
+ * o corte é propriedade daquela imagem, não do porte do cartaz: a mesma capa num
+ * cartaz largo continua tendo o letreiro do mesmo lado.
+ */
+export type FocoDaCapa = "centro" | "direita" | "esquerda";
+
 export interface CapaApp {
   /** Nome do arquivo em `public/acervo/`, sem o diretório. */
   readonly arquivo: string;
+  /** Onde o corte segura. Ausente é `centro`, que serve à maioria. */
+  readonly foco?: FocoDaCapa;
   /** `imagemAlt` da entidade de origem. Nunca vazio. */
   readonly alt: string;
   /** `creditoImagem` da entidade de origem. Nunca vazio. */
@@ -38,6 +53,32 @@ export interface CapaApp {
   readonly origem: string;
 }
 
+/**
+ * O glifo do selo redondo no canto do cartaz. É a única coisa que diz, ANTES do
+ * toque, o que acontece do outro lado: Play e Cast começam a tocar alguma coisa,
+ * Acontece abre um calendário, Mapa abre um mapa. `entrar` é o resto — a seta que
+ * não promete nada além de atravessar. Quem desenha cada um é `base/icones.tsx`.
+ */
+export type Selo = "entrar" | "tocar" | "ouvir" | "agenda" | "mapa";
+
+/**
+ * Como o grupo se arruma na grade, e por que isto é DADO e não posição.
+ *
+ * O ritmo era derivado da ordem do grupo — girava sozinho e nenhum se repetia em
+ * sequência. A referência de 23/08 tirou essa liberdade: ela desenha uma forma
+ * para cada grupo, e a forma carrega significado. «Ler» é faixa larga porque
+ * notícia e curso são leitura contínua; «Descobrir e perguntar» põe o feed em pé
+ * ao lado dos dois atalhos porque o feed é o destino grande da fileira. Derivar
+ * isso da posição do grupo daria a forma certa por acidente e a erraria assim que
+ * alguém reordenasse a lista.
+ *
+ *   · **par**    — retratos aos pares. Contagem ímpar deixaria meia fileira vazia
+ *                  no fim, então o ÚLTIMO vira faixa e fecha a linha.
+ *   · **faixa**  — cada cartaz ocupa a largura toda.
+ *   · **lado**   — o primeiro fica em pé à esquerda, os outros empilham à direita.
+ */
+export type Ritmo = "par" | "faixa" | "lado";
+
 export interface App {
   readonly id: string;
   readonly rotulo: string;
@@ -45,12 +86,38 @@ export interface App {
   readonly descricao: string;
   readonly href: string;
   readonly capa: CapaApp;
+  readonly selo: Selo;
+}
+
+/**
+ * O cartaz de temporada que a referência põe no fim de «Ir e ver».
+ *
+ * O TEXTO É NOSSO, E ISSO ESTÁ DECLARADO AQUI. Diferente de um cartaz de app, ele
+ * não sai de nenhuma entidade do acervo: não existe no grafo uma coleção
+ * «programação de inverno» para ele apontar — `meta.json` tem temporada como a
+ * série de datas de um evento, não como estação do ano. Ele é uma CHAMADA DE
+ * NAVEGAÇÃO para a agenda inteira, escrita por nós, e por isso não anuncia número
+ * nem promete recorte: dizer «42 shows deste inverno» seria inventar contagem que
+ * a fonte não faz. O fundo é textura, não fotografia do acervo — entra sem alt,
+ * como decoração, porque é o que ele é.
+ */
+export interface Promocao {
+  readonly rotulo: string;
+  readonly descricao: string;
+  readonly href: string;
+  /** O rótulo do botão. Visível e clicável junto com o cartaz inteiro. */
+  readonly chamada: string;
+  /** Caminho da textura de fundo em `public/`. Decorativa: entra com alt vazio. */
+  readonly fundo: string;
 }
 
 export interface GrupoApps {
   readonly id: string;
   readonly rotulo: string;
+  readonly ritmo: Ritmo;
   readonly apps: readonly App[];
+  /** O cartaz de temporada, quando o grupo carrega um. Vem depois da grade. */
+  readonly promocao?: Promocao;
 }
 
 export interface Atalho {
@@ -63,6 +130,7 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
   {
     id: "assistir",
     rotulo: "Assistir e ouvir",
+    ritmo: "par",
     apps: [
       {
         id: "play",
@@ -75,6 +143,7 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
           credito: "frame de video",
           origem: "Série “O segredo delas” estreia na Itaú Cultural Play",
         },
+        selo: "tocar",
       },
       {
         id: "cast",
@@ -83,16 +152,29 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
         href: "/cast",
         capa: {
           arquivo: "41307c2ff3e8a383.jpeg",
+          // O letreiro «Mekukradjá» e o grafismo do IC ocupam o terço esquerdo
+          // desta foto. Segurando à direita, o corte fica em Célia e o cartaz
+          // deixa de ter dois títulos.
+          foco: "direita",
           alt: "Célia Xakriabá é uma mulher indígena jovem. Ela usa cocar e segura um microfone.",
           credito: "Guilherme Castoldi",
           origem: "Célia Xakriabá – Mekukradjá",
         },
+        selo: "ouvir",
       },
     ],
   },
   {
     id: "ir",
     rotulo: "Ir e ver",
+    ritmo: "par",
+    promocao: {
+      rotulo: "Programação de inverno",
+      descricao: "Shows, exposições e muito mais",
+      href: "/acontece",
+      chamada: "Explorar",
+      fundo: "/hub/inverno.jpg",
+    },
     apps: [
       {
         id: "acontece",
@@ -105,6 +187,7 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
           credito: "Itaú Cultural",
           origem: "Auditório Ibirapuera (curadoria de hero, docs em src/dados/heroi.ts)",
         },
+        selo: "agenda",
       },
       {
         id: "mapa",
@@ -117,6 +200,7 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
           credito: "Pri Barbosa",
           origem: "A arte visual e urbana cura a cidade em meio ao caos",
         },
+        selo: "mapa",
       },
       {
         id: "museu",
@@ -129,12 +213,14 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
           credito: "Everton Ballardin",
           origem: "Recortes sobre Sandra Cinto",
         },
+        selo: "entrar",
       },
     ],
   },
   {
     id: "ler",
     rotulo: "Ler",
+    ritmo: "faixa",
     apps: [
       {
         id: "noticias",
@@ -147,6 +233,7 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
           credito: "divulgação",
           origem: "Roteiristas de A Vida Invisível falam sobre o processo de adaptação",
         },
+        selo: "entrar",
       },
       {
         id: "cursos",
@@ -159,12 +246,14 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
           credito: "Leonardo Rogério",
           origem: "Curso de extensão propõe reflexões sobre as culturas surdas",
         },
+        selo: "entrar",
       },
     ],
   },
   {
     id: "descobrir",
     rotulo: "Descobrir e perguntar",
+    ritmo: "lado",
     apps: [
       {
         id: "descobrir",
@@ -177,6 +266,7 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
           credito: "Agência Ophelia",
           origem: "curadoria de hero, docs em src/dados/heroi.ts",
         },
+        selo: "entrar",
       },
       {
         id: "buscar",
@@ -189,6 +279,7 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
           credito: "Iara Venanzi/Itaú Cultural",
           origem: "Artistas Mulheres Contemporâneas no Acervo: Claudia Andujar",
         },
+        selo: "entrar",
       },
       {
         id: "ia",
@@ -201,6 +292,7 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
           credito: "Itaú Cultural",
           origem: "Conheça o jogabulário da exposição Game+",
         },
+        selo: "entrar",
       },
     ],
   },
