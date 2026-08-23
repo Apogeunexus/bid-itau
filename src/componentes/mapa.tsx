@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/componentes/desertos";
 
@@ -118,6 +118,38 @@ interface Grupo {
   membros: PinoIndexado[];
 }
 
+/** O retângulo do desenho que está na tela, em unidades do `viewBox` do build. */
+interface Vista {
+  x: number;
+  y: number;
+  largura: number;
+  altura: number;
+}
+
+/** Quanto dá para aproximar. Além de 24× o desenho vira mancha: ele é esquemático. */
+const ZOOM_MAXIMO = 24;
+
+/**
+ * A partir daqui os contornos dos estados aparecem.
+ *
+ * Abaixo desse ponto vê-se o Brasil e as divisas seriam risco no meio do desenho;
+ * a partir dele a pessoa está olhando UMA região, e a divisa é o que diz onde ela
+ * está. É o mesmo princípio de um mapa de rua que só mostra o nome do bairro
+ * depois de certo nível — detalhe que aparece cedo demais é ruído.
+ */
+const ZOOM_DAS_DIVISAS = 2.2;
+
+function lerViewBox(vb: string): Vista {
+  const [x, y, largura, altura] = vb.split(/\s+/).map(Number);
+  return { x: x ?? 0, y: y ?? 0, largura: largura ?? 100, altura: altura ?? 100 };
+}
+
+/** Onde o cursor está dentro do desenho, em fração (0..1) — o ponto que o zoom ancora. */
+function focoDoEvento(e: { clientX: number; clientY: number; currentTarget: SVGSVGElement }) {
+  const r = e.currentTarget.getBoundingClientRect();
+  return { fx: (e.clientX - r.left) / r.width, fy: (e.clientY - r.top) / r.height };
+}
+
 /**
  * As classes do acervo agrupadas como a pessoa pensa nelas.
  *
@@ -146,6 +178,21 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
   const [desertos, definirDesertos] = useState(false);
   const [familia, definirFamilia] = useState<string>("");
   const [busca, definirBusca] = useState("");
+  /**
+   * A VISTA — o retângulo do desenho que está na tela.
+   *
+   * Zoom aqui é `viewBox`, e não `transform` com escala: `viewBox` é o
+   * enquadramento do próprio SVG, então o traço não engorda ao aproximar (todo
+   * traço da tela usa `vector-effect: non-scaling-stroke`) e o pino continua do
+   * mesmo tamanho em qualquer nível. Com `transform: scale()` o mapa inteiro
+   * inflaria junto — pinos gigantes, contorno grosso — que é o defeito clássico
+   * de zoom em SVG.
+   *
+   * `null` é «vista inteira»: o retângulo base que veio do build. Guardar null em
+   * vez de copiar o valor faz o botão de reenquadrar não precisar lembrar de nada.
+   */
+  const [vista, definirVista] = useState<Vista | null>(null);
+  const arrastando = useRef<{ x: number; y: number; vista: Vista } | null>(null);
 
   // O hash só é lido no cliente: sob export estático o HTML é o mesmo para todo recorte, e
   // ler `location` durante a renderização de servidor produziria divergência de hidratação.
@@ -235,6 +282,67 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
       // Os menores por último: um grupo grande nunca cobre um pino solitário.
       .sort((a, b) => b.membros.length - a.membros.length);
   }, [visiveis]);
+
+  // ---- zoom e arrasto -------------------------------------------------------
+  const base = useMemo(() => lerViewBox(dados.viewBox), [dados.viewBox]);
+  const atual = vista ?? base;
+  const zoom = base.largura / atual.largura;
+
+  /** O miolo dos pontos que estão na tela — a âncora do zoom sem cursor. */
+  const centroDoConteudo = useMemo(() => {
+    if (grupos.length === 0) return { x: base.x + base.largura / 2, y: base.y + base.altura / 2 };
+    return {
+      x: grupos.reduce((s, g) => s + g.x, 0) / grupos.length,
+      y: grupos.reduce((s, g) => s + g.y, 0) / grupos.length,
+    };
+  }, [grupos, base]);
+
+  /** Mantém a vista dentro do desenho: não dá para arrastar o Brasil para fora da moldura. */
+  const conter = useCallback(
+    (v: Vista): Vista => ({
+      largura: v.largura,
+      altura: v.altura,
+      x: Math.min(Math.max(v.x, base.x), base.x + base.largura - v.largura),
+      y: Math.min(Math.max(v.y, base.y), base.y + base.altura - v.altura),
+    }),
+    [base],
+  );
+
+  /**
+   * Aproxima mantendo o ponto sob o cursor parado.
+   *
+   * É o que separa um zoom que obedece de um que foge: aproximar sempre no centro
+   * faz o lugar que a pessoa está olhando escapar da tela, e ela passa a corrigir
+   * com arrasto a cada passo. `foco` vem em fração (0..1) do retângulo atual.
+   */
+  const aproximar = useCallback(
+    (fator: number, foco?: { fx: number; fy: number }) => {
+      definirVista((anterior) => {
+        const v = anterior ?? base;
+        const zoomAtual = base.largura / v.largura;
+        const alvo = Math.min(Math.max(zoomAtual * fator, 1), ZOOM_MAXIMO);
+        if (alvo === zoomAtual) return anterior;
+        const largura = base.largura / alvo;
+        const altura = base.altura / alvo;
+        // SEM FOCO — o caso do botão — a âncora é o CENTRO DO CONTEÚDO, e não o
+        // centro do retângulo. O `viewBox` do build é um envelope com folga, e o
+        // seu meio geométrico cai no interior vazio do país: aproximar por ele
+        // levava a uma tela sem nenhum ponto, e a pessoa concluía que o zoom
+        // estava quebrado. Ancorar no miolo dos pinos põe a aproximação onde há
+        // o que ver.
+        const fx = foco?.fx ?? (centroDoConteudo.x - v.x) / v.largura;
+        const fy = foco?.fy ?? (centroDoConteudo.y - v.y) / v.altura;
+        // O ponto sob o cursor, em unidades do desenho, tem de cair no mesmo lugar.
+        const ancoraX = v.x + v.largura * fx;
+        const ancoraY = v.y + v.altura * fy;
+        return conter({ largura, altura, x: ancoraX - largura * fx, y: ancoraY - altura * fy });
+      });
+    },
+    // `centroDoConteudo` entra aqui porque o zoom sem cursor o LÊ: sem ele na
+    // lista, a função ficaria presa ao miolo do primeiro recorte, e aproximar
+    // depois de filtrar levaria ao centro do conjunto antigo.
+    [base, conter, centroDoConteudo],
+  );
 
   const grupoSelecionado = grupos.find((g) => g.celula === selecionada) ?? null;
   const voltas = lente?.volta
@@ -328,15 +436,56 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
         ))}
       </TrilhoDeChips>
 
-      <div className="mapa-quadro">
+      <div className="mapa-quadro" data-zoom={zoom > 1 ? "sim" : "nao"}>
         <svg
+          // `data-mapa-viewbox` guarda o retângulo BASE, o que veio do build, e não
+          // o que está na tela: é por ele que os portões acham o SVG, e um valor
+          // que muda com o gesto do usuário faria a verificação medir outra coisa
+          // a cada execução. O enquadramento vivo é o `viewBox` logo abaixo.
           data-mapa-viewbox={dados.viewBox}
-          viewBox={dados.viewBox}
+          viewBox={`${atual.x} ${atual.y} ${atual.largura} ${atual.altura}`}
           role="img"
           aria-label={`Mapa esquemático do Brasil com ${grupos.length} pontos do recorte`}
           className="mapa-desenho"
+          onWheel={(e) => {
+            // Sem `preventDefault`: o React registra `onWheel` como ouvinte
+            // passivo e chamá-lo só produziria um aviso no console. O
+            // `overscroll-behavior: contain` do quadro é o que impede a página
+            // de rolar junto.
+            aproximar(e.deltaY < 0 ? 1.25 : 1 / 1.25, focoDoEvento(e));
+          }}
+          onDoubleClick={(e) => aproximar(2, focoDoEvento(e))}
+          onPointerDown={(e) => {
+            if (zoom <= 1) return;
+            arrastando.current = { x: e.clientX, y: e.clientY, vista: atual };
+            e.currentTarget.setPointerCapture(e.pointerId);
+          }}
+          onPointerMove={(e) => {
+            const inicio = arrastando.current;
+            if (!inicio) return;
+            const r = e.currentTarget.getBoundingClientRect();
+            // Converte o deslocamento em pixels para unidades do desenho.
+            const dx = ((e.clientX - inicio.x) / r.width) * inicio.vista.largura;
+            const dy = ((e.clientY - inicio.y) / r.height) * inicio.vista.altura;
+            definirVista(conter({ ...inicio.vista, x: inicio.vista.x - dx, y: inicio.vista.y - dy }));
+          }}
+          onPointerUp={(e) => {
+            arrastando.current = null;
+            e.currentTarget.releasePointerCapture(e.pointerId);
+          }}
         >
           <path className="mapa-contorno" d={dados.contorno} />
+          {/* AS DIVISAS SÓ APARECEM APROXIMADO. De longe elas seriam risco no meio
+              do Brasil; de perto são o que diz em que estado a pessoa está. Os
+              polígonos já vêm projetados do build — é o mesmo desenho que a camada
+              de desertos usa, aqui sem preenchimento. */}
+          {zoom >= ZOOM_DAS_DIVISAS && !desertos ? (
+            <g className="mapa-divisas" aria-hidden>
+              {dados.desertos.ufs.map((uf) => (
+                <path key={uf.sigla} d={uf.d} />
+              ))}
+            </g>
+          ) : null}
           {desertos ? <CamadaDesertos dados={dados.desertos} /> : null}
           <g className="mapa-pinos" data-sob-camada={desertos ? "sim" : "nao"}>
             {/* O PINO É LARANJA, SEMPRE — e a cor de linguagem saiu do mapa.
@@ -348,10 +497,18 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
                 lista logo abaixo, escrito. */}
             {grupos.map((g) => {
               const n = g.membros.length;
-              const raio = 3 + Math.min(7, Math.sqrt(n) * 1.6);
+              // O RAIO É DIVIDIDO PELO ZOOM. `viewBox` resolve o traço — todo
+              // `stroke` aqui usa `vector-effect: non-scaling-stroke` — mas NÃO
+              // resolve geometria: `r` está em unidades do desenho, então a 10×
+              // um pino de 4 unidades ocupa dez vezes mais tela e o mapa vira
+              // um borrão laranja. Dividir mantém o ponto do mesmo tamanho em
+              // qualquer aproximação, que é o que um pino deve fazer.
+              const raio = (3 + Math.min(7, Math.sqrt(n) * 1.6)) / zoom;
               // O número só entra quando o disco comporta: abaixo disso ele vira
               // borrão e piora a leitura em vez de melhorar.
-              const cabeONumero = n > 1 && raio >= 6;
+              // O teto é comparado com o raio EM TELA, não no desenho — por isso
+              // multiplica de volta pelo zoom.
+              const cabeONumero = n > 1 && raio * zoom >= 6;
               return (
                 <g key={g.celula}>
                   <circle
@@ -374,6 +531,9 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
                     <text
                       aria-hidden
                       className="mapa-cluster-n"
+                      // Mesma razão do raio: `font-size` em SVG é unidade de
+                      // desenho e escalaria junto com o enquadramento.
+                      style={{ fontSize: 7 / zoom }}
                       x={g.x}
                       y={g.y}
                       textAnchor="middle"
@@ -387,6 +547,46 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
             })}
           </g>
         </svg>
+
+        {/* OS BOTÕES SÃO O CAMINHO SEM MOUSE. Roda e arrasto atendem quem tem
+            trackpad; num telefone e no teclado, eles não existem. Sem estes três
+            o zoom seria um recurso só para parte das pessoas. */}
+        <div className="mapa-zoom" role="group" aria-label="Aproximar o mapa">
+          <button
+            type="button"
+            onClick={() => aproximar(1.6)}
+            disabled={zoom >= ZOOM_MAXIMO}
+            aria-label="Aproximar"
+            className="mapa-zoom-botao"
+          >
+            +
+          </button>
+          <button
+            type="button"
+            onClick={() => aproximar(1 / 1.6)}
+            disabled={zoom <= 1}
+            aria-label="Afastar"
+            className="mapa-zoom-botao"
+          >
+            −
+          </button>
+          {zoom > 1 ? (
+            <button
+              type="button"
+              onClick={() => definirVista(null)}
+              aria-label="Ver o Brasil inteiro"
+              className="mapa-zoom-botao mapa-zoom-reenquadrar"
+            >
+              ⤢
+            </button>
+          ) : null}
+        </div>
+
+        {zoom > 1 ? (
+          <p aria-live="polite" className="mapa-zoom-nivel">
+            {zoom.toFixed(1)}×
+          </p>
+        ) : null}
       </div>
 
       {/* COM A CAMADA LIGADA O PAINEL É DA CAMADA. A leitura de D-62 precisa caber inteira

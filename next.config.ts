@@ -43,6 +43,24 @@ const nextConfig: NextConfig = {
   output: "export",
   images: { unoptimized: true },
   trailingSlash: true,
+
+  /**
+   * SÓ VALE EM `next dev`, e existe por um motivo concreto.
+   *
+   * `localhost` compartilha cookies entre TODAS as portas, então quem roda vários
+   * projetos acumula cabeçalho até estourar o limite de 16 KB do Node e receber
+   * um HTTP 431 sem explicação. A saída é abrir por `127.0.0.1`, que o navegador
+   * trata como outro host e para o qual não manda esses cookies.
+   *
+   * Mas o Next 16 também trata `127.0.0.1` como outra ORIGEM e bloqueia os
+   * chunks de desenvolvimento: a página chega inteira, o JavaScript não, e o
+   * sintoma é uma tela que renderiza e nunca hidrata — nenhum botão responde, e
+   * o console fala de «cross-origin», não de hidratação. Declarar a origem aqui
+   * é o que o próprio aviso do Next manda fazer.
+   *
+   * Não afeta o build: `next build` não lê esta opção.
+   */
+  allowedDevOrigins: ["127.0.0.1"],
   experimental: {
     // 24 MB de JSON (`arestas` 13 MB + `entidades` 9,4 MB + `ocorrencias` 1,8 MB)
     // são carregados POR WORKER, e em memória viram várias vezes isso em objetos.

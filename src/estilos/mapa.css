@@ -14,15 +14,17 @@
  * criaria uma segunda fonte de verdade que diverge na primeira edição.
  * ------------------------------------------------------------------------- */
 
+/* O desenho preenche o quadro, e é o QUADRO que tem altura (`clamp` de ~45% da
+   vista). O teto de 288px que morava aqui vinha de quando o SVG se dimensionava
+   sozinho pela proporção; com o quadro mandando, ele virava um segundo limite
+   competindo com o primeiro — e o mapa encolhia sem que nada na regra do quadro
+   explicasse por quê. `overflow: hidden` porque agora o `viewBox` recorta: com
+   zoom, o que sai do enquadramento não pode vazar por cima da moldura. */
 .mapa-desenho {
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  /* O SVG tem `viewBox` fixo e proporção própria; a altura acompanha a largura da moldura.
-     O teto existe porque a tela inteira precisa caber sem rolagem — a camada de desertos é
-     uma imagem para ser projetada, e uma imagem que rola não é uma imagem. */
-  max-height: 288px;
-  overflow: visible;
+  overflow: hidden;
 }
 
 /* O TERRITÓRIO RECUA PARA QUE O PINO APAREÇA. Antes o contorno tinha traço a
@@ -64,7 +66,7 @@
 .mapa-cluster-n {
   fill: var(--cor-sobre-acao);
   font-family: var(--fonte-display);
-  font-size: 7px;
+  /* O tamanho vem inline, dividido pelo zoom — ver mapa.tsx. */
   font-weight: 700;
   pointer-events: none;
   user-select: none;
@@ -174,12 +176,102 @@
  * do que representa.
  * ------------------------------------------------------------------------- */
 .mapa-quadro {
+  position: relative;
   display: flex;
   overflow: hidden;
   block-size: clamp(11rem, 45vh, 22rem);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
-  background: var(--cor-superficie-2);
+  /* O QUADRO É O «MAR», e precisa ser OUTRA cor que o Brasil. Os dois usavam
+     `--cor-superficie-2`: de longe o traço de contorno separava os dois, mas ao
+     aproximar o interior do país preenchia a tela toda com a cor do fundo e o
+     mapa parecia vazio. Fundo da página no mar, superfície rebaixada na terra. */
+  background: var(--cor-fundo);
+  /* Impede a página de rolar junto quando a roda é usada para aproximar. É o que
+     substitui o `preventDefault` — o React registra `onWheel` como ouvinte
+     passivo, e chamá-lo lá só renderia um aviso no console. */
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+/* Aproximado, o cursor diz que dá para arrastar. Na vista inteira não dá, e
+   mostrar a mão aberta ali prometeria um gesto que não acontece. */
+.mapa-quadro[data-zoom="sim"] .mapa-desenho {
+  cursor: grab;
+}
+
+.mapa-quadro[data-zoom="sim"] .mapa-desenho:active {
+  cursor: grabbing;
+}
+
+/* ---- as divisas de estado, que só aparecem aproximado -------------------- */
+.mapa-divisas path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--cor-tinta-crua) 22%, transparent);
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+/* ---- os controles de zoom ------------------------------------------------ */
+.mapa-zoom {
+  position: absolute;
+  inset-block-start: 0.5rem;
+  inset-inline-end: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mapa-zoom-botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color var(--dur-1) var(--ease-padrao);
+}
+
+.mapa-zoom-botao:hover:not(:disabled) {
+  border-color: var(--cor-tinta);
+}
+
+.mapa-zoom-botao:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.mapa-zoom-botao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.mapa-zoom-reenquadrar {
+  font-size: var(--tipo-legenda);
+}
+
+/* O nível fica no canto oposto aos botões: é leitura, não controle. */
+.mapa-zoom-nivel {
+  position: absolute;
+  inset-block-end: 0.5rem;
+  inset-inline-start: 0.5rem;
+  border-radius: var(--raio-pilula);
+  padding: 0 0.5rem;
+  min-block-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  background: var(--cor-superficie);
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-micro);
+  font-variant-numeric: tabular-nums;
 }
 
 .mapa-quadro > svg {
@@ -197,7 +289,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--espaco-pilha);
-  margin-block-start: -0.75rem;
+  /* SEM MARGEM NEGATIVA. A primeira versão puxava a folha 0,75rem para cima para
+     imitar uma folha «subindo» sobre o mapa — e o que aparecia era a borda do
+     quadro encostando na borda da folha, duas linhas de 1px coladas formando um
+     traço duplo torto. Sobreposição de folha precisa que o que está embaixo NÃO
+     tenha borda ali; com os dois emoldurados, o respiro é a resposta certa. */
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-g) var(--raio-g) var(--raio-m) var(--raio-m);
   padding: 0.5rem var(--espaco-cartao) var(--espaco-cartao);
