@@ -159,8 +159,8 @@ export function SemResultado({ beco, indice, comNavegacaoPropria = false }: SemR
         {aplicado ? (
           <div className="beco-aplicado" data-contador-vivo={aplicado.total}>
             <p className="beco-aplicado-linha">
-              <strong>{milhar(aplicado.total)}</strong> resultados — exatamente o número que{" "}
-              «{aplicado.saida.rotulo}» prometia. Aplicado aqui mesmo, sem trocar de tela.
+              <strong>{milhar(aplicado.total)}</strong> resultados — o número que «
+              {aplicado.saida.rotulo}» prometia.
             </p>
             <ul className="beco-aplicado-lista">
               {aplicado.resultados.map((r) => (
@@ -172,8 +172,7 @@ export function SemResultado({ beco, indice, comNavegacaoPropria = false }: SemR
             </ul>
             {aplicado.total > aplicado.resultados.length ? (
               <p className="beco-nota">
-                Mostrando {milhar(aplicado.resultados.length)} de {milhar(aplicado.total)}. O
-                corte é da exibição, e está declarado em vez de acontecer em silêncio.
+                Mostrando {milhar(aplicado.resultados.length)} de {milhar(aplicado.total)}.
               </p>
             ) : null}
           </div>
@@ -222,11 +221,6 @@ export function SemResultado({ beco, indice, comNavegacaoPropria = false }: SemR
       {beco.vizinhos.length ? (
         <div className="beco-perto">
           <p className="beco-saidas-titulo">O que existe perto disso no acervo</p>
-          <p className="beco-nota">
-            Vizinhança por <code>semelhante_a</code>, e o motivo vem escrito na própria
-            ligação — é o mesmo mecanismo do selo laranja de Descobrir. Um «veja também» sem
-            motivo seria o recomendador opaco que este projeto recusa.
-          </p>
           <ul className="beco-lista-perto">
             {beco.vizinhos.map((v) => (
               <li key={v.id} className="beco-vizinho" data-perto-no-grafo={v.classe}>
@@ -250,18 +244,12 @@ export function SemResultado({ beco, indice, comNavegacaoPropria = false }: SemR
       {beco.trilhas.map((t) => (
         <div key={t.id} className="beco-trilha" data-trilha-relacionada={t.slug}>
           <p className="beco-saidas-titulo">
-            Ou percorra a trilha curada — {milhar(beco.trilhas.length)}, a única que este
-            acervo tem
+            Ou percorra a trilha curada do acervo
           </p>
           <Link href={`/trilha/${t.slug}/`} className="beco-trilha-link">
             {t.titulo}
           </Link>
           {t.resumo ? <p className="beco-nota">{t.resumo}</p> : null}
-          <p className="beco-nota">
-            {milhar(beco.trilhas.length)} trilha, e o singular é medido: o acervo tem uma
-            trilha curada. Dizer «trilhas relacionadas» no plural fingiria um catálogo que
-            não existe.
-          </p>
         </div>
       ))}
     </section>

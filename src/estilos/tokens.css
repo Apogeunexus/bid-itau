@@ -168,7 +168,9 @@
  * controles hoje. Quem resolve isso é o chip preto-cheio, não o tema.
  * ------------------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
-  :root {
+  /* `:not([data-tema="claro"])` — quem escolheu CLARO no menu da conta ganha do
+     sistema. Sem isto, a escolha manual só funcionaria numa direção. */
+  :root:not([data-tema="claro"]) {
     color-scheme: dark;
 
     --cor-tinta-crua: var(--ic-branco);
@@ -192,6 +194,31 @@
     /* No escuro o laranja cheio mede 7,94:1 contra preto — nada a corrigir. */
     --cor-acao-tinta: var(--ic-laranja);
   }
+}
+
+/* ---------------------------------------------------------------------------
+ * A ESCOLHA MANUAL (23/08, pedido do cliente): o menu da conta oferece sistema,
+ * claro e escuro, e `antes-da-pintura.js` escreve `data-tema` na raiz antes do
+ * primeiro pixel — sem lampejo entre a pintura e a hidratação.
+ *
+ * A LISTA É A MESMA da @media acima, e isso é DUPLICAÇÃO DE PROPÓSITO: CSS não
+ * tem como compartilhar um bloco entre um seletor e uma media query sem uma
+ * camada a mais. O que protege as duas de divergirem não é disciplina, é o
+ * portão de `verificar-ds.mjs`, que compara as duas listas e reprova se uma
+ * ganhar uma propriedade que a outra não tem. Os comentários do porquê de cada
+ * valor moram na @media, para não haver duas explicações para divergir também.
+ * ------------------------------------------------------------------------ */
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+
+  --cor-tinta-crua: var(--ic-branco);
+  --cor-papel-cru: var(--ic-preto);
+  --cor-superficie: color-mix(in srgb, var(--ic-preto) 93%, var(--ic-branco));
+  --cor-superficie-2: color-mix(in srgb, var(--ic-preto) 88%, var(--ic-branco));
+  --cor-borda: color-mix(in srgb, var(--ic-branco) 20%, transparent);
+  --cor-borda-forte: color-mix(in srgb, var(--ic-branco) 38%, transparent);
+  --cor-acao-lavada: color-mix(in srgb, transparent 82%, var(--ic-laranja));
+  --cor-acao-tinta: var(--ic-laranja);
 }
 
 /* Exposição ao Tailwind: os utilitários leem o token, e trocar o token troca a

@@ -362,30 +362,38 @@ console.log("\nverificar-ds — regras estruturais do design system");
   );
 }
 
-// ---- 6. O tema escuro tem UM DONO SÓ, e o dono é o sistema --------------
+// ---- 6. O tema escuro mora em DOIS seletores, e eles não podem divergir ----
 //
-// Até 23/08 o escuro morava em dois seletores — a @media do sistema e um
-// `:root[data-tema="escuro"]` para a escolha manual —, e o gate daqui existia
-// para impedir que as duas listas divergissem. O botão de tema saiu do produto:
-// o tema acompanha o sistema operacional e mais nada.
+// Até 23/08 o escuro morava só na @media do sistema, porque o produto não tinha
+// botão de tema. O cliente pediu a escolha de volta no mesmo dia, e ela exige um
+// segundo seletor: `:root[data-tema="escuro"]` para quem escolheu escuro, e um
+// `:not([data-tema="claro"])` na @media para quem escolheu claro num sistema
+// escuro. CSS não compartilha um bloco entre um seletor e uma media query, então
+// a lista de propriedades existe duas vezes.
 //
-// O QUE ESTE GATE TRAVA AGORA é o caminho de volta. Um `[data-tema]` reaparecer
-// em qualquer folha significa que alguém recriou meio interruptor — uma folha
-// respondendo a um atributo que nenhum código escreve mais, e portanto CSS que
-// nunca casa. É o tipo de resíduo que passa despercebido justamente porque não
-// quebra nada: ele só não faz efeito.
+// O QUE ESTE GATE TRAVA é a divergência entre as duas cópias — uma ganhar uma
+// propriedade que a outra não tem, e o tema passar a mudar só metade da tela
+// conforme o caminho pelo qual ele chegou. E trava também `[data-tema]` FORA de
+// `tokens.css`: o atributo é a chave do tema e ele tem um dono só.
 {
   const folhas = await arquivosDe(path.join(SRC, "estilos"), /\.css$/);
-  const comAtributo = [];
+  const forasteiras = [];
   let corpoDaMedia = null;
+  let corpoDoAtributo = null;
 
   for (const folha of folhas) {
     const fonte = semComentarios(await readFile(folha, "utf8"));
-    if (/\[data-tema/.test(fonte)) comAtributo.push(path.basename(folha));
-    if (path.basename(folha) === "tokens.css") {
-      const m = fonte.match(/@media \(prefers-color-scheme: dark\)\s*\{\s*:root\s*\{([\s\S]*?)\n {2}\}/);
-      corpoDaMedia = m ? m[1] : null;
+    const nome = path.basename(folha);
+    if (nome !== "tokens.css") {
+      if (/\[data-tema/.test(fonte)) forasteiras.push(nome);
+      continue;
     }
+    const m = fonte.match(
+      /@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-tema="claro"\]\)\s*\{([\s\S]*?)\n {2}\}/,
+    );
+    corpoDaMedia = m ? m[1] : null;
+    const a = fonte.match(/:root\[data-tema="escuro"\]\s*\{([\s\S]*?)\n\}/);
+    corpoDoAtributo = a ? a[1] : null;
   }
 
   // Casa INÍCIO DE LINHA, e não qualquer `nome:`: pega `color-scheme` junto das
@@ -393,18 +401,24 @@ console.log("\nverificar-ds — regras estruturais do design system");
   // a declaração que o navegador usa para pintar canvas e barra de rolagem), e
   // não confunde o `in srgb,` de dentro de um color-mix multilinha com uma
   // declaração nova.
-  const propriedades = corpoDaMedia
-    ? [...corpoDaMedia.matchAll(/^\s*([a-z0-9-]+)\s*:/gm)].map((m) => m[1])
-    : [];
+  const listar = (corpo) =>
+    corpo ? [...corpo.matchAll(/^\s*([a-z0-9-]+)\s*:/gm)].map((m) => m[1]).sort() : [];
+  const naMedia = listar(corpoDaMedia);
+  const noAtributo = listar(corpoDoAtributo);
+  const iguais = naMedia.length > 0 && naMedia.join(",") === noAtributo.join(",");
+  const soNoAtributo = noAtributo.filter((p) => !naMedia.includes(p));
+  const soNaMedia = naMedia.filter((p) => !noAtributo.includes(p));
 
   exigir(
-    propriedades.length > 0 && comAtributo.length === 0,
-    "o tema escuro mora só na @media do sistema — nenhum [data-tema] em folha nenhuma",
-    corpoDaMedia === null
-      ? "não achei `@media (prefers-color-scheme: dark) { :root { … } }` em tokens.css"
-      : `${propriedades.length} propriedades na @media` +
-        (comAtributo.length ? ` · [data-tema] ressurgiu em: ${comAtributo.join(", ")}` : ""),
-    "um bloco só, zero [data-tema]",
+    iguais && forasteiras.length === 0,
+    "as duas listas do tema escuro são a MESMA, e [data-tema] só existe em tokens.css",
+    corpoDaMedia === null || corpoDoAtributo === null
+      ? `não achei os dois blocos em tokens.css (media=${corpoDaMedia !== null}, atributo=${corpoDoAtributo !== null})`
+      : `${naMedia.length} propriedades na @media · ${noAtributo.length} no atributo` +
+        (soNaMedia.length ? ` · só na @media: ${soNaMedia.join(", ")}` : "") +
+        (soNoAtributo.length ? ` · só no atributo: ${soNoAtributo.join(", ")}` : "") +
+        (forasteiras.length ? ` · [data-tema] fora de tokens.css: ${forasteiras.join(", ")}` : ""),
+    "as duas listas iguais, zero [data-tema] em outra folha",
   );
 }
 

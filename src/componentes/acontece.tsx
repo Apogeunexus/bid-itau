@@ -338,11 +338,11 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
         </div>
 
         <p className="max-w-prose text-sm leading-relaxed text-tinta-2">
-          {`${milhar(diagnostico.eventosComSessao)} dos ${milhar(diagnostico.eventosNoAcervo)} eventos do acervo têm sessão datada, e são eles que aparecem aqui. Os outros ${milhar(diagnostico.eventosSemSessao)} — ${milhar(diagnostico.eventosSemSessaoDaEnciclopedia)} da Enciclopédia Itaú Cultural e ${milhar(diagnostico.eventosSemSessaoDoCms)} da agenda, sem período declarado — têm ano, não sessão: eles existem no acervo do território e na busca, e não nesta agenda.`}
+          {`${milhar(diagnostico.eventosComSessao)} dos ${milhar(diagnostico.eventosNoAcervo)} eventos do acervo têm sessão datada, e são eles que aparecem aqui.`}
         </p>
 
         <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
-          {`data de referência · ${curta(agenda.hoje)} · o protótipo é estático e «passado» e «futuro» são calculados contra a data em que ele foi gerado`}
+          {`data de referência · ${curta(agenda.hoje)}`}
         </p>
       </header>
 
@@ -587,7 +587,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
                 defeito, e um passado escondido seria mentira sobre o que existe. */}
             {dia.tempo === "passado" ? (
               <p className="max-w-prose rounded-lg bg-superficie-2 px-3 py-2 text-xs leading-relaxed text-tinta-2">
-                {`Este dia é anterior à data de referência, e as sessões abaixo já aconteceram. Elas continuam na tela de propósito: o acervo do Itaú Cultural documenta o que a cultura brasileira produziu, e ${milhar(diagnostico.sessoesPassadas)} das ${milhar(diagnostico.totalSessoes)} sessões deste protótipo são passadas. Escondê-las esvaziaria a agenda e mentiria sobre o que o acervo tem.`}
+                {`Este dia é anterior à data de referência: as ${milhar(diagnostico.sessoesPassadas)} sessões passadas continuam na tela.`}
               </p>
             ) : null}
 
@@ -682,9 +682,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
             </ul>
           ) : (
             <p className="rounded-xl border border-dashed border-borda p-3 text-xs leading-relaxed text-tinta-2">
-              Nenhum evento neste dia. A faixa só oferece dias que têm sessão, então este
-              estado não deveria ser alcançável pela tela — se ele apareceu, o endereço
-              trouxe um dia que o acervo não tem.
+              Nenhum evento neste dia. Escolha outro na faixa acima.
             </p>
           )}
         </section>
@@ -700,11 +698,6 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
         <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
           O que o acervo não publica
         </h2>
-        <p className="max-w-prose text-xs leading-relaxed text-tinta-2">
-          Cada linha abaixo é um campo que existe no modelo e que a fonte não preenche. O
-          número é medido no acervo carregado, não estimado — e o campo continua no lugar,
-          declarado, em vez de sumir da tela.
-        </p>
         <ul className="flex flex-col gap-2">
           {ausencias.map((a) => (
             <li key={a.campo} className="ausencia-medida" data-ausencia={a.campo}>

@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
+import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
 import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/componentes/desertos";
+import { Grafismo } from "@/componentes/grafismo";
 
 /**
  * mapa.tsx — o mapa como LENTE (D-59), desenhado por projeção própria em SVG (D-60).
@@ -28,7 +30,7 @@ import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/component
  * que é.
  */
 
-/** `[chave, id, título, classe, x, y, método, via, cor, célula, dentroDoBrasil, eventos]` */
+/** `[chave, id, título, classe, x, y, método, via, cor, célula, dentroDoBrasil, eventos, imagem]` */
 export type PinoIndexado = readonly [
   string,
   string,
@@ -43,11 +45,15 @@ export type PinoIndexado = readonly [
   0 | 1,
   /** Quantos eventos do acervo se ligam a esta entidade — contado no build. Ver `geo.ts`. */
   number,
+  /** Caminho da imagem do acervo, `""` quando não há. Ver `geo.ts`. */
+  string,
 ];
 
 /** A posição do campo na tupla, nomeada — `p[11]` num `sort` não diz nada a ninguém. */
 const EVENTOS = 11;
 const TITULO = 2;
+const COR = 8;
+const IMAGEM = 12;
 
 export interface VoltaPadrao {
   href: string;
@@ -177,9 +183,26 @@ const FAMILIAS: readonly Familia[] = [
   { id: "obras", rotulo: "Obras", classes: ["obra"] },
 ];
 
+/**
+ * QUEM TEM MAIS EVENTOS PRIMEIRO, e o alfabeto só desempata.
+ *
+ * A ordem alfabética abria a lista em «86» e «A. C. D'Ávila» — os primeiros
+ * do alfabeto, que não são os mais relevantes de nada. Quem tem mais eventos
+ * no acervo é quem ele mais documenta, e é por onde faz sentido começar.
+ *
+ * `localeCompare` com `pt` no desempate porque o alfabeto daqui tem acento:
+ * comparação binária põe «Álvaro» depois de «Zé», e a lista fica com um
+ * bloco de acentuados no fim que ninguém entende.
+ */
+const porRelevancia = (a: PinoIndexado, b: PinoIndexado) =>
+  b[EVENTOS] - a[EVENTOS] || a[TITULO].localeCompare(b[TITULO], "pt");
+
 export function Mapa({ dados }: { dados: DadosDoMapa }) {
   const [lente, definirLente] = useState<Lente | null>(null);
   const [selecionada, definirSelecionada] = useState<string | null>(null);
+  /** Qual aba da folha está aberta: o que o desenho mostra, ou o que ficou fora
+   *  dele. `null` é «ninguém escolheu ainda» — e aí quem decide é o recorte. */
+  const [aba, definirAba] = useState<"brasil" | "fora" | null>(null);
   const [desertos, definirDesertos] = useState(false);
   const [familia, definirFamilia] = useState<string>("");
   const [busca, definirBusca] = useState("");
@@ -205,6 +228,9 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
     const ler = () => {
       definirLente(lerHash(window.location.hash));
       definirSelecionada(null);
+      // Outra lente é outro conjunto: uma escolha de aba presa ao recorte
+      // anterior abriria a folha num painel possivelmente vazio.
+      definirAba(null);
     };
     ler();
     window.addEventListener("hashchange", ler);
@@ -250,22 +276,18 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
         if (termo && !semAcento(p[TITULO]).includes(termo)) return false;
         return true;
       })
-      /**
-       * QUEM TEM MAIS EVENTOS PRIMEIRO, e o alfabeto só desempata.
-       *
-       * A ordem alfabética abria a lista em «86» e «A. C. D'Ávila» — os primeiros
-       * do alfabeto, que não são os mais relevantes de nada. Quem tem mais eventos
-       * no acervo é quem ele mais documenta, e é por onde faz sentido começar.
-       *
-       * `localeCompare` com `pt` no desempate porque o alfabeto daqui tem acento:
-       * comparação binária põe «Álvaro» depois de «Zé», e a lista fica com um
-       * bloco de acentuados no fim que ninguém entende.
-       */
-      .sort(
-        (a, b) =>
-          b[EVENTOS] - a[EVENTOS] || a[TITULO].localeCompare(b[TITULO], "pt"),
-      );
+      .sort(porRelevancia);
   }, [recorte.posicionados, familia, busca]);
+
+  // A MESMA BUSCA VALE NAS DUAS ABAS. Sem isto, digitar com a aba «Fora do
+  // Brasil» aberta mudava os pinos atrás da folha e deixava a lista que a pessoa
+  // está lendo parada — um campo que finge não ouvir. A família não entra: os
+  // chips recortam o desenho, e as contagens deles contam o desenho.
+  const foraVisiveis = useMemo(() => {
+    const termo = semAcento(busca.trim());
+    if (!termo) return recorte.foraDoBrasil;
+    return recorte.foraDoBrasil.filter((p) => semAcento(p[TITULO]).includes(termo));
+  }, [recorte.foraDoBrasil, busca]);
 
   /** Quantos de cada família existem no recorte — o número que vai no chip. */
   const porFamilia = useMemo(() => {
@@ -366,6 +388,14 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
   );
 
   const grupoSelecionado = grupos.find((g) => g.celula === selecionada) ?? null;
+  // Sem nada fora do Brasil não há aba a mostrar. Sem escolha da pessoa, o
+  // recorte decide: um conjunto em que NADA se desenha abre direto em «fora» —
+  // abrir num «Nenhum resultado» com o conteúdo real atrás de um toque seria
+  // esconder a única lista que existe.
+  const abaAtiva =
+    recorte.foraDoBrasil.length === 0
+      ? "brasil"
+      : (aba ?? (recorte.posicionados.length === 0 ? "fora" : "brasil"));
   const voltas = lente?.volta
     ? [{ href: lente.volta, rotulo: `Voltar para ${lente.titulo}` }]
     : dados.voltas;
@@ -390,9 +420,12 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
                 estado continua em caixa alta: lá não há string a honrar. */}
             <p className="mapa-sobretitulo mapa-sobretitulo-lente">Lente sobre</p>
             <h1 className="mapa-titulo">{lente.titulo}</h1>
+            {/* SEM «situados no Brasil»: o número é o conjunto INTEIRO — inclui o
+                que caiu fora do desenho, que a folha e a legenda declaram. Manter
+                o qualificador faria o título afirmar uma contagem que não é a dele. */}
             <p className="mapa-linha">
               {recorte.total} {recorte.total === 1 ? "item" : "itens"} do conjunto que você já
-              estava vendo, situados no Brasil.
+              estava vendo.
             </p>
           </>
         ) : (
@@ -543,9 +576,18 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
                     cx={g.x}
                     cy={g.y}
                     r={raio}
-                    onClick={() => definirSelecionada(g.celula === selecionada ? null : g.celula)}
+                    // Tocar o desenho traz a folha de volta para a aba do desenho:
+                    // um cartão aberto atrás da aba «Fora do Brasil» seria um toque
+                    // sem resposta visível.
+                    onClick={() => {
+                      definirAba("brasil");
+                      definirSelecionada(g.celula === selecionada ? null : g.celula);
+                    }}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") definirSelecionada(g.celula);
+                      if (e.key === "Enter" || e.key === " ") {
+                        definirAba("brasil");
+                        definirSelecionada(g.celula);
+                      }
                     }}
                   />
                   {cabeONumero ? (
@@ -632,7 +674,33 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
           </>
         ) : (
           <>
-            {grupoSelecionado ? (
+            {/* O QUE TEM COORDENADA FORA DO BRASIL GANHOU ABA PRÓPRIA. Antes era
+                uma linha de nomes truncada em oito no rodapé da legenda — item de
+                verdade, escondido como nota metodológica. O desenho continua só
+                do Brasil; a aba é onde o resto do conjunto tem lista e link. */}
+            {recorte.foraDoBrasil.length > 0 ? (
+              <Segmento rotulo="O que a folha lista" className="mapa-abas">
+                <OpcaoDeSegmento
+                  selecionado={abaAtiva === "brasil"}
+                  onClick={() => definirAba("brasil")}
+                >
+                  {`No mapa · ${recorte.posicionados.length}`}
+                </OpcaoDeSegmento>
+                <OpcaoDeSegmento
+                  selecionado={abaAtiva === "fora"}
+                  onClick={() => definirAba("fora")}
+                >
+                  {`Fora do Brasil · ${recorte.foraDoBrasil.length}`}
+                </OpcaoDeSegmento>
+              </Segmento>
+            ) : null}
+
+            {abaAtiva === "fora" ? (
+              <ListaForaDoBrasil
+                itens={foraVisiveis}
+                total={recorte.foraDoBrasil.length}
+              />
+            ) : grupoSelecionado ? (
               <CartaoItem
                 grupo={grupoSelecionado}
                 aoFechar={() => definirSelecionada(null)}
@@ -647,7 +715,6 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
 
             <Legenda
               semCoordenada={recorte.semCoordenada}
-              foraDoBrasil={recorte.foraDoBrasil}
               voltaRecusada={Boolean(lente?.voltaRecusada)}
             />
           </>
@@ -715,38 +782,9 @@ function ListaDoRecorte({
         ) : null}
       </p>
       <ul className="mapa-lista-itens">
-        {visiveis.slice(0, TETO_DA_LISTA).map((p) => {
-          const rota = rotaDe(p[3], p[0]);
-          const conteudo = (
-            <>
-              <span className="mapa-item-nome">{p[TITULO]}</span>
-              {/* O NÚMERO QUE ORDENA FICA VISÍVEL. Sem ele a lista pareceria em
-                  ordem arbitrária — nem alfabética nem nada —, e ordem que não se
-                  explica lê como bug. Com ele, a primeira linha já ensina a regra. */}
-              {p[EVENTOS] > 0 ? (
-                <span className="mapa-item-eventos">
-                  {p[EVENTOS]} {p[EVENTOS] === 1 ? "evento" : "eventos"}
-                </span>
-              ) : (
-                <span className="mapa-item-classe">{nomeDaClasse(p[3])}</span>
-              )}
-            </>
-          );
-          return (
-            <li key={p[0]} className="mapa-item">
-              {rota ? (
-                <Link href={rota} className="mapa-item-alvo">
-                  {conteudo}
-                  <span aria-hidden className="mapa-item-seta">
-                    ›
-                  </span>
-                </Link>
-              ) : (
-                <div className="mapa-item-alvo">{conteudo}</div>
-              )}
-            </li>
-          );
-        })}
+        {visiveis.slice(0, TETO_DA_LISTA).map((p) => (
+          <ItemDaLista key={p[0]} p={p} />
+        ))}
       </ul>
       {visiveis.length > TETO_DA_LISTA ? (
         <p className="tipo-legenda text-tinta-3">
@@ -755,6 +793,129 @@ function ListaDoRecorte({
         </p>
       ) : null}
     </section>
+  );
+}
+
+/**
+ * A aba «Fora do Brasil» — o mesmo conjunto, do lado que o desenho não alcança.
+ *
+ * O desenho é do Brasil e continua sendo; o que tem coordenada fora dele deixou
+ * de ser rodapé truncado e virou lista com link, na mesma ordem da lista principal.
+ */
+function ListaForaDoBrasil({
+  itens,
+  total,
+}: {
+  itens: readonly PinoIndexado[];
+  total: number;
+}) {
+  if (itens.length === 0) {
+    return (
+      <section className="mapa-lista">
+        <p className="mapa-lista-titulo">Nenhum resultado</p>
+        <p className="tipo-legenda text-tinta-2">
+          Nada fora do Brasil corresponde à busca. Limpe o campo acima para ver{" "}
+          {total === 1 ? "o item" : `os ${total}`}.
+        </p>
+      </section>
+    );
+  }
+  const ordenados = [...itens].sort(porRelevancia);
+  return (
+    <section className="mapa-lista">
+      <p className="mapa-lista-titulo">
+        {itens.length < total
+          ? `${itens.length} de ${total} itens com coordenada fora do Brasil`
+          : `${itens.length} ${itens.length === 1 ? "item" : "itens"} com coordenada fora do Brasil`}
+      </p>
+      <ul className="mapa-lista-itens">
+        {ordenados.slice(0, TETO_DA_LISTA).map((p) => (
+          <ItemDaLista key={p[0]} p={p} />
+        ))}
+      </ul>
+      {ordenados.length > TETO_DA_LISTA ? (
+        <p className="tipo-legenda text-tinta-3">
+          Mostrando os primeiros {TETO_DA_LISTA} de {ordenados.length} — use a busca acima
+          para estreitar.
+        </p>
+      ) : null}
+    </section>
+  );
+}
+
+/**
+ * A capa da linha: a foto do acervo quando existe, a cor da linguagem quando não.
+ *
+ * A composição sem foto é da mesma família de `capa-sem-imagem.tsx`, encolhida
+ * para o tamanho de uma linha: campo na cor da linguagem (que já viaja na tupla,
+ * D-08) e o `\` do manual em duas camadas deslocadas — uma clara e uma escura,
+ * para que uma delas apareça sobre qualquer cor sem este arquivo saber qual é.
+ * A pastilha de classe fica de fora: aqui a classe está escrita ao lado, em texto.
+ *
+ * `alt=""` na foto pela mesma razão do Cast: o título é texto adjacente no mesmo
+ * link, e repeti-lo faria o leitor de tela anunciar cada linha duas vezes.
+ */
+function CapaDaLinha({ p }: { p: PinoIndexado }) {
+  if (p[IMAGEM]) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return (
+      <img
+        src={p[IMAGEM]}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className="mapa-item-capa"
+      />
+    );
+  }
+  const token = p[COR] || "--ic-preto";
+  return (
+    <span
+      aria-hidden
+      style={{ "--cor-linguagem": `var(${token})` } as React.CSSProperties}
+      className="mapa-item-capa mapa-item-capa-composta"
+    >
+      <Grafismo variacao="barra" className="mapa-item-capa-traco mapa-item-capa-traco-claro" />
+      <Grafismo variacao="barra" className="mapa-item-capa-traco mapa-item-capa-traco-escuro" />
+    </span>
+  );
+}
+
+/**
+ * A linha de item, a mesma nas duas listas da folha e no cartão do ponto.
+ *
+ * O NÚMERO QUE ORDENA FICA VISÍVEL. Sem ele a lista pareceria em ordem
+ * arbitrária — nem alfabética nem nada —, e ordem que não se explica lê como
+ * bug. Com ele, a primeira linha já ensina a regra.
+ */
+function ItemDaLista({ p }: { p: PinoIndexado }) {
+  const rota = rotaDe(p[3], p[0]);
+  const conteudo = (
+    <>
+      <CapaDaLinha p={p} />
+      <span className="mapa-item-nome">{p[TITULO]}</span>
+      {p[EVENTOS] > 0 ? (
+        <span className="mapa-item-eventos">
+          {p[EVENTOS]} {p[EVENTOS] === 1 ? "evento" : "eventos"}
+        </span>
+      ) : (
+        <span className="mapa-item-classe">{nomeDaClasse(p[3])}</span>
+      )}
+    </>
+  );
+  return (
+    <li className="mapa-item">
+      {rota ? (
+        <Link href={rota} className="mapa-item-alvo">
+          {conteudo}
+          <span aria-hidden className="mapa-item-seta">
+            ›
+          </span>
+        </Link>
+      ) : (
+        <div className="mapa-item-alvo">{conteudo}</div>
+      )}
+    </li>
   );
 }
 
@@ -799,29 +960,9 @@ function CartaoItem({
           logo abaixo declara que NENHUMA coordenada foi lida da fonte e nomeia os
           três métodos, que é onde a afirmação vale, dita uma vez. */}
       <ul className="mapa-lista-itens">
-        {grupo.membros.slice(0, 8).map((m) => {
-          const rota = rotaDe(m[3], m[0]);
-          const conteudo = (
-            <>
-              <span className="mapa-item-nome">{m[2]}</span>
-              <span className="mapa-item-classe">{nomeDaClasse(m[3])}</span>
-            </>
-          );
-          return (
-            <li key={m[0]} className="mapa-item">
-              {rota ? (
-                <Link href={rota} className="mapa-item-alvo">
-                  {conteudo}
-                  <span aria-hidden className="mapa-item-seta">
-                    ›
-                  </span>
-                </Link>
-              ) : (
-                <div className="mapa-item-alvo">{conteudo}</div>
-              )}
-            </li>
-          );
-        })}
+        {grupo.membros.slice(0, 8).map((m) => (
+          <ItemDaLista key={m[0]} p={m} />
+        ))}
       </ul>
       {n > 8 ? (
         <p className="text-xs text-tinta-2">e mais {n - 8} no mesmo ponto.</p>
@@ -843,17 +984,18 @@ function CartaoItem({
  * tomar o mapa por completo. Este bloco só aparece quando há de fato algo fora — e quando
  * não há, não sobra nem a moldura, porque «nada ficou sem posição» é o silêncio esperado,
  * não uma notícia.
+ *
+ * O que tem coordenada FORA DO BRASIL saiu daqui: era uma linha de nomes truncada em oito,
+ * e virou a aba própria da folha, com lista inteira e link.
  */
 function Legenda({
   semCoordenada,
-  foraDoBrasil,
   voltaRecusada,
 }: {
   semCoordenada: string[];
-  foraDoBrasil: readonly PinoIndexado[];
   voltaRecusada: boolean;
 }) {
-  const foraDoDesenho = semCoordenada.length > 0 || foraDoBrasil.length > 0;
+  const foraDoDesenho = semCoordenada.length > 0;
 
   return (
     <>
@@ -862,21 +1004,14 @@ function Legenda({
           {foraDoDesenho ? (
             <p>
               <strong className="font-semibold text-tinta">Fora do desenho:</strong>{" "}
-              {semCoordenada.length} sem coordenada que o acervo sustente e{" "}
-              {foraDoBrasil.length} com coordenada fora do Brasil. Nenhuma delas foi empurrada
-              para a borda — um ponto sem dado não vira posição.
+              {semCoordenada.length} sem coordenada que o acervo sustente. Nenhuma delas foi
+              empurrada para a borda — um ponto sem dado não vira posição.
             </p>
           ) : null}
           {semCoordenada.length ? (
             <p className="text-tinta-3">
               Sem posição: {semCoordenada.slice(0, 12).join(", ")}
               {semCoordenada.length > 12 ? ` e mais ${semCoordenada.length - 12}` : ""}.
-            </p>
-          ) : null}
-          {foraDoBrasil.length ? (
-            <p className="text-tinta-3">
-              Fora do Brasil: {foraDoBrasil.slice(0, 8).map((p) => p[2]).join(", ")}
-              {foraDoBrasil.length > 8 ? ` e mais ${foraDoBrasil.length - 8}` : ""}.
             </p>
           ) : null}
           {voltaRecusada ? (

@@ -221,6 +221,12 @@ export const ATALHOS_BASTIDOR: readonly Atalho[] = [
   { href: "/roteiro", rotulo: "Roteiro guiado", descricao: "A demonstração passo a passo" },
 ];
 
-/** Quantos aplicativos o hub anuncia. Contado, nunca digitado. */
+/**
+ * Quantos aplicativos o hub anuncia. Contado, nunca digitado.
+ *
+ * Os atalhos de conta saíram desta soma em 23/08, junto com a seção «Sua conta»:
+ * eles deixaram o hub e foram para o menu do ícone de conta, no alto da tela. O
+ * hub anuncia o que ele mostra.
+ */
 export const TOTAL_APPS =
-  GRUPOS_APPS.reduce((n, g) => n + g.apps.length, 0) + ATALHOS_CONTA.length + ATALHOS_BASTIDOR.length;
+  GRUPOS_APPS.reduce((n, g) => n + g.apps.length, 0) + ATALHOS_BASTIDOR.length;

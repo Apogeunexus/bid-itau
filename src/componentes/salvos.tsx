@@ -303,14 +303,6 @@ export function Salvos({
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold">Salvos</h1>
         </div>
-        {/* MEDIDO, e por isso curta: com esta frase em três linhas, o fim da segunda linha
-            da fila caía a 770px do topo da moldura, 6px atrás da barra de abas — e a imagem
-            que fecha o Cenário 4 é justamente o alerta e as DUAS linhas na mesma vista. O
-            corte é da prosa que nós compusemos; nenhum dado do acervo saiu. */}
-        <p className="text-xs leading-snug text-tinta-2">
-          Fila de <strong className="font-bold">sessões</strong>, não de eventos: duas
-          sessões do mesmo evento ocupam duas linhas.
-        </p>
       </header>
 
       {/* ---- 2. O alerta, no topo e destacado (D-57) ---- */}
@@ -341,9 +333,8 @@ export function Salvos({
         /* ---- 5. O estado vazio — o estado inicial de quem abre a tela ---- */
         <div className="salvos-vazio">
           <p className="text-sm leading-snug">
-            <strong className="font-bold">Nada salvo neste navegador.</strong> Salvos guarda
-            as sessões que você escolheu — data e hora específicas, dentro de um evento —
-            para que uma mudança de horário chegue só a quem salvou aquela sessão.
+            <strong className="font-bold">Nada salvo neste navegador.</strong> Guarde uma
+            sessão na página de um evento para ela aparecer aqui.
           </p>
 
           <button type="button" data-semear-cenario-4 className="salvos-semear" onClick={semear}>
@@ -351,31 +342,23 @@ export function Salvos({
           </button>
 
           <p className="text-xs leading-snug text-tinta-2">
-            O botão salva duas sessões reais do mesmo evento —{" "}
-            <strong className="font-bold">{par.eventoTitulo}</strong>, em{" "}
-            {par.atingida.dataCurta} às {par.atingida.hora} e em {par.intacta.dataCurta} às{" "}
-            {par.intacta.hora}. Uma delas foi alterada; a outra não. É o par que torna a
-            afirmação verificável em vez de dita.
+            Salva duas sessões de <strong className="font-bold">{par.eventoTitulo}</strong>,
+            em {par.atingida.dataCurta} às {par.atingida.hora} e em {par.intacta.dataCurta}{" "}
+            às {par.intacta.hora} — uma alterada, a outra não.
           </p>
 
         </div>
       )}
 
-      {/* ---- 6. As gavetas que a tela 23 prevê, declaradas em vez de criadas vazias ---- */}
+      {/* O NÚMERO de trilhas fica — ele é o que a pessoa guardou, e elas não
+          aparecem nesta fila porque não têm data. A explicação de por que só se
+          salva sessão, e o discurso sobre o descarte de id inválido, saíram da
+          tela em 23/08: eram sobre o modelo, não sobre o que está guardado. */}
       <p className="salvos-declarado">
-        <strong className="font-bold">Eventos salvos sem sessão escolhida</strong> não
-        existem aqui: aqui salvar é sempre de uma sessão, porque é a
-        ocorrência que uma mudança de horário atinge. Um evento salvo «em geral» não teria a
-        quem endereçar o aviso.{" "}
         <strong className="font-bold">
           Trilhas salvas: {trilhas.length === 0 ? "nenhuma neste navegador" : trilhas.length}
-        </strong>
-        {trilhas.length
-          ? " — trilha não é sessão e não tem data, então ela é contada aqui e aparece em Meu Repertório, fora desta fila cronológica."
-          : " — quando você marcar uma trilha, ela é contada aqui e aparece em Meu Repertório, fora desta fila cronológica."}
-        {descartados
-          ? ` ${descartados} id salvo neste navegador não corresponde a nenhuma ocorrência do acervo e foi descartado — declarado aqui em vez de sumir em silêncio.`
-          : ""}
+        </strong>{" "}
+        — elas aparecem em Meu Repertório, fora desta fila cronológica.
       </p>
     </div>
   );

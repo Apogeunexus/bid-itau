@@ -319,6 +319,15 @@
   background: var(--cor-borda-forte);
 }
 
+/* ---- as abas da folha ------------------------------------------------------
+ * «No mapa» e «Fora do Brasil» são o mesmo conjunto partido pelo desenho. As
+ * opções dividem a pílula ao meio: metades iguais leem como abas de um painel,
+ * não como dois botões soltos de largura ao acaso.
+ * ------------------------------------------------------------------------- */
+.mapa-abas .segmento-opcao {
+  flex: 1 1 0;
+}
+
 /* ---- a lista de resultados ------------------------------------------------- */
 .mapa-lista {
   display: flex;
@@ -358,6 +367,49 @@
   padding: 0.5rem 0;
   color: inherit;
   text-decoration: none;
+}
+
+/* ---- a capa da linha -------------------------------------------------------
+ * Foto do acervo quando existe; sem foto, campo na cor da linguagem com o `\`
+ * do manual — a mesma família de `capa-sem-imagem.tsx`, no porte de uma linha.
+ * A cor NÃO é escrita aqui: chega por `--cor-linguagem`, custom property inline
+ * vinda do dado (D-08). O par claro/escuro dos traços é o mesmo truque da capa
+ * grande: sobre uma cor que este arquivo não conhece, um dos dois sempre lê.
+ * ------------------------------------------------------------------------- */
+.mapa-item-capa {
+  flex: none;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border-radius: var(--raio-p);
+  object-fit: cover;
+  background: var(--cor-superficie-2);
+}
+
+.mapa-item-capa-composta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--cor-linguagem, var(--cor-superficie-2));
+}
+
+.mapa-item-capa-traco {
+  position: absolute;
+  block-size: 1.5rem;
+  inline-size: auto;
+}
+
+.mapa-item-capa-traco-claro {
+  transform: translate(-1px, -1px);
+  color: var(--ic-branco);
+  opacity: 0.55;
+}
+
+.mapa-item-capa-traco-escuro {
+  transform: translate(1px, 1px);
+  color: var(--ic-preto);
+  opacity: 0.28;
 }
 
 .mapa-item-nome {

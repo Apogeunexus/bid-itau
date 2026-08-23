@@ -323,11 +323,9 @@ export function Observatorio({
         <div className="obs-procedencia-topo">
           <h2 className="obs-procedencia-titulo">De onde veio cada coisa que esta tela mostra</h2>
           <p className="obs-procedencia-tese">
-            Todo protótipo de agenda cultural inventa dado para a demonstração funcionar.
-            Nenhum diz quanto. Aqui está o número, contado no acervo carregado: das{" "}
-            <strong>{milhar(painel.totalDeEntidades)}</strong> entidades e das{" "}
-            <strong>{milhar(painel.totalDeArestas)}</strong> ligações, isto é o que veio do
-            Itaú Cultural, isto é o que nós derivamos, e isto é o que nós inventamos.
+            Das <strong>{milhar(painel.totalDeEntidades)}</strong> entidades e das{" "}
+            <strong>{milhar(painel.totalDeArestas)}</strong> ligações: o que veio do Itaú
+            Cultural, o que foi derivado e o que foi autorado.
           </p>
         </div>
 

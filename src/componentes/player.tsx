@@ -277,7 +277,7 @@ export function Player({
           <>
             <p className="text-xs leading-relaxed text-tinta-2">
               {hidratado
-                ? "Nada foi registrado ainda. O registro acontece quando você clica — nunca por temporizador, nunca ao abrir a página."
+                ? "Nada foi registrado ainda."
                 : "Lendo o que ficou guardado neste navegador…"}
             </p>
             <button
@@ -323,11 +323,7 @@ export function Player({
             Esta mídia não declara ligação com nenhum evento do acervo. Só{" "}
             <strong data-denominador="com-ponte">{coberturaDaPonte.midiasDistintas}</strong>{" "}
             das <strong data-denominador="total">{coberturaDaPonte.deQuantas}</strong> mídias
-            declaram — juntas elas alcançam {coberturaDaPonte.eventosAlcancados} eventos. A
-            relação que o acervo registra entre mídia e evento é «fala sobre»; «semelhante
-            a» liga mídia a mídia e nunca chega a um evento. Não inventamos a ligação que
-            falta: dizer que esta mídia fala de um evento sem a fonte ter dito seria
-            inventar um fato sobre o acervo.
+            declaram — juntas elas alcançam {coberturaDaPonte.eventosAlcancados} eventos.
           </p>
         )}
       </section>

@@ -255,11 +255,6 @@ export function Filtros({
           limpar tudo
         </button>
 
-        <p className="filtros-nota">
-          O contador acima muda <strong>a cada critério marcado</strong>, aqui mesmo, sobre
-          {" "}{milhar(indice.total)} registros — sem trocar de tela e sem esperar servidor.
-        </p>
-
       </header>
 
       {/* ------------------------------------------------------------------ */}
@@ -280,12 +275,9 @@ export function Filtros({
         <h2 className="filtros-bloco-titulo">Acessibilidade</h2>
 
         <p className="filtros-bloco-linha">
-          As <strong>{numeros.dimensoes} dimensões</strong> que o acervo cataloga, todas
-          marcáveis — as {numeros.dimensoesSustentadas} que o acervo documenta e as{" "}
-          {numeros.dimensoesZeradas} que ele não documenta. Elas ficam aqui, no mesmo lugar e
-          com o mesmo peso de linguagem e território, porque{" "}
-          <strong>quem precisa de Libras precisa poder pedir Libras</strong> antes de
-          escolher, e não descobrir depois.
+          <strong>{numeros.dimensoes} dimensões</strong> catalogadas ·{" "}
+          {numeros.dimensoesSustentadas} documentadas no acervo · {numeros.dimensoesZeradas}{" "}
+          medem zero
         </p>
 
         <ul className="filtros-dimensoes">
@@ -311,10 +303,8 @@ export function Filtros({
 
               {d.sustentada ? (
                 <p className="filtros-dimensao-nota">
-                  {milhar(d.declaradaVerdadeira)} registros da fonte declaram, de{" "}
-                  {milhar(d.entreAsQueDeclaramNaFonte)} que preencheram a ficha —{" "}
-                  {milhar(d.noIndice)} deles estão entre as {milhar(indice.total)} entradas
-                  buscáveis.
+                  {milhar(d.declaradaVerdadeira)} de {milhar(d.entreAsQueDeclaramNaFonte)} que
+                  preencheram a ficha
                 </p>
               ) : (
                 <p className="filtros-dimensao-nota filtros-dimensao-zero">
@@ -328,13 +318,8 @@ export function Filtros({
         <p className="filtros-bloco-linha filtros-diagnostico">
           <strong>
             {numeros.dimensoesZeradas} das {numeros.dimensoes} dimensões medem zero no acervo
-            inteiro
           </strong>{" "}
-          — {zeradas.map((d) => d.rotulo.toLowerCase()).join(", ")}. As{" "}
-          {numeros.dimensoesZeradas} continuam marcáveis de propósito: escondê-las deixaria a
-          tela bonita e apagaria o diagnóstico. A acessibilidade está{" "}
-          <strong>catalogada em {numeros.dimensoes} dimensões e documentada em uma e meia</strong>
-          , e é esse número que uma agenda cultural pública precisa ver.
+          — {zeradas.map((d) => d.rotulo.toLowerCase()).join(", ")}
         </p>
       </section>
 
@@ -343,13 +328,6 @@ export function Filtros({
       {/* ---------------------------------------------------------------- */}
       <section className="filtros-bloco" data-bloco="ficha">
         <h2 className="filtros-bloco-titulo">A ficha foi preenchida?</h2>
-
-        <p className="filtros-bloco-linha">
-          <strong>«Não sabemos» e «não tem» são coisas diferentes</strong> para quem depende
-          de Libras. Num booleano `false` as duas viram a mesma coisa; só o campo que
-          registra se houve declaração as separa. Por isso a distinção é um par de controles,
-          e não uma nota de rodapé.
-        </p>
 
         <div className="filtros-par">
           <div className="filtros-par-item" data-declarado-ausente="declara">
@@ -366,9 +344,8 @@ export function Filtros({
               </span>
             </button>
             <p className="filtros-dimensao-nota">
-              {milhar(ficha.declaram)} das {milhar(ficha.total)} registros preencheram as{" "}
-              {numeros.dimensoes} dimensões. Nelas, um «não» é uma{" "}
-              <strong>declaração de ausência</strong>: a fonte foi perguntada e respondeu.
+              {milhar(ficha.declaram)} de {milhar(ficha.total)} preencheram as{" "}
+              {numeros.dimensoes} dimensões — aí um «não» é ausência declarada
             </p>
           </div>
 
@@ -386,10 +363,8 @@ export function Filtros({
               </span>
             </button>
             <p className="filtros-dimensao-nota">
-              {milhar(ficha.naoDeclaram)} das {milhar(ficha.total)} nunca declararam nada. Aí
-              um «não» é <strong>silêncio, não negação</strong> — e afirmar «este evento não
-              tem intérprete» em nome do Itaú Cultural seria uma alegação que a fonte não
-              faz.
+              {milhar(ficha.naoDeclaram)} de {milhar(ficha.total)} nunca declararam — aí um
+              «não» é silêncio, não negação
             </p>
           </div>
         </div>
@@ -400,8 +375,6 @@ export function Filtros({
             .sort((a, b) => b[1] - a[1])
             .map(([classe, n]) => `${classe} ${milhar(n)}`)
             .join(" · ")}
-          . As {milhar(ficha.declaram)} somam exatamente o denominador de cima — nenhuma
-          fatia fica sem nome.
         </p>
       </section>
 
@@ -410,11 +383,6 @@ export function Filtros({
       {/* ---------------------------------------------------------------- */}
       <section className="filtros-bloco" data-bloco="ontologia">
         <h2 className="filtros-bloco-titulo">Linguagem e território</h2>
-        <p className="filtros-bloco-linha">
-          As duas facetas que recortam de verdade, contadas sobre o recorte em curso: marcar
-          uma opção que diz {'"'}51{'"'} devolve exatamente 51.
-        </p>
-
         <TrilhoDeChips rotulo="Recortar por linguagem artística">
           {facetas.linguagem.slice(0, TETO_LINGUAGENS).map((o) => (
             <Chip
@@ -456,12 +424,6 @@ export function Filtros({
       {/* ---------------------------------------------------------------- */}
       <section className="filtros-bloco" data-bloco="sem-lastro">
         <h2 className="filtros-bloco-titulo">O que este acervo não recorta</h2>
-        <p className="filtros-bloco-linha">
-          Dois critérios que a tela pede e o acervo não sustenta. Eles ficam aqui, nomeados e
-          com o número, em vez de virarem controle que não faz nada — e as duas ausências são
-          de naturezas diferentes.
-        </p>
-
         {semLastro.map((c) => (
           <div
             key={c.campo}
@@ -513,7 +475,6 @@ export function Filtros({
           <div className="filtros-zero" data-sem-resultado="filtros">
             <p className="filtros-zero-frase">
               <strong>Zero de {milhar(indice.total)} entradas</strong> atendem a este recorte
-              — e o vazio tem causa nomeada, não é uma tela em branco.
             </p>
             <ul className="filtros-zero-motivos">
               {marcadas
@@ -522,9 +483,8 @@ export function Filtros({
                 .map((d) => (
                   <li key={d.campo} className="filtros-zero-motivo">
                     <strong>{d.rotulo}</strong> está marcada e mede{" "}
-                    <strong>0 de {milhar(ficha.declaram)}</strong> registros que preencheram a
-                    ficha. Nenhum registro do acervo declara esta dimensão — desmarcá-la é o
-                    caminho.
+                    <strong>0 de {milhar(ficha.declaram)}</strong> — desmarque para ver
+                    resultados.
                   </li>
                 ))}
               {criterios.map((c) => (
@@ -542,8 +502,7 @@ export function Filtros({
             </button>
             {trilhas.map((t) => (
               <p key={t.id} data-trilha-relacionada={t.slug} className="filtros-trilha">
-                Ou veja a <strong>{t.titulo}</strong> — {trilhas.length} trilha curada, a
-                única que este acervo tem.{" "}
+                Ou veja a <strong>{t.titulo}</strong>.{" "}
                 <Link href={`/trilha/${t.slug}/`}>abrir a trilha</Link>
               </p>
             ))}
@@ -552,7 +511,7 @@ export function Filtros({
           <>
             <p className="filtros-bloco-linha">
               Mostrando {milhar(Math.min(TETO_PREVIA, recorte.total))} de{" "}
-              {milhar(recorte.total)}. O corte é da exibição, não da contagem.
+              {milhar(recorte.total)}
             </p>
             <ul className="filtros-previa">
               {recorte.previa.map((r) => (
@@ -565,17 +524,15 @@ export function Filtros({
           </>
         )}
 
+        {/* O que a busca PERDE continua dito antes do clique: ela não entende
+            acessibilidade, e sair daqui muda o número. Isso não é a tela se
+            explicando — é o aviso de uma ação que altera o recorte. */}
         <p className="filtros-bloco-linha filtros-nao-viaja">
-          <strong>O que não viaja daqui para a busca.</strong> O motor de busca entende
-          texto, tipo, linguagem, tema, procedência e território — acessibilidade não é campo
-          dele. Levar este recorte para <code>/buscar/</code> levaria{" "}
-          {criterios.length === 0 ? "nenhuma faceta" : `${criterios.length} faceta(s)`} e{" "}
-          <strong>
-            deixaria para trás {marcadas.length} critério(s) de acessibilidade
-            {recorteDeFicha === "" ? "" : " e o recorte da ficha"}
-          </strong>
-          , devolvendo {milhar(recorte.semAcessibilidade)} em vez de {milhar(recorte.total)}.
-          Está dito aqui em vez de acontecer em silêncio.
+          A busca não entende acessibilidade: ela deixa para trás {marcadas.length}{" "}
+          critério(s)
+          {recorteDeFicha === "" ? "" : " e o recorte da ficha"} e devolve{" "}
+          <strong>{milhar(recorte.semAcessibilidade)}</strong> em vez de{" "}
+          {milhar(recorte.total)}.
         </p>
 
         <Link href={enderecoDeBusca} className="filtros-ir-buscar">

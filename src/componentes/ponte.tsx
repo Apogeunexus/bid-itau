@@ -144,9 +144,7 @@ export function BlocoPonte({
               mais nada — mas cortar sem dizer faria a tela mentir por omissão. */}
           {cortado ? (
             <p className="text-xs text-tinta-3">
-              Mostrando {grupo.entidades.length} de {grupo.total} — o acervo declara os
-              outros {grupo.total - grupo.entidades.length}, e este protótipo corta a
-              lista para caber na tela.
+              Mostrando {grupo.entidades.length} de {grupo.total}.
             </p>
           ) : null}
         </>

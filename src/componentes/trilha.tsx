@@ -59,10 +59,8 @@ function explicarProcedencia(
   switch (procedencia) {
     case "autorado":
       return (
-        `Escrita para este protótipo, sobre entidades reais da Enciclopédia Itaú Cultural. ` +
-        `«${de}» e «${para}» não compartilham nenhum atributo na fonte, e nenhuma regra ` +
-        `derivada os liga: a ponte é editorial. Ela aparece assinada em vez de passar por ` +
-        `dado do acervo.`
+        `Ponte editorial, escrita para este protótipo: «${de}» e «${para}» não compartilham ` +
+        `atributo na fonte, e nenhuma regra derivada os liga.`
       );
     case "ic":
       return `A ligação entre «${de}» e «${para}» vem do acervo do Itaú Cultural, com a fonte declarada.`;
@@ -195,9 +193,8 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
           <p className="text-sm font-semibold">{final.espacoDeclarado}</p>
         ) : (
           <p className="text-sm leading-snug">
-            O acervo do Itaú Cultural não publica o espaço desta sessão. Mostramos a data, o
-            horário e a gratuidade, que estão na fonte; o lugar não está, e não foi preenchido
-            com um valor plausível.
+            O acervo não publica o espaço desta sessão — a data, o horário e a gratuidade
+            estão na fonte; o lugar não.
           </p>
         )}
         {/* A contagem desta montagem é sobre O ACERVO e fica sempre — é o que sustenta a
@@ -245,11 +242,8 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
           className="rounded-md border border-dashed border-borda-forte p-2.5 text-[0.7rem] leading-snug text-tinta-2"
         >
           <strong className="font-bold">Sem elenco no grafo.</strong> Nenhuma aresta{" "}
-          <code>atua_em</code> chega a este evento — e não é acaso desta montagem: dos 129
-          eventos com ocorrência datada, zero têm aresta de agente. Não autoramos essa
-          ligação. Autorar uma ponte editorial entre dois termos é uma proposta de leitura;
-          autorar que uma pessoa real atuou nesta montagem seria uma afirmação factual falsa,
-          e é de outra ordem.
+          <code>atua_em</code> chega a este evento — dos 129 eventos com ocorrência datada,
+          zero têm aresta de agente.
         </p>
       )}
 

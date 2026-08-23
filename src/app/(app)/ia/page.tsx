@@ -29,9 +29,8 @@ export default function Ia() {
         </p>
         {/* PRODUTO, não comentário: a simulação declarada é o argumento. */}
         <p className="max-w-prose rounded-m border border-borda bg-superficie-2 px-3 py-2 text-sm leading-snug">
-          <strong>Nenhum modelo de IA é chamado aqui.</strong> Cada resposta sua estreita o
-          roteiro por regras fixas, e as regras vêm escritas no resultado — dá para conferir
-          por que cada item entrou, em vez de aceitar uma caixa-preta.
+          <strong>Nenhum modelo de IA é chamado aqui.</strong> O roteiro é montado por
+          regras fixas, e elas vêm escritas no resultado.
         </p>
       </header>
 

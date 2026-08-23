@@ -35,20 +35,113 @@
 /* A troca de persona vinha no rodapé do menu lateral. Sem menu ela não teria
  * mais onde existir — e a demonstração inteira depende de alternar entre as
  * três ao vivo. */
-[data-view="mobile"] .barra-persona {
+/* ---- A conta: um ícone no topo, e o menu que ele abre ----
+ *
+ * Era o NOME DA PERSONA numa pílula. O nome saiu em 23/08: ele gastava a única
+ * linha do cabeçalho com um dado de demonstração, e o que a pessoa quer ali é a
+ * porta para o que é dela. O menu carrega o que era a seção «Sua conta» no fim
+ * de /apps — salvos, repertório e perfil —, e o nome continua dentro dele.
+ *
+ * O menu posiciona ABSOLUTO contra `.barra-conta`, que é o único elemento
+ * posicionado nesta vizinhança: `fixed` se ancoraria na janela e escaparia da
+ * moldura de 390px (D-03). */
+[data-view="mobile"] .barra-conta {
+  position: relative;
   flex: none;
-  padding: 0.25rem 0.75rem;
+}
+
+[data-view="mobile"] .barra-conta-botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
   border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
   color: var(--cor-tinta-2);
+  cursor: pointer;
   transition:
     border-color var(--dur-1) var(--ease-padrao),
     color var(--dur-1) var(--ease-padrao);
 }
 
-[data-view="mobile"] .barra-persona:hover {
+[data-view="mobile"] .barra-conta-botao:hover,
+[data-view="mobile"] .barra-conta-botao[aria-expanded="true"] {
   border-color: var(--cor-acao);
   color: var(--cor-acao-tinta);
+}
+
+[data-view="mobile"] .barra-conta-botao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+[data-view="mobile"] .barra-conta-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  inline-size: 15rem;
+  padding: 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-3);
+}
+
+[data-view="mobile"] .barra-conta-persona {
+  padding: 0.25rem 0.5rem;
+  color: var(--cor-tinta-3);
+}
+
+[data-view="mobile"] .barra-conta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border-radius: var(--raio-m);
+  transition: background var(--dur-1) var(--ease-padrao);
+}
+
+[data-view="mobile"] .barra-conta-item:hover {
+  background: var(--cor-superficie-2);
+}
+
+[data-view="mobile"] .barra-conta-rotulo {
+  color: var(--cor-tinta);
+  font-weight: 700;
+}
+
+[data-view="mobile"] .barra-conta-descricao {
+  color: var(--cor-tinta-3);
+}
+
+/* A escolha de tema mora no fim do menu, separada por um fio: ela não é um
+   destino como os três de cima, é uma preferência da interface. */
+.seletor-tema {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-block-start: 0.25rem;
+  padding: 0.5rem;
+  border-top: 1px solid var(--cor-borda);
+}
+
+/* O segmento é `inline-flex` por padrão, com recuo folgado: dentro de um menu de
+   15rem os três rótulos não cabiam e «Escuro» ficava cortado na borda. Aqui ele
+   ocupa a largura toda e divide o espaço em três partes iguais. */
+.seletor-tema .segmento {
+  display: flex;
+  inline-size: 100%;
+}
+
+.seletor-tema .segmento-opcao {
+  flex: 1;
+  padding: 0.5rem 0.25rem;
+  font-size: var(--tipo-legenda);
 }
 
 /* ---- A barra ---- */

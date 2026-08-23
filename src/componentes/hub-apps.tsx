@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ATALHOS_BASTIDOR, ATALHOS_CONTA, GRUPOS_APPS, TOTAL_APPS, type Atalho } from "@/dados/apps";
+import { ATALHOS_BASTIDOR, GRUPOS_APPS, TOTAL_APPS, type Atalho } from "@/dados/apps";
 
 /**
  * hub-apps.tsx — a tela que o quinto botão da barra abre: os aplicativos que
@@ -12,11 +12,11 @@ import { ATALHOS_BASTIDOR, ATALHOS_CONTA, GRUPOS_APPS, TOTAL_APPS, type Atalho }
  * capa faz o trabalho que o rótulo não faz — ela é uma AMOSTRA do acervo
  * daquele app, não uma ilustração dele.
  *
- * O RITMO É INTENCIONAL, e é o que impede a grade de virar planilha: em grupo
- * de contagem ímpar o primeiro cartaz ocupa a largura toda em 16:9 e o resto
- * cai em pares 4:3. Sem isso, quinze retângulos iguais empilhados produzem
- * exatamente o cansaço que a reunião de 23/08 apontou («entrar num modo de
- * lista ou de grid é ruim de consumir»).
+ * O RITMO É INTENCIONAL, e é o que impede a grade de virar planilha — quatro
+ * ritmos que giram com a posição do grupo, descritos logo abaixo. Sem isso,
+ * catorze retângulos iguais empilhados produzem exatamente o cansaço que a
+ * reunião de 23/08 apontou («entrar num modo de lista ou de grid é ruim de
+ * consumir»).
  *
  * O TEXTO SÓ ENTRA POR CIMA DA FOTO NO CARTAZ LARGO, e essa não é uma escolha
  * estética. Boa parte do acervo já tem TIPOGRAFIA GRAVADA na imagem: a categoria
@@ -32,10 +32,11 @@ import { ATALHOS_BASTIDOR, ATALHOS_CONTA, GRUPOS_APPS, TOTAL_APPS, type Atalho }
  * O nome de quem fez continua guardado em `src/dados/apps.ts` e continua visível
  * onde a imagem é o conteúdo: a capa do evento, o player, o catálogo de /play.
  *
- * CONTA E BASTIDOR NÃO GANHAM CAPA. Ver `src/dados/apps.ts`: os dois são
- * ferramenta, não acervo, e uma foto ali prometeria conteúdo onde não há.
- * Bastidor só aparece na web porque no app cada uma dessas rotas se declara
- * «só web» — anunciar no telefone um caminho que termina em aviso é beco.
+ * BASTIDOR NÃO GANHA CAPA. Ver `src/dados/apps.ts`: ele é ferramenta, não
+ * acervo, e uma foto ali prometeria conteúdo onde não há. Só aparece na web
+ * porque no app cada uma dessas rotas se declara «só web» — anunciar no
+ * telefone um caminho que termina em aviso é beco. Os atalhos de CONTA saíram
+ * do hub em 23/08 e moram no menu do ícone de conta, no alto da tela.
  */
 
 /**
@@ -166,11 +167,9 @@ export function HubApps() {
         );
       })}
 
-      <section className="hub-grupo">
-        <h2 className="tipo-titulo-3 font-bold">Sua conta</h2>
-        <ListaAtalhos atalhos={ATALHOS_CONTA} />
-      </section>
-
+      {/* «Sua conta» saiu daqui em 23/08: salvos, repertório e perfil moram no
+          menu do ícone de conta, no alto da tela. Eles não são aplicativos — são
+          o que é da pessoa —, e no fim de uma lista de capas ninguém os achava. */}
       <section className="hub-grupo hidden desk:block">
         <h2 className="tipo-titulo-3 font-bold">Bastidor</h2>
         <ListaAtalhos atalhos={ATALHOS_BASTIDOR} />

@@ -250,8 +250,7 @@ export function ListaDeOcorrencias({
             histórico, que não tem sessão nenhuma, ela seria ruído. */}
         {ocorrencias.length ? (
           <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
-            data de referência · {curta(dataDeReferencia)} · o protótipo é estático e
-            «a próxima» é calculada contra a data em que ele foi gerado
+            data de referência · {curta(dataDeReferencia)}
           </p>
         ) : null}
       </header>
@@ -338,8 +337,7 @@ export function ListaDeOcorrencias({
                     <p className="ocorrencia-espaco text-xs leading-relaxed text-tinta-2">
                       <span className="ocorrencia-espaco-curto">não publicado</span>
                       <span className="ocorrencia-espaco-longo">
-                        O acervo do Itaú Cultural não publica o espaço desta sessão. O
-                        evento declara período, não endereço de cada data.
+                        O acervo não publica o espaço desta sessão.
                       </span>
                     </p>
                   )}
@@ -384,10 +382,10 @@ export function ListaDeOcorrencias({
                   gratuitas === ocorrencias.length ? "são gratuitas" : "é gratuita"
                 } e ${
                   esgotadas === 0 ? "nenhuma está esgotada" : "todas estão esgotadas"
-                }: a condição não varia entre elas, e por isso ela é dita aqui em vez de repetida em ${ocorrencias.length} linhas iguais. `
-              : `A condição varia entre as ${ocorrencias.length} sessões e por isso continua em coluna. `}
+                }. `
+              : `A condição varia entre as ${ocorrencias.length} sessões. `}
             {semEspaco === ocorrencias.length
-              ? `O acervo não publica o espaço de nenhuma das ${ocorrencias.length}: o registro declara período, não endereço de cada data — e por isso o espaço também não é coluna. `
+              ? `O acervo não publica o espaço de nenhuma das ${ocorrencias.length}. `
               : espacoUniforme && semEspaco === 0
                 ? `As ${ocorrencias.length} sessões acontecem em ${ocorrencias[0].espaco}, espaço declarado ${
                     ocorrencias[0].origemDoEspaco === "temporada"
@@ -397,9 +395,7 @@ export function ListaDeOcorrencias({
                 : semEspaco > 0
                   ? `O acervo não publica o espaço de ${semEspaco} das ${ocorrencias.length} sessões. `
                   : ""}
-            A acessibilidade é declarada no registro do evento e herdada por cada sessão —
-            a coluna repete a mesma declaração em todas as linhas porque é isso que o
-            acervo afirma, e não porque a tabela esteja duplicando dado.
+            A acessibilidade é declarada no registro do evento e herdada por cada sessão.
           </p>
         </>
       ) : (
@@ -421,16 +417,13 @@ export function ListaDeOcorrencias({
                     (temporada.inicio ? curta(temporada.inicio) : "sem data declarada")}
                 </span>
                 <span className="mt-1 block text-xs leading-relaxed text-tinta-2">
-                  Data histórica de registro, transcrita da fonte como ela a escreveu. Não
-                  é sessão em cartaz: este evento aconteceu e está no acervo como memória,
-                  não como programação.
+                  Data histórica de registro, transcrita da fonte. Não é sessão em cartaz.
                 </span>
               </p>
             ))
           ) : (
             <p className="rounded-xl border border-dashed border-borda p-3 text-xs leading-relaxed text-tinta-2">
-              Este registro não declara período nem sessão: o acervo guarda o evento sem
-              nenhuma data associada a ele.
+              Este registro não declara período nem sessão.
             </p>
           )}
         </div>

@@ -2,15 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   ICONE_ACONTECE,
   ICONE_APPS,
   ICONE_BUSCAR,
   ICONE_DESCOBRIR,
+  ICONE_PERFIL,
   ICONE_SALVOS,
 } from "@/componentes/base/icones";
 import { Grafismo } from "@/componentes/grafismo";
+import { SeletorDeTema } from "@/componentes/seletor-tema";
 import { useSessao } from "@/contexto/sessao";
+import { ATALHOS_CONTA } from "@/dados/apps";
 import { personaPorId } from "@/dados/personas";
 
 /**
@@ -61,6 +65,11 @@ export function NavegacaoBarra() {
   const caminho = (usePathname() ?? "").replace(/\/$/, "");
   const { personaId } = useSessao();
   const persona = personaPorId(personaId);
+  const [contaAberta, setContaAberta] = useState(false);
+
+  // Trocar de tela FECHA o menu. Sem isto ele sobreviveria à navegação e
+  // reapareceria aberto sobre a tela seguinte, que nunca é o que se espera.
+  useEffect(() => setContaAberta(false), [caminho]);
 
   const dentroDe = (href: string) => caminho === href || caminho.startsWith(`${href}/`);
 
@@ -71,9 +80,59 @@ export function NavegacaoBarra() {
           <Grafismo variacao="completo" className="h-5 w-auto text-acao-tinta" />
           Agenda Cultural BR
         </span>
-        <Link href="/meu" className="barra-persona tipo-legenda">
-          {persona?.nome ?? "…"}
-        </Link>
+
+        {/* A CONTA VIRA ÍCONE, e o que era a seção «Sua conta» no fim de /apps
+            mora aqui dentro (pedido de 23/08). O nome da persona saiu do
+            cabeçalho: ele ocupava a única linha do topo com um dado que só
+            interessa a quem está avaliando a demonstração, e continua visível no
+            menu, no perfil e no rodapé do trilho da web.
+
+            SEM SCRIM, e o fechamento é por foco: um scrim precisaria posicionar
+            contra a moldura e este cabeçalho é `sticky`, ou seja o contêiner
+            dele — o scrim cobriria só a faixa do topo. Fechar em `Escape`, ao
+            sair o foco e ao tocar num item cobre teclado e dedo sem inventar
+            camada nova. */}
+        <div
+          className="barra-conta"
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setContaAberta(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setContaAberta(false);
+          }}
+        >
+          <button
+            type="button"
+            data-conta
+            aria-expanded={contaAberta}
+            aria-controls="menu-da-conta"
+            aria-label={`Sua conta — você está como ${persona?.nome ?? "…"}`}
+            className="barra-conta-botao"
+            onClick={() => setContaAberta((v) => !v)}
+          >
+            {ICONE_PERFIL}
+          </button>
+
+          {contaAberta ? (
+            <div id="menu-da-conta" className="barra-conta-menu">
+              <p className="barra-conta-persona tipo-micro">
+                você está como {persona?.nome ?? "…"}
+              </p>
+              {ATALHOS_CONTA.map((atalho) => (
+                <Link
+                  key={atalho.href}
+                  href={atalho.href}
+                  className="barra-conta-item"
+                  onClick={() => setContaAberta(false)}
+                >
+                  <span className="barra-conta-rotulo tipo-detalhe">{atalho.rotulo}</span>
+                  <span className="barra-conta-descricao tipo-legenda">{atalho.descricao}</span>
+                </Link>
+              ))}
+              <SeletorDeTema />
+            </div>
+          ) : null}
+        </div>
       </header>
 
       <nav className="barra-inferior" aria-label="Navegação principal">

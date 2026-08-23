@@ -170,8 +170,7 @@ export function LeituraDesertos({ dados }: { dados: DadosDesertos }) {
         <strong className="font-semibold text-tinta">
           registro no acervo carregado do Itaú Cultural
         </strong>{" "}
-        — cada vínculo entre uma entidade e um lugar —, não oferta cultural do estado.
-        Sergipe tem cultura; o acervo é que não a documenta.
+        — não oferta cultural do estado. Sergipe tem cultura; o acervo é que não a documenta.
       </p>
       <p>
         {a.titulo} tem {a.registros} registros e {b.titulo}, {b.registros}:{" "}
@@ -185,10 +184,6 @@ export function LeituraDesertos({ dados }: { dados: DadosDesertos }) {
           {dois} têm zero
         </strong>
         .
-      </p>
-      <p className="desertos-tese">
-        Essa concentração não é falha do acervo. É o diagnóstico que justifica a plataforma
-        existir.
       </p>
     </section>
   );

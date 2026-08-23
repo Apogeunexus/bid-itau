@@ -14,8 +14,9 @@ export const metadata: Metadata = {
 /**
  * `colorScheme` declara ao navegador que o documento serve os dois temas.
  *
- * O TEMA SEGUE O SISTEMA OPERACIONAL, e só ele — não há botão nem preferência
- * guardada (23/08). Não é redundante com o `color-scheme: dark` de `tokens.css`:
+ * O TEMA SEGUE O SISTEMA OPERACIONAL por padrão, e o menu da conta oferece a
+ * escolha manual (23/08) — aplicada por `antes-da-pintura.js` antes do primeiro
+ * pixel. Isto aqui não é redundante com o `color-scheme: dark` de `tokens.css`:
  * aquele só chega quando a folha chega, e esta é uma meta tag que o navegador lê
  * no cabeçalho — é ela que pinta o CANVAS na cor certa antes do primeiro byte de
  * CSS, matando o lampejo branco que apareceria entre a resposta e a folha em

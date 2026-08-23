@@ -315,18 +315,11 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
           <BlocoAusenciaDeclarada
             chave="play"
             rotulo="Catálogo do Play"
-            frase="O catálogo do Itaú Cultural Play entra na camada seguinte deste protótipo. O que
-              está acima é o que o grafo já liga a este evento por ligação de mídia — e é isso, e não
-              uma vitrine de recomendação, que sustenta o «se não puder ir»."
+            frase="O que está acima é o que o acervo liga a este evento por ligação de mídia."
           />
         </section>
       </aside>
 
-      <p className="ev-rodape border-t border-borda pt-3 text-xs leading-relaxed text-tinta-3">
-        As sessões são registros próprios do acervo, com id próprio: o evento aparece uma
-        vez e as datas ficam abaixo dele. Onde um bloco declara ausência, é o registro do
-        Itaú Cultural que não publica o dado.
-      </p>
     </div>
   );
 }

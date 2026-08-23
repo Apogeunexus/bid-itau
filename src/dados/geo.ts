@@ -345,7 +345,8 @@ export const METODOS_INDEXADOS: readonly MetodoCoordenada[] = [
 export const VIAS_INDEXADAS: readonly ViaCoordenada[] = ["propria", "espaco", "territorio"];
 
 /**
- * `[chave, id, título, classe, x, y, método, via, corDaLinguagem, célula, dentroDoBrasil]`
+ * `[chave, id, título, classe, x, y, método, via, corDaLinguagem, célula, dentroDoBrasil,
+ *   eventos, imagem]`
  *
  * - `chave` é `{classe}_{slug}` — a MESMA gramática que as telas 03-01 e 03-04 escrevem no
  *   hash. É por ela que o recorte casa; o `id` canônico viaja junto porque é ele que o
@@ -355,6 +356,9 @@ export const VIAS_INDEXADAS: readonly ViaCoordenada[] = ["propria", "espaco", "t
  * - `dentroDoBrasil` é `1` ou `0`. As de fora entram no índice de propósito: elas precisam
  *   ser CONTADAS e declaradas, e uma entidade ausente do índice seria indistinguível de uma
  *   sem coordenada nenhuma — duas situações diferentes que a tela precisa separar.
+ * - `imagem` é o caminho local do acervo, `""` quando a entidade não tem. Viaja na tupla
+ *   pela mesma razão de `eventos`: a folha do mapa desenha capa, e o cliente não alcança o
+ *   grafo (DP-F).
  */
 export type PinoIndexado = readonly [
   string,
@@ -393,6 +397,8 @@ export type PinoIndexado = readonly [
    * «faz parte de uma série grande», que é outra pergunta e continua verdadeira.
    */
   number,
+  /** Caminho da imagem do acervo (`/acervo/…`), `""` quando não há. */
+  string,
 ];
 
 /**
@@ -473,6 +479,7 @@ export function indiceDePinos(): PinoIndexado[] {
         // percorrer relação por relação, e não presume qual relação liga gente a
         // evento — se o acervo ganhar outra, ela conta sozinha.
         vizinhos(entidade.id).filter((v) => v.entidade.classe === "evento").length,
+        entidade.imagem ?? "",
       ]);
     }
   }

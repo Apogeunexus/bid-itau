@@ -171,11 +171,6 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
         </section>
       </div>
 
-      <p className="border-t border-borda pt-3 text-xs leading-relaxed text-tinta-3">
-        Todo vínculo desta página vem do acervo, e o papel de cada um vem
-        da própria ligação. Onde o bloco declara ausência, é o registro do Itaú Cultural que
-        não publica o dado — nada foi preenchido no lugar dele.
-      </p>
     </div>
   );
 }

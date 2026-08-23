@@ -13,10 +13,10 @@ const OPCOES: Array<{ valor: Visao; rotulo: string }> = [
  * O alternador de visão, no canto, fora do fluxo do conteúdo (D-04).
  *
  * É o ÚNICO controle do canto. O modo comentado foi retirado do produto — a explicação
- * sobre o protótipo deixou de existir na tela —, o tema deixou de ter botão (ele segue o
- * sistema operacional e mais nada) e o interruptor de navegação do beta de 23/08 durou um
- * dia: a barra inferior deixou de ser uma das duas opções e passou a ser a navegação do
- * app, então não havia mais escolha a oferecer.
+ * sobre o protótipo deixou de existir na tela —, o tema voltou a ser escolhível mas mora
+ * no menu da conta, junto com o resto do que é da pessoa, e o interruptor de navegação do
+ * beta de 23/08 durou um dia: a barra inferior deixou de ser uma das duas opções e passou
+ * a ser a navegação do app, então não havia mais escolha a oferecer.
  *
  * A ancoragem à janela mora no `.canto` que envolve este bloco — ver `Canto` abaixo. É o
  * ÚNICO `fixed` legítimo do projeto: o controle de apresentação é deliberadamente externo

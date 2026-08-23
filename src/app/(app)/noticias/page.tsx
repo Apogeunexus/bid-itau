@@ -27,9 +27,8 @@ export default function Noticias() {
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Notícias</h1>
         </div>
         <p className="max-w-prose text-sm leading-snug">
-          O lado editorial do acervo — <strong>{milhar(TOTAL_DE_CONTEUDOS)} conteúdos</strong>,
-          dos quais estas quatro seções recortam o que o cliente pediu como submenu. Cada
-          texto abre na fonte, no site do Itaú Cultural.
+          O lado editorial do acervo — <strong>{milhar(TOTAL_DE_CONTEUDOS)} conteúdos</strong>.
+          Cada texto abre na fonte, no site do Itaú Cultural.
         </p>
       </header>
 

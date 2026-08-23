@@ -300,9 +300,8 @@ export function TelaRepertorio({
           </ul>
         ) : (
           <p className="rounded-xl border border-dashed border-borda-forte p-3 text-sm leading-snug">
-            <strong className="font-bold">Nada salvo ainda.</strong> Esta persona não tem
-            sessão salva no dado do protótipo, e nada foi salvo neste navegador. É estado
-            vazio, não erro — abra um evento e salve uma sessão para ela aparecer aqui.
+            <strong className="font-bold">Nada salvo ainda.</strong> Abra um evento e
+            salve uma sessão para ela aparecer aqui.
           </p>
         )}
       </Secao>

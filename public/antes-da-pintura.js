@@ -14,12 +14,27 @@
  * arquivo é o primeiro filho do `<body>` e NÃO leva `async`: assim ela bloqueia
  * o parser, roda antes de qualquer pintura, e o quadro errado nunca existe.
  *
- * O TEMA NÃO PASSA MAIS POR AQUI (23/08). Ele segue o sistema operacional e nada
- * mais: quem decide é a media query `prefers-color-scheme` em `tokens.css`, que
- * chega junto com a folha e não precisa de JavaScript nenhum.
+ * O TEMA VOLTOU A PASSAR POR AQUI (23/08, pedido do cliente): o menu da conta
+ * oferece sistema, claro e escuro. O padrão continua sendo o sistema operacional
+ * — sem nada guardado, nenhum atributo é escrito e quem decide é a media query
+ * `prefers-color-scheme` de `tokens.css`. A escolha só existe quando alguém a
+ * fez, e ela é aplicada AQUI para não haver lampejo entre a pintura e o React.
  */
 (function () {
   var raiz = document.documentElement;
+
+  try {
+    var tema = window.localStorage.getItem("agenda-cultural:tema");
+    // Só os dois valores conhecidos entram. Storage é editável por quem avalia,
+    // e um valor estranho vira atributo que nenhuma regra casa — o efeito seria
+    // «o tema parou de funcionar», sem erro nenhum na tela.
+    if (tema === "claro" || tema === "escuro") raiz.setAttribute("data-tema", tema);
+  } catch (erro) {
+    // smaug-ignore empty-catch: storage bloqueado (modo privado, iframe) é o
+    // caminho esperado aqui — o tema cai no do sistema, que é o padrão. Escrever
+    // no console antes da primeira pintura seria ruído em toda carga.
+    void erro;
+  }
 
   // O total vem do próprio HTML (`data-heroi-total`, escrito pelo layout a
   // partir da lista curada), então este arquivo não precisa saber quantas

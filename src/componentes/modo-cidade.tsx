@@ -455,7 +455,7 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
               <p className="cidade-dia-nota">
                 {dia.alternativa
                   ? dia.alternativa.motivo
-                  : "uma troca por dia de cada vez: todo quilômetro mostrado é medido"}
+                  : "uma troca por dia de cada vez"}
               </p>
             </article>
           );

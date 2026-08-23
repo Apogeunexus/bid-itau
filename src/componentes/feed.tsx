@@ -118,8 +118,8 @@ export function Feed({
         </div>
       ) : (
         <p className="rounded-xl border border-dashed border-borda-forte p-4 text-sm text-tinta-2">
-          Nenhum candidato sobrou com esta combinação de disposição. Isto é um resultado do
-          acervo, não um erro: desmarque um corte para voltar ao feed base.
+          Nenhum candidato sobrou com esta combinação. Desmarque um corte para voltar ao
+          feed base.
         </p>
       )}
 
