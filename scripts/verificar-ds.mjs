@@ -28,14 +28,51 @@ const RAIZ = path.resolve(import.meta.dirname, "..");
 const SRC = path.join(RAIZ, "src");
 
 /** Folhas cuja migração para tokens já foi feita — as únicas onde medida
- *  literal fora da grade é proibida. Cada onda de redesign acrescenta as suas. */
-const FOLHAS_MIGRADAS = ["menu-lateral.css"];
+ *  literal fora da grade é proibida. Desde a rodada de 2026-08, TODAS: as 21
+ *  antigas passaram pelo migrador determinístico e a catraca vale para o
+ *  conjunto inteiro. */
+const FOLHAS_MIGRADAS = [
+  "acontece-web.css",
+  "agenda.css",
+  "base.css",
+  "busca.css",
+  "cidade.css",
+  "filtros.css",
+  "frase.css",
+  "mapa.css",
+  "menu-lateral.css",
+  "observatorio.css",
+  "play.css",
+  "produtor.css",
+  "redacao.css",
+  "roteiro.css",
+  "salvos.css",
+  "sem-resultado.css",
+  "studio-duplicatas.css",
+  "studio-ocorrencias.css",
+  "studio.css",
+  "web-buscar.css",
+  "web-descobrir.css",
+  "web-evento.css",
+  "web.css",
+];
 
 /** Medidas que podem existir mesmo em folha migrada, nomeadas uma a uma. */
 const EXCECOES_DE_MEDIDA = [
-  "1px", // borda de 1 device pixel não é token, é física
-  "0px",
+  "16px", // o corpo-base do manual (12 pt) em base.css — o corte, não uma medida de tela
+  "390px", // a moldura do telefone (D-03): medida própria dela,
+  "844px", // idem
+  "430px", // a única @media de viewport — colapso da moldura
+  "10px", // a borda da moldura
+  "24px", // a sombra da moldura (par com 60px)
+  "60px",
+  "288px", // o teto do desenho do mapa nacional (mapa.css)
+  "286px",
 ];
+
+/** Até este tamanho, px é detalhe físico (borda, sublinhado, deslocamento de
+ *  sombra) e não medida de layout — layout em px acima disso é violação. */
+const TETO_PX_FISICO = 8;
 
 /** Teto congelado de `-[var(--ic-preto|branco)]` em TSX (medido na migração). */
 const TETO_ARBITRARIOS_PRETO_BRANCO = 62;
@@ -158,6 +195,8 @@ console.log("\nverificar-ds — regras estruturais do design system");
         if (EXCECOES_DE_MEDIDA.includes(m)) return false;
         // rem múltiplo de 0.25 é a grade — legítimo (DESIGN-SYSTEM.md §2).
         if (m.endsWith("rem")) return (Number(m.slice(0, -3)) * 100) % 25 !== 0;
+        // px pequeno é físico (borda, offset de sombra); layout em px é violação.
+        if (m.endsWith("px")) return Number(m.slice(0, -2)) > TETO_PX_FISICO;
         return true;
       });
     const centrados = [...limpo.matchAll(/text-align:\s*(center|justify)/g)];

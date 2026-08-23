@@ -75,11 +75,11 @@
  * na margem esquerda e a pessoa não vê uma coluna — vê sobra.
  *
  * O respiro à direita é menor que os outros três de propósito: é por ali que passa a barra
- * de rolagem interna que `.web-coluna-fixa` instala, e `padding-right: 0.35rem` dela mais
+ * de rolagem interna que `.web-coluna-fixa` instala, e `padding-right: 0.25rem` dela mais
  * 1rem daqui afastariam as fichas da própria borda.
  * ------------------------------------------------------------------------ */
 [data-view="web"] [data-coluna-facetas] {
-  padding: 1rem 0.65rem 1rem 1rem;
+  padding: 1rem 0.75rem 1rem 1rem;
   border: var(--web-borda);
   border-radius: var(--web-raio);
   background: color-mix(in srgb, var(--ic-preto) 2%, var(--ic-branco));
@@ -106,9 +106,9 @@
  * `.busca-resultado:first-child { border-top: 0 }` de `busca.css` continua valendo na
  * visão app e não é tocado — esta regra é mais específica e só existe sob `[data-view=web]`. */
 [data-view="web"] [data-grade-resultados] > .busca-resultado {
-  padding: 0.85rem;
+  padding: 0.75rem;
   border: var(--web-borda);
-  border-radius: 0.6rem;
+  border-radius: 0.5rem;
   background: var(--ic-branco);
 }
 

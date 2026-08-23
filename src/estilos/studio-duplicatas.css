@@ -9,7 +9,7 @@
  *
  * O que for compartilhado com a tela de ocorrências mora em `studio.css`.
  *
- * Todo laranja sai de `var(--ic-laranja)`, e as misturas usam `color-mix` em vez de um
+ * Todo laranja sai de `var(--cor-acao)`, e as misturas usam `color-mix` em vez de um
  * rgb() literal: o hex do manual tem UMA fonte de verdade, que é `globals.css` (D-06).
  * ------------------------------------------------------------------------- */
 
@@ -36,19 +36,19 @@
 .dup-componente {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.3rem 0.65rem;
-  border: 1px solid rgb(0 0 0 / 0.15);
-  border-radius: 999px;
-  font-size: 0.8125rem;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-detalhe);
 }
 
 .dup-componente-marca {
-  font-size: 0.65rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.5);
+  color: var(--cor-tinta-3);
 }
 
 /* O componente que o acervo NÃO preenche fica marcado, e não escondido. Ele é metade do
@@ -56,8 +56,8 @@
 .dup-componente[data-sustentado="nao"] {
   border-style: dashed;
   border-color: color-mix(in srgb, var(--ic-preto) 35%, transparent);
-  background: color-mix(in srgb, var(--ic-preto) 4%, transparent);
-  color: rgb(0 0 0 / 0.55);
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta-2);
 }
 
 .dup-componente[data-sustentado="sim"] {
@@ -69,17 +69,17 @@
 .dup-chaves {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
 }
 
 .dup-chave-linha {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.4rem 0.55rem;
-  border: 1px solid rgb(0 0 0 / 0.1);
-  border-radius: 0.5rem;
-  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
+  padding: 0.5rem 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
 }
 
 /* ---------------------------------------------------------------------------
@@ -89,7 +89,7 @@
 .dup-estagio {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.5rem;
 }
 
 .dup-estagio-cabeca {
@@ -100,11 +100,11 @@
 }
 
 .dup-estagio-selo {
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--raio-pilula);
   background: var(--ic-preto);
   color: var(--ic-branco);
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
@@ -113,25 +113,25 @@
  * preenchimento cheio. A chave AFIRMA; o probabilístico ESTIMA, e a tela não deixa os
  * dois parecerem a mesma coisa. */
 .dup-estagio-selo[data-estagio="probabilistico"] {
-  border: 1px solid var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 12%, transparent);
+  border: 1px solid var(--cor-acao);
+  background: var(--cor-acao-lavada);
   color: var(--ic-preto);
 }
 
 .dup-score {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.3rem;
-  padding: 0.25rem 0.6rem;
-  border: 1px solid var(--ic-laranja);
-  border-radius: 999px;
-  font-size: 0.75rem;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-legenda);
   font-variant-numeric: tabular-nums;
 }
 
 .dup-sem-score {
-  font-size: 0.75rem;
-  color: rgb(0 0 0 / 0.55);
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-2);
 }
 
 /* ---------------------------------------------------------------------------
@@ -146,8 +146,8 @@
 .dup-comparacao {
   display: flex;
   flex-direction: column;
-  border: 1px solid rgb(0 0 0 / 0.14);
-  border-radius: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
   overflow: hidden;
 }
 
@@ -163,29 +163,29 @@
 .dup-campo-rotulo {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  padding: 0.55rem 0.7rem;
-  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
-  font-size: 0.8125rem;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-detalhe);
   font-weight: 600;
-  color: rgb(0 0 0 / 0.65);
+  color: var(--cor-tinta-2);
 }
 
 .dup-campo-valor {
-  padding: 0.55rem 0.7rem;
+  padding: 0.5rem 0.75rem;
   border-left: 1px solid rgb(0 0 0 / 0.07);
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
 
 .dup-campo-cabecalho .dup-campo-valor,
 .dup-campo-coluna {
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.5);
+  color: var(--cor-tinta-3);
 }
 
 /* ---------------------------------------------------------------------------
@@ -200,12 +200,12 @@
  * ------------------------------------------------------------------------- */
 
 .dup-campo[data-divergente="sim"] {
-  background: color-mix(in srgb, var(--ic-laranja) 9%, transparent);
-  box-shadow: inset 3px 0 0 var(--ic-laranja);
+  background: var(--cor-acao-lavada);
+  box-shadow: inset 3px 0 0 var(--cor-acao);
 }
 
 .dup-campo[data-divergente="sim"] .dup-campo-rotulo {
-  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
+  background: var(--cor-acao-lavada);
   color: var(--ic-preto);
 }
 
@@ -215,11 +215,11 @@
 
 .dup-marca-divergente {
   align-self: flex-start;
-  padding: 0.05rem 0.4rem;
-  border-radius: 999px;
-  background: var(--ic-laranja);
+  padding: 0rem 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
   color: var(--ic-branco);
-  font-size: 0.6rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -234,8 +234,8 @@
 
 .dup-falso-positivo {
   border-style: dashed;
-  border-color: var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 4%, transparent);
+  border-color: var(--cor-acao);
+  background: color-mix(in srgb, var(--cor-acao) 4%, transparent);
 }
 
 /* ---------------------------------------------------------------------------
@@ -264,24 +264,24 @@
   top: 14.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 1rem;
   max-height: calc(100vh - 19rem);
   overflow-y: auto;
-  padding: 0.9rem;
-  border: 1px solid rgb(0 0 0 / 0.14);
-  border-radius: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
   background: var(--ic-branco);
 }
 
 .dup-fila-cabeca {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.25rem;
 }
 
 .dup-fila-total {
   font-family: var(--fonte-display);
-  font-size: 1.05rem;
+  font-size: var(--tipo-corpo);
   font-weight: 700;
   line-height: 1.2;
 }
@@ -291,39 +291,39 @@
 }
 
 .dup-fila-nota {
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.45;
-  color: rgb(0 0 0 / 0.6);
+  color: var(--cor-tinta-2);
 }
 
 .dup-fila-secao {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 /* O título de estágio gruda no topo da própria fila: quem rola cinquenta e um pares
  * probabilísticos continua sabendo em qual dos dois estágios está olhando. */
 .dup-fila-titulo {
   position: sticky;
-  top: -0.9rem;
+  top: -1rem;
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  margin: 0 -0.9rem;
-  padding: 0.35rem 0.9rem;
+  gap: 0.5rem;
+  margin: 0 -1rem;
+  padding: 0.25rem 1rem;
   background: var(--ic-branco);
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.55);
+  color: var(--cor-tinta-2);
 }
 
 .dup-fila-quantos {
-  padding: 0.05rem 0.4rem;
-  border-radius: 999px;
+  padding: 0rem 0.5rem;
+  border-radius: var(--raio-pilula);
   background: color-mix(in srgb, var(--ic-preto) 8%, transparent);
   font-variant-numeric: tabular-nums;
 }
@@ -331,7 +331,7 @@
 .dup-fila-lista {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -347,22 +347,22 @@
   gap: 0.25rem;
   width: 100%;
   cursor: pointer;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid rgb(0 0 0 / 0.12);
-  border-radius: 0.6rem;
+  padding: 0.5rem 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.5rem;
   background: var(--ic-branco);
   text-align: left;
-  transition: background-color 120ms ease, border-color 120ms ease;
+  transition: background-color var(--dur-1) var(--ease-padrao), border-color var(--dur-1) var(--ease-padrao);
 }
 
 .dup-linha:hover {
-  background: color-mix(in srgb, var(--ic-preto) 4%, transparent);
+  background: var(--cor-superficie-2);
 }
 
 /* O grupo aberto. `aria-pressed` carrega a mesma informação para quem não vê a cor. */
 .dup-linha[aria-pressed="true"] {
-  border-color: var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 10%, transparent);
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
 }
 
 .dup-linha-titulo {
@@ -370,7 +370,7 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 600;
   line-height: 1.3;
 }
@@ -379,11 +379,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.65rem;
+  gap: 0.25rem;
+  font-size: var(--tipo-micro);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.55);
+  color: var(--cor-tinta-2);
 }
 
 .dup-linha-score,
@@ -392,9 +392,9 @@
 }
 
 .dup-linha-score {
-  padding: 0.05rem 0.35rem;
-  border: 1px solid var(--ic-laranja);
-  border-radius: 999px;
+  padding: 0rem 0.25rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-pilula);
   color: var(--ic-preto);
 }
 
@@ -409,9 +409,9 @@
 
 .dup-linha-origem,
 .dup-origem {
-  padding: 0.05rem 0.4rem;
-  border: 1px solid rgb(0 0 0 / 0.2);
-  border-radius: 999px;
+  padding: 0rem 0.5rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
   font-weight: 700;
 }
 
@@ -425,18 +425,18 @@
 .dup-linha-origem[data-origem="encenado"],
 .dup-origem[data-origem="encenado"] {
   border-style: dashed;
-  color: rgb(0 0 0 / 0.6);
+  color: var(--cor-tinta-2);
 }
 
 .dup-linha-origem[data-origem="cruzado"],
 .dup-origem[data-origem="cruzado"] {
   border-style: dotted;
-  color: rgb(0 0 0 / 0.6);
+  color: var(--cor-tinta-2);
 }
 
 .dup-origem {
-  padding: 0.15rem 0.55rem;
-  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  font-size: var(--tipo-micro);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -444,9 +444,9 @@
 /* O par que o segundo estágio aproximou e que um humano tem de separar, marcado NA FILA e
  * não só no painel do contraexemplo: ele é o argumento de D-72 em forma de dado. */
 .dup-linha-separar {
-  padding: 0.05rem 0.4rem;
-  border-radius: 999px;
-  background: var(--ic-laranja);
+  padding: 0rem 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
   color: var(--ic-branco);
   font-weight: 700;
 }
@@ -482,28 +482,28 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 0.85rem 1rem;
+  padding: 0.75rem 1rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
-  border-radius: 0.75rem;
+  border-radius: var(--raio-m);
   background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
 }
 
 .dup-reversivel-rotulo {
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.5);
+  color: var(--cor-tinta-3);
 }
 
 .dup-reversivel-lista {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.5rem;
   margin: 0;
-  padding-left: 1.15rem;
+  padding-left: 1.25rem;
   max-width: 78ch;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.5;
   list-style: decimal;
   color: rgb(0 0 0 / 0.75);
@@ -519,10 +519,10 @@
 .dup-reversivel-consequencia {
   max-width: 78ch;
   padding-top: 0.5rem;
-  border-top: 1px solid rgb(0 0 0 / 0.1);
-  border-left: 3px solid var(--ic-laranja);
-  padding-left: 0.65rem;
-  font-size: 0.8125rem;
+  border-top: 1px solid var(--cor-borda);
+  border-left: 3px solid var(--cor-acao);
+  padding-left: 0.75rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.5;
 }
 
@@ -534,7 +534,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   gap: 0.75rem;
-  padding-top: 0.6rem;
+  padding-top: 0.5rem;
   border-top: 1px solid rgb(0 0 0 / 0.09);
 }
 
@@ -542,13 +542,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.35rem;
+  gap: 0.25rem;
 }
 
 .dup-acao-nota {
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.45;
-  color: rgb(0 0 0 / 0.65);
+  color: var(--cor-tinta-2);
 }
 
 /* O atalho para o par que o humano tem de separar, dentro da própria frase: o argumento
@@ -575,23 +575,23 @@
 .dup-decisao-painel,
 .dup-sem-decisao {
   max-width: 78ch;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.5;
-  color: rgb(0 0 0 / 0.7);
+  color: var(--cor-tinta-2);
 }
 
 .dup-sem-decisao {
-  color: rgb(0 0 0 / 0.55);
+  color: var(--cor-tinta-2);
 }
 
 .dup-decisao-acao {
   display: inline-block;
-  margin-right: 0.35rem;
-  padding: 0.1rem 0.5rem;
-  border-radius: 999px;
-  background: var(--ic-laranja);
+  margin-right: 0.25rem;
+  padding: 0rem 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
   color: var(--ic-branco);
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -600,32 +600,32 @@
 .dup-item-decidido {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  padding: 0.4rem;
-  border: 1px solid color-mix(in srgb, var(--ic-laranja) 45%, transparent);
-  border-radius: 0.7rem;
-  background: color-mix(in srgb, var(--ic-laranja) 5%, transparent);
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--cor-acao) 45%, transparent);
+  border-radius: var(--raio-m);
+  background: color-mix(in srgb, var(--cor-acao) 5%, transparent);
 }
 
 .dup-decisao-registro {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.7rem;
+  gap: 0.25rem;
+  font-size: var(--tipo-micro);
   line-height: 1.4;
-  color: rgb(0 0 0 / 0.65);
+  color: var(--cor-tinta-2);
 }
 
 /* O caminho de volta, nomeado na tela. Sem ele, «reversível» seria adjetivo. */
 .dup-desfazer {
   align-self: flex-start;
   cursor: pointer;
-  padding: 0.1rem 0.45rem;
-  border: 1px solid rgb(0 0 0 / 0.25);
-  border-radius: 999px;
+  padding: 0rem 0.5rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
   background: var(--ic-branco);
-  font-size: 0.65rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -652,10 +652,10 @@
 .dup-colapso-grupo {
   display: block;
   max-width: 78ch;
-  padding: 0.6rem 0.75rem;
-  border: 1px dashed rgb(0 0 0 / 0.2);
-  border-radius: 0.6rem;
-  font-size: 0.8125rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: 0.5rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.5;
   font-variant-numeric: tabular-nums;
   color: rgb(0 0 0 / 0.75);
@@ -671,9 +671,9 @@
 .dup-lado-numeros {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  font-size: 0.75rem;
-  color: rgb(0 0 0 / 0.65);
+  gap: 0.5rem;
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-2);
 }
 
 /* A VARIAÇÃO ENCENADA, DECLARADA JUNTO DO REGISTRO. Um clone que não dissesse que é clone
@@ -682,11 +682,11 @@
 .dup-lado-variacao {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  padding: 0.4rem 0.5rem;
+  gap: 0.25rem;
+  padding: 0.5rem 0.5rem;
   border-left: 3px solid color-mix(in srgb, var(--ic-preto) 30%, transparent);
-  border-radius: 0 0.4rem 0.4rem 0;
-  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
-  font-size: 0.75rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-legenda);
   line-height: 1.45;
 }

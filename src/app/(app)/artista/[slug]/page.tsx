@@ -153,23 +153,27 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
              não tem a categoria. */}
       {obras ? <BlocoPonte grupo={obras} /> : null}
 
-      {/* 7 — com quem dialoga no grafo, e o conteúdo editorial que fala sobre */}
-      <section className="flex flex-col gap-4">
-        <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
-          Com quem dialoga no grafo
-        </h2>
-        {semelhante ? <BlocoPonte grupo={semelhante} /> : null}
-        {dialoga ? <BlocoPonte grupo={dialoga} /> : null}
-      </section>
+      {/* 7 — com quem dialoga no grafo, e o conteúdo editorial que fala sobre.
+             Na web (tela 29, Parte 6): os dois lado a lado — densidade, não largura
+             (D-80); no app a pilha continua a mesma. */}
+      <div className="flex flex-col gap-6 desk:grid desk:grid-cols-2 desk:items-start">
+        <section className="flex flex-col gap-4">
+          <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
+            Com quem dialoga no grafo
+          </h2>
+          {semelhante ? <BlocoPonte grupo={semelhante} /> : null}
+          {dialoga ? <BlocoPonte grupo={dialoga} /> : null}
+        </section>
 
-      <section className="flex flex-col gap-4">
-        <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
-          Conteúdo editorial que fala sobre
-        </h2>
-        {aprofunda ? <BlocoPonte grupo={aprofunda} /> : null}
-        {falaSobre ? <BlocoPonte grupo={falaSobre} /> : null}
-        {contextualiza ? <BlocoPonte grupo={contextualiza} /> : null}
-      </section>
+        <section className="flex flex-col gap-4">
+          <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
+            Conteúdo editorial que fala sobre
+          </h2>
+          {aprofunda ? <BlocoPonte grupo={aprofunda} /> : null}
+          {falaSobre ? <BlocoPonte grupo={falaSobre} /> : null}
+          {contextualiza ? <BlocoPonte grupo={contextualiza} /> : null}
+        </section>
+      </div>
 
       <p className="border-t border-black/10 pt-3 text-xs leading-relaxed text-black/45">
         Todo vínculo desta página é uma aresta do grafo do acervo, e o papel de cada um vem

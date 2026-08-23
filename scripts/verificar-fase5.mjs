@@ -3382,7 +3382,7 @@ async function blocoPlay(cdp, base) {
       const t = texto(document.body);
       return {
         midias: midias.length,
-        declara529: /\\b529\\b/.test(t),
+        declara113: /\\b113\\b/.test(t),
         chips: chips.length,
         categorias: chips.map((c) => ({ v: c.getAttribute('data-categoria'), rot: (c.innerText || '').replace(/\\n+/g, ' ').trim() })),
         recursos: recursos.map((r) => ({
@@ -3400,12 +3400,15 @@ async function blocoPlay(cdp, base) {
       };
     `),
   );
+  // REFORMULAÇÃO 2026-08 (decisão do cliente): /play virou a vitrine de STREAMING —
+  // vídeo, série e playlist, 113 mídias medidas. Podcast mora em /cast e o editorial
+  // em /noticias; o catálogo unificado continua em catalogoDoPlay() e nas 529 rotas.
   exigir(
-    catalogo.midias === 529 && catalogo.declara529 && catalogo.chips === 10,
-    "APPX-02 · o catálogo mostra as 529 mídias numa lista só, e DECLARA o total, com um chip por categoria + «todas»",
-    `${catalogo.midias} mídias no DOM · a tela escreve «529»=${catalogo.declara529} · ${catalogo.chips} chips: ` +
+    catalogo.midias === 113 && catalogo.declara113 && catalogo.chips === 4,
+    "APPX-02 · a vitrine mostra as 113 mídias de streaming, DECLARA o total, com um chip por categoria + «todas»",
+    `${catalogo.midias} mídias no DOM · a tela escreve «113»=${catalogo.declara113} · ${catalogo.chips} chips: ` +
       catalogo.categorias.map((c) => c.rot).join(" · "),
-    "529 mídias, 10 chips",
+    "113 mídias, 4 chips",
   );
   exigir(
     catalogo.recursos.length === 3 &&
@@ -3428,7 +3431,7 @@ async function blocoPlay(cdp, base) {
   const recortar = await cdp.avaliar(
     naPagina5Async(`
       const antesUrl = location.pathname;
-      const chip = document.querySelector('[data-categoria="podcasts"]');
+      const chip = document.querySelector('[data-categoria="series"]');
       const prometido = Number(((chip.innerText || '').match(/(\\d+)\\s*$/) || [])[1]);
       chip.click();
       await new Promise((r) => setTimeout(r, 600));
@@ -3440,17 +3443,17 @@ async function blocoPlay(cdp, base) {
   exigir(
     recortar.entregue === recortar.prometido &&
       recortar.categorias.length === 1 &&
-      recortar.categorias[0] === "podcasts" &&
+      recortar.categorias[0] === "series" &&
       recortar.antesUrl === recortar.depoisUrl,
     "APPX-02 · um controle por categoria RECORTA sem navegar, e entrega o número que o chip anuncia",
-    `chip «podcasts» prometia ${recortar.prometido} · entregou ${recortar.entregue} · ` +
+    `chip «séries» prometia ${recortar.prometido} · entregou ${recortar.entregue} · ` +
       `categorias no recorte ${JSON.stringify(recortar.categorias)} · ${recortar.antesUrl} → ${recortar.depoisUrl}`,
     "entregue == prometido, recorte homogêneo, URL intacta",
   );
 
   const libras = await cdp.avaliar(
     naPagina5Async(`
-      document.querySelector('[data-categoria="podcasts"]').click();
+      document.querySelector('[data-categoria="series"]').click();
       await new Promise((r) => setTimeout(r, 400));
       const chip = document.querySelector('[data-acessibilidade-do-play="libras"]');
       const rotulo = (chip.innerText || '').replace(/\\n+/g, ' ').trim();
@@ -3460,10 +3463,10 @@ async function blocoPlay(cdp, base) {
     `),
   );
   exigir(
-    libras.entregue === 3 && /3\s*de\s*529/.test(libras.rotulo),
-    "D-90 · Libras anuncia «3 de 529» e recorta exatamente as 3 mídias que o acervo declara",
+    libras.entregue === 3 && /3\s*de\s*113/.test(libras.rotulo),
+    "D-90 · Libras anuncia «3 de 113» e recorta as 3 mídias com Libras — todas vídeos, todas no streaming",
     `chip «${libras.rotulo}» · ${libras.entregue} mídias no recorte · pathname ${libras.url}`,
-    "«3 de 529» e 3 mídias",
+    "«3 de 113» e 3 mídias",
   );
   await fotografar(cdp, "05-08-play");
 

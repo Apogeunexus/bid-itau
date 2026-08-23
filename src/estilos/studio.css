@@ -17,7 +17,7 @@
  * ilusão de D-03 — e a fase 3 já pagou por isso uma vez. Quem precisa grudar usa
  * `sticky`, como a barra de abas faz.
  *
- * As cores saem sempre de token (`var(--ic-laranja)`), nunca de hex literal: o hex do
+ * As cores saem sempre de token (`var(--cor-acao)`), nunca de hex literal: o hex do
  * manual tem UMA fonte de verdade, que é o bloco `:root` de `globals.css` (D-06).
  * ------------------------------------------------------------------------- */
 
@@ -41,33 +41,33 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
   margin: -2rem -1.5rem 0;
   padding: 1.25rem 1.5rem 1rem;
-  border-bottom: 1px solid rgb(0 0 0 / 0.12);
+  border-bottom: 1px solid var(--cor-borda);
   background: var(--ic-branco);
 }
 
 .studio-superficie {
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ic-laranja);
+  color: var(--cor-acao);
 }
 
 .studio-titulo {
   font-family: var(--fonte-display);
-  font-size: 1.5rem;
+  font-size: var(--tipo-titulo-2);
   font-weight: 700;
   line-height: 1.2;
 }
 
 .studio-objetivo {
   max-width: 68ch;
-  font-size: 0.875rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.5;
-  color: rgb(0 0 0 / 0.65);
+  color: var(--cor-tinta-2);
 }
 
 /* ---------------------------------------------------------------------------
@@ -78,12 +78,12 @@
 .studio-pastilha {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.3rem;
-  padding: 0.15rem 0.5rem;
-  border: 1px solid rgb(0 0 0 / 0.15);
-  border-radius: 999px;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
   background: var(--ic-branco);
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.4;
   white-space: nowrap;
 }
@@ -96,8 +96,8 @@
 /* A pastilha de destaque usa o laranja da marca — mesma família do selo de motivo e
  * do alerta. `color-mix` e não um rgb() literal: o laranja tem uma fonte de verdade. */
 .studio-pastilha-marca {
-  border-color: var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
 }
 
 /* ---------------------------------------------------------------------------
@@ -107,10 +107,10 @@
 .studio-painel {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 1rem;
   padding: 1.25rem;
-  border: 1px solid rgb(0 0 0 / 0.14);
-  border-radius: 1rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
   background: var(--ic-branco);
 }
 
@@ -123,23 +123,23 @@
 
 .studio-painel-nome {
   font-family: var(--fonte-display);
-  font-size: 1.05rem;
+  font-size: var(--tipo-corpo);
   font-weight: 700;
 }
 
 .studio-rotulo {
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.5);
+  color: var(--cor-tinta-3);
 }
 
 .studio-nota {
   max-width: 78ch;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.5;
-  color: rgb(0 0 0 / 0.7);
+  color: var(--cor-tinta-2);
 }
 
 /* O valor literal — chave de identidade, id de entidade, score. Monoespaçado de
@@ -147,7 +147,7 @@
  * proporcional esconde exatamente a diferença que a tela existe para mostrar. */
 .studio-literal {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
@@ -168,10 +168,10 @@
 .studio-lado {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.85rem;
-  border: 1px solid rgb(0 0 0 / 0.12);
-  border-radius: 0.75rem;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
   background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
 }
 
@@ -179,19 +179,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.35rem;
-  height: 1.35rem;
-  border-radius: 999px;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--raio-pilula);
   background: var(--ic-preto);
   color: var(--ic-branco);
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .studio-lado-titulo {
   font-family: var(--fonte-display);
-  font-size: 0.95rem;
+  font-size: var(--tipo-corpo);
   font-weight: 700;
   line-height: 1.3;
 }
@@ -207,8 +207,8 @@
 .studio-tabela {
   display: flex;
   flex-direction: column;
-  border: 1px solid rgb(0 0 0 / 0.12);
-  border-radius: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
   overflow: hidden;
 }
 
@@ -224,16 +224,16 @@
 }
 
 .studio-celula {
-  padding: 0.55rem 0.7rem;
-  font-size: 0.8125rem;
+  padding: 0.5rem 0.75rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
 
 .studio-celula-rotulo {
   font-weight: 600;
-  color: rgb(0 0 0 / 0.6);
-  background: color-mix(in srgb, var(--ic-preto) 3%, transparent);
+  color: var(--cor-tinta-2);
+  background: var(--cor-superficie-2);
 }
 
 /* ---------------------------------------------------------------------------
@@ -246,19 +246,19 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  padding-top: 0.35rem;
+  padding-top: 0.25rem;
   border-top: 1px solid rgb(0 0 0 / 0.09);
 }
 
 .studio-botao {
   cursor: pointer;
-  padding: 0.45rem 0.95rem;
+  padding: 0.5rem 1rem;
   border: 1px solid var(--ic-preto);
-  border-radius: 999px;
+  border-radius: var(--raio-pilula);
   background: var(--ic-branco);
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 600;
-  transition: background-color 120ms ease, color 120ms ease, opacity 120ms ease;
+  transition: background-color var(--dur-1) var(--ease-padrao), color var(--dur-1) var(--ease-padrao), opacity var(--dur-1) var(--ease-padrao);
 }
 
 .studio-botao:hover {
@@ -266,13 +266,13 @@
 }
 
 .studio-botao-primario {
-  border-color: var(--ic-laranja);
-  background: var(--ic-laranja);
+  border-color: var(--cor-acao);
+  background: var(--cor-acao);
   color: var(--ic-branco);
 }
 
 .studio-botao-primario:hover {
-  background: var(--ic-laranja);
+  background: var(--cor-acao);
   opacity: 0.9;
 }
 
@@ -287,20 +287,20 @@
 .studio-nao-sustenta {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.25rem;
   max-width: 78ch;
-  padding: 0.7rem 0.85rem;
-  border-left: 3px solid var(--ic-laranja);
-  border-radius: 0 0.5rem 0.5rem 0;
-  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
-  font-size: 0.8125rem;
+  padding: 0.75rem 0.75rem;
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0 var(--raio-p) var(--raio-p) 0;
+  background: var(--cor-acao-lavada);
+  font-size: var(--tipo-detalhe);
   line-height: 1.5;
 }
 
 .studio-nao-sustenta-rotulo {
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ic-laranja);
+  color: var(--cor-acao);
 }

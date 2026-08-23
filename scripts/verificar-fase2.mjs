@@ -1179,8 +1179,10 @@ async function cenario1(cdp, base) {
   ]);
 
   // ---- 8. Meu Repertório (DESC-07, D-44) ----
+  // Desde a reformulação de 2026-08 o mapa de repertório tem rota própria — /meu
+  // virou o hub do perfil e aponta para cá.
   titulo("── 8 · Meu Repertório (DESC-07, D-44) ──");
-  await cdp.navegar(`${base}/meu/`);
+  await cdp.navegar(`${base}/meu/repertorio/`);
 
   const LER_REPERTORIO = naPagina(`
     const adj = visiveis('[data-adjacente]');

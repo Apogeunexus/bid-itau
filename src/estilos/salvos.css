@@ -27,45 +27,45 @@
 .alerta-alteracao {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.7rem 0.8rem;
-  border: 2px solid var(--ic-laranja);
-  border-radius: 0.9rem;
-  background: color-mix(in srgb, var(--ic-laranja) 7%, transparent);
+  gap: 0.5rem;
+  padding: 0.75rem 0.75rem;
+  border: 2px solid var(--cor-acao);
+  border-radius: 1rem;
+  background: var(--cor-acao-lavada);
 }
 
 .alerta-cabeca {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.25rem;
 }
 
 /* O rótulo de procedência, no vocabulário visual da trilha da fase 2 (D-37): pastilha
  * contornada de laranja, versalete, texto e não ícone. Sigla muda não serve — quem avalia
  * tem de ler «autorado» de relance, na projeção, sem legenda. */
 .alerta-selo {
-  border: 1px solid var(--ic-laranja);
-  border-radius: 999px;
-  padding: 0.05rem 0.5rem;
-  font-size: 0.62rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-pilula);
+  padding: 0rem 0.5rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--ic-laranja);
+  color: var(--cor-acao);
   white-space: nowrap;
 }
 
 .alerta-campo {
-  font-size: 0.72rem;
+  font-size: var(--tipo-legenda);
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.6);
+  color: var(--cor-tinta-2);
 }
 
 .alerta-titulo {
-  font-size: 0.92rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 700;
   line-height: 1.2;
 }
@@ -77,32 +77,32 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.4rem;
+  gap: 0.5rem;
   font-family: var(--fonte-display, inherit);
 }
 
 .alerta-de {
-  font-size: 1.05rem;
+  font-size: var(--tipo-corpo);
   font-weight: 700;
-  color: rgb(0 0 0 / 0.45);
+  color: var(--cor-tinta-3);
   text-decoration: line-through;
   text-decoration-thickness: 2px;
 }
 
 .alerta-seta {
-  font-size: 0.9rem;
-  color: rgb(0 0 0 / 0.45);
+  font-size: var(--tipo-detalhe);
+  color: var(--cor-tinta-3);
 }
 
 .alerta-para {
-  font-size: 1.25rem;
+  font-size: var(--tipo-titulo-3);
   font-weight: 700;
-  color: var(--ic-laranja);
+  color: var(--cor-acao);
 }
 
 .alerta-quando {
-  font-size: 0.72rem;
-  color: rgb(0 0 0 / 0.6);
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-2);
 }
 
 /* As duas linhas de metadado — quando foi informado e quem informou. Grade de duas
@@ -110,14 +110,14 @@
 .alerta-ficha {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.1rem 0.5rem;
-  font-size: 0.7rem;
+  gap: 0rem 0.5rem;
+  font-size: var(--tipo-micro);
   line-height: 1.3;
 }
 
 .alerta-ficha dt {
   font-weight: 700;
-  color: rgb(0 0 0 / 0.5);
+  color: var(--cor-tinta-3);
   white-space: nowrap;
 }
 
@@ -129,11 +129,11 @@
 /* A frase que fecha o Cenário 4. Fundo branco dentro do bloco laranja: ela é a conclusão,
  * não mais um metadado, e precisa se destacar de dentro do próprio alerta. */
 .alerta-cenario {
-  margin-top: 0.1rem;
-  border-radius: 0.6rem;
+  margin-top: 0rem;
+  border-radius: 0.5rem;
   background: var(--ic-branco);
-  padding: 0.45rem 0.55rem;
-  font-size: 0.75rem;
+  padding: 0.5rem 0.5rem;
+  font-size: var(--tipo-legenda);
   font-weight: 700;
   line-height: 1.35;
 }
@@ -142,9 +142,9 @@
  * da proposta e não pode sumir com o interruptor. O parágrafo LONGO é que vai para dentro
  * de `<Comentario>`, e é ele quem paga o orçamento de altura. */
 .alerta-rotulo-curto {
-  font-size: 0.66rem;
+  font-size: var(--tipo-micro);
   line-height: 1.35;
-  color: rgb(0 0 0 / 0.55);
+  color: var(--cor-tinta-2);
 }
 
 /* --- A fila de sessões salvas -------------------------------------------- */
@@ -152,7 +152,7 @@
 .salvos-lista {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -161,10 +161,10 @@
 .salvos-item {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  border: 1px solid rgb(0 0 0 / 0.12);
-  border-radius: 0.8rem;
-  padding: 0.55rem 0.65rem;
+  gap: 0.25rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  padding: 0.5rem 0.75rem;
   background: var(--ic-branco);
 }
 
@@ -172,17 +172,17 @@
  * duas linhas do mesmo evento, lado a lado, uma contornada e a outra não. Trocar o fundo
  * daria o mesmo destaque e cortaria o contraste do texto. */
 .salvos-item[data-salvo-alertado="sim"] {
-  border-color: var(--ic-laranja);
+  border-color: var(--cor-acao);
   border-width: 2px;
-  padding: calc(0.55rem - 1px) calc(0.65rem - 1px);
+  padding: calc(0.5rem - 1px) calc(0.75rem - 1px);
 }
 
 .salvos-linha-topo {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.35rem;
-  font-size: 0.82rem;
+  gap: 0.25rem;
+  font-size: var(--tipo-detalhe);
 }
 
 .salvos-data {
@@ -190,14 +190,14 @@
 }
 
 .salvos-hora {
-  color: rgb(0 0 0 / 0.6);
+  color: var(--cor-tinta-2);
 }
 
 .salvos-marca {
   margin-left: auto;
-  border-radius: 999px;
-  padding: 0.02rem 0.45rem;
-  font-size: 0.6rem;
+  border-radius: var(--raio-pilula);
+  padding: 0rem 0.5rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -205,17 +205,17 @@
 }
 
 .salvos-marca-alertada {
-  border: 1px solid var(--ic-laranja);
-  color: var(--ic-laranja);
+  border: 1px solid var(--cor-acao);
+  color: var(--cor-acao);
 }
 
 .salvos-marca-intacta {
-  border: 1px solid rgb(0 0 0 / 0.2);
-  color: rgb(0 0 0 / 0.45);
+  border: 1px solid var(--cor-borda-forte);
+  color: var(--cor-tinta-3);
 }
 
 .salvos-evento {
-  font-size: 0.82rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 600;
   line-height: 1.25;
   text-decoration: underline;
@@ -226,19 +226,19 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.64rem;
-  color: rgb(0 0 0 / 0.45);
+  gap: 0.5rem;
+  font-size: var(--tipo-micro);
+  color: var(--cor-tinta-3);
 }
 
 .salvos-remover {
   margin-left: auto;
-  border: 1px solid rgb(0 0 0 / 0.2);
-  border-radius: 999px;
-  padding: 0.05rem 0.5rem;
-  font-size: 0.64rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  padding: 0rem 0.5rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
-  color: rgb(0 0 0 / 0.55);
+  color: var(--cor-tinta-2);
   cursor: pointer;
   background: none;
   transition: color 0.15s, border-color 0.15s;
@@ -260,10 +260,10 @@
 /* --- A prova visível de D-57 --------------------------------------------- */
 
 .salvos-prova {
-  border-left: 3px solid var(--ic-laranja);
-  border-radius: 0.2rem;
-  padding: 0.15rem 0 0.15rem 0.55rem;
-  font-size: 0.72rem;
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0.25rem;
+  padding: 0.25rem 0 0.25rem 0.5rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.35;
 }
 
@@ -272,19 +272,19 @@
 .salvos-vazio {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  border: 1px dashed rgb(0 0 0 / 0.25);
-  border-radius: 0.9rem;
-  padding: 0.9rem;
+  gap: 0.5rem;
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: 1rem;
+  padding: 1rem;
 }
 
 .salvos-semear {
-  border: 2px solid var(--ic-laranja);
-  border-radius: 999px;
-  background: var(--ic-laranja);
+  border: 2px solid var(--cor-acao);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
   color: var(--ic-branco);
-  padding: 0.45rem 0.9rem;
-  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  font-size: var(--tipo-legenda);
   font-weight: 700;
   cursor: pointer;
   align-self: flex-start;
@@ -301,9 +301,9 @@
  * recurso foi esquecido. Dizer o que existe, onde vive e por quê é o mesmo tratamento que
  * D-43 dá à acessibilidade e D-20 à coordenada. */
 .salvos-declarado {
-  border-top: 1px solid rgb(0 0 0 / 0.1);
-  padding-top: 0.55rem;
-  font-size: 0.68rem;
+  border-top: 1px solid var(--cor-borda);
+  padding-top: 0.5rem;
+  font-size: var(--tipo-micro);
   line-height: 1.4;
-  color: rgb(0 0 0 / 0.55);
+  color: var(--cor-tinta-2);
 }

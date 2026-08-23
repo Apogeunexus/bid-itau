@@ -88,13 +88,13 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.6rem;
-  padding-top: 0.35rem;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
 }
 
 .redacao-escopo-descricao {
   max-width: 88ch;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.45;
   color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
 }
@@ -106,7 +106,7 @@
 .redacao-contagens {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 0.25rem;
 }
 
 .redacao-lista {
@@ -127,7 +127,7 @@
   flex-direction: column;
   gap: 0.25rem;
   width: 100%;
-  padding: 0.55rem 0.7rem;
+  padding: 0.5rem 0.75rem;
   border: 0;
   background: transparent;
   text-align: left;
@@ -141,7 +141,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 /* O selo de origem. Ele é o primeiro elemento da linha, e a sugestão de IA usa o
@@ -149,10 +149,10 @@
 .redacao-selo-origem {
   display: inline-flex;
   align-items: center;
-  padding: 0.1rem 0.5rem;
+  padding: 0rem 0.5rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 30%, transparent);
-  border-radius: 999px;
-  font-size: 0.65rem;
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -160,9 +160,9 @@
 }
 
 .redacao-selo-origem[data-origem="ia"] {
-  border-color: var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 12%, transparent);
-  color: var(--ic-laranja);
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao);
 }
 
 /* ---------------------------------------------------------------------------
@@ -172,16 +172,16 @@
 .redacao-score {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.3rem;
-  padding: 0.1rem 0.45rem;
-  border: 1px solid var(--ic-laranja);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+  gap: 0.25rem;
+  padding: 0rem 0.5rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao-lavada);
   white-space: nowrap;
 }
 
 .redacao-score-rotulo {
-  font-size: 0.6rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -189,14 +189,14 @@
 }
 
 .redacao-score-numero {
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
 /* A ausência de score é DITA, e não deixada em branco (D-90). */
 .redacao-sem-score {
-  font-size: 0.65rem;
+  font-size: var(--tipo-micro);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
@@ -205,17 +205,17 @@
 
 .redacao-sem-score-explicado {
   border-left: 3px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
-  padding-left: 0.7rem;
+  padding-left: 0.75rem;
 }
 
 .redacao-bloco-score {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  padding: 0.9rem;
-  border: 1px solid var(--ic-laranja);
-  border-radius: 0.75rem;
-  background: color-mix(in srgb, var(--ic-laranja) 4%, transparent);
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-m);
+  background: color-mix(in srgb, var(--cor-acao) 4%, transparent);
 }
 
 /* Os cinco componentes, um por linha, com a marca à esquerda e o peso à direita.
@@ -233,13 +233,13 @@
 
 .redacao-componente {
   display: grid;
-  grid-template-columns: 1.2rem minmax(0, 1fr) 3.5rem;
+  grid-template-columns: 1.25rem minmax(0, 1fr) 3.5rem;
   align-items: baseline;
   gap: 0.5rem;
-  padding: 0.35rem 0.5rem;
-  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-p);
   background: var(--ic-branco);
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.4;
 }
 
@@ -248,7 +248,7 @@
 }
 
 .redacao-componente-marca {
-  color: var(--ic-laranja);
+  color: var(--cor-acao);
 }
 
 .redacao-componente[data-atende="nao"] .redacao-componente-marca {
@@ -258,7 +258,7 @@
 .redacao-componente-texto {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0rem;
   min-width: 0;
 }
 
@@ -282,7 +282,7 @@
 .redacao-sugestao {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 /* ---------------------------------------------------------------------------
@@ -296,23 +296,23 @@
 .redacao-campo {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.25rem;
 }
 
 .redacao-textarea {
   width: 100%;
-  padding: 0.55rem 0.7rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 25%, transparent);
-  border-radius: 0.6rem;
+  border-radius: 0.5rem;
   background: var(--ic-branco);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.45;
   resize: vertical;
 }
 
 .redacao-textarea:focus-visible {
-  outline: 2px solid var(--ic-laranja);
+  outline: 2px solid var(--cor-acao);
   outline-offset: 1px;
 }
 
@@ -321,11 +321,11 @@
 .redacao-veto {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  padding: 0.9rem;
-  border-left: 3px solid var(--ic-laranja);
-  border-radius: 0 0.75rem 0.75rem 0;
-  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+  gap: 0.5rem;
+  padding: 1rem;
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0 var(--raio-m) var(--raio-m) 0;
+  background: var(--cor-acao-lavada);
 }
 
 /* O botão travado tem de PARECER travado além de estar travado — as duas coisas,
@@ -336,7 +336,7 @@
 }
 
 .redacao-aviso-veto {
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.35;
   color: color-mix(in srgb, var(--ic-preto) 65%, transparent);
 }
@@ -358,23 +358,23 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  padding: 0.7rem 0.85rem;
+  padding: 0.75rem 0.75rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 14%, transparent);
-  border-radius: 0.75rem;
+  border-radius: var(--raio-m);
   background: var(--ic-branco);
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.45;
 }
 
 .redacao-decisao[data-acao-registrada="vetar"] {
-  border-left: 3px solid var(--ic-laranja);
+  border-left: 3px solid var(--cor-acao);
 }
 
 .redacao-decisao-cabeca {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .redacao-decisao-titulo {
@@ -387,22 +387,22 @@
 .redacao-decisao-motivo {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.4rem 0.55rem;
-  border-radius: 0.5rem;
-  background: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
+  gap: 0.25rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: var(--raio-p);
+  background: var(--cor-acao-lavada);
 }
 
 .redacao-decisao-assinatura {
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   font-variant-numeric: tabular-nums;
   color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
 }
 
 .redacao-desfazer {
   align-self: flex-start;
-  padding: 0.2rem 0.7rem;
-  font-size: 0.7rem;
+  padding: 0.25rem 0.75rem;
+  font-size: var(--tipo-micro);
 }
 
 .redacao-distribuicao {
@@ -421,21 +421,21 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1.1rem 1.25rem;
+  padding: 1rem 1.25rem;
   border: 1px solid var(--ic-preto);
-  border-radius: 1rem;
+  border-radius: var(--raio-g);
   background: var(--ic-preto);
   color: var(--ic-branco);
 }
 
 .redacao-limites .studio-nao-sustenta-rotulo {
-  color: var(--ic-laranja);
+  color: var(--cor-acao);
 }
 
 .redacao-limites ul {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-  gap: 0.6rem;
+  gap: 0.5rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -443,8 +443,8 @@
 
 .redacao-limites li {
   padding-left: 0.75rem;
-  border-left: 3px solid var(--ic-laranja);
-  font-size: 0.8125rem;
+  border-left: 3px solid var(--cor-acao);
+  font-size: var(--tipo-detalhe);
   line-height: 1.45;
 }
 
@@ -455,7 +455,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 /* Densidade de D-80 na linha da fila: com o respiro padrão, quatro itens ocupavam a
@@ -463,12 +463,12 @@
  * e nenhum texto é cortado para isso, porque truncar título de evento esconde
  * exatamente o que quem modera precisa ler. */
 .redacao-linha .redacao-linha-botao {
-  gap: 0.15rem;
-  padding: 0.45rem 0.6rem;
+  gap: 0.25rem;
+  padding: 0.5rem 0.5rem;
 }
 
 .redacao-linha .web-linha-titulo {
-  font-size: 0.85rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.25;
 }
 
@@ -497,25 +497,25 @@
 }
 
 .redacao-candidato[data-arrastando="sim"] {
-  outline: 2px dashed var(--ic-laranja);
+  outline: 2px dashed var(--cor-acao);
   outline-offset: 2px;
 }
 
 .redacao-candidato-texto {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0rem;
   min-width: 0;
 }
 
 .redacao-acrescentar {
-  padding: 0.2rem 0.7rem;
-  font-size: 0.7rem;
+  padding: 0.25rem 0.75rem;
+  font-size: var(--tipo-micro);
   white-space: nowrap;
 }
 
 .redacao-classe {
-  font-size: 0.65rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -531,8 +531,8 @@
  * ------------------------------------------------------------------------- */
 
 .redacao-publicabilidade[data-publicavel="nao"] {
-  border-left: 4px solid var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
+  border-left: 4px solid var(--cor-acao);
+  background: var(--cor-acao-lavada);
 }
 
 .redacao-publicabilidade .studio-botao[disabled] {
@@ -543,18 +543,18 @@
 .redacao-pendencias {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.45;
 }
 
 .redacao-pendencias li {
-  padding: 0.5rem 0.65rem;
-  border-left: 3px solid var(--ic-laranja);
-  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0 var(--raio-p) var(--raio-p) 0;
   background: var(--ic-branco);
 }
 
@@ -581,10 +581,10 @@
 .redacao-passo {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  padding: 0.85rem;
+  gap: 0.5rem;
+  padding: 0.75rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 14%, transparent);
-  border-radius: 0.75rem;
+  border-radius: var(--raio-m);
   background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
 }
 
@@ -593,7 +593,7 @@
  * ela acabou de escrever. */
 .redacao-passo[data-do-acervo="nao"] {
   border-style: dashed;
-  border-color: var(--ic-laranja);
+  border-color: var(--cor-acao);
 }
 
 .redacao-passo-cabeca {
@@ -613,34 +613,34 @@
 .redacao-no {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0rem;
   min-width: 0;
-  padding: 0.5rem 0.6rem;
+  padding: 0.5rem 0.5rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
-  border-radius: 0.6rem;
+  border-radius: 0.5rem;
   background: var(--ic-branco);
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.3;
 }
 
 .redacao-seta {
-  font-size: 1.1rem;
+  font-size: var(--tipo-destaque);
   font-weight: 700;
-  color: var(--ic-laranja);
+  color: var(--cor-acao);
 }
 
 /* O campo vazio é o estado que a tela existe para tornar impossível de ignorar. */
 .redacao-motivo[data-vazio="sim"] {
-  border-color: var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
 }
 
 .redacao-passo-procedencia {
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
 }
 
 .redacao-sugestao-ia {
-  border-color: var(--ic-laranja);
+  border-color: var(--cor-acao);
 }
 
 /* ---------------------------------------------------------------------------
@@ -655,10 +655,10 @@
 .redacao-previa {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.75rem;
   width: 100%;
-  max-width: 24.375rem; /* 390px — a largura da moldura de celular de D-03 */
-  padding: 0.9rem;
+  max-width: 24.5rem; /* 390px — a largura da moldura de celular de D-03 */
+  padding: 1rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
   border-radius: 1.25rem;
   background: var(--ic-branco);

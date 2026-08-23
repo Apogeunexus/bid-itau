@@ -162,10 +162,12 @@ export function Play({
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-bold desk:text-4xl">Play</h1>
         <p className="text-sm leading-relaxed desk:text-base">
-          O catálogo do que dá para ver e ouvir de onde você estiver, de graça. São{" "}
-          <strong data-denominador="midias">{catalogo.total}</strong> mídias do acervo do{" "}
-          {procedencia.rotulo} — podcast, série, vídeo, entrevista e coluna na mesma lista,
-          com o tipo etiquetado em cada uma.
+          O streaming do acervo, de graça, de onde você estiver. São{" "}
+          <strong data-denominador="midias">{catalogo.total}</strong> mídias do{" "}
+          {procedencia.rotulo} —{" "}
+          {catalogo.categorias.map((c) => c.rotulo.toLowerCase()).join(", ")} na mesma
+          lista, com o tipo etiquetado em cada uma. Os podcasts moram em Cast e o
+          editorial em Notícias.
         </p>
         <Comentario className="text-xs leading-relaxed text-black/55">
           O acervo não tem campo de «tipo» nem de «formato»: o que ele tem é a categoria do

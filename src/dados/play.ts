@@ -296,7 +296,24 @@ function montar(): Montado {
       `disse seria inventar um fato sobre o acervo.`,
   };
 
-  // --- o fio ------------------------------------------------------------------
+  const fio = fioDe(itens);
+
+  return { itens, porSlugDoPlay, categorias, dimensoes, ponte, midiasPorEvento, eventosPorMidia, fio };
+}
+
+/**
+ * Monta o DTO que atravessa a fronteira RSC para um CONJUNTO de itens. Extraída
+ * de `montar()` na reformulação de 2026-08, quando /play passou a servir só o
+ * recorte de streaming: o mesmo empacotamento serve o catálogo inteiro e
+ * qualquer recorte, com categorias re-contadas sobre o conjunto recebido.
+ */
+function fioDe(itens: ItemDoPlay[]): CatalogoNoFio {
+  const contagem = new Map<string, number>();
+  for (const i of itens) contagem.set(i.categoria, (contagem.get(i.categoria) ?? 0) + 1);
+  const categorias: CategoriaContada[] = [...contagem]
+    .map(([valor, n]) => ({ valor, rotulo: ROTULOS[valor], n }))
+    .sort((a, b) => b.n - a.n || (a.valor < b.valor ? -1 : 1));
+
   const vocabularioDeLinguagens = [...new Set(itens.flatMap((i) => i.linguagens))].sort();
   const indiceDeLinguagem = new Map(vocabularioDeLinguagens.map((l, i) => [l, i]));
   const indiceDeCategoria = new Map(categorias.map((c, i) => [c.valor, i]));
@@ -318,22 +335,53 @@ function montar(): Montado {
   const semFio = { itens: noFio, categorias, linguagens: vocabularioDeLinguagens };
   const bytes = JSON.stringify(semFio).length;
 
-  const fio: CatalogoNoFio = {
-    ...semFio,
-    total: itens.length,
-    bytes,
-    teto: TETO_DO_FIO,
-  };
-
   if (bytes > TETO_DO_FIO) {
     quebrar(
       `o catálogo no fio ficou com ${bytes} bytes, acima do teto declarado de ${TETO_DO_FIO}. ` +
-        `Corte CAMPO, nunca item: 529 é o número que a proposta afirma e nenhuma mídia pode ` +
-        `sumir para caber no orçamento.`,
+        `Corte CAMPO, nunca item: nenhuma mídia pode sumir para caber no orçamento.`,
     );
   }
 
-  return { itens, porSlugDoPlay, categorias, dimensoes, ponte, midiasPorEvento, eventosPorMidia, fio };
+  return { ...semFio, total: itens.length, bytes, teto: TETO_DO_FIO };
+}
+
+/**
+ * O RECORTE DE STREAMING (reformulação 2026-08, decisão do cliente): /play passou
+ * a mostrar só o que se ASSISTE — vídeo, série e playlist (113 mídias medidas).
+ * Podcast ganhou porta própria em /cast e o editorial em /noticias; o catálogo
+ * unificado de D-92 continua existindo por inteiro em `catalogoDoPlay()` e nas
+ * 529 rotas do player — o que mudou foi a vitrine, não o acervo.
+ */
+const CATEGORIAS_DE_STREAMING = ["videos", "series", "playlists"] as const;
+
+let fioStreamingMemo: CatalogoNoFio | null = null;
+
+export function catalogoNoFioStreaming(): CatalogoNoFio {
+  if (!fioStreamingMemo) {
+    fioStreamingMemo = fioDe(
+      estado().itens.filter((i) =>
+        (CATEGORIAS_DE_STREAMING as readonly string[]).includes(i.categoria),
+      ),
+    );
+  }
+  return fioStreamingMemo;
+}
+
+/** As 8 dimensões contadas sobre um conjunto — o denominador acompanha o recorte. */
+export function dimensoesDe(itens: readonly ItemDoPlay[]): DimensaoContada[] {
+  return DIMENSOES.map((campo) => {
+    const n = itens.filter((i) => i.acessibilidade[campo]).length;
+    return { campo, rotulo: ROTULOS_DE_DIMENSAO[campo], n, de: itens.length, sustentada: n > 0 };
+  });
+}
+
+/** As dimensões do recorte de streaming, para a tela do /play. */
+export function dimensoesDoStreaming(): DimensaoContada[] {
+  return dimensoesDe(
+    estado().itens.filter((i) =>
+      (CATEGORIAS_DE_STREAMING as readonly string[]).includes(i.categoria),
+    ),
+  );
 }
 
 function estado(): Montado {

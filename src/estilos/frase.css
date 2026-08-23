@@ -24,18 +24,18 @@
   top: 0;
   z-index: 2;
   width: 100%;
-  padding: 0.7rem 0.9rem;
+  padding: 0.75rem 1rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 15%, transparent);
-  border-radius: 14px;
+  border-radius: var(--raio-g);
   background: var(--ic-branco);
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.35;
   color: var(--ic-preto);
 }
 
 .frase-campo:focus-visible {
-  outline: 2px solid var(--ic-laranja);
+  outline: 2px solid var(--cor-acao);
   outline-offset: 2px;
   border-color: transparent;
 }
@@ -45,15 +45,15 @@
  * tradução voltaria a ser um passo escondido, que é exatamente o que D-64 proíbe. */
 .frase-leitura {
   margin: 0.25rem 0 0;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.5;
   color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
 }
 
 .frase-trecho {
-  padding: 0.05rem 0.15rem;
-  border-bottom: 2px solid var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 12%, transparent);
+  padding: 0rem 0.25rem;
+  border-bottom: 2px solid var(--cor-acao);
+  background: var(--cor-acao-lavada);
   color: var(--ic-preto);
   font-weight: 600;
 }
@@ -70,16 +70,16 @@
 .frase-ficha {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  padding: 0.5rem 0.65rem;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
-  border-left: 3px solid var(--ic-laranja);
+  border-left: 3px solid var(--cor-acao);
   border-radius: 8px;
   background: var(--ic-branco);
 }
 
 .frase-ficha + .frase-ficha {
-  margin-top: 0.3rem;
+  margin-top: 0.25rem;
 }
 
 /* A ficha que confessa tem borda tracejada: a diferença entre «esta recortou» e «esta
@@ -87,7 +87,7 @@
 .frase-ficha[data-confissao="sim"] {
   border-left-style: dashed;
   border-left-color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
-  background: color-mix(in srgb, var(--ic-preto) 3%, var(--ic-branco));
+  background: var(--cor-superficie-2);
 }
 
 .frase-ficha-topo {
@@ -98,7 +98,7 @@
 
 .frase-ficha-regra {
   flex: none;
-  font-size: 0.625rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -108,27 +108,27 @@
 .frase-ficha-rotulo {
   flex: 1;
   min-width: 0;
-  font-size: 0.875rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 600;
   line-height: 1.25;
 }
 
 .frase-ficha-n {
   flex: none;
-  font-size: 0.6875rem;
+  font-size: var(--tipo-micro);
   font-variant-numeric: tabular-nums;
   color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
 }
 
 .frase-ficha-marca {
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.35;
   color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
 }
 
 .frase-ficha-detalhe {
   margin: 0.25rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.45;
   color: color-mix(in srgb, var(--ic-preto) 78%, transparent);
 }
@@ -141,30 +141,30 @@
 .frase-botao {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.15rem 0.5rem;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
   border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
-  border-radius: 999px;
+  border-radius: var(--raio-pilula);
   background: var(--ic-branco);
   font: inherit;
-  font-size: 0.6875rem;
+  font-size: var(--tipo-micro);
   line-height: 1.4;
   color: var(--ic-preto);
   cursor: pointer;
 }
 
 .frase-botao:hover {
-  border-color: var(--ic-laranja);
+  border-color: var(--cor-acao);
 }
 
 .frase-botao:focus-visible {
-  outline: 2px solid var(--ic-laranja);
+  outline: 2px solid var(--cor-acao);
   outline-offset: 2px;
 }
 
 .frase-botao[aria-pressed="true"] {
-  border-color: var(--ic-laranja);
-  background: color-mix(in srgb, var(--ic-laranja) 10%, var(--ic-branco));
+  border-color: var(--cor-acao);
+  background: color-mix(in srgb, var(--cor-acao) 10%, var(--ic-branco));
   font-weight: 600;
 }
 
@@ -175,12 +175,12 @@
 .frase-sem-ia {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.7rem 0.85rem;
-  border: 1px solid color-mix(in srgb, var(--ic-laranja) 45%, transparent);
+  gap: 0.5rem;
+  padding: 0.75rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--cor-acao) 45%, transparent);
   border-radius: 10px;
-  background: color-mix(in srgb, var(--ic-laranja) 6%, var(--ic-branco));
-  font-size: 0.8125rem;
+  background: color-mix(in srgb, var(--cor-acao) 6%, var(--ic-branco));
+  font-size: var(--tipo-detalhe);
   line-height: 1.4;
 }
 
@@ -189,10 +189,10 @@
 .frase-regra {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
-  padding: 0.45rem 0;
+  gap: 0rem;
+  padding: 0.5rem 0;
   border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.4;
 }
 
@@ -201,7 +201,7 @@
 }
 
 .frase-regra-nome {
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 700;
 }
 
@@ -217,8 +217,8 @@
 .frase-resultado {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  padding: 0.45rem 0;
+  gap: 0.25rem;
+  padding: 0.5rem 0;
   border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
 }
 
@@ -232,10 +232,10 @@
 
 .frase-tipo {
   display: inline-block;
-  padding: 0.1rem 0.4rem;
+  padding: 0rem 0.5rem;
   border-radius: 3px;
   background: color-mix(in srgb, var(--ic-preto) 8%, transparent);
-  font-size: 0.5625rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -247,14 +247,14 @@
  * no acervo e texto composto por nós não podem parecer a mesma coisa (T-02-05). O
  * escrito ganha a barra laranja da citação; o composto fica em cinza, sem barra. */
 .frase-motivo {
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.4;
   color: color-mix(in srgb, var(--ic-preto) 75%, transparent);
 }
 
 .frase-motivo[data-origem-casamento="aresta"] {
   padding-left: 0.5rem;
-  border-left: 2px solid var(--ic-laranja);
+  border-left: 2px solid var(--cor-acao);
   font-style: italic;
 }
 
@@ -268,12 +268,12 @@
   justify-content: space-between;
   gap: 0.75rem;
   width: 100%;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid color-mix(in srgb, var(--ic-laranja) 40%, transparent);
+  padding: 0.5rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--cor-acao) 40%, transparent);
   border-radius: 10px;
-  background: color-mix(in srgb, var(--ic-laranja) 6%, var(--ic-branco));
+  background: color-mix(in srgb, var(--cor-acao) 6%, var(--ic-branco));
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.35;
   text-align: left;
   color: var(--ic-preto);
@@ -281,31 +281,31 @@
 }
 
 .frase-afrouxamento + .frase-afrouxamento {
-  margin-top: 0.4rem;
+  margin-top: 0.5rem;
 }
 
 .frase-afrouxamento:hover {
-  border-color: var(--ic-laranja);
+  border-color: var(--cor-acao);
 }
 
 .frase-afrouxamento:focus-visible {
-  outline: 2px solid var(--ic-laranja);
+  outline: 2px solid var(--cor-acao);
   outline-offset: 2px;
 }
 
 .frase-afrouxamento-n {
   flex: none;
-  font-size: 0.9375rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: var(--ic-laranja);
+  color: var(--cor-acao);
 }
 
 /* --- Títulos de bloco, no vocabulário de `/buscar` ----------------------- */
 
 .frase-bloco-titulo {
-  margin: 0 0 0.35rem;
-  font-size: 0.6875rem;
+  margin: 0 0 0.25rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -318,14 +318,14 @@
  * respirar — e é só ali que a confissão inteira cabe sem toque.                        */
 
 [data-view="web"] .frase-campo {
-  padding: 0.9rem 1.1rem;
-  font-size: 1.0625rem;
+  padding: 1rem 1rem;
+  font-size: var(--tipo-destaque);
 }
 
 [data-view="web"] .frase-ficha {
-  padding: 0.7rem 0.9rem;
+  padding: 0.75rem 1rem;
 }
 
 [data-view="web"] .frase-resultado {
-  padding: 0.8rem 0;
+  padding: 0.75rem 0;
 }

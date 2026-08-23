@@ -54,15 +54,15 @@
  * o alcança porque ele nunca teve essa classe.
  * ------------------------------------------------------------------------ */
 .pr-cartaz {
-  padding: 0.85rem 1rem;
-  border-left: 3px solid var(--ic-laranja);
-  border-radius: 0 1rem 1rem 0;
-  background: color-mix(in srgb, var(--ic-laranja) 7%, transparent);
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0 var(--raio-g) var(--raio-g) 0;
+  background: var(--cor-acao-lavada);
 }
 
 .pr-cartaz-frase {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   line-height: 1.55;
 }
 
@@ -71,7 +71,7 @@
 .pr-denominadores {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.9rem 1.35rem;
+  gap: 1rem 1.25rem;
   margin: 0.25rem 0 0;
   padding: 0;
   list-style: none;
@@ -80,18 +80,18 @@
 .pr-denominador {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0rem;
 }
 
 .pr-denominador-numero {
   font-family: var(--fonte-display);
-  font-size: 1.35rem;
+  font-size: var(--tipo-titulo-3);
   font-weight: 700;
   line-height: 1;
 }
 
 .pr-denominador-rotulo {
-  font-size: 0.62rem;
+  font-size: var(--tipo-micro);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
@@ -145,7 +145,7 @@
 [data-view="web"] .pr-bloco {
   padding: 1.25rem;
   border: var(--web-borda, 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent));
-  border-radius: var(--web-raio, 1rem);
+  border-radius: var(--web-raio, var(--raio-g));
   background: var(--ic-branco);
 }
 
@@ -153,7 +153,7 @@
  * moldura de painel que os outros blocos recebem na web. */
 [data-view="web"] .pr-cartaz {
   border: 0;
-  border-left: 3px solid var(--ic-laranja);
+  border-left: 3px solid var(--cor-acao);
 }
 
 /* Na moldura larga cabe mais lista antes de a rolagem interna começar. */

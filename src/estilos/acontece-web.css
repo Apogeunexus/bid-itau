@@ -49,7 +49,7 @@
 [data-view="web"] [data-acontece-web] {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.75rem;
 }
 
 [data-view="web"] .acontece-web-topo {
@@ -68,7 +68,7 @@
  * lista e mapa caibam na primeira tela sem rolagem.
  * ------------------------------------------------------------------------ */
 [data-view="web"] .acontece-web-interseccao {
-  padding: 0.7rem 0.9rem;
+  padding: 0.75rem 1rem;
 }
 
 /* SEM TETO DE LARGURA, e é uma medida e não um gosto: com `max-width: 92ch` este
@@ -78,12 +78,12 @@
  * primeira tela é disputada. */
 [data-view="web"] .acontece-web-interseccao-texto {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.45;
 }
 
 [data-view="web"] .acontece-web-interseccao .web-denominador-numero {
-  font-size: 1.15rem;
+  font-size: var(--tipo-destaque);
 }
 
 /* ---------------------------------------------------------------------------
@@ -94,7 +94,7 @@
  * ------------------------------------------------------------------------ */
 [data-view="web"] .acontece-web-colunas {
   --web-lateral: 30rem;
-  --web-gap: 1.1rem;
+  --web-gap: 1rem;
 }
 
 [data-view="web"] .acontece-web-coluna-lista {
@@ -112,9 +112,9 @@
 }
 
 [data-view="web"] .acontece-web-atalho {
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   font-weight: 600;
-  color: var(--ic-laranja);
+  color: var(--cor-acao);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -127,7 +127,7 @@
 
 [data-view="web"] .acontece-web-coluna-mapa {
   gap: 0.5rem;
-  padding: 0.85rem;
+  padding: 0.75rem;
 }
 
 /* ---------------------------------------------------------------------------
@@ -141,7 +141,7 @@
 }
 
 [data-view="web"] .acontece-web-contorno {
-  fill: color-mix(in srgb, var(--ic-preto) 5%, transparent);
+  fill: var(--cor-superficie-2);
   stroke: color-mix(in srgb, var(--ic-preto) 35%, transparent);
   stroke-width: 0.8;
 }
@@ -156,12 +156,12 @@
  * lados do par, e reescrever a cor do realce nesta folha faria a lista e o mapa
  * divergirem na primeira correção. */
 [data-view="web"] .acontece-web-pino[data-realcado="sim"] {
-  fill: var(--ic-laranja);
+  fill: var(--cor-acao);
 }
 
 [data-view="web"] .acontece-web-declaracao-mapa {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tipo-legenda);
   line-height: 1.45;
   color: color-mix(in srgb, var(--ic-preto) 65%, transparent);
 }

@@ -96,13 +96,13 @@
  * desmontaria o argumento da tela. Cresce o texto, não a cor nem a barra — a gramática
  * do selo é a mesma dos outros, só que na medida da caixa em que ele está. */
 [data-view="web"] [data-grade-web] > [data-destaque-curado] .selo-motivo {
-  padding: 0.7rem 0.8rem;
-  font-size: 1rem;
+  padding: 0.75rem 0.75rem;
+  font-size: var(--tipo-corpo);
 }
 
 /* A tipografia do título acompanha a largura pelo mesmo motivo. */
 [data-view="web"] [data-grade-web] > [data-destaque-curado] .cartao h3 {
-  font-size: 1.25rem;
+  font-size: var(--tipo-titulo-3);
 }
 
 /* ---------------------------------------------------------------------------

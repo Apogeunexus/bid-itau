@@ -120,7 +120,7 @@
  * respiro de desktop, colado ao topo, rolando por dentro quando passa da
  * altura da janela. Aqui só o que é desta tela. */
 [data-view="web"] .ev-lateral {
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
 }
 
 [data-view="web"] .ev-lateral h2 {
@@ -179,8 +179,8 @@
   grid-template-columns: subgrid;
   grid-column: 1 / -1;
   align-items: baseline;
-  gap: 0.6rem;
-  padding: 0.45rem 0.8rem;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border: 0;
   border-top: var(--web-borda);
   border-radius: 0;
@@ -201,13 +201,13 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  gap: 0.6rem;
-  padding: 0.5rem 0.8rem;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-top: 0;
-  border-bottom: 2px solid var(--ic-laranja);
+  border-bottom: 2px solid var(--cor-acao);
   background: var(--ic-branco);
   font-family: var(--fonte-display);
-  font-size: 0.62rem;
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -262,14 +262,14 @@
   grid-column: 1;
   display: block;
   font-variant-numeric: tabular-nums;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 600;
   line-height: 1.3;
 }
 [data-view="web"] .ocorrencia-hora {
   grid-column: 2;
   font-variant-numeric: tabular-nums;
-  font-size: 0.8125rem;
+  font-size: var(--tipo-detalhe);
   font-weight: 600;
 }
 [data-view="web"] .ocorrencia-temporada {
@@ -277,7 +277,7 @@
   display: block;
   min-width: 0;
   overflow-wrap: anywhere;
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   line-height: 1.35;
   color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
 }
@@ -289,18 +289,18 @@
 [data-view="web"] .ocorrencia-acesso {
   grid-column: 5;
   display: block;
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
   line-height: 1.3;
 }
 [data-view="web"] .ocorrencia-condicao {
   grid-column: 6;
-  font-size: 0.7rem;
+  font-size: var(--tipo-micro);
 }
 [data-view="web"] .ocorrencia-salvar {
   grid-column: 7;
   justify-self: end;
   white-space: nowrap;
-  font-size: 0.65rem;
+  font-size: var(--tipo-micro);
 }
 
 /* D-43 DENTRO DA CÉLULA. «Declarado ausente» e «não declarado» NÃO são a mesma
@@ -310,16 +310,16 @@
  * negação que a fonte nunca fez. */
 [data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade] {
   width: fit-content;
-  padding: 0.1rem 0.45rem;
+  padding: 0rem 0.5rem;
   border: 1px solid;
-  border-radius: 999px;
-  font-size: 0.62rem;
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 [data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade="presente"] {
-  border-color: var(--ic-laranja);
-  background: var(--ic-laranja);
+  border-color: var(--cor-acao);
+  background: var(--cor-acao);
   color: var(--ic-branco);
 }
 [data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade="ausente-declarada"] {
@@ -359,10 +359,10 @@
 
 [data-view="web"] .ocorrencia-nota-tabela {
   display: block;
-  padding: 0.6rem 0.85rem;
-  border-left: 3px solid var(--ic-laranja);
-  border-radius: 0 0.6rem 0.6rem 0;
-  background: color-mix(in srgb, var(--ic-laranja) 6%, transparent);
-  font-size: 0.72rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: var(--cor-acao-lavada);
+  font-size: var(--tipo-legenda);
   line-height: 1.5;
 }
