@@ -164,6 +164,31 @@ export interface CatalogoNoFio {
   teto: number;
 }
 
+/**
+ * A PEÇA DE DESTAQUE — a mídia que abre a vitrine.
+ *
+ * Ela viaja NOMEADA e com o `resumo`, contra a regra do catálogo, e a exceção é
+ * aritmética: a tupla existe porque o nome do campo repetido 113 vezes custa ~7 KB e o
+ * resumo das 113 custa ~11 KB. Aqui é UM item — o nome custa ~120 bytes e o resumo
+ * ~200. Comprimir isso seria pagar a complexidade da tupla para economizar 0,3% do
+ * orçamento, e a peça que abre a tela é justamente onde o resumo trabalha.
+ *
+ * Quem escolhe qual é o destaque é `play.ts`, e a escolha é ORDEM, não curadoria: a mais
+ * recente do recorte. Uma «seleção editorial» aqui seria uma afirmação sobre o acervo que
+ * ninguém fez.
+ */
+export interface DestaqueNoFio {
+  slug: string;
+  titulo: string;
+  rota: string;
+  rotuloCategoria: string;
+  resumo: string;
+  imagem?: string;
+  creditoImagem?: string;
+  /** A data de publicação como número `AAAAMMDD`. Ver `NOTA_DA_DATA`. */
+  dia: number;
+}
+
 /** O item do catálogo já nomeado — é isto que o componente manipula. */
 export interface ItemDoPlayNoCliente {
   slug: string;

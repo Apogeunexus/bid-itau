@@ -5,6 +5,7 @@ import {
   ROTULOS_DE_DIMENSAO,
   type CatalogoNoFio,
   type CategoriaContada,
+  type DestaqueNoFio,
   type DimensaoContada,
   type ItemNoFio,
 } from "./play-wire";
@@ -354,17 +355,59 @@ function fioDe(itens: ItemDoPlay[]): CatalogoNoFio {
  */
 const CATEGORIAS_DE_STREAMING = ["videos", "series", "playlists"] as const;
 
+let streamingMemo: ItemDoPlay[] | null = null;
+
+/**
+ * O recorte de streaming, filtrado UMA vez. Os três consumidores — o catálogo no fio, as
+ * dimensões e o destaque — leem a mesma lista: três filtros soltos divergiriam na
+ * primeira vez que alguém acrescentasse uma categoria de streaming e esquecesse um deles.
+ */
+function itensDeStreaming(): ItemDoPlay[] {
+  if (!streamingMemo) {
+    streamingMemo = estado().itens.filter((i) =>
+      (CATEGORIAS_DE_STREAMING as readonly string[]).includes(i.categoria),
+    );
+  }
+  return streamingMemo;
+}
+
 let fioStreamingMemo: CatalogoNoFio | null = null;
 
 export function catalogoNoFioStreaming(): CatalogoNoFio {
-  if (!fioStreamingMemo) {
-    fioStreamingMemo = fioDe(
-      estado().itens.filter((i) =>
-        (CATEGORIAS_DE_STREAMING as readonly string[]).includes(i.categoria),
-      ),
+  if (!fioStreamingMemo) fioStreamingMemo = fioDe(itensDeStreaming());
+  return fioStreamingMemo;
+}
+
+/**
+ * A PEÇA DE DESTAQUE da vitrine: a mídia MAIS RECENTE do recorte de streaming.
+ *
+ * A escolha é ordem, não curadoria — `montar()` já ordena por publicação decrescente com
+ * desempate pelo slug, então o primeiro item é determinístico e o mesmo em todo build.
+ * Uma «seleção editorial» aqui seria uma afirmação sobre o acervo que ninguém fez, e é a
+ * mesma razão por que a vitrine não tem «Top 10» nem «em alta»: não há dado de uso.
+ *
+ * O `resumo` viaja aqui e NÃO viaja no catálogo, e a exceção é aritmética: um resumo custa
+ * ~200 bytes contra os ~52 KB que os 113 custariam. Ver `DestaqueNoFio` em `play-wire.ts`.
+ */
+export function destaqueDoStreaming(): DestaqueNoFio {
+  const primeiro = itensDeStreaming()[0];
+  if (!primeiro) {
+    quebrar(
+      `o recorte de streaming ficou vazio e a vitrine de /play abre com uma peça de ` +
+        `destaque. Corrija o recorte em CATEGORIAS_DE_STREAMING em vez de deixar a tela ` +
+        `abrir sem abertura.`,
     );
   }
-  return fioStreamingMemo;
+  return {
+    slug: primeiro.slug,
+    titulo: primeiro.titulo,
+    rota: primeiro.rota,
+    rotuloCategoria: primeiro.rotuloCategoria,
+    resumo: primeiro.resumo,
+    imagem: primeiro.imagem,
+    creditoImagem: primeiro.creditoImagem,
+    dia: primeiro.dia,
+  };
 }
 
 /** As 8 dimensões contadas sobre um conjunto — o denominador acompanha o recorte. */
@@ -377,11 +420,7 @@ export function dimensoesDe(itens: readonly ItemDoPlay[]): DimensaoContada[] {
 
 /** As dimensões do recorte de streaming, para a tela do /play. */
 export function dimensoesDoStreaming(): DimensaoContada[] {
-  return dimensoesDe(
-    estado().itens.filter((i) =>
-      (CATEGORIAS_DE_STREAMING as readonly string[]).includes(i.categoria),
-    ),
-  );
+  return dimensoesDe(itensDeStreaming());
 }
 
 function estado(): Montado {

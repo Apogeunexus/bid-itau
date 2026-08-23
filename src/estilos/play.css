@@ -1,19 +1,29 @@
 /* ===========================================================================
- * play.css — Play — o catálogo das 529 mídias e o player (D-92)
+ * play.css — Play — a vitrine de streaming do acervo e o player (D-92)
  *
- * DE QUEM É: plano 05-07.
- * DECLARADA E VAZIA DE REGRA por 05-01, na onda 1 da fase 5.
+ * REFORMULAÇÃO DE 23/08: A TELA VIRA VITRINE DE STREAMING, no molde de Netflix
+ * e Apple TV que a reunião pediu — «pode ser literalmente um clone do app».
+ * O que mudou de forma, e por quê:
  *
- * Ela chega aqui sem uma única regra de propósito. `src/app/globals.css` é o
- * único arquivo que os seis planos da onda 2 tocariam, e dois executores
- * editando a mesma folha é a colisão que o merge não resolve sozinho. Com as
- * onze linhas de `@import` declaradas na onda 1, o ponto de colisão deixa de
- * EXISTIR em vez de ser administrado: 05-07 escreve SÓ neste arquivo e não precisa
- * abrir `globals.css` nem esperar os outros cinco.
+ * 1. **CARTAZ EM PÉ, EM TRILHO QUE ROLA.** A lista vertical de miniaturas de
+ *    88px entregava três itens por rolagem e não tinha nada de vitrine. O
+ *    vocabulário de streaming é o cartaz em pé numa fileira horizontal, uma
+ *    fileira por prateleira — é o que a referência faz e é o que a pessoa já
+ *    sabe operar sem aprender nada.
  *
- * Uma folha vazia importada não custa byte no bundle final.
+ * 2. **O CARTAZ É NOSSO, E ISSO É DE PROPÓSITO.** O acervo não tem key art:
+ *    tem FOTOGRAFIA LARGA, quase sempre 16:9, com o assunto fora do centro
+ *    (medido nas capas de /play). Recortar isso num 2:3 de pôster decepa o
+ *    assunto na metade dos casos. Então o cartaz é COMPOSTO: a foto no alto,
+ *    em 3:2, sem crop destrutivo, e embaixo uma faixa tipográfica da casa —
+ *    superfície, categoria em micro caixa-alta, título em Display. Ele não
+ *    finge ser pôster de filme; ele é a capa que este design system faz.
  *
- * O QUE ELA COBRE: o catálogo unificado por categoria, o bloco «não pode ir? veja isto» ligando ao evento, o player e o registro no repertório ao concluir.
+ * 3. **O DESTAQUE É FOTO SANGRANDO, COM VÉU.** Mesmo mecanismo do hero de
+ *    Descobrir (`base.css`): o fundo é PRETO FIXO nos dois temas, porque o que
+ *    está por cima é fotografia sob scrim e o texto é sempre branco. Escrito
+ *    com token de tinta, o fundo viraria branco no tema escuro e o texto
+ *    sumiria — foi assim que o portão de contraste pegou o hero na época.
  *
  * REGRAS DA CASA, herdadas das fases 3 e 4 e válidas para quem escrever aqui:
  *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
@@ -23,149 +33,392 @@
  *  - Divergência por visão em CSS puro sob `[data-view="web"]` ou
  *    `[data-view="mobile"]`. As variantes `desk:`/`app:` só prefixam
  *    UTILITÁRIO do Tailwind e nunca alcançam uma classe semântica nossa.
- *  - Reuse o vocabulário de `web.css` antes de escrever regra nova: ele já traz
- *    duas colunas, grade parametrizada, coluna fixa, painel, realce, alternador,
- *    declaração com denominador e lista densa.
  *  - Nada de posicionamento preso à janela (`position: fixed`) fora de
  *    `casca.tsx` — dentro da moldura de celular ele escapa e quebra D-03.
  * ======================================================================== */
 
 /* ---------------------------------------------------------------------------
- * Os chips de recorte desta tela MUDARAM DE ENDEREÇO.
- *
- * Eram `.play-chip`, uma das oito famílias de pílula do projeto, e a única que
- * preenchia o selecionado de laranja com texto branco — 2,64:1, reprovado. Hoje
- * são a primitiva `Chip` de `src/componentes/base/chip.tsx`, com o CSS em
- * `base.css`: selecionado preto cheio (18,7:1 no claro, 21:1 no escuro) e o
- * grupo dentro de um trilho que ROLA em vez de quebrar linha.
- *
- * A decisão que estava escrita aqui e continua valendo: UM chip só para os dois
- * grupos, categoria e acessibilidade. Os dois são o MESMO gesto — recortar a
- * lista sem sair da tela — e desenhá-los diferente sugeriria que um deles
- * navega. O que os distingue é o número ao lado, que em acessibilidade traz o
- * denominador, porque ali o número é o argumento.
+ * A tela. Mesmo esqueleto de `.hub`: gutter pelo token, respiro pelo token, e
+ * a barra inferior já é paga por `.moldura-rolagem` em `barra-inferior.css`.
  * ------------------------------------------------------------------------ */
-
-/* ---------------------------------------------------------------------------
- * O catálogo. Na visão app é UMA COLUNA de linhas horizontais: dentro da moldura
- * de 390px uma grade de cartões daria dois cartões ilegíveis por linha. Na visão
- * web vira a grade de `web.css`, que esta folha não reescreve — só parametriza.
- * ------------------------------------------------------------------------ */
-.play-catalogo {
+.play {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  /* `min-width: 0` na lista e nos itens: sem ele um título longo empurra a grade
-   * e a tela passa a rolar de lado dentro da moldura, que é o gate `scrollWidth
-   * === clientWidth`. */
-  min-width: 0;
+  gap: var(--espaco-secao);
+  padding: 0 var(--espaco-tela) var(--espaco-secao);
+  /* A largura do cartaz é variável DE FOLHA, não token do DS — por isso pode
+     nascer aqui. Trocá-la por visão reflui o trilho e a grade de uma vez.
+     7.5rem e não 8.5: dentro da moldura de 390px a medida maior deixava dois
+     cartazes e meio na tela, e o meio cartaz não lê como «tem mais», lê como
+     corte. A 7.5 cabem três com a espiada do quarto na borda. */
+  --play-cartaz: 7.5rem;
 }
 
-.play-catalogo > li {
-  min-width: 0;
+/* ---------------------------------------------------------------------------
+ * O DESTAQUE — a peça de abertura, com a mídia mais recente do recorte.
+ *
+ * Sangra até a borda da tela pelos dois lados e pelo topo: é o único elemento
+ * desta tela que ignora o gutter, e é o que faz a página abrir como vitrine em
+ * vez de abrir como documento.
+ * ------------------------------------------------------------------------ */
+.play-destaque {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  overflow: hidden;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  /* PRETO FIXO, e não `--cor-tinta`: ver o cabeçalho desta folha. */
+  background: var(--ic-preto);
+  /* `clamp` porque a peça divide a altura com a primeira prateleira: numa
+     moldura de 844px ela não pode comer a dobra inteira. Múltiplos da grade. */
+  min-block-size: clamp(21rem, 56vh, 30rem);
 }
 
-.play-cartao {
-  display: grid;
-  grid-template-columns: 5.5rem minmax(0, 1fr);
-  grid-template-areas:
-    "capa tipo"
-    "capa titulo"
-    "capa data";
-  align-items: start;
-  gap: 0.25rem 0.75rem;
-  min-width: 0;
+.play-destaque-foto {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
 }
 
-.play-capa {
-  grid-area: capa;
-  aspect-ratio: 16 / 10;
-  border-radius: var(--raio-p);
-  align-self: start;
+/* O VÉU É O QUE GARANTE O CONTRASTE, não a sorte da foto. Metade do acervo tem
+   o rodapé claro; sem o degradê o título branco ficaria ilegível justamente nas
+   capas mais bonitas. */
+.play-destaque-veu {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--ic-preto) 0%,
+    color-mix(in srgb, transparent 22%, var(--ic-preto)) 34%,
+    color-mix(in srgb, transparent 72%, var(--ic-preto)) 62%,
+    transparent 100%
+  );
 }
 
-.play-cartao-tipo {
-  grid-area: tipo;
-  font-size: var(--tipo-micro);
+.play-destaque-texto {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-block-start: auto;
+  padding: var(--espaco-tela);
+}
+
+/* O nome da tela. Pequeno e no alto da pilha de texto, como a assinatura no
+   topo da referência — quem diz o que é grande aqui é o título da mídia. */
+.play-destaque-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--ic-branco);
   font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--cor-tinta-3);
 }
 
-.play-cartao-titulo {
-  grid-area: titulo;
-  font-size: var(--tipo-detalhe);
-  font-weight: 700;
-  line-height: 1.3;
-  min-width: 0;
-  /* Três linhas e reticências. Sem o limite, um título de 139 caracteres estica a
-   * linha da grade e o catálogo vira uma escada. */
+.play-destaque-tipo {
+  color: color-mix(in srgb, var(--ic-branco) 78%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+
+.play-destaque-titulo {
   display: -webkit-box;
+  overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
-  overflow: hidden;
+  color: var(--ic-branco);
+  font-weight: 700;
   overflow-wrap: anywhere;
 }
 
-.play-cartao-pe {
-  grid-area: data;
+.play-destaque-resumo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  max-inline-size: 42rem;
+  color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
+}
+
+/* O par laranja-sobre-preto do DS: 9,1:1, e o único par de contraste que passa
+   nos dois temas (ver `--cor-sobre-acao` em tokens.css). */
+.play-destaque-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  margin-block-start: 0.25rem;
+  padding: 0 1.25rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-weight: 700;
+  transition: opacity var(--dur-1) var(--ease-padrao);
+}
+
+.play-destaque-botao:hover {
+  opacity: 0.9;
+}
+
+/* A ressalva que a forma de vitrine obriga: um botão de play prometeria um
+   arquivo que este acervo não tem. Ela é micro e apagada, mas está NA PEÇA — a
+   página do player explica por extenso, e aqui basta não prometer. */
+.play-destaque-nota {
+  max-inline-size: 34rem;
+  color: color-mix(in srgb, var(--ic-branco) 66%, transparent);
+}
+
+/* O crédito FLUTUA no canto, com recuo. Colado nas duas bordas ele virava uma
+   tarja logo abaixo do cabeçalho do app e lia como aviso de sistema, não como
+   crédito de foto. `--tipo-micro` pelo token, e não pelo utilitário `tipo-micro`,
+   que embute caixa-alta: um nome próprio gritado é outro erro. */
+.play-destaque-credito {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-p);
+  background: color-mix(in srgb, transparent 30%, var(--ic-preto));
+  color: var(--ic-branco);
+  font-size: var(--tipo-micro);
+}
+
+/* ---------------------------------------------------------------------------
+ * A PRATELEIRA — cabeçalho de fileira + trilho que rola.
+ *
+ * O trilho SANGRA até a borda pela mesma razão de `.trilho-chips` em
+ * `base.css`: o primeiro cartaz alinha com o texto, e os que rolam passam por
+ * baixo da margem em vez de parecerem cortados no meio do recuo.
+ * ------------------------------------------------------------------------ */
+/* Os dois trilhos de recorte num bloco só, entre o destaque e a primeira
+   prateleira. Ver o comentário no componente para por que eles encolheram. */
+.play-recorte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.play-prateleira {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.play-prateleira-cabecalho {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
-  min-width: 0;
-  font-size: var(--tipo-micro);
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.play-prateleira-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-inline-size: 0;
+  font-weight: 700;
+}
+
+.play-prateleira-n {
+  color: var(--cor-tinta-3);
   font-variant-numeric: tabular-nums;
+  font-weight: 400;
+}
+
+.play-prateleira-tudo {
+  flex: none;
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.play-prateleira-tudo:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.play-trilho {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximate;
+  scrollbar-width: none;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+  padding-block-end: 0.25rem;
+}
+
+.play-trilho > li {
+  flex: none;
+  inline-size: var(--play-cartaz);
+  scroll-snap-align: start;
+}
+
+/* ---------------------------------------------------------------------------
+ * O CARTAZ — foto em 3:2 no alto, faixa tipográfica embaixo.
+ *
+ * A largura vem de `--play-cartaz`, declarada em `.play` lá em cima: uma linha
+ * por visão reflui o trilho e a grade juntos.
+ * ------------------------------------------------------------------------ */
+.play-cartaz {
+  display: flex;
+  block-size: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-1);
+  transition:
+    border-color var(--dur-1) var(--ease-padrao),
+    box-shadow var(--dur-1) var(--ease-padrao);
+}
+
+.play-cartaz:hover {
+  border-color: var(--cor-borda-forte);
+  box-shadow: var(--sombra-2);
+}
+
+.play-cartaz:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.play-cartaz-quadro {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  /* 3:2 e não 2:3. O acervo é fotografia larga: fechar num retrato de pôster
+     recortaria 62% da largura e decepa o assunto, que raramente está no centro. */
+  aspect-ratio: 3 / 2;
+  background: var(--cor-superficie-2);
+}
+
+.play-cartaz-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-2) var(--ease-padrao);
+}
+
+.play-cartaz:hover .play-cartaz-foto {
+  transform: scale(1.04);
+}
+
+/* A capa de marca de `capa-sem-imagem.tsx` preenche o quadro do mesmo jeito.
+   Medido: zero das 113 mídias de streaming estão sem imagem — a regra existe
+   para o dia em que o acervo mudar, não para o estado de hoje. */
+.play-cartaz-quadro > .capa-sem-imagem {
+  block-size: 100%;
+}
+
+/* O selo de Libras SOBRE a foto, em branco cheio: é o único recurso de
+   acessibilidade que o acervo declara nesta vitrine (3 das 113), e ele merece
+   aparecer na parede de cartazes e não só no chip de recorte. Branco e preto
+   fixos porque estão sobre FOTOGRAFIA, que não inverte com o tema. */
+.play-cartaz-selo {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  padding: 0 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+  font-weight: 700;
+}
+
+.play-cartaz-faixa {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+
+.play-cartaz-tipo {
   color: var(--cor-tinta-3);
 }
 
-/* O crédito de imagem é OBRIGATÓRIO quando há imagem — o acervo é de terceiros e a
- * procedência é argumento da proposta, não rodapé. Aqui ele é linha de texto e não
- * tarja sobre a foto: sobreposto a uma miniatura de 88px ele ficava ilegível. Uma
- * linha, com reticências; o crédito inteiro está na página da própria mídia. */
-.play-credito {
-  min-width: 0;
+.play-cartaz-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  color: var(--cor-tinta);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* Data e crédito no pé, FORA do cartaz. O crédito é obrigatório quando há
+   imagem — o acervo é de terceiros e a procedência é argumento da proposta.
+   Sobreposto à foto ele competia com o selo; aqui é uma linha, com reticências,
+   e o crédito inteiro está na página da própria mídia. */
+.play-cartaz-pe {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  margin-block-start: 0.25rem;
+  color: var(--cor-tinta-3);
+  font-size: var(--tipo-micro);
+  font-variant-numeric: tabular-nums;
+}
+
+.play-cartaz-credito {
   flex: 1 1 auto;
+  min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.play-capa-imagem {
-  object-fit: cover;
-  background: var(--cor-superficie-2);
+/* ---------------------------------------------------------------------------
+ * A GRADE — o que aparece NO LUGAR das prateleiras quando há recorte.
+ *
+ * É a mesma troca que a referência faz ao escolher um gênero: fileira vira
+ * grade, porque com recorte a pergunta deixou de ser «o que tem» e passou a ser
+ * «me mostre tudo isso». Cartaz idêntico ao do trilho — um vocabulário só.
+ * ------------------------------------------------------------------------ */
+.play-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 0.75rem;
+  min-inline-size: 0;
 }
 
-.play-cartao:hover .play-cartao-titulo {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.play-grade > li {
+  min-inline-size: 0;
 }
 
 /* ---------------------------------------------------------------------------
- * A visão web (D-79/D-80): o catálogo vira grade de cartões verticais.
- *
- * A divergência é por CSS sob `[data-view="web"]`, nunca por ramo em JavaScript —
- * o DOM é um só. `--web-colunas` é escolhido pelo componente em `style`, e
- * `.web-grade` de `web.css` faz a grade; esta folha não a reescreve.
+ * A visão web (D-79/D-80): mesma árvore de JSX, outras medidas.
  * ------------------------------------------------------------------------ */
-[data-view="web"] .play-cartao {
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-areas:
-    "capa"
-    "tipo"
-    "titulo"
-    "data";
-  gap: 0.25rem;
+[data-view="web"] .play {
+  --play-cartaz: 12rem;
+  max-inline-size: 76rem;
+  margin-inline: auto;
 }
 
-[data-view="web"] .play-capa {
-  aspect-ratio: 16 / 9;
-  width: 100%;
+[data-view="web"] .play-destaque {
+  border-radius: var(--raio-g);
+  margin-inline: 0;
+  min-block-size: clamp(24rem, 52vh, 34rem);
 }
 
-[data-view="web"] .play-cartao-titulo {
-  font-size: var(--tipo-detalhe);
-  -webkit-line-clamp: 2;
+[data-view="web"] .play-trilho {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+[data-view="web"] .play-grade {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
 }
 
 /* ---------------------------------------------------------------------------
