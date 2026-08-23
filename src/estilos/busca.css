@@ -63,48 +63,19 @@
   color: var(--cor-tinta-3);
 }
 
-/* --- Fichas e facetas (D-80: facetas vêm da ontologia) -------------------
- * Pastilha de contorno, nunca preenchida: faceta é filtro, não etiqueta de conteúdo, e
- * confundir as duas famílias visuais faria o filtro competir com o selo de linguagem —
- * que é dado, e por isso tem cor própria vinda do vocabulário (D-08).                 */
-
-.busca-ficha,
-.busca-faceta {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  border: 1px solid var(--cor-borda-forte);
-  border-radius: var(--raio-pilula);
-  background: var(--cor-superficie);
-  font-size: var(--tipo-detalhe);
-  line-height: 1.25;
-  color: var(--cor-tinta);
-  cursor: pointer;
-}
-
-.busca-faceta:hover {
-  border-color: var(--cor-acao);
-}
-
-.busca-faceta[aria-pressed="true"] {
-  border-color: var(--cor-acao);
-  background: color-mix(in srgb, var(--cor-acao) 10%, var(--cor-papel-cru));
-  font-weight: 600;
-}
-
-.busca-faceta:focus-visible {
-  outline: 2px solid var(--cor-acao);
-  outline-offset: 2px;
-}
-
-/* O contador ao lado da faceta é informação secundária — e é ele que sustenta D-66,
- * porque «sem ela: 300» é a promessa de que nenhum caminho leva a lugar nenhum. */
-.busca-faceta-n {
-  font-size: var(--tipo-micro);
-  font-variant-numeric: tabular-nums;
-  color: var(--cor-tinta-3);
-}
+/* --- Fichas e facetas: MUDARAM DE ENDEREÇO -------------------------------
+ * Eram `.busca-faceta` e `.busca-ficha`, duas das oito famílias de pílula do
+ * projeto. Hoje são a primitiva `Chip` de `src/componentes/base/chip.tsx`, com o
+ * CSS em `base.css`, dentro de um trilho que rola em vez de quebrar linha.
+ *
+ * O que mudou de verdade no desenho: o selecionado era contorno laranja com fundo
+ * lavado, e virou preto cheio. A razão está na primitiva — laranja lavado sob
+ * texto laranja não chegava ao contraste mínimo, e o preto libera o laranja para
+ * significar só AÇÃO.
+ *
+ * A decisão que estava escrita aqui e continua valendo: faceta é FILTRO, não
+ * etiqueta de conteúdo. Ela nunca copia o desenho do selo de linguagem, que é
+ * dado e tem cor própria vinda do vocabulário (D-08).                        */
 
 /* --- Resultado ----------------------------------------------------------
  * Sem cartão e sem sombra: a lista mistura 15 classes (D-63) e uma moldura por item

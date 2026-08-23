@@ -250,41 +250,13 @@
   color: var(--cor-tinta-2);
 }
 
-/* ---- as facetas que recortam de verdade --------------------------------- */
-
-.filtros-facetas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.filtros-faceta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid var(--cor-borda-forte);
-  border-radius: var(--raio-pilula);
-  font-size: var(--tipo-legenda);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.filtros-faceta[aria-pressed="true"] {
-  border-color: var(--cor-acao);
-  background: var(--cor-acao-lavada);
-}
-
-.filtros-faceta-cor {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: var(--raio-pilula);
-}
-
-.filtros-faceta-n {
-  font-family: var(--fonte-display);
-  color: var(--cor-tinta-3);
-}
+/* ---- as facetas que recortam de verdade ---------------------------------
+ * `.filtros-faceta` era a terceira das oito famílias de pílula e foi absorvida
+ * pela primitiva `Chip`. Note que os controles VIZINHOS — `.filtros-marcavel` e
+ * `.filtros-dimensao`, logo acima — NÃO são chips e continuam onde estão: são
+ * caixas de marcação com denominador, e é neles que mora o contrato que
+ * `verificar-fase5.mjs:3097` mede. Confundir os dois estragaria o portão que
+ * garante que o zero chega explicado.                                        */
 
 /* ---- o que o acervo não sustenta ---------------------------------------- */
 

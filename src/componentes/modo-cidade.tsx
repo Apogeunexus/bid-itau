@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
@@ -306,20 +307,13 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
 
         <div className="cidade-janela">
           <span className="cidade-janela-rotulo">quantos dias você fica</span>
-          <div className="cidade-dias">
+          <TrilhoDeChips rotulo="Quantos dias você fica" className="cidade-dias">
             {opcoesDeDias.map((n) => (
-              <button
-                key={n}
-                type="button"
-                data-dias={n}
-                aria-pressed={n === dias}
-                onClick={() => escolherDias(n)}
-                className="cidade-dia-botao"
-              >
+              <Chip key={n} data-dias={n} selecionado={n === dias} onClick={() => escolherDias(n)}>
                 {n}
-              </button>
+              </Chip>
             ))}
-          </div>
+          </TrilhoDeChips>
         </div>
       </header>
 

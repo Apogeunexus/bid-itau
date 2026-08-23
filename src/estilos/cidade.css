@@ -47,30 +47,19 @@
   color: var(--cor-tinta-2);
 }
 
-.cidade-dias {
-  display: flex;
-  gap: 0.25rem;
-}
+/* O seletor de dias é um TrilhoDeChips desde a reformulação — `.cidade-dia-botao`
+   era a sexta das oito famílias de pílula e foi absorvida pela primitiva. O que
+   resta aqui é só o ajuste local: um número de um ou dois dígitos num chip de
+   largura livre ficaria estreito demais para ter cara de alvo de toque.
 
-.cidade-dia-botao {
-  cursor: pointer;
-  min-width: 2.25rem;
-  border: 1px solid var(--cor-borda-forte);
-  border-radius: var(--raio-pilula);
-  padding: 0.25rem 0.75rem;
-  font-size: var(--tipo-detalhe);
+   A decisão que estava escrita aqui e vale para a primitiva inteira: o estado do
+   controle sai do ATRIBUTO DE ACESSIBILIDADE, e não de uma classe paralela.
+   `aria-pressed` já precisa estar certo para leitor de tela, e derivar o desenho
+   dele impede que os dois se separem numa edição futura. */
+.cidade-dias .chip {
+  min-width: 2.75rem;
+  justify-content: center;
   font-weight: 700;
-  line-height: 1.2;
-  background: transparent;
-}
-
-/* O estado do controle sai do ATRIBUTO DE ACESSIBILIDADE, e não de uma classe paralela:
-   `aria-pressed` já precisa estar certo para leitor de tela, e derivar o desenho dele
-   impede que os dois se separem numa edição futura. */
-.cidade-dia-botao[aria-pressed="true"] {
-  background: var(--cor-acao);
-  border-color: var(--cor-acao);
-  color: var(--cor-sobre-acao);
 }
 
 /* ---------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
@@ -455,31 +456,23 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
       {criterios.length ? (
         <section className="flex flex-col gap-1.5">
           <p className="busca-bloco-titulo">critérios marcados · toque para tirar</p>
-          <div className="flex flex-wrap gap-2">
-            {criterios.map((criterio) => {
-              const contagem = resposta?.porCriterio.find(
-                (c) => chaveCriterio(c.criterio) === chaveCriterio(criterio),
-              );
-              return (
-                <button
-                  key={chaveCriterio(criterio)}
-                  type="button"
-                  className="busca-faceta busca-ficha"
-                  data-faceta={chaveCriterio(criterio)}
-                  onClick={() => alternarCriterio(criterio)}
-                >
-                  <span className="text-[0.65rem] tracking-wide uppercase opacity-60">
-                    {ROTULO_CAMPO[criterio.campo]}
-                  </span>
-                  {criterio.rotulo}
-                  {contagem ? (
-                    <span className="busca-faceta-n">sem ela: {milhar(contagem.semEle)}</span>
-                  ) : null}
-                  <span aria-hidden>×</span>
-                </button>
-              );
-            })}
-          </div>
+          <TrilhoDeChips rotulo="Critérios marcados">
+            {criterios.map((criterio) => (
+              // O «sem ela: 340» saiu daqui. Era o número do que a tela mostraria
+              // se este critério fosse retirado — informação útil UMA vez, e ruído
+              // quando repetida em cada chip de uma fileira. Quem quer saber o
+              // efeito de tirar um critério tira: a contagem do resultado responde.
+              <Chip
+                key={chaveCriterio(criterio)}
+                selecionado
+                data-faceta={chaveCriterio(criterio)}
+                onClick={() => alternarCriterio(criterio)}
+              >
+                <span className="tipo-micro opacity-70">{ROTULO_CAMPO[criterio.campo]}</span>{" "}
+                {criterio.rotulo} <span aria-hidden>×</span>
+              </Chip>
+            ))}
+          </TrilhoDeChips>
         </section>
       ) : null}
 
@@ -534,16 +527,10 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
               <strong>critérios visíveis e editáveis</strong>, um a um, com o que não foi
               entendido dito na cara: não é uma resposta de chatbot.
             </p>
-            <Link
-              href="/buscar/frase/"
-              className="busca-faceta w-fit font-semibold no-underline"
-            >
-              <Grafismo
-                variacao="barra"
-                className="h-3.5 w-auto shrink-0 text-acao-tinta"
-              />
+            <Chip href="/buscar/frase/" className="w-fit font-semibold">
+              <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
               traduzir esta frase em critérios
-            </Link>
+            </Chip>
           </section>
           {/* ------------------------------------------------------------------ */}
           {/* 2. Antes de digitar — o estado que a banca vê primeiro              */}
@@ -556,20 +543,23 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   classe: o mesmo mecanismo de faceta de sempre, só que na porta. */}
               <section className="busca-bloco">
                 <p className="busca-bloco-titulo">explore por seção</p>
-                <div className="flex flex-wrap gap-2">
+                {/* A contagem FICA aqui, e sai dos filtros abaixo. A diferença não é
+                    de gosto: numa lista de seções o número é o conteúdo — «quantas
+                    exposições existem» é a pergunta que a seção responde. Num chip
+                    de filtro ele é o mesmo dado repetido dez vezes ao lado de algo
+                    que o usuário já vai medir no resultado. */}
+                <TrilhoDeChips rotulo="Explorar por seção do acervo">
                   {facetas.classe.map((opcao) => (
-                    <button
+                    <Chip
                       key={chaveCriterio(opcao)}
-                      type="button"
-                      className="busca-faceta"
                       data-faceta={chaveCriterio(opcao)}
                       onClick={() => alternarCriterio(opcao)}
+                      contagem={milhar(opcao.n)}
                     >
                       {opcao.rotulo}
-                      <span className="busca-faceta-n">{milhar(opcao.n)}</span>
-                    </button>
+                    </Chip>
                   ))}
-                </div>
+                </TrilhoDeChips>
               </section>
 
               {/* A VITRINE: cartões reais do índice com a capa na cor da linguagem —
@@ -603,41 +593,33 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   Disposição não é critério de busca: ela <strong>pondera a caminhada</strong> de
                   Descobrir (D-31). Tocar leva para lá com a disposição já marcada.
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <TrilhoDeChips rotulo="Ir para Descobrir com uma disposição marcada">
                   {DISPOSICOES.map((disposicao) => (
-                    <Link
+                    <Chip
                       key={disposicao.id}
                       href="/descobrir/"
-                      className="busca-faceta no-underline"
                       onClick={() => definirDisposicoes([disposicao.id])}
                     >
                       {disposicao.rotulo}
-                    </Link>
+                    </Chip>
                   ))}
-                </div>
+                </TrilhoDeChips>
               </section>
 
               <section className="busca-bloco">
                 <p className="busca-bloco-titulo">atalhos por linguagem</p>
-                <div className="flex flex-wrap gap-2">
+                <TrilhoDeChips rotulo="Atalhos por linguagem artística">
                   {facetas.linguagem.slice(0, 12).map((opcao) => (
-                    <button
+                    <Chip
                       key={chaveCriterio(opcao)}
-                      type="button"
-                      className="busca-faceta"
                       data-faceta={chaveCriterio(opcao)}
-                      style={{ "--cor-linguagem": `var(${opcao.cor ?? "--ic-preto"})` } as React.CSSProperties}
+                      cor={opcao.cor ?? "--ic-preto"}
                       onClick={() => alternarCriterio(opcao)}
                     >
-                      <span
-                        aria-hidden
-                        className="size-2 shrink-0 rounded-full bg-[var(--cor-linguagem)]"
-                      />
                       {opcao.rotulo}
-                      <span className="busca-faceta-n">{milhar(opcao.n)}</span>
-                    </button>
+                    </Chip>
                   ))}
-                </div>
+                </TrilhoDeChips>
                 <Comentario className="text-xs leading-snug text-tinta-2">
                   A cor de cada linguagem veio do vocabulário gerado, não deste arquivo (D-08).
                 </Comentario>
@@ -646,18 +628,13 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
               <section className="busca-bloco">
                 <p className="busca-bloco-titulo">buscas recentes</p>
                 {recentes.length ? (
-                  <div className="flex flex-wrap gap-2">
+                  <TrilhoDeChips rotulo="Buscas recentes">
                     {recentes.map((termo) => (
-                      <button
-                        key={termo}
-                        type="button"
-                        className="busca-faceta"
-                        onClick={() => setTexto(termo)}
-                      >
+                      <Chip key={termo} onClick={() => setTexto(termo)}>
                         {termo}
-                      </button>
+                      </Chip>
                     ))}
-                  </div>
+                  </TrilhoDeChips>
                 ) : (
                   <p className="text-sm leading-snug text-tinta-2">
                     Você ainda não buscou nada neste navegador.
@@ -680,13 +657,10 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   e a frase vira <strong>critérios visíveis e editáveis</strong>, não uma resposta
                   de chatbot.
                 </p>
-                <Link
-                  href="/buscar/frase/"
-                  className="busca-faceta w-fit font-semibold no-underline"
-                >
+                <Chip href="/buscar/frase/" className="w-fit font-semibold">
                   <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
                   buscar por frase
-                </Link>
+                </Chip>
               </section>
             </div>
           ) : null}
@@ -903,17 +877,13 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
 
                 Ele fica FORA da visão app por CSS: a porta de entrada de Filtros no app é
                 de 05-06, e abrir uma segunda aqui empurraria a tela que a fase 3 congelou. */}
-            <Link
-              href="/filtros/"
-              data-link-filtros="sim"
-              className="busca-faceta w-fit font-semibold no-underline"
-            >
+            <Chip href="/filtros/" data-link-filtros="sim" className="w-fit font-semibold">
               <Grafismo
                 variacao="barra"
                 className="h-3.5 w-auto shrink-0 text-acao-tinta"
               />
               filtrar por acessibilidade — as 8 dimensões como critério, não como selo
-            </Link>
+            </Chip>
 
             <BlocoFaceta
               titulo="tipo"
@@ -979,12 +949,12 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           O mapa é <strong>lente sobre este resultado</strong>, não uma porta de entrada: ele
           abre com o conjunto que está aqui e com o endereço de volta para esta busca.
         </p>
-        <Link href={lente} className="busca-faceta w-fit font-semibold no-underline">
+        <Chip href={lente} className="w-fit font-semibold">
           <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
           {idsLente.length
             ? `abrir ${milhar(idsLente.length)} no mapa`
             : "abrir o mapa sem recorte"}
-        </Link>
+        </Chip>
         {total > idsLente.length ? (
           <p className="text-xs leading-snug text-tinta-2">
             A lente leva os primeiros {milhar(idsLente.length)} de {milhar(total)} — o corte é
@@ -1020,32 +990,22 @@ function BlocoFaceta({
     <div className="flex flex-col gap-1.5">
       <p className="busca-bloco-titulo">{titulo}</p>
       {opcoes.length ? (
-        <div className="flex flex-wrap gap-2">
+        <TrilhoDeChips rotulo={`Recortar por ${titulo}`}>
           {opcoes.map((opcao) => {
             const chave = chaveCriterio(opcao);
-            const marcada = marcados.has(chave);
             return (
-              <button
+              <Chip
                 key={chave}
-                type="button"
-                aria-pressed={marcada}
-                className={`busca-faceta${marcada ? " busca-ficha" : ""}`}
+                selecionado={marcados.has(chave)}
                 data-faceta={chave}
+                cor={opcao.cor ?? undefined}
                 onClick={() => aoTocar(opcao)}
               >
-                {opcao.cor ? (
-                  <span
-                    aria-hidden
-                    style={{ "--cor-linguagem": `var(${opcao.cor})` } as React.CSSProperties}
-                    className="size-2 shrink-0 rounded-full bg-[var(--cor-linguagem)]"
-                  />
-                ) : null}
                 {rotulo ? rotulo(opcao.valor) : opcao.rotulo}
-                <span className="busca-faceta-n">{milhar(opcao.n)}</span>
-              </button>
+              </Chip>
             );
           })}
-        </div>
+        </TrilhoDeChips>
       ) : (
         <p className="text-sm text-tinta-2">
           Nenhuma opção deste campo recorta o resultado atual.

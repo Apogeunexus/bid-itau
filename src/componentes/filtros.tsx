@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
 import {
@@ -424,44 +425,34 @@ export function Filtros({
           uma opção que diz {'"'}51{'"'} devolve exatamente 51.
         </p>
 
-        <ul className="filtros-facetas">
+        <TrilhoDeChips rotulo="Recortar por linguagem artística">
           {facetas.linguagem.slice(0, TETO_LINGUAGENS).map((o) => (
-            <li key={`${o.campo}:${o.valor}`}>
-              <button
-                type="button"
-                aria-pressed={criterioMarcado(o)}
-                className="filtros-faceta"
-                onClick={() => alternarCriterio(o)}
-              >
-                {o.cor ? (
-                  <span
-                    className="filtros-faceta-cor"
-                    aria-hidden
-                    style={{ background: `var(${o.cor})` }}
-                  />
-                ) : null}
-                {o.rotulo}
-                <span className="filtros-faceta-n">{milhar(o.n)}</span>
-              </button>
-            </li>
+            <Chip
+              key={`${o.campo}:${o.valor}`}
+              selecionado={criterioMarcado(o)}
+              onClick={() => alternarCriterio(o)}
+              // O nome do token, e não a cor: a bolinha é pintada pelo CSS a
+              // partir do dado, do mesmo jeito que `selo-linguagem.tsx` faz.
+              cor={o.cor ?? undefined}
+              contagem={milhar(o.n)}
+            >
+              {o.rotulo}
+            </Chip>
           ))}
-        </ul>
+        </TrilhoDeChips>
 
-        <ul className="filtros-facetas">
+        <TrilhoDeChips rotulo="Recortar por território">
           {facetas.territorio.slice(0, TETO_TERRITORIOS).map((o) => (
-            <li key={`${o.campo}:${o.valor}`}>
-              <button
-                type="button"
-                aria-pressed={criterioMarcado(o)}
-                className="filtros-faceta"
-                onClick={() => alternarCriterio(o)}
-              >
-                {o.rotulo}
-                <span className="filtros-faceta-n">{milhar(o.n)}</span>
-              </button>
-            </li>
+            <Chip
+              key={`${o.campo}:${o.valor}`}
+              selecionado={criterioMarcado(o)}
+              onClick={() => alternarCriterio(o)}
+              contagem={milhar(o.n)}
+            >
+              {o.rotulo}
+            </Chip>
           ))}
-        </ul>
+        </TrilhoDeChips>
       </section>
 
       </div>
