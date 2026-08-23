@@ -151,7 +151,7 @@ export default function Verificacao() {
       <p className="mt-4 rounded-lg bg-superficie-2 p-3 text-sm">
         Visão ativa: <strong className="app:inline desk:hidden">app (mobile)</strong>
         <strong className="app:hidden desk:inline">web (desktop)</strong> · {meta.totais.entidades}{" "}
-        entidades · {meta.totais.arestas} arestas
+        entidades · {meta.totais.arestas} ligações
       </p>
 
       <div className="grid gap-8 app:grid-cols-1 desk:grid-cols-2">
@@ -163,8 +163,8 @@ export default function Verificacao() {
           <Tabela cabecalho={["procedência", "entidades"]} linhas={Object.entries(numeros.porProcedencia)} />
           <p className="mt-2 text-xs text-tinta-2">
             Toda entidade <code>ic</code> carrega a URL de origem. As{" "}
-            {numeros.porProcedencia.autorado ?? 0} autoradas são as 40 duplicatas do Cenário 3,
-            as 3 personas com repertório e a trilha do Cenário 1.
+            {numeros.porProcedencia.autorado ?? 0} autoradas são as 40 duplicatas do cenário 3,
+            as 3 personas com repertório e a trilha do cenário 1.
           </p>
         </Secao>
 
@@ -174,7 +174,7 @@ export default function Verificacao() {
             Procedência das arestas: {Object.entries(meta.porProcedenciaDeAresta)
               .map(([k, v]) => `${k} ${v}`)
               .join(" · ")}. As {meta.porProcedenciaDeAresta.autorado ?? 0} autoradas são a
-            trilha do Cenário 1, as duplicatas e os repertórios — nenhuma outra.
+            trilha do cenário 1, as duplicatas e os repertórios — nenhuma outra.
           </p>
         </Secao>
 
@@ -219,7 +219,7 @@ export default function Verificacao() {
               ["ocorrências derivadas", meta.totais.ocorrencias],
               ["eventos com ocorrência", meta.cobertura.agenda.eventosComOcorrencia],
               ["eventos sem período na fonte", meta.cobertura.agenda.eventosSemPeriodo],
-              ["duplicatas do Cenário 3", meta.totais.duplicatas],
+              ["duplicatas do cenário 3", meta.totais.duplicatas],
             ]}
           />
         </Secao>

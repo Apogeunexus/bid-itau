@@ -332,7 +332,7 @@ const GATILHOS_PROCEDENCIA: Array<{ termo: string; valor: string; rotulo: string
   { termo: "do itau cultural", valor: "ic", rotulo: "acervo do Itaú Cultural" },
   { termo: "da enciclopedia", valor: "ic", rotulo: "acervo do Itaú Cultural" },
   { termo: "do acervo", valor: "ic", rotulo: "acervo do Itaú Cultural" },
-  { termo: "autorado", valor: "autorado", rotulo: "autorado para o protótipo" },
+  { termo: "autorado", valor: "autorado", rotulo: "escrito pela curadoria" },
   { termo: "derivado", valor: "derivado", rotulo: "derivado por regra" },
 ];
 
@@ -740,7 +740,7 @@ export function traduzir(frase: string, indice?: IndiceDTO): Traducao {
       fim,
       substituicaoDeclarada: true,
       substituicaoFrase:
-        `${gatilho.leitura} não virou janela de data. Este protótipo não fabrica datas (D-48) e o ` +
+        `${gatilho.leitura} não virou janela de data. Este protótipo não fabrica datas e o ` +
         `acervo não publica agenda futura: as sessões que ele tem são as que já aconteceram. A regra ` +
         `leu o pedido temporal como «o que tem sessão datada» — evento — e para por aí.`,
     });
@@ -778,7 +778,7 @@ export function traduzir(frase: string, indice?: IndiceDTO): Traducao {
     const declaracao =
       "«Perto de mim» não tem resposta neste protótipo, e fingir que tem seria o pior caminho. " +
       "Não pedimos sua localização — pedir seria requisição de runtime num protótipo estático " +
-      "(D-60) e coleta de dado pessoal sem necessidade (D-25) — e nenhuma das 2.425 sessões do " +
+      "(D-60) e coleta de dado pessoal sem necessidade — e nenhuma das 2.425 sessões do " +
       "acervo declara espaço. O que existe é TERRITÓRIO, pela hierarquia `situado_em`.";
 
     // Quando a própria frase JÁ nomeou um território («perto de mim, em Pernambuco»), a

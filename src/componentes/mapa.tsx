@@ -195,7 +195,7 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
         ) : (
           <p className="text-xs leading-snug text-tinta-2">
             Você chegou <strong className="font-semibold">sem recorte</strong>: o mapa é
-            lente sobre um resultado, não porta de entrada (D-59). Sem conjunto, ele mostra
+            lente sobre um resultado, não porta de entrada. Sem conjunto, ele mostra
             todo o acervo que consegue situar no Brasil.
           </p>
         )}
@@ -270,7 +270,7 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
             <p data-legenda-mapa className="mapa-legenda">
               Coordenadas derivadas de centroide e de deslocamento por espaço, nunca lidas
               da fonte. Os {dados.desertos.ufs.length} polígonos são esquemáticos e
-              autorados — a contagem vem do grafo, não do desenho.
+              autorados — a contagem vem do acervo, não do desenho.
             </p>
           </>
         ) : (

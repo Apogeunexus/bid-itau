@@ -349,7 +349,7 @@ export function passosDaTrilha(trilhaId: string): PassoTrilha[] {
         relacao: null,
         motivo:
           `A ordem autorada da trilha põe «${de.titulo}» antes de «${para.titulo}», mas ` +
-          `nenhuma aresta do grafo liga os dois. O passo aparece como declarado, sem ponte.`,
+          `nenhuma ligação do acervo liga os dois. O passo aparece como declarado, sem ponte.`,
         origemMotivo: "sem-aresta",
         procedenciaAresta: null,
         final: ultimo ? destinoFinal(para) : null,
@@ -459,7 +459,7 @@ export interface Publicabilidade {
 export function trilhaEhPublicavel(trilhaId: string): Publicabilidade {
   const trilha = porId(trilhaId);
   if (!trilha || trilha.classe !== "trilha") {
-    return { publicavel: false, motivo: "Esta trilha não existe no grafo." };
+    return { publicavel: false, motivo: "Esta trilha não existe no acervo." };
   }
 
   const passos = passosDaTrilha(trilhaId);
@@ -468,7 +468,7 @@ export function trilhaEhPublicavel(trilhaId: string): Publicabilidade {
       publicavel: false,
       motivo:
         "Esta trilha não declara cadeia de passos. Sem passos não há ponte a percorrer, " +
-        "e uma trilha sem ponte é uma lista — por isso ela não é publicável (D-38).",
+        "e uma trilha sem ponte é uma lista — por isso ela não é publicável.",
     };
   }
 
@@ -479,7 +479,7 @@ export function trilhaEhPublicavel(trilhaId: string): Publicabilidade {
       motivo:
         `O último passo desta trilha é «${destino.titulo}», que é ${destino.classe} e não ` +
         "evento. Uma trilha de primeira vez precisa terminar em algo a que se possa ir, " +
-        "com data — por isso ela não é publicável (D-38).",
+        "com data — por isso ela não é publicável.",
     };
   }
 
@@ -490,7 +490,7 @@ export function trilhaEhPublicavel(trilhaId: string): Publicabilidade {
       motivo:
         `O último passo é o evento «${destino.titulo}», mas o acervo não publica nenhuma ` +
         "sessão datada para ele. Sem data não há para onde levar quem seguiu a trilha — " +
-        "por isso ela não é publicável (D-38).",
+        "por isso ela não é publicável.",
     };
   }
 

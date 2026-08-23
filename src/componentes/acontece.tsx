@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
@@ -342,7 +343,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
         </p>
 
         <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
-          A lista abaixo é de EVENTOS, com a contagem de ocorrências no cartão (D-53).
+          A lista abaixo é de EVENTOS, com a contagem de ocorrências no cartão.
           Ocorrência é registro próprio, com id próprio, e não um array aninhado dentro do
           evento — é essa separação que permite um alerta chegar a quem salvou uma sessão
           específica, e é ela que impede a agenda de virar catálogo de calendário. A
@@ -367,13 +368,12 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
           {/* O ALTERNADOR É A DECLARAÇÃO DE D-90 VIRADA CONTROLE. Ele não é um
               filtro de conveniência: cada recorte responde uma pergunta que o
               acervo sustenta, e a diferença entre as duas é o achado da tela. */}
-          <div className="web-alternador" role="group" aria-label="Recorte da lista">
+          <Segmento rotulo="Recorte da lista">
             {mapa.recortes.map((r) => (
-              <button
+              <OpcaoDeSegmento
                 key={r.id}
-                type="button"
                 data-modo-lista={r.id}
-                aria-pressed={r.id === modoLista}
+                selecionado={r.id === modoLista}
                 onClick={() => {
                   setModoLista(r.id);
                   // O realce morre com a troca de recorte: a chave acesa pode não
@@ -383,9 +383,9 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
                 }}
               >
                 {`${r.rotulo} · ${milhar(r.total)}`}
-              </button>
+              </OpcaoDeSegmento>
             ))}
-          </div>
+          </Segmento>
         </div>
 
         {/* D-90. TEXTO DE PRODUTO, FORA DO <Comentario>: é a resposta da tela ao
@@ -603,7 +603,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
 
             <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
               Não existe nesta tela nenhum filtro que remova o passado, nem desligado por
-              padrão (D-54). Também não existe atalho para filtros: filtros são Camada 2,
+              padrão. Também não existe atalho para filtros: filtros são Camada 2,
               da fase 5, e o atalho seria link morto na demonstração.
             </Comentario>
 

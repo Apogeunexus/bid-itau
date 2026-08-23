@@ -53,7 +53,7 @@ import type { DimensaoAcessibilidade } from "@/dados/tipos";
  *    aqui o raciocínio é repetido, não reinventado.
  *
  * 3. FAIXA ETÁRIA não vira controle porque O CAMPO NÃO EXISTE — nem no CMS, nem na
- *    Enciclopédia, nem nas 7.810 entidades. `disposicoes.ts` já registrou essa decisão por
+ *    Enciclopédia, nem nos 7.810 registros. `disposicoes.ts` já registrou essa decisão por
  *    escrito e o predicado de lá devolve `indeterminado` de propósito. A tela 9 pede faixa
  *    etária, e a resposta honesta é dizer que ela não existe: é mais forte do que um
  *    seletor que devolve tudo.
@@ -257,9 +257,8 @@ export function Filtros({
         </button>
 
         <p className="filtros-nota">
-          O contador acima muda <strong>a cada critério marcado</strong>, aqui mesmo: filtro
-          em memória sobre {milhar(indice.total)} entradas, sem trocar de tela e sem
-          consultar servidor nenhum.
+          O contador acima muda <strong>a cada critério marcado</strong>, aqui mesmo, sobre
+          {" "}{milhar(indice.total)} registros — sem trocar de tela e sem esperar servidor.
         </p>
 
         <Comentario className="filtros-comentario">
@@ -267,7 +266,7 @@ export function Filtros({
           primeira classe; D-90 manda declarar a ausência com o denominador em vez de
           oferecer controle que não corta; D-43 separa declarado-ausente de não-declarado.
           As contagens de acessibilidade não vêm de `indice.ts`, que não as indexa: elas são
-          calculadas no build por `filtros.ts`, direto do grafo, e descem em{" "}
+          calculadas no build por `filtros.ts`, direto do acervo, e descem em{" "}
           {milhar(acessibilidade.bytesDoDto)} bytes de contagens.
         </Comentario>
       </header>
@@ -290,7 +289,7 @@ export function Filtros({
         <h2 className="filtros-bloco-titulo">Acessibilidade</h2>
 
         <p className="filtros-bloco-linha">
-          As <strong>{numeros.dimensoes} dimensões</strong> que o CMS cataloga, todas
+          As <strong>{numeros.dimensoes} dimensões</strong> que o acervo cataloga, todas
           marcáveis — as {numeros.dimensoesSustentadas} que o acervo documenta e as{" "}
           {numeros.dimensoesZeradas} que ele não documenta. Elas ficam aqui, no mesmo lugar e
           com o mesmo peso de linguagem e território, porque{" "}
@@ -376,7 +375,7 @@ export function Filtros({
               </span>
             </button>
             <p className="filtros-dimensao-nota">
-              {milhar(ficha.declaram)} das {milhar(ficha.total)} entidades preencheram as{" "}
+              {milhar(ficha.declaram)} das {milhar(ficha.total)} registros preencheram as{" "}
               {numeros.dimensoes} dimensões. Nelas, um «não» é uma{" "}
               <strong>declaração de ausência</strong>: a fonte foi perguntada e respondeu.
             </p>
@@ -532,7 +531,7 @@ export function Filtros({
                 .map((d) => (
                   <li key={d.campo} className="filtros-zero-motivo">
                     <strong>{d.rotulo}</strong> está marcada e mede{" "}
-                    <strong>0 de {milhar(ficha.declaram)}</strong> entidades que preencheram a
+                    <strong>0 de {milhar(ficha.declaram)}</strong> registros que preencheram a
                     ficha. Nenhum registro do acervo declara esta dimensão — desmarcá-la é o
                     caminho.
                   </li>

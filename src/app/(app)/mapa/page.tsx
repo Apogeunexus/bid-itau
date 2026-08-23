@@ -91,7 +91,7 @@ export default function PaginaMapa() {
       <Comentario className="px-3 pb-3 text-xs text-tinta-3">
         O índice de coordenadas é calculado no build e atravessa inteiro para o navegador:
         nenhuma travessia de grafo acontece na máquina de quem avalia, e nenhuma requisição
-        de rede é feita (D-60).
+        de rede é feita.
       </Comentario>
     </>
   );

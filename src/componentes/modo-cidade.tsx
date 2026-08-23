@@ -328,7 +328,7 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
       </section>
 
       <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
-        {`A medição que levou a este enquadramento (D-48): os 100 eventos da agenda do CMS têm data e nenhum território; os 160 eventos da Enciclopédia têm território e data histórica. Nenhum registro do acervo tem as duas coisas, e por isso a consulta desta tela é «o que existe culturalmente aqui» e não «o que acontece nesta semana» (D-49). Nenhuma data foi produzida: ${enquadramento.comData} dos ${enquadramento.total} registros trazem o texto de data que a fonte escreveu, e os outros ${enquadramento.semData} dizem que não trazem (D-51). O roteiro por dia continua existindo como estrutura (D-50) — o que mudou foi a natureza do item.`}
+        {`A medição que levou a este enquadramento: os 100 eventos da agenda do CMS têm data e nenhum território; os 160 eventos da Enciclopédia têm território e data histórica. Nenhum registro do acervo tem as duas coisas, e por isso a consulta desta tela é «o que existe culturalmente aqui» e não «o que acontece nesta semana». Nenhuma data foi produzida: ${enquadramento.comData} dos ${enquadramento.total} registros trazem o texto de data que a fonte escreveu, e os outros ${enquadramento.semData} dizem que não trazem. O roteiro por dia continua existindo como estrutura — o que mudou foi a natureza do item.`}
       </Comentario>
 
       {/* ================================================================== */}

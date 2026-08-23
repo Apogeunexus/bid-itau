@@ -180,7 +180,7 @@ export function LeituraDesertos({ dados }: { dados: DadosDesertos }) {
           territorializado em dois estados de {dados.ufs.length}
         </strong>
         . {dados.comUmRegistro.length} estados têm um registro só — {cinco}. E{" "}
-        {dados.semRegistro.length} não aparecem em lugar nenhum do grafo:{" "}
+        {dados.semRegistro.length} não aparecem em lugar nenhum do acervo:{" "}
         <strong className="font-semibold text-tinta">
           {dois} têm zero
         </strong>

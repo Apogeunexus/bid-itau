@@ -103,18 +103,18 @@ export default async function PaginaObra({ params }: { params: Promise<{ slug: s
         <h2 className="tipo-detalhe font-bold">Autoria</h2>
         <p className="max-w-prose text-sm leading-snug text-tinta-2">
           O acervo exportado não liga nenhuma obra a uma pessoa — não existe aresta de
-          autoria no grafo, e por isso esta página não atribui a obra a ninguém.
+          autoria no acervo, e por isso esta página não atribui a obra a ninguém.
           Inferir o autor do título seria inventar um fato em nome do Itaú Cultural.
         </p>
         <Comentario className="pt-1 text-xs leading-snug text-tinta-2">
-          Medido sobre as arestas do grafo: zero ligações obra↔pessoa em toda a classe. A
+          Medido sobre as ligações do acervo: zero ligações obra↔pessoa em toda a classe. A
           Enciclopédia tem a autoria em prosa no verbete acima, quando o verbete existe —
           transcrita da fonte, nunca estruturada por nós.
         </Comentario>
       </section>
 
       <p className="border-t border-borda pt-3 text-xs leading-relaxed text-tinta-3">
-        Todo vínculo desta página é uma aresta do grafo do acervo. Onde há ausência
+        Todo vínculo desta página vem do acervo. Onde há ausência
         declarada, é o registro do Itaú Cultural que não publica o dado — nada foi
         preenchido no lugar dele.
       </p>

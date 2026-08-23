@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
 import { Comentario } from "@/componentes/comentario";
 import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/componentes/desertos";
 import type {
@@ -347,7 +348,7 @@ export function Observatorio({
               <span className="obs-coluna-rotulo">Ligações</span>
               <span className="obs-coluna-total">{milhar(painel.totalDeArestas)}</span>
               <span className="obs-coluna-nota">
-                as arestas entre elas: é a ligação, e não a coisa, que faz o grafo explicar
+                as ligações entre elas: é a ligação, e não a coisa, que faz o grafo explicar
               </span>
             </span>
           </p>
@@ -373,17 +374,17 @@ export function Observatorio({
         </p>
 
         <Comentario como="p" className="obs-comentario">
-          Este painel é o princípio 9 virando interface (D-88). Ele é tela de primeira classe
+          Este painel é o princípio 9 virando interface. Ele é tela de primeira classe
           e não rodapé de propósito: em cinza, no pé da página, «procedência» é uma
           formalidade; no topo, com o número grande, ela é o que torna verificável tudo o que
           a tela afirma depois. Nenhum número aqui é literal — todos saem de{" "}
           <code>contagens()</code> de <code>grafo.ts</code>, da varredura das{" "}
-          {milhar(numeros.arestas)} arestas e de <code>meta.json</code>, e o módulo quebra
+          {milhar(numeros.arestas)} ligações e de <code>meta.json</code>, e o módulo quebra
           alto se as três não fecharem. O exemplo de cada procedência também sai de regra e
           não de escolha: em entidade é <strong>a de maior grau</strong> daquela procedência,
           desempatada pelo id; em ligação é <strong>a relação mais frequente</strong>. Uma
           entidade escolhida à mão seria literal disfarçado, e trocaria de sentido em
-          silêncio na primeira regeração do grafo.
+          silêncio na primeira regeração do acervo.
         </Comentario>
       </section>
 
@@ -395,19 +396,18 @@ export function Observatorio({
           <h2 id="obs-recorte-titulo" className="obs-secao-titulo">
             Indicadores de impacto cultural
           </h2>
-          <div className="web-alternador obs-publicos" role="group" aria-label="público">
+          <Segmento rotulo="público" className="obs-publicos">
             {publicos.map((p) => (
-              <button
+              <OpcaoDeSegmento
                 key={p.id}
-                type="button"
                 data-publico={p.id}
-                aria-pressed={p.id === publico.id}
+                selecionado={p.id === publico.id}
                 onClick={() => definirPublico(p.id)}
               >
                 {p.rotulo}
-              </button>
+              </OpcaoDeSegmento>
             ))}
-          </div>
+          </Segmento>
         </div>
         <p className="obs-publico-nota">
           <strong>{publico.rotulo}</strong> — {publico.resumo}. A pergunta que ele faz é «

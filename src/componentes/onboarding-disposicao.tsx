@@ -28,7 +28,7 @@ export function OnboardingDisposicao() {
         O que te move hoje?
       </h2>
       <p className="text-xs text-tinta-2">
-        Escolha quantas quiser, ou nenhuma. Vocabulário autorado para o protótipo — não veio
+        Escolha quantas quiser, ou nenhuma. Vocabulário escrito pela curadoria — não veio
         do acervo do Itaú Cultural.
       </p>
 

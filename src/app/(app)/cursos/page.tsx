@@ -37,7 +37,7 @@ export default function Cursos() {
           acervo — cursos e oficinas, com a inscrição na fonte.
         </p>
         <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-          A classe `formacao` inteira, varrida do grafo no build. O acervo exportado não
+          A classe `formacao` inteira, varrida do acervo no build. O acervo exportado não
           declara período nem vagas — o que existe é título, resumo, linguagem e fonte, e é
           isso que a vitrine mostra, sem inventar campos.
         </Comentario>

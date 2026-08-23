@@ -403,16 +403,21 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Buscar</h1>
         </div>
 
-        {/* PRODUTO, e não comentário: a afirmação de que não há serviço de busca por trás
-            é parte do argumento e fica na tela nos dois modos. */}
+        {/* O QUE ESTA FRASE PRECISA DIZER é o que a pessoa ganha: um campo só
+            para tudo. A versão anterior dizia «um índice único do grafo … roda no
+            seu navegador, em memória: não há serviço de busca por trás» — três
+            afirmações de arquitetura na primeira linha de uma tela de busca. Isso
+            é argumento de proposta, e argumento de proposta mora no modo
+            comentado, junto com o resto da prova. Quem usa quer saber que
+            procurar «Lygia Clark» acha a artista, a obra e o verbete de uma vez. */}
         <p className="text-sm leading-snug">
-          Um campo só, sobre um <strong>índice único do grafo</strong> — agenda, acervo,
-          editorial e verbete no mesmo resultado, com o tipo etiquetado em cada um. O filtro
-          roda aqui no seu navegador, em memória: <strong>não há serviço de busca por trás</strong>.
+          Uma busca só para o acervo inteiro: eventos, artistas, obras, vídeos e verbetes
+          aparecem no mesmo resultado, cada um com o seu tipo.
         </p>
 
         <Comentario className="text-sm leading-snug text-tinta-2">
-          O índice tem {milhar(indice.total)} entidades de {indice.facetas.classe.length}{" "}
+          Índice único sobre o grafo, filtrado no navegador e em memória — não há serviço de
+          busca por trás. São {milhar(indice.total)} entidades de {indice.facetas.classe.length}{" "}
           classes, em forma colunar com classe, linguagem, tema, procedência e território
           internados — {milhar(Math.round(indice.diagnostico.bytes / 1024))} KB medidos contra
           um teto de {milhar(Math.round(indice.diagnostico.tetoBytes / 1024))} KB. Ficam de fora
@@ -588,7 +593,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 <p className="busca-bloco-titulo">em vez de buscar, deixe levar</p>
                 <p className="text-sm leading-snug">
                   Disposição não é critério de busca: ela <strong>pondera a caminhada</strong> de
-                  Descobrir (D-31). Tocar leva para lá com a disposição já marcada.
+                  Descobrir. Tocar leva para lá com a disposição já marcada.
                 </p>
                 <TrilhoDeChips rotulo="Ir para Descobrir com uma disposição marcada">
                   {DISPOSICOES.map((disposicao) => (
@@ -618,7 +623,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   ))}
                 </TrilhoDeChips>
                 <Comentario className="text-xs leading-snug text-tinta-2">
-                  A cor de cada linguagem veio do vocabulário gerado, não deste arquivo (D-08).
+                  A cor de cada linguagem veio do vocabulário gerado, não deste arquivo.
                 </Comentario>
               </section>
 
@@ -769,7 +774,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                             ) : null}
                             {!rota ? (
                               <span className="text-xs text-tinta-3">
-                                sem página própria nesta camada
+                                sem página própria 
                               </span>
                             ) : null}
                           </div>
@@ -825,7 +830,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   <Comentario className="text-xs leading-snug text-tinta-2">
                     Cada número acima foi medido sobre o índice inteiro no momento em que a tela
                     desenhou, e não estimado. A tela de zero-resultado completa é Camada 2 (fase
-                    5); aqui é o estado vazio de Buscar, e ele já oferece saída medida (D-66).
+                    5); aqui é o estado vazio de Buscar, e ele já oferece saída medida.
                   </Comentario>
                 </section>
               ) : null}
@@ -853,10 +858,15 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           <section className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
               <p className="busca-bloco-titulo">recortar</p>
+              {/* «As facetas saem da própria ontologia — classe, linguagem, tema,
+                  procedência e território da entidade» era a lista dos CAMPOS do
+                  modelo de dados, dita a quem só queria filtrar. O que a pessoa
+                  precisa saber é a promessa: o número ao lado é o resultado real,
+                  e não há caminho que leve a nada. Os títulos de cada trilho já
+                  dizem por que se está recortando. */}
               <p className="text-sm leading-snug text-tinta-2">
-                As facetas saem da própria ontologia — classe, linguagem, tema, procedência e
-                território da entidade — e o número é quantos resultados aquela opção devolve
-                agora. Opção que devolveria zero não aparece.
+                O número ao lado de cada opção é quanto ela devolve agora. Nenhuma leva a
+                zero resultado — as que levariam não aparecem.
               </p>
             </div>
 
@@ -928,7 +938,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 não filtra e não avisa faria quem avalia concluir que o acervo é todo gratuito. */}
             <p className="text-sm leading-snug text-tinta-2">
               <strong>Não há faceta de gratuidade</strong>, e o motivo é do dado: as 2.425 sessões
-              do grafo saem todas gratuitas porque `gratuito` é a negação de um campo de ingresso
+              do acervo saem todas gratuitas porque `gratuito` é a negação de um campo de ingresso
               que nenhum dos 300 eventos declara. Um filtro de gratuidade passaria 100% dos eventos
               datados — ele não recortaria nada, e oferecê-lo sem dizer isso seria pior do que não
               tê-lo.

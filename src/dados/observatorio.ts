@@ -88,7 +88,7 @@ export const PROCEDENCIAS: readonly Procedencia[] = ["ic", "derivado", "autorado
 export const SIGNIFICADO_DA_PROCEDENCIA: Record<Procedencia, string> = {
   ic: "Veio do acervo do Itaú Cultural — CMS e Enciclopédia —, carregado como está. Nós não escrevemos nada disto.",
   derivado:
-    "Nós extraímos do que veio do Itaú Cultural, por regra escrita e auditável: as ocorrências datadas, os territórios, os espaços e as arestas de semelhança. Não é invenção, é leitura — mas é leitura NOSSA, e por isso está separada.",
+    "Nós extraímos do que veio do Itaú Cultural, por regra escrita e auditável: as ocorrências datadas, os territórios, os espaços e as ligações de semelhança. Não é invenção, é leitura — mas é leitura NOSSA, e por isso está separada.",
   autorado:
     "Nós inventamos para o protótipo. Não existe no acervo do Itaú Cultural: foi escrito por nós para a demonstração ter o que mostrar.",
 };
@@ -385,7 +385,7 @@ function conferir(): Conferencia {
     const arestasDeMeta = META.porProcedenciaDeAresta[p] ?? 0;
     somaDeArestas += minhasArestas;
     if (minhasArestas !== arestasDeMeta) {
-      problemas.push(`arestas «${p}»: varredura ${minhasArestas}, meta.json ${arestasDeMeta}`);
+      problemas.push(`ligações «${p}»: varredura ${minhasArestas}, meta.json ${arestasDeMeta}`);
     }
   }
 
@@ -396,7 +396,7 @@ function conferir(): Conferencia {
   }
   if (somaDeArestas !== a.totalDeArestas || somaDeArestas !== META.totais.arestas) {
     problemas.push(
-      `as fatias de aresta somam ${somaDeArestas}, a varredura viu ${a.totalDeArestas} arestas distintas e meta.json declara ${META.totais.arestas}`,
+      `as fatias de aresta somam ${somaDeArestas}, a varredura viu ${a.totalDeArestas} ligações distintas e meta.json declara ${META.totais.arestas}`,
     );
   }
 
@@ -476,7 +476,7 @@ export function painelDeProcedencia(): PainelDeProcedencia {
       percentual: porcento(n, totalDeArestas),
       significado: SIGNIFICADO_DA_PROCEDENCIA[p],
       exemplo: top
-        ? `${(ROTULO_DA_RELACAO[top[0]] ?? top[0]).toString()} — ${top[1].toLocaleString("pt-BR")} arestas`
+        ? `${(ROTULO_DA_RELACAO[top[0]] ?? top[0]).toString()} — ${top[1].toLocaleString("pt-BR")} ligações`
         : "—",
       regraDoExemplo: "exemplo · a relação mais frequente",
       composicao: a.relacoesPorProcedencia[p]
@@ -704,7 +704,7 @@ function circulacaoTerritorial(): Indicador {
       do_que: "entidades distintas por trás desses registros",
     },
     sustentado: true,
-    procedenciaDoNumero: "src/dados/geo.ts · densidadePorUf() sobre as arestas situado_em",
+    procedenciaDoNumero: "src/dados/geo.ts · densidadePorUf() sobre as ligações situado_em",
     declaracao: null,
     leitura:
       `${primeiro.titulo} tem ${primeiro.registros} registros e ${segundo.titulo}, ${segundo.registros}: ` +
@@ -812,7 +812,7 @@ function acessibilidadeComoCriterio(): Indicador {
  * Faixa etária — o segundo caso em que o dado não sustenta, e é de outra espécie.
  *
  * Gratuidade tem campo e o campo está vazio. Faixa etária NÃO TEM CAMPO: nem no CMS, nem na
- * Enciclopédia, nem nas 7.810 entidades. `disposicoes.ts` já registra isso por escrito e
+ * Enciclopédia, nem nos 7.810 registros. `disposicoes.ts` já registra isso por escrito e
  * mantém o corte visível e desligado. Um proxy por palavra no título — «infantil», «livre» —
  * seria inventar a classificação indicativa de um evento real, que é a categoria de mentira
  * mais cara que esta tela poderia cometer.
@@ -826,7 +826,7 @@ function faixaEtaria(): Indicador {
     unidade: "—",
     denominador: {
       n: 0,
-      do_que: `campos de faixa etária nas ${total.toLocaleString("pt-BR")} entidades do acervo`,
+      do_que: `campos de faixa etária nas ${total.toLocaleString("pt-BR")} registros do acervo`,
     },
     denominadorSecundario: {
       n: total,
@@ -836,7 +836,7 @@ function faixaEtaria(): Indicador {
     procedenciaDoNumero:
       "src/dados/disposicoes.ts · o corte por faixa etária já nasce visível e desligado, com o motivo escrito",
     declaracao:
-      "O acervo não declara faixa etária nem classificação indicativa em campo nenhum — nem no CMS, nem na Enciclopédia, nem nas 7.810 entidades. Este recorte fica visível e desligado. Adivinhar por palavra no título seria inventar a classificação indicativa de um evento real, e é diferente de gratuidade: lá o campo existe e está vazio; aqui o campo não existe.",
+      "O acervo não declara faixa etária nem classificação indicativa em campo nenhum — nem no CMS, nem na Enciclopédia, nem nos 7.810 registros. Este recorte fica visível e desligado. Adivinhar por palavra no título seria inventar a classificação indicativa de um evento real, e é diferente de gratuidade: lá o campo existe e está vazio; aqui o campo não existe.",
     leitura:
       "Dois indicadores desta tela não são sustentados pelo acervo, e eles falham por motivos diferentes. A tela mostra os dois em vez de mostrar cinco que fecham bonito.",
     detalhe: [],
@@ -872,7 +872,7 @@ export function indicadores(): Indicador[] {
     if (!i.sustentado && !i.declaracao) {
       throw new Error(
         `observatorio.ts: «${i.id}» não é sustentado pelo acervo e não traz declaração. ` +
-          `Um indicador sem lastro e sem frase é um zero silencioso (D-90).`,
+          `Um indicador sem lastro e sem frase é um zero silencioso.`,
       );
     }
     if (!i.denominador?.do_que || typeof i.denominador.n !== "number") {

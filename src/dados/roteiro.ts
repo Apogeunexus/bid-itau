@@ -181,14 +181,14 @@ export function numerosDoRoteiro(): NumerosDoRoteiro {
   }
 
   const trilha = trilhaCompletaPorSlug(TRILHA_DO_CENARIO_1);
-  if (!trilha) romper(`a trilha «${TRILHA_DO_CENARIO_1}» do Cenário 1 não existe mais no grafo`);
+  if (!trilha) romper(`a trilha «${TRILHA_DO_CENARIO_1}» do cenário 1 não existe mais no acervo`);
 
   const indice = montarIndice({ slugsPorTipo, porSlug, vizinhos });
   const traducao = traduzir(FRASE_DO_CENARIO_5, indice);
   const semelhanca = traducao.criterios.find((c) => c.regra === "semelhanca");
   if (!semelhanca) {
     romper(
-      `a frase do Cenário 5 («${FRASE_DO_CENARIO_5}») deixou de acionar a regra de ` +
+      `a frase do cenário 5 («${FRASE_DO_CENARIO_5}») deixou de acionar a regra de ` +
         `semelhança, e sem ela o número de arestas fora de alcance não existe`,
     );
   }
@@ -425,7 +425,7 @@ function cartaoDeAbertura(personaId: string, ids: string[]): { param: string; ti
   const cartao = PRECOMPUTO.listas[combinacao.lista]?.[0];
   if (!cartao) {
     romper(
-      `o feed de «${personaId}» com ${ids.join(" + ")} devolveu lista vazia, e o Cenário 1 ` +
+      `o feed de «${personaId}» com ${ids.join(" + ")} devolveu lista vazia, e o cenário 1 ` +
         `depende de um cartão para a tela de explicação existir`,
     );
   }
@@ -442,11 +442,11 @@ function cartaoDeAbertura(personaId: string, ids: string[]): { param: string; ti
  */
 function destinoDaTrilha(): { rota: string; titulo: string } {
   const trilha = trilhaCompletaPorSlug(TRILHA_DO_CENARIO_1);
-  if (!trilha) romper(`a trilha «${TRILHA_DO_CENARIO_1}» do Cenário 1 não existe mais no grafo`);
+  if (!trilha) romper(`a trilha «${TRILHA_DO_CENARIO_1}» do cenário 1 não existe mais no acervo`);
   const final = trilha.passos[trilha.passos.length - 1]?.final;
   if (!final?.evento?.rota) {
     romper(
-      `a trilha «${TRILHA_DO_CENARIO_1}» deixou de terminar num evento com rota, e o Cenário 1 ` +
+      `a trilha «${TRILHA_DO_CENARIO_1}» deixou de terminar num evento com rota, e o cenário 1 ` +
         `promete que ela termina numa montagem real e datada`,
     );
   }
@@ -461,7 +461,7 @@ function eventoDoCenario5(): { slug: string; titulo: string } {
   const evento = resposta.resultados.find((r) => r.classe === "evento");
   if (!evento) {
     romper(
-      `a busca por «${FRASE_DO_CENARIO_5}» não devolveu nenhum evento, e o Cenário 5 abre ` +
+      `a busca por «${FRASE_DO_CENARIO_5}» não devolveu nenhum evento, e o cenário 5 abre ` +
         `uma ficha de evento no segundo passo`,
     );
   }
@@ -524,7 +524,7 @@ export function montarRoteiro(): RoteiroDTO {
           rota: "/descobrir/",
           comoChegar: "digitando",
           provar:
-            "o feed é caminhada no grafo e não popularidade: cada cartão traz o motivo que o " +
+            "o feed é caminhada no acervo e não popularidade: cada cartão traz o motivo que o " +
             "trouxe e quantos saltos foram precisos, não uma posição em ranking.",
         },
         {
@@ -563,12 +563,12 @@ export function montarRoteiro(): RoteiroDTO {
       naoSustenta: {
         texto:
           `A cadeia rap → poesia falada → teatro documentário se apoia em ` +
-          `${n.ligacoesAutoradasDaTrilha} arestas AUTORADAS, e não em ligação da fonte. ` +
+          `${n.ligacoesAutoradasDaTrilha} ligações AUTORADAS, e não em ligação da fonte. ` +
           `Rap está classificado em Música e Slam em Literatura, e nada no acervo liga as duas: ` +
           `a ponte é nossa. Ela está rotulada «autorado» na tela da trilha, passo a passo — ` +
           `não escondemos a ponte, mostramos de quem ela é.`,
         numeros: [String(n.ligacoesAutoradasDaTrilha)],
-        origem: "derivado do grafo · trilhaCompletaPorSlug().ligacoesAutoradas",
+        origem: "derivado do acervo · trilhaCompletaPorSlug().ligacoesAutoradas",
       },
       semeadura: {
         visao: "mobile",
@@ -625,13 +625,13 @@ export function montarRoteiro(): RoteiroDTO {
           `os da Enciclopédia têm território real e data histórica. Por isso Modo Cidade responde ` +
           `O QUE EXISTE NO TERRITÓRIO, e não o que está em cartaz esta semana — e nós não ` +
           `fabricamos data para tapar o buraco. Programação futura é exatamente o que chega ` +
-          `quando os produtores publicarem no Studio, que é a tela do Cenário 4.`,
+          `quando os produtores publicarem no Studio, que é a tela do cenário 4.`,
         numeros: [
           String(n.eventosComFuturaETerritorio),
           String(n.eventosComSessaoFutura),
           String(n.eventosComTerritorio),
         ],
-        origem: "derivado do grafo · ocorrenciasDe() + vizinhos(situado_em) sobre os 300 eventos",
+        origem: "derivado do acervo · ocorrenciasDe() + vizinhos(situado_em) sobre os 300 eventos",
       },
       semeadura: {
         visao: "mobile",
@@ -679,7 +679,7 @@ export function montarRoteiro(): RoteiroDTO {
           `exatamente por isso que existe um segundo estágio probabilístico e um desfecho humano ` +
           `em vez de fusão automática. Além disso, ${daOnda("gruposPorChaveEncenados")} dos ` +
           `${daOnda("gruposPorChave")} grupos são ENCENADOS: ` +
-          `${n.arestasDeDuplicataSuspeita} arestas autoradas clonaram eventos reais com variação ` +
+          `${n.arestasDeDuplicataSuspeita} ligações autoradas clonaram eventos reais com variação ` +
           `controlada, e estão marcadas «autorado». Os outros ${daOnda("gruposPorChaveDoAcervo")} o ` +
           `critério encontrou sozinho.`,
         numeros: [
@@ -689,7 +689,7 @@ export function montarRoteiro(): RoteiroDTO {
           String(n.arestasDeDuplicataSuspeita),
         ],
         origem:
-          "chave e arestas derivadas do grafo · grupos e pares de src/dados/duplicatas.ts (constante medida)",
+          "chave e arestas derivadas do acervo · grupos e pares de src/dados/duplicatas.ts (constante medida)",
       },
       semeadura: {
         visao: "web",
@@ -753,7 +753,7 @@ export function montarRoteiro(): RoteiroDTO {
           String(n.eventosComIngressoDeclarado),
           String(n.eventos),
         ],
-        origem: "derivado do grafo · ocorrenciasDe() sobre os 300 eventos",
+        origem: "derivado do acervo · ocorrenciasDe() sobre os 300 eventos",
       },
       semeadura: {
         visao: "web",
@@ -814,7 +814,7 @@ export function montarRoteiro(): RoteiroDTO {
       naoSustenta: {
         texto:
           `«Parecido com» casa por TEXTO, e não por travessia de aresta. Das ` +
-          `${n.arestasDeSemelhancaDaBienal} arestas «semelhante_a» que saem das entidades de ` +
+          `${n.arestasDeSemelhancaDaBienal} ligações «semelhante_a» que saem das entidades de ` +
           `Bienal, a busca alcança ${n.semelhancasAlcancaveis} vizinhos e ` +
           `${n.semelhancasForaDoAlcance} ficam FORA DE ALCANCE — o índice de busca não tem campo ` +
           `de vizinhança, então o resultado é sempre um subconjunto do que casa por título. A tela ` +
@@ -825,7 +825,7 @@ export function montarRoteiro(): RoteiroDTO {
           String(n.semelhancasForaDoAlcance),
           String(n.semelhancasAlcancaveis),
         ],
-        origem: "derivado do grafo · montarVizinhancaDeSemelhanca() sobre a âncora da frase",
+        origem: "derivado do acervo · montarVizinhancaDeSemelhanca() sobre a âncora da frase",
       },
       semeadura: {
         visao: "mobile",

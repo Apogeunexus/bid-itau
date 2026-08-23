@@ -473,7 +473,7 @@ function ordenarBalde(
 
 const MOTIVO_SERENDIPIDADE = (titulo: string): MotivoCartao => ({
   texto:
-    `Fora do seu repertório, de propósito. Nenhuma aresta do acervo liga «${titulo}» ao que ` +
+    `Fora do seu repertório, de propósito. Nenhuma ligação do acervo liga «${titulo}» ao que ` +
     `você já atravessou — este cartão não veio da caminhada, veio de um sorteio determinístico ` +
     `entre o que ela NÃO alcançou.`,
   // Não houve aresta. Carimbar isto de «composto» afirmaria uma relação que não existe.
@@ -524,7 +524,7 @@ function escolherSerendipidade(
 function assinaturaDaCuradoria(trilha: Entidade): string {
   switch (trilha.procedencia) {
     case "autorado":
-      return "Curadoria humana, autorada para este protótipo: escrita à mão, não calculada, e não faz parte do acervo do Itaú Cultural.";
+      return "Curadoria humana, escrita pela curadoria: escrita à mão, não calculada, e não faz parte do acervo do Itaú Cultural.";
     case "ic":
       return "Curadoria publicada pelo Itaú Cultural.";
     case "derivado":

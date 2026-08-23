@@ -159,7 +159,7 @@ export const CONTORNO_BRASIL: readonly ParGeografico[] = [
 export const ROTULO_UNIDADES_FEDERATIVAS =
   "Os 27 polígonos estaduais são esquemáticos e autorados: aproximam a forma de cada " +
   "unidade federativa no traço, o suficiente para localizá-la. A CONTAGEM de cada estado " +
-  "não vem do desenho — vem do grafo, por travessia, e não muda se o traço mudar.";
+  "não vem do desenho — vem do acervo, por travessia, e não muda se o traço mudar.";
 
 export interface UnidadeFederativa {
   sigla: string;

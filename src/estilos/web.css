@@ -270,45 +270,22 @@
 }
 
 /* ---------------------------------------------------------------------------
- * .web-alternador — o grupo de botões que troca RECORTE, não tela (D-84, D-89).
+ * .web-alternador MUDOU DE ENDEREÇO — virou a primitiva `Segmento`, em
+ * `src/componentes/base/segmento.tsx`, com o CSS em `base.css`.
  *
- * Três planos da onda 2 precisam do mesmo gesto: o Observatório troca de público,
- * a Redação troca de escopo de curador, e Acontece troca de recorte da lista. É a
- * mesma superfície servindo escopos diferentes, e por isso o controle é um só,
- * escrito aqui. O estado é `aria-pressed`, que é o atributo que o leitor de tela
- * já entende — não uma classe «ativo» que só o olho enxerga.
+ * A decisão que estava escrita aqui e continua valendo: três telas precisam do
+ * MESMO gesto — o Observatório troca de público, a Redação troca de escopo de
+ * curador, Acontece troca de recorte da lista — e por isso o controle é um só. O
+ * estado é `aria-pressed`, o atributo que o leitor de tela já entende, e não uma
+ * classe «ativo» que só o olho enxerga.
+ *
+ * O que mudou na mudança: o CSS deixou de morar sob `[data-view="web"]`. Aqui
+ * ele só existia na web, então o mesmo JSX na visão app renderizava botões nus
+ * do navegador — invisível porque os três usos ficam escondidos no app, mas era
+ * um defeito esperando alguém pôr o controle numa tela pública. E o selecionado
+ * deixou de ser laranja cheio e virou tinta cheia, igual ao chip: dois controles
+ * com duas gramáticas de «marcado» ensinavam o usuário a duvidar das duas.
  * ------------------------------------------------------------------------ */
-[data-view="web"] .web-alternador {
-  display: inline-flex;
-  gap: 0;
-  padding: 0.25rem;
-  border: var(--web-borda);
-  border-radius: var(--raio-pilula);
-  background: var(--cor-superficie-2);
-}
-
-[data-view="web"] .web-alternador > button {
-  padding: 0.5rem 1rem;
-  border: 0;
-  border-radius: var(--raio-pilula);
-  background: transparent;
-  color: var(--cor-tinta-2);
-  font-size: var(--tipo-detalhe);
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background-color var(--dur-1) var(--ease-padrao),
-    color var(--dur-1) var(--ease-padrao);
-}
-
-[data-view="web"] .web-alternador > button:hover {
-  color: var(--cor-tinta);
-}
-
-[data-view="web"] .web-alternador > button[aria-pressed="true"] {
-  background: var(--cor-acao);
-  color: var(--cor-sobre-acao);
-}
 
 /* ---------------------------------------------------------------------------
  * .web-lista-densa — lista longa que rola por dentro, ao lado de outra coisa.

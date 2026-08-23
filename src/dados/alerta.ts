@@ -220,7 +220,7 @@ function informanteDe(evento: Entidade): { nome: string; doAcervo: boolean } {
 
   return {
     nome:
-      "Informante autorado para o protótipo — o acervo não liga nenhuma instituição a " +
+      "Informante escrito pela curadoria — o acervo não liga nenhuma instituição a " +
       "este evento pela relação «realiza», e nós não inventamos nome de produtora",
     doAcervo: false,
   };
@@ -231,7 +231,7 @@ function informanteDe(evento: Entidade): { nome: string; doAcervo: boolean } {
 // ---------------------------------------------------------------------------
 
 const FRASE_DO_ROTULO =
-  "Alteração autorada para este protótipo. Nenhum sistema do Itaú Cultural publica " +
+  "Alteração escrita pela curadoria. Nenhum sistema do Itaú Cultural publica " +
   "histórico de mudança de sessão: as 2.425 ocorrências deste grafo são derivadas do " +
   "período real do evento e nenhuma delas registra alteração. A sessão é real e a data é " +
   "real; a mudança é nossa, e aparece rotulada em vez de passar por dado do acervo — é " +
@@ -273,7 +273,7 @@ function montar(
   paraValor: (o: Ocorrencia) => string,
 ): AlteracaoAutorada {
   const evento = porId(eventoId);
-  if (!evento) romper(`o evento «${eventoId}» não existe mais no grafo`);
+  if (!evento) romper(`o evento «${eventoId}» não existe mais no acervo`);
 
   const futuras = sessoesFuturas(eventoId, hoje);
   const alvo = futuras[0];
@@ -383,7 +383,7 @@ export function parDeDemonstracao({
   hoje = DATA_DE_REFERENCIA,
 }: { hoje?: string } = {}): ParDeDemonstracao {
   const evento = porId(EVENTO_DO_PAR);
-  if (!evento) romper(`o evento do par «${EVENTO_DO_PAR}» não existe mais no grafo`);
+  if (!evento) romper(`o evento do par «${EVENTO_DO_PAR}» não existe mais no acervo`);
   if (evento.procedencia === "autorado" || evento.clonadoDe) {
     romper(`o evento do par «${EVENTO_DO_PAR}» virou duplicata encenada`);
   }

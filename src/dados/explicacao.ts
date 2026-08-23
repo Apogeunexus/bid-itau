@@ -351,7 +351,7 @@ export function explicacaoDe(entidadeId: string, personaId: string): ExplicacaoD
       rotulo: serendipidade ? "sorteio fora do repertório" : "fora do alcance desta persona",
       tipo: "fora-da-caminhada",
       detalhe: serendipidade
-        ? "Nenhuma aresta do acervo liga este item ao que você já atravessou. Ele entrou por um sorteio determinístico entre o que a caminhada NÃO alcançou (D-30)."
+        ? "Nenhuma ligação do acervo liga este item ao que você já atravessou. Ele entrou por um sorteio determinístico entre o que a caminhada NÃO alcançou."
         : "Nenhum caminho de até dois saltos parte do repertório desta persona até este item. Ele apareceu no feed de outra persona.",
     });
   }

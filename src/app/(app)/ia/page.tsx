@@ -31,10 +31,9 @@ export default function Ia() {
         </p>
         {/* PRODUTO, não comentário: a simulação declarada é o argumento. */}
         <p className="max-w-prose rounded-m border border-borda bg-superficie-2 px-3 py-2 text-sm leading-snug">
-          <strong>Assistente simulado:</strong> nenhum modelo de IA é chamado. Cada
-          combinação de respostas é uma página montada no build por regras determinísticas
-          sobre o grafo — as regras ficam impressas no roteiro, e é isso que faz dele uma
-          recomendação explicável em vez de uma caixa-preta.
+          <strong>Nenhum modelo de IA é chamado aqui.</strong> Cada resposta sua estreita o
+          roteiro por regras fixas, e as regras vêm escritas no resultado — dá para conferir
+          por que cada item entrou, em vez de aceitar uma caixa-preta.
         </p>
         <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
           São {milhar(cidades.length * OPCOES_DE_DIAS.length * GOSTOS.length)} combinações

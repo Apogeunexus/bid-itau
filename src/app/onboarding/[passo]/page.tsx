@@ -25,7 +25,7 @@ const PASSOS = {
     titulo: "Onboarding 2 — território e alcance",
     camada: "C3" as const,
     objetivo:
-      "Saber de onde a pessoa parte, sem pedir endereço: cidade atual, raio em tempo e não em quilômetros, e o alternador «estou de viagem» — é por aqui que o Cenário 2 entra.",
+      "Saber de onde a pessoa parte, sem pedir endereço: cidade atual, raio em tempo e não em quilômetros, e o alternador «estou de viagem» — é por aqui que o cenário 2 entra.",
     blocos: [
       "cidade atual, com correção manual",
       "raio de deslocamento em tempo — até 30 min",
@@ -58,8 +58,7 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
 
   return (
     <TelaEsqueleto
-      nome={conteudo.titulo}
-      camada={conteudo.camada}
+      nome={conteudo.titulo}
       objetivo={conteudo.objetivo}
       acoes={
         <>

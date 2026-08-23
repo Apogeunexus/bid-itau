@@ -194,7 +194,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
       {/* 2 — O CAMINHO. É o miolo da tela. --------------------------------- */}
       <section className="flex flex-col gap-1.5">
         <h2 className="text-[0.65rem] font-bold tracking-widest text-tinta-3 uppercase">
-          {ativo?.doFeed ? "O caminho que trouxe este cartão" : "O caminho no grafo"}
+          {ativo?.doFeed ? "O caminho que trouxe este cartão" : "O caminho no acervo"}
         </h2>
 
         {ativo ? (

@@ -301,7 +301,7 @@ export function Produtor({
     `Os com evento datado são ${numeros.comEventoDatado} porque as duas metades do acervo não ` +
     `se tocam: as sessões vêm da agenda do site, e os 100 registros de lá chegam sem agente ` +
     `nenhum. Programação futura é o que entra por aqui quando o produtor publicar no Studio. ` +
-    `Não inventamos a aresta que encheria este bloco.`;
+    `Não inventamos a ligação que encheria este bloco.`;
 
   return (
     <div className="pr-tela flex flex-col gap-6 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
@@ -351,7 +351,7 @@ export function Produtor({
           <BlocoAusenciaDeclarada
             chave="territorio"
             rotulo="Território e espaço"
-            frase={`O acervo não situa esta entrada em nenhum território. ${numeros.comTerritorio} dos ${numeros.total} produtores têm território por ${numeros.arestasTerritorio} arestas «situado_em» — os ${numeros.espacos} espaços, todos, e ${numeros.comTerritorio - numeros.espacos} das ${numeros.instituicoes} instituições.`}
+            frase={`O acervo não situa esta entrada em nenhum território. ${numeros.comTerritorio} dos ${numeros.total} produtores têm território por ${numeros.arestasTerritorio} ligações «situado_em» — os ${numeros.espacos} espaços, todos, e ${numeros.comTerritorio - numeros.espacos} das ${numeros.instituicoes} instituições.`}
           />
         )}
       </section>
@@ -407,14 +407,14 @@ export function Produtor({
         }
         frase={
           ehEspaco
-            ? `O acervo não situa nenhum evento neste espaço. ${numeros.comAcolhe} dos ${numeros.espacos} espaços acolhem ao menos um, por ${numeros.arestasAcolhe} arestas «situado_em» chegando.`
-            : `O registro do Itaú Cultural não atribui a realização de nenhum evento a esta entrada. ${numeros.comRealiza} das ${numeros.instituicoes} instituições realizam ao menos um, por ${numeros.arestasRealiza} arestas «realiza».`
+            ? `O acervo não situa nenhum evento neste espaço. ${numeros.comAcolhe} dos ${numeros.espacos} espaços acolhem ao menos um, por ${numeros.arestasAcolhe} ligações «situado_em» chegando.`
+            : `O registro do Itaú Cultural não atribui a realização de nenhum evento a esta entrada. ${numeros.comRealiza} das ${numeros.instituicoes} instituições realizam ao menos um, por ${numeros.arestasRealiza} ligações «realiza».`
         }
       >
         <p className="text-xs leading-relaxed text-tinta-2">
           {ehEspaco
-            ? "Eventos que o acervo situa neste espaço pela aresta «situado_em». São registros históricos: nenhum deles tem sessão datada."
-            : "Eventos atribuídos a esta entrada pela aresta «realiza». São registros históricos da Enciclopédia: nenhum deles tem sessão datada."}
+            ? "Eventos que o acervo situa neste espaço pela ligação «situado_em». São registros históricos: nenhum deles tem sessão datada."
+            : "Eventos atribuídos a esta entrada pela ligação «realiza». São registros históricos da Enciclopédia: nenhum deles tem sessão datada."}
         </p>
         <ul className="flex flex-col">
           {produtor.realiza.map((e) => (
@@ -449,11 +449,11 @@ export function Produtor({
         rotulo="Pessoas ligadas"
         vazio={produtor.pessoasTotal === 0}
         contagem={produtor.pessoasTotal === 1 ? "1 pessoa" : `${produtor.pessoasTotal} pessoas`}
-        frase={`Nenhuma pessoa do acervo é alcançável a partir desta entrada. Produtor não tem aresta de atuação: a ligação com gente existe só pelos eventos, a dois saltos, e ${numeros.comPessoas} dos ${numeros.total} produtores chegam assim a ao menos uma pessoa. Não completamos a lista, porque escrever aqui um nome que o acervo não liga a esta entrada seria inventar uma participação.`}
+        frase={`Nenhuma pessoa do acervo é alcançável a partir desta entrada. Produtor não tem ligação de atuação: a ligação com gente existe só pelos eventos, a dois saltos, e ${numeros.comPessoas} dos ${numeros.total} produtores chegam assim a ao menos uma pessoa. Não completamos a lista, porque escrever aqui um nome que o acervo não liga a esta entrada seria inventar uma participação.`}
       >
         <p className="text-xs leading-relaxed text-tinta-2">
           Alcançadas a dois saltos: quem atua nos eventos que esta entrada{" "}
-          {ehEspaco ? "acolhe" : "realiza"}. O papel de cada uma vem da aresta de atuação,
+          {ehEspaco ? "acolhe" : "realiza"}. O papel de cada uma vem da ligação de atuação,
           não de um campo do agente.
         </p>
         <ul className="flex flex-col">
@@ -480,7 +480,7 @@ export function Produtor({
             ? "1 linguagem"
             : `${linguagensConhecidas.length} linguagens`
         }
-        frase={`Esta entrada não declara linguagem artística; ${numeros.comLinguagem} dos ${numeros.total} produtores declaram, por ${numeros.arestasLinguagem} arestas «pertence_a». São todas instituições: nenhum dos ${numeros.espacos} espaços do acervo declara linguagem, e isso é da fonte — um espaço recebe o que for programado nele.`}
+        frase={`Esta entrada não declara linguagem artística; ${numeros.comLinguagem} dos ${numeros.total} produtores declaram, por ${numeros.arestasLinguagem} ligações «pertence_a». São todas instituições: nenhum dos ${numeros.espacos} espaços do acervo declara linguagem, e isso é da fonte — um espaço recebe o que for programado nele.`}
       >
         <SelosDeLinguagem ids={produtor.linguagens} />
       </BlocoDoProdutor>
@@ -499,9 +499,9 @@ export function Produtor({
       </section>
 
       <p className="pr-rodape border-t border-borda pt-3 text-xs leading-relaxed text-tinta-3">
-        Todo vínculo desta página é uma aresta do grafo do acervo, conferível uma a uma.
+        Todo vínculo desta página vem do acervo, conferível uma a uma.
         Onde um bloco declara ausência, é o registro do Itaú Cultural que não publica o
-        dado — nada foi preenchido no lugar dele, e nenhuma aresta foi autorada para
+        dado — nada foi preenchido no lugar dele, e nenhuma ligação foi autorada para
         completar o que a fonte não afirma.
       </p>
     </div>

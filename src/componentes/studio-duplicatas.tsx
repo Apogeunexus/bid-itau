@@ -611,7 +611,7 @@ export function StudioDuplicatas({
             <div className="studio-painel-cabeca">
               <span className="studio-painel-nome">O colapso, contado</span>
               <Comentario como="span" className="studio-rotulo">
-                Cenário 3 · D-77
+                cenário 3 · D-77
               </Comentario>
             </div>
 
@@ -634,7 +634,7 @@ export function StudioDuplicatas({
                 <strong>{numeros.gruposEncenadosNaFila} são encenados</strong>: eventos
                 clonados de eventos reais com variação controlada — caixa do título, prefixo
                 do produtor, sufixo de edição —, marcados{" "}
-                <code className="studio-literal">autorado</code> e criados para o Cenário 3.
+                <code className="studio-literal">autorado</code> e criados para o cenário 3.
                 Outros <strong>{numeros.gruposDoAcervoNaFila} não têm clone nenhum</strong>:
                 o critério os achou sozinho no acervo. Os{" "}
                 {numeros.gruposCruzadosNaFila} restantes são clone emparelhado com um evento
@@ -751,7 +751,7 @@ export function StudioDuplicatas({
                   suspeita vira afirmação, e a afirmação tem direção.
                 </li>
                 <li>
-                  <strong>Este protótipo não tem escrita.</strong> Nenhuma aresta do grafo
+                  <strong>Este protótipo não tem escrita.</strong> Nenhuma ligação do acervo
                   muda quando o botão é apertado: a decisão é registrada na sessão do
                   navegador e desaparece ao recarregar. O que esta tela demonstra é a{" "}
                   <strong>forma</strong> da decisão e o que ela produziria num sistema com

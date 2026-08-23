@@ -86,7 +86,7 @@ function gravarRascunho(passos: PassoDoEditor[]) {
 }
 
 const ROTULO_ORIGEM_MOTIVO: Record<PassoDoEditor["origemMotivo"], string> = {
-  escrito: "motivo escrito na aresta do acervo",
+  escrito: "motivo escrito na ligação do acervo",
   composto: "motivo composto a partir da relação",
   "sem-aresta": "não há aresta entre os dois nós",
 };
@@ -515,7 +515,7 @@ export function RedacaoTrilha({
                     {p.procedenciaAresta ? ` · procedência ${p.procedenciaAresta}` : ""}
                     {p.doAcervo
                       ? ""
-                      : " · passo acrescentado agora: nenhuma aresta do grafo liga estes dois nós, e o motivo é texto da curadoria"}
+                      : " · passo acrescentado agora: nenhuma ligação do acervo liga estes dois nós, e o motivo é texto da curadoria"}
                   </p>
                 </li>
               ))}
@@ -524,7 +524,7 @@ export function RedacaoTrilha({
             <Comentario className="studio-nota">
               `origemMotivo` está na tela porque um motivo escrito no acervo e um composto a
               partir da relação não são a mesma coisa, e a distinção já existe no tipo
-              (D-37). Apagá-la aqui faria a curadoria assinar como escrito o que foi
+             . Apagá-la aqui faria a curadoria assinar como escrito o que foi
               derivado.
             </Comentario>
           </section>

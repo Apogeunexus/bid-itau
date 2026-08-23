@@ -10,7 +10,7 @@
  *
  * ONDE ISTO FICA HONESTO OU DESONESTO: dos três cortes de DESC-01, o acervo sustenta
  * um. Gratuidade existe (`Ocorrencia.gratuito`). **Duração e faixa etária não existem em
- * campo nenhum do grafo** — nem no CMS, nem na Enciclopédia, nem nas 7.810 entidades
+ * campo nenhum do grafo** — nem no CMS, nem na Enciclopédia, nem nos 7.810 registros
  * geradas. Um proxy ("evento de música dura pouco", "espetáculo infantil é o que tem
  * 'infantil' no título") seria inventar dado e apresentá-lo como filtro. Por isso os
  * predicados dessas duas devolvem `indeterminado`, o motor emite aviso, e a tela mostra
@@ -124,7 +124,7 @@ export const DISPOSICOES: Disposicao[] = [
     procedencia: "autorado",
     explicacao:
       "Promove o que está a dois saltos do seu repertório e o que vem de classe pouco frequente no feed.",
-    campoLido: "distância no grafo (saltos) e raridade da classe entre os candidatos",
+    campoLido: "distância no acervo (saltos) e raridade da classe entre os candidatos",
     ausencia: null,
   },
   {

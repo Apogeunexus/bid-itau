@@ -50,8 +50,8 @@ export default function Descobrir() {
             Nada disso é dito a quem usa o app — para essa pessoa, quem faz o trabalho é o
             selo de motivo de cada cartão, que continua na tela nos dois modos. */}
         <Comentario className="text-sm leading-snug text-tinta-2">
-          Levar, não fazer buscar. Cada cartão abaixo chegou por uma aresta do acervo, e o selo
-          laranja é o texto dessa aresta — nada aqui é ordenado por popularidade.
+          Levar, não fazer buscar. Cada cartão abaixo chegou por uma ligação do acervo, e o selo
+          laranja é o texto dessa ligação — nada aqui é ordenado por popularidade.
         </Comentario>
       </header>
 

@@ -174,7 +174,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
         <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
           Evento, temporada e ocorrência são três registros próprios, cada um com id no
           grafo (DADO-02). Colapsá-los num array aninhado dentro do evento é o que faz
-          agenda cultural virar catálogo — e é o que tornaria o Cenário 4 do RFP
+          agenda cultural virar catálogo — e é o que tornaria o cenário 4 do RFP
           impossível de demonstrar, porque não haveria a quem dirigir o alerta.
         </Comentario>
       </header>
@@ -335,7 +335,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
         </p>
 
         <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
-          Estes quatro campos existem no modelo e continuam visíveis mesmo vazios (D-51).
+          Estes quatro campos existem no modelo e continuam visíveis mesmo vazios.
           Campo que some vira bloco que some, e bloco que some faz parecer que a categoria
           não existe no produto — quando o que não existe é o dado na fonte.
         </Comentario>

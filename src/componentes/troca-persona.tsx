@@ -56,7 +56,7 @@ export function TrocaPersona({ className }: { className?: string }) {
           foi feita, que é assunto de quem avalia a arquitetura, não de quem troca de
           persona. */}
       <p className="text-[0.65rem] leading-snug text-tinta-3">
-        Persona é dado autorado para o protótipo.
+        Persona é dado escrito pela curadoria.
         <Comentario como="span">
           {" "}
           Trocar aqui remonta o feed na hora — as três caminhadas foram montadas no build,

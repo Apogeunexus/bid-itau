@@ -37,7 +37,7 @@ export default function StudioPublicar() {
           obrigatória.
         </p>
         <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
-          A checagem de duplicata roda contra os {eventos.length} eventos reais do grafo,
+          A checagem de duplicata roda contra os {eventos.length} eventos reais do acervo,
           com a normalização do índice de busca — digite «Bienal» no título para vê-la
           disparar. Publicar não persiste: o protótipo é estático, e o registro que seria
           enviado aparece na tela com o limite declarado.

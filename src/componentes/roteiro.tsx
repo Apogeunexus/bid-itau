@@ -283,7 +283,7 @@ export function Roteiro({ roteiro }: { roteiro: RoteiroDTO }) {
 
         <Comentario como="div" className="rot-constantes">
           <p className="rot-constantes-nota">
-            Os números dos Cenários 3 e 4 que este módulo não deriva do grafo estão declarados
+            Os números dos Cenários 3 e 4 que este módulo não deriva do acervo estão declarados
             como constante medida, com o arquivo que os calcula nomeado ao lado. O plano 04-04
             não importa <code>duplicatas.ts</code> nem <code>ocorrencias-studio.ts</code> de
             propósito — eles são escritos na mesma onda, e um import os tornaria dependência de

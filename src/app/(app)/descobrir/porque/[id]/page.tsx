@@ -52,7 +52,7 @@ export default async function PaginaPorque({ params }: { params: Promise<{ id: s
           className="mt-auto border-t-2 border-acao pt-2 text-[0.7rem] leading-snug text-tinta-2"
         >
           <strong className="font-bold">Nenhuma decisão editorial foi tomada por IA.</strong> O
-          caminho mostrado nesta tela é travessia determinística no grafo do acervo, e o
+          caminho mostrado nesta tela é travessia determinística no acervo, e o
           destaque curado é humano e assinado.
         </p>
       </div>

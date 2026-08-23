@@ -356,7 +356,7 @@ export function Salvos({
           </p>
 
           <button type="button" data-semear-cenario-4 className="salvos-semear" onClick={semear}>
-            Ver o Cenário 4 com o par de exemplo
+            Ver o cenário 4 com o par de exemplo
           </button>
 
           <p className="text-xs leading-snug text-tinta-2">
@@ -369,7 +369,7 @@ export function Salvos({
 
           <Comentario className="text-[0.68rem] leading-snug text-tinta-3">
             O par é fixo no dado, escolhido por regra declarada e travado em constante: uma
-            regeração do grafo que mude o conjunto faz o build quebrar com mensagem nomeada,
+            regeração do acervo que mude o conjunto faz o build quebrar com mensagem nomeada,
             em vez de trocar o roteiro da banca em silêncio.
           </Comentario>
         </div>
@@ -378,7 +378,7 @@ export function Salvos({
       {/* ---- 6. As gavetas que a tela 23 prevê, declaradas em vez de criadas vazias ---- */}
       <p className="salvos-declarado">
         <strong className="font-bold">Eventos salvos sem sessão escolhida</strong> não
-        existem aqui: neste protótipo salvar é sempre de uma ocorrência (D-56), porque é a
+        existem aqui: aqui salvar é sempre de uma sessão, porque é a
         ocorrência que uma mudança de horário atinge. Um evento salvo «em geral» não teria a
         quem endereçar o aviso.{" "}
         <strong className="font-bold">

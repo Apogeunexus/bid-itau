@@ -69,7 +69,7 @@ function dataCurta(iso: string): string {
 export const CURADOR_AUTORADO = "Redação · curadoria editorial (perfil autorado)";
 
 export const CURADOR_E_AUTORADO =
-  "Não há autenticação neste protótipo (D-25). O nome de quem decide é autorado e aparece " +
+  "Não há autenticação neste protótipo. O nome de quem decide é autorado e aparece " +
   "rotulado, em vez de simular um login: o que esta tela precisa provar é que toda decisão " +
   "fica registrada com autor e carimbo, e não que sabemos quem está do outro lado. O " +
   `carimbo é derivado da data de referência do build (${DATA_DE_REFERENCIA}), nunca do ` +
@@ -247,7 +247,7 @@ export const ORIGENS_DECLARADAS: readonly OrigemDeclarada[] = [
       "Entidade de outra classe alcançada, a partir de um evento já na fila, por aresta " +
       "editorial (`aprofunda`, `fala_sobre`, `dialoga_com` ou `semelhante_a`). A IA " +
       "propõe publicá-la como aprofundamento daquele evento — e por ser proposta, e não " +
-      "afirmação, ela vem com score de confiança visível (D-82).",
+      "afirmação, ela vem com score de confiança visível.",
     temScore: true,
   },
 ];
@@ -375,7 +375,7 @@ export const REGRA_DA_AMOSTRAGEM =
   "acervo, não `localeCompare` e não índice de array. Produtor e ingestão tomam um a cada N " +
   "com passo fixo sobre essa ordem. A IA usa RODÍZIO ENTRE AS FAIXAS DE SCORE: as faixas " +
   "são percorridas em ordem crescente e cada volta tira de cada faixa o próximo candidato " +
-  "por id, até completar a cota. Duas gerações do grafo com o mesmo dado produzem a mesma " +
+  "por id, até completar a cota. Duas gerações do acervo com o mesmo dado produzem a mesma " +
   "fila.";
 
 export const POR_QUE_RODIZIO_NA_IA =
@@ -730,7 +730,7 @@ export const ACOES_DA_REDACAO: readonly AcaoDeclarada[] = [
       "Barra o item, e EXIGE motivo escrito — o botão de confirmar não conclui com o campo " +
       "vazio. Um veto sem motivo registrado é moderação silenciosa: some da fila e ninguém " +
       "consegue dizer por quê. É a única ação em que o campo é obrigatório, e a diferença " +
-      "é o argumento (D-83).",
+      "é o argumento.",
   },
   {
     id: "devolver",
@@ -781,7 +781,7 @@ export function declaracoesDaRedacao(): DeclaracaoDaRedacao[] {
     {
       campo: "data de entrada na fila",
       texto:
-        "Nenhuma entidade do acervo carrega data de submissão, então a fila não ordena por " +
+        "Nenhuma registro do acervo carrega data de submissão, então a fila não ordena por " +
         "«mais antigo primeiro». A ordem é a da regra de amostragem declarada, e a tela diz " +
         "isso em vez de exibir uma antiguidade que não existe.",
     },
@@ -855,7 +855,7 @@ export function passosParaEditor(slug: string): PassoDoEditor[] {
   if (!completa) {
     throw new Error(
       `redacao.ts: nenhuma trilha do acervo responde por «${slug}». O editor de trilha da ` +
-        "tela 35 abre sobre a trilha existente do grafo, e uma trilha ausente aqui " +
+        "tela 35 abre sobre a trilha existente do acervo, e uma trilha ausente aqui " +
         "significa que a fonte mudou por baixo — melhor parar de compilar que abrir um " +
         "editor vazio que parece funcionar.",
     );
@@ -869,7 +869,7 @@ export function passosParaEditor(slug: string): PassoDoEditor[] {
       throw new Error(
         `redacao.ts: o passo ${p.ordem} da trilha «${slug}» chegou com motivo vazio. ` +
           "`PassoTrilha.motivo` é documentado como nunca vazio e é ele que vira o selo " +
-          "público em /trilha/[slug]/ (D-85). Um motivo vazio aqui publicaria um selo em " +
+          "público em /trilha/[slug]/. Um motivo vazio aqui publicaria um selo em " +
           "branco. CORRIJA a fonte em trilha.ts/motivo.ts — não relaxe esta conferência.",
       );
     }
@@ -906,7 +906,7 @@ export function slugDaTrilhaDoEditor(): string {
 export function trilhaParaEditor(slug: string): TrilhaDoEditor {
   const completa = trilhaCompletaPorSlug(slug);
   if (!completa) {
-    throw new Error(`redacao.ts: trilha «${slug}» não existe no grafo.`);
+    throw new Error(`redacao.ts: trilha «${slug}» não existe no acervo.`);
   }
   const pub = trilhaEhPublicavel(completa.id);
   return {
@@ -958,9 +958,9 @@ export interface SugestaoDeProximoPasso {
 export const REGRA_DA_SUGESTAO =
   "A sugestão de próximo passo é TRAVESSIA DO GRAFO, não modelo: a partir do último nó da " +
   "cadeia, o vizinho de maior preferência de relação que ainda não está na trilha, com a " +
-  "frase da própria aresta como justificativa. É determinística — a mesma trilha produz " +
+  "frase da própria ligação como justificativa. É determinística — a mesma trilha produz " +
   "sempre a mesma sugestão — e é sempre descartável: nenhuma sugestão entra na trilha sem " +
-  "um clique humano (D-86).";
+  "um clique humano.";
 
 export function sugestaoDeProximoPasso(slug: string): SugestaoDeProximoPasso | null {
   const passos = passosParaEditor(slug);
@@ -1060,7 +1060,7 @@ export const REGRA_DO_CATALOGO =
   `O grafo tem ${comPonto(TOTAL_DE_ENTIDADES)} entidades e mandar todas ao navegador ` +
   "estoura o orçamento de 60 KB deste plano por uma ordem de grandeza. O catálogo recorta " +
   "por regra declarada — entidade " +
-  "com resumo de pelo menos 60 caracteres e grau 2 ou mais no grafo, para o curador poder " +
+  "com resumo de pelo menos 60 caracteres e grau 2 ou mais no acervo, para o curador poder " +
   "julgar o candidato e para o passo ter ponte de onde sair — e depois amostra com passo " +
   "fixo sobre a ordem de `id`, atravessando todas as classes. A tela diz «N de " +
   `${comPonto(TOTAL_DE_ENTIDADES)}», e não «o grafo completo»: dizer «completo» sobre um ` +

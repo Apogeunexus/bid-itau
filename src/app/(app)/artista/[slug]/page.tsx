@@ -113,7 +113,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
                 {/* A frase é produto — declara uma ausência do acervo, da mesma família
                     dos rótulos de procedência. Só o número da decisão sai de cena. */}
                 O acervo não atribui nenhum papel a esta entrada: papel é propriedade da
-                aresta de atuação<Comentario como="span"> (D-41)</Comentario>, e não há
+                ligação de atuação<Comentario como="span"> (D-41)</Comentario>, e não há
                 nenhuma partindo daqui.
               </p>
             )}
@@ -156,7 +156,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
       <div className="flex flex-col gap-6 desk:grid desk:grid-cols-2 desk:items-start">
         <section className="flex flex-col gap-4">
           <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
-            Com quem dialoga no grafo
+            Com quem dialoga no acervo
           </h2>
           {semelhante ? <BlocoPonte grupo={semelhante} /> : null}
           {dialoga ? <BlocoPonte grupo={dialoga} /> : null}
@@ -173,8 +173,8 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
       </div>
 
       <p className="border-t border-borda pt-3 text-xs leading-relaxed text-tinta-3">
-        Todo vínculo desta página é uma aresta do grafo do acervo, e o papel de cada um vem
-        da própria aresta. Onde o bloco declara ausência, é o registro do Itaú Cultural que
+        Todo vínculo desta página vem do acervo, e o papel de cada um vem
+        da própria ligação. Onde o bloco declara ausência, é o registro do Itaú Cultural que
         não publica o dado — nada foi preenchido no lugar dele.
       </p>
     </div>

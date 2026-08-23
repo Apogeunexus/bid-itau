@@ -62,7 +62,7 @@ const HORA_DO_CARIMBO = "09:40";
 export const OPERADOR_DO_STUDIO = "Operação de programação (perfil autorado)";
 
 export const OPERADOR_E_AUTORADO =
-  "Não há autenticação neste protótipo (D-25). O nome de quem alterou é autorado e aparece " +
+  "Não há autenticação neste protótipo. O nome de quem alterou é autorado e aparece " +
   "rotulado, em vez de simular um login: o que a tela precisa provar é que a alteração fica " +
   "registrada com autor e carimbo, e não que sabemos quem está do outro lado. O carimbo é " +
   `derivado da data de referência do build (${DATA_DE_REFERENCIA}), nunca do relógio de quem ` +
@@ -489,7 +489,7 @@ export function declaracoesDoQueNaoSustenta(): DeclaracaoHonesta[] {
       rotulo: "o Studio opera sobre 129 eventos",
       texto:
         `O seletor traz ${comSeparador(n.eventosComSessao)} eventos, e não os ` +
-        `${comSeparador(n.eventos)} do grafo: são os do CMS que têm sessão. As entidades da ` +
+        `${comSeparador(n.eventos)} do acervo: são os do CMS que têm sessão. As entidades da ` +
         `Enciclopédia devolvem zero ocorrências — elas são o acervo histórico, sem programação ` +
         `datada — e por isso ficam de fora, dito e não escondido. Gestão de ocorrência sobre ` +
         `evento sem ocorrência é tela vazia com aparência de defeito.`,

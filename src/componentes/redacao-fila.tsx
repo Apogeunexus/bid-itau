@@ -377,7 +377,7 @@ export function RedacaoFila({
         <Comentario className="studio-nota">
           O escopo troca o RECORTE, não a tela e não a URL — é a mesma superfície servindo
           cortes diferentes, e é essa propriedade que responde ao «como crescer sem
-          reescrever a plataforma» do RFP (D-84, D-89). Uma redação regional e uma redação
+          reescrever a plataforma» do RFP. Uma redação regional e uma redação
           nacional operam este mesmo arquivo.
         </Comentario>
       </header>
@@ -555,8 +555,8 @@ export function RedacaoFila({
                     <span>{item.sugestao.motivo}</span>
                   </p>
                   <p className="studio-nota">
-                    Travessia do grafo a partir de «{item.sugestao.deTitulo}», pela relação
-                    «{item.sugestao.relacao}». A frase acima é a da própria aresta, com
+                    Travessia do acervo a partir de «{item.sugestao.deTitulo}», pela relação
+                    «{item.sugestao.relacao}». A frase acima é a da própria ligação, com
                     procedência {item.sugestao.procedenciaAresta} — a IA não a escreveu.
                   </p>
                 </div>

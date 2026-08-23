@@ -32,7 +32,7 @@ export default function MapaDeRepertorio() {
         <Comentario className="max-w-prose text-sm text-tinta-2">
           O perfil como mapa do que a pessoa atravessou, não como configurações: as
           linguagens já experimentadas, com peso, e o que está adjacente a exatamente um
-          passo — calculado no grafo, não escrito à mão.
+          passo — calculado no acervo, não escrito à mão.
         </Comentario>
         <Link
           href="/meu/"

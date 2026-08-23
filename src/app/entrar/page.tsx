@@ -17,7 +17,6 @@ export default function Entrar() {
   return (
     <TelaEsqueleto
       nome="Entrada"
-      camada="C1"
       objetivo="Ser a primeira parte da experiência, não um pedágio antes dela: marca sobre imagem do acervo, a frase de proposta e a escolha de quem está entrando."
     >
       <EsqueletoBloco altura="9rem" rotulo="imagem do acervo, com a marca por cima" />

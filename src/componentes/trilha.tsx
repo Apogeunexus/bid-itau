@@ -131,7 +131,7 @@ function No({ no, papel }: { no: NonNullable<PassoTrilha["de"]>; papel: string }
           {corpo}
           {/* Sem rota nesta fase, e a tela diz isso em vez de fingir um link morto. */}
           <span className="mt-1 block text-[0.65rem] leading-snug text-tinta-3">
-            verbete sem rota própria nesta fase — a ponte é a aresta, não o link
+            verbete sem rota própria  — a ponte é a ligação, não o link
           </span>
         </>
       )}
@@ -209,7 +209,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
           {final.sessoes.length === 1 ? "sessão" : "sessões"} sem espaço declarado.
           <Comentario como="span">
             {" "}
-            Nenhuma das 2.425 ocorrências do grafo tem espaço — é a mesma disjunção entre
+            Nenhuma das 2.425 ocorrências do acervo tem espaço — é a mesma disjunção entre
             território e data que a fase 1 registrou, e ela alcança esta tela.
           </Comentario>
         </p>
@@ -315,14 +315,14 @@ function Passo({ passo, total }: { passo: PassoTrilha; total: number }) {
       >
         <p className="flex flex-wrap items-center gap-1.5 text-xs font-bold">
           <span className="rounded-full border border-acao px-2 py-0.5 text-[0.65rem] tracking-wide text-acao-tinta uppercase">
-            {procedencia ?? "sem aresta"}
+            {procedencia ?? "sem ligação"}
           </span>
           {procedencia ? ROTULO_PROCEDENCIA[procedencia] : "os dois passos não estão ligados"}
         </p>
         <p className="text-[0.7rem] leading-snug text-tinta-2">
           {procedencia
             ? explicarProcedencia(procedencia, passo.de.titulo, passo.para.titulo)
-            : "A ordem é a autorada na trilha, mas nenhuma aresta do grafo liga estes dois nós. O passo aparece declarado, sem ponte."}
+            : "A ordem é a autorada na trilha, mas nenhuma ligação do acervo liga estes dois nós. O passo aparece declarado, sem ponte."}
         </p>
         <p className="text-[0.65rem] text-tinta-3">
           {passo.relacao ? `relação «${passo.relacao}» · ` : ""}
@@ -367,7 +367,7 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
               quem usa e informativa só para quem avalia o modelo. */}
           <Comentario como="span">
             {" "}
-            Cada passo abaixo é uma aresta do grafo: de onde veio, para onde vai e por quê.
+            Cada passo abaixo é uma ligação do acervo: de onde veio, para onde vai e por quê.
           </Comentario>
         </p>
       </header>

@@ -610,6 +610,61 @@ body {
   background: var(--cor-chip);
 }
 
+/* ---------------------------------------------------------------------------
+ * SEGMENTO — `src/componentes/base/segmento.tsx`.
+ *
+ * UMA pílula com divisões dentro, e não pílulas soltas. A forma carrega a
+ * semântica: chip é escolha múltipla e opcional, segmento é escolha exclusiva e
+ * obrigatória. Ver o cabeçalho do componente.
+ *
+ * Sem `[data-view="web"]`, ao contrário do `.web-alternador` que ele substitui:
+ * aquele só tinha regra na web, e na visão app o mesmo JSX renderizava botões
+ * nus do navegador. Ninguém tinha visto porque os três usos ficam escondidos no
+ * app — era um defeito esperando alguém pôr o controle numa tela pública.
+ * ------------------------------------------------------------------------- */
+.segmento {
+  display: inline-flex;
+  gap: 0;
+  padding: 0.25rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie-2);
+}
+
+.segmento-opcao {
+  border: 0;
+  border-radius: var(--raio-pilula);
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-1) var(--ease-padrao),
+    color var(--dur-1) var(--ease-padrao);
+}
+
+.segmento-opcao:hover {
+  color: var(--cor-tinta);
+}
+
+.segmento-opcao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* TINTA CHEIA, o mesmo «selecionado» do chip. O `.web-alternador` preenchia de
+   laranja, e o resultado era o produto ensinando duas gramáticas: num controle
+   «marcado» era laranja, no outro era preto. Um vocabulário só — e o laranja
+   volta a significar só AÇÃO, que é o princípio 2. */
+.segmento-opcao[aria-pressed="true"] {
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
+  font-weight: 700;
+}
+
 /* Cartão grande de disposição — tela 2, DESC-01. */
 .cartao-disposicao {
   display: flex;

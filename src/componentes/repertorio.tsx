@@ -313,7 +313,7 @@ export function TelaRepertorio({
             diretos») e contrasta com o motor da outra tela. A frase em destaque acima já diz
             a mesma coisa em português para quem usa; esta diz COMO ela foi calculada. */}
         <Comentario className="text-[0.7rem] leading-snug text-tinta-2">
-          {`Um passo quer dizer UMA aresta a partir do que você já atravessou: ${repertorio.diagnostico.adjacentesBrutos} vizinhos diretos no grafo, dos quais ${repertorio.diagnostico.adjacentesExibidos} entram neste repertório adjacente, no máximo 10 por linguagem. `}
+          {`Um passo quer dizer UMA aresta a partir do que você já atravessou: ${repertorio.diagnostico.adjacentesBrutos} vizinhos diretos no acervo, dos quais ${repertorio.diagnostico.adjacentesExibidos} entram neste repertório adjacente, no máximo 10 por linguagem. `}
           Não é a caminhada de dois saltos de Descobrir: aquela responde «o que te
           interessaria agora», esta responde «o que está encostado em você».
         </Comentario>
@@ -323,7 +323,7 @@ export function TelaRepertorio({
       <Secao
         titulo="Linguagens que você atravessou"
         apoio={`${repertorio.diagnostico.entidadesNoRepertorio} entidades no repertório, agrupadas pela linguagem que cada uma declara.`}
-        comentario="A cor de cada linguagem vem do vocabulário do acervo, não do componente (D-08)."
+        comentario="A cor de cada linguagem vem do vocabulário do acervo, não do componente."
       >
         <ul className="flex flex-col gap-2">
           {repertorio.atravessado.map((grupo) => (
@@ -351,8 +351,8 @@ export function TelaRepertorio({
           precisa saber que Descobrir e esta tela compartilham a regra. */}
       <Secao
         titulo="A um passo, e você ainda não foi"
-        apoio="Cada item chegou por uma aresta que sai de algo do seu repertório."
-        comentario="O selo laranja é o texto dessa aresta — a mesma regra do cartão de Descobrir, para não haver dois vocabulários para a mesma ideia."
+        apoio="Cada item chegou por uma ligação que sai de algo do seu repertório."
+        comentario="O selo laranja é o texto dessa ligação — a mesma regra do cartão de Descobrir, para não haver dois vocabulários para a mesma ideia."
       >
         {repertorio.adjacente.length ? (
           <>
@@ -386,7 +386,7 @@ export function TelaRepertorio({
       {/* ---- 3. Salvos ---- */}
       <Secao
         titulo="Salvos"
-        comentario="Sessões salvas isoladamente (D-42). O que está no repertório da persona veio do dado autorado; o que você salvar nesta demonstração aparece junto."
+        comentario="Sessões salvas isoladamente. O que está no repertório da persona veio do dado autorado; o que você salvar nesta demonstração aparece junto."
       >
         {todosSalvos.length ? (
           <ul className="flex flex-col gap-2">
@@ -412,32 +412,32 @@ export function TelaRepertorio({
       <Secao
         apenasComentado
         titulo="O que esta tela mostraria, e o protótipo não tem"
-        apoio="Cada bloco abaixo está na especificação da tela 21. Nenhum deles tem dado no grafo, e por isso aparecem declarados em vez de omitidos."
+        apoio="Cada bloco abaixo está na especificação da tela 21. Nenhum deles tem dado no acervo, e por isso aparecem declarados em vez de omitidos."
       >
         <div className="flex flex-col gap-2">
           <BlocoDeclarado
             titulo="Histórico de «eu fui»"
             mostraria="A lista do que a pessoa marcou como ido, em ordem cronológica, e a comparação com o que ela salvou e não foi."
-            porque="O grafo não tem registro de presença: «eu fui» é um evento de uso, e o protótipo não tem conta, não tem autenticação e não coleta comportamento (D-25)."
+            porque="O grafo não tem registro de presença: «eu fui» é um evento de uso, e o protótipo não tem conta, não tem autenticação e não coleta comportamento."
           />
           <BlocoDeclarado
             titulo="Trilhas próprias"
             mostraria="As trilhas que a própria pessoa montou, editáveis e compartilháveis."
             porque={
               trilhasSalvas.length
-                ? `Há ${trilhasSalvas.length} trilha salva neste navegador, mas montar trilha própria é escrita no grafo — e o protótipo é export estático, sem servidor e sem gravação (D-24).`
-                : "Montar trilha própria é escrita no grafo, e o protótipo é export estático: sem servidor, sem gravação (D-24). O grafo tem uma trilha, e ela é autorada e assinada."
+                ? `Há ${trilhasSalvas.length} trilha salva neste navegador, mas montar trilha própria é escrita no acervo — e o protótipo é export estático, sem servidor e sem gravação.`
+                : "Montar trilha própria é escrita no acervo, e o protótipo é export estático: sem servidor, sem gravação. O grafo tem uma trilha, e ela é autorada e assinada."
             }
           />
           <BlocoDeclarado
             titulo="Preferências de acessibilidade"
             mostraria="As 8 dimensões do CMS como preferência persistente, filtrando a agenda para quem depende de libras, audiodescrição ou legenda."
-            porque="A preferência existiria; o dado para atendê-la, não. As 8 dimensões chegam quase todas em zero no acervo, e filtrar por elas devolveria lista vazia — a ficha da página do evento mostra declarado contra não declarado em vez de fingir cobertura (D-43)."
+            porque="A preferência existiria; o dado para atendê-la, não. As 8 dimensões chegam quase todas em zero no acervo, e filtrar por elas devolveria lista vazia — a ficha da página do evento mostra declarado contra não declarado em vez de fingir cobertura."
           />
           <BlocoDeclarado
             titulo="Privacidade — exportar e excluir"
             mostraria="Baixar tudo o que o produto guarda sobre a pessoa e apagar a conta em um toque."
-            porque="Não há o que exportar nem o que excluir além do que está neste navegador: persona, disposições e salvos vivem em localStorage e somem ao limpar o site. Nenhum dado pessoal sai daqui (D-25, D-46)."
+            porque="Não há o que exportar nem o que excluir além do que está neste navegador: persona, disposições e salvos vivem em localStorage e somem ao limpar o site. Nenhum dado pessoal sai daqui."
           />
         </div>
       </Secao>

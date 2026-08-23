@@ -221,7 +221,7 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
           ))}
         </div>
         <p className="tipo-legenda text-tinta-3">
-          O que não for marcado entra como «não declarado» — nunca como «não tem» (D-43).
+          O que não for marcado entra como «não declarado» — nunca como «não tem».
         </p>
       </fieldset>
 
@@ -252,10 +252,15 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
       {/* -------- o registro que SERIA publicado, declarado -------- */}
       {publicado ? (
         <section className="flex flex-col gap-1.5 rounded-g border border-borda bg-superficie-2 p-4" data-registro-simulado>
-          <p className="tipo-detalhe font-bold">✓ Registro pronto — e o protótipo declara o limite</p>
+          {/* O AVISO FICA — quem apertou «publicar» precisa saber que nada foi
+              gravado, senão o botão mente. O que mudou é de onde ele fala: antes
+              era «este protótipo é estático e não persiste nada», que explica o
+              MECANISMO; agora diz a consequência, que é o que muda a decisão de
+              quem está na tela. */}
+          <p className="tipo-detalhe font-bold">✓ Registro pronto — mas nada foi gravado</p>
           <p className="tipo-legenda leading-snug text-tinta-2">
-            Este protótipo é estático e não persiste nada: o registro abaixo é o que o
-            Studio enviaria ao acervo, com procedência «produtor» e score {score}%.
+            Nesta demonstração o envio não é salvo. Abaixo está exatamente o que iria para o
+            acervo, com procedência «produtor» e score {score}%.
           </p>
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 tipo-legenda">
             <dt className="font-bold">título</dt>

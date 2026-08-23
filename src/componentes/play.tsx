@@ -174,7 +174,7 @@ export function Play({
           O acervo não tem campo de «tipo» nem de «formato»: o que ele tem é a categoria do
           CMS, e é dela que sai o recorte abaixo. As {catalogo.total} são todas do{" "}
           {procedencia.rotulo} — a procedência é constante aqui, e por isso é declarada uma
-          vez em vez de repetida em cada item (D-92).
+          vez em vez de repetida em cada item.
         </Comentario>
       </header>
 

@@ -239,8 +239,8 @@ export function dimensoesDeAcessibilidade(): DimensaoContada[] {
       sustentada,
       declaracao: sustentada
         ? null
-        : `0 de ${milhar(VARREDURA.declaram)} entidades que preencheram a ficha declaram ` +
-          `${ROTULO_DIMENSAO[campo].toLowerCase()} — a dimensão existe na ontologia do CMS e ` +
+        : `0 de ${milhar(VARREDURA.declaram)} registros que preencheram a ficha declaram ` +
+          `${ROTULO_DIMENSAO[campo].toLowerCase()} — a dimensão existe no catálogo e ` +
           `não aparece uma vez no acervo publicado. Marcar este critério devolve nenhum ` +
           `resultado, e é esse zero que está sendo mostrado.`,
     };
@@ -393,18 +393,18 @@ export const CRITERIOS_SEM_LASTRO: readonly CriterioSemLastro[] = [
     denominadores: [
       {
         chave: "entidades-com-classificacao",
-        rotulo: `de ${milhar(ENTIDADES_ESPERADAS)} entidades trazem classificação indicativa`,
+        rotulo: `de ${milhar(ENTIDADES_ESPERADAS)} registros trazem classificação indicativa`,
         n: 0,
       },
       {
         chave: "dimensoes-de-classificacao-no-cms",
-        rotulo: `dimensões de classificação indicativa no CMS (contra ${DIMENSOES_ESPERADAS} de acessibilidade)`,
+        rotulo: `dimensões de classificação indicativa no catálogo (contra ${DIMENSOES_ESPERADAS} de acessibilidade)`,
         n: 0,
       },
     ],
     frase:
-      `Faixa etária não existe no acervo — nem no CMS, nem na Enciclopédia, nem nas ` +
-      `${milhar(ENTIDADES_ESPERADAS)} entidades geradas. O CMS modela ` +
+      `Faixa etária não existe no acervo — nem no catálogo, nem na Enciclopédia, nem nos ` +
+      `${milhar(ENTIDADES_ESPERADAS)} registros. O catálogo modela ` +
       `${DIMENSOES_ESPERADAS} dimensões de acessibilidade e NENHUMA de classificação ` +
       `indicativa; a Enciclopédia é verbete, não bilheteria. Adivinhar por palavra no ` +
       `título — «infantil» — seria inventar a classificação e apresentá-la como filtro. ` +
@@ -495,7 +495,7 @@ export function montarAcessibilidade(indice: IndiceDTO): AcessibilidadeDTO {
 
   if (ausentesNoGrafo) {
     throw new Error(
-      `filtros.ts: ${ausentesNoGrafo} entrada(s) do índice não voltaram do grafo por ` +
+      `filtros.ts: ${ausentesNoGrafo} entrada(s) do índice não voltaram do acervo por ` +
         `classe/slug. O DTO de acessibilidade é POSICIONAL contra o índice, e uma entrada ` +
         `perdida deslocaria todas as seguintes — o contador ao vivo passaria a atribuir a ` +
         `ficha de uma entidade a outra, em silêncio.`,

@@ -190,8 +190,8 @@ const ESPECIFICACOES: EspecificacaoGrupo[] = [
     rotulo: "Atua em",
     rotuloComPapel: (papel) => `Atua como ${papel} em`,
     fraseDeAusencia:
-      "O acervo não liga esta entrada a nenhum evento pela aresta de atuação. " +
-      "Sem essa aresta não sabemos — e não afirmamos — de que este agente participou.",
+      "O acervo não liga esta entrada a nenhum evento pela ligação de atuação. " +
+      "Sem essa ligação não sabemos — e não afirmamos — de que este agente participou.",
   },
   {
     chave: "realiza",
@@ -210,8 +210,8 @@ const ESPECIFICACOES: EspecificacaoGrupo[] = [
     rotulo: "Obras",
     classesDoVizinho: ["obra"],
     fraseDeAusencia:
-      "O acervo carregado não publica a autoria da obra como vínculo: não existe no grafo " +
-      "nenhuma aresta ligando obra a pessoa ou coletivo. As obras estão lá, os agentes " +
+      "O acervo carregado não publica a autoria da obra como vínculo: não existe no acervo " +
+      "nenhuma ligação ligando obra a pessoa ou coletivo. As obras estão lá, os agentes " +
       "também, e a ligação entre os dois é o que a fonte não declara. Ligar por semelhança " +
       "de nome inventaria autoria.",
   },
@@ -289,7 +289,7 @@ const ESPECIFICACOES: EspecificacaoGrupo[] = [
     limite: 8,
     fraseDeAusencia:
       "O acervo não aproxima esta entrada de nenhuma outra: ela não compartilha linguagem " +
-      "nem tema com ninguém no grafo carregado.",
+      "nem tema com ninguém no acervo carregado.",
   },
   {
     chave: "dialoga",

@@ -447,7 +447,7 @@ export function montarIndice(fonte: FonteDoGrafo): IndiceDTO {
   const ROTULO_PROCEDENCIA: Record<Procedencia, string> = {
     ic: "acervo do Itaú Cultural",
     derivado: "derivado por regra",
-    autorado: "autorado para o protótipo",
+    autorado: "escrito pela curadoria",
   };
 
   const facetas: Facetas = {

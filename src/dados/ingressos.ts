@@ -6,7 +6,7 @@
  * ingresso — a fonte só tem o booleano `comIngresso`, sempre falso, e `preco` é
  * sempre null (`tipos.ts`). Para o fluxo ser DEMONSTRÁVEL, este módulo autora o
  * link para DOIS eventos, no mesmo estatuto da trilha do Cenário 1 (D-37): dado
- * autorado para o protótipo, ROTULADO COMO TAL NA TELA, nunca apresentado como se
+ * escrito pela curadoria, ROTULADO COMO TAL NA TELA, nunca apresentado como se
  * a fonte o tivesse publicado. Quando o produtor publicar o link pelo Studio, esta
  * tabela desaparece e o campo vem do acervo.
  *
@@ -32,14 +32,14 @@ const INGRESSOS: IngressoAutorado[] = [
     url: "https://www.sympla.com.br/evento/o-veneno-do-teatro",
     plataforma: "Sympla",
     procedencia: "autorado",
-    rotulo: "link autorado para o protótipo — o acervo não publica link de ingresso",
+    rotulo: "link escrito pela curadoria — o acervo não publica link de ingresso",
   },
   {
     eventoSlug: "b-a-b-i-l-a-q-u-e-s",
     url: "https://www.sympla.com.br/evento/b-a-b-i-l-a-q-u-e-s",
     plataforma: "Sympla",
     procedencia: "autorado",
-    rotulo: "link autorado para o protótipo — o acervo não publica link de ingresso",
+    rotulo: "link escrito pela curadoria — o acervo não publica link de ingresso",
   },
 ];
 

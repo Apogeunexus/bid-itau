@@ -629,7 +629,7 @@ export function StudioOcorrencias({
       {/* ------------------------------------------------------------------ */}
       <section className="oco-semeadura">
         <div className="oco-semeadura-texto">
-          <strong className="oco-semeadura-titulo">Cenário 4, sem sair da tela</strong>
+          <strong className="oco-semeadura-titulo">cenário 4, sem sair da tela</strong>
           <p>
             O botão salva neste navegador as duas sessões do par —{" "}
             {par.atingida.dataCurta} às {par.atingida.hora} e {par.intacta.dataCurta} às{" "}
@@ -645,7 +645,7 @@ export function StudioOcorrencias({
           onClick={semear}
           disabled={!hidratado || parSemeado}
         >
-          {parSemeado ? "Par do Cenário 4 já salvo" : "Salvar o par do Cenário 4"}
+          {parSemeado ? "Par do cenário 4 já salvo" : "Salvar o par do cenário 4"}
         </button>
       </section>
 

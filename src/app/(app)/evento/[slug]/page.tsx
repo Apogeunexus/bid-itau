@@ -321,7 +321,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
             chave="play"
             rotulo="Catálogo do Play"
             frase="O catálogo do Itaú Cultural Play entra na camada seguinte deste protótipo. O que
-              está acima é o que o grafo já liga a este evento por aresta de mídia — e é isso, e não
+              está acima é o que o grafo já liga a este evento por ligação de mídia — e é isso, e não
               uma vitrine de recomendação, que sustenta o «se não puder ir»."
           />
         </section>

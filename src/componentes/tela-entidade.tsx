@@ -17,31 +17,29 @@ import type { Entidade } from "@/dados/tipos";
 export function TelaEntidade({
   nome,
   objetivo,
-  camada,
   entidade,
   blocos,
   classesEsperadas,
 }: {
   nome: string;
   objetivo: string;
-  camada?: "C1" | "C2" | "C3";
   entidade?: Entidade;
   blocos: string[];
   classesEsperadas: string;
 }) {
   if (!entidade) {
     return (
-      <TelaEsqueleto nome={nome} objetivo={objetivo} camada={camada}>
+      <TelaEsqueleto nome={nome} objetivo={objetivo}>
         <EsqueletoBloco
           altura="7rem"
-          rotulo={`Nenhuma entidade de ${classesEsperadas} foi encontrada para este endereço. A rota existe e responde; o conteúdo aparece quando a classe estiver populada no grafo.`}
+          rotulo={`Nenhuma entidade de ${classesEsperadas} foi encontrada para este endereço. A rota existe e responde; o conteúdo aparece quando a classe estiver populada no acervo.`}
         />
       </TelaEsqueleto>
     );
   }
 
   return (
-    <TelaEsqueleto nome={nome} objetivo={objetivo} camada={camada}>
+    <TelaEsqueleto nome={nome} objetivo={objetivo}>
       <section className="flex flex-col gap-3 rounded-xl border border-borda p-4">
         <div className="flex items-start gap-4">
           <EsqueletoBloco altura="6rem" className="w-28 shrink-0" rotulo="imagem do acervo" />

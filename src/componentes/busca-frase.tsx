@@ -437,12 +437,12 @@ export function BuscaFrase({
             const ancoraCurta =
               criterio.regra === "semelhanca" && criterio.ancora
                 ? criterio.ancora.entradas
-                  ? `${milhar(criterio.ancora.entradas)} entradas do índice casam · ${milhar(vizinhanca.arestas)} arestas «semelhante a» com motivo escrito`
+                  ? `${milhar(criterio.ancora.entradas)} entradas do índice casam · ${milhar(vizinhanca.arestas)} ligações «semelhante a» com motivo escrito`
                   : "nenhuma entrada do índice casa com esta âncora"
                 : null;
             const ancoraLonga =
               criterio.regra === "semelhanca" && criterio.ancora?.entradas
-                ? `«${criterio.ancora.termo}» casa com ${milhar(criterio.ancora.entradas)} entradas do índice; a mais próxima é «${criterio.ancora.titulo}». Do que casa saem ${milhar(vizinhanca.arestas)} arestas «semelhante a», ${milhar(vizinhanca.vizinhos)} delas para entidades distintas, TODAS com motivo escrito em português — e é desse texto que vem o porquê de cada resultado abaixo. O casamento em si é por TEXTO sobre o índice: ${milhar(vizinhanca.alcancaveis)} dessas entidades também casam por título e se explicam aqui pelo acervo; ${milhar(vizinhanca.foraDoAlcance)} ficam fora do alcance deste critério.`
+                ? `«${criterio.ancora.termo}» casa com ${milhar(criterio.ancora.entradas)} entradas do índice; a mais próxima é «${criterio.ancora.titulo}». Do que casa saem ${milhar(vizinhanca.arestas)} ligações «semelhante a», ${milhar(vizinhanca.vizinhos)} delas para entidades distintas, TODAS com motivo escrito em português — e é desse texto que vem o porquê de cada resultado abaixo. O casamento em si é por TEXTO sobre o índice: ${milhar(vizinhanca.alcancaveis)} dessas entidades também casam por título e se explicam aqui pelo acervo; ${milhar(vizinhanca.foraDoAlcance)} ficam fora do alcance deste critério.`
                 : null;
 
             const detalhe =
@@ -780,7 +780,7 @@ export function BuscaFrase({
           A honestidade aqui é mais forte que uma simulação: o que a proposta vende não é o
           modelo, é o controle. Uma tradução que acertasse e não se mostrasse seria pior
           para quem avalia do que uma regra que erra e se explica — a regra se corrige em
-          um toque (D-65).
+          um toque.
         </Comentario>
       </section>
 
@@ -809,8 +809,8 @@ export function BuscaFrase({
         <p className="text-sm leading-snug text-tinta-2">
           <strong>O que esta tela não alcança, dito com número.</strong> «Parecido com» é
           casado por TEXTO sobre o índice único de {milhar(indice.total)} entradas — o
-          índice não tem campo de vizinhança, e nesta camada ele não ganha um. Das{" "}
-          {milhar(vizinhanca.arestas)} arestas «semelhante a» que saem do que casa com
+          índice não tem campo de vizinhança, e  ele não ganha um. Das{" "}
+          {milhar(vizinhanca.arestas)} ligações «semelhante a» que saem do que casa com
           «Bienal», {milhar(vizinhanca.vizinhos)} chegam a entidades distintas;{" "}
           {milhar(vizinhanca.alcancaveis)} delas também casam por texto e explicam-se aqui
           com o motivo escrito no acervo, e {milhar(vizinhanca.foraDoAlcance)} ficam fora

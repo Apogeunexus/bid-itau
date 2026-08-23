@@ -28,7 +28,7 @@ export function SelecaoPersona({ personas }: { personas: PersonaExibivel[] }) {
   if (!personas.length) {
     return (
       <p className="rounded-xl border border-dashed border-borda-forte p-4 text-sm text-tinta-2">
-        Nenhuma persona no grafo ainda. A tela existe e responde; as três personas do
+        Nenhuma persona no acervo ainda. A tela existe e responde; as três personas do
         protótipo aparecem quando `personas.json` for gerado.
       </p>
     );

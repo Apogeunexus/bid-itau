@@ -41,7 +41,7 @@ import type { Entidade } from "./tipos";
  */
 export const CRITERIO_DE_IDENTIDADE =
   "Dois registros são o mesmo evento quando têm o mesmo título normalizado, o mesmo " +
-  "agente realizador e a mesma obra. O critério é o da ontologia (D-22), não uma medida " +
+  "agente realizador e a mesma obra. O critério é o da ontologia, não uma medida " +
   "de parecença entre textos: ele afirma o que faz duas linhas serem a mesma coisa no " +
   "mundo, e por isso a suspeita que ele levanta é auditável campo a campo.";
 
@@ -420,7 +420,7 @@ function gruposEncenados(): GrupoDeDuplicatas[] {
 export function grupoDoTracador(): GrupoDeDuplicatas {
   const grupos = gruposEncenados();
   const menor = grupos[0];
-  if (!menor) romper("nenhuma aresta duplicata_suspeita no grafo");
+  if (!menor) romper("nenhuma ligação duplicata_suspeita no acervo");
   if (menor.id !== GRUPO_DO_TRACADOR) {
     romper(
       `o menor grupo encenado agora é «${menor.id}» e a constante GRUPO_DO_TRACADOR diz ` +
@@ -765,7 +765,7 @@ export function declaracaoDoQueNaoSustenta(): string {
   const n = numerosDaDeduplicacao();
   return (
     `O critério tem três componentes e este acervo preenche ` +
-    `um. Dos ${comSeparador(n.eventos)} eventos do grafo, ${n.eventosComAgenteNaChave} ` +
+    `um. Dos ${comSeparador(n.eventos)} eventos do acervo, ${n.eventosComAgenteNaChave} ` +
     `trazem agente realizador na chave de identidade e ${n.eventosComObraNaChave} trazem ` +
     `obra — toda chave tem a forma «evento|título normalizado||», com os dois campos finais ` +
     `vazios. O que de fato casou aqui foi o título normalizado, e só ele. Isso não é falha ` +

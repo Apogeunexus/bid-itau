@@ -81,7 +81,7 @@ export function SeletorDisposicao() {
       {aberto ? (
         <div className="flex flex-col gap-2 border-t border-borda pt-2">
           <p className="text-xs text-tinta-3">
-            Seleção múltipla. As cinco são autoradas para o protótipo — nenhuma vem do acervo
+            Seleção múltipla. As cinco são escritas pela curadoria — nenhuma vem do acervo
             do Itaú Cultural.
           </p>
 
