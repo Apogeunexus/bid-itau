@@ -54,12 +54,12 @@ export interface CapaApp {
 }
 
 /**
- * O glifo do selo redondo no canto do cartaz. É a única coisa que diz, ANTES do
- * toque, o que acontece do outro lado: Play e Cast começam a tocar alguma coisa,
- * Acontece abre um calendário, Mapa abre um mapa. `entrar` é o resto — a seta que
- * não promete nada além de atravessar. Quem desenha cada um é `base/icones.tsx`.
+ * O vocabulário de desenho do cartaz. Ele diz, ANTES do toque, o que acontece do
+ * outro lado: Play e Cast começam a tocar alguma coisa, Acontece abre um
+ * calendário, Mapa abre um mapa. `entrar` é o resto — a seta que não promete nada
+ * além de atravessar. Quem desenha cada um é `base/icones.tsx`.
  */
-export type Selo = "entrar" | "tocar" | "ouvir" | "agenda" | "mapa";
+export type Glifo = "entrar" | "tocar" | "ouvir" | "agenda" | "mapa" | "ia";
 
 /**
  * Como o grupo se arruma na grade, e por que isto é DADO e não posição.
@@ -85,30 +85,20 @@ export interface App {
   /** Uma linha: o que este app responde. Nunca o nome repetido em outra ordem. */
   readonly descricao: string;
   readonly href: string;
-  readonly capa: CapaApp;
-  readonly selo: Selo;
-}
-
-/**
- * O cartaz de temporada que a referência põe no fim de «Ir e ver».
- *
- * O TEXTO É NOSSO, E ISSO ESTÁ DECLARADO AQUI. Diferente de um cartaz de app, ele
- * não sai de nenhuma entidade do acervo: não existe no grafo uma coleção
- * «programação de inverno» para ele apontar — `meta.json` tem temporada como a
- * série de datas de um evento, não como estação do ano. Ele é uma CHAMADA DE
- * NAVEGAÇÃO para a agenda inteira, escrita por nós, e por isso não anuncia número
- * nem promete recorte: dizer «42 shows deste inverno» seria inventar contagem que
- * a fonte não faz. O fundo é textura, não fotografia do acervo — entra sem alt,
- * como decoração, porque é o que ele é.
- */
-export interface Promocao {
-  readonly rotulo: string;
-  readonly descricao: string;
-  readonly href: string;
-  /** O rótulo do botão. Visível e clicável junto com o cartaz inteiro. */
-  readonly chamada: string;
-  /** Caminho da textura de fundo em `public/`. Decorativa: entra com alt vazio. */
-  readonly fundo: string;
+  /**
+   * A amostra do acervo daquele app. AUSENTE quando não há acervo a amostrar —
+   * ver «Roteiros com IA» lá embaixo: o cartaz vira um gradiente da paleta da
+   * marca, desenhado em CSS, e não uma foto emprestada de outra coisa.
+   */
+  readonly capa?: CapaApp;
+  /** O disco no canto de baixo. */
+  readonly selo: Glifo;
+  /**
+   * O glifo grande no alto do cartaz SEM capa. Sem fotografia, o quadro fica com
+   * um vazio no topo e o cartaz perde o peso dos vizinhos; qual símbolo entra ali
+   * é do app, não do layout.
+   */
+  readonly marca?: Glifo;
 }
 
 export interface GrupoApps {
@@ -116,8 +106,6 @@ export interface GrupoApps {
   readonly rotulo: string;
   readonly ritmo: Ritmo;
   readonly apps: readonly App[];
-  /** O cartaz de temporada, quando o grupo carrega um. Vem depois da grade. */
-  readonly promocao?: Promocao;
 }
 
 export interface Atalho {
@@ -168,13 +156,6 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
     id: "ir",
     rotulo: "Ir e ver",
     ritmo: "par",
-    promocao: {
-      rotulo: "Programação de inverno",
-      descricao: "Shows, exposições e muito mais",
-      href: "/acontece",
-      chamada: "Explorar",
-      fundo: "/hub/inverno.jpg",
-    },
     apps: [
       {
         id: "acontece",
@@ -286,13 +267,16 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
         rotulo: "Roteiros com IA",
         descricao: "Descreva o programa e receba um roteiro",
         href: "/ia",
-        capa: {
-          arquivo: "6a769da06f5653fd.png",
-          alt: "A imagem mostra um fundo em degradê suave, passando por tons de verde, amarelo, rosa, azul.",
-          credito: "Itaú Cultural",
-          origem: "Conheça o jogabulário da exposição Game+",
-        },
+        // SEM CAPA, E ISSO NÃO É LACUNA. Os outros nove cartazes mostram uma
+        // amostra do acervo daquele app; este não tem acervo — ele RECEBE uma
+        // descrição e devolve um roteiro. A capa que estava aqui era o degradê da
+        // exposição Game+, emprestado por parecer bonito, e ela trazia o letreiro
+        // «GAME+» gravado na imagem: o cartaz ficava com dois títulos e anunciava
+        // uma exposição que não é o destino do link. O gradiente é desenhado em
+        // CSS a partir das seis cores de apoio da marca — que no manual
+        // significam pluralidade —, não é arquivo e não reivindica procedência.
         selo: "entrar",
+        marca: "ia",
       },
     ],
   },

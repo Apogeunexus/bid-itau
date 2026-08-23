@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   ICONE_ACONTECE,
+  ICONE_IA,
   ICONE_MAPA,
   ICONE_ONDA,
   ICONE_SETA,
@@ -12,9 +13,8 @@ import {
   TOTAL_APPS,
   type Atalho,
   type CapaApp,
-  type Promocao,
+  type Glifo,
   type Ritmo,
-  type Selo,
 } from "@/dados/apps";
 
 /**
@@ -38,8 +38,9 @@ import {
  * largas faziam isso — o texto dos cartazes pequenos descia para baixo da imagem
  * porque parte do acervo tem TIPOGRAFIA GRAVADA na foto e título sobre título não
  * se resolve com véu. A referência de 23/08 pediu o contrário e o preço está
- * pago no dado, não no CSS: as dez capas de `apps.ts` foram escolhidas uma a uma
- * a partir de entidades reais, e nenhuma delas é peça gráfica com letreiro.
+ * pago no dado, não no CSS: cada capa de `apps.ts` diz por onde o corte segura
+ * (é isso que tira o letreiro do Mekukradjá do cartaz do Cast), e o único app
+ * que não tinha o que amostrar perdeu a capa emprestada e virou gradiente.
  *
  * O CARTAZ NÃO MOSTRA O CRÉDITO DA FOTO. Aqui a imagem não é a obra, é a
  * AMOSTRA do que tem dentro do app — e onze «Foto: fulano» empilhados viravam
@@ -54,13 +55,14 @@ import {
  * do hub em 23/08 e moram no menu do ícone de conta, no alto da tela.
  */
 
-/** O disco do canto do cartaz. O que cada nome significa está em `apps.ts`. */
-const SELOS: Record<Selo, React.ReactNode> = {
+/** O traço de cada glifo. O que cada nome significa está em `apps.ts`. */
+const GLIFOS: Record<Glifo, React.ReactNode> = {
   entrar: ICONE_SETA,
   tocar: ICONE_TOCAR,
   ouvir: ICONE_ONDA,
   agenda: ICONE_ACONTECE,
   mapa: ICONE_MAPA,
+  ia: ICONE_IA,
 };
 
 /**
@@ -92,29 +94,47 @@ function Cartaz({
   descricao,
   capa,
   selo,
+  marca,
   porte,
 }: {
   href: string;
   rotulo: string;
   descricao: string;
-  capa: CapaApp;
-  selo: Selo;
+  capa?: CapaApp;
+  selo: Glifo;
+  marca?: Glifo;
   porte: string;
 }) {
+  // SEM CAPA O CARTAZ INTEIRO MUDA DE LADO, não só o fundo. O gradiente da marca
+  // é CLARO, então o texto branco com véu escuro que serve à fotografia aqui
+  // reprovaria o contraste — a tinta vira preta e o véu deixa de existir. O
+  // porquê de um app não ter capa está em `apps.ts`.
+  const claro = !capa;
   return (
-    <li className={`hub-cartaz hub-cartaz--${porte}`}>
+    <li className={`hub-cartaz hub-cartaz--${porte}${claro ? " hub-cartaz--claro" : ""}`}>
       <Link href={href} className="hub-cartaz-link">
-        {/* `next/image` está fora do projeto por decisão registrada em
-            capa-sem-imagem.tsx: sob `output: "export"` com
-            `images.unoptimized`, ele só acrescentaria peso ao pacote. */}
-        <img
-          src={`/acervo/${capa.arquivo}`}
-          alt={capa.alt}
-          data-foco={capa.foco ?? "centro"}
-          className="hub-cartaz-foto"
-          loading="lazy"
-        />
-        <span className="hub-cartaz-veu" aria-hidden />
+        {/* Sem capa não entra camada nenhuma: o gradiente é o fundo do próprio
+            cartaz, em `hub.css`, e o porquê está lá. */}
+        {capa ? (
+          <>
+            {/* `next/image` está fora do projeto por decisão registrada em
+                capa-sem-imagem.tsx: sob `output: "export"` com
+                `images.unoptimized`, ele só acrescentaria peso ao pacote. */}
+            <img
+              src={`/acervo/${capa.arquivo}`}
+              alt={capa.alt}
+              data-foco={capa.foco ?? "centro"}
+              className="hub-cartaz-foto"
+              loading="lazy"
+            />
+            <span className="hub-cartaz-veu" aria-hidden />
+          </>
+        ) : null}
+        {marca ? (
+          <span className="hub-cartaz-marca" aria-hidden>
+            {GLIFOS[marca]}
+          </span>
+        ) : null}
         <span className="hub-cartaz-texto">
           <span className="hub-cartaz-rotulo tipo-titulo-3">{rotulo}</span>
           <span className="hub-cartaz-descricao tipo-legenda">{descricao}</span>
@@ -122,29 +142,10 @@ function Cartaz({
         {/* O selo é decorativo: ele repete em desenho o que o rótulo do cartaz
             já diz em palavra, e o link inteiro é a área de toque. */}
         <span className="hub-cartaz-selo" aria-hidden>
-          {SELOS[selo]}
+          {GLIFOS[selo]}
         </span>
       </Link>
     </li>
-  );
-}
-
-function CartazDeTemporada({ promocao }: { promocao: Promocao }) {
-  return (
-    <Link href={promocao.href} className="hub-temporada">
-      {/* Textura, não fotografia do acervo: `alt` vazio porque não há o que
-          descrever — o que informa é o texto que vem por cima. */}
-      <img src={promocao.fundo} alt="" className="hub-temporada-fundo" loading="lazy" />
-      <span className="hub-temporada-veu" aria-hidden />
-      <span className="hub-temporada-texto">
-        <span className="hub-temporada-rotulo tipo-destaque">{promocao.rotulo}</span>
-        <span className="hub-temporada-descricao tipo-detalhe">{promocao.descricao}</span>
-      </span>
-      <span className="hub-temporada-botao tipo-detalhe">
-        {promocao.chamada}
-        {ICONE_SETA}
-      </span>
-    </Link>
   );
 }
 
@@ -192,11 +193,11 @@ export function HubApps() {
                   descricao={app.descricao}
                   capa={app.capa}
                   selo={app.selo}
+                  marca={app.marca}
                   porte={portes[n]}
                 />
               ))}
             </ul>
-            {grupo.promocao ? <CartazDeTemporada promocao={grupo.promocao} /> : null}
           </section>
         );
       })}

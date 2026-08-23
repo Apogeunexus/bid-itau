@@ -38,11 +38,17 @@
   margin-block-start: var(--espaco-tela);
   aspect-ratio: 16 / 9;
   border-radius: var(--raio-g);
-  /* Preto fixo nos dois temas: é o que está DEBAIXO do véu e da foto, e é contra
-     ele que o branco do título mede. Sem esta linha o fundo herdado no tema
-     claro é papel, e o contraste medido do título deixa de ser o que se vê. */
-  background: var(--ic-preto);
-  box-shadow: var(--sombra-2);
+  /* PRETO FIXO NOS DOIS TEMAS, mas LEVANTADO. Fixo porque é o que está debaixo do
+     véu e da foto, e é contra ele que o branco do título mede — herdando o papel,
+     no tema claro o título mediria contra branco e o número deixaria de ser o que
+     se vê. Levantado a 8% de branco porque a foto ocupa só a metade direita: a
+     metade esquerda é esta cor CHAPADA, e em preto puro ela é a mesma cor da
+     página no tema escuro — o cartaz perdia a borda esquerda inteira e parecia
+     começar no meio. A 8% ele continua 18:1 contra o título. */
+  background: color-mix(in srgb, var(--ic-preto) 92%, var(--ic-branco));
+  box-shadow:
+    var(--sombra-2),
+    inset 0 0 0 1px var(--cor-borda);
 }
 
 /* A foto ocupa a metade direita e o véu apaga a borda dela na esquerda, onde o
@@ -62,7 +68,7 @@
   inset: 0;
   background: linear-gradient(
     to right,
-    var(--ic-preto) 0%,
+    color-mix(in srgb, var(--ic-preto) 96%, transparent) 0%,
     color-mix(in srgb, var(--ic-preto) 86%, transparent) 42%,
     color-mix(in srgb, var(--ic-preto) 26%, transparent) 60%,
     transparent 78%
@@ -120,12 +126,22 @@
 }
 
 /* ---- O cartaz ---- */
+/* O FIO DE BORDA NÃO É ENFEITE — é o que faz o cartaz existir no tema escuro.
+ *
+ * O fundo do cartaz é preto FIXO (é contra ele que o rótulo branco mede) e a
+ * página no escuro também é preta. Sem o fio, os dois são a mesma cor: o canto
+ * arredondado some, o rodapé do cartaz escorre para dentro da página e a tela
+ * vira uma fotografia flutuando sobre um borrão. `--cor-borda` gira com o tema —
+ * 20% de branco no escuro, 12% de preto no claro —, que é o certo aqui: o que o
+ * fio separa é o cartaz da PÁGINA, e é a página que muda de cor. */
 .hub-cartaz {
   position: relative;
   overflow: hidden;
   border-radius: var(--raio-g);
   background: var(--ic-preto);
-  box-shadow: var(--sombra-1);
+  box-shadow:
+    var(--sombra-1),
+    inset 0 0 0 1px var(--cor-borda);
 }
 
 .hub-cartaz-link {
@@ -156,16 +172,24 @@
 }
 
 /* Sem o véu o rótulo cai sobre o que a fotografia trouxer, e metade do acervo é
-   clara no rodapé. */
+   clara no rodapé.
+ *
+ * SÃO DUAS CAMADAS, e a de cima é um fio de branco. O véu sozinho leva o rodapé
+ * do cartaz a preto quase puro, que é a cor da página no tema escuro — o texto
+ * ficava legível e o CARTAZ desaparecia debaixo dele. Os 8% de branco no pé
+ * levam aquele trecho a cerca de 10% de luz: continua 17:1 contra o rótulo
+ * branco e volta a ser uma superfície, não um buraco. */
 .hub-cartaz-veu {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--ic-preto) 88%, transparent) 0%,
-    color-mix(in srgb, var(--ic-preto) 44%, transparent) 42%,
-    transparent 76%
-  );
+  background:
+    linear-gradient(to top, color-mix(in srgb, var(--ic-branco) 8%, transparent) 0%, transparent 34%),
+    linear-gradient(
+      to top,
+      color-mix(in srgb, var(--ic-preto) 90%, transparent) 0%,
+      color-mix(in srgb, var(--ic-preto) 44%, transparent) 42%,
+      transparent 76%
+    );
 }
 
 .hub-cartaz-texto {
@@ -243,89 +267,76 @@
   grid-row: span 2;
 }
 
-/* ---- O cartaz de temporada: chamada de navegação, não app ----------------
+/* ---- O cartaz SEM capa: gradiente da marca, desenhado aqui ---------------
  *
- * Ele não entra na grade porque não é um app: vem depois dela, na largura toda,
- * e leva para a agenda inteira. O texto dele é NOSSO e isso está declarado em
- * `apps.ts` — daí o fundo ser textura e não fotografia do acervo. */
-.hub-temporada {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--espaco-pilha);
-  overflow: hidden;
-  margin-top: 0.75rem;
-  padding: var(--espaco-cartao) 1rem;
-  aspect-ratio: 19 / 7;
-  border-radius: var(--raio-g);
-  background: var(--ic-preto);
-  box-shadow: var(--sombra-1);
+ * Quem não tem capa e por quê está em `apps.ts`. As seis cores de apoio do
+ * manual significam pluralidade, e é isso que este cartaz mostra — nenhuma delas
+ * é dado aqui, o que seria o uso proibido (a cor da linguagem vem do
+ * vocabulário, nunca de uma folha).
+ *
+ * CADA COR ENTRA LAVADA COM BRANCO, e isso não é gosto: a tinta deste cartaz é
+ * PRETA, porque não há fotografia embaixo dela. O lilás cheio mede 2,9:1 contra
+ * preto e reprovaria a descrição no canto inferior esquerdo; lavado a 56% ele
+ * passa de 7:1. O gradiente claro é o que torna a tinta preta possível.
+ *
+ * O GRADIENTE MORA NO PRÓPRIO CARTAZ, e não numa camada por cima — e a última
+ * linha da declaração, a cor chapada, é o motivo. Ela vira o `background-color`
+ * do cartão: é ela que fica debaixo do texto se as quatro camadas de degradê não
+ * pintarem. Numa camada separada, o que sobra embaixo do texto preto é o preto
+ * do cartaz — texto preto sobre preto, e nenhuma medição enxerga isso, porque
+ * quem mede contraste lê `background-color` e degradê não é cor. */
+.hub-cartaz--claro {
+  background:
+    radial-gradient(
+      130% 130% at 0% 0%,
+      color-mix(in srgb, var(--ic-verde) 74%, var(--ic-branco)) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      130% 130% at 100% 0%,
+      color-mix(in srgb, var(--ic-amarelo) 76%, var(--ic-branco)) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      130% 130% at 100% 100%,
+      color-mix(in srgb, var(--ic-rosa) 62%, var(--ic-branco)) 0%,
+      transparent 66%
+    ),
+    radial-gradient(
+      140% 140% at 0% 100%,
+      color-mix(in srgb, var(--ic-lilas) 56%, var(--ic-branco)) 0%,
+      transparent 72%
+    ),
+    color-mix(in srgb, var(--ic-verde-agua) 48%, var(--ic-branco));
 }
 
-.hub-temporada-fundo {
+/* A marca: o glifo grande no alto, onde a fotografia estaria. */
+.hub-cartaz-marca {
   position: absolute;
-  inset: 0;
+  top: var(--espaco-cartao);
+  left: var(--espaco-cartao);
   display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-}
-
-.hub-temporada-veu {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    color-mix(in srgb, var(--ic-preto) 66%, transparent) 0%,
-    color-mix(in srgb, var(--ic-preto) 30%, transparent) 58%,
-    color-mix(in srgb, var(--ic-preto) 12%, transparent) 100%
-  );
-}
-
-/* `relative` nos dois filhos de conteúdo: o véu é posicionado e, sem isto,
-   pintaria por cima do texto e do botão, que estão no fluxo. */
-.hub-temporada-texto {
-  position: relative;
-  display: flex;
-  min-inline-size: 0;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.hub-temporada-rotulo {
-  color: var(--ic-branco);
-  font-weight: 700;
-}
-
-.hub-temporada-descricao {
-  color: color-mix(in srgb, var(--ic-branco) 88%, transparent);
-}
-
-/* A pílula clara com tinta preta: 21:1 contra o branco. O laranja de ação não
-   entra aqui porque o cartaz inteiro já é o link — dois níveis de destaque no
-   mesmo alvo competiriam entre si. */
-.hub-temporada-botao {
-  position: relative;
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--raio-pilula);
-  background: var(--ic-branco);
   color: var(--ic-preto);
-  font-weight: 600;
-  transition: transform var(--dur-1) var(--ease-padrao);
 }
 
-.hub-temporada:hover .hub-temporada-botao {
-  transform: translateX(0.25rem);
+.hub-cartaz-marca svg {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
 }
 
-.hub-temporada-botao svg {
-  inline-size: 1rem;
-  block-size: 1rem;
+/* O cartaz claro: tinta preta e selo de vidro claro, porque o fundo é o
+   gradiente e não uma fotografia. */
+.hub-cartaz--claro .hub-cartaz-rotulo {
+  color: var(--ic-preto);
+}
+
+.hub-cartaz--claro .hub-cartaz-descricao {
+  color: color-mix(in srgb, var(--ic-preto) 76%, transparent);
+}
+
+.hub-cartaz--claro .hub-cartaz-selo {
+  background: color-mix(in srgb, var(--ic-branco) 52%, transparent);
+  color: var(--ic-preto);
 }
 
 /* ---- Bastidor: linha, não cartaz ---- */
@@ -384,10 +395,6 @@
 
 [data-view="web"] .hub-cartaz--faixa {
   aspect-ratio: 3 / 1;
-}
-
-[data-view="web"] .hub-temporada {
-  aspect-ratio: 4 / 1;
 }
 
 [data-view="web"] .hub-atalhos {
