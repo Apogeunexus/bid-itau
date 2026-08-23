@@ -7,7 +7,7 @@ import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
 import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/componentes/desertos";
 import { Grafismo } from "@/componentes/grafismo";
-import type { DadosDePerto, ItemPerto, OrigemDoMapa } from "@/dados/mapa-perto";
+import type { DadosDePerto, ItemPerto } from "@/dados/mapa-perto";
 
 /**
  * mapa.tsx — o mapa como LENTE (D-59), desenhado por projeção própria em SVG (D-60).
