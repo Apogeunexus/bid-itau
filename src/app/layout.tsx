@@ -4,6 +4,7 @@ import { ComentadoProvider } from "@/contexto/comentado";
 import { SessaoProvider } from "@/contexto/sessao";
 import { TemaProvider } from "@/contexto/tema";
 import { ViewProvider } from "@/contexto/visao";
+import { HEROIS } from "@/dados/heroi";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -32,9 +33,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // `suppressHydrationWarning` porque `antes-da-pintura.js` acrescenta
-    // `data-tema` a este elemento antes de o React existir. O aviso seria
-    // legítimo em qualquer outro atributo; neste é o mecanismo funcionando.
-    <html lang="pt-BR" suppressHydrationWarning>
+    // `data-tema` e `data-heroi` a este elemento antes de o React existir. O
+    // aviso seria legítimo em qualquer outro atributo; nestes é o mecanismo
+    // funcionando.
+    //
+    // `data-heroi-total` sai da lista curada e é lido pelo script para sortear.
+    // O total viaja pelo HTML em vez de ser repetido no JavaScript porque assim
+    // não existe uma segunda contagem para ficar defasada.
+    <html lang="pt-BR" data-heroi-total={HEROIS.length} suppressHydrationWarning>
       <body className="antialiased">
         {/* Primeiro filho do body e SEM `async`, para bloquear o parser e rodar
             antes da primeira pintura — ver o cabeçalho do próprio arquivo. */}

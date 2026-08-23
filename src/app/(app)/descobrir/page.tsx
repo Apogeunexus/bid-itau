@@ -1,6 +1,7 @@
 import { Comentario } from "@/componentes/comentario";
 import { Feed } from "@/componentes/feed";
 import { Grafismo } from "@/componentes/grafismo";
+import { ANCORA_DO_FEED, Heroi } from "@/componentes/heroi";
 import { SeletorDisposicao } from "@/componentes/seletor-disposicao";
 import { PRECOMPUTO } from "@/dados/feeds";
 
@@ -19,19 +20,29 @@ import { PRECOMPUTO } from "@/dados/feeds";
  */
 export default function Descobrir() {
   return (
-    // `desk:max-w-6xl` e não `5xl`: a moldura da visão web já é `max-w-6xl` em
-    // `casca.tsx`, e o teto de 5xl estreitava o conteúdo em 128px dentro dela — pagando
-    // com a largura dos cartões um limite que a moldura não pedia. Com 1.152px menos os
-    // 64px de respiro sobram 1.088px, que dão três colunas de ~347px (D-80: o que muda na
-    // web é densidade, não largura).
-    <div className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-6xl desk:gap-6 desk:p-8">
+    <>
+      {/* O hero fica FORA do contêiner com padding, de propósito: ele sangra até a
+          borda da moldura, e um gutter de 20px à sua volta o transformaria num
+          cartão de foto em vez de uma abertura. */}
+      <Heroi />
+
+      {/* `desk:max-w-6xl` e não `5xl`: a moldura da visão web já é `max-w-6xl` em
+          `casca.tsx`, e o teto de 5xl estreitava o conteúdo em 128px dentro dela — pagando
+          com a largura dos cartões um limite que a moldura não pedia. Com 1.152px menos os
+          64px de respiro sobram 1.088px, que dão três colunas de ~347px (D-80: o que muda na
+          web é densidade, não largura). */}
+      <div
+        id={ANCORA_DO_FEED}
+        className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-6xl desk:gap-6 desk:p-8"
+      >
+      {/* O selo «C1» saiu daqui e das outras oito telas que o traziam. Ele nomeava a
+          camada do produto no vocabulário interno do projeto — informação para quem
+          escreveu a especificação, não para quem usa o app, e ocupando o canto mais
+          nobre do cabeçalho. Nenhum portão dependia dele. */}
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
-          <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Descobrir</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
-            C1
-          </span>
+          <h1 className="tipo-titulo-1 font-bold">Descobrir</h1>
         </div>
         {/* A tese da tela, escrita para quem AVALIA a proposta: ela nomeia o mecanismo
             («uma aresta do acervo»), aponta para o próprio componente («o selo laranja») e
@@ -56,9 +67,8 @@ export default function Descobrir() {
         listas={PRECOMPUTO.listas}
         porPersona={PRECOMPUTO.porPersona}
         personaPadrao={PRECOMPUTO.personaPadrao}
-        bytes={PRECOMPUTO.bytes}
-        combinacoes={PRECOMPUTO.combinacoes}
-      />
-    </div>
+        />
+      </div>
+    </>
   );
 }

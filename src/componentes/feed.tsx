@@ -42,9 +42,6 @@ export interface FeedProps {
   listas: CartaoDTO[][];
   porPersona: Record<string, CombinacaoFeedProps[]>;
   personaPadrao: string;
-  /** Bytes do precômputo. Vai para a tela: o custo do truque é declarado, não escondido. */
-  bytes: number;
-  combinacoes: number;
 }
 
 export function Feed({
@@ -52,8 +49,6 @@ export function Feed({
   listas,
   porPersona,
   personaPadrao,
-  bytes,
-  combinacoes,
 }: FeedProps) {
   const { personaId, disposicoes } = useSessao();
 
@@ -129,53 +124,7 @@ export function Feed({
         </p>
       )}
 
-      {combinacao ? (
-        <Diagnostico
-          diagnostico={combinacao.diagnostico}
-          cartoes={cartoes.length}
-          bytes={bytes}
-          combinacoes={combinacoes}
-        />
-      ) : null}
     </div>
   );
 }
 
-/**
- * Os números da montagem, na própria tela.
- *
- * Não é debug esquecido: é o argumento da proposta em forma verificável. Quem avalia lê,
- * sem abrir o código, quantos cartões vieram com texto do acervo e quantos foram redigidos
- * a partir de uma relação — a distinção que um recomendador opaco não oferece.
- *
- * E é por ser endereçado a quem AVALIA que ele mora inteiro dentro de `<Comentario>`: para
- * quem usa o app, «3 sementes · 41 candidatos a 1 salto» não quer dizer nada. A distinção
- * que essa pessoa precisa — de onde veio o texto do motivo — já está no rodapé de cada
- * cartão, em português, e continua na tela nos dois modos.
- */
-function Diagnostico({
-  diagnostico,
-  cartoes,
-  bytes,
-  combinacoes,
-}: {
-  diagnostico: DiagnosticoFeed;
-  cartoes: number;
-  bytes: number;
-  combinacoes: number;
-}) {
-  return (
-    <Comentario className="border-t border-borda pt-2 text-[0.65rem] leading-relaxed text-tinta-3">
-      Caminhada: {diagnostico.sementes} sementes · {diagnostico.candidatosPorSalto[1] ?? 0}{" "}
-      candidatos a 1 salto, {diagnostico.candidatosPorSalto[2] ?? 0} a 2 · {cartoes} cartões em{" "}
-      {diagnostico.classesCobertas.length} classes · motivo escrito no acervo em{" "}
-      {diagnostico.motivosEscritos}, montado a partir da relação em {diagnostico.motivosCompostos},
-      fora da caminhada em {diagnostico.motivosSemAresta}
-      {diagnostico.cortadosPorDisposicao
-        ? ` · ${diagnostico.cortadosPorDisposicao} candidatos cortados pela disposição`
-        : ""}
-      . As {combinacoes} combinações de persona e disposição foram montadas no build e pesam{" "}
-      {(bytes / 1024).toFixed(0)} KB — trocar qualquer uma não recalcula nada no navegador.
-    </Comentario>
-  );
-}

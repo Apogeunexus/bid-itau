@@ -28,9 +28,6 @@ export default function MapaDeRepertorio() {
         <div className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Mapa de repertório</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
-            C3
-          </span>
         </div>
         <Comentario className="max-w-prose text-sm text-tinta-2">
           O perfil como mapa do que a pessoa atravessou, não como configurações: as

@@ -22,13 +22,23 @@
  * documento. É por isso que ele não precisa conhecer cor nenhuma.
  */
 (function () {
+  var raiz = document.documentElement;
+
+  // O SORTEIO DO HERO. Ele mora aqui pelo mesmo motivo do tema: sortear depois
+  // da hidratação faria a primeira foto pintar e trocar, a cada carregamento.
+  // O total vem do próprio HTML (`data-heroi-total`, escrito pelo layout a
+  // partir da lista curada), então este arquivo não precisa saber quantas
+  // imagens existem — e não há como as duas contagens divergirem.
+  var total = Number(raiz.getAttribute("data-heroi-total") || 0);
+  if (total > 1) raiz.setAttribute("data-heroi", String(Math.floor(Math.random() * total)));
+
   try {
     var tema = window.localStorage.getItem("agenda-cultural:tema");
     // Lista fechada, e não «o que estiver lá»: o localStorage é editável pelo
     // usuário, e um valor inventado viraria um seletor que não casa com nada —
     // o sintoma seria um tema que não muda, sem erro nenhum para investigar.
     if (tema === "claro" || tema === "escuro") {
-      document.documentElement.setAttribute("data-tema", tema);
+      raiz.setAttribute("data-tema", tema);
     }
   } catch (erro) {
     // localStorage bloqueado (modo privado, iframe de terceiro). O tema do

@@ -56,9 +56,13 @@ export function SeletorDisposicao() {
               .
             </>
           ) : (
+            // Encurtado na reformulação de 2026-08: a versão anterior explicava
+            // o MECANISMO («disposição pondera a caminhada, não a destrava») no
+            // estado padrão da tela mais vista do produto. Isso é texto de
+            // especificação vestido de produto — quem chega quer saber o que
+            // está vendo, e o porquê está a um toque de distância, em «editar».
             <>
-              Você não marcou nenhuma disposição. Este é o <strong>feed base</strong>, montado
-              a partir do seu repertório — disposição pondera a caminhada, não a destrava.
+              Este é o <strong>feed base</strong>, do seu repertório.
             </>
           )}
         </p>

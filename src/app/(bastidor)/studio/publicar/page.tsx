@@ -30,9 +30,6 @@ export default function StudioPublicar() {
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">
             Studio — publicar evento
           </h1>
-          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
-            C3
-          </span>
         </div>
         <p className="max-w-prose text-sm leading-snug">
           O cadastro com devolutiva de qualidade: o score sobe conforme se preenche, a

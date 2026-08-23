@@ -190,6 +190,230 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
+ * HERO de Descobrir — `src/componentes/heroi.tsx`.
+ *
+ * A foto muda a cada carregamento. O mecanismo é o atributo `data-heroi` que
+ * `public/antes-da-pintura.js` escreve no <html> antes da primeira pintura, e as
+ * regras abaixo respondem a ele. SEM JAVASCRIPT o primeiro slide aparece: é a
+ * regra `:first-child` que garante que o hero nunca fica vazio.
+ * ------------------------------------------------------------------------- */
+
+.heroi {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  overflow: hidden;
+  /* `clamp` porque o hero divide a altura com o feed: numa moldura de 844px ele
+     não pode comer a dobra inteira, e numa janela web alta não pode virar uma
+     tira. Os três valores são múltiplos da grade. */
+  block-size: clamp(14rem, 40vh, 26rem);
+  /* PRETO FIXO, e não `--cor-tinta`. O hero é escuro NOS DOIS TEMAS porque
+     carrega foto sob um scrim, e o texto por cima é sempre branco. Escrito com o
+     token de tinta, o fundo virava BRANCO no tema escuro — e bastaria a imagem
+     falhar para a tela mostrar texto branco sobre branco. Foi assim que o portão
+     de contraste achou: sem cor de fundo legível, ele mediu 1,00:1. */
+  background: var(--ic-preto);
+}
+
+.heroi-trilho,
+.heroi-slide,
+.heroi-foto {
+  position: absolute;
+  inset: 0;
+}
+
+.heroi-slide {
+  display: none;
+}
+
+/* Sem JS, ou com um índice que não casa, o primeiro slide serve. */
+.heroi-trilho > .heroi-slide:first-child {
+  display: block;
+}
+
+/* Oito pares: o índice sorteado esconde o primeiro e mostra o escolhido. Escrito
+   à mão e não gerado porque são oito linhas de CSS contra uma dependência de
+   build — e porque `verificar-ds.mjs` confere que a lista de HEROIS tem o mesmo
+   tamanho, então as duas não podem divergir em silêncio. */
+[data-heroi="1"] .heroi-trilho > .heroi-slide:first-child,
+[data-heroi="2"] .heroi-trilho > .heroi-slide:first-child,
+[data-heroi="3"] .heroi-trilho > .heroi-slide:first-child,
+[data-heroi="4"] .heroi-trilho > .heroi-slide:first-child,
+[data-heroi="5"] .heroi-trilho > .heroi-slide:first-child,
+[data-heroi="6"] .heroi-trilho > .heroi-slide:first-child,
+[data-heroi="7"] .heroi-trilho > .heroi-slide:first-child {
+  display: none;
+}
+
+[data-heroi="1"] .heroi-slide[data-heroi-slide="1"],
+[data-heroi="2"] .heroi-slide[data-heroi-slide="2"],
+[data-heroi="3"] .heroi-slide[data-heroi-slide="3"],
+[data-heroi="4"] .heroi-slide[data-heroi-slide="4"],
+[data-heroi="5"] .heroi-slide[data-heroi-slide="5"],
+[data-heroi="6"] .heroi-slide[data-heroi-slide="6"],
+[data-heroi="7"] .heroi-slide[data-heroi-slide="7"] {
+  display: block;
+}
+
+.heroi-foto {
+  background-position: center;
+  background-size: cover;
+}
+
+/* O SCRIM É O QUE GARANTE O CONTRASTE, e não a curadoria. As oito fotos foram
+   escolhidas com o canto inferior esquerdo calmo, mas «calmo» não é «escuro»:
+   sem o degradê, um canto claro deixaria o título branco ilegível. A curadoria
+   evita que o scrim coma o ASSUNTO; quem garante o texto é esta regra. */
+.heroi-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top right,
+    var(--ic-preto) 0%,
+    color-mix(in srgb, transparent 30%, var(--ic-preto)) 34%,
+    transparent 68%
+  );
+}
+
+.heroi-credito {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 0.25rem 0.5rem;
+  background: color-mix(in srgb, transparent 35%, var(--ic-preto));
+  color: var(--ic-branco);
+  font-size: var(--tipo-micro);
+  letter-spacing: 0.02em;
+}
+
+/* O grafismo \C do manual (p.17), cortado em dois terços e sangrando pela borda
+   superior direita — é a aplicação que o manual chama de «\C cortado». A cor da
+   barra é uma das seis de apoio, e mora AQUI porque `--ic-lilas` e irmãs são
+   proibidas em .tsx: cor de apoio nunca é decidida em TypeScript. */
+.heroi-marca {
+  position: absolute;
+  top: var(--espaco-tela);
+  right: var(--espaco-tela);
+  z-index: 1;
+  display: grid;
+  pointer-events: none;
+}
+
+/* 3.5rem, e não as 8rem da primeira tentativa. Medido na tela: a marca grande
+   caía sobre o rosto da pessoa fotografada — em duas das oito imagens ela
+   atravessava o assunto. O grafismo é ASSINATURA, não ilustração: ele marca a
+   peça e sai da frente. */
+.heroi-marca > * {
+  grid-area: 1 / 1;
+  block-size: 3.5rem;
+  inline-size: auto;
+}
+
+.heroi-marca-c {
+  color: var(--ic-branco);
+  opacity: 0.85;
+}
+
+.heroi-marca-barra {
+  color: var(--ic-amarelo);
+  /* «Utilize cerca de dois terços do \C cortado» — o manual é literal nisso, e
+     avisa que cortar mais descaracteriza a barra. */
+  clip-path: inset(0 0 33.33% 0);
+}
+
+/* A colagem: duas barras a mais, em outras duas cores de apoio, deslocadas atrás
+   da assinatura. É o mosaico do manual (p.17) reduzido a três módulos — ele roda
+   as seis cores de apoio numa grade, e três já bastam para dizer «é aquele
+   grafismo» sem virar padronagem em cima de uma fotografia. */
+.heroi-marca::before,
+.heroi-marca::after {
+  content: "";
+  grid-area: 1 / 1;
+  align-self: start;
+  block-size: 2rem;
+  inline-size: 0.75rem;
+  clip-path: polygon(0 0, 55% 0, 100% 100%, 45% 100%);
+}
+
+.heroi-marca::before {
+  background: var(--ic-rosa);
+  transform: translate(-1.75rem, 0.5rem);
+}
+
+.heroi-marca::after {
+  background: var(--ic-verde-agua);
+  transform: translate(-3.25rem, -0.25rem);
+}
+
+.heroi-texto {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-block-start: auto;
+  padding: var(--espaco-tela);
+  max-inline-size: 34rem;
+}
+
+/* CAIXA ALTA no título, e o manual não proíbe: a varredura das 35 páginas por
+   «caixa alta» e «maiúscul» não retorna nada. O que ele proíbe é centralizar
+   bloco de texto (p.14) — por isso tudo aqui alinha à esquerda. */
+.heroi-titulo {
+  margin: 0;
+  color: var(--ic-branco);
+  font-size: var(--tipo-cartaz);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.heroi-linha {
+  margin: 0;
+  max-inline-size: 40ch;
+  color: color-mix(in srgb, transparent 15%, var(--ic-branco));
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+}
+
+/* Texto PRETO sobre o laranja, nunca branco: branco sobre esta cor mede 2,64:1 e
+   reprova; preto mede 9,1:1. Ver `--cor-sobre-acao` em tokens.css. */
+.heroi-botao {
+  margin-block-start: 0.25rem;
+  border-radius: var(--raio-pilula);
+  padding: 0.5rem 1.25rem;
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: opacity var(--dur-1) var(--ease-padrao);
+}
+
+.heroi-botao:hover {
+  opacity: 0.9;
+}
+
+.heroi-nota {
+  position: relative;
+  z-index: 1;
+  align-self: flex-end;
+  margin-block-start: auto;
+  padding: var(--espaco-tela);
+  max-inline-size: 26rem;
+  color: color-mix(in srgb, transparent 25%, var(--ic-branco));
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------------------------------------
  * CHIP e TRILHO — a primitiva de `src/componentes/base/chip.tsx`.
  *
  * Mora aqui, e não em folha própria, por um motivo prático: `globals.css` é

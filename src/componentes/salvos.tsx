@@ -311,9 +311,6 @@ export function Salvos({
         <div className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold">Salvos</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
-            C1
-          </span>
         </div>
         {/* MEDIDO, e por isso curta: com esta frase em três linhas, o fim da segunda linha
             da fila caía a 770px do topo da moldura, 6px atrás da barra de abas — e a imagem

@@ -255,6 +255,85 @@ console.log("\nverificar-ds — regras estruturais do design system");
   }
 }
 
+// ---- 5b. A curadoria do hero, REMEDIDA contra o disco -------------------
+//
+// `src/dados/heroi.ts` é uma lista curta escrita à mão a partir de uma medição
+// que rodou uma vez. O defeito previsível não é a escolha estar errada — é ela
+// envelhecer: um arquivo renomeado no acervo, uma dimensão anotada errado, uma
+// entrada acrescentada sem `alt`. Nada disso quebra o build; tudo isso quebra o
+// hero em silêncio, para quem usa leitor de tela primeiro.
+//
+// O gate reabre cada arquivo, relê a dimensão pelos magic bytes (a extensão
+// mente em 10% do acervo) e confere contra o que a lista declara.
+{
+  const fonte = await readFile(path.join(SRC, "dados", "heroi.ts"), "utf8");
+  const entradas = [
+    ...fonte.matchAll(
+      /arquivo:\s*"([^"]+)"[\s\S]*?largura:\s*(\d+)[\s\S]*?altura:\s*(\d+)[\s\S]*?alt:\s*"([^"]*)"[\s\S]*?credito:\s*"([^"]*)"/g,
+    ),
+  ].map((m) => ({
+    arquivo: m[1],
+    largura: Number(m[2]),
+    altura: Number(m[3]),
+    alt: m[4],
+    credito: m[5],
+  }));
+
+  const problemas = [];
+  for (const e of entradas) {
+    const caminho = path.join(RAIZ, "public", "acervo", e.arquivo);
+    let cabeca;
+    try {
+      cabeca = await readFile(caminho);
+    } catch {
+      problemas.push(`${e.arquivo}: não existe em public/acervo/`);
+      continue;
+    }
+    let dim = null;
+    if (cabeca[0] === 0xff && cabeca[1] === 0xd8) {
+      let i = 2;
+      while (i < cabeca.length - 9) {
+        if (cabeca[i] !== 0xff) {
+          i++;
+          continue;
+        }
+        const marcador = cabeca[i + 1];
+        if (marcador >= 0xc0 && marcador <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marcador)) {
+          dim = { altura: cabeca.readUInt16BE(i + 5), largura: cabeca.readUInt16BE(i + 7) };
+          break;
+        }
+        i += 2 + cabeca.readUInt16BE(i + 2);
+      }
+    } else if (cabeca.subarray(0, 4).toString("hex") === "89504e47") {
+      dim = { largura: cabeca.readUInt32BE(16), altura: cabeca.readUInt32BE(20) };
+    }
+
+    if (!dim) problemas.push(`${e.arquivo}: não consegui ler a dimensão`);
+    else if (dim.largura !== e.largura || dim.altura !== e.altura) {
+      problemas.push(
+        `${e.arquivo}: declara ${e.largura}×${e.altura}, o arquivo tem ${dim.largura}×${dim.altura}`,
+      );
+    } else if (dim.largura / dim.altura < 1.5) {
+      problemas.push(`${e.arquivo}: razão ${(dim.largura / dim.altura).toFixed(2)} < 1.5`);
+    } else if (dim.largura < 800) {
+      problemas.push(`${e.arquivo}: ${dim.largura}px de largura, mínimo 800`);
+    }
+    if (!e.alt.trim()) problemas.push(`${e.arquivo}: alt vazio`);
+    if (!e.credito.trim()) problemas.push(`${e.arquivo}: crédito vazio`);
+  }
+
+  // Menos de 8 e o sorteio deixa de ser sorteio: com três imagens, a repetição
+  // fica evidente em poucas visitas e o efeito vira defeito.
+  if (entradas.length < 8) problemas.push(`só ${entradas.length} entradas, mínimo 8`);
+
+  exigir(
+    problemas.length === 0,
+    `curadoria do hero: ${entradas.length} imagens conferidas contra o disco`,
+    problemas.length === 0 ? "todas medem o que declaram, com alt e crédito" : problemas.join(" | "),
+    "0 problemas",
+  );
+}
+
 // ---- 6. Os dois blocos do tema escuro declaram o MESMO conjunto ---------
 //
 // O tema escuro mora em dois seletores — `@media (prefers-color-scheme: dark)`
