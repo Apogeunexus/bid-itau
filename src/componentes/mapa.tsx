@@ -2,13 +2,34 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ICONE_MAPA } from "@/componentes/base/icones";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
 import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/componentes/desertos";
 import { Grafismo } from "@/componentes/grafismo";
+import type { DadosDePerto, ItemPerto, OrigemDoMapa } from "@/dados/mapa-perto";
 
 /**
  * mapa.tsx — o mapa como LENTE (D-59), desenhado por projeção própria em SVG (D-60).
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * A INVERSÃO DE 2026-08: DESCOBERTA PRIMEIRO, MAPA COMO APOIO
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * Esta tela abria com o desenho do Brasil ocupando a primeira dobra e a lista do acervo
+ * escondida embaixo dele. O efeito era um Google Maps cultural: a pessoa chegava e via
+ * bolinhas, quando a pergunta que ela traz é «o que tem perto de mim que vale a pena
+ * conhecer?». O RFP pede EQUILÍBRIO entre mapa, busca, filtros e curadoria, e o mapa
+ * tinha virado o conteúdo.
+ *
+ * A ordem agora é: origem → busca → filtro → cartões com distância → mapa. O desenho
+ * continua na tela, inteiro e com os mesmos pinos — ele só deixou de ser a abertura, e
+ * ganhou um botão «Ver no mapa» que leva até ele. Mapa não é porta de entrada (D-59), e
+ * agora o layout diz isso, em vez de só o texto dizer.
+ *
+ * COM LENTE A TELA NÃO MUDA. Quem chega de Acontece ou de Buscar veio consertar um
+ * recorte, não explorar: as fileiras de descoberta ficam fora, e o desenho volta a ser o
+ * primeiro elemento depois dos filtros — que é o que aquele conjunto pede.
  *
  * COMPONENTE DE CLIENTE, e por DP-F ele NÃO IMPORTA `@/dados/geo` nem `@/dados/grafo`, nem
  * transitivamente. Tudo o que ele desenha chega por propriedade, já projetado no build por
@@ -74,6 +95,8 @@ export interface DadosDoMapa {
   voltas: readonly VoltaPadrao[];
   /** A camada de desertos culturais (D-62), já projetada e já contada no build. */
   desertos: DadosDesertos;
+  /** As cidades de origem e o que está perto de cada uma, montado no build. */
+  perto: DadosDePerto;
 }
 
 interface Lente {
@@ -197,6 +220,9 @@ const FAMILIAS: readonly Familia[] = [
 const porRelevancia = (a: PinoIndexado, b: PinoIndexado) =>
   b[EVENTOS] - a[EVENTOS] || a[TITULO].localeCompare(b[TITULO], "pt");
 
+/** Normaliza acento nos dois lados da busca: quem procura «belem» tem de achar «Belém». */
+const semAcento = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
 export function Mapa({ dados }: { dados: DadosDoMapa }) {
   const [lente, definirLente] = useState<Lente | null>(null);
   const [selecionada, definirSelecionada] = useState<string | null>(null);
@@ -221,6 +247,13 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
    */
   const [vista, definirVista] = useState<Vista | null>(null);
   const arrastando = useRef<{ x: number; y: number; vista: Vista } | null>(null);
+  /** De onde a pessoa está olhando. A primeira origem é a de maior acervo. */
+  const [origemSlug, definirOrigemSlug] = useState<string>(
+    dados.perto.origens[0]?.slug ?? "",
+  );
+  const [trocandoOrigem, definirTrocandoOrigem] = useState(false);
+  /** O alvo do «Ver no mapa» — rolagem, e não hash: o hash aqui é a gramática da lente. */
+  const secaoDoMapa = useRef<HTMLElement | null>(null);
 
   // O hash só é lido no cliente: sob export estático o HTML é o mesmo para todo recorte, e
   // ler `location` durante a renderização de servidor produziria divergência de hidratação.
@@ -263,10 +296,7 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
    * trouxe, e é dele que a legenda tira «quantos ficaram sem posição». Filtrar aquilo aqui
    * faria o número de ausências mudar conforme o usuário digita — a declaração de
    * procedência é sobre o conjunto, não sobre a vista.
-   *
-   * Normaliza acento nos dois lados: quem procura «belem» tem de achar «Belém».
    */
-  const semAcento = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
   const visiveis = useMemo(() => {
     const classes = FAMILIAS.find((f) => f.id === familia)?.classes ?? [];
     const termo = semAcento(busca.trim());
@@ -302,6 +332,53 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
     }
     return conta;
   }, [recorte.posicionados]);
+
+  // ---- a descoberta: origem, o que há nela, e o que está perto dela ---------
+
+  const origem = useMemo(
+    () => dados.perto.origens.find((o) => o.slug === origemSlug) ?? null,
+    [dados.perto.origens, origemSlug],
+  );
+
+  /**
+   * As duas fileiras, recortadas pelos MESMOS filtros do mapa.
+   *
+   * Os chips e a busca ficam acima delas na tela, então precisam valer para elas — um
+   * filtro que recorta o desenho e ignora os cartões logo abaixo é um filtro que mente
+   * sobre o próprio alcance.
+   */
+  const fileiras = useMemo(() => {
+    if (!origem) return null;
+    const classes = FAMILIAS.find((f) => f.id === familia)?.classes ?? [];
+    const termo = semAcento(busca.trim());
+    const cabe = (item: ItemPerto) => {
+      const p = dados.pinos[item.i];
+      if (!p) return false;
+      if (classes.length && !classes.includes(p[3])) return false;
+      if (termo && !semAcento(p[TITULO]).includes(termo)) return false;
+      return true;
+    };
+    return { naCidade: origem.naCidade.filter(cabe), fora: origem.fora.filter(cabe) };
+  }, [origem, dados.pinos, familia, busca]);
+
+  /**
+   * O DESTAQUE — a peça de abertura, tirada da fileira da cidade.
+   *
+   * Preferência por quem tem foto no acervo, e depois por quem tem rota: um destaque que
+   * não leva a lugar nenhum é um cartaz sem porta. Se a cidade não tem nada que passe no
+   * filtro, o destaque vem do que está perto — e se nem isso, ele some, em vez de virar
+   * uma moldura vazia.
+   */
+  const destaque = useMemo(() => {
+    if (!fileiras) return null;
+    const candidatos = [...fileiras.naCidade, ...fileiras.fora].filter((item) => {
+      const p = dados.pinos[item.i];
+      return p && rotaDe(p[3], p[0]);
+    });
+    const item = candidatos.find((i) => dados.pinos[i.i][IMAGEM]) ?? candidatos[0];
+    if (!item) return null;
+    return { item, p: dados.pinos[item.i], fora: fileiras.fora.includes(item) };
+  }, [fileiras, dados.pinos]);
 
   /**
    * O agrupamento é uma CONSULTA pela célula que o servidor já calculou, e não um segundo
@@ -440,8 +517,54 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
         )}
       </header>
 
+      {/* A ORIGEM — «de onde você está olhando».
+          Ela é ESCOLHIDA, e nunca adivinhada: o protótipo não pede localização e não
+          teria como honrar «perto de mim» sem ela. Dizer qual é a origem, e deixar
+          trocá-la, é o que faz a distância dos cartões abaixo significar alguma coisa. */}
+      {origem && !lente ? (
+        <div className="mapa-origem">
+          <span aria-hidden className="mapa-origem-pino">
+            {ICONE_MAPA}
+          </span>
+          <p className="mapa-origem-linha">
+            <span className="mapa-origem-rotulo">Explorando a partir de</span>
+            <strong className="mapa-origem-cidade">
+              {origem.titulo}
+              {origem.uf ? `, ${origem.uf}` : ""}
+            </strong>
+          </p>
+          <button
+            type="button"
+            aria-expanded={trocandoOrigem}
+            onClick={() => definirTrocandoOrigem((aberto) => !aberto)}
+            className="mapa-origem-trocar"
+          >
+            {trocandoOrigem ? "Fechar" : "Alterar"}
+          </button>
+        </div>
+      ) : null}
+
+      {origem && !lente && trocandoOrigem ? (
+        <TrilhoDeChips rotulo="Escolher a cidade de origem">
+          {dados.perto.origens.map((o) => (
+            <Chip
+              key={o.slug}
+              data-origem={o.slug}
+              selecionado={o.slug === origem.slug}
+              onClick={() => {
+                definirOrigemSlug(o.slug);
+                definirTrocandoOrigem(false);
+              }}
+              contagem={o.total}
+            >
+              {o.titulo}
+            </Chip>
+          ))}
+        </TrilhoDeChips>
+      ) : null}
+
       <label className="mapa-busca">
-        <span className="sr-only">Buscar no que está no mapa</span>
+        <span className="sr-only">Buscar no acervo desta tela</span>
         <svg aria-hidden viewBox="0 0 20 20" className="mapa-busca-lupa">
           <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" strokeWidth="2" />
           <path d="M13.5 13.5 L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -450,7 +573,7 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
           type="search"
           value={busca}
           onChange={(e) => definirBusca(e.target.value)}
-          placeholder="Buscar no mapa…"
+          placeholder="Buscar eventos, lugares, pessoas…"
           className="mapa-busca-campo"
         />
       </label>
@@ -490,7 +613,48 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
         ))}
       </TrilhoDeChips>
 
-      <div className="mapa-quadro" data-zoom={zoom > 1 ? "sim" : "nao"}>
+      {/* AS FILEIRAS DE DESCOBERTA. Só sem lente: com um recorte na mão, a tela é sobre
+          aquele conjunto, e uma fileira «perto de São Paulo» ao lado dele seria um segundo
+          assunto no meio do primeiro. */}
+      {origem && fileiras && !lente ? (
+        <section className="mapa-perto" data-origem-ativa={origem.slug}>
+          {destaque ? (
+            <Destaque item={destaque.item} p={destaque.p} comDistancia={destaque.fora} />
+          ) : null}
+
+          <FileiraPerto
+            titulo={`Em ${origem.titulo}`}
+            apoio={`${fileiras.naCidade.length} dos ${origem.total} registros da cidade — o resto está na lista do mapa`}
+            itens={fileiras.naCidade}
+            pinos={dados.pinos}
+            comDistancia={false}
+            vazio={`Nada em ${origem.titulo} corresponde a este recorte. Toque em «Tudo» ou limpe a busca.`}
+          />
+
+          <FileiraPerto
+            titulo="Mais perto daqui"
+            apoio={`O acervo mais próximo fora da cidade — ${dados.perto.fonteDaDistancia}.`}
+            itens={fileiras.fora}
+            pinos={dados.pinos}
+            comDistancia
+            vazio="Nada fora da cidade corresponde a este recorte. Toque em «Tudo» ou limpe a busca."
+          />
+
+          <button
+            type="button"
+            onClick={() => secaoDoMapa.current?.scrollIntoView({ block: "start" })}
+            className="mapa-ver-no-mapa"
+          >
+            <span aria-hidden className="mapa-ver-no-mapa-pino">
+              {ICONE_MAPA}
+            </span>
+            Ver no mapa
+          </button>
+        </section>
+      ) : null}
+
+      <section ref={secaoDoMapa} className="mapa-secao">
+      <div className="mapa-quadro" data-camada={desertos ? "sim" : "nao"} data-zoom={zoom > 1 ? "sim" : "nao"}>
         <svg
           // `data-mapa-viewbox` guarda o retângulo BASE, o que veio do build, e não
           // o que está na tela: é por ele que os portões acham o SVG, e um valor
@@ -720,6 +884,7 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
           </>
         )}
       </div>
+      </section>
     </div>
   );
 }
@@ -737,6 +902,218 @@ const NOME_DA_CLASSE: Record<string, string> = {
 
 function nomeDaClasse(classe: string): string {
   return NOME_DA_CLASSE[classe] ?? classe;
+}
+
+// ---------------------------------------------------------------------------
+// A descoberta: destaque, fileira e cartão
+// ---------------------------------------------------------------------------
+
+/**
+ * Quilômetros escritos em português, sem `toLocaleString`.
+ *
+ * A formatação é à mão pela mesma razão que `cidade.ts` registra para `localeCompare`: o
+ * ICU depende da máquina, e sob export estático o número renderizado no build e o
+ * renderizado na hidratação precisam ser o MESMO texto — divergência ali é erro de
+ * hidratação, não detalhe de estilo.
+ *
+ * Abaixo de 10 km a casa decimal informa; acima dela, não: «2.030,4 km» finge uma precisão
+ * que uma linha reta entre dois centroides de município não tem.
+ */
+function formatarKm(valor: number): string {
+  if (valor < 10) return `${valor.toFixed(1).replace(".", ",")} km`;
+  return `${Math.round(valor).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} km`;
+}
+
+/**
+ * A capa de qualquer porte: a foto do acervo quando existe, a composição de marca quando
+ * não — campo na cor da linguagem (que já viaja na tupla, D-08) e o `\` do manual em duas
+ * camadas deslocadas, uma clara e uma escura, para que uma delas apareça sobre qualquer
+ * cor sem este arquivo saber qual é. É a mesma família de `capa-sem-imagem.tsx`.
+ *
+ * MEDIDO NESTE ACERVO: 115 dos 790 pinos do Brasil têm foto. A composição não é o caso de
+ * exceção desta tela — ela é o caso comum, e por isso precisa ser bonita.
+ *
+ * `alt=""` na foto porque o título é texto adjacente dentro do mesmo link: repeti-lo faria
+ * o leitor de tela anunciar cada cartão duas vezes.
+ */
+function Textura({ camada, barras }: { camada: string; barras: number }) {
+  return (
+    <span aria-hidden className={`mapa-capa-textura ${camada}`}>
+      {Array.from({ length: barras }, (_, i) => (
+        <Grafismo key={i} variacao="barra" className="mapa-capa-traco" />
+      ))}
+    </span>
+  );
+}
+
+function Capa({
+  p,
+  className,
+  barras = 2,
+}: {
+  p: PinoIndexado;
+  className: string;
+  /** Quantos `\` compõem a textura. Numa linha de 56px, dois; num cartão, uma parede. */
+  barras?: number;
+}) {
+  if (p[IMAGEM]) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return (
+      <img
+        src={p[IMAGEM]}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className={`mapa-capa ${className}`}
+      />
+    );
+  }
+  const token = p[COR] || "--ic-preto";
+  return (
+    <span
+      aria-hidden
+      style={{ "--cor-linguagem": `var(${token})` } as React.CSSProperties}
+      className={`mapa-capa mapa-capa-composta ${className}`}
+    >
+      <Textura camada="mapa-capa-textura-clara" barras={barras} />
+      <Textura camada="mapa-capa-textura-escura" barras={barras} />
+    </span>
+  );
+}
+
+/** A linha de lugar do cartão: o espaço quando o acervo o conhece, a cidade quando não. */
+function Lugar({ item, comDistancia }: { item: ItemPerto; comDistancia: boolean }) {
+  return (
+    <span className="mapa-lugar">
+      <span aria-hidden className="mapa-lugar-pino">
+        {ICONE_MAPA}
+      </span>
+      {comDistancia ? `${formatarKm(item.km)} · ${item.onde}` : item.onde}
+    </span>
+  );
+}
+
+/**
+ * O DESTAQUE — a peça de abertura da descoberta.
+ *
+ * Foto (ou composição) sangrando, véu por cima e o texto no pé, que é o mesmo mecanismo do
+ * destaque de `/play` e do hero de Descobrir. O véu não é enfeite: metade do acervo tem o
+ * rodapé claro, e sem o degradê o título branco ficaria ilegível justamente nas capas mais
+ * bonitas.
+ */
+function Destaque({
+  item,
+  p,
+  comDistancia,
+}: {
+  item: ItemPerto;
+  p: PinoIndexado;
+  comDistancia: boolean;
+}) {
+  const rota = rotaDe(p[3], p[0]);
+  // Sem rota não há destaque: um cartaz do tamanho da tela que não abre nada é uma porta
+  // pintada na parede. O `useMemo` que escolhe o item já prefere quem tem rota; isto é a
+  // rede embaixo dela.
+  if (!rota) return null;
+  return (
+    <Link href={rota} data-destaque={p[0]} className="mapa-destaque">
+      <Capa p={p} className="mapa-destaque-capa" barras={24} />
+      <span aria-hidden className="mapa-destaque-veu" />
+      <span className="mapa-destaque-texto">
+        <span className="mapa-destaque-classe">{nomeDaClasse(p[3])}</span>
+        <span className="mapa-destaque-titulo">{p[TITULO]}</span>
+        <Lugar item={item} comDistancia={comDistancia} />
+      </span>
+    </Link>
+  );
+}
+
+/**
+ * A FILEIRA — cabeçalho com procedência e um trilho que rola.
+ *
+ * O apoio do cabeçalho carrega o denominador («8 de 217») em vez de deixar a fileira
+ * parecer o conjunto inteiro: um trilho cortado em silêncio lê como «é só isso que existe»,
+ * e o resto do acervo da cidade está na lista logo abaixo do mapa.
+ */
+function FileiraPerto({
+  titulo,
+  apoio,
+  itens,
+  pinos,
+  comDistancia,
+  vazio,
+}: {
+  titulo: string;
+  apoio: string;
+  itens: readonly ItemPerto[];
+  pinos: readonly PinoIndexado[];
+  comDistancia: boolean;
+  vazio: string;
+}) {
+  return (
+    <section className="mapa-fileira">
+      <div className="mapa-fileira-cabecalho">
+        <h2 className="mapa-fileira-titulo">{titulo}</h2>
+        <p className="mapa-fileira-apoio">{apoio}</p>
+      </div>
+      {itens.length === 0 ? (
+        <p className="mapa-fileira-vazio">{vazio}</p>
+      ) : (
+        <ul className="mapa-trilho">
+          {itens.map((item) => (
+            <CartaoPerto
+              key={pinos[item.i][0]}
+              item={item}
+              p={pinos[item.i]}
+              comDistancia={comDistancia}
+            />
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+/**
+ * O CARTÃO — capa em 3:2 e uma faixa tipográfica embaixo.
+ *
+ * A composição é a de `/play` e a razão é a mesma: o acervo não tem key art, tem fotografia
+ * larga com o assunto fora do centro. Recortar isso num cartaz em pé decepa o assunto; a
+ * faixa da casa embaixo resolve sem cortar nada.
+ */
+function CartaoPerto({
+  item,
+  p,
+  comDistancia,
+}: {
+  item: ItemPerto;
+  p: PinoIndexado;
+  comDistancia: boolean;
+}) {
+  const rota = rotaDe(p[3], p[0]);
+  const miolo = (
+    <>
+      <span className="mapa-cartao-quadro">
+        <Capa p={p} className="mapa-cartao-capa" barras={12} />
+      </span>
+      <span className="mapa-cartao-faixa">
+        <span className="mapa-cartao-classe">{nomeDaClasse(p[3])}</span>
+        <span className="mapa-cartao-titulo">{p[TITULO]}</span>
+        <Lugar item={item} comDistancia={comDistancia} />
+      </span>
+    </>
+  );
+  return (
+    <li className="mapa-cartao-perto" data-perto={p[0]}>
+      {rota ? (
+        <Link href={rota} className="mapa-cartao-alvo">
+          {miolo}
+        </Link>
+      ) : (
+        <div className="mapa-cartao-alvo">{miolo}</div>
+      )}
+    </li>
+  );
 }
 
 /**
@@ -844,44 +1221,6 @@ function ListaForaDoBrasil({
 }
 
 /**
- * A capa da linha: a foto do acervo quando existe, a cor da linguagem quando não.
- *
- * A composição sem foto é da mesma família de `capa-sem-imagem.tsx`, encolhida
- * para o tamanho de uma linha: campo na cor da linguagem (que já viaja na tupla,
- * D-08) e o `\` do manual em duas camadas deslocadas — uma clara e uma escura,
- * para que uma delas apareça sobre qualquer cor sem este arquivo saber qual é.
- * A pastilha de classe fica de fora: aqui a classe está escrita ao lado, em texto.
- *
- * `alt=""` na foto pela mesma razão do Cast: o título é texto adjacente no mesmo
- * link, e repeti-lo faria o leitor de tela anunciar cada linha duas vezes.
- */
-function CapaDaLinha({ p }: { p: PinoIndexado }) {
-  if (p[IMAGEM]) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return (
-      <img
-        src={p[IMAGEM]}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="mapa-item-capa"
-      />
-    );
-  }
-  const token = p[COR] || "--ic-preto";
-  return (
-    <span
-      aria-hidden
-      style={{ "--cor-linguagem": `var(${token})` } as React.CSSProperties}
-      className="mapa-item-capa mapa-item-capa-composta"
-    >
-      <Grafismo variacao="barra" className="mapa-item-capa-traco mapa-item-capa-traco-claro" />
-      <Grafismo variacao="barra" className="mapa-item-capa-traco mapa-item-capa-traco-escuro" />
-    </span>
-  );
-}
-
-/**
  * A linha de item, a mesma nas duas listas da folha e no cartão do ponto.
  *
  * O NÚMERO QUE ORDENA FICA VISÍVEL. Sem ele a lista pareceria em ordem
@@ -892,7 +1231,7 @@ function ItemDaLista({ p }: { p: PinoIndexado }) {
   const rota = rotaDe(p[3], p[0]);
   const conteudo = (
     <>
-      <CapaDaLinha p={p} />
+      <Capa p={p} className="mapa-item-capa" barras={6} />
       <span className="mapa-item-nome">{p[TITULO]}</span>
       {p[EVENTOS] > 0 ? (
         <span className="mapa-item-eventos">

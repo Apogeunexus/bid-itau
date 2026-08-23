@@ -168,18 +168,403 @@
   outline: none;
 }
 
+/* ---------------------------------------------------------------------------
+ * A ORIGEM — «de onde você está olhando».
+ *
+ * Uma linha só, com o pino à esquerda e o botão de trocar à direita: é a barra de
+ * localização da referência, sem fingir que houve GPS. O nome da cidade é o único
+ * elemento com peso aqui, porque é ele que dá sentido a todo «92 km» abaixo.
+ * ------------------------------------------------------------------------- */
+.mapa-origem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-block-size: 2.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+  background: var(--cor-superficie);
+}
+
+/* DUAS LINHAS, E NÃO UMA. Numa só, «Explorando a partir de» e o nome da cidade
+   disputavam a largura da moldura de 390px e quem perdia era o nome — «São Pa…»,
+   que é justamente o dado que dá sentido a todo «92 km» abaixo. Empilhados, o
+   rótulo fica pequeno em cima e a cidade inteira embaixo. */
+.mapa-origem-linha {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-inline-size: 0;
+  margin: 0;
+  font-size: var(--tipo-detalhe);
+}
+
+/* O ícone da navegação, no porte de texto. A regra é mais específica que a
+   `size-6` do utilitário, então o mesmo `<svg>` serve à barra e a esta linha sem
+   um segundo `<path>` no projeto. */
+.mapa-origem-pino svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  color: var(--cor-acao-tinta);
+}
+
+.mapa-origem-pino {
+  display: flex;
+  flex: none;
+}
+
+.mapa-origem-rotulo {
+  font-size: var(--tipo-micro);
+  line-height: 1.2;
+  color: var(--cor-tinta-3);
+}
+
+.mapa-origem-cidade {
+  overflow: hidden;
+  font-size: var(--tipo-destaque);
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-origem-trocar {
+  flex: none;
+  min-block-size: 2.25rem;
+  padding: 0 0.75rem;
+  border-radius: var(--raio-pilula);
+  color: var(--cor-acao-tinta);
+  cursor: pointer;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+.mapa-origem-trocar:hover {
+  background: var(--cor-acao-lavada);
+}
+
+.mapa-origem-trocar:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+ * A DESCOBERTA — destaque, duas fileiras e o botão que leva ao desenho.
+ * ------------------------------------------------------------------------- */
+.mapa-perto {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-block-start: 0.25rem;
+}
+
+/* ---- o destaque ---------------------------------------------------------- */
+.mapa-destaque {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  overflow: hidden;
+  border-radius: var(--raio-g);
+  /* PRETO FIXO nos dois temas, e não `--cor-tinta`: o que está por cima é
+     fotografia sob véu e o texto é sempre branco. Escrito com token de tinta, o
+     fundo viraria branco no tema escuro e o texto sumiria — foi assim que o
+     portão de contraste pegou o hero de Descobrir na época. */
+  background: var(--ic-preto);
+  block-size: clamp(11rem, 30vh, 15rem);
+  color: var(--ic-branco);
+  text-decoration: none;
+  transition: box-shadow var(--dur-1) var(--ease-padrao);
+}
+
+.mapa-destaque:hover {
+  box-shadow: var(--sombra-2);
+}
+
+.mapa-destaque:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.mapa-destaque-capa {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  --capa-traco: 3rem;
+}
+
+/* O VÉU É O QUE GARANTE O CONTRASTE, não a sorte da capa. Vale para a foto e
+   vale para a composição de marca, que pode ser um amarelo claro. */
+.mapa-destaque-veu {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--ic-preto) 0%,
+    color-mix(in srgb, transparent 25%, var(--ic-preto)) 38%,
+    color-mix(in srgb, transparent 72%, var(--ic-preto)) 66%,
+    transparent 100%
+  );
+}
+
+.mapa-destaque-texto {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  margin-block-start: auto;
+  min-inline-size: 0;
+  padding: var(--espaco-cartao);
+}
+
+.mapa-destaque-classe {
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ic-branco) 78%, transparent);
+}
+
+.mapa-destaque-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-family: var(--fonte-display, inherit);
+  font-size: var(--tipo-titulo-2);
+  font-weight: 800;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.mapa-destaque .mapa-lugar {
+  color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
+}
+
+.mapa-destaque .mapa-lugar-pino svg {
+  color: var(--cor-acao);
+}
+
+/* ---- a fileira e o trilho ------------------------------------------------ */
+.mapa-fileira {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mapa-fileira-cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mapa-fileira-titulo {
+  margin: 0;
+  font-family: var(--fonte-display, inherit);
+  font-size: var(--tipo-titulo-3);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* O APOIO CARREGA O DENOMINADOR E A PROCEDÊNCIA. «8 de 217» impede a fileira de
+   parecer o conjunto inteiro, e a frase da distância impede o «92 km» de passar
+   por rota de trânsito. As duas coisas são a mesma regra da casa: número na tela
+   diz de onde veio. */
+.mapa-fileira-apoio {
+  margin: 0;
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+  color: var(--cor-tinta-3);
+}
+
+.mapa-fileira-vazio {
+  margin: 0;
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  padding: var(--espaco-cartao);
+  font-size: var(--tipo-detalhe);
+  color: var(--cor-tinta-2);
+}
+
+/* O trilho SANGRA até a borda pela mesma razão de `.trilho-chips` em `base.css`:
+   o primeiro cartão alinha com o texto, e os que rolam passam por baixo da margem
+   em vez de parecerem cortados no meio do recuo. */
+.mapa-trilho {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximate;
+  scrollbar-width: none;
+  margin: 0;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding: 0;
+  padding-inline: var(--espaco-tela);
+  padding-block-end: 0.25rem;
+  list-style: none;
+}
+
+.mapa-trilho > li {
+  flex: none;
+  inline-size: 9.5rem;
+  scroll-snap-align: start;
+}
+
+/* ---- o cartão ------------------------------------------------------------ */
+.mapa-cartao-alvo {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-1);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color var(--dur-1) var(--ease-padrao),
+    box-shadow var(--dur-1) var(--ease-padrao);
+}
+
+a.mapa-cartao-alvo:hover {
+  border-color: var(--cor-borda-forte);
+  box-shadow: var(--sombra-2);
+}
+
+a.mapa-cartao-alvo:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.mapa-cartao-quadro {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  /* 3:2 e não 2:3. O acervo é fotografia larga com o assunto fora do centro:
+     fechar num retrato de pôster decepa o assunto na metade dos casos. */
+  aspect-ratio: 3 / 2;
+  background: var(--cor-superficie-2);
+}
+
+.mapa-cartao-capa {
+  inline-size: 100%;
+  block-size: 100%;
+  --capa-traco: 2rem;
+}
+
+.mapa-cartao-faixa {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+
+.mapa-cartao-classe {
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
+
+.mapa-cartao-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  /* DUAS LINHAS, e o trilho é a razão: os cartões esticam até a altura do mais alto, então
+     um título de três linhas encompridava a fileira inteira e abria um vão embaixo dos
+     outros seis. O nome completo está na página da entidade, a um toque. */
+  -webkit-line-clamp: 2;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+a.mapa-cartao-alvo:hover .mapa-cartao-titulo {
+  color: var(--cor-acao-tinta);
+}
+
+/* ---- a linha de lugar, comum ao cartão e ao destaque --------------------- */
+.mapa-lugar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-block-start: auto;
+  min-inline-size: 0;
+  padding-block-start: 0.25rem;
+  font-size: var(--tipo-legenda);
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-tinta-2);
+}
+
+.mapa-lugar-pino {
+  display: flex;
+  flex: none;
+}
+
+.mapa-lugar-pino svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+  color: var(--cor-acao-tinta);
+}
+
+/* ---- o botão que leva ao desenho ---------------------------------------- */
+.mapa-ver-no-mapa {
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  padding: 0 1.25rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  cursor: pointer;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  transition: opacity var(--dur-1) var(--ease-padrao);
+}
+
+.mapa-ver-no-mapa:hover {
+  opacity: 0.9;
+}
+
+.mapa-ver-no-mapa:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.mapa-ver-no-mapa-pino {
+  display: flex;
+}
+
+.mapa-ver-no-mapa-pino svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
 /* ---- o quadro do mapa ------------------------------------------------------
- * ALTURA LIMITADA A ~45% DA VISTA, e não «o que sobrar». Antes o desenho comia a
- * primeira dobra inteira e a lista do que ele mostra ficava abaixo, invisível —
- * o mapa era o protagonista de uma tela cujo conteúdo é o acervo. Ele agora é
- * ferramenta: grande o bastante para se ler, pequeno o bastante para caber junto
- * do que representa.
+ * O DESENHO ENCOLHEU DE NOVO NA INVERSÃO DE 2026-08. Antes ele ocupava ~45% da
+ * vista logo abaixo do cabeçalho, e a tela lia como navegador de pinos: a pessoa
+ * chegava procurando «o que tem perto de mim» e recebia um mapa do Brasil. Agora
+ * a descoberta vem primeiro e o desenho é o apoio dela — ~30% da vista, alcançado
+ * pelo botão «Ver no mapa».
+ *
+ * COM A CAMADA DE DESERTOS LIGADA ELE VOLTA AO TAMANHO ANTERIOR, e isso não é
+ * exceção arbitrária: a camada é uma imagem para ser projetada num slide (D-62), e
+ * ali o desenho É o conteúdo. O quadro segue o que a tela está dizendo.
  * ------------------------------------------------------------------------- */
 .mapa-quadro {
   position: relative;
   display: flex;
   overflow: hidden;
-  block-size: clamp(11rem, 45vh, 22rem);
+  block-size: clamp(10rem, 30vh, 16rem);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
   /* O QUADRO É O «MAR», e precisa ser OUTRA cor que o Brasil. Os dois usavam
@@ -192,6 +577,18 @@
      passivo, e chamá-lo lá só renderia um aviso no console. */
   overscroll-behavior: contain;
   touch-action: none;
+}
+
+.mapa-quadro[data-camada="sim"] {
+  block-size: clamp(11rem, 45vh, 22rem);
+}
+
+/* A seção do mapa: rótulo, desenho e folha, o alvo do «Ver no mapa». */
+.mapa-secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  scroll-margin-block-start: var(--espaco-pilha);
 }
 
 /* Aproximado, o cursor diz que dá para arrastar. Na vista inteira não dá, e
@@ -369,23 +766,24 @@
   text-decoration: none;
 }
 
-/* ---- a capa da linha -------------------------------------------------------
- * Foto do acervo quando existe; sem foto, campo na cor da linguagem com o `\`
- * do manual — a mesma família de `capa-sem-imagem.tsx`, no porte de uma linha.
- * A cor NÃO é escrita aqui: chega por `--cor-linguagem`, custom property inline
- * vinda do dado (D-08). O par claro/escuro dos traços é o mesmo truque da capa
- * grande: sobre uma cor que este arquivo não conhece, um dos dois sempre lê.
+/* ---- a capa, nos três portes -----------------------------------------------
+ * Foto do acervo quando existe; sem foto, campo na cor da linguagem com o `\` do
+ * manual — a mesma família de `capa-sem-imagem.tsx`. A cor NÃO é escrita aqui:
+ * chega por `--cor-linguagem`, custom property inline vinda do dado (D-08). O par
+ * claro/escuro dos traços é o mesmo truque da capa grande: sobre uma cor que este
+ * arquivo não conhece, um dos dois sempre lê.
+ *
+ * UMA CLASSE, TRÊS TAMANHOS. `.mapa-capa` traz o comportamento e quem a usa dá a
+ * medida — `--capa-traco` é o único número que muda de porte para porte. Antes
+ * havia um bloco por lugar, e o dia em que a linha ganhasse um detalhe o cartão
+ * não ganharia.
  * ------------------------------------------------------------------------- */
-.mapa-item-capa {
-  flex: none;
-  inline-size: 2.75rem;
-  block-size: 2.75rem;
-  border-radius: var(--raio-p);
+.mapa-capa {
   object-fit: cover;
   background: var(--cor-superficie-2);
 }
 
-.mapa-item-capa-composta {
+.mapa-capa-composta {
   position: relative;
   display: flex;
   align-items: center;
@@ -394,22 +792,52 @@
   background: var(--cor-linguagem, var(--cor-superficie-2));
 }
 
-.mapa-item-capa-traco {
+/* A TEXTURA É UMA PAREDE DE `\`, e não um traço solitário. Com dois riscos no meio
+   de um cartão de 152px a capa lia como um campo de cor com um arranhão — o
+   «horrível» que abriu esta reformulação. Quantas barras é decisão de quem chama:
+   duas na linha de 56px, uma parede no cartão. */
+.mapa-capa-textura {
   position: absolute;
-  block-size: 1.5rem;
+  inset: -0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.mapa-capa-traco {
+  block-size: var(--capa-traco, 1.5rem);
   inline-size: auto;
 }
 
-.mapa-item-capa-traco-claro {
+/* Uma camada clara e uma escura, deslocadas de 1px: os tokens de linguagem vão de
+   um roxo escuro a um amarelo claro e este arquivo NÃO PODE saber qual é qual —
+   saber seria a associação linguagem→cor que D-08 proíbe. Com as duas, uma delas
+   sempre lê, seja qual for o preenchimento. */
+.mapa-capa-textura-clara {
   transform: translate(-1px, -1px);
   color: var(--ic-branco);
-  opacity: 0.55;
+  opacity: 0.4;
 }
 
-.mapa-item-capa-traco-escuro {
+.mapa-capa-textura-escura {
   transform: translate(1px, 1px);
   color: var(--ic-preto);
-  opacity: 0.28;
+  opacity: 0.2;
+}
+
+/* A CAPA DA LINHA CRESCEU DE 2,75rem PARA 3,5rem na inversão de 2026-08. A 44px
+   uma fotografia do acervo virava mancha e a composição de marca virava um
+   quadradinho colorido sem leitura — «as imagens do mapa estão horríveis» foi
+   exatamente isso. A 56px a foto tem assunto e o `\` tem desenho. */
+.mapa-item-capa {
+  flex: none;
+  inline-size: 3.5rem;
+  block-size: 3.5rem;
+  border-radius: var(--raio-m);
+  --capa-traco: 1.25rem;
 }
 
 .mapa-item-nome {

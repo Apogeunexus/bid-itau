@@ -17,6 +17,7 @@ import {
   UNIDADES_POR_GRAU,
   VIAS_INDEXADAS,
 } from "@/dados/geo";
+import { dadosDePerto } from "@/dados/mapa-perto";
 
 /**
  * Mapa NÃO é aba (D-14) e NÃO é porta de entrada (D-59). É LENTE sobre um conjunto de
@@ -80,6 +81,9 @@ export default function PaginaMapa() {
       { href: "/buscar", rotulo: "Voltar para Buscar" },
     ],
     desertos: montarDesertos(),
+    // A descoberta por distância, montada no build pela mesma razão do resto desta página:
+    // `distanciaKm` mora em `geo.ts`, que importa o grafo, e o cliente não o alcança (DP-F).
+    perto: dadosDePerto(),
   };
 
   return <Mapa dados={dados} />;
