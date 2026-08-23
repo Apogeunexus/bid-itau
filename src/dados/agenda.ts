@@ -21,16 +21,10 @@
  * ordena diferente em ambientes diferentes e o HTML exportado deixaria de ser
  * reprodutível. As chaves de ordenação são data (ISO, que ordena como texto) e slug.
  *
- * AUSÊNCIA MEDIDA VIRA CAMPO DECLARADO, nunca campo que some. Campo que desaparece vira
- * bloco que desaparece, e bloco que desaparece faz parecer que a categoria não existe no
- * produto. As quatro ausências desta tela viajam no DTO como dado de primeira classe,
- * com numerador, denominador e frase — e a frase é TEXTO DE PRODUTO, porque procedência
- * é o argumento da proposta e não a anotação dele.
  */
 
 import { ocorrenciasDe, porSlug, slugsPorTipo } from "./grafo";
 import type {
-  Acessibilidade,
   ClasseEntidade,
   DimensaoAcessibilidade,
   Ocorrencia,
@@ -68,7 +62,7 @@ export interface EventoDaAgenda {
   sessoesPassadas: number;
   /** Quantas das sessões deste evento declaram Libras. */
   comLibras: number;
-  /** Quantas sessões vêm sem ingresso declarado na fonte. Ver `ausencias`. */
+  /** Quantas sessões vêm sem ingresso declarado na fonte. */
   gratuitas: number;
 }
 
@@ -112,23 +106,6 @@ export interface JanelaDaFaixa {
   totalDeDias: number;
 }
 
-/**
- * Uma ausência medida. Campo que existe no modelo e que o acervo não preenche.
- *
- * Nenhuma delas se resolve inventando valor; todas se resolvem dizendo o número. Por
- * isso `numerador` e `denominador` são varridos das sessões de verdade, e a `frase` é
- * montada a partir deles — nunca escrita com o número à mão.
- */
-export interface AusenciaMedida {
-  /** Vira `data-ausencia="{campo}"` na tela. */
-  campo: "espaco" | "preco" | "lotacao" | "acessibilidade";
-  rotulo: string;
-  numerador: number;
-  denominador: number;
-  /** Texto de PRODUTO. Nunca vazio. */
-  frase: string;
-}
-
 export interface DiagnosticoDaAgenda {
   hoje: string;
   eventosNoAcervo: number;
@@ -160,7 +137,6 @@ export interface Agenda {
   dias: DiaDaAgenda[];
   janelaSugerida: JanelaDaFaixa;
   eventos: EventoDaAgenda[];
-  ausencias: AusenciaMedida[];
   diagnostico: DiagnosticoDaAgenda;
 }
 
@@ -212,20 +188,6 @@ export const DIMENSOES = Object.keys(ROTULO_DIMENSAO) as DimensaoAcessibilidade[
 // Utilitários puros — sem locale, sem relógio, sem Intl
 // ---------------------------------------------------------------------------
 
-/**
- * Milhar com ponto, à mão. `Intl.NumberFormat` dependeria do ICU do ambiente, e o texto
- * do HTML exportado tem de ser byte a byte o mesmo em qualquer máquina que rode o build.
- */
-export function formatarNumero(n: number): string {
-  const bruto = String(Math.trunc(Math.abs(n)));
-  let saida = "";
-  for (let i = 0; i < bruto.length; i++) {
-    if (i > 0 && (bruto.length - i) % 3 === 0) saida += ".";
-    saida += bruto[i];
-  }
-  return n < 0 ? `-${saida}` : saida;
-}
-
 /** Comparação por ponto de código. Estável entre ambientes, ao contrário de locale. */
 function comparar(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0;
@@ -247,95 +209,14 @@ function tempoDoDia(data: string, hoje: string): TempoDoDia {
   return "hoje";
 }
 
-function mesmaAcessibilidade(a: Acessibilidade, b: Acessibilidade): boolean {
-  return DIMENSOES.every((d) => a[d] === b[d]);
-}
-
 // ---------------------------------------------------------------------------
-// A varredura das quatro ausências
+// A varredura que alimenta o diagnóstico
 // ---------------------------------------------------------------------------
 
 interface Varredura {
   totalSessoes: number;
-  semEspaco: number;
-  semPreco: number;
-  esgotadas: number;
-  gratuitas: number;
-  /** Quantas sessões declaram cada uma das 8 dimensões. */
-  porDimensao: Record<DimensaoAcessibilidade, number>;
-  /** Eventos cuja acessibilidade VARIA entre as próprias sessões. */
-  eventosComAcessibilidadeVariavel: number;
   eventosComSessao: number;
   eventosNoAcervo: number;
-  eventosComIngressoDeclarado: number;
-}
-
-function montarAusencias(v: Varredura): AusenciaMedida[] {
-  const total = formatarNumero(v.totalSessoes);
-
-  /* As dimensões que ALGUMA sessão declara. No acervo carregado é só uma; o texto é
-   * montado a partir da medição para não mentir se o acervo mudar. */
-  const declaradas = DIMENSOES.filter((d) => v.porDimensao[d] > 0);
-  const quaisDimensoes = declaradas.length
-    ? `das ${DIMENSOES.length} dimensões, ${
-        declaradas.length === 1 ? "só " : ""
-      }${declaradas
-        .map((d) => `${ROTULO_DIMENSAO[d]} (${formatarNumero(v.porDimensao[d])} de ${total})`)
-        .join(", ")} aparece${declaradas.length === 1 ? "" : "m"} em alguma sessão`
-    : `nenhuma das ${DIMENSOES.length} dimensões aparece em sessão alguma`;
-
-  return [
-    {
-      campo: "espaco",
-      rotulo: "Onde a sessão acontece",
-      numerador: v.semEspaco,
-      denominador: v.totalSessoes,
-      /* A primeira frase é, palavra por palavra, a que a fase 2 já escreveu na página do
-       * evento (`lista-ocorrencias.tsx`), com o número medido acrescentado. Duas frases
-       * diferentes para a mesma ausência contariam histórias diferentes nas duas telas. */
-      frase:
-        `O acervo do Itaú Cultural não publica o espaço desta sessão. O evento declara ` +
-        `período, não endereço de cada data — e o campo vem vazio em ` +
-        `${formatarNumero(v.semEspaco)} das ${total} sessões. É por isso que esta agenda ` +
-        `não mostra distância nem tempo até o lugar: sem espaço na sessão, qualquer ` +
-        `distância seria inventada.`,
-    },
-    {
-      campo: "preco",
-      rotulo: "Quanto custa",
-      numerador: v.semPreco,
-      denominador: v.totalSessoes,
-      frase:
-        `Preço não existe no acervo: o campo vem vazio em ${formatarNumero(v.semPreco)} ` +
-        `das ${total} sessões. A fonte publica apenas se há ingresso, nunca quanto ele ` +
-        `custa — e ${formatarNumero(v.eventosComIngressoDeclarado)} dos ` +
-        `${formatarNumero(v.eventosNoAcervo)} eventos do acervo declaram ingresso, que é ` +
-        `a razão de toda sessão aqui aparecer sem ingresso declarado.`,
-    },
-    {
-      campo: "lotacao",
-      rotulo: "Lotação",
-      numerador: v.esgotadas,
-      denominador: v.totalSessoes,
-      frase:
-        `Sessão esgotada é estado que o modelo tem e que o acervo nunca aciona: ` +
-        `${formatarNumero(v.esgotadas)} das ${total} sessões estão marcadas como ` +
-        `esgotadas. O campo existe e nenhum registro o exercita — encenar um esgotado ` +
-        `aqui seria afirmar sobre um evento real algo que a fonte não diz.`,
-    },
-    {
-      campo: "acessibilidade",
-      rotulo: "Acessibilidade por sessão",
-      numerador: v.eventosComAcessibilidadeVariavel,
-      denominador: v.eventosComSessao,
-      frase:
-        `A acessibilidade é registro de cada sessão e o modelo deixa que ela varie de ` +
-        `uma para outra; no acervo carregado ela não varia em nenhum evento — ` +
-        `${formatarNumero(v.eventosComAcessibilidadeVariavel)} dos ` +
-        `${formatarNumero(v.eventosComSessao)} eventos com sessão datada têm sessões que ` +
-        `diferem entre si. Além disso, ${quaisDimensoes}.`,
-    },
-  ];
 }
 
 // ---------------------------------------------------------------------------
@@ -362,18 +243,8 @@ export function montarAgenda({ hoje }: { hoje: string }): Agenda {
 
   const varredura: Varredura = {
     totalSessoes: 0,
-    semEspaco: 0,
-    semPreco: 0,
-    esgotadas: 0,
-    gratuitas: 0,
-    porDimensao: Object.fromEntries(DIMENSOES.map((d) => [d, 0])) as Record<
-      DimensaoAcessibilidade,
-      number
-    >,
-    eventosComAcessibilidadeVariavel: 0,
     eventosComSessao: 0,
     eventosNoAcervo: slugs.length,
-    eventosComIngressoDeclarado: 0,
   };
 
   let sessoesFuturas = 0;
@@ -386,12 +257,6 @@ export function montarAgenda({ hoje }: { hoje: string }): Agenda {
   for (const slug of slugs) {
     const entidade = porSlug("evento", slug);
     if (!entidade) continue;
-
-    /* Ingresso declarado é fato do REGISTRO DO EVENTO, e é dele que `gratuito` sai no
-     * gerador (`gratuito = !evento.extra?.comIngresso`). Medir aqui é o que impede a
-     * frase de gratuidade de virar afirmação sobre entrada franca. */
-    const extra = entidade.extra as { comIngresso?: boolean } | undefined;
-    if (extra?.comIngresso === true) varredura.eventosComIngressoDeclarado++;
 
     const sessoes: Ocorrencia[] = ocorrenciasDe(entidade.id);
     if (!sessoes.length) {
@@ -411,7 +276,6 @@ export function montarAgenda({ hoje }: { hoje: string }): Agenda {
     let futuras = 0;
     let passadas = 0;
     let proxima: string | null = null;
-    let variavel = false;
 
     for (const sessao of sessoes) {
       const data = dia(sessao.inicio);
@@ -429,21 +293,10 @@ export function montarAgenda({ hoje }: { hoje: string }): Agenda {
       }
 
       varredura.totalSessoes++;
-      if (sessao.espacoId == null) varredura.semEspaco++;
-      if (sessao.preco == null) varredura.semPreco++;
-      if (sessao.esgotado) varredura.esgotadas++;
-      if (sessao.gratuito) {
-        varredura.gratuitas++;
-        gratuitas++;
-      }
-      for (const d of DIMENSOES) if (sessao.acessibilidade[d]) varredura.porDimensao[d]++;
+      if (sessao.gratuito) gratuitas++;
       if (sessao.acessibilidade.libras) comLibras++;
-      if (!mesmaAcessibilidade(sessao.acessibilidade, sessoes[0].acessibilidade)) {
-        variavel = true;
-      }
     }
 
-    if (variavel) varredura.eventosComAcessibilidadeVariavel++;
     sessoesFuturas += futuras;
     sessoesPassadas += passadas;
     maxSessoesPorEvento = Math.max(maxSessoesPorEvento, sessoes.length);
@@ -503,7 +356,6 @@ export function montarAgenda({ hoje }: { hoje: string }): Agenda {
       totalDeDias: dias.length,
     },
     eventos,
-    ausencias: montarAusencias(varredura),
     diagnostico: {
       hoje: referencia,
       eventosNoAcervo: varredura.eventosNoAcervo,

@@ -124,12 +124,6 @@ function CartaoDoEpisodio({
         {programa ? <span className="cast-cartao-programa tipo-micro">{programa}</span> : null}
         <span className="cast-cartao-titulo tipo-detalhe">{item.titulo}</span>
       </Link>
-      <p className="cast-cartao-pe">
-        <time dateTime={diaParaIso(item.dia)}>{diaParaTexto(item.dia)}</time>
-        {item.creditoImagem ? (
-          <span className="cast-cartao-credito">Foto: {item.creditoImagem}</span>
-        ) : null}
-      </p>
     </li>
   );
 }

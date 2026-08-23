@@ -841,8 +841,6 @@ async function bloco1Acontece(cdp, base) {
         slugsDistintos: new Set(slugs).size,
         contagens,
         semContagemVisivel: contagens.filter(c => !c.visivel).length,
-        ausencias: visiveis('[data-ausencia]').map(a => ({
-          campo: a.getAttribute('data-ausencia'), altura: alturaDe(a), texto: a.innerText.slice(0, 60) })),
       };
     `),
   );
@@ -911,17 +909,10 @@ async function bloco1Acontece(cdp, base) {
     "eventos listados e marcados como passados, não escondidos",
   );
 
-  exigir(
-    t.ausencias.length === 4 && t.ausencias.every((a) => a.altura > 0),
-    "as quatro frases de ausência visíveis, com altura maior que zero",
-    t.ausencias.map((a) => `${a.campo} ${a.altura}px`).join(" · "),
-    "4 ausências, todas com altura > 0",
-  );
-
   resumo.push([
     "AGEN-01",
     `Acontece: ${t.cartoes} EVENTOS com contagem de sessões visível em ${t.cartoes}/${t.cartoes}, ` +
-      `${t.chips} dias na faixa (0 vazios em ${porDia.length} percorridos), passado listado e rotulado, 4 ausências medidas`,
+      `${t.chips} dias na faixa (0 vazios em ${porDia.length} percorridos), passado listado e rotulado`,
   ]);
 }
 
@@ -960,8 +951,6 @@ async function bloco2Ocorrencia(cdp, base) {
         ids: ss.map(x => x.getAttribute('data-sessao')),
         tempos: [...new Set(ss.map(x => x.getAttribute('data-sessao-tempo')))],
         salvar: visiveis('[data-salvar-sessao]').length,
-        ausencias: visiveis('[data-ausencia]').map(a => ({ campo: a.getAttribute('data-ausencia'),
-          texto: a.innerText.replace(/\\n+/g, ' ').slice(0, 90), temNumero: /\\d/.test(a.innerText) })),
         grupos: grupos.length, orfas: orfas.length, semCabecalho: semCabecalho.length,
         diasNomeados: grupos.map(g => g.querySelector('.grupo-de-dia-cabecalho').textContent.trim()).slice(0, 3),
       };
@@ -1009,13 +998,6 @@ async function bloco2Ocorrencia(cdp, base) {
     `«${(apos.texto || "").slice(0, 110)}…»`,
     "confirmação nomeando data e hora da sessão",
   );
-  exigir(
-    s.ausencias.length >= 3 && s.ausencias.every((a) => a.temNumero),
-    "ausências de espaço, preço e lotação declaradas COM NÚMERO",
-    s.ausencias.map((a) => a.campo).join(", ") + ` · ${s.ausencias.length} com número: ${s.ausencias.every((a) => a.temNumero)}`,
-    "cada ausência com o número medido",
-  );
-
   resumo.push([
     "AGEN-02",
     `Seleção de ocorrência: ${s.sessoes} sessões agrupadas por dia, ${s.salvar} controles (um por sessão); ` +

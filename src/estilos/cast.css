@@ -287,27 +287,6 @@
   overflow-wrap: anywhere;
 }
 
-/* Data e crédito no pé. O crédito é obrigatório quando há imagem — o acervo é
-   de terceiros e a procedência é argumento da proposta. Uma linha, com
-   reticências; o crédito inteiro está na página do episódio. */
-.cast-cartao-pe {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  min-inline-size: 0;
-  color: var(--cor-tinta-3);
-  font-size: var(--tipo-micro);
-  font-variant-numeric: tabular-nums;
-}
-
-.cast-cartao-credito {
-  flex: 1 1 auto;
-  min-inline-size: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 /* ---------------------------------------------------------------------------
  * PORTE «DESTAQUE» — a MAIOR fileira do acervo, em painel próprio.
  *

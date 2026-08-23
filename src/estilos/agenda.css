@@ -170,33 +170,6 @@
 }
 
 /* ---------------------------------------------------------------------------
- * O BLOCO DAS AUSÊNCIAS MEDIDAS.
- *
- * Borda tracejada de propósito: é a mesma gramática que a fase 2 usou para «bloco que
- * declara ausência» na página do evento. O tracejado diz «aqui falta dado na fonte» sem
- * precisar de ícone, e distingue à distância o bloco que declara do bloco que informa.
- * ------------------------------------------------------------------------- */
-.ausencia-medida {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px dashed var(--cor-borda-forte);
-  border-radius: var(--raio-m);
-  font-size: var(--tipo-legenda);
-  line-height: 1.5;
-  color: var(--cor-tinta-2);
-}
-
-.ausencia-medida-rotulo {
-  font-size: var(--tipo-micro);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--cor-tinta-3);
-}
-
-/* ---------------------------------------------------------------------------
  * A SELEÇÃO DE OCORRÊNCIA — o grupo de um dia e a linha de uma sessão.
  * ------------------------------------------------------------------------- */
 .grupo-de-dia {

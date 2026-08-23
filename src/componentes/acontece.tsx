@@ -42,8 +42,8 @@ import {
  * O QUE NÃO EXISTE AQUI, DE PROPÓSITO. `docs/telas.md` (tela 8) prevê «atalho para
  * filtros» e «distância em tempo». Filtros são Camada 2, fase 5: o atalho seria link
  * morto na demonstração. Distância exigiria a localização de quem usa e o espaço da
- * sessão, e o acervo não publica o segundo em 2.425 de 2.425 sessões — a ausência é
- * DECLARADA em texto, no bloco de ausências, em vez de virar uma gaveta vazia.
+ * sessão, e o acervo não publica o segundo em 2.425 de 2.425 sessões — qualquer
+ * distância seria inventada.
  */
 
 // ---------------------------------------------------------------------------
@@ -116,8 +116,7 @@ export function pedacosDoDia(iso: string) {
 
 /**
  * Milhar com ponto. `Intl.NumberFormat` dependeria do ICU do ambiente e o texto do HTML
- * exportado tem de ser o mesmo byte a byte em qualquer máquina que rode o build. Repete
- * `formatarNumero` de `agenda.ts` pelo motivo de DP-F explicado acima.
+ * exportado tem de ser o mesmo byte a byte em qualquer máquina que rode o build.
  */
 export function milhar(n: number): string {
   const bruto = String(Math.trunc(Math.abs(n)));
@@ -181,7 +180,7 @@ interface EventoDoDia {
 }
 
 export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda }) {
-  const { dias, eventos, ausencias, janelaSugerida, diagnostico } = agenda;
+  const { dias, eventos, janelaSugerida, diagnostico } = agenda;
 
   /* ---------------------------------------------------------------------
    * O ESTADO DA VISÃO WEB (D-80, D-81).
@@ -501,10 +500,6 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {/*     dias com sessão. Dia vazio não existe aqui por construção.      */}
       {/* ================================================================== */}
       <section className="flex flex-col gap-2">
-        <p className="max-w-prose text-xs leading-relaxed text-tinta-2">
-          {`A faixa navega os ${milhar(diagnostico.diasDistintos)} dias que têm sessão no acervo, de ${curta(diagnostico.primeiroDia)} a ${curta(diagnostico.ultimoDia)} — e a maior parte deles já passou. Dia sem sessão não aparece porque não existe: março de 2026, por exemplo, não tem uma única sessão, e um calendário contínuo o mostraria vazio.`}
-        </p>
-
         <div className="flex items-center justify-between gap-2">
           <button
             type="button"
@@ -687,28 +682,6 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
           )}
         </section>
       ) : null}
-
-      {/* ================================================================== */}
-      {/* 5 — AS QUATRO AUSÊNCIAS MEDIDAS.                                    */}
-      {/*     Texto de PRODUTO: são elas que sustentam a promessa de          */}
-      {/*     procedência honesta, e escondê-las esvaziaria exatamente a tela */}
-      {/*     que se quer mostrar.                                            */}
-      {/* ================================================================== */}
-      <section className="flex flex-col gap-2">
-        <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
-          O que o acervo não publica
-        </h2>
-        <ul className="flex flex-col gap-2">
-          {ausencias.map((a) => (
-            <li key={a.campo} className="ausencia-medida" data-ausencia={a.campo}>
-              <span className="ausencia-medida-rotulo">
-                {`${a.rotulo} · ${milhar(a.numerador)} de ${milhar(a.denominador)}`}
-              </span>
-              <span>{a.frase}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
 
     </div>
   );

@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from "react";
 import { SELO_GRATUIDADE, curta, milhar, plural, porExtenso } from "@/componentes/acontece";
 import { Grafismo } from "@/componentes/grafismo";
 import { useSessao } from "@/contexto/sessao";
-import type { AusenciaMedida, TempoDoDia } from "@/dados/agenda";
+import type { TempoDoDia } from "@/dados/agenda";
 
 /**
  * selecao-ocorrencia.tsx — a tela onde fica claro que O QUE SE SALVA É A SESSÃO (D-56).
@@ -59,8 +59,6 @@ export interface SelecaoDeOcorrenciaDTO {
   sessoesPassadas: number;
   sessoesFuturas: number;
   sessoes: SessaoExibivel[];
-  /** As quatro ausências medidas da agenda, as mesmas de `/acontece`. */
-  ausencias: AusenciaMedida[];
   /** A acessibilidade varia entre as sessões DESTE evento? Medido, não presumido. */
   acessibilidadeVaria: boolean;
 }
@@ -300,25 +298,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
         ) : null}
       </section>
 
-      {/* ================================================================== */}
-      {/* 3 — AS AUSÊNCIAS, CADA UMA ONDE A PESSOA A PROCURARIA.              */}
-      {/*     Texto de PRODUTO.                                               */}
-      {/* ================================================================== */}
       <section className="flex flex-col gap-2">
-        <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
-          O que esta tela não pode dizer
-        </h2>
-        <ul className="flex flex-col gap-2">
-          {evento.ausencias.map((a) => (
-            <li key={a.campo} className="ausencia-medida" data-ausencia={a.campo}>
-              <span className="ausencia-medida-rotulo">
-                {`${a.rotulo} · ${milhar(a.numerador)} de ${milhar(a.denominador)}`}
-              </span>
-              <span>{a.frase}</span>
-            </li>
-          ))}
-        </ul>
-
         {/* A ausência de acessibilidade variável, dita sobre ESTE evento e não só sobre o
             acervo inteiro: é aqui, na lista de sessões, que alguém esperaria ver variação. */}
         <p className="max-w-prose text-xs leading-relaxed text-tinta-2">

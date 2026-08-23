@@ -190,12 +190,6 @@ function Cartaz({ item }: { item: ItemDoPlayNoCliente }) {
           <span className="play-cartaz-titulo tipo-detalhe">{item.titulo}</span>
         </span>
       </Link>
-      <p className="play-cartaz-pe">
-        <time dateTime={diaParaIso(item.dia)}>{diaParaTexto(item.dia)}</time>
-        {item.creditoImagem ? (
-          <span className="play-cartaz-credito">Foto: {item.creditoImagem}</span>
-        ) : null}
-      </p>
     </li>
   );
 }

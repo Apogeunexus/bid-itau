@@ -3,7 +3,7 @@ import {
   type SelecaoDeOcorrenciaDTO,
   type SessaoExibivel,
 } from "@/componentes/selecao-ocorrencia";
-import { DIMENSOES, ROTULO_DIMENSAO, montarAgenda, type TempoDoDia } from "@/dados/agenda";
+import { DIMENSOES, ROTULO_DIMENSAO, type TempoDoDia } from "@/dados/agenda";
 import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { ocorrenciasDe, porId, porSlug, slugsPorTipo, temporadasDe } from "@/dados/grafo";
 import type { Entidade } from "@/dados/tipos";
@@ -25,14 +25,6 @@ import type { Entidade } from "@/dados/tipos";
 /** A data de referência de `alerta.ts`, nunca o relógio: um build depois da meia-noite
  * UTC divergiria da data que o resto do produto e as suítes pinam (T-03-04). */
 const HOJE = DATA_DE_REFERENCIA;
-
-/**
- * A agenda inteira, montada UMA VEZ no carregamento do módulo e reaproveitada pelas 129
- * páginas. Montá-la por página varreria as 2.425 ocorrências 129 vezes, e as quatro
- * ausências têm de ser as MESMAS que `/acontece` mostra — recontá-las por página abriria
- * a porta para as duas telas divergirem no número.
- */
-const AGENDA = montarAgenda({ hoje: HOJE });
 
 export function generateStaticParams() {
   return slugsPorTipo("evento")
@@ -131,7 +123,6 @@ export default async function PaginaSessoes({ params }: { params: Promise<{ slug
     sessoesPassadas: sessoes.filter((s) => s.tempo === "passado").length,
     sessoesFuturas: sessoes.filter((s) => s.tempo !== "passado").length,
     sessoes,
-    ausencias: AGENDA.ausencias,
     acessibilidadeVaria,
   };
 

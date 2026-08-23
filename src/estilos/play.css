@@ -347,29 +347,6 @@
   overflow-wrap: anywhere;
 }
 
-/* Data e crédito no pé, FORA do cartaz. O crédito é obrigatório quando há
-   imagem — o acervo é de terceiros e a procedência é argumento da proposta.
-   Sobreposto à foto ele competia com o selo; aqui é uma linha, com reticências,
-   e o crédito inteiro está na página da própria mídia. */
-.play-cartaz-pe {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  min-inline-size: 0;
-  margin-block-start: 0.25rem;
-  color: var(--cor-tinta-3);
-  font-size: var(--tipo-micro);
-  font-variant-numeric: tabular-nums;
-}
-
-.play-cartaz-credito {
-  flex: 1 1 auto;
-  min-inline-size: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 /* ---------------------------------------------------------------------------
  * OS TRÊS PORTES DE FILEIRA (23/08).
  *
