@@ -49,17 +49,36 @@ export default function Meu() {
           passo — calculado no grafo, não escrito à mão.
         </Comentario>
 
-        {/* A entrada para Salvos (AGEN-03). Meu Repertório mostra O QUE foi salvo; a fila
-            de Salvos é onde o alerta de alteração chega, e ela precisa ser alcançável sem
-            que ninguém digite a URL — Mapa e Salvos não têm aba (D-14), então a porta é
-            aqui. */}
-        <Link
-          href="/salvos"
-          className="w-fit rounded-full border border-acao px-3 py-1 text-xs font-bold text-acao transition-colors hover:bg-acao hover:text-[var(--ic-branco)]"
-        >
-          Salvos e alertas de alteração →
-        </Link>
       </header>
+
+      {/* O HUB DO PERFIL (reformulação 2026-08: o cliente reprovou a organização da
+          tela). Três portas em cartão, com o que cada uma entrega dito na frente —
+          Salvos é onde o alerta de alteração chega (AGEN-03), Filtros guarda as 8
+          dimensões de acessibilidade, e a estrelinha guarda os roteiros gerados. */}
+      <nav aria-label="Atalhos do perfil" className="grid gap-3 desk:grid-cols-3">
+        <Link href="/salvos" className="cartao no-underline">
+          <span className="tipo-detalhe font-bold">Salvos e alertas</span>
+          <span className="tipo-legenda text-tinta-2">
+            As sessões que você guardou, com aviso quando o produtor altera horário ou
+            cancela.
+          </span>
+          <span className="tipo-legenda font-bold text-acao">abrir →</span>
+        </Link>
+        <Link href="/filtros" className="cartao no-underline">
+          <span className="tipo-detalhe font-bold">Acessibilidade</span>
+          <span className="tipo-legenda text-tinta-2">
+            As 8 dimensões como critério que se marca uma vez e vale para toda a agenda.
+          </span>
+          <span className="tipo-legenda font-bold text-acao">configurar →</span>
+        </Link>
+        <Link href="/ia" className="cartao no-underline">
+          <span className="tipo-detalhe font-bold">Roteiros com IA ✦</span>
+          <span className="tipo-legenda text-tinta-2">
+            Os roteiros que a estrelinha montou para você, guardados neste navegador.
+          </span>
+          <span className="tipo-legenda font-bold text-acao">ver →</span>
+        </Link>
+      </nav>
 
       {/* D-45 — a troca de persona mora SÓ AQUI desde a reformulação de 2026-08
           (feedback do cliente: a visualização de personas não pode afetar a

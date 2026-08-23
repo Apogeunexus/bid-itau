@@ -22,4 +22,4 @@
  */
 
 export const COMMIT_DA_CONSOLIDACAO = "ca6bd52";
-export const COMMIT_ULTIMO_QUE_TOCOU_GLOBALS = "ca6bd52";
+export const COMMIT_ULTIMO_QUE_TOCOU_GLOBALS = "0d8d037"; // fase B: +@import menu-lateral.css

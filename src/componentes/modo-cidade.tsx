@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Comentario } from "@/componentes/comentario";
 import { Grafismo } from "@/componentes/grafismo";
+import { MapaDoDia } from "@/componentes/mapa-do-dia";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
 import type { AlternativaCompacta, DadosDaCidade, DiaCompacto } from "@/dados/cidade";
 
@@ -362,6 +363,12 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
               </header>
 
               <p className="cidade-dia-justificativa">{dia.justificativa}</p>
+
+              {/* O PERCURSO DESENHADO (reformulação 2026-08): as paradas do dia como pinos
+                  numerados. Os pontos chegam projetados do build — este arquivo continua
+                  sem alcançar geo.ts (DP-F). A troca de item redesenha junto, porque os
+                  itens vêm da mesma ordem resolvida. */}
+              <MapaDoDia itens={itens} numero={dia.numero} />
 
               <ol className="cidade-itens">
                 {itens.map((item, posicaoVisivel) => {

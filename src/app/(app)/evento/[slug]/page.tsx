@@ -9,9 +9,11 @@ import {
 } from "@/componentes/lista-ocorrencias";
 import { BlocoAusenciaDeclarada, BlocoPonte } from "@/componentes/ponte";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
+import { Comentario } from "@/componentes/comentario";
 import { Verbete } from "@/componentes/verbete";
 import { DATA_DE_REFERENCIA as DATA_FIXA } from "@/dados/alerta";
 import { ocorrenciasDe, porId, porSlug, slugsPorTipo, temporadasDe } from "@/dados/grafo";
+import { AUSENCIA_DE_INGRESSO, ingressoDe } from "@/dados/ingressos";
 import { vinculosDe, type GrupoVinculo } from "@/dados/ponte";
 import type { Entidade } from "@/dados/tipos";
 
@@ -100,6 +102,7 @@ function Cabecalho({ nome, objetivo }: { nome: string; objetivo: string }) {
 export default async function PaginaEvento({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const entidade = porSlug("evento", slug);
+  const ingresso = ingressoDe(slug);
 
   if (!entidade) {
     return (
@@ -231,11 +234,34 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
       {ocorrencias.length ? (
         <Link
           href={`/evento/${entidade.slug}/sessoes/`}
-          className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-[var(--ic-branco)] no-underline transition-opacity hover:opacity-90"
+          className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-ic-branco no-underline transition-opacity hover:opacity-90"
         >
           Escolher e salvar uma sessão
         </Link>
       ) : null}
+
+      {/* A PONTE DE VENDA (reformulação 2026-08): quando o evento tem link de ingresso,
+          o botão leva direto à plataforma. O acervo NÃO publica esse dado (0 de 300 —
+          medido); nos dois eventos de demonstração o link é AUTORADO e rotulado como
+          tal, no estatuto da trilha do Cenário 1 (D-37). O `<a>` externo é clique da
+          pessoa, não requisição do protótipo — zero rede em runtime continua valendo. */}
+      {ingresso ? (
+        <div className="flex flex-col gap-1">
+          <a
+            href={ingresso.url}
+            target="_blank"
+            rel="noreferrer"
+            className="w-fit rounded-full border-2 border-acao px-4 py-2 text-sm font-bold text-acao no-underline transition-colors hover:bg-acao hover:text-ic-branco"
+          >
+            Ingressos na {ingresso.plataforma} ↗
+          </a>
+          <p className="text-xs italic leading-snug text-black/55">{ingresso.rotulo}.</p>
+        </div>
+      ) : (
+        <Comentario className="max-w-prose text-xs leading-snug text-black/55">
+          {AUSENCIA_DE_INGRESSO}
+        </Comentario>
+      )}
 
       {/* 3 — o verbete, embutido, com crédito e link de procedência (D-39) */}
       <Verbete entidade={entidade} />

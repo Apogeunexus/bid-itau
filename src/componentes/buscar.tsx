@@ -25,10 +25,12 @@ import { DISPOSICOES } from "@/dados/disposicoes";
 import { FRASE_DO_CENARIO_5 } from "@/dados/frase";
 import {
   consultar,
+  expandirIndice,
   facetasDe,
   REGRA_ORDENACAO,
   type CampoCriterio,
   type Criterio,
+  type EntradaIndice,
   type IndiceDTO,
   type OpcaoFaceta,
 } from "@/dados/indice";
@@ -355,6 +357,23 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
     [criterios],
   );
 
+  // A VITRINE do estado inicial (reformulação 2026-08: a busca vira índice de acervo,
+  // não campo vazio). Duas entradas por classe navegável, preferindo as que declaram
+  // linguagem — é a linguagem que dá cor à capa (D-08). Ordem do índice, determinística.
+  const vitrine = useMemo(() => {
+    const porClasse = new Map<ClasseEntidade, EntradaIndice[]>();
+    for (const preferir of [true, false]) {
+      for (const e of expandirIndice(indice)) {
+        if (!ROTA_POR_CLASSE[e.classe]) continue;
+        if (preferir && e.linguagens.length === 0) continue;
+        const lista = porClasse.get(e.classe) ?? [];
+        if (lista.length < 2 && !lista.some((x) => x.chave === e.chave)) lista.push(e);
+        porClasse.set(e.classe, lista);
+      }
+    }
+    return [...porClasse.values()].flat().slice(0, 12);
+  }, [indice]);
+
   // --- a gramática de lente do mapa (D-59) --------------------------------
   // Três chaves, escritas igual nos planos 03-01, 03-03 e 03-04: `r` os ids do recorte
   // juntados por `~`, `t` o título legível, `v` o endereço de volta — que inclui o hash
@@ -531,6 +550,53 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           {/* ------------------------------------------------------------------ */}
           {!ativa ? (
             <div className="flex flex-col gap-3">
+              {/* AS SEÇÕES DO ACERVO — o pedido do cliente na reformulação de 2026-08: a
+                  busca abre como um índice de blog, com as seções selecionáveis e a
+                  contagem REAL de cada uma. Marcar uma seção é marcar o critério de
+                  classe: o mesmo mecanismo de faceta de sempre, só que na porta. */}
+              <section className="busca-bloco">
+                <p className="busca-bloco-titulo">explore por seção</p>
+                <div className="flex flex-wrap gap-2">
+                  {facetas.classe.map((opcao) => (
+                    <button
+                      key={chaveCriterio(opcao)}
+                      type="button"
+                      className="busca-faceta"
+                      data-faceta={chaveCriterio(opcao)}
+                      onClick={() => alternarCriterio(opcao)}
+                    >
+                      {opcao.rotulo}
+                      <span className="busca-faceta-n">{milhar(opcao.n)}</span>
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              {/* A VITRINE: cartões reais do índice com a capa na cor da linguagem —
+                  a aparência dominante do produto (M-6), sem custo novo de bytes. */}
+              <section className="busca-bloco">
+                <p className="busca-bloco-titulo">uma amostra do acervo</p>
+                <div className="grid grid-cols-2 gap-3 desk:grid-cols-3">
+                  {vitrine.map((entrada) => (
+                    <Link
+                      key={entrada.chave}
+                      href={`${ROTA_POR_CLASSE[entrada.classe]}/${entrada.slug}/`}
+                      className="flex flex-col gap-1.5 no-underline"
+                    >
+                      <CapaSemImagem
+                        titulo={entrada.titulo}
+                        classe={entrada.classe}
+                        linguagens={entrada.linguagens}
+                        className="aspect-square w-full rounded-p"
+                      />
+                      <span className="line-clamp-2 text-sm leading-snug font-semibold">
+                        {entrada.titulo}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+
               <section className="busca-bloco">
                 <p className="busca-bloco-titulo">em vez de buscar, deixe levar</p>
                 <p className="text-sm leading-snug">

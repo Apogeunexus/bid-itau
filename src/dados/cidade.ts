@@ -1,5 +1,5 @@
 import { DATA_DE_REFERENCIA } from "@/dados/alerta";
-import { coordenadaDe, distanciaKm, type ViaCoordenada } from "@/dados/geo";
+import { coordenadaDe, distanciaKm, projetar, type ViaCoordenada } from "@/dados/geo";
 import { ocorrenciasDe, porId, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "@/dados/grafo";
 import type { ClasseEntidade, Coordenada, Entidade, MetodoCoordenada } from "@/dados/tipos";
 
@@ -161,6 +161,13 @@ export interface AncoraGeografica {
    * nele. É este campo, e não o método, que a tela usa para NÃO imprimir «0 km».
    */
   noCentroide: boolean;
+  /**
+   * O ponto JÁ PROJETADO no viewBox nacional (`geo.ts LIMITES`), calculado no build.
+   * É o contrato de geo.ts: quem precisa de posição no navegador recebe o índice
+   * projetado por propriedade — o mapa do dia (reformulação 2026-08) desenha daqui,
+   * e nenhum componente de cliente alcança `projetar`.
+   */
+  ponto: { x: number; y: number };
 }
 
 /**
@@ -428,6 +435,7 @@ export function acervoDe(territorioId: string): ItemDeAcervo[] {
           origemId: resolvida.origemId,
           origemTitulo: resolvida.origemTitulo,
           noCentroide: resolvida.via === "territorio",
+          ponto: (({ x, y }) => ({ x, y }))(projetar(resolvida.coordenada)),
         }
       : null;
 
@@ -657,6 +665,13 @@ function montarDia(numero: number, itens: readonly ItemDeAcervo[]): DiaDeRoteiro
 export interface PedidoDeRoteiro {
   territorioId: string;
   dias: number;
+  /**
+   * Promoção de interesse da ESTRELINHA (reformulação 2026-08): itens em que o
+   * predicado é verdadeiro sobem para a frente da fila DA SUA CLASSE — o rodízio,
+   * o percurso e todas as quatro regras continuam intactos, então o roteiro segue
+   * determinístico e explicável. Sem o campo, nada muda.
+   */
+  promover?: (item: ItemDeAcervo) => boolean;
 }
 
 /**
@@ -674,9 +689,16 @@ export interface PedidoDeRoteiro {
  *  3. **Prioridade ao que é próprio do território**, pela marca medida.
  *  4. **Desempate por chave**, comparada por ponto de código. Nada de sorteio.
  */
-export function montarRoteiro({ territorioId, dias }: PedidoDeRoteiro): Roteiro {
+export function montarRoteiro({ territorioId, dias, promover }: PedidoDeRoteiro): Roteiro {
   const acervo = acervoDe(territorioId);
   const territorio = porId(territorioId);
+
+  // O comparador efetivo: a promoção da estrelinha vem ANTES do interesse, e o
+  // interesse continua decidindo todo o resto — inclusive o desempate por chave.
+  const comparar = promover
+    ? (a: ItemDeAcervo, b: ItemDeAcervo) =>
+        (promover(a) ? 0 : 1) - (promover(b) ? 0 : 1) || compararInteresse(a, b)
+    : compararInteresse;
 
   // Quantos itens por dia. Dois é o piso da tela 11 e três é o teto; abaixo de dois o dia
   // não é percurso, acima de três a moldura de celular não mostra o dia inteiro.
@@ -693,7 +715,7 @@ export function montarRoteiro({ territorioId, dias }: PedidoDeRoteiro): Roteiro 
     if (fila) fila.push(item);
     else filas.set(item.classe, [item]);
   }
-  for (const fila of filas.values()) fila.sort(compararInteresse);
+  for (const fila of filas.values()) fila.sort(comparar);
   const classesPresentes = [...filas.keys()].sort(
     (a, b) => pesoDaClasse(a) - pesoDaClasse(b) || porChave(a, b),
   );
@@ -717,7 +739,7 @@ export function montarRoteiro({ territorioId, dias }: PedidoDeRoteiro): Roteiro 
   // --- Sementes: os dias começam o mais longe possível uns dos outros -------
   const comCoordenadaPropria = selecionados
     .filter((i) => i.ancora && !i.ancora.noCentroide)
-    .sort(compararInteresse);
+    .sort(comparar);
   const restantes = new Set(selecionados.map((i) => i.chave));
   const sementes: ItemDeAcervo[] = [];
 
@@ -761,7 +783,7 @@ export function montarRoteiro({ territorioId, dias }: PedidoDeRoteiro): Roteiro 
   while (grupos.length < diasEfetivos) grupos.push([]);
 
   // --- Preenchimento: o dia mais vazio escolhe primeiro, e escolhe o mais perto ---
-  const disponiveis = selecionados.filter((i) => restantes.has(i.chave)).sort(compararInteresse);
+  const disponiveis = selecionados.filter((i) => restantes.has(i.chave)).sort(comparar);
   while (disponiveis.length && grupos.some((g) => g.length < itensPorDia)) {
     let alvo = -1;
     for (let d = 0; d < grupos.length; d += 1) {
