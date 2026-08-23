@@ -174,13 +174,31 @@
     color-scheme: dark;
 
     --cor-tinta-crua: var(--ic-branco);
-    --cor-papel-cru: var(--ic-preto);
+    /* O PAPEL ESCURO NÃO É PRETO PURO, pela mesma razão que o papel claro não é
+     * branco puro: os dois são um fundo, e um fundo no extremo da escala não
+     * deixa nada existir abaixo dele. A referência de 23/08 mede #0e0e0e na
+     * página do telefone escuro (chapado, sem grão — a variação de 1 nível numa
+     * janela de 3×3 é compressão do JPEG, não textura), e mede #010100 no rodapé
+     * dos cartazes: no escuro daquele desenho o CARTAZ é mais escuro que a
+     * página, e é isso que desenha a borda dele sem precisar de um fio.
+     *
+     * Em preto puro esse degrau não existe: o cartaz preto e a página preta são a
+     * mesma cor, o canto arredondado some e o rodapé escorre para dentro da
+     * página. 6% de branco é o que dá à página um chão. */
+    --cor-papel-cru: color-mix(in srgb, var(--ic-preto) 94%, var(--ic-branco));
 
     /* Elevação no escuro é SUPERFÍCIE MAIS CLARA, não sombra: as `--sombra-*`
-     * são preto em alfa baixo e ficam inertes contra fundo preto. Cartão preto
+     * são preto em alfa baixo e ficam inertes contra fundo escuro. Cartão preto
      * sobre página preta desaparece; 7% e 12% de branco dão os dois degraus.
      * Preto na frente pelo fallback: sem color-mix, superfície branca sob texto
-     * branco seria invisível — degradar para preto só apaga a elevação. */
+     * branco seria invisível — degradar para preto só apaga a elevação.
+     *
+     * OS DOIS DEGRAUS NÃO SUBIRAM COM O PAPEL, e a tentativa está registrada
+     * porque ela custou um contraste: levantados para 12% e 18%, o rótulo
+     * «não sustenta» do Studio — laranja cheio sobre o realce lavado de laranja —
+     * caiu de 5,46:1 para 4,39:1 e reprovou o mínimo de 4,5. O papel subiu 15
+     * níveis, e quem se apoia numa superfície bordada (`--cor-borda` é 20% de
+     * branco e desenha o cartão sozinha) não precisou dos 15 de volta. */
     --cor-superficie: color-mix(in srgb, var(--ic-preto) 93%, var(--ic-branco));
     --cor-superficie-2: color-mix(in srgb, var(--ic-preto) 88%, var(--ic-branco));
 
@@ -212,7 +230,7 @@
   color-scheme: dark;
 
   --cor-tinta-crua: var(--ic-branco);
-  --cor-papel-cru: var(--ic-preto);
+  --cor-papel-cru: color-mix(in srgb, var(--ic-preto) 94%, var(--ic-branco));
   --cor-superficie: color-mix(in srgb, var(--ic-preto) 93%, var(--ic-branco));
   --cor-superficie-2: color-mix(in srgb, var(--ic-preto) 88%, var(--ic-branco));
   --cor-borda: color-mix(in srgb, var(--ic-branco) 20%, transparent);

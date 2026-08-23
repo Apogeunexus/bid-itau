@@ -296,11 +296,32 @@ for (const { rota, visao } of ROTAS) {
     const r = await cdp.avaliar(sonda(EXCECOES));
 
     if (tema === "escuro") {
+      // NÃO É IGUALDADE COM PRETO PURO, e deixou de ser em 23/08. O que este
+      // gate existe para pegar é a página que ficou CLARA — foi assim que ele
+      // nasceu, contra uma tela que continuava creme com o sistema em escuro.
+      // Escrito como `=== "rgb(0, 0, 0)"`, ele também travava a cor exata do
+      // papel escuro, e o papel deixou de ser preto puro: preto puro não deixa
+      // nada existir abaixo dele, e o cartaz de /apps é preto (ver o comentário
+      // do `--cor-papel-cru` em tokens.css). O teto de 40 por canal é o dobro do
+      // papel de hoje e uma ordem de grandeza abaixo de qualquer creme — cabe a
+      // mudança de tom sem deixar passar a falha que o gate persegue.
+      // O Chrome devolve `color(srgb 0.06 0.06 0.06)` quando a cor saiu de um
+      // color-mix, e `rgb(0, 0, 0)` quando saiu de um hex. As duas formas
+      // precisam ser lidas: casar só uma faria o gate reprovar a página certa
+      // pelo formato em que ela foi escrita.
+      const emSrgb = /^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/.exec(r.body);
+      const emRgb = /^rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(r.body);
+      const canais = emSrgb
+        ? [1, 2, 3].map((i) => Math.round(Number(emSrgb[i]) * 255))
+        : emRgb
+          ? [1, 2, 3].map((i) => Number(emRgb[i]))
+          : null;
+      const claroDemais = !canais || Math.max(...canais) > 40;
       exigir(
-        r.body === "rgb(0, 0, 0)" && r.esquema === "dark",
+        !claroDemais && r.esquema === "dark",
         `${rota} · a página inteira vira escura`,
         `body ${r.body} · color-scheme ${r.esquema} · ${r.examinados} elementos na tela`,
-        "body preto, color-scheme dark",
+        "body com nenhum canal acima de 40, color-scheme dark",
       );
     }
     exigir(

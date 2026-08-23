@@ -38,17 +38,14 @@
   margin-block-start: var(--espaco-tela);
   aspect-ratio: 16 / 9;
   border-radius: var(--raio-g);
-  /* PRETO FIXO NOS DOIS TEMAS, mas LEVANTADO. Fixo porque é o que está debaixo do
-     véu e da foto, e é contra ele que o branco do título mede — herdando o papel,
-     no tema claro o título mediria contra branco e o número deixaria de ser o que
-     se vê. Levantado a 8% de branco porque a foto ocupa só a metade direita: a
-     metade esquerda é esta cor CHAPADA, e em preto puro ela é a mesma cor da
-     página no tema escuro — o cartaz perdia a borda esquerda inteira e parecia
-     começar no meio. A 8% ele continua 18:1 contra o título. */
-  background: color-mix(in srgb, var(--ic-preto) 92%, var(--ic-branco));
-  box-shadow:
-    var(--sombra-2),
-    inset 0 0 0 1px var(--cor-borda);
+  /* Preto fixo nos dois temas: é o que está DEBAIXO do véu e da foto, e é contra
+     ele que o branco do título mede. Sem esta linha o fundo herdado no tema
+     claro é papel, e o contraste medido do título deixa de ser o que se vê.
+     Preto PURO, e não levantado: no escuro o papel agora tem 6% de branco
+     (tokens.css), então é o cartaz que fica mais escuro que a página e é esse
+     degrau que desenha a borda dele — do jeito que a referência mede. */
+  background: var(--ic-preto);
+  box-shadow: var(--sombra-2);
 }
 
 /* A foto ocupa a metade direita e o véu apaga a borda dela na esquerda, onde o
@@ -68,7 +65,7 @@
   inset: 0;
   background: linear-gradient(
     to right,
-    color-mix(in srgb, var(--ic-preto) 96%, transparent) 0%,
+    var(--ic-preto) 0%,
     color-mix(in srgb, var(--ic-preto) 86%, transparent) 42%,
     color-mix(in srgb, var(--ic-preto) 26%, transparent) 60%,
     transparent 78%
@@ -126,22 +123,19 @@
 }
 
 /* ---- O cartaz ---- */
-/* O FIO DE BORDA NÃO É ENFEITE — é o que faz o cartaz existir no tema escuro.
+/* O CARTAZ É PRETO PURO NOS DOIS TEMAS, e nada o contorna.
  *
- * O fundo do cartaz é preto FIXO (é contra ele que o rótulo branco mede) e a
- * página no escuro também é preta. Sem o fio, os dois são a mesma cor: o canto
- * arredondado some, o rodapé do cartaz escorre para dentro da página e a tela
- * vira uma fotografia flutuando sobre um borrão. `--cor-borda` gira com o tema —
- * 20% de branco no escuro, 12% de preto no claro —, que é o certo aqui: o que o
- * fio separa é o cartaz da PÁGINA, e é a página que muda de cor. */
+ * Chegou a ter um fio de borda por dentro, dos dias em que a página no escuro
+ * também era preta e sem o fio o cartaz não tinha limite nenhum. O papel escuro
+ * subiu para 6% de branco (tokens.css) e o fio virou dívida: agora é o cartaz
+ * que é mais escuro que a página, e é esse degrau que desenha a borda — que é o
+ * que a referência mede (#010100 no cartaz contra #0e0e0e na página). */
 .hub-cartaz {
   position: relative;
   overflow: hidden;
   border-radius: var(--raio-g);
   background: var(--ic-preto);
-  box-shadow:
-    var(--sombra-1),
-    inset 0 0 0 1px var(--cor-borda);
+  box-shadow: var(--sombra-1);
 }
 
 .hub-cartaz-link {
@@ -172,24 +166,17 @@
 }
 
 /* Sem o véu o rótulo cai sobre o que a fotografia trouxer, e metade do acervo é
-   clara no rodapé.
- *
- * SÃO DUAS CAMADAS, e a de cima é um fio de branco. O véu sozinho leva o rodapé
- * do cartaz a preto quase puro, que é a cor da página no tema escuro — o texto
- * ficava legível e o CARTAZ desaparecia debaixo dele. Os 8% de branco no pé
- * levam aquele trecho a cerca de 10% de luz: continua 17:1 contra o rótulo
- * branco e volta a ser uma superfície, não um buraco. */
+   clara no rodapé. Ele fecha em preto quase cheio, e é para fechar mesmo: o
+   rodapé escuro do cartaz é o que o separa da página levantada. */
 .hub-cartaz-veu {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(to top, color-mix(in srgb, var(--ic-branco) 8%, transparent) 0%, transparent 34%),
-    linear-gradient(
-      to top,
-      color-mix(in srgb, var(--ic-preto) 90%, transparent) 0%,
-      color-mix(in srgb, var(--ic-preto) 44%, transparent) 42%,
-      transparent 76%
-    );
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--ic-preto) 90%, transparent) 0%,
+    color-mix(in srgb, var(--ic-preto) 44%, transparent) 42%,
+    transparent 76%
+  );
 }
 
 .hub-cartaz-texto {
