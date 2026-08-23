@@ -20,20 +20,57 @@
 @custom-variant desk (&:is([data-view="web"] *, [data-view="web"]));
 
 :root {
+  /* ---- As duas cruas: o eixo que o tema gira -----------------------------
+   * TINTA e PAPEL são os dois extremos de que todo o resto da escala deriva.
+   * Existem como token próprio por um motivo mecânico: custom property com
+   * `var()` resolve no elemento ONDE ESTÁ DECLARADA, e as duas estão no mesmo
+   * `:root` que o bloco escuro redeclara — então trocar estas duas linhas lá
+   * embaixo reescreve os onze derivados de uma vez, sem repetir color-mix e
+   * sem chance de um degrau ficar para trás numa edição futura.
+   *
+   * O PAPEL CLARO NÃO É BRANCO PURO. É o creme quente da referência de 2026-08
+   * (#f7f1eb medido): 8% de um laranja rebaixado sobre branco puxa a temperatura
+   * e tira o brilho de papel de escritório de uma vez. O branco puro continua
+   * existindo — é `--cor-superficie`, e é ele que faz o cartão FLUTUAR sobre a
+   * página em vez de se dissolver nela. Zero hex novo: sai de `--ic-laranja`,
+   * `--ic-preto` e `--ic-branco`.
+   *
+   * A ORDEM DOS ARGUMENTOS NÃO É ESTÉTICA. O Lightning CSS emite um fallback
+   * para navegador sem `color-mix` e escolhe o PRIMEIRO argumento da mistura.
+   * Escrito como «preto 3% sobre creme», o fallback do fundo da página virava
+   * PRETO — e com `--cor-tinta` também preto, a tela degradava para ilegível em
+   * vez de degradar para branca. Com o branco na frente, o pior caso é a página
+   * perder o creme e ficar branca, que é exatamente o que ela era antes. */
+  --cor-tinta-crua: var(--ic-preto);
+  --cor-papel-cru: color-mix(
+    in srgb,
+    var(--ic-branco) 92%,
+    color-mix(in srgb, var(--ic-laranja) 62%, var(--ic-preto))
+  );
+
   /* ---- Cor semântica: o PAPEL de cada cor (DESIGN-SYSTEM.md §2) ----------
    * Laranja é AÇÃO — botão primário, link ativo, foco, progresso. Nunca
    * decoração, nunca data. As cores de linguagem continuam DADO e entram por
    * custom property vinda do vocabulário, nunca daqui. */
   --cor-acao: var(--ic-laranja);
-  --cor-acao-lavada: color-mix(in srgb, var(--ic-laranja) 8%, transparent);
-  --cor-tinta: var(--ic-preto);
-  --cor-tinta-2: color-mix(in srgb, var(--ic-preto) 62%, transparent);
-  --cor-tinta-3: color-mix(in srgb, var(--ic-preto) 45%, transparent);
-  --cor-fundo: var(--ic-branco);
+  /* `transparent` na frente pelo mesmo motivo do papel: é o fallback que o
+   * Lightning CSS escolhe. Com o laranja na frente, o item ativo do menu
+   * degradava para fundo laranja CHEIO sob texto laranja — invisível. Sem
+   * color-mix, o certo é o realce simplesmente não existir. */
+  --cor-acao-lavada: color-mix(in srgb, transparent 92%, var(--ic-laranja));
+  --cor-tinta: var(--cor-tinta-crua);
+  --cor-tinta-2: color-mix(in srgb, var(--cor-tinta-crua) 62%, transparent);
+  /* 58% e não os 45% de antes: sobre papel claro, 45% de preto mede 3,36:1 e
+   * reprova o mínimo de 4,5:1 para texto. A 58% mede 5,4:1 no claro e 6,9:1 no
+   * escuro — o mesmo número serve os dois temas, que é o que mantém a escala
+   * simétrica em vez de virar dois valores para lembrar. */
+  --cor-tinta-3: color-mix(in srgb, var(--cor-tinta-crua) 58%, transparent);
+  --cor-fundo: var(--cor-papel-cru);
   --cor-superficie: var(--ic-branco);
-  --cor-superficie-2: color-mix(in srgb, var(--ic-preto) 4%, var(--ic-branco));
-  --cor-borda: color-mix(in srgb, var(--ic-preto) 12%, transparent);
-  --cor-borda-forte: color-mix(in srgb, var(--ic-preto) 28%, transparent);
+  /* Papel na frente: é FUNDO, e o fallback tem de ser o papel, não a tinta. */
+  --cor-superficie-2: color-mix(in srgb, var(--cor-papel-cru) 96%, var(--cor-tinta-crua));
+  --cor-borda: color-mix(in srgb, var(--cor-tinta-crua) 12%, transparent);
+  --cor-borda-forte: color-mix(in srgb, var(--cor-tinta-crua) 28%, transparent);
   --cor-foco: var(--ic-laranja);
 
   /* ---- Tipografia: um degrau = tamanho + entrelinha ----------------------
@@ -83,6 +120,65 @@
   --espaco-secao: 3rem;
   --espaco-cartao: 1.25rem;
   --espaco-pilha: 0.75rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * TEMA ESCURO — autorizado pelo manual, não inventado aqui.
+ *
+ * O manual da marca (p.9) chancela explicitamente a assinatura em BRANCO sobre
+ * fundo PRETO, e mostra o swatch. A ressalva é a assinatura Flex, que só tem
+ * versão sobre fundo branco — usamos Fix/Free, que é também o que o mockup do
+ * site institucional do manual (p.31) faz, com trilho e topo pretos.
+ *
+ * DOIS SELETORES COM A MESMA LISTA, e não um só, porque o override manual
+ * precisa vencer NOS DOIS SENTIDOS: forçar claro num sistema escuro (é o
+ * `:not([data-tema="claro"])` dentro da @media que devolve o claro) e forçar
+ * escuro num sistema claro (é o segundo bloco). Os dois pesam 0,2,0 — quem
+ * vier depois na folha ganha, e o escolhido à mão vem depois de propósito.
+ *
+ * O LARANJA NÃO CLAREIA. `--ic-laranja` mede 7,9:1 contra preto: o escuro
+ * MELHORA a cor de ação. O problema de contraste do projeto é o inverso e é
+ * anterior a este bloco — branco sobre laranja mede 2,64:1, e está em quatro
+ * controles hoje. Quem resolve isso é o chip preto-cheio, não o tema.
+ * ------------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    color-scheme: dark;
+
+    --cor-tinta-crua: var(--ic-branco);
+    --cor-papel-cru: var(--ic-preto);
+
+    /* Elevação no escuro é SUPERFÍCIE MAIS CLARA, não sombra: as `--sombra-*`
+     * são preto em alfa baixo e ficam inertes contra fundo preto. Cartão preto
+     * sobre página preta desaparece; 7% e 12% de branco dão os dois degraus.
+     * Preto na frente pelo fallback: sem color-mix, superfície branca sob texto
+     * branco seria invisível — degradar para preto só apaga a elevação. */
+    --cor-superficie: color-mix(in srgb, var(--ic-preto) 93%, var(--ic-branco));
+    --cor-superficie-2: color-mix(in srgb, var(--ic-preto) 88%, var(--ic-branco));
+
+    /* 20% e 38% e não 12% e 28%: contra preto, uma borda a 12% de branco
+     * simplesmente não se vê, e o desenho de cartão e controle some junto. */
+    --cor-borda: color-mix(in srgb, var(--ic-branco) 20%, transparent);
+    --cor-borda-forte: color-mix(in srgb, var(--ic-branco) 38%, transparent);
+
+    /* 18% e não 8%: o realce lavado de item ativo a 8% sobre preto não existe. */
+    --cor-acao-lavada: color-mix(in srgb, transparent 82%, var(--ic-laranja));
+  }
+}
+
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+
+  --cor-tinta-crua: var(--ic-branco);
+  --cor-papel-cru: var(--ic-preto);
+
+  --cor-superficie: color-mix(in srgb, var(--ic-preto) 93%, var(--ic-branco));
+  --cor-superficie-2: color-mix(in srgb, var(--ic-preto) 88%, var(--ic-branco));
+
+  --cor-borda: color-mix(in srgb, var(--ic-branco) 20%, transparent);
+  --cor-borda-forte: color-mix(in srgb, var(--ic-branco) 38%, transparent);
+
+  --cor-acao-lavada: color-mix(in srgb, transparent 82%, var(--ic-laranja));
 }
 
 /* Exposição ao Tailwind: os utilitários leem o token, e trocar o token troca a

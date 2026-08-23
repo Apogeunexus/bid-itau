@@ -25,10 +25,14 @@
   }
 }
 
+/* A página lê o TOKEN, não a paleta. Enquanto isto citava `--ic-branco` direto,
+ * nenhum tema podia existir: a raiz do documento ficava branca por decreto e o
+ * escuro só chegaria até a borda de cada componente. Trocar as duas linhas é o
+ * que faz o tema ser uma propriedade do documento em vez de um enfeite. */
 html,
 body {
-  background: var(--ic-branco);
-  color: var(--ic-preto);
+  background: var(--cor-fundo);
+  color: var(--cor-tinta);
 }
 
 /* ---------------------------------------------------------------------------
