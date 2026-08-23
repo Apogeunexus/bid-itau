@@ -77,6 +77,71 @@
  * etiqueta de conteúdo. Ela nunca copia o desenho do selo de linguagem, que é
  * dado e tem cor própria vinda do vocabulário (D-08).                        */
 
+/* --- Os grupos de filtro, recolhidos na visão app -------------------------
+ * O PROBLEMA QUE ISTO RESOLVE. Com a busca vazia, os cinco grupos de faceta são cinco
+ * fileiras de fichas que ninguém pediu; dentro da moldura de 390px elas empurram o resto
+ * da tela para fora do alcance, e a tela que devia convidar a descobrir abre como um
+ * formulário. Recolhido, cada grupo é uma linha com o nome e quantas opções há dentro.
+ *
+ * A VISÃO WEB NÃO RECOLHE NADA, e não por um ramo em JavaScript. O alternador existe no
+ * DOM das duas visões e some por `display: none` na web; a regra que esconde o corpo do
+ * grupo é escrita SÓ para a app. D-80 pede a coluna de facetas à vista o tempo todo, e o
+ * gate WEB-04 mede exatamente isso com a busca vazia — a coluna continua aberta lá.
+ *
+ * QUEM DECIDE O ESTADO É `recolhivel` EM `buscar.tsx`, e ele é `!ativa`: com uma busca em
+ * curso as facetas voltam a ficar abertas nas duas visões, porque aí elas são a ferramenta
+ * que está na mão da pessoa.                                                            */
+
+.busca-grupo-cabeca {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* O título já traz `margin-bottom` para quando é o cabeçalho de um bloco solto; dentro da
+ * cabeça quem separa é o `gap` do grupo, e a margem viraria um degrau. */
+.busca-grupo-cabeca .busca-bloco-titulo {
+  margin-bottom: 0;
+}
+
+.busca-grupo-alternador {
+  flex: none;
+  /* O alvo de toque: o rótulo é micro, e sem este respiro sobrariam ~14px de altura para
+   * o dedo. O padding cresce a área clicável sem mexer no desenho da linha. */
+  padding: 0.5rem 0;
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--cor-acao-tinta);
+  cursor: pointer;
+}
+
+/* O chevron só existe quando há o que abrir — aberto, o rótulo já diz «fechar». */
+.busca-grupo-alternador[aria-expanded="false"]::after {
+  content: " ›";
+}
+
+.busca-grupo-alternador:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
+}
+
+.busca-grupo-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+[data-view="mobile"] .busca-grupo-corpo[data-recolhido] {
+  display: none;
+}
+
+[data-view="web"] .busca-grupo-alternador {
+  display: none;
+}
+
 /* --- Resultado ----------------------------------------------------------
  * Sem cartão e sem sombra: a lista mistura 15 classes (D-63) e uma moldura por item
  * pesaria a tela inteira. A separação é uma linha, e o que distingue os tipos é a

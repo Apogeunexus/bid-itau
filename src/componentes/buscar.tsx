@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
@@ -91,6 +91,36 @@ const MAX_RECENTES = 6;
 
 /** Quantos temas a faceta mostra antes de pedir «ver todos». São 94 no vocabulário. */
 const TEMAS_VISIVEIS = 10;
+
+/**
+ * O que o campo sugere enquanto está vazio, e que troca sozinho de tempos em tempos.
+ *
+ * O PRIMEIRO ITEM É SEMPRE O DO PRIMEIRO QUADRO, e é o genérico. Sob `output: "export"`
+ * o HTML nasce no build: sortear a sugestão inicial divergiria da hidratação, e o React
+ * acusaria no console. O giro começa depois, no efeito.
+ *
+ * OS EXEMPLOS CONCRETOS CASAM ALGO, e isso foi conferido e não estimado. Um exemplo que
+ * devolvesse zero seria a primeira busca da pessoa e o primeiro beco — o oposto de D-66.
+ * Contados por título normalizado em `src/dados/gerado/entidades.json`: Lygia Clark 1,
+ * bienal 116, arte contemporânea 10, dança contemporânea 8, Belém 11. «teatro em Belém»
+ * ficou de fora por isto mesmo: a consulta exige TODOS os termos na mesma entrada, e o
+ * acervo tem zero títulos com os três.
+ */
+const SUGESTOES = [
+  // TRÊS SUBSTANTIVOS, E NÃO QUATRO, PORQUE O CAMPO É DE 390px. Com «ou tema» no fim, a
+  // frase mede 317px contra 296px úteis dentro da moldura — medido com a fonte real da
+  // tela — e a primeira coisa que a pessoa vê seria um texto cortado no meio. Tema
+  // continua no lugar onde ele recorta de verdade: a faceta, e os exemplos que giram.
+  "pessoa, lugar ou evento",
+  "Lygia Clark",
+  "bienal",
+  "arte contemporânea",
+  "dança contemporânea",
+  "Belém",
+];
+
+/** O giro é lento de propósito: a sugestão é convite, não animação. */
+const GIRO_DA_SUGESTAO = 4000;
 
 /**
  * Classe da ontologia → o nome que se usa em português na tela.
@@ -273,6 +303,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
   const [descartados, setDescartados] = useState(0);
   const [lidoDoHash, setLidoDoHash] = useState(false);
   const [todosOsTemas, setTodosOsTemas] = useState(false);
+  const [sugestao, setSugestao] = useState(0);
 
   /** Todas as opções de faceta do índice, por `campo:valor`. Valida o hash e nomeia. */
   const conhecidas = useMemo(() => {
@@ -311,6 +342,23 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
     const atual = `${window.location.pathname}${window.location.search}`;
     window.history.replaceState(null, "", `${atual}${novo}`);
   }, [texto, criterios, lidoDoHash]);
+
+  // O GIRO DA SUGESTÃO, e as duas condições que o desligam.
+  //
+  // Com texto digitado o placeholder nem aparece — girar ali seria trabalho invisível a
+  // cada 4 segundos, para sempre. E quem pediu menos movimento no sistema operacional não
+  // vê giro nenhum: fica a sugestão genérica, que é a que diz o que se pode buscar. É o
+  // mecanismo de parada que um texto que se troca sozinho precisa ter (WCAG 2.2.2) — o
+  // outro é digitar, que também para.
+  useEffect(() => {
+    if (texto) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const giro = window.setInterval(
+      () => setSugestao((i) => (i + 1) % SUGESTOES.length),
+      GIRO_DA_SUGESTAO,
+    );
+    return () => window.clearInterval(giro);
+  }, [texto]);
 
   const registrarRecente = useCallback((termo: string) => {
     const limpo = termo.trim();
@@ -401,15 +449,13 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Buscar</h1>
         </div>
 
-        {/* O QUE ESTA FRASE PRECISA DIZER é o que a pessoa ganha: um campo só
-            para tudo. A versão anterior dizia «um índice único do grafo … roda no
-            seu navegador, em memória: não há serviço de busca por trás» — três
-            afirmações de arquitetura na primeira linha de uma tela de busca. Quem
-            usa quer saber que
-            procurar «Lygia Clark» acha a artista, a obra e o verbete de uma vez. */}
+        {/* O QUE ESTA FRASE PRECISA DIZER é o que a pessoa ganha, em UMA linha.
+            Antes desta versão a frase ainda explicava o mecanismo — «aparecem no
+            mesmo resultado, cada um com o seu tipo» —, e explicava para o leitor
+            aquilo que a primeira lista de resultados mostra sozinha: a etiqueta de
+            tipo em cada linha é a prova de D-63, não este parágrafo. */}
         <p className="text-sm leading-snug">
-          Uma busca só para o acervo inteiro: eventos, artistas, obras, vídeos e verbetes
-          aparecem no mesmo resultado, cada um com o seu tipo.
+          Encontre eventos, artistas, obras, vídeos e muito mais em um só lugar.
         </p>
 
       </header>
@@ -433,7 +479,11 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           type="search"
           autoFocus
           autoComplete="off"
-          placeholder="bienal, teatro, Belém, Lygia Clark…"
+          // A sugestão é convite, e por isso ela troca: «bienal, teatro, Belém, Lygia
+          // Clark…» era uma lista de quatro exemplos parada, que se lê como sintaxe. Uma
+          // sugestão por vez, começando pelo que se PODE buscar e passando pelo que
+          // existe de verdade no acervo, é a diferença entre um campo e um convite.
+          placeholder={`Busque por ${SUGESTOES[sugestao]}…`}
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
           onBlur={() => registrarRecente(texto)}
@@ -538,6 +588,12 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     exposições existem» é a pergunta que a seção responde. Num chip
                     de filtro ele é o mesmo dado repetido dez vezes ao lado de algo
                     que o usuário já vai medir no resultado. */}
+                {/* O RÓTULO PASSA POR `rotuloDaClasse`, e isso é conserto e não gosto:
+                    `opcao.rotulo` é o valor cru da ontologia, e a fileira dizia
+                    «conteudo», «midia», «territorio» — sem acento, e com os nomes
+                    internos do modelo de dados na primeira fileira que a pessoa vê. É
+                    exatamente o que o mapa de rótulos existe para impedir, e a faceta
+                    «tipo» lá embaixo já o usava; aqui faltava. */}
                 <TrilhoDeChips rotulo="Explorar por seção do acervo">
                   {facetas.classe.map((opcao) => (
                     <Chip
@@ -546,7 +602,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                       onClick={() => alternarCriterio(opcao)}
                       contagem={milhar(opcao.n)}
                     >
-                      {opcao.rotulo}
+                      {rotuloDaClasse(opcao.valor as ClasseEntidade)}
                     </Chip>
                   ))}
                 </TrilhoDeChips>
@@ -577,11 +633,30 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 </div>
               </section>
 
-              <section className="busca-bloco">
-                <p className="busca-bloco-titulo">em vez de buscar, deixe levar</p>
+              {/* A DESCOBERTA VEM ANTES DOS FILTROS, e essa ordem é o assunto da
+                  reformulação. Quem chega sem um nome na cabeça precisa de uma porta de
+                  saída antes de encontrar um formulário; empurrar as duas portas — a
+                  caminhada e a frase — para depois da fileira de facetas era pedir que a
+                  pessoa desistisse no meio do caminho.
+
+                  AS DUAS PORTAS FICAM NO MESMO BLOCO porque respondem à mesma pergunta.
+                  Só o pedaço da frase carrega `data-convite-frase="app"`: na web ele some
+                  por CSS, e quem diz a mesma coisa lá é o painel permanente do topo. Se o
+                  atributo estivesse na seção inteira, a web perderia junto o convite para
+                  Descobrir, que não tem substituto nenhum. */}
+              <section className="busca-bloco flex flex-col gap-2">
+                <p className="busca-bloco-titulo">não sabe o que procurar?</p>
                 <p className="text-sm leading-snug">
-                  Disposição não é critério de busca: ela <strong>pondera a caminhada</strong> de
-                  Descobrir. Tocar leva para lá com a disposição já marcada.
+                  Deixe o acervo te surpreender: Descobrir monta uma{" "}
+                  <strong>caminhada</strong> em vez de pedir um termo.
+                </p>
+                <Chip href="/descobrir/" className="w-fit font-semibold">
+                  <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
+                  quero descobrir algo
+                </Chip>
+                <p className="text-xs leading-snug text-tinta-2">
+                  Disposição não é critério de busca: ela pondera a caminhada. Tocar leva
+                  para lá com a disposição já marcada.
                 </p>
                 <TrilhoDeChips rotulo="Ir para Descobrir com uma disposição marcada">
                   {DISPOSICOES.map((disposicao) => (
@@ -594,11 +669,33 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     </Chip>
                   ))}
                 </TrilhoDeChips>
+
+                {/* O convite da fase 3, intacto no conteúdo e só mudado de endereço — e
+                    ele some na WEB, onde o bloco permanente `[data-frase-natural]` já diz
+                    a mesma coisa com a frase por extenso e sem depender de a busca estar
+                    vazia. Dois convites para a mesma tela na mesma página seriam ruído. */}
+                <div data-convite-frase="app" className="flex flex-col gap-2">
+                  <p className="text-sm leading-snug">
+                    Ou descreva com uma frase — «algo parecido com a Bienal, gratuito e perto
+                    de mim» — e a frase vira{" "}
+                    {/* smaug-ignore ui-strings: «editáveis» é pt-BR; o casador lê o prefixo «edit» */}
+                    <strong>critérios visíveis e editáveis</strong>, não uma resposta de
+                    chatbot.
+                  </p>
+                  <Chip href="/buscar/frase/" className="w-fit font-semibold">
+                    <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
+                    buscar por frase
+                  </Chip>
+                </div>
               </section>
 
+              {/* «atalhos por linguagem» virou «explore por linguagem»: o par com
+                  «explore por seção» é o que diz que os dois trilhos são a mesma oferta —
+                  entrar no acervo por um corte — e não um menu de atalhos solto no meio
+                  da tela. */}
               <section className="busca-bloco">
-                <p className="busca-bloco-titulo">atalhos por linguagem</p>
-                <TrilhoDeChips rotulo="Atalhos por linguagem artística">
+                <p className="busca-bloco-titulo">explore por linguagem</p>
+                <TrilhoDeChips rotulo="Explorar por linguagem artística">
                   {facetas.linguagem.slice(0, 12).map((opcao) => (
                     <Chip
                       key={chaveCriterio(opcao)}
@@ -633,22 +730,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 </p>
               </section>
 
-              {/* O convite da fase 3, intacto — e some na WEB, onde o bloco permanente
-                  `[data-frase-natural]` já diz a mesma coisa com a frase por extenso e
-                  sem depender de a busca estar vazia. Dois convites para a mesma tela na
-                  mesma página seriam ruído; quem some é a caixa, por CSS. */}
-              <section data-convite-frase="app" className="busca-bloco">
-                <p className="busca-bloco-titulo">não sabe o nome do que procura?</p>
-                <p className="text-sm leading-snug">
-                  Descreva com uma frase — «algo parecido com a Bienal, gratuito e perto de mim» —
-                  e a frase vira <strong>critérios visíveis e editáveis</strong>, não uma resposta
-                  de chatbot.
-                </p>
-                <Chip href="/buscar/frase/" className="w-fit font-semibold">
-                  <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
-                  buscar por frase
-                </Chip>
-              </section>
             </div>
           ) : null}
 
@@ -837,7 +918,12 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           {/* ------------------------------------------------------------------ */}
           <section className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
-              <p className="busca-bloco-titulo">recortar</p>
+              {/* «recortar» virou «filtre o acervo» porque este bloco deixou de ser a
+                  primeira coisa que a pessoa vê ao rolar: com os grupos recolhidos, o
+                  título é o que anuncia o que há lá dentro, e um verbo solto não anuncia
+                  nada. O vocabulário de recorte segue valendo no texto abaixo, onde ele
+                  descreve o que os números querem dizer. */}
+              <p className="busca-bloco-titulo">filtre o acervo</p>
               {/* «As facetas saem da própria ontologia — classe, linguagem, tema,
                   procedência e território da entidade» era a lista dos CAMPOS do
                   modelo de dados, dita a quem só queria filtrar. O que a pessoa
@@ -872,18 +958,31 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
               filtrar por acessibilidade — as 8 dimensões como critério, não como selo
             </Chip>
 
+            {/* `recolhivel={!ativa}` — E O QUE ISSO SIGNIFICA EM CADA VISÃO.
+                Enquanto ninguém buscou nada, os cinco grupos são cinco fileiras de
+                fichas que ninguém pediu, e no telefone elas empurram para muito longe
+                tudo o que vem depois. Com a busca em curso as facetas são a FERRAMENTA
+                em uso, e recolher o que a pessoa está manejando seria o defeito oposto.
+
+                NA WEB NADA DISSO ACONTECE, e não por um ramo em JavaScript: o alternador
+                é `display: none` sob `[data-view="web"]` e a regra que esconde o corpo do
+                grupo é escrita só para a app (`busca.css`). D-80 pede a coluna à vista o
+                tempo todo, e ela continua à vista — inclusive com a busca vazia, que é o
+                estado que o gate WEB-04 mede. */}
             <BlocoFaceta
               titulo="tipo"
               opcoes={facetas.classe}
               marcados={marcados}
+              recolhivel={!ativa}
               rotulo={(valor) => rotuloDaClasse(valor as ClasseEntidade)}
               aoTocar={alternarCriterio}
             />
-            <BlocoFaceta titulo="linguagem" opcoes={facetas.linguagem.slice(0, 12)} marcados={marcados} aoTocar={alternarCriterio} />
+            <BlocoFaceta titulo="linguagem" opcoes={facetas.linguagem.slice(0, 12)} marcados={marcados} recolhivel={!ativa} aoTocar={alternarCriterio} />
             <BlocoFaceta
               titulo="tema"
               opcoes={todosOsTemas ? facetas.tema : facetas.tema.slice(0, TEMAS_VISIVEIS)}
               marcados={marcados}
+              recolhivel={!ativa}
               aoTocar={alternarCriterio}
               rodape={
                 facetas.tema.length > TEMAS_VISIVEIS ? (
@@ -899,11 +998,12 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 ) : null
               }
             />
-            <BlocoFaceta titulo="procedência" opcoes={facetas.procedencia} marcados={marcados} aoTocar={alternarCriterio} />
+            <BlocoFaceta titulo="procedência" opcoes={facetas.procedencia} marcados={marcados} recolhivel={!ativa} aoTocar={alternarCriterio} />
             <BlocoFaceta
               titulo="território"
               opcoes={facetas.territorio.slice(0, 12)}
               marcados={marcados}
+              recolhivel={!ativa}
               aoTocar={alternarCriterio}
               rodape={
                 <p className="text-xs leading-snug text-tinta-2">
@@ -965,6 +1065,7 @@ function BlocoFaceta({
   aoTocar,
   rotulo,
   rodape,
+  recolhivel = false,
 }: {
   titulo: string;
   opcoes: OpcaoFaceta[];
@@ -972,42 +1073,78 @@ function BlocoFaceta({
   aoTocar: (opcao: OpcaoFaceta) => void;
   rotulo?: (valor: string) => string;
   rodape?: React.ReactNode;
+  /**
+   * O grupo GANHA UM ALTERNADOR e começa fechado — na visão app, onde a regra que
+   * esconde o corpo é escrita. Na web o alternador não é desenhado e o corpo fica
+   * onde sempre esteve: o mesmo DOM, duas medidas (D-05).
+   */
+  recolhivel?: boolean;
 }) {
+  // O estado sobrevive a `recolhivel` mudar de valor: quem abriu «tema», buscou e depois
+  // limpou a busca encontra «tema» aberto — foi a última coisa que essa pessoa pediu.
+  const [aberto, setAberto] = useState(false);
+  const idCorpo = useId();
+  const recolhido = recolhivel && !aberto;
+
   return (
     <div className="flex flex-col gap-1.5">
-      <p className="busca-bloco-titulo">{titulo}</p>
-      {opcoes.length ? (
-        // A CONTAGEM FICA AQUI, e não é exceção arbitrária: o parágrafo acima
-        // promete que «o número é quantos resultados aquela opção devolve
-        // agora». Tirá-la, como esta migração chegou a fazer, deixou a frase
-        // apontando para um dado que não estava na tela — e a promessa de que
-        // nenhum recorte leva a lugar nenhum (D-66) é argumento do produto, não
-        // decoração de chip. O que continua fora é o «sem ela: 340» dos
-        // critérios já marcados: aquele é o mesmo número repetido em cada
-        // pílula de uma fileira, e ninguém prometeu nada sobre ele.
-        <TrilhoDeChips rotulo={`Recortar por ${titulo}`}>
-          {opcoes.map((opcao) => {
-            const chave = chaveCriterio(opcao);
-            return (
-              <Chip
-                key={chave}
-                selecionado={marcados.has(chave)}
-                data-faceta={chave}
-                cor={opcao.cor ?? undefined}
-                contagem={milhar(opcao.n)}
-                onClick={() => aoTocar(opcao)}
-              >
-                {rotulo ? rotulo(opcao.valor) : opcao.rotulo}
-              </Chip>
-            );
-          })}
-        </TrilhoDeChips>
-      ) : (
-        <p className="text-sm text-tinta-2">
-          Nenhuma opção deste campo recorta o resultado atual.
-        </p>
-      )}
-      {rodape}
+      <div className="busca-grupo-cabeca">
+        <p className="busca-bloco-titulo">{titulo}</p>
+        {recolhivel ? (
+          // O RÓTULO DO ALTERNADOR É A CONTAGEM DE OPÇÕES, e não um «ver» genérico:
+          // fechado, o grupo esconde justamente quantas escolhas há ali dentro, e é
+          // esse número que decide se vale o toque.
+          <button
+            type="button"
+            className="busca-grupo-alternador"
+            aria-expanded={aberto}
+            aria-controls={idCorpo}
+            onClick={() => setAberto((v) => !v)}
+          >
+            {aberto
+              ? "fechar"
+              : `${milhar(opcoes.length)} ${opcoes.length === 1 ? "opção" : "opções"}`}
+          </button>
+        ) : null}
+      </div>
+      <div
+        id={idCorpo}
+        className="busca-grupo-corpo"
+        data-recolhido={recolhido ? "sim" : undefined}
+      >
+        {opcoes.length ? (
+          // A CONTAGEM FICA AQUI, e não é exceção arbitrária: o parágrafo acima
+          // promete que «o número é quantos resultados aquela opção devolve
+          // agora». Tirá-la, como esta migração chegou a fazer, deixou a frase
+          // apontando para um dado que não estava na tela — e a promessa de que
+          // nenhum recorte leva a lugar nenhum (D-66) é argumento do produto, não
+          // decoração de chip. O que continua fora é o «sem ela: 340» dos
+          // critérios já marcados: aquele é o mesmo número repetido em cada
+          // pílula de uma fileira, e ninguém prometeu nada sobre ele.
+          <TrilhoDeChips rotulo={`Recortar por ${titulo}`}>
+            {opcoes.map((opcao) => {
+              const chave = chaveCriterio(opcao);
+              return (
+                <Chip
+                  key={chave}
+                  selecionado={marcados.has(chave)}
+                  data-faceta={chave}
+                  cor={opcao.cor ?? undefined}
+                  contagem={milhar(opcao.n)}
+                  onClick={() => aoTocar(opcao)}
+                >
+                  {rotulo ? rotulo(opcao.valor) : opcao.rotulo}
+                </Chip>
+              );
+            })}
+          </TrilhoDeChips>
+        ) : (
+          <p className="text-sm text-tinta-2">
+            Nenhuma opção deste campo recorta o resultado atual.
+          </p>
+        )}
+        {rodape}
+      </div>
     </div>
   );
 }
