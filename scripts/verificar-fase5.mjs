@@ -1371,9 +1371,14 @@ const CONTRATO_POR_ROTA = [
     esperado: { "sem-resultado": 1, beco: 1, afrouxamento: 4, "trilha-relacionada": 1 },
   },
   {
+    // 113 e 4, e não 529 e 10: a reformulação de 2026-08 estreitou /play para a vitrine de
+    // STREAMING (vídeo, série, playlist) e mandou podcast para /cast. O gate de DOM lá
+    // embaixo já media os números novos; este contrato de ARQUIVO tinha ficado para trás, e
+    // o resultado era um portão que reprovaria a tela certa. As 529 rotas de /play/[slug]
+    // continuam — o catálogo unificado não encolheu, só a vitrine.
     rota: "play/index.html",
     plano: "05-07",
-    esperado: { play: 1, categoria: 10, midia: 529, "veja-isto": 1 },
+    esperado: { play: 1, categoria: 4, midia: 113, "veja-isto": 1 },
   },
 ];
 
@@ -3588,8 +3593,8 @@ async function blocoPlay(cdp, base) {
 
   resumo.push([
     "APPX-02",
-    `/play declara e mostra as 529 mídias com 10 chips de recorte; «podcasts» entrega os ${recortar.prometido} ` +
-      `que anuncia sem navegar, e Libras anuncia «3 de 529» e entrega 3, com os dois recursos zerados declarando`,
+    `/play declara e mostra as 113 mídias de streaming com 4 chips de recorte; «séries» entrega os ${recortar.prometido} ` +
+      `que anuncia sem navegar, e Libras anuncia «3 de 113» e entrega 3, com os dois recursos zerados declarando`,
   ]);
   resumo.push([
     "APPX-03",

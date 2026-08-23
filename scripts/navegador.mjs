@@ -28,13 +28,39 @@ export const ALTURA_PADRAO = 960;
 export const TETO_NAVEGACAO_PADRAO = 30_000;
 export const TETO_HIDRATACAO_PADRAO = 15_000;
 
-const CAMINHOS_CHROME = [
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-  "/Applications/Chromium.app/Contents/MacOS/Chromium",
-  "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
-  "/usr/bin/google-chrome",
-  "/usr/bin/chromium",
-];
+// A lista é montada por plataforma, e não concatenada de uma vez, porque no Windows os
+// caminhos NASCEM de variáveis de ambiente: «Program Files» muda de nome em máquina com
+// Windows em outro idioma, e `%ProgramFiles(x86)%` nem sequer existe em instalação de 32
+// bits. Escrever os caminhos literais faria a verificação passar aqui e falhar na máquina do
+// lado — que é o tipo de verde falso que T-02-22 existe para impedir.
+function caminhosDoSistema() {
+  if (process.platform !== "win32") {
+    return [
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "/Applications/Chromium.app/Contents/MacOS/Chromium",
+      "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
+      "/usr/bin/google-chrome",
+      "/usr/bin/chromium",
+    ];
+  }
+
+  // Edge fecha a lista, e não a abre: ele é Chromium e fala o mesmo CDP, mas medir num
+  // motor que não é o do resto do projeto é decisão, não acaso. Só entra quando não há
+  // Chrome nenhum — e aí é melhor que a alternativa, que é não medir.
+  const raizes = [
+    process.env.ProgramFiles,
+    process.env["ProgramFiles(x86)"],
+    process.env.LOCALAPPDATA,
+  ].filter(Boolean);
+
+  return [
+    ...raizes.map((r) => path.join(r, "Google", "Chrome", "Application", "chrome.exe")),
+    ...raizes.map((r) => path.join(r, "Chromium", "Application", "chrome.exe")),
+    ...raizes.map((r) => path.join(r, "Microsoft", "Edge", "Application", "msedge.exe")),
+  ];
+}
+
+const CAMINHOS_CHROME = caminhosDoSistema();
 
 export function acharChrome() {
   // CHROME_BIN é ESCOLHA EXPLÍCITA, não sugestão. Se estiver definido e não existir, falha
