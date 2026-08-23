@@ -37,13 +37,13 @@ function Cabecalho({ nome, objetivo }: { nome: string; objetivo: string }) {
   return (
     <header className="flex flex-col gap-2">
       <div className="flex items-baseline gap-2">
-        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
         <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{nome}</h1>
-        <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+        <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
           C1
         </span>
       </div>
-      <p className="max-w-prose text-sm text-black/60">{objetivo}</p>
+      <p className="max-w-prose text-sm text-tinta-2">{objetivo}</p>
     </header>
   );
 }
@@ -102,7 +102,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
                   <li
                     key={p.papel}
                     data-papel={p.papel}
-                    className="rounded-full bg-acao px-2.5 py-0.5 text-xs font-bold text-[var(--ic-branco)]"
+                    className="rounded-full bg-acao px-2.5 py-0.5 text-xs font-bold text-sobre-acao"
                   >
                     {`${p.papel} · ${p.contagem} ${p.contagem === 1 ? "vínculo" : "vínculos"}`}
                   </li>
@@ -111,7 +111,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
             ) : (
               <p
                 data-papeis="0"
-                className="text-xs leading-relaxed text-black/60"
+                className="text-xs leading-relaxed text-tinta-2"
               >
                 {/* A frase é produto — declara uma ausência do acervo, da mesma família
                     dos rótulos de procedência. Só o número da decisão sai de cena. */}
@@ -121,7 +121,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
               </p>
             )}
 
-            <p className="text-[0.65rem] tracking-widest text-black/45 uppercase">
+            <p className="text-[0.65rem] tracking-widest text-tinta-3 uppercase">
               {entidade.classe} · procedência {entidade.procedencia}
             </p>
           </div>
@@ -131,7 +131,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
         {entidade.linguagens.length ? (
           <SelosDeLinguagem ids={entidade.linguagens} />
         ) : (
-          <p className="text-xs text-black/50">
+          <p className="text-xs text-tinta-3">
             Nenhuma linguagem artística declarada para esta entrada no acervo.
           </p>
         )}
@@ -158,7 +158,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
              (D-80); no app a pilha continua a mesma. */}
       <div className="flex flex-col gap-6 desk:grid desk:grid-cols-2 desk:items-start">
         <section className="flex flex-col gap-4">
-          <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
+          <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
             Com quem dialoga no grafo
           </h2>
           {semelhante ? <BlocoPonte grupo={semelhante} /> : null}
@@ -166,7 +166,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
+          <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
             Conteúdo editorial que fala sobre
           </h2>
           {aprofunda ? <BlocoPonte grupo={aprofunda} /> : null}
@@ -175,7 +175,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
         </section>
       </div>
 
-      <p className="border-t border-black/10 pt-3 text-xs leading-relaxed text-black/45">
+      <p className="border-t border-borda pt-3 text-xs leading-relaxed text-tinta-3">
         Todo vínculo desta página é uma aresta do grafo do acervo, e o papel de cada um vem
         da própria aresta. Onde o bloco declara ausência, é o registro do Itaú Cultural que
         não publica o dado — nada foi preenchido no lugar dele.

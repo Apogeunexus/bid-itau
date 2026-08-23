@@ -27,9 +27,9 @@ export default function Descobrir() {
     <div className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-6xl desk:gap-6 desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Descobrir</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C1
           </span>
         </div>
@@ -38,7 +38,7 @@ export default function Descobrir() {
             se posiciona contra uma alternativa de projeto («ordenado por popularidade»).
             Nada disso é dito a quem usa o app — para essa pessoa, quem faz o trabalho é o
             selo de motivo de cada cartão, que continua na tela nos dois modos. */}
-        <Comentario className="text-sm leading-snug text-black/60">
+        <Comentario className="text-sm leading-snug text-tinta-2">
           Levar, não fazer buscar. Cada cartão abaixo chegou por uma aresta do acervo, e o selo
           laranja é o texto dessa aresta — nada aqui é ordenado por popularidade.
         </Comentario>

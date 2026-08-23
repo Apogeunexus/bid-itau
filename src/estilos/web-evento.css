@@ -171,7 +171,7 @@
   overscroll-behavior: contain;
   border: var(--web-borda);
   border-radius: var(--web-raio);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 [data-view="web"] .ocorrencias-lista > li {
@@ -187,7 +187,7 @@
 }
 
 [data-view="web"] .ocorrencias-lista > li:nth-of-type(odd) {
-  background: color-mix(in srgb, var(--ic-preto) 2.5%, transparent);
+  background: color-mix(in srgb, var(--cor-tinta-crua) 2.5%, transparent);
 }
 
 /* O CABEÇALHO GRUDA NO TOPO DA TABELA. Sem isto, na linha 40 de 53 ninguém
@@ -205,13 +205,13 @@
   padding: 0.5rem 0.75rem;
   border-top: 0;
   border-bottom: 2px solid var(--cor-acao);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   font-family: var(--fonte-display);
   font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 /* Uma frase na app, duas células na web: o `<p>` que embrulha dia e hora some
@@ -279,7 +279,7 @@
   overflow-wrap: anywhere;
   font-size: var(--tipo-micro);
   line-height: 1.35;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }
 [data-view="web"] .ocorrencia-espaco {
   grid-column: 4;
@@ -320,16 +320,16 @@
 [data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade="presente"] {
   border-color: var(--cor-acao);
   background: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
 }
 [data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade="ausente-declarada"] {
-  border-color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
-  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  border-color: var(--cor-borda-forte);
+  color: var(--cor-tinta-2);
 }
 [data-view="web"] .ocorrencia-acesso[data-coluna-acessibilidade="nao-declarada"] {
   border-style: dashed;
-  border-color: color-mix(in srgb, var(--ic-preto) 25%, transparent);
-  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  border-color: var(--cor-borda-forte);
+  color: var(--cor-tinta-3);
 }
 /* O cabeçalho reusa a classe da célula para herdar a coluna e o `order`, mas
  * não é pastilha nenhuma — ele não carrega o atributo, e é o atributo que

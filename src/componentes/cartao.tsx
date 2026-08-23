@@ -133,24 +133,24 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
       >
         <Grafismo
           variacao="barra"
-          className="mt-0.5 h-3.5 w-auto shrink-0 text-acao"
+          className="mt-0.5 h-3.5 w-auto shrink-0 text-acao-tinta"
         />
         <span>{cartao.motivo.texto}</span>
       </p>
 
       {cartao.assinatura ? (
-        <p className="text-xs leading-snug text-black/60 italic">{cartao.assinatura}</p>
+        <p className="text-xs leading-snug text-tinta-2 italic">{cartao.assinatura}</p>
       ) : null}
 
       <footer className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-        <span className="text-[0.65rem] tracking-wide text-black/45 uppercase">
+        <span className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
           motivo {ROTULO_ORIGEM[cartao.motivo.origemMotivo]}
           {cartao.saltos > 0 ? ` · ${cartao.saltos} salto${cartao.saltos > 1 ? "s" : ""}` : ""}
           {cartao.viaConcentrador ? " · via concentrador" : ""}
         </span>
         <Link
           href={rotaDaExplicacao(cartao)}
-          className="text-xs font-semibold text-acao underline underline-offset-2"
+          className="text-xs font-semibold text-acao-tinta underline underline-offset-2"
         >
           por que isto apareceu?
         </Link>

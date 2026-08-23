@@ -58,6 +58,33 @@
    * degradava para fundo laranja CHEIO sob texto laranja — invisível. Sem
    * color-mix, o certo é o realce simplesmente não existir. */
   --cor-acao-lavada: color-mix(in srgb, transparent 92%, var(--ic-laranja));
+  /* A tinta que vai POR CIMA da cor de ação — e que NÃO gira com o tema.
+   *
+   * O laranja da marca é o mesmo nos dois temas: ele não clareia nem escurece,
+   * então quem se apoia nele também não pode. Usar `--cor-tinta` num botão
+   * laranja daria preto no claro (9,1:1, ótimo) e branco no escuro (2,64:1,
+   * reprovado) — o mesmo botão, acessível de dia e ilegível de noite.
+   *
+   * Branco sobre este laranja mede 2,64:1 e reprova em qualquer tema; preto
+   * mede 9,1:1. Não é escolha estética: é o único par que passa. */
+  --cor-sobre-acao: var(--ic-preto);
+  /* O laranja QUANDO ELE É TEXTO — e por que ele não pode ser o mesmo laranja.
+   *
+   * `--ic-laranja` sobre papel claro mede 2,36:1. Reprova o mínimo de 4,5:1 para
+   * texto por larga margem, e reprovava em cem lugares: «por que isto apareceu?»,
+   * «abrir o mapa →», os contadores de /filtros, a faixa do cartão. Num produto
+   * que faz da acessibilidade o critério de primeira classe — oito dimensões
+   * declaradas, o zero explicado — o link ilegível era a contradição na vitrine.
+   *
+   * 65% de laranja sobre preto dá 5,05:1 no creme e 5,66:1 no branco. É um
+   * laranja mais fechado, sim; é o mesmo laranja com menos luz, não outra cor, e
+   * é o único ponto da escala em que a marca e o mínimo legível coexistem.
+   *
+   * NO ESCURO ELE VOLTA A SER O LARANJA CHEIO, porque contra preto o original já
+   * mede 7,94:1 — ali não há nada a corrigir e escurecer só apagaria a marca.
+   * O laranja de FUNDO (`--cor-acao`) não muda em tema nenhum: com tinta preta
+   * por cima ele mede 9,1:1 e sempre esteve certo. */
+  --cor-acao-tinta: color-mix(in srgb, var(--ic-laranja) 65%, var(--ic-preto));
   --cor-tinta: var(--cor-tinta-crua);
   --cor-tinta-2: color-mix(in srgb, var(--cor-tinta-crua) 62%, transparent);
   /* 58% e não os 45% de antes: sobre papel claro, 45% de preto mede 3,36:1 e
@@ -163,6 +190,8 @@
 
     /* 18% e não 8%: o realce lavado de item ativo a 8% sobre preto não existe. */
     --cor-acao-lavada: color-mix(in srgb, transparent 82%, var(--ic-laranja));
+    /* No escuro o laranja cheio mede 7,94:1 contra preto — nada a corrigir. */
+    --cor-acao-tinta: var(--ic-laranja);
   }
 }
 
@@ -179,6 +208,7 @@
   --cor-borda-forte: color-mix(in srgb, var(--ic-branco) 38%, transparent);
 
   --cor-acao-lavada: color-mix(in srgb, transparent 82%, var(--ic-laranja));
+  --cor-acao-tinta: var(--ic-laranja);
 }
 
 /* Exposição ao Tailwind: os utilitários leem o token, e trocar o token troca a
@@ -200,6 +230,8 @@
 
   --color-acao: var(--cor-acao);
   --color-acao-lavada: var(--cor-acao-lavada);
+  --color-acao-tinta: var(--cor-acao-tinta);
+  --color-sobre-acao: var(--cor-sobre-acao);
   --color-tinta: var(--cor-tinta);
   --color-tinta-2: var(--cor-tinta-2);
   --color-tinta-3: var(--cor-tinta-3);

@@ -29,9 +29,9 @@ export default function Cursos() {
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-6xl desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Cursos</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C2
           </span>
         </div>
@@ -39,7 +39,7 @@ export default function Cursos() {
           As <strong>{milhar(cursos.length)} formações</strong> da Escola Itaú Cultural no
           acervo — cursos e oficinas, com a inscrição na fonte.
         </p>
-        <Comentario className="max-w-prose text-sm leading-snug text-black/60">
+        <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
           A classe `formacao` inteira, varrida do grafo no build. O acervo exportado não
           declara período nem vagas — o que existe é título, resumo, linguagem e fonte, e é
           isso que a vitrine mostra, sem inventar campos.

@@ -37,9 +37,9 @@ export default async function Secao({ params }: PageProps<"/noticias/[secao]">) 
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-6xl desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{dados.secao.rotulo}</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C2
           </span>
         </div>
@@ -85,7 +85,7 @@ export default async function Secao({ params }: PageProps<"/noticias/[secao]">) 
         ))}
       </div>
 
-      <Comentario className="max-w-prose text-sm leading-snug text-black/60">
+      <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
         A seção recorta `extra.categoria` do CMS, medida no build. Para achar algo
         específico do editorial, a Busca cobre as 5.092 entidades do índice — inclusive
         estes conteúdos.

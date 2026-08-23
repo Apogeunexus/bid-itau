@@ -88,13 +88,13 @@ function Cabecalho({ nome, objetivo }: { nome: string; objetivo: string }) {
   return (
     <header className="flex flex-col gap-2">
       <div className="flex items-baseline gap-2">
-        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
         <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{nome}</h1>
-        <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+        <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
           C1
         </span>
       </div>
-      <p className="max-w-prose text-sm text-black/60">{objetivo}</p>
+      <p className="max-w-prose text-sm text-tinta-2">{objetivo}</p>
     </header>
   );
 }
@@ -195,13 +195,13 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
           className="h-36 w-full rounded-xl"
         />
         <h1 className="text-2xl leading-tight font-bold">{entidade.titulo}</h1>
-        <p className="text-[0.65rem] tracking-widest text-black/45 uppercase">
+        <p className="text-[0.65rem] tracking-widest text-tinta-3 uppercase">
           evento · procedência {entidade.procedencia}
         </p>
         {entidade.linguagens.length ? (
           <SelosDeLinguagem ids={entidade.linguagens} />
         ) : (
-          <p className="text-xs text-black/50">
+          <p className="text-xs text-tinta-3">
             Nenhuma linguagem artística declarada para este evento no acervo.
           </p>
         )}
@@ -251,14 +251,14 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
             href={ingresso.url}
             target="_blank"
             rel="noreferrer"
-            className="w-fit rounded-full border-2 border-acao px-4 py-2 text-sm font-bold text-acao no-underline transition-colors hover:bg-acao hover:text-ic-branco"
+            className="w-fit rounded-full border-2 border-acao px-4 py-2 text-sm font-bold text-acao-tinta no-underline transition-colors hover:bg-acao hover:text-ic-branco"
           >
             Ingressos na {ingresso.plataforma} ↗
           </a>
-          <p className="text-xs italic leading-snug text-black/55">{ingresso.rotulo}.</p>
+          <p className="text-xs italic leading-snug text-tinta-2">{ingresso.rotulo}.</p>
         </div>
       ) : (
-        <Comentario className="max-w-prose text-xs leading-snug text-black/55">
+        <Comentario className="max-w-prose text-xs leading-snug text-tinta-2">
           {AUSENCIA_DE_INGRESSO}
         </Comentario>
       )}
@@ -304,7 +304,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
                que não têm agente: o evento datado da trilha tem 40 arestas
                `aprofunda`, e é por elas que ele cruza para o acervo. */}
         <section className="ev-aprofunda flex flex-col gap-4">
-          <h2 className="web-painel-titulo text-sm font-bold tracking-wide text-black/70 uppercase">
+          <h2 className="web-painel-titulo text-sm font-bold tracking-wide text-tinta-2 uppercase">
             Aprofunda isto
           </h2>
           {aprofunda ? <BlocoPonte grupo={aprofunda} /> : null}
@@ -316,7 +316,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
                O bloco não some: mostra a mídia que o grafo tem e declara o que
                ainda não existe. */}
         <section className="ev-se-nao-puder flex flex-col gap-4">
-          <h2 className="web-painel-titulo text-sm font-bold tracking-wide text-black/70 uppercase">
+          <h2 className="web-painel-titulo text-sm font-bold tracking-wide text-tinta-2 uppercase">
             Se não puder ir
           </h2>
           {falaSobre ? <BlocoPonte grupo={falaSobre} /> : null}
@@ -330,7 +330,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
         </section>
       </aside>
 
-      <p className="ev-rodape border-t border-black/10 pt-3 text-xs leading-relaxed text-black/45">
+      <p className="ev-rodape border-t border-borda pt-3 text-xs leading-relaxed text-tinta-3">
         As sessões são registros próprios do acervo, com id próprio: o evento aparece uma
         vez e as datas ficam abaixo dele. Onde um bloco declara ausência, é o registro do
         Itaú Cultural que não publica o dado.

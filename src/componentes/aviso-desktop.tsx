@@ -32,7 +32,7 @@ export function AvisoDesktop() {
   return (
     <div className="flex flex-col gap-3 p-6 desk:hidden">
       <h1 className="text-xl font-bold">{superficie} é superfície de desktop</h1>
-      <p className="text-sm text-black/60">
+      <p className="text-sm text-tinta-2">
         As superfícies de bastidor — Studio, Redação, Observatório e o roteiro da
         demonstração — são feitas para tela grande e densa, e não têm equivalente na visão
         app. A rota existe e responde; só precisa da outra visão.
@@ -40,7 +40,7 @@ export function AvisoDesktop() {
       <button
         type="button"
         onClick={() => definirVisao("web")}
-        className="w-fit cursor-pointer rounded-full bg-acao px-5 py-2.5 font-semibold text-[var(--ic-branco)] transition-opacity hover:opacity-90"
+        className="w-fit cursor-pointer rounded-full bg-acao px-5 py-2.5 font-semibold text-sobre-acao transition-opacity hover:opacity-90"
       >
         Trocar para a visão Web
       </button>

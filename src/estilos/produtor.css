@@ -94,7 +94,7 @@
   font-size: var(--tipo-micro);
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 /* ---------------------------------------------------------------------------
@@ -144,9 +144,9 @@
 
 [data-view="web"] .pr-bloco {
   padding: 1.25rem;
-  border: var(--web-borda, 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent));
+  border: var(--web-borda, 1px solid color-mix(in srgb, var(--cor-tinta-crua) 12%, transparent));
   border-radius: var(--web-raio, var(--raio-g));
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 /* O «em cartaz» é declaração, não painel: mantém a barra laranja e não ganha a

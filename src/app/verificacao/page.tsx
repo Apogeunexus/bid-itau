@@ -49,7 +49,7 @@ function Secao({ titulo, children }: { titulo: string; children: React.ReactNode
   return (
     <section className="mt-10">
       <h2 className="text-lg font-bold">
-        <span className="mr-2 text-acao">\</span>
+        <span className="mr-2 text-acao-tinta">\</span>
         {titulo}
       </h2>
       <div className="mt-3">{children}</div>
@@ -61,14 +61,14 @@ function Tabela({ linhas, cabecalho }: { linhas: Array<[string, string | number]
   return (
     <table className="w-full text-sm">
       <thead>
-        <tr className="border-b-2 border-[var(--ic-preto)] text-left">
+        <tr className="border-b-2 border-tinta text-left">
           <th className="py-1 text-xs font-semibold tracking-wider uppercase">{cabecalho[0]}</th>
           <th className="py-1 text-right text-xs font-semibold tracking-wider uppercase">{cabecalho[1]}</th>
         </tr>
       </thead>
       <tbody>
         {linhas.map(([chave, valor]) => (
-          <tr key={chave} className="border-b border-neutral-200">
+          <tr key={chave} className="border-b border-borda">
             <td className="py-1 break-words">{chave}</td>
             <td className="py-1 text-right tabular-nums">{valor}</td>
           </tr>
@@ -80,9 +80,9 @@ function Tabela({ linhas, cabecalho }: { linhas: Array<[string, string | number]
 
 function Campo({ rotulo, children }: { rotulo: string; children: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-[7rem_1fr] gap-3 border-t border-neutral-200 py-2">
-      <dt className="text-xs font-semibold tracking-wider text-neutral-500 uppercase">{rotulo}</dt>
-      <dd className="text-sm break-words text-[var(--ic-preto)]">{children}</dd>
+    <div className="grid grid-cols-[7rem_1fr] gap-3 border-t border-borda py-2">
+      <dt className="text-xs font-semibold tracking-wider text-tinta-2 uppercase">{rotulo}</dt>
+      <dd className="text-sm break-words text-tinta">{children}</dd>
     </div>
   );
 }
@@ -90,12 +90,12 @@ function Campo({ rotulo, children }: { rotulo: string; children: React.ReactNode
 function Cartao({ entidade }: { entidade: Entidade }) {
   const sessoes = ocorrenciasDe(entidade.id);
   return (
-    <article className="rounded-2xl border-2 border-[var(--ic-preto)] p-5">
-      <span className="inline-block rounded-full bg-acao px-3 py-1 text-xs font-bold tracking-wider text-[var(--ic-branco)] uppercase">
+    <article className="rounded-2xl border-2 border-tinta p-5">
+      <span className="inline-block rounded-full bg-acao px-3 py-1 text-xs font-bold tracking-wider text-sobre-acao uppercase">
         {entidade.classe}
       </span>
       <h3 className="mt-3 text-xl leading-snug font-bold">{entidade.titulo}</h3>
-      {entidade.resumo ? <p className="mt-2 text-sm text-neutral-700">{entidade.resumo}</p> : null}
+      {entidade.resumo ? <p className="mt-2 text-sm text-tinta-2">{entidade.resumo}</p> : null}
       <dl className="mt-4">
         <Campo rotulo="id">
           <code>{entidade.id}</code>
@@ -104,7 +104,7 @@ function Cartao({ entidade }: { entidade: Entidade }) {
         <Campo rotulo="fonte">
           {entidade.fonte ? (
             <a
-              className="text-acao underline underline-offset-2"
+              className="text-acao-tinta underline underline-offset-2"
               href={entidade.fonte}
               rel="noreferrer noopener"
               target="_blank"
@@ -135,20 +135,20 @@ export default function Verificacao() {
     : 0;
 
   return (
-    <main className="bg-[var(--ic-branco)] p-6 text-[var(--ic-preto)]">
-      <p className="text-xs font-semibold tracking-widest text-acao uppercase">
+    <main className="bg-superficie p-6 text-tinta">
+      <p className="text-xs font-semibold tracking-widest text-acao-tinta uppercase">
         Verificação da fase 1
       </p>
       <h1 className="mt-2 text-2xl font-bold app:text-2xl desk:text-4xl">
         O grafo, contado por classe e por procedência
       </h1>
-      <p className="mt-2 max-w-prose text-sm text-neutral-700">
+      <p className="mt-2 max-w-prose text-sm text-tinta-2">
         Todos os números desta página são lidos de <code>src/dados/gerado/meta.json</code>,
         que o gerador escreve depois de conferir as próprias invariantes. Nenhum foi
         digitado à mão. Gerado em {meta.geradoEm}.
       </p>
 
-      <p className="mt-4 rounded-lg bg-neutral-100 p-3 text-sm">
+      <p className="mt-4 rounded-lg bg-superficie-2 p-3 text-sm">
         Visão ativa: <strong className="app:inline desk:hidden">app (mobile)</strong>
         <strong className="app:hidden desk:inline">web (desktop)</strong> · {meta.totais.entidades}{" "}
         entidades · {meta.totais.arestas} arestas
@@ -161,7 +161,7 @@ export default function Verificacao() {
 
         <Secao titulo="Procedência">
           <Tabela cabecalho={["procedência", "entidades"]} linhas={Object.entries(numeros.porProcedencia)} />
-          <p className="mt-2 text-xs text-neutral-600">
+          <p className="mt-2 text-xs text-tinta-2">
             Toda entidade <code>ic</code> carrega a URL de origem. As{" "}
             {numeros.porProcedencia.autorado ?? 0} autoradas são as 40 duplicatas do Cenário 3,
             as 3 personas com repertório e a trilha do Cenário 1.
@@ -170,7 +170,7 @@ export default function Verificacao() {
 
         <Secao titulo="Arestas por relação">
           <Tabela cabecalho={["relação", "arestas"]} linhas={Object.entries(meta.porRelacao)} />
-          <p className="mt-2 text-xs text-neutral-600">
+          <p className="mt-2 text-xs text-tinta-2">
             Procedência das arestas: {Object.entries(meta.porProcedenciaDeAresta)
               .map(([k, v]) => `${k} ${v}`)
               .join(" · ")}. As {meta.porProcedenciaDeAresta.autorado ?? 0} autoradas são a
@@ -186,7 +186,7 @@ export default function Verificacao() {
               ["sem coordenada", meta.cobertura.semCoordenada.total],
             ]}
           />
-          <p className="mt-2 text-xs text-neutral-600">
+          <p className="mt-2 text-xs text-tinta-2">
             Tabela estática de {meta.cobertura.coordenadas.municipiosNaTabela} municípios e{" "}
             {meta.cobertura.coordenadas.paisesNaTabela} países, escrita à mão. Nenhuma API de
             geocodificação participa da geração.
@@ -201,7 +201,7 @@ export default function Verificacao() {
               v,
             ])}
           />
-          <p className="mt-2 text-xs text-neutral-600">
+          <p className="mt-2 text-xs text-tinta-2">
             Contagem sobre as entidades <code>ic</code>: é o que a fonte afirma. Das 8
             dimensões do CMS só Libras aparece de verdade, e mesmo assim em{" "}
             {meta.acessibilidade.libras} registros. Incluindo ocorrências e temporadas, que
@@ -253,7 +253,7 @@ export default function Verificacao() {
       </Secao>
 
       <Secao titulo="As duas lacunas conhecidas do acervo">
-        <div className="space-y-3 text-sm text-neutral-700">
+        <div className="space-y-3 text-sm text-tinta-2">
           <p>
             <strong>Território e data não se cruzam.</strong> <code>porTerritorio</code> em Belém
             devolve <strong>{belemTudo}</strong> entidades sem janela e{" "}
@@ -272,11 +272,11 @@ export default function Verificacao() {
       <Secao titulo="As 3 personas (mock rotulado, D-25)">
         <ul className="space-y-2 text-sm">
           {personas.map((p) => (
-            <li key={p.id} className="border-t border-neutral-200 pt-2">
+            <li key={p.id} className="border-t border-borda pt-2">
               <strong>{p.nome}</strong> · <code>{p.procedencia}</code> ·{" "}
               {p.repertorio.linguagens.join(", ")} · {p.repertorio.entidades.length} entidades
               reais no repertório · {p.repertorio.ocorrenciasSalvas.length} ocorrências salvas
-              <p className="text-neutral-600">{p.resumo}</p>
+              <p className="text-tinta-2">{p.resumo}</p>
             </li>
           ))}
         </ul>

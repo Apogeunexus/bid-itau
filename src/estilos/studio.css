@@ -45,7 +45,7 @@
   margin: -2rem -1.5rem 0;
   padding: 1.25rem 1.5rem 1rem;
   border-bottom: 1px solid var(--cor-borda);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 .studio-superficie {
@@ -53,7 +53,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .studio-titulo {
@@ -82,7 +82,7 @@
   padding: 0.25rem 0.5rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-pilula);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   font-size: var(--tipo-legenda);
   line-height: 1.4;
   white-space: nowrap;
@@ -111,7 +111,7 @@
   padding: 1.25rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-g);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 .studio-painel-cabeca {
@@ -172,7 +172,7 @@
   padding: 0.75rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
-  background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
+  background: color-mix(in srgb, var(--cor-tinta-crua) 2%, transparent);
 }
 
 .studio-lado-marca {
@@ -182,8 +182,8 @@
   width: 1.25rem;
   height: 1.25rem;
   border-radius: var(--raio-pilula);
-  background: var(--ic-preto);
-  color: var(--ic-branco);
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
   font-size: var(--tipo-micro);
   font-weight: 700;
   text-transform: uppercase;
@@ -216,7 +216,7 @@
   display: grid;
   grid-template-columns: 11rem 1fr;
   gap: 0;
-  border-top: 1px solid rgb(0 0 0 / 0.09);
+  border-top: 1px solid var(--cor-borda);
 }
 
 .studio-linha:first-child {
@@ -247,28 +247,28 @@
   align-items: center;
   gap: 0.5rem;
   padding-top: 0.25rem;
-  border-top: 1px solid rgb(0 0 0 / 0.09);
+  border-top: 1px solid var(--cor-borda);
 }
 
 .studio-botao {
   cursor: pointer;
   padding: 0.5rem 1rem;
-  border: 1px solid var(--ic-preto);
+  border: 1px solid var(--cor-tinta);
   border-radius: var(--raio-pilula);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   font-size: var(--tipo-detalhe);
   font-weight: 600;
   transition: background-color var(--dur-1) var(--ease-padrao), color var(--dur-1) var(--ease-padrao), opacity var(--dur-1) var(--ease-padrao);
 }
 
 .studio-botao:hover {
-  background: color-mix(in srgb, var(--ic-preto) 6%, transparent);
+  background: color-mix(in srgb, var(--cor-tinta-crua) 6%, transparent);
 }
 
 .studio-botao-primario {
   border-color: var(--cor-acao);
   background: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
 }
 
 .studio-botao-primario:hover {
@@ -302,5 +302,5 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }

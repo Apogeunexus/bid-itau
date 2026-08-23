@@ -167,7 +167,7 @@ export function LeituraDesertos({ dados }: { dados: DadosDesertos }) {
       <h2 className="desertos-titulo">Desertos culturais</h2>
       <p>
         O que este mapa mede é{" "}
-        <strong className="font-semibold text-[var(--ic-preto)]">
+        <strong className="font-semibold text-tinta">
           registro no acervo carregado do Itaú Cultural
         </strong>{" "}
         — cada vínculo entre uma entidade e um lugar —, não oferta cultural do estado.
@@ -175,13 +175,13 @@ export function LeituraDesertos({ dados }: { dados: DadosDesertos }) {
       </p>
       <p>
         {a.titulo} tem {a.registros} registros e {b.titulo}, {b.registros}:{" "}
-        <strong className="font-semibold text-[var(--ic-preto)]">
+        <strong className="font-semibold text-tinta">
           {dados.doisMaiores} dos {dados.total}, {dados.percentual}% do acervo
           territorializado em dois estados de {dados.ufs.length}
         </strong>
         . {dados.comUmRegistro.length} estados têm um registro só — {cinco}. E{" "}
         {dados.semRegistro.length} não aparecem em lugar nenhum do grafo:{" "}
-        <strong className="font-semibold text-[var(--ic-preto)]">
+        <strong className="font-semibold text-tinta">
           {dois} têm zero
         </strong>
         .

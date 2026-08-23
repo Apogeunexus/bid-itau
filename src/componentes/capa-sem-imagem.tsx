@@ -120,7 +120,7 @@ export function CapaDeCartao({
   }
 
   return (
-    <div className={`relative flex overflow-hidden bg-black/5 ${className ?? ""}`}>
+    <div className={`relative flex overflow-hidden bg-superficie-2 ${className ?? ""}`}>
       {/* `images: { unoptimized: true }` sob output: "export" — `next/image` não traria
           nada aqui além de peso, e o arquivo já está servido de `public/acervo`. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}

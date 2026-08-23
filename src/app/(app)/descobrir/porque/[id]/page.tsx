@@ -38,18 +38,18 @@ export default async function PaginaPorque({ params }: { params: Promise<{ id: s
       <div className="flex min-h-full flex-col gap-3 p-4">
         <Link
           href="/descobrir/"
-          className="text-xs font-bold text-acao underline underline-offset-2"
+          className="text-xs font-bold text-acao-tinta underline underline-offset-2"
         >
           ← Descobrir
         </Link>
         <h1 className="text-lg leading-tight font-bold">Por que isto apareceu</h1>
-        <p className="text-sm leading-snug text-black/60">
+        <p className="text-sm leading-snug text-tinta-2">
           Nenhum item do acervo corresponde a este endereço. A rota existe e responde; a
           explicação aparece quando o endereço é o de um cartão que o feed pode produzir.
         </p>
         <p
           data-limite-ia
-          className="mt-auto border-t-2 border-acao pt-2 text-[0.7rem] leading-snug text-black/70"
+          className="mt-auto border-t-2 border-acao pt-2 text-[0.7rem] leading-snug text-tinta-2"
         >
           <strong className="font-bold">Nenhuma decisão editorial foi tomada por IA.</strong> O
           caminho mostrado nesta tela é travessia determinística no grafo do acervo, e o

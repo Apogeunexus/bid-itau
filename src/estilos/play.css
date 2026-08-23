@@ -43,23 +43,23 @@
   align-items: baseline;
   gap: 0.5rem;
   padding: 0.25rem 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
+  border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
   font-size: var(--tipo-detalhe);
   line-height: 1.2;
   cursor: pointer;
   background: transparent;
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 .play-chip:hover {
-  border-color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  border-color: var(--cor-borda-forte);
 }
 
 .play-chip[aria-pressed="true"] {
   background: var(--cor-acao);
   border-color: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
   font-weight: 700;
 }
 
@@ -73,7 +73,7 @@
  * proibido. O tracejado diz, antes do clique, que ali não há o que recortar. */
 .play-chip[data-nao-sustenta] {
   border-style: dashed;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 /* ---------------------------------------------------------------------------
@@ -120,7 +120,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 .play-cartao-titulo {
@@ -146,7 +146,7 @@
   min-width: 0;
   font-size: var(--tipo-micro);
   font-variant-numeric: tabular-nums;
-  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 /* O crédito de imagem é OBRIGATÓRIO quando há imagem — o acervo é de terceiros e a
@@ -212,7 +212,7 @@
   align-items: baseline;
   gap: 0.5rem;
   padding: 0.25rem 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
   font-size: var(--tipo-detalhe);
 }
@@ -231,19 +231,19 @@
 .player-recurso[data-estado="presente"] {
   background: var(--cor-acao);
   border-color: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
 }
 
 .player-recurso[data-estado="ausente-declarada"] {
-  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* Tracejado e mais apagado: o estado «a fonte não falou disso» tem de ser
  * visivelmente OUTRA COISA que «a fonte disse que não tem». */
 .player-recurso[data-estado="nao-declarada"] {
   border-style: dashed;
-  border-color: color-mix(in srgb, var(--ic-preto) 25%, transparent);
-  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  border-color: var(--cor-borda-forte);
+  color: var(--cor-tinta-3);
 }
 
 /* O controle de concluir. Alvo grande de propósito: é o único gesto que esta
@@ -253,21 +253,21 @@
   align-self: flex-start;
   padding: 0.5rem 1rem;
   min-height: 2.5rem;
-  border: 1px solid var(--ic-preto);
+  border: 1px solid var(--cor-tinta);
   border-radius: var(--raio-pilula);
   font-size: var(--tipo-detalhe);
   font-weight: 700;
   cursor: pointer;
   background: transparent;
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 .player-botao:hover {
-  background: color-mix(in srgb, var(--ic-preto) 6%, transparent);
+  background: color-mix(in srgb, var(--cor-tinta-crua) 6%, transparent);
 }
 
 .player-botao[aria-pressed="true"] {
   background: var(--cor-acao);
   border-color: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
 }

@@ -289,9 +289,9 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
       {/* ================================================================== */}
       <header className="flex flex-col gap-1.5">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{dados.titulo}</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C1
           </span>
         </div>
@@ -299,7 +299,7 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
         {/* D-51 na contagem: quantos registros trazem data e quantos não. Os números
             saíram da frase de enquadramento para ela caber na primeira vista, e vieram
             para cá — não sumiram, que é o que importa. */}
-        <p className="text-[0.65rem] tracking-wide text-black/45 uppercase">
+        <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
           {[dados.estado, dados.pais].filter(Boolean).join(" · ")}
           {` · ${enquadramento.total} registros · ${enquadramento.comData} com data · ${enquadramento.semData} sem`}
         </p>
@@ -329,14 +329,14 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
       {/*     importante da fase e a ponte narrativa para o Studio.            */}
       {/* ================================================================== */}
       <section className="cidade-enquadramento" data-enquadramento={dados.slug}>
-        <Grafismo variacao="barra" className="h-4 w-auto shrink-0 text-acao" />
+        <Grafismo variacao="barra" className="h-4 w-auto shrink-0 text-acao-tinta" />
         <div className="flex flex-col gap-1.5">
           <p className="cidade-enquadramento-frase">{enquadramento.frase}</p>
           <p className="cidade-enquadramento-adiante">{enquadramento.fraseDoStudio}</p>
         </div>
       </section>
 
-      <Comentario className="max-w-prose text-xs leading-relaxed text-black/55">
+      <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
         {`A medição que levou a este enquadramento (D-48): os 100 eventos da agenda do CMS têm data e nenhum território; os 160 eventos da Enciclopédia têm território e data histórica. Nenhum registro do acervo tem as duas coisas, e por isso a consulta desta tela é «o que existe culturalmente aqui» e não «o que acontece nesta semana» (D-49). Nenhuma data foi produzida: ${enquadramento.comData} dos ${enquadramento.total} registros trazem o texto de data que a fonte escreveu, e os outros ${enquadramento.semData} dizem que não trazem (D-51). O roteiro por dia continua existindo como estrutura (D-50) — o que mudou foi a natureza do item.`}
       </Comentario>
 
@@ -456,7 +456,7 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
                           >
                             <Grafismo
                               variacao="barra"
-                              className="mt-px h-3 w-auto shrink-0 text-acao"
+                              className="mt-px h-3 w-auto shrink-0 text-acao-tinta"
                             />
                             <span>{item.proprioDoTerritorio.curta}</span>
                           </p>
@@ -513,7 +513,7 @@ export function ModoCidade({ dados }: { dados: DadosDaCidade }) {
       {/* 5 — OUTRAS CIDADES, para a tela não ser um beco.                    */}
       {/* ================================================================== */}
       <section className="flex flex-col gap-1.5">
-        <p className="text-[0.65rem] tracking-wide text-black/45 uppercase">
+        <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
           {`os ${dados.outrasCidades.length + 1} municípios que o acervo documenta com 8 ou mais registros`}
         </p>
         <div className="cidade-outras">

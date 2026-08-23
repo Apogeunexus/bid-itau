@@ -58,7 +58,7 @@ export default async function RoteiroDaIa({ params }: PageProps<"/ia/roteiro/[co
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">
             ✦ {cidade.titulo}, {dias} dias
           </h1>
@@ -135,7 +135,7 @@ export default async function RoteiroDaIa({ params }: PageProps<"/ia/roteiro/[co
           <ol className="flex flex-col gap-2">
             {dia.itens.map((item, i) => (
               <li key={item.chave} className="flex items-start gap-3">
-                <span className="tipo-destaque w-6 shrink-0 text-center font-bold text-acao">
+                <span className="tipo-destaque w-6 shrink-0 text-center font-bold text-acao-tinta">
                   {i + 1}
                 </span>
                 <div className="w-16 shrink-0">
@@ -179,7 +179,7 @@ export default async function RoteiroDaIa({ params }: PageProps<"/ia/roteiro/[co
         </ul>
       </section>
 
-      <Comentario className="max-w-prose text-sm leading-snug text-black/60">
+      <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
         A troca de item parada a parada, com o deslocamento re-medido, vive no Modo Cidade
         (`/cidade/{cidade.slug}/`) — o roteiro da estrelinha aponta para lá quem quiser
         mexer no percurso item a item.

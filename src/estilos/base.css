@@ -65,10 +65,16 @@ body {
   height: min(844px, calc(100vh - 4rem));
   flex: none;
   overflow: hidden;
+  /* O BEZEL NÃO É O TEMA, É O OBJETO. A tela do telefone acompanha o tema — ela
+     é o produto — mas a moldura de plástico continua preta no escuro, porque um
+     telefone preto é preto de dia e de noite. O preço é que, sobre palco escuro,
+     ela se dissolve no fundo: o `outline` de 1px devolve o recorte sem fingir
+     que o aparelho mudou de cor. */
   border: 10px solid var(--ic-preto);
+  outline: 1px solid var(--cor-borda);
   border-radius: 2.5rem;
-  background: var(--ic-branco);
-  box-shadow: 0 24px 60px var(--cor-borda-forte);
+  background: var(--cor-fundo);
+  box-shadow: var(--sombra-3);
 }
 
 [data-view="mobile"] .moldura-rolagem {
@@ -140,7 +146,7 @@ body {
   padding: 0.75rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 /* Cartão especial: o destaque curado (D-29) e a serendipidade (D-30) precisam ser
@@ -155,7 +161,7 @@ body {
   align-items: center;
   gap: 0.25rem;
   margin: -0.25rem -0.25rem 0;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
   font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -191,12 +197,12 @@ body {
   padding: 0.75rem 0.75rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   transition: border-color var(--dur-1) var(--ease-padrao), background-color var(--dur-1) var(--ease-padrao);
 }
 
 .cartao-disposicao:hover {
-  border-color: var(--ic-preto);
+  border-color: var(--cor-tinta);
 }
 
 .cartao-disposicao-ativa,

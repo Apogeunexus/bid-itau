@@ -44,7 +44,7 @@
 .cidade-janela-rotulo {
   font-size: var(--tipo-detalhe);
   font-weight: 600;
-  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 .cidade-dias {
@@ -55,7 +55,7 @@
 .cidade-dia-botao {
   cursor: pointer;
   min-width: 2.25rem;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 25%, transparent);
+  border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
   padding: 0.25rem 0.75rem;
   font-size: var(--tipo-detalhe);
@@ -70,7 +70,7 @@
 .cidade-dia-botao[aria-pressed="true"] {
   background: var(--cor-acao);
   border-color: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
 }
 
 /* ---------------------------------------------------------------------------
@@ -101,7 +101,7 @@
   max-width: 66ch;
   font-size: var(--tipo-legenda);
   line-height: 1.4;
-  color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* ---------------------------------------------------------------------------
@@ -111,7 +111,7 @@
 .cidade-fonte-distancia {
   font-size: var(--tipo-micro);
   line-height: 1.4;
-  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+  color: var(--cor-tinta-3);
   max-width: 62ch;
 }
 
@@ -119,7 +119,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+  border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
   padding: 0.75rem;
 }
@@ -141,14 +141,14 @@
   margin-left: auto;
   font-size: var(--tipo-legenda);
   font-weight: 600;
-  color: color-mix(in srgb, var(--ic-preto) 62%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 .cidade-dia-justificativa,
 .cidade-dia-nota {
   font-size: var(--tipo-micro);
   line-height: 1.35;
-  color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
+  color: var(--cor-tinta-2);
   max-width: 62ch;
 }
 
@@ -170,7 +170,7 @@
   display: flex;
   gap: 0.5rem;
   padding-top: 0.5rem;
-  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 8%, transparent);
+  border-top: 1px solid var(--cor-borda);
 }
 
 .cidade-item:first-child {
@@ -182,7 +182,7 @@
   font-size: var(--tipo-micro);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 .cidade-item-titulo {
@@ -208,11 +208,11 @@ a.cidade-item-titulo:hover {
 }
 
 .cidade-item-data {
-  color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 .cidade-item-sem-data {
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
   font-style: italic;
 }
 
@@ -222,7 +222,7 @@ a.cidade-item-titulo:hover {
   gap: 0.25rem;
   font-size: var(--tipo-micro);
   line-height: 1.3;
-  color: color-mix(in srgb, var(--ic-preto) 68%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* A coluna da capa: imagem em cima, controle de troca embaixo. Largura fixa para as três
@@ -237,7 +237,7 @@ a.cidade-item-titulo:hover {
 
 .cidade-alternar {
   cursor: pointer;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 22%, transparent);
+  border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
   padding: 0rem 0.5rem;
   font-size: var(--tipo-micro);
@@ -269,7 +269,7 @@ a.cidade-item-titulo:hover {
   font-size: var(--tipo-detalhe);
   font-weight: 700;
   text-decoration: none;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
   background: transparent;
 }
 
@@ -281,7 +281,7 @@ a.cidade-item-titulo:hover {
 
 .cidade-exportado-recado {
   font-size: var(--tipo-micro);
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 /* O roteiro em texto simples: sem rede e sem biblioteca. Ele ROLA por dentro em vez de
@@ -291,7 +291,7 @@ a.cidade-item-titulo:hover {
   overflow: auto;
   white-space: pre-wrap;
   word-break: break-word;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 15%, transparent);
+  border: 1px solid var(--cor-borda);
   border-radius: var(--raio-p);
   padding: 0.75rem;
   font-size: var(--tipo-micro);
@@ -310,7 +310,7 @@ a.cidade-item-titulo:hover {
 }
 
 .cidade-outra {
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+  border: 1px solid var(--cor-borda);
   border-radius: var(--raio-pilula);
   padding: 0.25rem 0.75rem;
   font-size: var(--tipo-micro);
@@ -324,5 +324,5 @@ a.cidade-item-titulo:hover {
   font-size: var(--tipo-micro);
   line-height: 1.4;
   max-width: 66ch;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }

@@ -18,7 +18,7 @@
  * ------------------------------------------------------------------------- */
 
 .dup-criterio {
-  border-color: color-mix(in srgb, var(--ic-preto) 22%, transparent);
+  border-color: var(--cor-borda-forte);
 }
 
 /* Os três componentes do critério, com o que o acervo preenche e o que ele deixa vazio.
@@ -55,13 +55,13 @@
  * argumento: o critério tem três partes e a fonte entrega uma. */
 .dup-componente[data-sustentado="nao"] {
   border-style: dashed;
-  border-color: color-mix(in srgb, var(--ic-preto) 35%, transparent);
+  border-color: var(--cor-borda-forte);
   background: var(--cor-superficie-2);
   color: var(--cor-tinta-2);
 }
 
 .dup-componente[data-sustentado="sim"] {
-  border-color: var(--ic-preto);
+  border-color: var(--cor-tinta);
 }
 
 /* A chave literal dos registros, uma sob a outra — é sobre este VALOR que a comparação
@@ -102,8 +102,8 @@
 .dup-estagio-selo {
   padding: 0.25rem 0.75rem;
   border-radius: var(--raio-pilula);
-  background: var(--ic-preto);
-  color: var(--ic-branco);
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
   font-size: var(--tipo-legenda);
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -115,7 +115,7 @@
 .dup-estagio-selo[data-estagio="probabilistico"] {
   border: 1px solid var(--cor-acao);
   background: var(--cor-acao-lavada);
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 .dup-score {
@@ -153,7 +153,7 @@
 
 .dup-campo {
   display: grid;
-  border-top: 1px solid rgb(0 0 0 / 0.09);
+  border-top: 1px solid var(--cor-borda);
 }
 
 .dup-campo:first-child {
@@ -173,7 +173,7 @@
 
 .dup-campo-valor {
   padding: 0.5rem 0.75rem;
-  border-left: 1px solid rgb(0 0 0 / 0.07);
+  border-left: 1px solid var(--cor-borda);
   font-size: var(--tipo-detalhe);
   line-height: 1.45;
   overflow-wrap: anywhere;
@@ -206,7 +206,7 @@
 
 .dup-campo[data-divergente="sim"] .dup-campo-rotulo {
   background: var(--cor-acao-lavada);
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 .dup-campo[data-divergente="sim"] .dup-campo-valor {
@@ -218,7 +218,7 @@
   padding: 0rem 0.5rem;
   border-radius: var(--raio-pilula);
   background: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
   font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -270,7 +270,7 @@
   padding: 1rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-g);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 .dup-fila-cabeca {
@@ -313,7 +313,7 @@
   gap: 0.5rem;
   margin: 0 -1rem;
   padding: 0.25rem 1rem;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -324,7 +324,7 @@
 .dup-fila-quantos {
   padding: 0rem 0.5rem;
   border-radius: var(--raio-pilula);
-  background: color-mix(in srgb, var(--ic-preto) 8%, transparent);
+  background: color-mix(in srgb, var(--cor-tinta-crua) 8%, transparent);
   font-variant-numeric: tabular-nums;
 }
 
@@ -350,7 +350,7 @@
   padding: 0.5rem 0.5rem;
   border: 1px solid var(--cor-borda);
   border-radius: 0.5rem;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   text-align: left;
   transition: background-color var(--dur-1) var(--ease-padrao), border-color var(--dur-1) var(--ease-padrao);
 }
@@ -395,7 +395,7 @@
   padding: 0rem 0.25rem;
   border: 1px solid var(--cor-acao);
   border-radius: var(--raio-pilula);
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 /* ---------------------------------------------------------------------------
@@ -417,9 +417,9 @@
 
 .dup-linha-origem[data-origem="acervo"],
 .dup-origem[data-origem="acervo"] {
-  border-color: var(--ic-preto);
-  background: var(--ic-preto);
-  color: var(--ic-branco);
+  border-color: var(--cor-tinta);
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
 }
 
 .dup-linha-origem[data-origem="encenado"],
@@ -447,7 +447,7 @@
   padding: 0rem 0.5rem;
   border-radius: var(--raio-pilula);
   background: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
   font-weight: 700;
 }
 
@@ -472,7 +472,7 @@
  * ------------------------------------------------------------------------- */
 
 .dup-decisao {
-  border-color: color-mix(in srgb, var(--ic-preto) 22%, transparent);
+  border-color: var(--cor-borda-forte);
 }
 
 /* O bloco que declara o que a fusão FAZ, antes de ela acontecer. Ele tem o mesmo peso
@@ -483,9 +483,9 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
+  border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-m);
-  background: color-mix(in srgb, var(--ic-preto) 2%, transparent);
+  background: color-mix(in srgb, var(--cor-tinta-crua) 2%, transparent);
 }
 
 .dup-reversivel-rotulo {
@@ -506,11 +506,11 @@
   font-size: var(--tipo-detalhe);
   line-height: 1.5;
   list-style: decimal;
-  color: rgb(0 0 0 / 0.75);
+  color: var(--cor-tinta-2);
 }
 
 .dup-reversivel-lista strong {
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 /* A consequência que a tela ASSUME: `duplicata_de` ainda não está no vocabulário fechado
@@ -535,7 +535,7 @@
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   gap: 0.75rem;
   padding-top: 0.5rem;
-  border-top: 1px solid rgb(0 0 0 / 0.09);
+  border-top: 1px solid var(--cor-borda);
 }
 
 .dup-acao {
@@ -559,7 +559,7 @@
   background: none;
   padding: 0;
   font: inherit;
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 0.15em;
@@ -590,7 +590,7 @@
   padding: 0rem 0.5rem;
   border-radius: var(--raio-pilula);
   background: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
   font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -624,7 +624,7 @@
   padding: 0rem 0.5rem;
   border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -632,7 +632,7 @@
 }
 
 .dup-desfazer:hover {
-  background: color-mix(in srgb, var(--ic-preto) 6%, transparent);
+  background: color-mix(in srgb, var(--cor-tinta-crua) 6%, transparent);
 }
 
 /* ---------------------------------------------------------------------------
@@ -644,7 +644,7 @@
  * ------------------------------------------------------------------------- */
 
 .dup-colapso {
-  border-color: color-mix(in srgb, var(--ic-preto) 22%, transparent);
+  border-color: var(--cor-borda-forte);
 }
 
 /* `block` e não `flex`: num contêiner flex cada <strong> vira ITEM e a frase quebra a linha
@@ -658,7 +658,7 @@
   font-size: var(--tipo-detalhe);
   line-height: 1.5;
   font-variant-numeric: tabular-nums;
-  color: rgb(0 0 0 / 0.75);
+  color: var(--cor-tinta-2);
 }
 
 .dup-colapso-grupo .studio-rotulo {
@@ -684,7 +684,7 @@
   flex-direction: column;
   gap: 0.25rem;
   padding: 0.5rem 0.5rem;
-  border-left: 3px solid color-mix(in srgb, var(--ic-preto) 30%, transparent);
+  border-left: 3px solid var(--cor-borda-forte);
   border-radius: 0 0.5rem 0.5rem 0;
   background: var(--cor-superficie-2);
   font-size: var(--tipo-legenda);

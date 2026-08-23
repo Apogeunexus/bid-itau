@@ -169,7 +169,7 @@ export function Play({
           lista, com o tipo etiquetado em cada uma. Os podcasts moram em Cast e o
           editorial em Notícias.
         </p>
-        <Comentario className="text-xs leading-relaxed text-black/55">
+        <Comentario className="text-xs leading-relaxed text-tinta-2">
           O acervo não tem campo de «tipo» nem de «formato»: o que ele tem é a categoria do
           CMS, e é dela que sai o recorte abaixo. As {catalogo.total} são todas do{" "}
           {procedencia.rotulo} — a procedência é constante aqui, e por isso é declarada uma
@@ -180,16 +180,16 @@ export function Play({
       {/* ------------------------------------------------- continue de onde parou */}
       <section
         data-continue={!hidratado ? "carregando" : retomada.resolvidas.length ? "com-itens" : "vazio"}
-        className="flex flex-col gap-2 rounded-lg border border-black/10 p-3 desk:web-painel"
+        className="flex flex-col gap-2 rounded-lg border border-borda p-3 desk:web-painel"
       >
         <h2 className="text-sm font-bold">Continue de onde parou</h2>
 
         {!hidratado ? (
-          <p className="text-xs text-black/45">Lendo o que ficou guardado neste navegador…</p>
+          <p className="text-xs text-tinta-3">Lendo o que ficou guardado neste navegador…</p>
         ) : retomada.resolvidas.length === 0 ? (
           /* Vazio e EXPLICADO, não sumido: um bloco que desaparece deixa quem avalia sem
              saber se a funcionalidade existe ou se ela quebrou. */
-          <p className="text-xs leading-relaxed text-black/55">
+          <p className="text-xs leading-relaxed text-tinta-2">
             Nada aqui ainda. Ao concluir uma mídia na página dela, ela passa a aparecer
             nesta lista — e continua aparecendo depois de fechar e reabrir o navegador,
             porque o registro fica guardado neste computador e em nenhum outro lugar.
@@ -202,9 +202,9 @@ export function Play({
                   <Link
                     href={i.rota}
                     data-retomada={i.slug}
-                    className="flex items-baseline gap-2 py-1 text-sm underline decoration-black/20 underline-offset-4 hover:decoration-current"
+                    className="flex items-baseline gap-2 py-1 text-sm underline decoration-borda-forte underline-offset-4 hover:decoration-current"
                   >
-                    <span className="shrink-0 text-[0.6rem] font-bold tracking-widest text-black/45 uppercase">
+                    <span className="shrink-0 text-[0.6rem] font-bold tracking-widest text-tinta-3 uppercase">
                       {i.rotuloCategoria}
                     </span>
                     <span className="min-w-0 truncate">{i.titulo}</span>
@@ -212,7 +212,7 @@ export function Play({
                 </li>
               ))}
             </ul>
-            <p className="text-xs text-black/55">
+            <p className="text-xs text-tinta-2">
               <strong data-denominador="concluidas">{retomada.resolvidas.length}</strong> de{" "}
               {catalogo.total} concluída{retomada.resolvidas.length > 1 ? "s" : ""} neste
               navegador.
@@ -223,7 +223,7 @@ export function Play({
         {retomada.descartadas > 0 ? (
           /* O descarte é DECLARADO. Storage adulterado não pode encolher a lista em
              silêncio — a pessoa tem de saber que havia algo ali que não resolveu. */
-          <p data-descarte className="text-xs leading-relaxed text-black/55">
+          <p data-descarte className="text-xs leading-relaxed text-tinta-2">
             <strong>{retomada.descartadas}</strong> registro
             {retomada.descartadas > 1 ? "s guardados neste navegador não correspondem" : " guardado neste navegador não corresponde"}{" "}
             a nenhuma mídia do acervo e foi descartado da lista acima.
@@ -234,7 +234,7 @@ export function Play({
       {/* -------------------------------------------- não pode ir? veja isto (D-92) */}
       <section
         data-veja-isto
-        className="flex flex-col gap-2 rounded-lg border border-black/10 p-3 desk:web-painel"
+        className="flex flex-col gap-2 rounded-lg border border-borda p-3 desk:web-painel"
       >
         <h2 className="text-sm font-bold">Não pode ir? veja isto</h2>
         <p className="text-sm leading-relaxed">
@@ -246,7 +246,7 @@ export function Play({
           páginas desses eventos, essas mídias aparecem como o que dá para ver de casa
           quando não dá para ir.
         </p>
-        <p className="text-xs leading-relaxed text-black/55">
+        <p className="text-xs leading-relaxed text-tinta-2">
           As outras {ponte.deQuantas - ponte.midiasDistintas} não têm essa ligação
           declarada, e nós não a inventamos. O acervo registra «fala sobre» entre mídia e
           evento; «semelhante a» liga mídia a mídia e nunca chega a um evento. Afirmar que
@@ -286,7 +286,7 @@ export function Play({
       {/* ---------------------------------------------- filtro de acessibilidade (D-90) */}
       <section className="flex flex-col gap-2">
         <h2 className="text-sm font-bold">Recursos de acessibilidade</h2>
-        <p className="text-xs leading-relaxed text-black/55">
+        <p className="text-xs leading-relaxed text-tinta-2">
           O número ao lado de cada recurso é quanto ele recorta do acervo, medido antes de
           você marcar qualquer coisa. Dois dos três não recortam nada — e é por isso que
           eles aparecem com o número, e não escondidos.
@@ -331,7 +331,7 @@ export function Play({
 
         {recorte.length === 0 ? (
           /* Vazio EXPLICADO — o mesmo compromisso de D-93: nenhum fim de caminho mudo. */
-          <p data-recorte-vazio className="rounded-lg border border-dashed border-black/25 p-4 text-sm leading-relaxed">
+          <p data-recorte-vazio className="rounded-lg border border-dashed border-borda-forte p-4 text-sm leading-relaxed">
             Nenhuma das {catalogo.total} mídias do acervo atende a esse recorte.{" "}
             {dimensoesMarcadas.some((d) => (dimensoes.find((x) => x.campo === d)?.n ?? 0) === 0)
               ? "O acervo publicado não declara esse recurso em nenhuma mídia — o vazio aqui é o próprio dado, não uma falha da busca."
@@ -387,7 +387,7 @@ export function Play({
       </section>
 
       {/* ------------------------------------------------------------- o custo declarado */}
-      <p data-corte className="text-xs leading-relaxed text-black/55">
+      <p data-corte className="text-xs leading-relaxed text-tinta-2">
         O resumo de cada mídia não viaja nesta lista — ele aparece por inteiro na página
         dela. {corte.motivo} O catálogo desta tela pesa{" "}
         <strong>{(catalogo.bytes / 1024).toFixed(1)} KB</strong> de um orçamento de{" "}

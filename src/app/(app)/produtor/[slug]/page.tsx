@@ -235,13 +235,13 @@ export default async function PaginaProdutor({ params }: { params: Promise<{ slu
           <div className="flex items-baseline gap-2">
             <Grafismo
               variacao="barra"
-              className="h-5 w-auto shrink-0 text-acao"
+              className="h-5 w-auto shrink-0 text-acao-tinta"
             />
             <h1 className="text-2xl leading-tight font-bold desk:text-3xl">
               Página do produtor ou instituição
             </h1>
           </div>
-          <p className="max-w-prose text-sm text-black/60">
+          <p className="max-w-prose text-sm text-tinta-2">
             A rota existe e responde; nenhuma das {numeros.instituicoes} instituições nem
             dos {numeros.espacos} espaços do acervo corresponde a este endereço.
           </p>

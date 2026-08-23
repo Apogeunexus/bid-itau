@@ -333,18 +333,18 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {/* ================================================================== */}
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Acontece</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C1
           </span>
         </div>
 
-        <p className="max-w-prose text-sm leading-relaxed text-black/70">
+        <p className="max-w-prose text-sm leading-relaxed text-tinta-2">
           {`${milhar(diagnostico.eventosComSessao)} dos ${milhar(diagnostico.eventosNoAcervo)} eventos do acervo têm sessão datada, e são eles que aparecem aqui. Os outros ${milhar(diagnostico.eventosSemSessao)} — ${milhar(diagnostico.eventosSemSessaoDaEnciclopedia)} da Enciclopédia Itaú Cultural e ${milhar(diagnostico.eventosSemSessaoDoCms)} da agenda, sem período declarado — têm ano, não sessão: eles existem no acervo do território e na busca, e não nesta agenda.`}
         </p>
 
-        <Comentario className="max-w-prose text-xs leading-relaxed text-black/55">
+        <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
           A lista abaixo é de EVENTOS, com a contagem de ocorrências no cartão (D-53).
           Ocorrência é registro próprio, com id próprio, e não um array aninhado dentro do
           evento — é essa separação que permite um alerta chegar a quem salvou uma sessão
@@ -352,7 +352,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
           travessia rodou no build; trocar de dia aqui troca um índice em memória.
         </Comentario>
 
-        <p className="text-[0.65rem] tracking-wide text-black/45 uppercase">
+        <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
           {`data de referência · ${curta(agenda.hoje)} · o protótipo é estático e «passado» e «futuro» são calculados contra a data em que ele foi gerado`}
         </p>
       </header>
@@ -514,7 +514,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {/*     dias com sessão. Dia vazio não existe aqui por construção.      */}
       {/* ================================================================== */}
       <section className="flex flex-col gap-2">
-        <p className="max-w-prose text-xs leading-relaxed text-black/70">
+        <p className="max-w-prose text-xs leading-relaxed text-tinta-2">
           {`A faixa navega os ${milhar(diagnostico.diasDistintos)} dias que têm sessão no acervo, de ${curta(diagnostico.primeiroDia)} a ${curta(diagnostico.ultimoDia)} — e a maior parte deles já passou. Dia sem sessão não aparece porque não existe: março de 2026, por exemplo, não tem uma única sessão, e um calendário contínuo o mostraria vazio.`}
         </p>
 
@@ -523,7 +523,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
             type="button"
             onClick={() => setInicioFaixa((i) => Math.max(0, i - visiveis))}
             disabled={inicioFaixa === 0}
-            className="cursor-pointer rounded-full border border-black/25 px-3 py-1 text-xs font-semibold disabled:cursor-default disabled:opacity-35"
+            className="cursor-pointer rounded-full border border-borda-forte px-3 py-1 text-xs font-semibold disabled:cursor-default disabled:opacity-35"
           >
             dias anteriores
           </button>
@@ -531,7 +531,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
           {/* Todo teto de exibição é DITO, no padrão que a fase 2 fixou: o recorte contra
               o total, sempre, para ninguém confundir «a faixa mostra 23» com «o acervo
               tem 23». */}
-          <span className="text-[0.65rem] tracking-wide text-black/50 uppercase">
+          <span className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
             {`${milhar(faixa.length)} de ${milhar(diagnostico.diasDistintos)} dias exibidos`}
           </span>
 
@@ -541,7 +541,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
               setInicioFaixa((i) => Math.min(Math.max(0, dias.length - visiveis), i + visiveis))
             }
             disabled={inicioFaixa >= dias.length - visiveis}
-            className="cursor-pointer rounded-full border border-black/25 px-3 py-1 text-xs font-semibold disabled:cursor-default disabled:opacity-35"
+            className="cursor-pointer rounded-full border border-borda-forte px-3 py-1 text-xs font-semibold disabled:cursor-default disabled:opacity-35"
           >
             dias seguintes
           </button>
@@ -591,7 +591,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
         <section className="flex flex-col gap-3">
           <header className="flex flex-col gap-1.5">
             <h2 className="text-lg leading-tight font-bold">{porExtenso(dia.data)}</h2>
-            <p className="text-xs text-black/60">
+            <p className="text-xs text-tinta-2">
               {`${plural(dia.totalEventos, "evento", "eventos")} · ${plural(dia.totalSessoes, "sessão", "sessões")} neste dia`}
             </p>
 
@@ -599,12 +599,12 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
                 motivo é dito — porque um passado que aparece sem explicação parece
                 defeito, e um passado escondido seria mentira sobre o que existe. */}
             {dia.tempo === "passado" ? (
-              <p className="max-w-prose rounded-lg bg-black/[0.04] px-3 py-2 text-xs leading-relaxed text-black/70">
+              <p className="max-w-prose rounded-lg bg-superficie-2 px-3 py-2 text-xs leading-relaxed text-tinta-2">
                 {`Este dia é anterior à data de referência, e as sessões abaixo já aconteceram. Elas continuam na tela de propósito: o acervo do Itaú Cultural documenta o que a cultura brasileira produziu, e ${milhar(diagnostico.sessoesPassadas)} das ${milhar(diagnostico.totalSessoes)} sessões deste protótipo são passadas. Escondê-las esvaziaria a agenda e mentiria sobre o que o acervo tem.`}
               </p>
             ) : null}
 
-            <Comentario className="max-w-prose text-xs leading-relaxed text-black/55">
+            <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
               Não existe nesta tela nenhum filtro que remova o passado, nem desligado por
               padrão (D-54). Também não existe atalho para filtros: filtros são Camada 2,
               da fase 5, e o atalho seria link morto na demonstração.
@@ -617,11 +617,11 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
             <div className="flex flex-col gap-1">
               <a
                 href={lente}
-                className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-[var(--ic-branco)] no-underline transition-opacity hover:opacity-90"
+                className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao no-underline transition-opacity hover:opacity-90"
               >
                 Ver este dia no mapa
               </a>
-              <p className="text-[0.65rem] leading-relaxed text-black/50">
+              <p className="text-[0.65rem] leading-relaxed text-tinta-3">
                 {`O mapa abre como lente sobre estes ${plural(eventosDoDia.length, "evento", "eventos")}, e não como uma busca nova. O recorte e o caminho de volta viajam no endereço.`}
               </p>
             </div>
@@ -653,7 +653,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
                     <p className="contagem-sessoes">
                       <Grafismo
                         variacao="barra"
-                        className="mt-0.5 h-3.5 w-auto shrink-0 text-acao"
+                        className="mt-0.5 h-3.5 w-auto shrink-0 text-acao-tinta"
                       />
                       <span>
                         <strong>{plural(evento.totalSessoes, "sessão", "sessões")}</strong>
@@ -691,7 +691,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
 
                     <Link
                       href={`/evento/${evento.slug}/sessoes/`}
-                      className="w-fit text-xs font-semibold text-acao underline underline-offset-2"
+                      className="w-fit text-xs font-semibold text-acao-tinta underline underline-offset-2"
                     >
                       escolher e salvar uma sessão
                     </Link>
@@ -700,7 +700,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
               ))}
             </ul>
           ) : (
-            <p className="rounded-xl border border-dashed border-black/20 p-3 text-xs leading-relaxed text-black/60">
+            <p className="rounded-xl border border-dashed border-borda p-3 text-xs leading-relaxed text-tinta-2">
               Nenhum evento neste dia. A faixa só oferece dias que têm sessão, então este
               estado não deveria ser alcançável pela tela — se ele apareceu, o endereço
               trouxe um dia que o acervo não tem.
@@ -716,10 +716,10 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {/*     desligado esvaziaria exatamente a tela que se quer mostrar.     */}
       {/* ================================================================== */}
       <section className="flex flex-col gap-2">
-        <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
+        <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
           O que o acervo não publica
         </h2>
-        <p className="max-w-prose text-xs leading-relaxed text-black/60">
+        <p className="max-w-prose text-xs leading-relaxed text-tinta-2">
           Cada linha abaixo é um campo que existe no modelo e que a fonte não preenche. O
           número é medido no acervo carregado, não estimado — e o campo continua no lugar,
           declarado, em vez de sumir da tela.
@@ -736,7 +736,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
         </ul>
       </section>
 
-      <Comentario className="max-w-prose border-t border-black/10 pt-3 text-[0.65rem] leading-relaxed text-black/45">
+      <Comentario className="max-w-prose border-t border-borda pt-3 text-[0.65rem] leading-relaxed text-tinta-3">
         {`DTO desta tela: ${milhar(Math.round(diagnostico.bytesDoDto / 1024))} KB, montados no build sobre ${milhar(diagnostico.totalSessoes)} ocorrências e ${milhar(diagnostico.diasDistintos)} dias. O grafo de 23 MB não atravessa a fronteira do cliente (DP-F): o que chegou ao navegador foi este índice, e nada mais.`}
       </Comentario>
     </div>

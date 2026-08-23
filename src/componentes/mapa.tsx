@@ -186,14 +186,14 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
       <header className="flex flex-col gap-0.5">
         <h1 className="text-lg leading-tight font-semibold">Mapa</h1>
         {lente ? (
-          <p className="text-xs leading-snug text-black/70">
+          <p className="text-xs leading-snug text-tinta-2">
             Lente sobre{" "}
-            <strong className="font-semibold text-[var(--ic-preto)]">{lente.titulo}</strong>{" "}
+            <strong className="font-semibold text-tinta">{lente.titulo}</strong>{" "}
             — {recorte.total} {recorte.total === 1 ? "item" : "itens"} do conjunto que você
             já estava vendo.
           </p>
         ) : (
-          <p className="text-xs leading-snug text-black/70">
+          <p className="text-xs leading-snug text-tinta-2">
             Você chegou <strong className="font-semibold">sem recorte</strong>: o mapa é
             lente sobre um resultado, não porta de entrada (D-59). Sem conjunto, ele mostra
             todo o acervo que consegue situar no Brasil.
@@ -343,14 +343,14 @@ function CartaoItem({
             <li key={m[0]} className="flex flex-col">
               <span className="text-sm leading-tight font-semibold">
                 {rota ? (
-                  <Link href={rota} className="underline decoration-black/30 underline-offset-2">
+                  <Link href={rota} className="underline decoration-borda-forte underline-offset-2">
                     {m[2]}
                   </Link>
                 ) : (
                   m[2]
                 )}
               </span>
-              <span className="text-xs text-black/55">
+              <span className="text-xs text-tinta-2">
                 {m[3]} · coordenada derivada por {metodo}
                 {via === "espaco" ? ", resolvida pelo espaço a que se liga" : null}
                 {via === "territorio" ? ", resolvida pelo território a que se liga" : null}
@@ -361,7 +361,7 @@ function CartaoItem({
         })}
       </ul>
       {n > 8 ? (
-        <p className="text-xs text-black/55">e mais {n - 8} no mesmo ponto.</p>
+        <p className="text-xs text-tinta-2">e mais {n - 8} no mesmo ponto.</p>
       ) : null}
     </section>
   );
@@ -391,7 +391,7 @@ function Legenda({
   return (
     <section data-legenda-mapa className="mapa-legenda">
       <p>
-        <strong className="font-semibold text-[var(--ic-preto)]">
+        <strong className="font-semibold text-tinta">
           Nenhuma coordenada deste mapa foi lida da fonte.
         </strong>{" "}
         Elas são derivadas: centroide de município, centroide de estado, ou deslocamento a
@@ -409,7 +409,7 @@ function Legenda({
           <>Todo o recorte coube no desenho: nada ficou sem posição.</>
         ) : (
           <>
-            <strong className="font-semibold text-[var(--ic-preto)]">
+            <strong className="font-semibold text-tinta">
               Fora do desenho:
             </strong>{" "}
             {semCoordenada.length} sem coordenada que o acervo sustente e{" "}
@@ -419,19 +419,19 @@ function Legenda({
         )}
       </p>
       {semCoordenada.length ? (
-        <p className="text-black/50">
+        <p className="text-tinta-3">
           Sem posição: {semCoordenada.slice(0, 12).join(", ")}
           {semCoordenada.length > 12 ? ` e mais ${semCoordenada.length - 12}` : ""}.
         </p>
       ) : null}
       {foraDoBrasil.length ? (
-        <p className="text-black/50">
+        <p className="text-tinta-3">
           Fora do Brasil: {foraDoBrasil.slice(0, 8).map((p) => p[2]).join(", ")}
           {foraDoBrasil.length > 8 ? ` e mais ${foraDoBrasil.length - 8}` : ""}.
         </p>
       ) : null}
       {voltaRecusada ? (
-        <p className="text-black/50">
+        <p className="text-tinta-3">
           O endereço de volta que veio na URL não é um caminho interno e foi recusado; as
           voltas acima são as da própria tela.
         </p>

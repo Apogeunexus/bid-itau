@@ -101,32 +101,32 @@ export function Verbete({
     <section
       data-verbete={entidade.procedencia}
       data-verbete-vazio={vazio}
-      className={`flex flex-col gap-2 rounded-xl border-l-4 border-black/80 bg-black/[0.03] p-3 ${className ?? ""}`}
+      className={`flex flex-col gap-2 rounded-xl border-l-4 border-tinta-2 bg-superficie-2 p-3 ${className ?? ""}`}
     >
-      <h3 className="text-[0.65rem] font-bold tracking-widest text-black/55 uppercase">
+      <h3 className="text-[0.65rem] font-bold tracking-widest text-tinta-2 uppercase">
         {fonte.rotulo} · {fonte.nome}
       </h3>
 
       {texto ? (
         <p className="text-sm leading-relaxed">{texto}</p>
       ) : (
-        <p className="text-sm leading-relaxed text-black/60 italic">{frasePorExtensoDoVazio}</p>
+        <p className="text-sm leading-relaxed text-tinta-2 italic">{frasePorExtensoDoVazio}</p>
       )}
 
       {vazio === "curto" ? (
-        <p className="text-xs leading-relaxed text-black/60">{fraseDoTextoCurto}</p>
+        <p className="text-xs leading-relaxed text-tinta-2">{fraseDoTextoCurto}</p>
       ) : null}
 
       {entidade.fonte ? (
         <a
           href={entidade.fonte}
           rel="noreferrer"
-          className="w-fit text-xs font-semibold text-acao underline underline-offset-2"
+          className="w-fit text-xs font-semibold text-acao-tinta underline underline-offset-2"
         >
           conferir a entrada na fonte
         </a>
       ) : (
-        <p className="text-xs text-black/45">
+        <p className="text-xs text-tinta-3">
           Esta entrada não registra URL de origem no acervo.
         </p>
       )}

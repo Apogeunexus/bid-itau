@@ -360,9 +360,9 @@ export function BuscaFrase({
     <div className="flex flex-col gap-2 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Buscar por frase</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C1
           </span>
         </div>
@@ -544,7 +544,7 @@ export function BuscaFrase({
             );
           })
         ) : (
-          <p className="text-sm leading-snug text-black/60">
+          <p className="text-sm leading-snug text-tinta-2">
             Nenhuma regra reconheceu nada nesta frase. As {AS_REGRAS.length} regras que
             existem estão listadas abaixo, com um exemplo de frase para cada uma.
           </p>
@@ -569,7 +569,7 @@ export function BuscaFrase({
             isso é o contrário de descartar em silêncio.
           </p>
         ) : (
-          <p className="text-black/70">
+          <p className="text-tinta-2">
             <strong className="frase-ficha-regra">não entendi isto:</strong> nada ficou de
             fora — as {traducao.diagnostico.palavrasTotais} palavras com
             conteúdo desta frase foram lidas por alguma regra.
@@ -581,7 +581,7 @@ export function BuscaFrase({
       </section>
 
       {descartados > 0 ? (
-        <p className="text-sm leading-snug text-black/60">
+        <p className="text-sm leading-snug text-tinta-2">
           {milhar(descartados)} valor{descartados > 1 ? "es" : ""} do endereço não existe
           neste índice e foi descartado. O recorte abaixo é o que sobrou — preferimos dizer
           isso a mostrar um recorte diferente do que foi pedido.
@@ -607,7 +607,7 @@ export function BuscaFrase({
                   : `${milhar(total)} resultado${total > 1 ? "s" : ""}`}
           </p>
           {total > 0 && resposta ? (
-            <p className="text-sm text-black/60">
+            <p className="text-sm text-tinta-2">
               em{" "}
               {Object.entries(resposta.porClasse)
                 .sort((a, b) => b[1] - a[1])
@@ -618,7 +618,7 @@ export function BuscaFrase({
         </div>
 
         {!ativos.length ? (
-          <p className="text-sm leading-snug text-black/70">
+          <p className="text-sm leading-snug text-tinta-2">
             Você tirou todas as fichas. Sem nenhum critério de pé não há por que mostrar
             coisa alguma — listar o acervo inteiro aqui seria devolver 5.092 resultados sem
             um motivo para nenhum deles. Recoloque uma ficha acima, ou reescreva a frase.
@@ -662,7 +662,7 @@ export function BuscaFrase({
                       {ROTULO_CLASSE[resultado.classe] ?? resultado.classe}
                     </span>
                     {resultado.territorioRotulo ? (
-                      <span className="text-xs text-black/55">{resultado.territorioRotulo}</span>
+                      <span className="text-xs text-tinta-2">{resultado.territorioRotulo}</span>
                     ) : null}
                   </div>
                   {rota ? (
@@ -688,7 +688,7 @@ export function BuscaFrase({
         ) : null}
 
         {resposta && exibidos < total ? (
-          <p className="text-xs leading-snug text-black/55">
+          <p className="text-xs leading-snug text-tinta-2">
             A lista mostra {milhar(exibidos)} de {milhar(total)}. O corte é de exibição — as
             contagens acima e os números das fichas são sobre os {milhar(total)}.
           </p>
@@ -735,7 +735,7 @@ export function BuscaFrase({
                 </button>
               ),
             )}
-            <Comentario className="text-xs leading-snug text-black/55">
+            <Comentario className="text-xs leading-snug text-tinta-2">
               Cada número acima foi medido sobre o índice inteiro no momento em que a tela
               desenhou, e não estimado. Soltar a ficha aqui é a MESMA operação de tirar a
               ficha lá em cima — por isso o número prometido é o número entregue.
@@ -773,13 +773,13 @@ export function BuscaFrase({
                 <span className="frase-regra-nome">{regra.nome}</span>
                 <span>{regra.padrao}</span>
                 <span className="frase-regra-exemplo">exemplo: «{regra.exemplo}»</span>
-                <span className="text-black/55">produz: {regra.produz}</span>
+                <span className="text-tinta-2">produz: {regra.produz}</span>
               </div>
             ))}
           </div>
         ) : null}
 
-        <Comentario className="text-xs leading-snug text-black/60">
+        <Comentario className="text-xs leading-snug text-tinta-2">
           A honestidade aqui é mais forte que uma simulação: o que a proposta vende não é o
           modelo, é o controle. Uma tradução que acertasse e não se mostrasse seria pior
           para quem avalia do que uma regra que erra e se explica — a regra se corrige em
@@ -793,11 +793,11 @@ export function BuscaFrase({
       <section className="flex flex-col gap-1.5">
         <p className="frase-bloco-titulo">ver este recorte no mapa</p>
         <Link href={lente} className="frase-botao w-fit no-underline">
-          <Grafismo variacao="barra" className="h-3 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-3 w-auto shrink-0 text-acao-tinta" />
           {idsLente.length ? `abrir ${milhar(idsLente.length)} no mapa` : "abrir o mapa sem recorte"}
         </Link>
         {total > idsLente.length ? (
-          <p className="text-xs leading-snug text-black/55">
+          <p className="text-xs leading-snug text-tinta-2">
             A lente leva os primeiros {milhar(idsLente.length)} de {milhar(total)} — o corte
             é do endereço, que não comporta a lista inteira, e está declarado aqui em vez de
             acontecer em silêncio.
@@ -809,7 +809,7 @@ export function BuscaFrase({
       {/* O que o critério de texto NÃO alcança — declarado, não escondido    */}
       {/* ------------------------------------------------------------------ */}
       <section className="flex flex-col gap-1">
-        <p className="text-sm leading-snug text-black/70">
+        <p className="text-sm leading-snug text-tinta-2">
           <strong>O que esta tela não alcança, dito com número.</strong> «Parecido com» é
           casado por TEXTO sobre o índice único de {milhar(indice.total)} entradas — o
           índice não tem campo de vizinhança, e nesta camada ele não ganha um. Das{" "}
@@ -820,7 +820,7 @@ export function BuscaFrase({
           do alcance deste critério. Buscar pela vizinhança inteira é Camada 2 — e dizer o
           número é o que impede esta tela de parecer mais do que é.
         </p>
-        <Comentario className="text-xs leading-snug text-black/55">
+        <Comentario className="text-xs leading-snug text-tinta-2">
           Levar a vizinhança inteira ao navegador exigiria o grafo do lado do cliente:
           `entidades.json` tem 9,4 MB e `arestas.json` 13,6 MB, e DP-F proíbe o alcance
           inclusive transitivamente. O que atravessa a fronteira é o mapa de{" "}

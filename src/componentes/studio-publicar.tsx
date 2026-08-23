@@ -110,7 +110,7 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
       >
         <div className="flex items-baseline gap-2">
           <span className="tipo-detalhe font-bold">Qualidade do registro</span>
-          <span className="tipo-destaque font-bold text-acao">{score}%</span>
+          <span className="tipo-destaque font-bold text-acao-tinta">{score}%</span>
         </div>
         <div className="h-2 overflow-hidden rounded-pilula bg-borda" aria-hidden>
           <div className="h-full rounded-pilula bg-acao transition-all" style={{ width: `${score}%` }} />
@@ -125,7 +125,7 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
       {/* -------- os campos -------- */}
       <label className="flex flex-col gap-1">
         <span className="tipo-detalhe font-bold">
-          Título do evento <span className="text-acao">*</span>
+          Título do evento <span className="text-acao-tinta">*</span>
         </span>
         <input
           type="text"
@@ -145,14 +145,14 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
           className="flex flex-col gap-1.5 rounded-m border-2 border-acao bg-superficie-2 p-3"
           data-aviso-duplicata={duplicatas.length}
         >
-          <p className="tipo-detalhe font-bold text-acao">
+          <p className="tipo-detalhe font-bold text-acao-tinta">
             Possível duplicata — {duplicatas.length === 1 ? "1 evento existente casa" : `${duplicatas.length} eventos existentes casam`}{" "}
             com este título:
           </p>
           <ul className="flex list-disc flex-col gap-0.5 pl-5">
             {duplicatas.map((d) => (
               <li key={d.slug} className="tipo-legenda">
-                <a href={`/evento/${d.slug}/`} target="_blank" rel="noreferrer" className="font-semibold text-acao">
+                <a href={`/evento/${d.slug}/`} target="_blank" rel="noreferrer" className="font-semibold text-acao-tinta">
                   {d.titulo} ↗
                 </a>
               </li>
@@ -170,7 +170,7 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
       <div className="grid grid-cols-2 gap-3">
         <label className="flex flex-col gap-1">
           <span className="tipo-detalhe font-bold">
-            Início <span className="text-acao">*</span>
+            Início <span className="text-acao-tinta">*</span>
           </span>
           <input type="date" value={inicio} onChange={(e) => setInicio(e.target.value)} className={campo} />
         </label>
@@ -187,7 +187,7 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
 
       <label className="flex flex-col gap-1">
         <span className="tipo-detalhe font-bold">
-          Descrição alternativa da imagem <span className="text-acao">*</span>
+          Descrição alternativa da imagem <span className="text-acao-tinta">*</span>
         </span>
         <input
           type="text"
@@ -228,7 +228,7 @@ export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
       {problemas.length > 0 ? (
         <ul className="flex list-disc flex-col gap-0.5 pl-5" data-problemas={problemas.length}>
           {problemas.map((p) => (
-            <li key={p} className="tipo-legenda text-acao">
+            <li key={p} className="tipo-legenda text-acao-tinta">
               {p}
             </li>
           ))}

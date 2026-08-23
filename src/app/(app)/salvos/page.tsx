@@ -31,7 +31,7 @@ export default function PaginaSalvos() {
       {/* Fala SOBRE a tela — o que ela prova e por que ela existe no roteiro. Quem usa o
           app recebe a mesma ideia em produto no cabeçalho de `<Salvos>` e na frase que
           fecha o alerta, as duas escritas na segunda pessoa. */}
-      <Comentario className="max-w-prose text-sm leading-snug text-black/60">
+      <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
         Esta é a metade-app do Cenário 4. Ela só funciona porque evento, temporada e
         ocorrência são registros próprios (DADO-02): a alteração atinge uma ocorrência, o
         evento continua válido, e o aviso tem a quem ser endereçado. Num modelo de catálogo,

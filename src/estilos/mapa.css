@@ -27,14 +27,14 @@
 
 .mapa-contorno {
   fill: var(--cor-superficie-2);
-  stroke: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  stroke: color-mix(in srgb, var(--cor-tinta-crua) 45%, transparent);
   stroke-width: 1.6;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
 .mapa-pino {
-  stroke: var(--ic-branco);
+  stroke: var(--cor-fundo);
   stroke-width: 1.5;
   vector-effect: non-scaling-stroke;
   fill: var(--cor-pino, var(--cor-acao));
@@ -60,7 +60,7 @@
 }
 
 .mapa-botao {
-  border: 1px solid var(--ic-preto);
+  border: 1px solid var(--cor-tinta);
   border-radius: var(--raio-pilula);
   padding: 0.25rem 0.75rem;
   font-size: var(--tipo-legenda);
@@ -74,7 +74,7 @@
 }
 
 .mapa-quadro {
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+  border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
 }
 
@@ -94,7 +94,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  border: 1px solid var(--ic-preto);
+  border: 1px solid var(--cor-tinta);
   border-radius: var(--raio-m);
   padding: 0.5rem 0.75rem;
 }
@@ -103,7 +103,7 @@
   cursor: pointer;
   font-size: var(--tipo-micro);
   font-weight: 600;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
   text-decoration: underline;
 }
 
@@ -113,7 +113,7 @@
   gap: 0.25rem;
   font-size: var(--tipo-micro);
   line-height: 1rem;
-  color: color-mix(in srgb, var(--ic-preto) 62%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 .mapa-pino {
@@ -146,7 +146,7 @@
  * acervo magro, 0 é um estado que o acervo não sabe que existe.
  * ------------------------------------------------------------------------- */
 .desertos-uf {
-  stroke: color-mix(in srgb, var(--ic-preto) 30%, transparent);
+  stroke: color-mix(in srgb, var(--cor-tinta-crua) 30%, transparent);
   stroke-width: 0.7;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
@@ -156,13 +156,13 @@
   fill: color-mix(
     in srgb,
     var(--cor-acao) calc(8% + var(--intensidade, 0) * 85%),
-    var(--ic-branco)
+    var(--cor-papel-cru)
   );
 }
 
 /* Um registro só: quase branco, mas AINDA PREENCHIDO — o estado existe no acervo. */
 .desertos-uf[data-faixa="minimo"] {
-  fill: color-mix(in srgb, var(--cor-acao) 7%, var(--ic-branco));
+  fill: color-mix(in srgb, var(--cor-acao) 7%, var(--cor-papel-cru));
   stroke: color-mix(in srgb, var(--cor-acao) 55%, transparent);
   stroke-width: 1;
 }
@@ -171,22 +171,22 @@
    escala — é a ausência da escala, e precisa ler como buraco à distância de um slide. */
 .desertos-uf[data-faixa="vazio"] {
   fill: url(#desertos-hachura);
-  stroke: var(--ic-preto);
+  stroke: var(--cor-tinta);
   stroke-width: 1.4;
   stroke-dasharray: 3 2;
 }
 
 .desertos-hachura-traco {
-  stroke: color-mix(in srgb, var(--ic-preto) 38%, transparent);
+  stroke: color-mix(in srgb, var(--cor-tinta-crua) 38%, transparent);
   stroke-width: 1.2;
 }
 
 .desertos-sigla {
   font-size: var(--tipo-legenda);
   font-weight: 700;
-  fill: var(--ic-preto);
+  fill: var(--cor-tinta);
   paint-order: stroke;
-  stroke: var(--ic-branco);
+  stroke: var(--cor-fundo);
   stroke-width: 3;
   stroke-linejoin: round;
 }
@@ -197,7 +197,7 @@
   gap: 0.25rem;
   font-size: var(--tipo-legenda);
   line-height: 1rem;
-  color: color-mix(in srgb, var(--ic-preto) 78%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 .desertos-titulo {
@@ -205,7 +205,7 @@
   font-size: var(--tipo-detalhe);
   font-weight: 700;
   line-height: 1.2;
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 /* A tese fica destacada porque ela é a frase que a apresentação vai ler em voz alta. */
@@ -213,11 +213,11 @@
   border-left: 3px solid var(--cor-acao);
   padding-left: 0.5rem;
   font-weight: 600;
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 .mapa-botao-camada[aria-pressed="true"] {
   background: var(--cor-acao);
   border-color: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
 }

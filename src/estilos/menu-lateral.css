@@ -61,7 +61,7 @@
 
 .menu-item[aria-current="page"] {
   background: var(--cor-acao-lavada);
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 /* Subitem (Exposições dentro de Museu, seções de Notícias): mesma linha, um

@@ -398,9 +398,9 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
     <div className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-6xl desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Buscar</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C1
           </span>
         </div>
@@ -413,7 +413,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           roda aqui no seu navegador, em memória: <strong>não há serviço de busca por trás</strong>.
         </p>
 
-        <Comentario className="text-sm leading-snug text-black/60">
+        <Comentario className="text-sm leading-snug text-tinta-2">
           O índice tem {milhar(indice.total)} entidades de {indice.facetas.classe.length}{" "}
           classes, em forma colunar com classe, linguagem, tema, procedência e território
           internados — {milhar(Math.round(indice.diagnostico.bytes / 1024))} KB medidos contra
@@ -484,7 +484,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
       ) : null}
 
       {descartados > 0 ? (
-        <p className="text-sm leading-snug text-black/60">
+        <p className="text-sm leading-snug text-tinta-2">
           {descartados === 1
             ? "Um critério do endereço não existe neste índice e foi descartado."
             : `${milhar(descartados)} critérios do endereço não existem neste índice e foram descartados.`}{" "}
@@ -540,7 +540,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
             >
               <Grafismo
                 variacao="barra"
-                className="h-3.5 w-auto shrink-0 text-acao"
+                className="h-3.5 w-auto shrink-0 text-acao-tinta"
               />
               traduzir esta frase em critérios
             </Link>
@@ -638,7 +638,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     </button>
                   ))}
                 </div>
-                <Comentario className="text-xs leading-snug text-black/55">
+                <Comentario className="text-xs leading-snug text-tinta-2">
                   A cor de cada linguagem veio do vocabulário gerado, não deste arquivo (D-08).
                 </Comentario>
               </section>
@@ -659,11 +659,11 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm leading-snug text-black/60">
+                  <p className="text-sm leading-snug text-tinta-2">
                     Você ainda não buscou nada neste navegador.
                   </p>
                 )}
-                <p className="text-xs leading-snug text-black/55">
+                <p className="text-xs leading-snug text-tinta-2">
                   O histórico fica só neste navegador, em chave própria, e não vai para lugar
                   nenhum — nem para os salvos.
                 </p>
@@ -684,7 +684,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   href="/buscar/frase/"
                   className="busca-faceta w-fit font-semibold no-underline"
                 >
-                  <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
+                  <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
                   buscar por frase
                 </Link>
               </section>
@@ -714,7 +714,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                       : `${milhar(total)} resultado${total > 1 ? "s" : ""}`}
                 </p>
                 {total > 0 ? (
-                  <p className="text-sm text-black/60">
+                  <p className="text-sm text-tinta-2">
                     em{" "}
                     {Object.entries(resposta.porClasse)
                       .sort((a, b) => b[1] - a[1])
@@ -778,12 +778,12 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                             <div className="flex flex-wrap items-center gap-2">
                               {etiqueta}
                               {resultado.territorioRotulo ? (
-                                <span className="text-xs text-black/55">
+                                <span className="text-xs text-tinta-2">
                                   {resultado.territorioRotulo}
                                 </span>
                               ) : null}
                               {resultado.temImagem ? (
-                                <span className="text-xs text-black/45">com imagem no acervo</span>
+                                <span className="text-xs text-tinta-3">com imagem no acervo</span>
                               ) : null}
                             </div>
                             {rota ? (
@@ -797,7 +797,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                               <SelosDeLinguagem ids={resultado.linguagens} limite={2} />
                             ) : null}
                             {!rota ? (
-                              <span className="text-xs text-black/45">
+                              <span className="text-xs text-tinta-3">
                                 sem página própria nesta camada
                               </span>
                             ) : null}
@@ -808,7 +808,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   </ul>
 
                   {exibidos < total ? (
-                    <p className="text-sm leading-snug text-black/60">
+                    <p className="text-sm leading-snug text-tinta-2">
                       A lista mostra {milhar(exibidos)} de {milhar(total)}. O corte é de exibição —
                       as contagens acima e as facetas ao lado são sobre os {milhar(total)}.
                     </p>
@@ -841,7 +841,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                       >
                         <Grafismo
                           variacao="barra"
-                          className="h-3.5 w-auto shrink-0 text-acao"
+                          className="h-3.5 w-auto shrink-0 text-acao-tinta"
                         />
                         <span>{afrouxamento.rotulo}</span>
                         <span className="busca-afrouxamento-n">
@@ -851,7 +851,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                       </button>
                     ))}
                   </div>
-                  <Comentario className="text-xs leading-snug text-black/55">
+                  <Comentario className="text-xs leading-snug text-tinta-2">
                     Cada número acima foi medido sobre o índice inteiro no momento em que a tela
                     desenhou, e não estimado. A tela de zero-resultado completa é Camada 2 (fase
                     5); aqui é o estado vazio de Buscar, e ele já oferece saída medida (D-66).
@@ -882,7 +882,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           <section className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
               <p className="busca-bloco-titulo">recortar</p>
-              <p className="text-sm leading-snug text-black/60">
+              <p className="text-sm leading-snug text-tinta-2">
                 As facetas saem da própria ontologia — classe, linguagem, tema, procedência e
                 território da entidade — e o número é quantos resultados aquela opção devolve
                 agora. Opção que devolveria zero não aparece.
@@ -910,7 +910,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
             >
               <Grafismo
                 variacao="barra"
-                className="h-3.5 w-auto shrink-0 text-acao"
+                className="h-3.5 w-auto shrink-0 text-acao-tinta"
               />
               filtrar por acessibilidade — as 8 dimensões como critério, não como selo
             </Link>
@@ -932,7 +932,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 facetas.tema.length > TEMAS_VISIVEIS ? (
                   <button
                     type="button"
-                    className="w-fit text-xs font-semibold text-acao underline underline-offset-2"
+                    className="w-fit text-xs font-semibold text-acao-tinta underline underline-offset-2"
                     onClick={() => setTodosOsTemas((v) => !v)}
                   >
                     {todosOsTemas
@@ -949,7 +949,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
               marcados={marcados}
               aoTocar={alternarCriterio}
               rodape={
-                <p className="text-xs leading-snug text-black/55">
+                <p className="text-xs leading-snug text-tinta-2">
                   {milhar(indice.diagnostico.comTerritorioBrasileiro)} das {milhar(indice.total)}{" "}
                   entradas estão situadas num estado brasileiro. O território vem da hierarquia
                   `situado_em` do acervo, não de um campo de endereço.
@@ -959,7 +959,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
 
             {/* T-03-24: a gratuidade NÃO é oferecida, e o motivo fica na tela. Um filtro que
                 não filtra e não avisa faria quem avalia concluir que o acervo é todo gratuito. */}
-            <p className="text-sm leading-snug text-black/70">
+            <p className="text-sm leading-snug text-tinta-2">
               <strong>Não há faceta de gratuidade</strong>, e o motivo é do dado: as 2.425 sessões
               do grafo saem todas gratuitas porque `gratuito` é a negação de um campo de ingresso
               que nenhum dos 300 eventos declara. Um filtro de gratuidade passaria 100% dos eventos
@@ -980,13 +980,13 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           abre com o conjunto que está aqui e com o endereço de volta para esta busca.
         </p>
         <Link href={lente} className="busca-faceta w-fit font-semibold no-underline">
-          <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
           {idsLente.length
             ? `abrir ${milhar(idsLente.length)} no mapa`
             : "abrir o mapa sem recorte"}
         </Link>
         {total > idsLente.length ? (
-          <p className="text-xs leading-snug text-black/55">
+          <p className="text-xs leading-snug text-tinta-2">
             A lente leva os primeiros {milhar(idsLente.length)} de {milhar(total)} — o corte é
             do endereço, que não comporta a lista inteira, e está declarado aqui em vez de
             acontecer em silêncio.
@@ -1047,7 +1047,7 @@ function BlocoFaceta({
           })}
         </div>
       ) : (
-        <p className="text-sm text-black/55">
+        <p className="text-sm text-tinta-2">
           Nenhuma opção deste campo recorta o resultado atual.
         </p>
       )}

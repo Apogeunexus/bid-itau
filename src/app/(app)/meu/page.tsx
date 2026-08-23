@@ -29,13 +29,13 @@ export default function Meu() {
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Meu perfil</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C1
           </span>
         </div>
-        <Comentario className="max-w-prose text-sm text-black/60">
+        <Comentario className="max-w-prose text-sm text-tinta-2">
           O perfil como hub: a persona no topo, e cada área do produto como porta com o que
           ela entrega dito na frente — em vez de uma tela única com tudo empilhado.
         </Comentario>
@@ -44,7 +44,7 @@ export default function Meu() {
       {/* D-45 — trocar de persona é um toque, e vale para o produto inteiro. */}
       <TrocaPersona />
 
-      <Comentario className="max-w-prose text-sm text-black/60">
+      <Comentario className="max-w-prose text-sm text-tinta-2">
         Os números dos cartões abaixo são medidos no build — o resumo do repertório vem da
         mesma travessia de um salto que alimenta o mapa, nunca de contagem escrita à mão.
       </Comentario>
@@ -59,7 +59,7 @@ export default function Meu() {
               .join("/")}{" "}
             atravessadas por Maria, Carlos e Joana.
           </span>
-          <span className="tipo-legenda font-bold text-acao">abrir o mapa →</span>
+          <span className="tipo-legenda font-bold text-acao-tinta">abrir o mapa →</span>
         </Link>
         <Link href="/salvos" className="cartao no-underline">
           <span className="tipo-detalhe font-bold">Salvos e alertas</span>
@@ -67,21 +67,21 @@ export default function Meu() {
             As sessões que você guardou, com aviso quando o produtor altera horário ou
             cancela.
           </span>
-          <span className="tipo-legenda font-bold text-acao">abrir →</span>
+          <span className="tipo-legenda font-bold text-acao-tinta">abrir →</span>
         </Link>
         <Link href="/filtros" className="cartao no-underline">
           <span className="tipo-detalhe font-bold">Acessibilidade</span>
           <span className="tipo-legenda text-tinta-2">
             As 8 dimensões como critério que se marca uma vez e vale para toda a agenda.
           </span>
-          <span className="tipo-legenda font-bold text-acao">configurar →</span>
+          <span className="tipo-legenda font-bold text-acao-tinta">configurar →</span>
         </Link>
         <Link href="/ia" className="cartao no-underline">
           <span className="tipo-detalhe font-bold">Roteiros com IA ✦</span>
           <span className="tipo-legenda text-tinta-2">
             Os roteiros que a estrelinha montou para você, guardados neste navegador.
           </span>
-          <span className="tipo-legenda font-bold text-acao">ver →</span>
+          <span className="tipo-legenda font-bold text-acao-tinta">ver →</span>
         </Link>
       </nav>
     </div>

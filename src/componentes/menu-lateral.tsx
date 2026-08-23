@@ -271,7 +271,7 @@ export function MenuLateral() {
           </Icone>
         </button>
         <span className="flex items-center gap-2 font-display font-bold">
-          <Grafismo variacao="completo" className="h-5 w-auto text-acao" />
+          <Grafismo variacao="completo" className="h-5 w-auto text-acao-tinta" />
           Agenda Cultural BR
         </span>
       </header>
@@ -280,7 +280,7 @@ export function MenuLateral() {
 
       <nav className="menu-lateral" data-aberto={aberto ? "sim" : "nao"} aria-label="Navegação principal">
         <div className="menu-marca">
-          <Grafismo variacao="completo" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="completo" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <span>Agenda Cultural BR</span>
           <button
             type="button"
@@ -323,7 +323,7 @@ export function MenuLateral() {
         <div className="menu-rodape">
           <Link href="/meu" onClick={fechar} className="tipo-legenda block text-tinta-2">
             Você está como <strong className="text-tinta">{persona?.nome ?? "…"}</strong>
-            <span className="text-acao"> · trocar</span>
+            <span className="text-acao-tinta"> · trocar</span>
           </Link>
         </div>
       </nav>

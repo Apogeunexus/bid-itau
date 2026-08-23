@@ -165,11 +165,11 @@ function BlocoDoProdutor({
           <h2 className="flex items-baseline gap-1.5 text-sm font-bold">
             <Grafismo
               variacao="barra"
-              className="h-3.5 w-auto shrink-0 text-acao"
+              className="h-3.5 w-auto shrink-0 text-acao-tinta"
             />
             {rotulo}
             {contagem ? (
-              <span className="text-xs font-normal text-black/45">{contagem}</span>
+              <span className="text-xs font-normal text-tinta-3">{contagem}</span>
             ) : null}
           </h2>
           {children}
@@ -197,12 +197,12 @@ function LinhaDeEvento({ evento }: { evento: EventoDoProdutor }) {
     <>
       <span className="min-w-0 flex-1">
         <span className="block leading-snug font-semibold">{evento.titulo}</span>
-        <span className="block text-[0.65rem] tracking-widest text-black/45 uppercase">
+        <span className="block text-[0.65rem] tracking-widest text-tinta-3 uppercase">
           evento{evento.dataDeclarada ? ` · ${evento.dataDeclarada}` : ""}
         </span>
       </span>
       {evento.datado ? (
-        <span className="shrink-0 self-start rounded-full border border-acao px-2 py-0.5 text-xs font-bold text-acao">
+        <span className="shrink-0 self-start rounded-full border border-acao px-2 py-0.5 text-xs font-bold text-acao-tinta">
           com sessão datada
         </span>
       ) : null}
@@ -210,11 +210,11 @@ function LinhaDeEvento({ evento }: { evento: EventoDoProdutor }) {
   );
 
   return (
-    <li className="border-t border-black/10 first:border-t-0">
+    <li className="border-t border-borda first:border-t-0">
       {evento.rota ? (
         <Link
           href={evento.rota}
-          className="flex items-baseline gap-2 py-2 text-sm no-underline hover:bg-black/[0.03]"
+          className="flex items-baseline gap-2 py-2 text-sm no-underline hover:bg-superficie-2"
         >
           {miolo}
         </Link>
@@ -235,7 +235,7 @@ function LinhaDeEvento({ evento }: { evento: EventoDoProdutor }) {
  */
 function LinhaDePessoa({ pessoa }: { pessoa: PessoaLigada }) {
   return (
-    <li className="border-t border-black/10 py-2 text-sm first:border-t-0">
+    <li className="border-t border-borda py-2 text-sm first:border-t-0">
       <span className="flex items-baseline gap-2">
         <span className="min-w-0 flex-1">
           {pessoa.rota ? (
@@ -245,17 +245,17 @@ function LinhaDePessoa({ pessoa }: { pessoa: PessoaLigada }) {
           ) : (
             <span className="leading-snug font-semibold">{pessoa.titulo}</span>
           )}
-          <span className="block text-[0.65rem] tracking-widest text-black/45 uppercase">
+          <span className="block text-[0.65rem] tracking-widest text-tinta-3 uppercase">
             {pessoa.classe}
           </span>
         </span>
         {pessoa.papel ? (
-          <span className="shrink-0 self-start rounded-full border border-acao px-2 py-0.5 text-xs font-bold text-acao">
+          <span className="shrink-0 self-start rounded-full border border-acao px-2 py-0.5 text-xs font-bold text-acao-tinta">
             {pessoa.papel}
           </span>
         ) : null}
       </span>
-      <span className="mt-0.5 block text-xs leading-snug text-black/55">
+      <span className="mt-0.5 block text-xs leading-snug text-tinta-2">
         atua em{" "}
         {pessoa.eventoRota ? (
           <Link href={pessoa.eventoRota} className="font-semibold">
@@ -321,7 +321,7 @@ export function Produtor({
           />
           <div className="flex min-w-0 flex-col gap-2">
             <h1 className="text-2xl leading-tight font-bold">{produtor.titulo}</h1>
-            <p className="text-[0.65rem] tracking-widest text-black/45 uppercase">
+            <p className="text-[0.65rem] tracking-widest text-tinta-3 uppercase">
               {ehEspaco ? "espaço" : "instituição"} · procedência {produtor.procedencia}
             </p>
             {/* O «selo de verificação» que a tela 24 pede é, neste acervo, a
@@ -329,7 +329,7 @@ export function Produtor({
                 mostrar é de onde o registro veio e o endereço para conferir.
                 Um selo azul de «verificado» sem processo de verificação atrás
                 seria enfeite afirmando uma checagem que ninguém fez. */}
-            <p className="text-xs leading-relaxed text-black/55">
+            <p className="text-xs leading-relaxed text-tinta-2">
               {produtor.fonte
                 ? "Registro do acervo do Itaú Cultural, conferível na fonte — é essa procedência, e não um selo, que sustenta a entrada."
                 : "Registro do acervo do Itaú Cultural. Esta entrada não traz endereço de fonte para conferência."}
@@ -371,7 +371,7 @@ export function Produtor({
         className="pr-bloco pr-cartaz flex flex-col gap-2"
       >
         <h2 className="flex items-baseline gap-1.5 text-sm font-bold">
-          <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
           O que está em cartaz agora
         </h2>
         <p className="pr-cartaz-frase">{fraseDoCartaz}</p>
@@ -411,7 +411,7 @@ export function Produtor({
             : `O registro do Itaú Cultural não atribui a realização de nenhum evento a esta entrada. ${numeros.comRealiza} das ${numeros.instituicoes} instituições realizam ao menos um, por ${numeros.arestasRealiza} arestas «realiza».`
         }
       >
-        <p className="text-xs leading-relaxed text-black/55">
+        <p className="text-xs leading-relaxed text-tinta-2">
           {ehEspaco
             ? "Eventos que o acervo situa neste espaço pela aresta «situado_em». São registros históricos: nenhum deles tem sessão datada."
             : "Eventos atribuídos a esta entrada pela aresta «realiza». São registros históricos da Enciclopédia: nenhum deles tem sessão datada."}
@@ -426,7 +426,7 @@ export function Produtor({
         </ul>
         {produtor.realizaTotal + produtor.acolheTotal >
         produtor.realiza.length + produtor.acolhe.length ? (
-          <p className="text-xs text-black/50">
+          <p className="text-xs text-tinta-3">
             Mostrando {produtor.realiza.length + produtor.acolhe.length} de{" "}
             {produtor.realizaTotal + produtor.acolheTotal} — o acervo declara os outros{" "}
             {produtor.realizaTotal +
@@ -451,7 +451,7 @@ export function Produtor({
         contagem={produtor.pessoasTotal === 1 ? "1 pessoa" : `${produtor.pessoasTotal} pessoas`}
         frase={`Nenhuma pessoa do acervo é alcançável a partir desta entrada. Produtor não tem aresta de atuação: a ligação com gente existe só pelos eventos, a dois saltos, e ${numeros.comPessoas} dos ${numeros.total} produtores chegam assim a ao menos uma pessoa. Não completamos a lista, porque escrever aqui um nome que o acervo não liga a esta entrada seria inventar uma participação.`}
       >
-        <p className="text-xs leading-relaxed text-black/55">
+        <p className="text-xs leading-relaxed text-tinta-2">
           Alcançadas a dois saltos: quem atua nos eventos que esta entrada{" "}
           {ehEspaco ? "acolhe" : "realiza"}. O papel de cada uma vem da aresta de atuação,
           não de um campo do agente.
@@ -462,7 +462,7 @@ export function Produtor({
           ))}
         </ul>
         {produtor.pessoasTotal > produtor.pessoas.length ? (
-          <p className="text-xs text-black/50">
+          <p className="text-xs text-tinta-3">
             Mostrando {produtor.pessoas.length} de {produtor.pessoasTotal} — as outras{" "}
             {produtor.pessoasTotal - produtor.pessoas.length} estão no acervo e a lista é
             cortada para caber na tela.
@@ -498,7 +498,7 @@ export function Produtor({
         )}
       </section>
 
-      <p className="pr-rodape border-t border-black/10 pt-3 text-xs leading-relaxed text-black/45">
+      <p className="pr-rodape border-t border-borda pt-3 text-xs leading-relaxed text-tinta-3">
         Todo vínculo desta página é uma aresta do grafo do acervo, conferível uma a uma.
         Onde um bloco declara ausência, é o registro do Itaú Cultural que não publica o
         dado — nada foi preenchido no lugar dele, e nenhuma aresta foi autorada para

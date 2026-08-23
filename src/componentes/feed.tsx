@@ -80,7 +80,7 @@ export function Feed({
             <li
               key={aviso.origem}
               data-aviso={aviso.origem}
-              className="rounded-lg border border-acao bg-[var(--ic-branco)] p-2.5 text-xs leading-snug"
+              className="rounded-lg border border-acao bg-superficie p-2.5 text-xs leading-snug"
             >
               {aviso.texto}
             </li>
@@ -123,7 +123,7 @@ export function Feed({
           ))}
         </div>
       ) : (
-        <p className="rounded-xl border border-dashed border-black/25 p-4 text-sm text-black/60">
+        <p className="rounded-xl border border-dashed border-borda-forte p-4 text-sm text-tinta-2">
           Nenhum candidato sobrou com esta combinação de disposição. Isto é um resultado do
           acervo, não um erro: desmarque um corte para voltar ao feed base.
         </p>
@@ -165,7 +165,7 @@ function Diagnostico({
   combinacoes: number;
 }) {
   return (
-    <Comentario className="border-t border-black/10 pt-2 text-[0.65rem] leading-relaxed text-black/45">
+    <Comentario className="border-t border-borda pt-2 text-[0.65rem] leading-relaxed text-tinta-3">
       Caminhada: {diagnostico.sementes} sementes · {diagnostico.candidatosPorSalto[1] ?? 0}{" "}
       candidatos a 1 salto, {diagnostico.candidatosPorSalto[2] ?? 0} a 2 · {cartoes} cartões em{" "}
       {diagnostico.classesCobertas.length} classes · motivo escrito no acervo em{" "}

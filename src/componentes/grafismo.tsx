@@ -81,7 +81,7 @@ export function TituloComGrafismo({
   const Tag = (["h1", "h2", "h3"] as const)[nivel - 1];
   return (
     <Tag className={`flex items-center gap-1.5 font-bold ${className ?? ""}`}>
-      <Grafismo variacao="barra" className="h-[0.9em] w-auto text-acao" />
+      <Grafismo variacao="barra" className="h-[0.9em] w-auto text-acao-tinta" />
       <span>{children}</span>
     </Tag>
   );

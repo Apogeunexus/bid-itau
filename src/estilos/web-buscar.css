@@ -82,7 +82,7 @@
   padding: 1rem 0.75rem 1rem 1rem;
   border: var(--web-borda);
   border-radius: var(--web-raio);
-  background: color-mix(in srgb, var(--ic-preto) 2%, var(--ic-branco));
+  background: color-mix(in srgb, var(--cor-tinta-crua) 2%, var(--cor-papel-cru));
 }
 
 /* ---------------------------------------------------------------------------
@@ -109,7 +109,7 @@
   padding: 0.75rem;
   border: var(--web-borda);
   border-radius: 0.5rem;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 /* ---------------------------------------------------------------------------

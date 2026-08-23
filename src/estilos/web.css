@@ -41,7 +41,7 @@
   --web-gap: 1.5rem;
   --web-lateral: 22rem;
   --web-raio: 1rem;
-  --web-borda: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+  --web-borda: 1px solid color-mix(in srgb, var(--cor-tinta-crua) 12%, transparent);
 }
 
 /* ---------------------------------------------------------------------------
@@ -136,7 +136,7 @@
   padding: 1.25rem;
   border: var(--web-borda);
   border-radius: var(--web-raio);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 /* Cabeçalho de painel: o rótulo pequeno e maiúsculo que nomeia a superfície. */
@@ -147,7 +147,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* ---------------------------------------------------------------------------
@@ -266,7 +266,7 @@
   font-size: var(--tipo-micro);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 /* ---------------------------------------------------------------------------
@@ -292,7 +292,7 @@
   border: 0;
   border-radius: var(--raio-pilula);
   background: transparent;
-  color: color-mix(in srgb, var(--ic-preto) 65%, transparent);
+  color: var(--cor-tinta-2);
   font-size: var(--tipo-detalhe);
   font-weight: 600;
   cursor: pointer;
@@ -302,12 +302,12 @@
 }
 
 [data-view="web"] .web-alternador > button:hover {
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 [data-view="web"] .web-alternador > button[aria-pressed="true"] {
   background: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
 }
 
 /* ---------------------------------------------------------------------------
@@ -340,7 +340,7 @@
   padding: 0.5rem 0.75rem;
   border: var(--web-borda);
   border-radius: 0.5rem;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 [data-view="web"] .web-linha-titulo {
@@ -352,7 +352,7 @@
 [data-view="web"] .web-linha-meta {
   font-size: var(--tipo-micro);
   line-height: 1.35;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 /* ---------------------------------------------------------------------------

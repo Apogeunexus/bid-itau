@@ -104,9 +104,9 @@
   gap: 0.5rem;
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--ic-preto);
+  border: 1px solid var(--cor-tinta);
   border-radius: 0.5rem;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   text-align: left;
   text-decoration: none;
   font-size: var(--tipo-detalhe);
@@ -131,7 +131,7 @@
   font-family: var(--fonte-display);
   font-size: var(--tipo-detalhe);
   font-weight: 700;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
   white-space: nowrap;
 }
 
@@ -209,7 +209,7 @@
 
 .beco-aba:hover {
   border-color: var(--cor-acao);
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 /* ---- por que está vazio, com os denominadores --------------------------- */
@@ -247,7 +247,7 @@
   font-family: var(--fonte-display);
   font-size: var(--tipo-corpo);
   line-height: 1;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .beco-denominador-rotulo {
@@ -294,7 +294,7 @@
 .beco-trilha-link {
   align-self: flex-start;
   padding: 0.25rem 0.75rem;
-  border: 1px solid var(--ic-preto);
+  border: 1px solid var(--cor-tinta);
   border-radius: var(--raio-pilula);
   font-size: var(--tipo-detalhe);
   font-weight: 700;
@@ -303,7 +303,7 @@
 
 .beco-trilha-link:hover {
   border-color: var(--cor-acao);
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 /* ---------------------------------------------------------------------------

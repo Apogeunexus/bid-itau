@@ -90,7 +90,7 @@ function BlocoAlerta({ alteracao }: { alteracao: AlteracaoAutorada }) {
       <div className="alerta-cabeca">
         <Grafismo
           variacao="barra"
-          className="h-3.5 w-auto shrink-0 text-acao"
+          className="h-3.5 w-auto shrink-0 text-acao-tinta"
         />
         <span data-procedencia-alerta={alteracao.procedencia} className="alerta-selo">
           {alteracao.procedencia}
@@ -309,9 +309,9 @@ export function Salvos({
       {/* ---- 1. Cabeçalho: a fila é de sessões, não de eventos (D-56) ---- */}
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold">Salvos</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C1
           </span>
         </div>
@@ -319,7 +319,7 @@ export function Salvos({
             da fila caía a 770px do topo da moldura, 6px atrás da barra de abas — e a imagem
             que fecha o Cenário 4 é justamente o alerta e as DUAS linhas na mesma vista. O
             corte é da prosa que nós compusemos; nenhum dado do acervo saiu. */}
-        <p className="text-xs leading-snug text-black/60">
+        <p className="text-xs leading-snug text-tinta-2">
           Fila de <strong className="font-bold">sessões</strong>, não de eventos: duas
           sessões do mesmo evento ocupam duas linhas.
         </p>
@@ -362,7 +362,7 @@ export function Salvos({
             Ver o Cenário 4 com o par de exemplo
           </button>
 
-          <p className="text-xs leading-snug text-black/60">
+          <p className="text-xs leading-snug text-tinta-2">
             O botão salva duas sessões reais do mesmo evento —{" "}
             <strong className="font-bold">{par.eventoTitulo}</strong>, em{" "}
             {par.atingida.dataCurta} às {par.atingida.hora} e em {par.intacta.dataCurta} às{" "}
@@ -370,7 +370,7 @@ export function Salvos({
             afirmação verificável em vez de dita.
           </p>
 
-          <Comentario className="text-[0.68rem] leading-snug text-black/50">
+          <Comentario className="text-[0.68rem] leading-snug text-tinta-3">
             O par é fixo no dado, escolhido por regra declarada e travado em constante: uma
             regeração do grafo que mude o conjunto faz o build quebrar com mensagem nomeada,
             em vez de trocar o roteiro da banca em silêncio.

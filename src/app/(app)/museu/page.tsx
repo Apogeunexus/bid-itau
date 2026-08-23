@@ -36,21 +36,21 @@ export default function Museu() {
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-6xl desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Museu virtual</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C2
           </span>
         </div>
         <p className="max-w-prose text-sm leading-snug">
           O que o acervo tem de museal, em três portas: <strong>{milhar(museus.length)} espaços-museu</strong>,{" "}
           <strong>{milhar(expositivos.length)} eventos expositivos</strong> e o acervo digital de{" "}
-          <Link href="/museu/exposicoes/" className="font-semibold text-acao">
+          <Link href="/museu/exposicoes/" className="font-semibold text-acao-tinta">
             exposições e visitas
           </Link>
           .
         </p>
-        <Comentario className="max-w-prose text-sm leading-snug text-black/60">
+        <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
           Não existe classe «museu» na ontologia — o recorte é medido: espaços com «museu» no
           título e eventos com categoria expositiva. O denominador fica na tela para o hub
           não parecer maior do que o acervo sustenta.
@@ -94,7 +94,7 @@ export default function Museu() {
                   <span className="line-clamp-1 tipo-legenda text-tinta-2">{m.resumo}</span>
                 ) : null}
               </span>
-              <span aria-hidden className="text-acao">
+              <span aria-hidden className="text-acao-tinta">
                 →
               </span>
             </Link>

@@ -64,7 +64,7 @@
   margin: -1rem -1rem 0;
   padding: 0.75rem 1rem 0.75rem;
   border-bottom: 1px solid var(--cor-borda);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 .filtros-titulo {
@@ -89,7 +89,7 @@
   font-family: var(--fonte-display);
   font-size: var(--tipo-titulo-1);
   line-height: 1;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .filtros-contador-de {
@@ -134,7 +134,7 @@
   padding: 0.75rem;
   border: 1px solid var(--cor-borda);
   border-radius: 1rem;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 .filtros-bloco-titulo {
@@ -183,7 +183,7 @@
 .filtros-dimensao[data-nao-sustenta] {
   border-style: dashed;
   border-color: var(--cor-borda-forte);
-  background: rgb(0 0 0 / 0.02);
+  background: var(--cor-superficie-2);
 }
 
 .filtros-marcavel {
@@ -201,14 +201,14 @@
   flex: none;
   width: 1rem;
   height: 1rem;
-  border: 2px solid rgb(0 0 0 / 0.35);
+  border: 2px solid var(--cor-borda-forte);
   border-radius: 0.25rem;
 }
 
 .filtros-marcavel[aria-pressed="true"] .filtros-marcavel-caixa {
   border-color: var(--cor-acao);
   background: var(--cor-acao);
-  box-shadow: inset 0 0 0 2px var(--ic-branco);
+  box-shadow: inset 0 0 0 2px var(--cor-superficie);
 }
 
 .filtros-marcavel-rotulo {
@@ -224,7 +224,7 @@
 }
 
 .filtros-marcavel[aria-pressed="true"] .filtros-marcavel-n {
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 /* Faixa etária e gratuidade: o controle existe na tela, nomeado, e NÃO é marcável. É essa
@@ -247,7 +247,7 @@
 }
 
 .filtros-dimensao-zero {
-  color: rgb(0 0 0 / 0.72);
+  color: var(--cor-tinta-2);
 }
 
 /* ---- as facetas que recortam de verdade --------------------------------- */
@@ -295,7 +295,7 @@
   padding: 0.5rem 0.75rem;
   border: 1px dashed var(--cor-borda-forte);
   border-radius: 0.75rem;
-  background: rgb(0 0 0 / 0.02);
+  background: var(--cor-superficie-2);
 }
 
 .filtros-sem-lastro-topo {
@@ -333,7 +333,7 @@
   font-family: var(--fonte-display);
   font-size: var(--tipo-corpo);
   line-height: 1;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .filtros-denominador-rotulo {
@@ -363,7 +363,7 @@
   align-items: baseline;
   gap: 0.5rem;
   padding: 0.25rem 0;
-  border-bottom: 1px solid rgb(0 0 0 / 0.06);
+  border-bottom: 1px solid var(--cor-borda);
   font-size: var(--tipo-legenda);
 }
 
@@ -424,13 +424,13 @@
   padding: 0.5rem 0.5rem;
   border: 1px solid var(--cor-borda);
   border-radius: 0.5rem;
-  background: rgb(0 0 0 / 0.02);
+  background: var(--cor-superficie-2);
 }
 
 .filtros-ir-buscar {
   align-self: flex-start;
   padding: 0.25rem 0.75rem;
-  border: 1px solid var(--ic-preto);
+  border: 1px solid var(--cor-tinta);
   border-radius: var(--raio-pilula);
   font-size: var(--tipo-detalhe);
   font-weight: 700;

@@ -74,8 +74,28 @@ const EXCECOES_DE_MEDIDA = [
  *  sombra) e não medida de layout — layout em px acima disso é violação. */
 const TETO_PX_FISICO = 8;
 
-/** Teto congelado de `-[var(--ic-preto|branco)]` em TSX (medido na migração). */
-const TETO_ARBITRARIOS_PRETO_BRANCO = 62;
+/**
+ * Teto congelado de `-[var(--ic-preto|branco)]` em TSX.
+ *
+ * Era 62 na migração de agosto e caiu para 9 na faxina do tema escuro. Os NOVE
+ * que sobraram não são dívida: são os lugares onde o preto e o branco estão
+ * sobre a COR DA LINGUAGEM, que é dado e não gira com o tema — a pastilha e as
+ * duas texturas de `capa-sem-imagem.tsx`, o crédito sobre a capa, e o rótulo de
+ * `selo-linguagem.tsx`. O que está por cima de uma cor que não inverte também
+ * não pode inverter. Ou seja: 9 é o piso, não um alvo a perseguir.
+ */
+const TETO_ARBITRARIOS_PRETO_BRANCO = 9;
+
+/**
+ * Teto de literais de cinza em TSX — `text-black/60`, `border-black/25`,
+ * `bg-neutral-100` e parentes.
+ *
+ * Eram 371 e foram a ZERO na faxina. Este gate existe para que continuem: são
+ * exatamente as classes que parecem inofensivas ao escrever e só quebram no
+ * tema escuro, onde `text-black/60` fica preto sobre preto. Diferente da catraca
+ * acima, aqui não há caso legítimo — a forma certa é sempre o token semântico.
+ */
+const TETO_LITERAIS_DE_CINZA = 0;
 
 let verdes = 0;
 const falhas = [];
@@ -159,6 +179,32 @@ console.log("\nverificar-ds — regras estruturais do design system");
     `arbitrários de preto/branco em TSX ≤ ${TETO_ARBITRARIOS_PRETO_BRANCO} (catraca da migração)`,
     `${total}`,
     `≤ ${TETO_ARBITRARIOS_PRETO_BRANCO}`,
+  );
+}
+
+// ---- 3b. Literais de cinza do Tailwind congelados em ZERO ---------------
+//
+// `text-black/60` e parentes são o defeito mais fácil de reintroduzir no tema
+// escuro: eles PARECEM neutros ao escrever e só quebram quando o fundo inverte,
+// virando preto sobre preto. O gate anda junto com a catraca acima porque as
+// duas medem a mesma dívida por dois caminhos — arbitrário com `var()` e classe
+// de paleta do próprio Tailwind.
+{
+  const tsx = await arquivosDe(SRC, /\.tsx$/);
+  const hits = [];
+  for (const a of tsx) {
+    const limpo = semComentariosTs(await readFile(a, "utf8"));
+    for (const m of limpo.matchAll(
+      /\b(?:text|border|bg|decoration|divide|ring|outline|from|via|to)-black(?:\/(?:\[[^\]]+\]|\d+))?\b|\b(?:text|border|bg|decoration|divide|ring|outline)-(?:neutral|gray|zinc|slate|stone)-\d+\b/g,
+    )) {
+      hits.push(`${path.relative(RAIZ, a)}: ${m[0]}`);
+    }
+  }
+  exigir(
+    hits.length <= TETO_LITERAIS_DE_CINZA,
+    `literais de cinza do Tailwind em TSX ≤ ${TETO_LITERAIS_DE_CINZA} (a forma é text-tinta-2/border-borda/bg-superficie-2)`,
+    hits.length === 0 ? `0 em ${tsx.length} arquivos` : hits.slice(0, 10).join(", "),
+    `≤ ${TETO_LITERAIS_DE_CINZA}`,
   );
 }
 

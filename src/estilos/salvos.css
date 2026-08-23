@@ -52,7 +52,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
   white-space: nowrap;
 }
 
@@ -97,7 +97,7 @@
 .alerta-para {
   font-size: var(--tipo-titulo-3);
   font-weight: 700;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .alerta-quando {
@@ -123,7 +123,7 @@
 
 .alerta-ficha dd {
   margin: 0;
-  color: rgb(0 0 0 / 0.75);
+  color: var(--cor-tinta-2);
 }
 
 /* A frase que fecha o Cenário 4. Fundo branco dentro do bloco laranja: ela é a conclusão,
@@ -131,7 +131,7 @@
 .alerta-cenario {
   margin-top: 0rem;
   border-radius: 0.5rem;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   padding: 0.5rem 0.5rem;
   font-size: var(--tipo-legenda);
   font-weight: 700;
@@ -165,7 +165,7 @@
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
   padding: 0.5rem 0.75rem;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 /* A linha alertada muda de BORDA, e não de fundo. É o par visual que prova D-57 numa foto:
@@ -206,7 +206,7 @@
 
 .salvos-marca-alertada {
   border: 1px solid var(--cor-acao);
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .salvos-marca-intacta {
@@ -245,8 +245,8 @@
 }
 
 .salvos-remover:hover {
-  color: var(--ic-preto);
-  border-color: var(--ic-preto);
+  color: var(--cor-tinta);
+  border-color: var(--cor-tinta);
 }
 
 /* Sessão passada continua na fila (D-54) — apagar o passado apagaria a memória do
@@ -282,7 +282,7 @@
   border: 2px solid var(--cor-acao);
   border-radius: var(--raio-pilula);
   background: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
   padding: 0.5rem 1rem;
   font-size: var(--tipo-legenda);
   font-weight: 700;

@@ -22,9 +22,9 @@ export default function Ia() {
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Roteiros com IA ✦</h1>
-          <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+          <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
             C2
           </span>
         </div>
@@ -39,7 +39,7 @@ export default function Ia() {
           sobre o grafo — as regras ficam impressas no roteiro, e é isso que faz dele uma
           recomendação explicável em vez de uma caixa-preta.
         </p>
-        <Comentario className="max-w-prose text-sm leading-snug text-black/60">
+        <Comentario className="max-w-prose text-sm leading-snug text-tinta-2">
           São {milhar(cidades.length * OPCOES_DE_DIAS.length * GOSTOS.length)} combinações
           pré-computadas ({cidades.length} cidades × {OPCOES_DE_DIAS.length} janelas ×{" "}
           {GOSTOS.length} gostos) — o mesmo princípio dos 96 feeds de Descobrir: a resposta

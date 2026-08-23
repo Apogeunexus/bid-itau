@@ -41,18 +41,18 @@ export default async function PaginaTrilha({
           <div className="flex items-baseline gap-2">
             <Grafismo
               variacao="barra"
-              className="h-5 w-auto shrink-0 text-acao"
+              className="h-5 w-auto shrink-0 text-acao-tinta"
             />
             <h1 className="text-2xl leading-tight font-bold">Trilha não encontrada</h1>
           </div>
-          <p className="max-w-prose text-sm leading-snug text-black/60">
+          <p className="max-w-prose text-sm leading-snug text-tinta-2">
             Nenhuma trilha do acervo responde por «{slug}». As trilhas são entidades do
             grafo como qualquer outra — quando não existe, a tela diz que não existe, em vez
             de montar uma cadeia plausível.
           </p>
           <Link
             href="/descobrir/"
-            className="text-sm font-semibold text-acao underline underline-offset-2"
+            className="text-sm font-semibold text-acao-tinta underline underline-offset-2"
           >
             voltar para Descobrir
           </Link>

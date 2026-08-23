@@ -114,7 +114,7 @@
 [data-view="web"] .acontece-web-atalho {
   font-size: var(--tipo-legenda);
   font-weight: 600;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -142,12 +142,12 @@
 
 [data-view="web"] .acontece-web-contorno {
   fill: var(--cor-superficie-2);
-  stroke: color-mix(in srgb, var(--ic-preto) 35%, transparent);
+  stroke: color-mix(in srgb, var(--cor-tinta-crua) 35%, transparent);
   stroke-width: 0.8;
 }
 
 [data-view="web"] .acontece-web-pino {
-  fill: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  fill: color-mix(in srgb, var(--cor-tinta-crua) 45%, transparent);
   cursor: pointer;
 }
 
@@ -163,7 +163,7 @@
   margin: 0;
   font-size: var(--tipo-legenda);
   line-height: 1.45;
-  color: color-mix(in srgb, var(--ic-preto) 65%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* Na visão web a lista da agenda da fase 3 continua embaixo, e o cabeçalho dela respira

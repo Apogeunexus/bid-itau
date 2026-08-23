@@ -26,7 +26,7 @@ function Alternador() {
     <div
       role="group"
       aria-label="Alternar visão"
-      className="alternador flex gap-1 rounded-full border border-[var(--ic-preto)] bg-[var(--ic-branco)] p-1 shadow-lg"
+      className="alternador flex gap-1 rounded-full border border-tinta bg-superficie p-1 shadow-lg"
     >
       {OPCOES.map((opcao) => {
         const ativa = visao === opcao.valor;
@@ -39,8 +39,8 @@ function Alternador() {
             className={clsx(
               "cursor-pointer rounded-full px-4 py-1.5 text-sm font-semibold transition-colors",
               ativa
-                ? "bg-acao text-[var(--ic-branco)]"
-                : "text-[var(--ic-preto)] hover:bg-black/5",
+                ? "bg-acao text-sobre-acao"
+                : "text-tinta hover:bg-superficie-2",
             )}
           >
             {opcao.rotulo}
@@ -72,10 +72,10 @@ function InterruptorComentado() {
       onClick={alternar}
       title="Mostra as notas que explicam o protótipo: o raciocínio de cada tela e as decisões citadas."
       className={clsx(
-        "controle-comentado cursor-pointer rounded-full border bg-[var(--ic-branco)] px-3 py-1 text-xs font-semibold shadow-lg transition-colors",
+        "controle-comentado cursor-pointer rounded-full border bg-superficie px-3 py-1 text-xs font-semibold shadow-lg transition-colors",
         comentado
-          ? "border-acao text-acao"
-          : "border-black/25 text-black/50 hover:text-[var(--ic-preto)]",
+          ? "border-acao text-acao-tinta"
+          : "border-borda-forte text-tinta-3 hover:text-tinta",
       )}
     >
       <span aria-hidden className="mr-1">
@@ -117,7 +117,7 @@ const ICONE_DO_TEMA: Record<Tema, string> = {
 };
 
 // smaug-ignore ui-strings: nome de token do design system, não a palavra «ação»
-const CLASSE_TEMA_ESCOLHIDO = "border-acao text-acao";
+const CLASSE_TEMA_ESCOLHIDO = "border-acao text-acao-tinta";
 const CLASSE_TEMA_DO_SISTEMA = "border-borda-forte text-tinta-3 hover:text-tinta";
 
 function ControleTema() {
@@ -174,7 +174,7 @@ export function Casca({ children }: { children: ReactNode }) {
       // apenas a visão lida, uma medição do modo comentado pegaria o quadro anterior à
       // leitura da chave — e o defeito seria intermitente, que é o pior tipo.
       data-hidratado={hidratado && comentadoHidratado ? "sim" : "nao"}
-      className="min-h-screen bg-[var(--ic-branco)] text-[var(--ic-preto)] app:bg-neutral-100 desk:bg-[var(--ic-branco)]"
+      className="min-h-screen bg-superficie text-tinta app:bg-superficie-2 desk:bg-superficie"
     >
       <div className="palco">
         {/* A moldura deixou de ser o contêiner de rolagem na reformulação do design

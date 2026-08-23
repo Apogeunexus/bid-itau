@@ -38,7 +38,7 @@ function LinhaVinculo({ grupo, item }: { grupo: GrupoVinculo; item: ItemVinculo 
     <>
       <span className="min-w-0 flex-1">
         <span className="block leading-snug font-semibold">{item.titulo}</span>
-        <span className="block text-[0.65rem] tracking-widest text-black/45 uppercase">
+        <span className="block text-[0.65rem] tracking-widest text-tinta-3 uppercase">
           {item.classe}
         </span>
       </span>
@@ -46,7 +46,7 @@ function LinhaVinculo({ grupo, item }: { grupo: GrupoVinculo; item: ItemVinculo 
           e não um link: sem esta pastilha, «A. Mattera» e «Paço Imperial» pareceriam a
           mesma coisa dentro do mesmo bloco. */}
       {item.papel ? (
-        <span className="shrink-0 self-start rounded-full border border-acao px-2 py-0.5 text-xs font-bold text-acao">
+        <span className="shrink-0 self-start rounded-full border border-acao px-2 py-0.5 text-xs font-bold text-acao-tinta">
           {item.papel}
         </span>
       ) : null}
@@ -56,12 +56,12 @@ function LinhaVinculo({ grupo, item }: { grupo: GrupoVinculo; item: ItemVinculo 
   return (
     <li
       data-vinculo={`${grupo.relacao ?? ""}:${item.papel ?? ""}`}
-      className="border-t border-black/10 first:border-t-0"
+      className="border-t border-borda first:border-t-0"
     >
       {item.rota ? (
         <Link
           href={item.rota}
-          className="flex items-baseline gap-2 py-2 text-sm no-underline hover:bg-black/[0.03]"
+          className="flex items-baseline gap-2 py-2 text-sm no-underline hover:bg-superficie-2"
         >
           {miolo}
         </Link>
@@ -74,9 +74,9 @@ function LinhaVinculo({ grupo, item }: { grupo: GrupoVinculo; item: ItemVinculo 
           relação nomeada em ruído. T-02-05: quando o texto é do Itaú Cultural, isso é
           declarado — sem a linha, frase nossa passaria por frase do acervo. */}
       {item.motivo.origemMotivo === "escrito" ? (
-        <p className="pb-2 text-xs leading-snug text-black/55">
+        <p className="pb-2 text-xs leading-snug text-tinta-2">
           {item.motivo.texto}{" "}
-          <span className="text-[0.65rem] tracking-wide text-black/40 uppercase">
+          <span className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
             · escrito no acervo
           </span>
         </p>
@@ -84,7 +84,7 @@ function LinhaVinculo({ grupo, item }: { grupo: GrupoVinculo; item: ItemVinculo 
 
       {/* D-19/D-20: toda coordenada do projeto é derivada, e o método é para ser dito. */}
       {item.coordenada ? (
-        <p className="pb-2 text-[0.65rem] tracking-wide text-black/40 uppercase">
+        <p className="pb-2 text-[0.65rem] tracking-wide text-tinta-3 uppercase">
           coordenada derivada · {item.coordenada.metodo}
         </p>
       ) : null}
@@ -116,10 +116,10 @@ export function BlocoPonte({
       className={`flex flex-col gap-1 ${className ?? ""}`}
     >
       <h3 className="flex items-baseline gap-1.5 text-sm font-bold">
-        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
+        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
         {rotulo ?? grupo.rotulo}
         {!vazio ? (
-          <span className="text-xs font-normal text-black/45">
+          <span className="text-xs font-normal text-tinta-3">
             {grupo.total} {grupo.total === 1 ? "vínculo" : "vínculos"}
           </span>
         ) : null}
@@ -128,7 +128,7 @@ export function BlocoPonte({
       {vazio ? (
         <p
           data-ponte-ausente={grupo.chave}
-          className="rounded-lg border border-dashed border-black/20 p-2.5 text-xs leading-relaxed text-black/60"
+          className="rounded-lg border border-dashed border-borda p-2.5 text-xs leading-relaxed text-tinta-2"
         >
           {grupo.fraseDeAusencia}
         </p>
@@ -143,7 +143,7 @@ export function BlocoPonte({
               tem 37 arestas `realiza`, e renderizar as 37 travaria a tela sem informar
               mais nada — mas cortar sem dizer faria a tela mentir por omissão. */}
           {cortado ? (
-            <p className="text-xs text-black/50">
+            <p className="text-xs text-tinta-3">
               Mostrando {grupo.entidades.length} de {grupo.total} — o acervo declara os
               outros {grupo.total - grupo.entidades.length}, e este protótipo corta a
               lista para caber na tela.
@@ -174,12 +174,12 @@ export function BlocoAusenciaDeclarada({
   return (
     <section data-ponte={chave} className={`flex flex-col gap-1 ${className ?? ""}`}>
       <h3 className="flex items-baseline gap-1.5 text-sm font-bold">
-        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
+        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
         {rotulo}
       </h3>
       <p
         data-ponte-ausente={chave}
-        className="rounded-lg border border-dashed border-black/20 p-2.5 text-xs leading-relaxed text-black/60"
+        className="rounded-lg border border-dashed border-borda p-2.5 text-xs leading-relaxed text-tinta-2"
       >
         {frase}
       </p>

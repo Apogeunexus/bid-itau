@@ -142,13 +142,13 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
       <header className="flex flex-col gap-2">
         <Link
           href={`/evento/${evento.slug}/`}
-          className="w-fit text-xs font-semibold text-acao underline underline-offset-2"
+          className="w-fit text-xs font-semibold text-acao-tinta underline underline-offset-2"
         >
           ← voltar para o evento
         </Link>
 
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{evento.titulo}</h1>
         </div>
 
@@ -159,19 +159,19 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
           </span>
         </p>
 
-        <p className="text-[0.65rem] tracking-wide text-black/45 uppercase">
+        <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
           {`data de referência · ${curta(evento.dataDeReferencia)} · o protótipo é estático e «já aconteceu» é calculado contra a data em que ele foi gerado`}
         </p>
 
         {/* 5 — POR QUE ISTO É UMA TELA E NÃO UM MENU. Texto de PRODUTO. */}
-        <p className="max-w-prose text-sm leading-relaxed text-black/70">
+        <p className="max-w-prose text-sm leading-relaxed text-tinta-2">
           Escolher a sessão é uma tela, e não um menu suspenso, porque a ocorrência é uma
           entidade com identidade própria no modelo — não uma data dentro do evento. É essa
           identidade que permite um aviso de alteração chegar exatamente a quem salvou
           aquela sessão, e não a todo mundo que se interessou pelo evento.
         </p>
 
-        <Comentario className="max-w-prose text-xs leading-relaxed text-black/55">
+        <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
           Evento, temporada e ocorrência são três registros próprios, cada um com id no
           grafo (DADO-02). Colapsá-los num array aninhado dentro do evento é o que faz
           agenda cultural virar catálogo — e é o que tornaria o Cenário 4 do RFP
@@ -184,13 +184,13 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
       {/* ================================================================== */}
       <section className="flex flex-col gap-3">
         <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-          <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
+          <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
             Escolha a sessão
           </h2>
           {/* Teto exibido com total declarado — o padrão da fase 2 para toda lista que
               não cabe inteira. Sem o total ao lado, «24 sessões» seria lido como o
               tamanho do acervo em vez do tamanho do recorte. */}
-          <span className="text-[0.65rem] tracking-wide text-black/50 uppercase">
+          <span className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
             {`${milhar(visiveis.length)} de ${plural(evento.totalSessoes, "sessão", "sessões")} exibidas`}
           </span>
         </div>
@@ -232,9 +232,9 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
                         agora com o número medido. Duas frases diferentes para a mesma
                         ausência divergiriam na primeira correção. */}
                     {sessao.espaco ? (
-                      <p className="text-xs text-black/60">
+                      <p className="text-xs text-tinta-2">
                         {sessao.espaco}
-                        <span className="text-[0.65rem] tracking-wide text-black/40 uppercase">
+                        <span className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
                           {" · espaço declarado "}
                           {sessao.origemDoEspaco === "temporada"
                             ? "na temporada"
@@ -242,14 +242,14 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
                         </span>
                       </p>
                     ) : (
-                      <p className="text-xs leading-relaxed text-black/55">
+                      <p className="text-xs leading-relaxed text-tinta-2">
                         O acervo do Itaú Cultural não publica o espaço desta sessão. O
                         evento declara período, não endereço de cada data.
                       </p>
                     )}
 
                     {/* Acessibilidade POR SESSÃO, como o modelo prevê. */}
-                    <p className="text-xs leading-relaxed text-black/60">
+                    <p className="text-xs leading-relaxed text-tinta-2">
                       {sessao.acessibilidadePresente.length
                         ? `Acessibilidade declarada nesta sessão: ${sessao.acessibilidadePresente.join(", ")}.`
                         : sessao.declaraAcessibilidade
@@ -268,8 +268,8 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
                       onClick={() => salvarSessao(sessao.id)}
                       className={`w-fit cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors ${
                         salvo
-                          ? "border-acao bg-acao text-[var(--ic-branco)]"
-                          : "border-black/25 text-[var(--ic-preto)] hover:border-[var(--ic-preto)]"
+                          ? "border-acao bg-acao text-sobre-acao"
+                          : "border-borda-forte text-tinta hover:border-tinta"
                       }`}
                     >
                       {salvo ? "sessão salva — tocar para remover" : "salvar esta sessão"}
@@ -283,7 +283,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
                         </span>
                         <Link
                           href="/salvos/"
-                          className="w-fit text-xs font-bold text-acao underline underline-offset-2"
+                          className="w-fit text-xs font-bold text-acao-tinta underline underline-offset-2"
                         >
                           ver as sessões salvas
                         </Link>
@@ -300,7 +300,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
           <button
             type="button"
             onClick={() => setMostrarTodas(true)}
-            className="w-fit cursor-pointer rounded-full border border-black/25 px-3 py-1 text-xs font-semibold"
+            className="w-fit cursor-pointer rounded-full border border-borda-forte px-3 py-1 text-xs font-semibold"
           >
             {`mostrar as ${plural(evento.sessoes.length, "sessão", "sessões")}`}
           </button>
@@ -312,7 +312,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
       {/*     Texto de PRODUTO, fora do modo comentado.                       */}
       {/* ================================================================== */}
       <section className="flex flex-col gap-2">
-        <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
+        <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
           O que esta tela não pode dizer
         </h2>
         <ul className="flex flex-col gap-2">
@@ -328,13 +328,13 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
 
         {/* A ausência de acessibilidade variável, dita sobre ESTE evento e não só sobre o
             acervo inteiro: é aqui, na lista de sessões, que alguém esperaria ver variação. */}
-        <p className="max-w-prose text-xs leading-relaxed text-black/60">
+        <p className="max-w-prose text-xs leading-relaxed text-tinta-2">
           {evento.acessibilidadeVaria
             ? "A acessibilidade declarada muda de uma sessão para outra neste evento — cada linha acima mostra a da sua própria sessão."
             : `Neste evento a acessibilidade é idêntica nas ${plural(evento.totalSessoes, "sessão", "sessões")}: ela aparece por sessão porque o modelo permite que varie, e no acervo carregado ela não varia.`}
         </p>
 
-        <Comentario className="max-w-prose text-xs leading-relaxed text-black/55">
+        <Comentario className="max-w-prose text-xs leading-relaxed text-tinta-2">
           Estes quatro campos existem no modelo e continuam visíveis mesmo vazios (D-51).
           Campo que some vira bloco que some, e bloco que some faz parecer que a categoria
           não existe no produto — quando o que não existe é o dado na fonte.

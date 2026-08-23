@@ -24,7 +24,7 @@ export function EsqueletoLinha({
     <span
       aria-hidden
       style={{ width: largura }}
-      className={`block h-3 animate-pulse rounded-full bg-black/10 ${className ?? ""}`}
+      className={`block h-3 animate-pulse rounded-full bg-superficie-2 ${className ?? ""}`}
     />
   );
 }
@@ -41,7 +41,7 @@ export function EsqueletoBloco({
   return (
     <div
       style={{ height: altura }}
-      className={`flex animate-pulse items-center justify-center rounded-xl bg-black/[0.06] px-3 text-center text-xs font-medium text-black/45 ${className ?? ""}`}
+      className={`flex animate-pulse items-center justify-center rounded-xl bg-superficie-2 px-3 text-center text-xs font-medium text-tinta-3 ${className ?? ""}`}
     >
       {rotulo}
     </div>
@@ -63,11 +63,11 @@ export function EsqueletoCartao({
 }) {
   return (
     <article
-      className={`flex gap-3 rounded-xl border border-black/10 bg-[var(--ic-branco)] p-3 ${className ?? ""}`}
+      className={`flex gap-3 rounded-xl border border-borda bg-superficie p-3 ${className ?? ""}`}
     >
       <EsqueletoBloco altura="4.5rem" className="w-20 shrink-0" />
       <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
-        <p className="truncate text-sm font-semibold text-black/70">{rotulo}</p>
+        <p className="truncate text-sm font-semibold text-tinta-2">{rotulo}</p>
         {Array.from({ length: linhas }, (_, i) => (
           <EsqueletoLinha key={i} largura={i === linhas - 1 ? "60%" : "92%"} />
         ))}
@@ -116,15 +116,15 @@ export function TelaEsqueleto({
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{nome}</h1>
           {camada ? (
-            <span className="ml-auto shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-xs font-semibold text-black/50">
+            <span className="ml-auto shrink-0 rounded-full border border-borda px-2 py-0.5 text-xs font-semibold text-tinta-3">
               {camada}
             </span>
           ) : null}
         </div>
-        <p className="max-w-prose text-sm text-black/60">{objetivo}</p>
+        <p className="max-w-prose text-sm text-tinta-2">{objetivo}</p>
         {acoes ? <div className="flex flex-wrap gap-2 pt-1">{acoes}</div> : null}
       </header>
       {children}
@@ -132,7 +132,7 @@ export function TelaEsqueleto({
           vocabulário do nosso plano de trabalho e não existe para ninguém de fora. A linha
           de objetivo logo acima continua nas duas modalidades: ela descreve o que a tela
           entrega, e sem ela um esqueleto vira um retângulo cinza sem nome. */}
-      <Comentario className="mt-2 border-t border-black/10 pt-3 text-xs text-black/40">
+      <Comentario className="mt-2 border-t border-borda pt-3 text-xs text-tinta-3">
         Fase 1 — a rota existe, navega e declara o que será. O conteúdo entra nas fases 2 a 6.
       </Comentario>
     </div>

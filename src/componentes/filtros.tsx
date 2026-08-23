@@ -222,7 +222,7 @@ export function Filtros({
         <h1 className="filtros-titulo">
           <Grafismo
             variacao="barra"
-            className="h-3.5 w-auto shrink-0 text-acao"
+            className="h-3.5 w-auto shrink-0 text-acao-tinta"
           />
           Filtros
         </h1>

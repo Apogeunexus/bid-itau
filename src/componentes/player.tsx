@@ -131,11 +131,11 @@ export function Player({
     >
       {/* ------------------------------------------------------------------- cabeçalho */}
       <header className="flex flex-col gap-2">
-        <p className="text-[0.65rem] font-bold tracking-widest text-black/50 uppercase">
+        <p className="text-[0.65rem] font-bold tracking-widest text-tinta-3 uppercase">
           {midia.rotuloCategoria}
         </p>
         <h1 className="text-xl leading-tight font-bold desk:text-3xl">{midia.titulo}</h1>
-        <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs text-black/55">
+        <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs text-tinta-2">
           <time dateTime={diaParaIso(midia.dia)}>Publicado em {diaParaTexto(midia.dia)}</time>
           <span>Acervo do Itaú Cultural</span>
         </p>
@@ -149,7 +149,7 @@ export function Player({
             src={midia.imagem}
             alt={midia.imagemAlt ?? midia.titulo}
             decoding="async"
-            className="w-full rounded-lg bg-black/5 object-cover"
+            className="w-full rounded-lg bg-superficie-2 object-cover"
           />
         ) : (
           <CapaSemImagem
@@ -162,14 +162,14 @@ export function Player({
         {midia.creditoImagem ? (
           /* Crédito obrigatório quando há imagem: o acervo é de terceiros e a procedência
              é argumento da proposta, não rodapé. */
-          <figcaption className="text-xs text-black/55">Foto: {midia.creditoImagem}</figcaption>
+          <figcaption className="text-xs text-tinta-2">Foto: {midia.creditoImagem}</figcaption>
         ) : null}
       </figure>
 
       {/* --------------------------------------- o arquivo que não existe (T-05-33) */}
       <section
         data-sem-arquivo
-        className="flex flex-col gap-2 rounded-lg border border-dashed border-black/30 p-3"
+        className="flex flex-col gap-2 rounded-lg border border-dashed border-borda-forte p-3"
       >
         <h2 className="text-sm font-bold">{semArquivo.titulo}</h2>
         <p className="text-xs leading-relaxed">{semArquivo.acervo}</p>
@@ -181,7 +181,7 @@ export function Player({
               href={midia.fonte}
               target="_blank"
               rel="noreferrer noopener"
-              className="break-all underline decoration-black/30 underline-offset-4"
+              className="break-all underline decoration-borda-forte underline-offset-4"
             >
               {midia.fonte}
             </a>
@@ -248,7 +248,7 @@ export function Player({
       </section>
 
       {/* ------------------------------------------- concluir → repertório (D-92) */}
-      <section className="flex flex-col gap-2 rounded-lg border border-black/10 p-3">
+      <section className="flex flex-col gap-2 rounded-lg border border-borda p-3">
         <h2 className="text-sm font-bold">Marcar no meu repertório</h2>
 
         {assistida ? (
@@ -268,7 +268,7 @@ export function Player({
                 type="button"
                 data-desfazer
                 onClick={desfazer}
-                className="text-xs underline decoration-black/30 underline-offset-4"
+                className="text-xs underline decoration-borda-forte underline-offset-4"
               >
                 desfazer
               </button>
@@ -276,7 +276,7 @@ export function Player({
           </>
         ) : (
           <>
-            <p className="text-xs leading-relaxed text-black/55">
+            <p className="text-xs leading-relaxed text-tinta-2">
               {hidratado
                 ? "Nada foi registrado ainda. O registro acontece quando você clica — nunca por temporizador, nunca ao abrir a página."
                 : "Lendo o que ficou guardado neste navegador…"}
@@ -293,7 +293,7 @@ export function Player({
           </>
         )}
 
-        <Comentario className="text-xs leading-relaxed text-black/55">
+        <Comentario className="text-xs leading-relaxed text-tinta-2">
           O registro fica no `localStorage` deste navegador, sob a chave{" "}
           <code>{CHAVE_CONCLUIDAS}</code>, e alimenta «continue de onde parou» no Play. Ele
           é um conjunto: concluir duas vezes a mesma mídia deixa uma entrada. O carimbo usa
@@ -305,7 +305,7 @@ export function Player({
       {/* ------------------------------------------------ o que isto aprofunda (tela 20) */}
       <section
         data-veja-isto
-        className="flex flex-col gap-2 rounded-lg border border-black/10 p-3"
+        className="flex flex-col gap-2 rounded-lg border border-borda p-3"
       >
         <h2 className="text-sm font-bold">O que esta mídia aprofunda</h2>
 
@@ -316,11 +316,11 @@ export function Player({
                 <Link
                   href={l.rota}
                   data-ligacao={l.slug}
-                  className="text-sm underline decoration-black/20 underline-offset-4 hover:decoration-current"
+                  className="text-sm underline decoration-borda-forte underline-offset-4 hover:decoration-current"
                 >
                   {l.titulo}
                 </Link>
-                {l.motivo ? <span className="text-xs text-black/55"> — {l.motivo}</span> : null}
+                {l.motivo ? <span className="text-xs text-tinta-2"> — {l.motivo}</span> : null}
               </li>
             ))}
           </ul>
@@ -341,7 +341,7 @@ export function Player({
       </section>
 
       <p className="text-xs">
-        <Link href="/play/" className="underline decoration-black/30 underline-offset-4">
+        <Link href="/play/" className="underline decoration-borda-forte underline-offset-4">
           ← voltar ao catálogo
         </Link>
       </p>

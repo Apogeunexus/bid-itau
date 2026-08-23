@@ -25,13 +25,13 @@
   z-index: 2;
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 15%, transparent);
+  border: 1px solid var(--cor-borda);
   border-radius: var(--raio-g);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   font: inherit;
   font-size: var(--tipo-detalhe);
   line-height: 1.35;
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 .frase-campo:focus-visible {
@@ -47,14 +47,14 @@
   margin: 0.25rem 0 0;
   font-size: var(--tipo-detalhe);
   line-height: 1.5;
-  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 .frase-trecho {
   padding: 0rem 0.25rem;
   border-bottom: 2px solid var(--cor-acao);
   background: var(--cor-acao-lavada);
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
   font-weight: 600;
 }
 
@@ -72,10 +72,10 @@
   flex-direction: column;
   gap: 0.25rem;
   padding: 0.5rem 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+  border: 1px solid var(--cor-borda);
   border-left: 3px solid var(--cor-acao);
   border-radius: 8px;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 .frase-ficha + .frase-ficha {
@@ -86,7 +86,7 @@
  * não recorta, e eu te digo isso» precisa ser vista antes de ser lida. */
 .frase-ficha[data-confissao="sim"] {
   border-left-style: dashed;
-  border-left-color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  border-left-color: var(--cor-borda-forte);
   background: var(--cor-superficie-2);
 }
 
@@ -102,7 +102,7 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 .frase-ficha-rotulo {
@@ -117,20 +117,20 @@
   flex: none;
   font-size: var(--tipo-micro);
   font-variant-numeric: tabular-nums;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 .frase-ficha-marca {
   font-size: var(--tipo-legenda);
   line-height: 1.35;
-  color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 .frase-ficha-detalhe {
   margin: 0.25rem 0 0;
   font-size: var(--tipo-legenda);
   line-height: 1.45;
-  color: color-mix(in srgb, var(--ic-preto) 78%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* --- Botões pequenos -----------------------------------------------------
@@ -143,13 +143,13 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 20%, transparent);
+  border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   font: inherit;
   font-size: var(--tipo-micro);
   line-height: 1.4;
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
   cursor: pointer;
 }
 
@@ -164,7 +164,7 @@
 
 .frase-botao[aria-pressed="true"] {
   border-color: var(--cor-acao);
-  background: color-mix(in srgb, var(--cor-acao) 10%, var(--ic-branco));
+  background: color-mix(in srgb, var(--cor-acao) 10%, var(--cor-papel-cru));
   font-weight: 600;
 }
 
@@ -179,7 +179,7 @@
   padding: 0.75rem 0.75rem;
   border: 1px solid color-mix(in srgb, var(--cor-acao) 45%, transparent);
   border-radius: 10px;
-  background: color-mix(in srgb, var(--cor-acao) 6%, var(--ic-branco));
+  background: color-mix(in srgb, var(--cor-acao) 6%, var(--cor-papel-cru));
   font-size: var(--tipo-detalhe);
   line-height: 1.4;
 }
@@ -191,7 +191,7 @@
   flex-direction: column;
   gap: 0rem;
   padding: 0.5rem 0;
-  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
+  border-top: 1px solid var(--cor-borda);
   font-size: var(--tipo-legenda);
   line-height: 1.4;
 }
@@ -206,7 +206,7 @@
 }
 
 .frase-regra-exemplo {
-  color: color-mix(in srgb, var(--ic-preto) 60%, transparent);
+  color: var(--cor-tinta-2);
   font-style: italic;
 }
 
@@ -219,7 +219,7 @@
   flex-direction: column;
   gap: 0.25rem;
   padding: 0.5rem 0;
-  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
+  border-top: 1px solid var(--cor-borda);
 }
 
 /* O primeiro resultado não paga o respiro de separação: ele encosta na contagem, e são
@@ -234,13 +234,13 @@
   display: inline-block;
   padding: 0rem 0.5rem;
   border-radius: 3px;
-  background: color-mix(in srgb, var(--ic-preto) 8%, transparent);
+  background: color-mix(in srgb, var(--cor-tinta-crua) 8%, transparent);
   font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
-  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* O motivo do casamento. A ORIGEM MUDA O DESENHO, e isso não é decoração: texto escrito
@@ -249,7 +249,7 @@
 .frase-motivo {
   font-size: var(--tipo-legenda);
   line-height: 1.4;
-  color: color-mix(in srgb, var(--ic-preto) 75%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 .frase-motivo[data-origem-casamento="aresta"] {
@@ -271,12 +271,12 @@
   padding: 0.5rem 0.75rem;
   border: 1px solid color-mix(in srgb, var(--cor-acao) 40%, transparent);
   border-radius: 10px;
-  background: color-mix(in srgb, var(--cor-acao) 6%, var(--ic-branco));
+  background: color-mix(in srgb, var(--cor-acao) 6%, var(--cor-papel-cru));
   font: inherit;
   font-size: var(--tipo-detalhe);
   line-height: 1.35;
   text-align: left;
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
   cursor: pointer;
 }
 
@@ -298,7 +298,7 @@
   font-size: var(--tipo-detalhe);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 /* --- Títulos de bloco, no vocabulário de `/buscar` ----------------------- */
@@ -309,7 +309,7 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 /* --- A visão web (D-01, D-02) -------------------------------------------

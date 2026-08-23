@@ -23,7 +23,7 @@ export default function Entrar() {
       <EsqueletoBloco altura="9rem" rotulo="imagem do acervo, com a marca por cima" />
 
       <p className="flex items-center gap-2 text-lg leading-snug font-bold">
-        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+        <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
         Descubra a cultura brasileira pelo que te move
       </p>
 
@@ -34,7 +34,7 @@ export default function Entrar() {
       </p>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-sm font-bold tracking-wide text-black/70 uppercase">
+        <h2 className="text-sm font-bold tracking-wide text-tinta-2 uppercase">
           Entrar como
         </h2>
         <SelecaoPersona personas={personas} />
@@ -44,7 +44,7 @@ export default function Entrar() {
 
       <Link
         href="/descobrir"
-        className="w-fit text-sm font-semibold text-acao underline underline-offset-2"
+        className="w-fit text-sm font-semibold text-acao-tinta underline underline-offset-2"
       >
         Pular para Descobrir
       </Link>

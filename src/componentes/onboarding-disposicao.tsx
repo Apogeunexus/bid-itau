@@ -24,10 +24,10 @@ export function OnboardingDisposicao() {
   return (
     <section className="flex flex-col gap-3">
       <h2 className="flex items-center gap-1.5 text-xl leading-tight font-bold">
-        <Grafismo variacao="barra" className="h-4 w-auto shrink-0 text-acao" />
+        <Grafismo variacao="barra" className="h-4 w-auto shrink-0 text-acao-tinta" />
         O que te move hoje?
       </h2>
-      <p className="text-xs text-black/55">
+      <p className="text-xs text-tinta-2">
         Escolha quantas quiser, ou nenhuma. Vocabulário autorado para o protótipo — não veio
         do acervo do Itaú Cultural.
       </p>
@@ -48,19 +48,19 @@ export function OnboardingDisposicao() {
             >
               <span className="flex items-baseline justify-between gap-2">
                 <span className="text-base leading-snug font-bold">{disposicao.rotulo}</span>
-                <span className="shrink-0 rounded-full border border-black/15 px-2 py-0.5 text-[0.6rem] font-semibold tracking-wide text-black/50 uppercase">
+                <span className="shrink-0 rounded-full border border-borda px-2 py-0.5 text-[0.6rem] font-semibold tracking-wide text-tinta-3 uppercase">
                   {disposicao.tipo === "corte" ? "corta" : "pondera"}
                 </span>
               </span>
-              <span className="block text-xs leading-snug text-black/60">
+              <span className="block text-xs leading-snug text-tinta-2">
                 {disposicao.explicacao}
               </span>
               {disposicao.ausencia ? (
-                <span className="block border-l-2 border-acao pl-2 text-[0.7rem] leading-snug text-black/55">
+                <span className="block border-l-2 border-acao pl-2 text-[0.7rem] leading-snug text-tinta-2">
                   {disposicao.ausencia}
                 </span>
               ) : (
-                <span className="block text-[0.65rem] leading-snug text-black/40">
+                <span className="block text-[0.65rem] leading-snug text-tinta-3">
                   lê {disposicao.campoLido}
                 </span>
               )}

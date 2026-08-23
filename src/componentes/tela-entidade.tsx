@@ -42,18 +42,18 @@ export function TelaEntidade({
 
   return (
     <TelaEsqueleto nome={nome} objetivo={objetivo} camada={camada}>
-      <section className="flex flex-col gap-3 rounded-xl border border-black/10 p-4">
+      <section className="flex flex-col gap-3 rounded-xl border border-borda p-4">
         <div className="flex items-start gap-4">
           <EsqueletoBloco altura="6rem" className="w-28 shrink-0" rotulo="imagem do acervo" />
           <div className="flex min-w-0 flex-col gap-1">
             <h2 className="text-lg leading-tight font-bold">{entidade.titulo}</h2>
-            <p className="text-xs text-black/50">
+            <p className="text-xs text-tinta-3">
               {entidade.classe} · procedência {entidade.procedencia}
             </p>
             {entidade.fonte ? (
               <a
                 href={entidade.fonte}
-                className="w-fit text-xs font-semibold text-acao underline underline-offset-2"
+                className="w-fit text-xs font-semibold text-acao-tinta underline underline-offset-2"
                 rel="noreferrer"
               >
                 fonte no acervo do Itaú Cultural
@@ -65,7 +65,7 @@ export function TelaEntidade({
         <SelosDeLinguagem ids={entidade.linguagens} />
 
         {entidade.resumo ? (
-          <p className="line-clamp-4 text-sm text-black/70">{entidade.resumo}</p>
+          <p className="line-clamp-4 text-sm text-tinta-2">{entidade.resumo}</p>
         ) : null}
       </section>
 

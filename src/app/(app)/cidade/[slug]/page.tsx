@@ -36,7 +36,7 @@ export default async function PaginaCidade({ params }: { params: Promise<{ slug:
     return (
       <div className="flex flex-col gap-2 p-5">
         <h1 className="text-2xl leading-tight font-bold">Cidade fora do recorte</h1>
-        <p className="max-w-prose text-sm leading-relaxed text-black/70">
+        <p className="max-w-prose text-sm leading-relaxed text-tinta-2">
           {`«${slug}» não é um dos ${cidadesComAcervo().length} municípios que o acervo documenta com pelo menos 8 registros. O Modo Cidade só existe onde há acervo para percorrer.`}
         </p>
       </div>

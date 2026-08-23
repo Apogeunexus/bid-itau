@@ -41,7 +41,7 @@ function Pergunta({
   return (
     <section className="flex flex-col gap-2">
       <h2 className="tipo-destaque font-bold">
-        <span className="text-acao">{numero}.</span> {titulo}
+        <span className="text-acao-tinta">{numero}.</span> {titulo}
       </h2>
       {children}
     </section>
@@ -199,7 +199,7 @@ export function RoteirosSalvos() {
     <ul className="flex flex-col gap-1.5">
       {salvos.map((c) => (
         <li key={c}>
-          <a href={`/ia/roteiro/${c}/`} className="text-sm font-semibold text-acao">
+          <a href={`/ia/roteiro/${c}/`} className="text-sm font-semibold text-acao-tinta">
             ✦ {c.replaceAll("--", " · ").replaceAll("-", " ")}
           </a>
         </li>
@@ -227,8 +227,8 @@ export function SalvarRoteiro({ combinacao }: { combinacao: string }) {
       className={
         salvo
           ? "w-fit rounded-pilula bg-tinta px-4 py-2 text-sm font-bold text-ic-branco"
-          : // smaug-ignore ui-strings: «acao» aqui é nome de classe CSS (bg-acao/text-acao), não texto de interface
-            "w-fit rounded-pilula border-2 border-acao px-4 py-2 text-sm font-bold text-acao transition-colors hover:bg-acao hover:text-ic-branco"
+          : // smaug-ignore ui-strings: «acao» aqui é nome de classe CSS (bg-acao/text-acao-tinta), não texto de interface
+            "w-fit rounded-pilula border-2 border-acao px-4 py-2 text-sm font-bold text-acao-tinta transition-colors hover:bg-acao hover:text-ic-branco"
       }
     >
       {salvo ? "✓ Roteiro salvo — remover" : "✦ Salvar este roteiro"}

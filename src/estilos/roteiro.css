@@ -38,7 +38,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  border-bottom: 2px solid var(--ic-preto);
+  border-bottom: 2px solid var(--cor-tinta);
   padding-bottom: 1rem;
 }
 
@@ -47,7 +47,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .rot-cabecalho-titulo {
@@ -60,7 +60,7 @@
   max-width: 62ch;
   font-size: var(--tipo-detalhe);
   line-height: 1.5;
-  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* --- o cenário ----------------------------------------------------------- */
@@ -75,11 +75,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+  border: 1px solid var(--cor-borda);
   border-left: 4px solid var(--cor-acao);
   border-radius: var(--raio-p);
   padding: 1.25rem 1.5rem;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 .rot-cenario-cabeca {
@@ -94,7 +94,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .rot-titulo {
@@ -107,7 +107,7 @@
 /* A visão exigida é pastilha e não texto corrido: ela decide se a primeira tela
    abre certa, e quem apresenta precisa vê-la sem ler o parágrafo. */
 .rot-visao {
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 30%, transparent);
+  border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
   padding: 0.25rem 0.75rem;
   font-size: var(--tipo-micro);
@@ -118,7 +118,7 @@
 
 .rot-visao[data-visao="mobile"] {
   border-color: var(--cor-acao);
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .rot-pergunta {
@@ -126,7 +126,7 @@
   font-size: var(--tipo-detalhe);
   line-height: 1.5;
   font-style: italic;
-  color: color-mix(in srgb, var(--ic-preto) 78%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* --- a entrada direta (STUD-04) ------------------------------------------ */
@@ -147,7 +147,7 @@
   border: none;
   padding: 0.5rem 1rem;
   background: var(--cor-acao);
-  color: var(--ic-branco);
+  color: var(--cor-sobre-acao);
   font-size: var(--tipo-detalhe);
   font-weight: 700;
   white-space: nowrap;
@@ -163,7 +163,7 @@
   flex: 1 1 24rem;
   font-size: var(--tipo-legenda);
   line-height: 1.45;
-  color: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* --- os passos, com a rota escrita --------------------------------------- */
@@ -181,7 +181,7 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  border-top: 1px solid color-mix(in srgb, var(--ic-preto) 10%, transparent);
+  border-top: 1px solid var(--cor-borda);
   padding-top: 0.5rem;
 }
 
@@ -198,8 +198,8 @@
   width: 1.25rem;
   height: 1.25rem;
   border-radius: var(--raio-pilula);
-  background: var(--ic-preto);
-  color: var(--ic-branco);
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
   font-size: var(--tipo-micro);
   font-weight: 700;
 }
@@ -221,7 +221,7 @@
   overflow-wrap: anywhere;
   border-radius: 0.25rem;
   padding: 0rem 0.25rem;
-  background: color-mix(in srgb, var(--ic-preto) 7%, transparent);
+  background: color-mix(in srgb, var(--cor-tinta-crua) 7%, transparent);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: var(--tipo-legenda);
   line-height: 1.5;
@@ -233,14 +233,14 @@
   font-size: var(--tipo-micro);
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 .rot-provar {
   max-width: 74ch;
   font-size: var(--tipo-detalhe);
   line-height: 1.5;
-  color: color-mix(in srgb, var(--ic-preto) 76%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 /* --- D-77: os dois blocos com o MESMO peso ------------------------------- */
@@ -269,7 +269,7 @@
 }
 
 .rot-bloco-sustenta {
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+  border: 1px solid var(--cor-borda);
 }
 
 .rot-bloco-nao-sustenta {
@@ -285,7 +285,7 @@
 }
 
 .rot-bloco-nao-sustenta .rot-bloco-rotulo {
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .rot-bloco-lista {
@@ -309,7 +309,7 @@
   gap: 0.25rem;
   font-size: var(--tipo-micro);
   line-height: 1.4;
-  color: color-mix(in srgb, var(--ic-preto) 50%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 .rot-origem-rotulo {
@@ -324,7 +324,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  border-top: 2px solid var(--ic-preto);
+  border-top: 2px solid var(--cor-tinta);
   padding-top: 1rem;
 }
 
@@ -339,7 +339,7 @@
   max-width: 74ch;
   font-size: var(--tipo-detalhe);
   line-height: 1.5;
-  color: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  color: var(--cor-tinta-2);
 }
 
 .rot-constantes-nota {
@@ -378,9 +378,9 @@
   gap: 0.5rem;
   margin: 0 -0.5rem;
   padding: 0.5rem 0.5rem;
-  background: color-mix(in srgb, var(--ic-branco) 94%, transparent);
+  background: color-mix(in srgb, var(--cor-papel-cru) 94%, transparent);
   backdrop-filter: blur(6px);
-  border-bottom: 1px solid color-mix(in srgb, var(--ic-preto) 12%, transparent);
+  border-bottom: 1px solid var(--cor-borda);
 }
 
 @media (max-width: 60rem) {
@@ -397,7 +397,7 @@
      de 1fr estoura, o quinto atalho sai da janela e a página ganha rolagem
      horizontal. `nowrap` + `ellipsis` só recortam depois que isto permite. */
   min-width: 0;
-  border: 1px solid color-mix(in srgb, var(--ic-preto) 18%, transparent);
+  border: 1px solid var(--cor-borda);
   border-radius: 0.25rem;
   padding: 0.25rem 0.5rem;
   text-decoration: none;
@@ -413,7 +413,7 @@
   flex: 0 0 auto;
   font-size: var(--tipo-legenda);
   font-weight: 700;
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 .rot-atalho-titulo {
@@ -432,11 +432,11 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  color: var(--cor-tinta-3);
 }
 
 .rot-atalho-visao[data-visao="mobile"] {
-  color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
 }
 
 /* O salto do atalho não pode parar com o cabeçalho do cenário por baixo da

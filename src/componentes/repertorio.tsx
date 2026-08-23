@@ -72,13 +72,13 @@ function Secao({
   const Envolucro = apenasComentado ? SecaoComentada : "section";
   return (
     <Envolucro className="flex flex-col gap-2">
-      <h2 className="flex items-center gap-1.5 text-sm font-bold tracking-wide text-black/70 uppercase">
-        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
+      <h2 className="flex items-center gap-1.5 text-sm font-bold tracking-wide text-tinta-2 uppercase">
+        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
         {titulo}
       </h2>
-      {apoio ? <p className="text-xs leading-snug text-black/50">{apoio}</p> : null}
+      {apoio ? <p className="text-xs leading-snug text-tinta-3">{apoio}</p> : null}
       {comentario ? (
-        <Comentario className="text-xs leading-snug text-black/50">{comentario}</Comentario>
+        <Comentario className="text-xs leading-snug text-tinta-3">{comentario}</Comentario>
       ) : null}
       {children}
     </Envolucro>
@@ -120,11 +120,11 @@ function BlocoDeclarado({
   return (
     <div
       data-bloco-declarado={titulo}
-      className="flex flex-col gap-1 rounded-xl border border-dashed border-black/25 p-3"
+      className="flex flex-col gap-1 rounded-xl border border-dashed border-borda-forte p-3"
     >
-      <p className="text-xs font-bold tracking-wide text-black/60 uppercase">{titulo}</p>
+      <p className="text-xs font-bold tracking-wide text-tinta-2 uppercase">{titulo}</p>
       <p className="text-sm leading-snug">{mostraria}</p>
-      <p className="text-[0.7rem] leading-snug text-black/45">{porque}</p>
+      <p className="text-[0.7rem] leading-snug text-tinta-3">{porque}</p>
     </div>
   );
 }
@@ -141,7 +141,7 @@ function LinguagemAtravessada({ grupo }: { grupo: GrupoAtravessado }) {
     <li
       data-atravessado={grupo.linguagemId}
       data-peso={grupo.peso}
-      className="flex flex-col gap-1.5 rounded-xl border border-black/10 bg-[var(--ic-branco)] p-2.5"
+      className="flex flex-col gap-1.5 rounded-xl border border-borda bg-superficie p-2.5"
       style={{ "--cor-linguagem": `var(${token})` } as React.CSSProperties}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
@@ -150,21 +150,21 @@ function LinguagemAtravessada({ grupo }: { grupo: GrupoAtravessado }) {
         ) : (
           <span className="text-sm font-semibold">{rotulo}</span>
         )}
-        <span className="text-xs font-bold text-black/60">
+        <span className="text-xs font-bold text-tinta-2">
           {grupo.peso}{" "}
           {grupo.peso === 1 ? "entidade atravessada" : "entidades atravessadas"}
         </span>
       </div>
 
       {/* O peso visual da tela 21: a barra é a contagem, não uma nota. */}
-      <div className="h-2 w-full overflow-hidden rounded-full bg-black/[0.07]">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-superficie-2">
         <div
           className="h-full rounded-full bg-[var(--cor-linguagem)]"
           style={{ width: `${Math.max(4, Math.round(grupo.pesoRelativo * 100))}%` }}
         />
       </div>
 
-      <p className="text-[0.65rem] leading-snug text-black/45">
+      <p className="text-[0.65rem] leading-snug text-tinta-3">
         {grupo.declaradaNoRepertorio
           ? "declarada no seu repertório"
           : "não declarada no repertório — chegou pelas entidades que você atravessou"}
@@ -183,13 +183,13 @@ function LinhaSalva({ salvo }: { salvo: SalvoResolvido }) {
   return (
     <li
       data-salvo={salvo.ocorrenciaId}
-      className="flex flex-col gap-0.5 rounded-xl border border-black/10 bg-[var(--ic-branco)] p-2.5"
+      className="flex flex-col gap-0.5 rounded-xl border border-borda bg-superficie p-2.5"
     >
       <p className="flex flex-wrap items-baseline gap-x-2 text-sm">
         <span className="font-bold">{salvo.dataCurta}</span>
-        <span className="text-black/60">{salvo.hora}</span>
+        <span className="text-tinta-2">{salvo.hora}</span>
         {salvo.gratuito ? (
-          <span className="rounded-full border border-black/15 px-1.5 text-[0.65rem] font-semibold">
+          <span className="rounded-full border border-borda px-1.5 text-[0.65rem] font-semibold">
             gratuita
           </span>
         ) : null}
@@ -201,7 +201,7 @@ function LinhaSalva({ salvo }: { salvo: SalvoResolvido }) {
       ) : (
         <span className="text-sm leading-snug font-semibold">{salvo.eventoTitulo}</span>
       )}
-      <span className="text-[0.65rem] leading-snug text-black/45">
+      <span className="text-[0.65rem] leading-snug text-tinta-3">
         O acervo não publica o espaço desta sessão — a ausência é declarada aqui como é na
         página do evento.
       </span>
@@ -312,7 +312,7 @@ export function TelaRepertorio({
         {/* Comentário: define «um passo» em vocabulário de grafo («aresta», «vizinhos
             diretos») e contrasta com o motor da outra tela. A frase em destaque acima já diz
             a mesma coisa em português para quem usa; esta diz COMO ela foi calculada. */}
-        <Comentario className="text-[0.7rem] leading-snug text-black/55">
+        <Comentario className="text-[0.7rem] leading-snug text-tinta-2">
           {`Um passo quer dizer UMA aresta a partir do que você já atravessou: ${repertorio.diagnostico.adjacentesBrutos} vizinhos diretos no grafo, dos quais ${repertorio.diagnostico.adjacentesExibidos} entram neste repertório adjacente, no máximo 10 por linguagem. `}
           Não é a caminhada de dois saltos de Descobrir: aquela responde «o que te
           interessaria agora», esta responde «o que está encostado em você».
@@ -333,7 +333,7 @@ export function TelaRepertorio({
         {/* A primeira frase é dado sobre o repertório de quem está olhando, e fica sempre. A
             segunda fala sobre O QUE A TELA FAZ («a tela diz de qual delas cada grupo veio»),
             que é justificativa de projeto. */}
-        <p className="text-[0.65rem] leading-snug text-black/45">
+        <p className="text-[0.65rem] leading-snug text-tinta-3">
           Declaradas no repertório: {repertorio.linguagensDeclaradas.join(", ") || "nenhuma"}.
           As demais chegaram pelas entidades atravessadas.
           <Comentario como="span">
@@ -364,7 +364,7 @@ export function TelaRepertorio({
               ))}
             </ul>
             {repertorio.adjacente.length > TETO_EXIBIDO ? (
-              <p className="text-[0.7rem] leading-snug text-black/50">
+              <p className="text-[0.7rem] leading-snug text-tinta-3">
                 Mostrando {TETO_EXIBIDO} de {repertorio.adjacente.length} vizinhos a um passo.
                 <Comentario como="span">
                   {" "}
@@ -376,7 +376,7 @@ export function TelaRepertorio({
             ) : null}
           </>
         ) : (
-          <p className="rounded-xl border border-dashed border-black/25 p-3 text-sm leading-snug">
+          <p className="rounded-xl border border-dashed border-borda-forte p-3 text-sm leading-snug">
             Nenhuma entidade do seu repertório tem vizinho a um salto que já não esteja no
             próprio repertório. É estado, não falha.
           </p>
@@ -395,7 +395,7 @@ export function TelaRepertorio({
             ))}
           </ul>
         ) : (
-          <p className="rounded-xl border border-dashed border-black/25 p-3 text-sm leading-snug">
+          <p className="rounded-xl border border-dashed border-borda-forte p-3 text-sm leading-snug">
             <strong className="font-bold">Nada salvo ainda.</strong> Esta persona não tem
             sessão salva no dado do protótipo, e nada foi salvo neste navegador. É estado
             vazio, não erro — abra um evento e salve uma sessão para ela aparecer aqui.

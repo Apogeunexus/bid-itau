@@ -17,10 +17,10 @@ export default function Blog() {
     <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Blog</h1>
         </div>
-        <p className="max-w-prose text-sm text-black/60">
+        <p className="max-w-prose text-sm text-tinta-2">
           O espaço de leitura contínua do produto — textos autorais, bastidores e séries de
           artigos.
         </p>
@@ -36,14 +36,14 @@ export default function Blog() {
         <div className="flex flex-wrap gap-2">
           <Link
             href="/noticias"
-            className="rounded-pilula border border-acao px-3 py-1 text-xs font-bold text-acao"
+            className="rounded-pilula border border-acao px-3 py-1 text-xs font-bold text-acao-tinta"
           >
             Colunas e opinião em Notícias →
           </Link>
         </div>
       </section>
 
-      <Comentario className="max-w-prose text-sm text-black/60">
+      <Comentario className="max-w-prose text-sm text-tinta-2">
         A tela existe porque o item de menu existe — e um item que levasse a um 404 seria
         indistinguível de rota quebrada. Quando a redação publicar textos próprios pelo Studio,
         eles aparecem aqui; até lá, a ausência fica dita com o denominador, no padrão de D-93.

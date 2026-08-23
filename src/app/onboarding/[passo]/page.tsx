@@ -71,7 +71,7 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
           </Link>
           <Link
             href="/descobrir"
-            className="rounded-full border border-[var(--ic-preto)] px-4 py-2 text-sm font-semibold transition-colors hover:bg-black/5"
+            className="rounded-full border border-tinta px-4 py-2 text-sm font-semibold transition-colors hover:bg-superficie-2"
           >
             Pular
           </Link>
@@ -99,7 +99,7 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
               <Link
                 key={c.slug}
                 href={`/cidade/${c.slug}/`}
-                className="rounded-full border border-black/25 px-3 py-1 text-xs font-semibold no-underline"
+                className="rounded-full border border-borda-forte px-3 py-1 text-xs font-semibold no-underline"
               >
                 {c.titulo} <span className="opacity-60">· {c.total}</span>
               </Link>

@@ -63,15 +63,15 @@ const DIMENSOES = Object.keys(ROTULOS) as DimensaoAcessibilidade[];
 const APARENCIA: Record<EstadoDimensao, { texto: string; classe: string }> = {
   presente: {
     texto: "declarado",
-    classe: "border-acao bg-acao text-[var(--ic-branco)]",
+    classe: "border-acao bg-acao text-sobre-acao",
   },
   "ausente-declarada": {
     texto: "declarado ausente",
-    classe: "border-black/70 text-black/70",
+    classe: "border-tinta-2 text-tinta-2",
   },
   "nao-declarada": {
     texto: "não declarado",
-    classe: "border-dashed border-black/25 text-black/45",
+    classe: "border-dashed border-borda-forte text-tinta-3",
   },
 };
 
@@ -106,7 +106,7 @@ export function FichaDeAcessibilidade({
     <section className={`flex flex-col gap-2 ${className ?? ""}`}>
       <h3 className="text-sm font-bold">
         Acessibilidade{" "}
-        <span className="text-xs font-normal text-black/45">
+        <span className="text-xs font-normal text-tinta-3">
           {declaradas} de {DIMENSOES.length} recursos declarados
         </span>
       </h3>
@@ -117,7 +117,7 @@ export function FichaDeAcessibilidade({
             key={dimensao}
             data-dimensao={dimensao}
             data-estado={estado}
-            className="flex items-center justify-between gap-2 border-t border-black/10 py-1.5 text-sm first:border-t-0"
+            className="flex items-center justify-between gap-2 border-t border-borda py-1.5 text-sm first:border-t-0"
           >
             <span>{ROTULOS[dimensao]}</span>
             <span
@@ -131,7 +131,7 @@ export function FichaDeAcessibilidade({
 
       {/* A linha ao pé é o requisito, não o enfeite: sem ela a coluna de «não declarado»
           é lida como uma coluna de «não tem». */}
-      <p className="text-xs leading-relaxed text-black/55">
+      <p className="text-xs leading-relaxed text-tinta-2">
         {declaraDimensoes ? (
           <>
             Este registro vem da agenda do Itaú Cultural, que preenche as 8 dimensões: onde

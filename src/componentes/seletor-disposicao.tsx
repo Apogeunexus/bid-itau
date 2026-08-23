@@ -36,10 +36,10 @@ export function SeletorDisposicao() {
   return (
     <section
       data-seletor-disposicao
-      className="flex flex-col gap-2 rounded-xl border border-black/10 bg-[var(--ic-branco)] p-3"
+      className="flex flex-col gap-2 rounded-xl border border-borda bg-superficie p-3"
     >
       <div className="flex items-start gap-2">
-        <Grafismo variacao="barra" className="mt-1 h-4 w-auto shrink-0 text-acao" />
+        <Grafismo variacao="barra" className="mt-1 h-4 w-auto shrink-0 text-acao-tinta" />
 
         {/* A disposição em TEXTO CORRIDO. É a metade «visível» de D-32, e é o que a foto
             do slide precisa mostrar sem ninguém tocar em nada. */}
@@ -68,15 +68,15 @@ export function SeletorDisposicao() {
           data-abrir-disposicao
           aria-expanded={aberto}
           onClick={() => setAberto((v) => !v)}
-          className="shrink-0 cursor-pointer rounded-full border border-acao px-3 py-1 text-xs font-bold text-acao"
+          className="shrink-0 cursor-pointer rounded-full border border-acao px-3 py-1 text-xs font-bold text-acao-tinta"
         >
           {aberto ? "fechar" : "editar"}
         </button>
       </div>
 
       {aberto ? (
-        <div className="flex flex-col gap-2 border-t border-black/10 pt-2">
-          <p className="text-xs text-black/50">
+        <div className="flex flex-col gap-2 border-t border-borda pt-2">
+          <p className="text-xs text-tinta-3">
             Seleção múltipla. As cinco são autoradas para o protótipo — nenhuma vem do acervo
             do Itaú Cultural.
           </p>
@@ -97,16 +97,16 @@ export function SeletorDisposicao() {
               >
                 <span className="flex items-baseline gap-2">
                   <span className="flex-1 text-sm leading-snug font-bold">{d.rotulo}</span>
-                  <span className="shrink-0 text-[0.6rem] tracking-widest text-black/45 uppercase">
+                  <span className="shrink-0 text-[0.6rem] tracking-widest text-tinta-3 uppercase">
                     {d.tipo === "corte" ? "corta" : "pondera"}
                   </span>
                 </span>
-                <span className="block text-xs leading-snug text-black/60">{d.explicacao}</span>
+                <span className="block text-xs leading-snug text-tinta-2">{d.explicacao}</span>
                 {/* A ausência de campo aparece JÁ NA ESCOLHA, e não só depois no feed:
                     marcar um corte que o acervo não sustenta e descobrir isso adiante seria
                     deixar a pessoa supor que o filtro rodou. */}
                 {d.ausencia ? (
-                  <span className="block border-l-2 border-acao pl-2 text-[0.7rem] leading-snug text-black/70">
+                  <span className="block border-l-2 border-acao pl-2 text-[0.7rem] leading-snug text-tinta-2">
                     {d.ausencia}
                   </span>
                 ) : null}
@@ -118,7 +118,7 @@ export function SeletorDisposicao() {
             <button
               type="button"
               onClick={() => definirDisposicoes([])}
-              className="cursor-pointer self-start text-xs font-semibold text-black/50 underline underline-offset-2"
+              className="cursor-pointer self-start text-xs font-semibold text-tinta-3 underline underline-offset-2"
             >
               limpar as {marcadas.length}
             </button>

@@ -96,8 +96,8 @@ function Secao({
 }) {
   return (
     <section className={`flex flex-col gap-2 ${className ?? ""}`}>
-      <h2 className="flex items-center gap-1.5 text-sm font-bold tracking-wide text-black/70 uppercase">
-        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao" />
+      <h2 className="flex items-center gap-1.5 text-sm font-bold tracking-wide text-tinta-2 uppercase">
+        <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
         {titulo}
       </h2>
       {children}
@@ -109,20 +109,20 @@ function Secao({
 function No({ no, papel }: { no: NonNullable<PassoTrilha["de"]>; papel: string }) {
   const corpo = (
     <>
-      <span className="block text-[0.6rem] font-semibold tracking-wide text-black/45 uppercase">
+      <span className="block text-[0.6rem] font-semibold tracking-wide text-tinta-3 uppercase">
         {papel}
       </span>
       <span className="block text-sm leading-snug font-bold">{no.titulo}</span>
-      <span className="block text-xs text-black/50">{no.classe}</span>
+      <span className="block text-xs text-tinta-3">{no.classe}</span>
     </>
   );
 
   return (
-    <div className="min-w-0 flex-1 rounded-lg border border-black/10 bg-[var(--ic-branco)] p-2.5">
+    <div className="min-w-0 flex-1 rounded-lg border border-borda bg-superficie p-2.5">
       {no.rota ? (
         <Link href={no.rota} className="block no-underline">
           {corpo}
-          <span className="mt-1 block text-xs font-semibold text-acao underline underline-offset-2">
+          <span className="mt-1 block text-xs font-semibold text-acao-tinta underline underline-offset-2">
             abrir a página
           </span>
         </Link>
@@ -130,7 +130,7 @@ function No({ no, papel }: { no: NonNullable<PassoTrilha["de"]>; papel: string }
         <>
           {corpo}
           {/* Sem rota nesta fase, e a tela diz isso em vez de fingir um link morto. */}
-          <span className="mt-1 block text-[0.65rem] leading-snug text-black/40">
+          <span className="mt-1 block text-[0.65rem] leading-snug text-tinta-3">
             verbete sem rota própria nesta fase — a ponte é a aresta, não o link
           </span>
         </>
@@ -145,7 +145,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
 
   return (
     <div className="mt-3 flex flex-col gap-3 rounded-lg border border-acao bg-[color-mix(in_srgb,var(--ic-laranja)_6%,transparent)] p-3">
-      <p className="text-[0.65rem] font-bold tracking-wide text-acao uppercase">
+      <p className="text-[0.65rem] font-bold tracking-wide text-acao-tinta uppercase">
         Aqui a trilha vira agenda
       </p>
 
@@ -163,14 +163,14 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
               className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-sm"
             >
               <span className="font-semibold">{sessao.dataCurta}</span>
-              <span className="text-black/60">{sessao.dataLonga}</span>
-              <span className="text-black/60">· {sessao.hora}</span>
+              <span className="text-tinta-2">{sessao.dataLonga}</span>
+              <span className="text-tinta-2">· {sessao.hora}</span>
               {sessao.gratuito ? (
-                <span className="rounded-full border border-black/15 px-1.5 text-[0.65rem] font-semibold">
+                <span className="rounded-full border border-borda px-1.5 text-[0.65rem] font-semibold">
                   entrada gratuita
                 </span>
               ) : (
-                <span className="text-[0.65rem] text-black/45">
+                <span className="text-[0.65rem] text-tinta-3">
                   o acervo não declara gratuidade nesta sessão
                 </span>
               )}
@@ -187,9 +187,9 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
       {/* ------------------------------------------------------------------ */}
       <div
         data-lugar-declarado={final.espacoDeclarado ?? "ausente"}
-        className="flex flex-col gap-1 rounded-md border border-dashed border-black/25 p-2.5"
+        className="flex flex-col gap-1 rounded-md border border-dashed border-borda-forte p-2.5"
       >
-        <p className="text-[0.65rem] font-bold tracking-wide text-black/55 uppercase">
+        <p className="text-[0.65rem] font-bold tracking-wide text-tinta-2 uppercase">
           Lugar
         </p>
         {final.espacoDeclarado ? (
@@ -204,7 +204,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
         {/* A contagem desta montagem é sobre O ACERVO e fica sempre — é o que sustenta a
             frase acima. O que vira comentário é a generalização para as 2.425 ocorrências e
             a referência ao que «a fase 1 registrou», que é o nosso caderno de campo. */}
-        <p className="text-[0.65rem] leading-snug text-black/45">
+        <p className="text-[0.65rem] leading-snug text-tinta-3">
           Medido: {final.sessoesSemEspaco} de {final.sessoes.length}{" "}
           {final.sessoes.length === 1 ? "sessão" : "sessões"} sem espaço declarado.
           <Comentario como="span">
@@ -218,7 +218,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
             href={final.evento.fonte}
             target="_blank"
             rel="noreferrer"
-            className="text-xs font-semibold text-acao underline underline-offset-2"
+            className="text-xs font-semibold text-acao-tinta underline underline-offset-2"
           >
             conferir na fonte
           </a>
@@ -228,7 +228,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
       {/* ---- Elenco: ausência estrutural, declarada em texto ---- */}
       {final.elenco.length ? (
         <div className="flex flex-col gap-1">
-          <p className="text-[0.65rem] font-bold tracking-wide text-black/55 uppercase">
+          <p className="text-[0.65rem] font-bold tracking-wide text-tinta-2 uppercase">
             Quem atua
           </p>
           <ul className="flex flex-col gap-0.5 text-sm">
@@ -248,7 +248,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
       ) : (
         <p
           data-elenco-declarado="ausente"
-          className="rounded-md border border-dashed border-black/25 p-2.5 text-[0.7rem] leading-snug text-black/60"
+          className="rounded-md border border-dashed border-borda-forte p-2.5 text-[0.7rem] leading-snug text-tinta-2"
         >
           <strong className="font-bold">Sem elenco no grafo.</strong> Nenhuma aresta{" "}
           <code>atua_em</code> chega a este evento — e não é acaso desta montagem: dos 129
@@ -262,7 +262,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
       {final.evento.rota ? (
         <Link
           href={final.evento.rota}
-          className="rounded-full bg-acao px-4 py-2 text-center text-sm font-bold text-[var(--ic-branco)] no-underline"
+          className="rounded-full bg-acao px-4 py-2 text-center text-sm font-bold text-sobre-acao no-underline"
         >
           abrir a página do evento
         </Link>
@@ -278,9 +278,9 @@ function Passo({ passo, total }: { passo: PassoTrilha; total: number }) {
   return (
     <li
       data-passo-trilha={passo.ordem}
-      className="flex flex-col gap-2 rounded-xl border border-black/10 bg-black/[0.02] p-3"
+      className="flex flex-col gap-2 rounded-xl border border-borda bg-superficie-2 p-3"
     >
-      <p className="text-[0.65rem] font-bold tracking-wide text-black/45 uppercase">
+      <p className="text-[0.65rem] font-bold tracking-wide text-tinta-3 uppercase">
         Passo {passo.ordem} de {total}
       </p>
 
@@ -290,7 +290,7 @@ function Passo({ passo, total }: { passo: PassoTrilha; total: number }) {
         <No no={passo.de} papel="de onde veio" />
         <div
           aria-hidden
-          className="flex shrink-0 items-center text-lg font-bold text-acao"
+          className="flex shrink-0 items-center text-lg font-bold text-acao-tinta"
         >
           →
         </div>
@@ -301,7 +301,7 @@ function Passo({ passo, total }: { passo: PassoTrilha; total: number }) {
       <p className="selo-motivo" data-motivo-passo={passo.motivo}>
         <Grafismo
           variacao="barra"
-          className="mt-0.5 h-3.5 w-auto shrink-0 text-acao"
+          className="mt-0.5 h-3.5 w-auto shrink-0 text-acao-tinta"
         />
         <span>{passo.motivo}</span>
       </p>
@@ -311,20 +311,20 @@ function Passo({ passo, total }: { passo: PassoTrilha; total: number }) {
       {/* -------------------------------------------------------------- */}
       <div
         data-procedencia-aresta={procedencia ?? "sem-aresta"}
-        className="flex flex-col gap-1 rounded-lg border border-black/15 bg-[var(--ic-branco)] p-2.5"
+        className="flex flex-col gap-1 rounded-lg border border-borda bg-superficie p-2.5"
       >
         <p className="flex flex-wrap items-center gap-1.5 text-xs font-bold">
-          <span className="rounded-full border border-acao px-2 py-0.5 text-[0.65rem] tracking-wide text-acao uppercase">
+          <span className="rounded-full border border-acao px-2 py-0.5 text-[0.65rem] tracking-wide text-acao-tinta uppercase">
             {procedencia ?? "sem aresta"}
           </span>
           {procedencia ? ROTULO_PROCEDENCIA[procedencia] : "os dois passos não estão ligados"}
         </p>
-        <p className="text-[0.7rem] leading-snug text-black/60">
+        <p className="text-[0.7rem] leading-snug text-tinta-2">
           {procedencia
             ? explicarProcedencia(procedencia, passo.de.titulo, passo.para.titulo)
             : "A ordem é a autorada na trilha, mas nenhuma aresta do grafo liga estes dois nós. O passo aparece declarado, sem ponte."}
         </p>
-        <p className="text-[0.65rem] text-black/45">
+        <p className="text-[0.65rem] text-tinta-3">
           {passo.relacao ? `relação «${passo.relacao}» · ` : ""}
           {ROTULO_ORIGEM_MOTIVO[passo.origemMotivo]}
         </p>
@@ -348,14 +348,14 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
       {/* ---- Título, destino e a ponte em uma frase ---- */}
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao" />
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold">{trilha.titulo}</h1>
         </div>
 
         {trilha.linguagens.length ? <SelosDeLinguagem ids={trilha.linguagens} limite={4} /> : null}
 
         {trilha.resumo ? (
-          <p className="max-w-prose text-sm leading-snug text-black/70">{trilha.resumo}</p>
+          <p className="max-w-prose text-sm leading-snug text-tinta-2">{trilha.resumo}</p>
         ) : null}
 
         <p className="max-w-prose text-sm leading-snug">
@@ -374,13 +374,13 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
 
       {/* ---- A procedência da trilha inteira, antes dos passos ---- */}
       <div className="flex flex-col gap-1.5 rounded-xl border border-acao bg-[color-mix(in_srgb,var(--ic-laranja)_7%,transparent)] p-3">
-        <p className="text-[0.65rem] font-bold tracking-wide text-acao uppercase">
+        <p className="text-[0.65rem] font-bold tracking-wide text-acao-tinta uppercase">
           {trilha.ligacoesAutoradas} de {trilha.passos.length}{" "}
           {trilha.passos.length === 1 ? "ligação autorada" : "ligações autoradas"}
         </p>
         <p className="text-sm leading-snug">{trilha.assinatura}</p>
         {trilha.autoradaPorque ? (
-          <p className="text-[0.7rem] leading-snug text-black/60">
+          <p className="text-[0.7rem] leading-snug text-tinta-2">
             Motivo declarado na própria trilha: {trilha.autoradaPorque}. Os quatro nós da
             cadeia vêm do acervo do Itaú Cultural; o que é nosso são as ligações entre eles,
             e cada uma aparece rotulada abaixo.
@@ -400,7 +400,7 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
       ) : (
         <div
           data-trilha-nao-publicavel="true"
-          className="rounded-xl border border-dashed border-black/30 p-4 text-sm leading-snug"
+          className="rounded-xl border border-dashed border-borda-forte p-4 text-sm leading-snug"
         >
           <strong className="font-bold">Esta trilha não é publicável.</strong>{" "}
           {trilha.motivoNaoPublicavel}
@@ -414,15 +414,15 @@ export function TelaTrilha({ trilha }: { trilha: TrilhaCompleta }) {
         onClick={() => alternarSalvo(trilha.id)}
         className={
           salva
-            ? "cursor-pointer rounded-full border border-acao bg-acao px-4 py-2 text-sm font-bold text-[var(--ic-branco)]"
-            : "cursor-pointer rounded-full border border-black/20 px-4 py-2 text-sm font-bold hover:border-[var(--ic-preto)]"
+            ? "cursor-pointer rounded-full border border-acao bg-acao px-4 py-2 text-sm font-bold text-sobre-acao"
+            : "cursor-pointer rounded-full border border-borda px-4 py-2 text-sm font-bold hover:border-tinta"
         }
       >
         {salva ? "trilha salva no seu repertório" : "salvar esta trilha"}
       </button>
       {/* A frase de privacidade é produto: quem clica «salvar» tem direito de saber onde
           aquilo foi parar. Só a citação da decisão sai de cena. */}
-      <p className="-mt-3 text-[0.65rem] leading-snug text-black/45">
+      <p className="-mt-3 text-[0.65rem] leading-snug text-tinta-3">
         Salvar grava no navegador<Comentario como="span"> (D-46)</Comentario>. Não há conta,
         não há autenticação e nenhum dado pessoal sai daqui.
       </p>

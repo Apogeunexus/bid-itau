@@ -26,7 +26,7 @@ export function TrocaPersona({ className }: { className?: string }) {
       <div
         role="group"
         aria-label="Trocar de persona"
-        className="flex flex-wrap gap-1 rounded-full border border-black/15 p-1"
+        className="flex flex-wrap gap-1 rounded-full border border-borda p-1"
       >
         {PERSONAS.map((persona) => {
           const ativa = hidratado && personaId === persona.id;
@@ -40,8 +40,8 @@ export function TrocaPersona({ className }: { className?: string }) {
               className={clsx(
                 "flex-1 cursor-pointer rounded-full px-3 py-1.5 text-sm font-semibold transition-colors",
                 ativa
-                  ? "bg-acao text-[var(--ic-branco)]"
-                  : "text-[var(--ic-preto)] hover:bg-black/5",
+                  ? "bg-acao text-sobre-acao"
+                  : "text-tinta hover:bg-superficie-2",
               )}
             >
               {persona.nome}
@@ -55,7 +55,7 @@ export function TrocaPersona({ className }: { className?: string }) {
           uma persona inventada passar por gente do acervo. A segunda é sobre ONDE a conta
           foi feita, que é assunto de quem avalia a arquitetura, não de quem troca de
           persona. */}
-      <p className="text-[0.65rem] leading-snug text-black/45">
+      <p className="text-[0.65rem] leading-snug text-tinta-3">
         Persona é dado autorado para o protótipo.
         <Comentario como="span">
           {" "}

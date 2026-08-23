@@ -237,7 +237,7 @@ export function ListaDeOcorrencias({
         </h2>
 
         {ocorrencias.length > 0 && !proxima ? (
-          <p className="text-xs leading-relaxed text-black/60">
+          <p className="text-xs leading-relaxed text-tinta-2">
             {`Nenhuma sessão futura em relação à data de referência: ${
               ocorrencias.length === 1
                 ? "a sessão listada já passou"
@@ -249,7 +249,7 @@ export function ListaDeOcorrencias({
         {/* A data de referência só é dita onde ela decide alguma coisa. No evento
             histórico, que não tem sessão nenhuma, ela seria ruído. */}
         {ocorrencias.length ? (
-          <p className="text-[0.65rem] tracking-wide text-black/40 uppercase">
+          <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
             data de referência · {curta(dataDeReferencia)} · o protótipo é estático e
             «a próxima» é calculada contra a data em que ele foi gerado
           </p>
@@ -297,7 +297,7 @@ export function ListaDeOcorrencias({
                 <li
                   key={ocorrencia.id}
                   data-ocorrencia={ocorrencia.id}
-                  className="ocorrencia-linha flex flex-col gap-1.5 rounded-xl border border-black/10 p-3"
+                  className="ocorrencia-linha flex flex-col gap-1.5 rounded-xl border border-borda p-3"
                 >
                   {/* Uma frase na app, DUAS CÉLULAS na web. O separador é elemento
                       próprio porque na tabela ele não existe — e a alternativa,
@@ -310,7 +310,7 @@ export function ListaDeOcorrencias({
                     <span className="ocorrencia-hora">{hora ? hora : "sem horário"}</span>
                   </p>
 
-                  <p className="ocorrencia-condicao flex flex-wrap gap-x-2 gap-y-1 text-xs text-black/60">
+                  <p className="ocorrencia-condicao flex flex-wrap gap-x-2 gap-y-1 text-xs text-tinta-2">
                     <span className="font-semibold">
                       {ocorrencia.gratuito ? "sessão gratuita" : "sessão com ingresso"}
                     </span>
@@ -324,9 +324,9 @@ export function ListaDeOcorrencias({
                       texto — então a célula leva o rótulo curto e a frase inteira é dita
                       UMA vez, com o denominador, ao pé da tabela. */}
                   {ocorrencia.espaco ? (
-                    <p className="ocorrencia-espaco text-xs text-black/60">
+                    <p className="ocorrencia-espaco text-xs text-tinta-2">
                       {ocorrencia.espaco}
-                      <span className="ocorrencia-espaco-origem text-[0.65rem] tracking-wide text-black/40 uppercase">
+                      <span className="ocorrencia-espaco-origem text-[0.65rem] tracking-wide text-tinta-3 uppercase">
                         {" "}
                         · espaço declarado{" "}
                         {ocorrencia.origemDoEspaco === "temporada"
@@ -335,7 +335,7 @@ export function ListaDeOcorrencias({
                       </span>
                     </p>
                   ) : (
-                    <p className="ocorrencia-espaco text-xs leading-relaxed text-black/55">
+                    <p className="ocorrencia-espaco text-xs leading-relaxed text-tinta-2">
                       <span className="ocorrencia-espaco-curto">não publicado</span>
                       <span className="ocorrencia-espaco-longo">
                         O acervo do Itaú Cultural não publica o espaço desta sessão. O
@@ -352,8 +352,8 @@ export function ListaDeOcorrencias({
                     onClick={() => alternarSalvo(ocorrencia.id)}
                     className={`ocorrencia-salvar w-fit cursor-pointer rounded-full border px-3 py-1 text-xs font-bold transition-colors ${
                       salvo
-                        ? "border-acao bg-acao text-[var(--ic-branco)]"
-                        : "border-black/25 text-[var(--ic-preto)] hover:border-[var(--ic-preto)]"
+                        ? "border-acao bg-acao text-sobre-acao"
+                        : "border-borda-forte text-tinta hover:border-tinta"
                     }`}
                   >
                     {salvo ? "sessão salva — tocar para remover" : "salvar esta sessão"}
@@ -414,13 +414,13 @@ export function ListaDeOcorrencias({
               <p
                 key={temporada.id}
                 data-data-declarada={temporada.dataDeclarada ?? ""}
-                className="rounded-xl border border-black/10 p-3 text-sm"
+                className="rounded-xl border border-borda p-3 text-sm"
               >
                 <span className="font-semibold">
                   {temporada.dataDeclarada ??
                     (temporada.inicio ? curta(temporada.inicio) : "sem data declarada")}
                 </span>
-                <span className="mt-1 block text-xs leading-relaxed text-black/55">
+                <span className="mt-1 block text-xs leading-relaxed text-tinta-2">
                   Data histórica de registro, transcrita da fonte como ela a escreveu. Não
                   é sessão em cartaz: este evento aconteceu e está no acervo como memória,
                   não como programação.
@@ -428,7 +428,7 @@ export function ListaDeOcorrencias({
               </p>
             ))
           ) : (
-            <p className="rounded-xl border border-dashed border-black/20 p-3 text-xs leading-relaxed text-black/60">
+            <p className="rounded-xl border border-dashed border-borda p-3 text-xs leading-relaxed text-tinta-2">
               Este registro não declara período nem sessão: o acervo guarda o evento sem
               nenhuma data associada a ele.
             </p>

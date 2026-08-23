@@ -27,7 +27,7 @@ export function SelecaoPersona({ personas }: { personas: PersonaExibivel[] }) {
 
   if (!personas.length) {
     return (
-      <p className="rounded-xl border border-dashed border-black/25 p-4 text-sm text-black/60">
+      <p className="rounded-xl border border-dashed border-borda-forte p-4 text-sm text-tinta-2">
         Nenhuma persona no grafo ainda. A tela existe e responde; as três personas do
         protótipo aparecem quando `personas.json` for gerado.
       </p>
@@ -55,11 +55,11 @@ export function SelecaoPersona({ personas }: { personas: PersonaExibivel[] }) {
               "cursor-pointer rounded-xl border p-3 text-left transition-colors",
               ativa
                 ? "border-acao bg-acao/10"
-                : "border-black/15 hover:border-[var(--ic-preto)]",
+                : "border-borda hover:border-tinta",
             )}
           >
             <span className="block font-bold">{persona.nome}</span>
-            <span className="mt-0.5 block text-xs text-black/60">{persona.resumo}</span>
+            <span className="mt-0.5 block text-xs text-tinta-2">{persona.resumo}</span>
           </button>
         );
       })}

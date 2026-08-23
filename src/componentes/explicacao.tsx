@@ -70,11 +70,11 @@ export function Explicacao({ pagina }: { pagina: PaginaExplicacao }) {
       <header className="flex items-center gap-2 text-xs">
         <Link
           href="/descobrir/"
-          className="font-bold text-acao underline underline-offset-2"
+          className="font-bold text-acao-tinta underline underline-offset-2"
         >
           ← Descobrir
         </Link>
-        <span className="ml-auto text-black/45">
+        <span className="ml-auto text-tinta-3">
           explicando para <strong className="font-bold">{explicacao?.personaNome}</strong>
         </span>
       </header>
@@ -99,7 +99,7 @@ export function Explicacao({ pagina }: { pagina: PaginaExplicacao }) {
           ) : (
             <h1 className="line-clamp-2 text-base leading-tight font-bold">{pagina.titulo}</h1>
           )}
-          <p className="text-[0.6rem] tracking-widest text-black/45 uppercase">
+          <p className="text-[0.6rem] tracking-widest text-tinta-3 uppercase">
             {pagina.classe} · procedência {pagina.procedencia}
           </p>
         </div>
@@ -110,7 +110,7 @@ export function Explicacao({ pagina }: { pagina: PaginaExplicacao }) {
       {/* 5 — D-35. O limite da IA em texto, no pé, em toda página de explicação. */}
       <p
         data-limite-ia
-        className="mt-auto border-t-2 border-acao pt-2 text-[0.7rem] leading-snug text-black/70"
+        className="mt-auto border-t-2 border-acao pt-2 text-[0.7rem] leading-snug text-tinta-2"
       >
         <strong className="font-bold">Nenhuma decisão editorial foi tomada por IA.</strong> O
         caminho acima é travessia determinística no acervo, o destaque curado é humano e
@@ -193,7 +193,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
     <>
       {/* 2 — O CAMINHO. É o miolo da tela. --------------------------------- */}
       <section className="flex flex-col gap-1.5">
-        <h2 className="text-[0.65rem] font-bold tracking-widest text-black/50 uppercase">
+        <h2 className="text-[0.65rem] font-bold tracking-widest text-tinta-3 uppercase">
           {ativo?.doFeed ? "O caminho que trouxe este cartão" : "O caminho no grafo"}
         </h2>
 
@@ -227,12 +227,12 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
         {/* A legenda de DP-A. Obrigatória sempre que há cadeia na tela: sem ela as duas
             marcações acima seriam decoração, e a diferença entre citar o acervo e redigir a
             partir dele ficaria só no estilo. Sem cadeia ela não tem o que legendar. */}
-        <p className={clsx("text-[0.65rem] leading-snug text-black/55", !ativo && "hidden")}>
+        <p className={clsx("text-[0.65rem] leading-snug text-tinta-2", !ativo && "hidden")}>
           <span className="mr-1 border-l-[3px] border-acao pl-1 font-semibold">
             «entre aspas»
           </span>
           é texto do acervo do Itaú Cultural;
-          <span className="mx-1 border-l-[3px] border-dashed border-black/40 pl-1 italic">
+          <span className="mx-1 border-l-[3px] border-dashed border-borda-forte pl-1 italic">
             em itálico
           </span>
           é frase nossa, composta a partir da aresta.
@@ -242,7 +242,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
             banca vai pedir, e prova que o item está ligado ao repertório por mais de um fio. */}
         {validos.length > 1 ? (
           <div className="flex flex-wrap items-baseline gap-1">
-            <span className="text-[0.65rem] text-black/50">
+            <span className="text-[0.65rem] text-tinta-3">
               {validos.length - 1} outro{validos.length > 2 ? "s" : ""} caminho
               {validos.length > 2 ? "s" : ""} chega{validos.length > 2 ? "m" : ""} aqui:
             </span>
@@ -256,8 +256,8 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
                 className={clsx(
                   "cursor-pointer rounded-full border px-1.5 py-px text-[0.65rem] font-semibold",
                   c === ativo
-                    ? "border-acao text-acao"
-                    : "border-black/20 text-black/60",
+                    ? "border-acao text-acao-tinta"
+                    : "border-borda text-tinta-2",
                 )}
               >
                 {c.sementeTitulo}
@@ -270,7 +270,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
 
       {/* 3 — OS CRITÉRIOS, removíveis. ------------------------------------- */}
       <section className="flex flex-col gap-1.5">
-        <h2 className="text-[0.65rem] font-bold tracking-widest text-black/50 uppercase">
+        <h2 className="text-[0.65rem] font-bold tracking-widest text-tinta-3 uppercase">
           O que pesou · toque para remover
         </h2>
         <ul className="flex flex-wrap gap-1.5">
@@ -294,11 +294,11 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
                   className={clsx(
                     "flex cursor-pointer items-baseline gap-1 rounded-full border px-2 py-0.5 text-xs",
                     fora
-                      ? "border-black/20 text-black/35 line-through"
+                      ? "border-borda text-tinta-3 line-through"
                       : "border-acao font-semibold",
                   )}
                 >
-                  <span className="text-[0.55rem] tracking-widest text-black/45 uppercase">
+                  <span className="text-[0.55rem] tracking-widest text-tinta-3 uppercase">
                     {ficha.tipo === "fora-da-caminhada" ? "sorteio" : ficha.tipo}
                   </span>
                   {ficha.rotulo}
@@ -313,7 +313,7 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
               <button
                 type="button"
                 onClick={() => setTodas((v) => !v)}
-                className="cursor-pointer rounded-full border border-black/25 px-2 py-0.5 text-xs font-semibold text-black/60"
+                className="cursor-pointer rounded-full border border-borda-forte px-2 py-0.5 text-xs font-semibold text-tinta-2"
               >
                 {todas ? "menos" : `+${escondidas}`}
               </button>
@@ -347,8 +347,8 @@ function Corpo({ explicacao }: { explicacao: ExplicacaoDaPersona }) {
             className={clsx(
               "flex-1 cursor-pointer rounded-full border px-3 py-1.5 text-xs font-bold",
               preferencia === valor
-                ? "border-acao bg-acao text-[var(--ic-branco)]"
-                : "border-black/25 text-[var(--ic-preto)]",
+                ? "border-acao bg-acao text-sobre-acao"
+                : "border-borda-forte text-tinta",
             )}
           >
             {preferencia === valor ? "✓ " : ""}
@@ -388,7 +388,7 @@ function Cadeia({
     <ol className="flex flex-col">
       <li data-passo className="flex flex-col">
         <span className="line-clamp-2 text-sm leading-tight font-bold">{caminho.sementeTitulo}</span>
-        <span className="text-[0.6rem] tracking-widest text-black/45 uppercase">
+        <span className="text-[0.6rem] tracking-widest text-tinta-3 uppercase">
           {caminho.sementeClasse} · no seu repertório
         </span>
       </li>
@@ -407,21 +407,21 @@ function Cadeia({
             // é citação literal do acervo do Itaú Cultural, nunca é truncado — cortar a
             // palavra do IC para caber na moldura seria pagar o orçamento vertical com a
             // única coisa que esta tela existe para preservar.
-            <p className="my-0.5 line-clamp-3 border-l-[3px] border-dashed border-black/35 py-px pl-2 text-xs leading-snug text-black/75 italic">
+            <p className="my-0.5 line-clamp-3 border-l-[3px] border-dashed border-borda-forte py-px pl-2 text-xs leading-snug text-tinta-2 italic">
               {passo.motivoTexto}
             </p>
           )}
           <span className="flex flex-wrap items-baseline gap-1">
             <span className="line-clamp-2 text-sm leading-tight font-bold">{passo.paraTitulo}</span>
-            <span className="text-[0.6rem] tracking-widest text-black/45 uppercase">
+            <span className="text-[0.6rem] tracking-widest text-tinta-3 uppercase">
               {passo.paraClasse}
             </span>
             <span
               className={clsx(
                 "rounded-full px-1.5 text-[0.55rem] font-bold tracking-wide",
                 passo.origemMotivo === "escrito"
-                  ? "bg-acao text-[var(--ic-branco)]"
-                  : "border border-black/30 text-black/55",
+                  ? "bg-acao text-sobre-acao"
+                  : "border border-borda-forte text-tinta-2",
               )}
             >
               {passo.origemMotivo === "escrito"
@@ -458,7 +458,7 @@ function Recalculo({
 }) {
   if (!removidos.length) {
     return (
-      <p className="text-[0.65rem] leading-snug text-black/50">
+      <p className="text-[0.65rem] leading-snug text-tinta-3">
         {total
           ? `${total} caminho${total > 1 ? "s" : ""} sustenta${total > 1 ? "m" : ""} esta recomendação. Remover uma ficha recalcula na hora.`
           : "Nenhum caminho sustenta esta recomendação — ela veio de fora da caminhada."}
@@ -474,7 +474,7 @@ function Recalculo({
     <p
       className={clsx(
         "rounded-lg p-2 text-xs leading-snug",
-        restaram ? "bg-black/[0.05]" : "border-2 border-acao",
+        restaram ? "bg-superficie-2" : "border-2 border-acao",
       )}
     >
       {decorativo ? (

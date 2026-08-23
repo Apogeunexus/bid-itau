@@ -53,7 +53,7 @@
   padding: 0.5rem 0.5rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   cursor: pointer;
   transition:
     border-color var(--dur-1) var(--ease-padrao),
@@ -61,7 +61,7 @@
 }
 
 .dia-chip:hover {
-  border-color: var(--ic-preto);
+  border-color: var(--cor-tinta);
 }
 
 /* O DIA PASSADO NÃO É UM ERRO DE ESTADO, É O ACERVO (D-54). Ele fica mais baixo em
@@ -70,19 +70,19 @@
  * quebrada. A distinção também é dita em texto no chip; a cor sozinha nunca carrega
  * informação aqui. */
 .dia-chip[data-tempo="passado"] {
-  background: rgb(0 0 0 / 0.03);
+  background: var(--cor-superficie-2);
   color: var(--cor-tinta-2);
 }
 
 .dia-chip[data-tempo="hoje"] {
-  border-color: var(--ic-preto);
+  border-color: var(--cor-tinta);
   font-weight: 700;
 }
 
 .dia-chip[aria-pressed="true"] {
   border-color: var(--cor-acao);
   background: var(--cor-acao-lavada);
-  color: var(--ic-preto);
+  color: var(--cor-tinta);
 }
 
 .dia-chip-data {
@@ -115,7 +115,7 @@
   padding: 0.75rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 /* A contagem de ocorrências com peso de primeira ordem. É ela que torna visível que a
@@ -147,7 +147,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  border: 1px solid rgb(0 0 0 / 0.18);
+  border: 1px solid var(--cor-borda);
   border-radius: var(--raio-pilula);
   padding: 0rem 0.5rem;
   font-size: var(--tipo-micro);
@@ -205,7 +205,7 @@
   top: 0;
   z-index: 1;
   padding: 0.25rem 0;
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
   font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -220,11 +220,11 @@
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
-  background: var(--ic-branco);
+  background: var(--cor-superficie);
 }
 
 .linha-sessao[data-sessao-tempo="passado"] {
-  background: rgb(0 0 0 / 0.03);
+  background: var(--cor-superficie-2);
 }
 
 /* A CONFIRMAÇÃO DE SALVAMENTO (D-56). Ela é o ponto da tela inteira: precisa ser
