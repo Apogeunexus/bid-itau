@@ -1378,7 +1378,9 @@ const CONTRATO_POR_ROTA = [
     // continuam — o catálogo unificado não encolheu, só a vitrine.
     rota: "play/index.html",
     plano: "05-07",
-    esperado: { play: 1, categoria: 4, midia: 113, "veja-isto": 1 },
+    // `veja-isto` saiu da conta em 23/08 junto com o painel de cobertura da ponte —
+    // ver a asserção de DOM «o painel de cobertura da ponte saiu da vitrine».
+    esperado: { play: 1, categoria: 4, midia: 113 },
   },
 ];
 
@@ -3389,7 +3391,6 @@ async function blocoPlay(cdp, base) {
       const midias = todos('[data-midia]');
       const chips = todos('[data-categoria]');
       const recursos = todos('[data-acessibilidade-do-play]');
-      const ponte = document.querySelector('[data-veja-isto]');
       const t = texto(document.body);
       return {
         midias: midias.length,
@@ -3402,8 +3403,9 @@ async function blocoPlay(cdp, base) {
           n: (r.querySelector('[data-denominador]')?.innerText ?? '').trim(),
           marcado: r.getAttribute('aria-pressed'),
         })),
-        ponteVisivel: visivel(ponte),
-        ponteDenominadores: ponte ? Array.from(ponte.querySelectorAll('[data-denominador]')).map((d) => d.getAttribute('data-denominador') + '=' + (d.innerText || '').trim()) : [],
+        // A vitrine NÃO pode mais falar da cobertura da ponte: ver a asserção
+        // «o painel de cobertura saiu da vitrine», logo abaixo.
+        pontesNaVitrine: todos('[data-veja-isto]').length,
         continue: attr('[data-continue]', 'data-continue'),
         transborda: transbordaNaHorizontal(),
       };
@@ -3429,11 +3431,19 @@ async function blocoPlay(cdp, base) {
       ` · nenhum vem marcado antes do gesto`,
     "3 recursos com número, 2 declarando o zero, 0 marcados",
   );
+  // D-92 CONTINUA VALENDO, E MUDOU DE TELA (23/08, decisão do cliente). O painel «não
+  // pode ir? veja isto» declarava a cobertura da ponte — «14 das 529 mídias falam de um
+  // evento…» — no fim da VITRINE, para quem veio escolher o que assistir. Isso é
+  // prestação de contas sobre o acervo, não é escolha de conteúdo. A ponte em si não
+  // sumiu: ela continua MEDIDA em `play.ts` (o gate de dados lá em cima confere os
+  // quatro números contra o grafo) e continua pondo as mídias na página do evento. O que
+  // este gate trava agora é o inverso do que travava: a cobertura não volta para a
+  // vitrine sem alguém decidir de novo.
   exigir(
-    catalogo.ponteVisivel && catalogo.ponteDenominadores.length >= 2,
-    "D-92 · «não pode ir? veja isto» é PRODUTO, e declara a cobertura REAL com denominador",
-    `visível=${catalogo.ponteVisivel} · denominadores ${JSON.stringify(catalogo.ponteDenominadores)}`,
-    "visível, com denominadores",
+    catalogo.pontesNaVitrine === 0,
+    "D-92 · o painel de cobertura da ponte saiu da vitrine (os números seguem medidos em play.ts)",
+    `${catalogo.pontesNaVitrine} painéis [data-veja-isto] na vitrine`,
+    "0",
   );
 
   const recortar = await cdp.avaliar(
@@ -3721,7 +3731,7 @@ async function blocoContratosCruzados(cdp, base) {
     "05-04": ["fila-redacao", "item-fila", "procedencia-item", "score-ia", "acao-redacao", "escopo-curador", "passo-trilha", "motivo-passo", "publicavel", "sugestao-ia", "limites-ia", "slug-trilha"],
     "05-05": ["observatorio", "procedencia-painel", "procedencia-fatia", "indicador", "publico", "leitura-procedencia", "mapa-desertos"],
     "05-06": ["filtros", "dimensao-acessibilidade", "declarado-ausente", "nao-declarado", "criterio-inexistente", "sem-resultado", "afrouxamento", "beco", "trilha-relacionada"],
-    "05-07": ["play", "categoria", "midia", "player", "concluir", "assistido", "veja-isto", "sem-arquivo"],
+    "05-07": ["play", "categoria", "midia", "player", "concluir", "assistido", "sem-arquivo"],
   };
   const COMPARTILHADOS = ["denominador", "nao-sustenta", "realcado", "contador-vivo"];
 

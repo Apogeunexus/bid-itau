@@ -4,7 +4,6 @@ import {
   catalogoNoFioStreaming,
   destaqueDoStreaming,
   dimensoesDoStreaming,
-  PONTE_COM_EVENTO,
   PROCEDENCIA_DAS_MIDIAS,
 } from "@/dados/play";
 
@@ -32,7 +31,6 @@ export default function PaginaPlay() {
       catalogo={catalogoNoFioStreaming()}
       destaque={destaqueDoStreaming()}
       dimensoes={dimensoesDoStreaming()}
-      ponte={PONTE_COM_EVENTO}
       procedencia={PROCEDENCIA_DAS_MIDIAS}
     />
   );

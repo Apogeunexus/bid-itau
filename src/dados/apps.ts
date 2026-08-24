@@ -126,10 +126,15 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
         descricao: "Filmes, séries e mostras do acervo",
         href: "/play",
         capa: {
-          arquivo: "62900cb44f608102.jpg",
-          alt: "Frame de episódio da série O segredo delas. Na imagem, a atriz Zezé Motta sorri enquanto é entrevistada.",
-          credito: "frame de video",
-          origem: "Série “O segredo delas” estreia na Itaú Cultural Play",
+          // A capa anterior era o frame de «O segredo delas», e ela vinha do
+          // vídeo com as TARJAS PRETAS gravadas em cima e embaixo: num cartaz em
+          // retrato, o corte guarda as duas e o app abre com uma faixa preta
+          // atravessada. Esta é uma fotografia, não um frame — e é do mesmo
+          // recorte, uma mídia de vídeo do catálogo do Play.
+          arquivo: "009010abd65ad607.jpg",
+          alt: "Na imagem está uma mulher negra, de cabeça raspada, sorrindo e com uma das mãos no rosto, quanto a outra está apoiada na mesa. Ela usa uma roupa vermelha de um ombro só, anel com uma pedra grande e brincos.",
+          credito: "Marcus Leoni/Itaú Cultural",
+          origem: "Série “Cada voz” recebe Virgínia Rodrigues (midia:cms:1114)",
         },
         selo: "tocar",
       },

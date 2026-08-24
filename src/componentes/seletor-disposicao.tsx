@@ -38,14 +38,21 @@ export function SeletorDisposicao() {
       data-seletor-disposicao
       className="flex flex-col gap-2 rounded-xl border border-borda bg-superficie p-3"
     >
-      <div className="flex items-start gap-2">
-        <Grafismo variacao="barra" className="mt-1 h-4 w-auto shrink-0 text-acao-tinta" />
+      {/* SEM DISPOSIÇÃO MARCADA, A LINHA É SÓ O BOTÃO — e ele diz o que faz.
+          Antes ela dizia «este é o feed base, do seu repertório»: «feed base» é o nome
+          INTERNO do estado padrão, quem chega não sabe o que é e não precisa saber, e a
+          frase ocupava a primeira linha da tela mais vista do produto explicando o
+          mecanismo em vez de mostrar conteúdo. Com a frase fora, a barra do grafismo
+          também sai: ela acompanha o texto, e sozinha num campo vazio vira enfeite
+          apontando para nada.
 
-        {/* A disposição em TEXTO CORRIDO. É a metade «visível» de D-32, e é o que a foto
-            do slide precisa mostrar sem ninguém tocar em nada. */}
-        <p className="min-w-0 flex-1 text-sm leading-snug">
-          {marcadas.length ? (
-            <>
+          Com disposição marcada nada disso muda: o texto corrido é a metade «visível» de
+          D-32, e é o que a foto do slide precisa mostrar sem ninguém tocar em nada. */}
+      <div className="flex items-start gap-2">
+        {marcadas.length ? (
+          <>
+            <Grafismo variacao="barra" className="mt-1 h-4 w-auto shrink-0 text-acao-tinta" />
+            <p className="min-w-0 flex-1 text-sm leading-snug">
               Hoje você quer{" "}
               {marcadas.map((d, i) => (
                 <span key={d.id}>
@@ -54,18 +61,9 @@ export function SeletorDisposicao() {
                 </span>
               ))}
               .
-            </>
-          ) : (
-            // Encurtado na reformulação de 2026-08: a versão anterior explicava
-            // o MECANISMO («disposição pondera a caminhada, não a destrava») no
-            // estado padrão da tela mais vista do produto. Isso é texto de
-            // especificação vestido de produto — quem chega quer saber o que
-            // está vendo, e o porquê está a um toque de distância, em «editar».
-            <>
-              Este é o <strong>feed base</strong>, do seu repertório.
-            </>
-          )}
-        </p>
+            </p>
+          </>
+        ) : null}
 
         <button
           type="button"
@@ -74,7 +72,7 @@ export function SeletorDisposicao() {
           onClick={() => setAberto((v) => !v)}
           className="shrink-0 cursor-pointer rounded-full border border-acao px-3 py-1 text-xs font-bold text-acao-tinta"
         >
-          {aberto ? "fechar" : "editar"}
+          {aberto ? "fechar" : marcadas.length ? "editar" : "escolher disposição"}
         </button>
       </div>
 

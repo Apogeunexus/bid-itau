@@ -241,13 +241,11 @@ export function Play({
   catalogo,
   destaque,
   dimensoes,
-  ponte,
   procedencia,
 }: {
   catalogo: CatalogoNoFio;
   destaque: DestaqueNoFio;
   dimensoes: readonly DimensaoContada[];
-  ponte: { arestas: number; midiasDistintas: number; eventosAlcancados: number; deQuantas: number; declaracao: string };
   procedencia: { rotulo: string; n: number };
 }) {
   const [categoria, setCategoria] = useState<string>(SEM_RECORTE);
@@ -589,26 +587,12 @@ export function Play({
         )}
       </section>
 
-      {/* -------------------------------------------- não pode ir? veja isto (D-92) */}
-      <section
-        data-veja-isto
-        className="flex flex-col gap-2 rounded-m border border-borda p-3 desk:web-painel"
-      >
-        <h2 className="tipo-detalhe font-bold">Não pode ir? veja isto</h2>
-        {/* Os quatro denominadores ficam: eles são a COBERTURA REAL da ponte, e o
-            portão D-92 os lê. O parágrafo que explicava por que não autoramos aresta
-            mídia→evento saiu da tela em 23/08 — ele vive em `play.ts`. */}
-        <p className="tipo-detalhe">
-          <strong data-denominador="com-ponte">{ponte.midiasDistintas}</strong> das{" "}
-          <strong data-denominador="total">{ponte.deQuantas}</strong> mídias falam de um
-          evento que está no acervo — são{" "}
-          <strong data-denominador="arestas">{ponte.arestas}</strong> ligações, alcançando{" "}
-          <strong data-denominador="eventos">{ponte.eventosAlcancados}</strong> eventos. Nas
-          páginas desses eventos, essas mídias aparecem como o que dá para ver de casa
-          quando não dá para ir.
-        </p>
-      </section>
-
+      {/* O painel «Não pode ir? veja isto» saiu do catálogo em 23/08. Ele mostrava a
+          COBERTURA da ponte mídia→evento — «14 das 529 mídias falam de um evento…» — no
+          fim da vitrine, para quem veio escolher o que assistir. É prestação de contas
+          sobre o acervo, não é escolha de conteúdo, e o lugar dela é o Observatório.
+          A ponte em si continua: ela é o que põe as mídias na página do evento
+          (`midiasPorEvento` em `play.ts`), e os números continuam MEDIDOS lá. */}
     </section>
   );
 }

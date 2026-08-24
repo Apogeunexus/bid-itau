@@ -32,11 +32,20 @@
  * Ele diz «toque para entrar em um deles», e quem cumpre isso são os cartazes
  * abaixo — por isso ele é `<header>` e não `<a>`. Um cartaz de abertura
  * clicável mandaria o dedo para algum lugar que a própria frase não promete. */
+/* A RAZÃO É PISO, NÃO TRAVA, e essa é a correção de 23/08 à noite. Ela morava em
+ * `aspect-ratio` no próprio cartaz, com o texto por cima em `absolute`: em
+ * qualquer largura em que o título não coubesse em duas linhas — 320px, por
+ * exemplo — o bloco de texto crescia para fora do cartaz, e o `overflow: hidden`
+ * cortava a PRIMEIRA linha. A tela mostrava «num lugar só» e comia o «Tudo».
+ *
+ * Agora a razão mora num espaçador (`::before`) que ocupa a mesma célula de
+ * grade do texto: a altura da célula é a MAIOR das duas, então o cartaz mantém
+ * 16:9 enquanto o texto couber e cresce quando ele não couber. */
 .hub-abertura {
   position: relative;
+  display: grid;
   overflow: hidden;
   margin-block-start: var(--espaco-tela);
-  aspect-ratio: 16 / 9;
   border-radius: var(--raio-g);
   /* Preto fixo nos dois temas: é o que está DEBAIXO do véu e da foto, e é contra
      ele que o branco do título mede. Sem esta linha o fundo herdado no tema
@@ -46,6 +55,12 @@
      degrau que desenha a borda dele — do jeito que a referência mede. */
   background: var(--ic-preto);
   box-shadow: var(--sombra-2);
+}
+
+.hub-abertura::before {
+  content: "";
+  grid-area: 1 / 1;
+  aspect-ratio: 16 / 9;
 }
 
 /* A foto ocupa a metade direita e o véu apaga a borda dela na esquerda, onde o
@@ -73,23 +88,34 @@
 }
 
 .hub-abertura-texto {
-  position: absolute;
-  inset-block: 0;
-  left: 0;
+  /* Mesma célula do espaçador: é isso que faz a razão ser piso. `relative` para
+     pintar por cima do véu, que é posicionado. */
+  position: relative;
+  grid-area: 1 / 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-self: center;
   gap: 0.75rem;
   /* A coluna do texto é o que decide a quebra do título: mais estreita e «Tudo
      num lugar só» cai em três linhas, mais larga e ele invade a parte clara da
-     foto. 62% menos o respiro é a medida em que ele quebra em duas, como na
-     referência, e ainda termina dentro da parte escura do véu. */
-  max-inline-size: 62%;
+     foto. 62% é a medida em que ele quebra em duas, como na referência, e ainda
+     termina dentro da parte escura do véu.
+     O PISO DE 12rem é para o telefone estreito: abaixo de ~360px de janela, 62%
+     não cabem duas palavras de 2rem e o título ia para três linhas. */
+  max-inline-size: max(62%, 12rem);
+  padding-block: 1rem;
   padding-inline: 1.25rem;
 }
 
+/* O TAMANHO DO TÍTULO INTERPOLA ENTRE DOIS DEGRAUS DA ESCALA, e não é medida
+   nova: `--tipo-titulo-1` é o piso e `--tipo-cartaz` é o teto, os dois
+   declarados em tokens.css. O cartaz tem 2.25rem, que é o desenho, e é largura
+   demais para um telefone de 320px — ali o título passava de duas para três
+   linhas. Interpolar é o que mantém o desenho onde ele cabe e recua um degrau
+   onde não cabe, sem uma media query nova e sem um tamanho inventado. */
 .hub-abertura-texto h1 {
   color: var(--ic-branco);
+  font-size: clamp(var(--tipo-titulo-1), 9vw, var(--tipo-cartaz));
 }
 
 .hub-abertura-texto p {
@@ -138,12 +164,32 @@
   box-shadow: var(--sombra-1);
 }
 
+/* TRÊS FILEIRAS, E A DO MEIO É FOLGA: a marca em cima, o vazio esticável, o
+ * texto embaixo. Antes o texto era `absolute` no rodapé e a razão do porte
+ * travava a altura do cartaz — em janela estreita o texto crescia para fora e o
+ * `overflow: hidden` cortava a PRIMEIRA linha dele. Em 320px o cartaz da IA
+ * mostrava «com IA» e comia o «Roteiros».
+ *
+ * A razão agora mora no espaçador `::before`, que ocupa as três fileiras: a
+ * altura do cartaz é a MAIOR entre a razão do porte e o que o texto pede. */
 .hub-cartaz-link {
-  display: block;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
   block-size: 100%;
 }
 
+.hub-cartaz-link::before {
+  content: "";
+  grid-area: 1 / 1 / -1 / -1;
+}
+
+/* A foto virou CAMADA e não mais a primeira fileira: com o texto no fluxo, uma
+   imagem em fluxo somaria altura em vez de ficar atrás dele. */
 .hub-cartaz-foto {
+  position: absolute;
+  inset: 0;
   display: block;
   inline-size: 100%;
   block-size: 100%;
@@ -179,11 +225,11 @@
   );
 }
 
+/* `relative` para pintar por cima do véu, que é posicionado. */
 .hub-cartaz-texto {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  position: relative;
+  grid-row: 3;
+  grid-column: 1;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -229,21 +275,28 @@
   block-size: 1.25rem;
 }
 
-/* ---- Os portes: só a razão do retângulo e quantas colunas ele ocupa ---- */
-.hub-cartaz--retrato {
+/* ---- Os portes: só a razão do retângulo e quantas colunas ele ocupa ----
+ *
+ * A razão vai no ESPAÇADOR, não no cartaz: no cartaz ela travava a altura e o
+ * texto que não coubesse era cortado (ver o bloco de `.hub-cartaz-link`). No
+ * espaçador ela é o piso — o cartaz tem a forma desenhada enquanto ela couber. */
+.hub-cartaz--retrato .hub-cartaz-link::before {
   aspect-ratio: 5 / 6;
 }
 
-.hub-cartaz--paisagem {
+.hub-cartaz--paisagem .hub-cartaz-link::before {
   aspect-ratio: 5 / 4;
 }
 
-.hub-cartaz--larga {
+.hub-cartaz--larga .hub-cartaz-link::before {
   aspect-ratio: 16 / 9;
 }
 
 .hub-cartaz--faixa {
   grid-column: 1 / -1;
+}
+
+.hub-cartaz--faixa .hub-cartaz-link::before {
   aspect-ratio: 15 / 7;
 }
 
@@ -297,12 +350,16 @@
     color-mix(in srgb, var(--ic-verde-agua) 48%, var(--ic-branco));
 }
 
-/* A marca: o glifo grande no alto, onde a fotografia estaria. */
+/* A marca: o glifo grande no alto, onde a fotografia estaria. Ela ocupa a
+   PRIMEIRA fileira do cartaz e não flutua em `absolute` — flutuando, ela não
+   somava altura, e num cartaz estreito o título subia por baixo dela. */
 .hub-cartaz-marca {
-  position: absolute;
-  top: var(--espaco-cartao);
-  left: var(--espaco-cartao);
+  position: relative;
+  grid-row: 1;
+  grid-column: 1;
+  justify-self: start;
   display: block;
+  padding: var(--espaco-cartao) var(--espaco-cartao) 0;
   color: var(--ic-preto);
 }
 
