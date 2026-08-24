@@ -1,0 +1,263 @@
+/* ---------------------------------------------------------------------------
+ * TRANSIÇÃO — troca de tela (View Transitions) e o chrome que NÃO viaja junto.
+ *
+ * O ritmo é o do design system: `--dur-2` sai, `--dur-3` entra, `--ease-padrao`
+ * é a curva do iOS que o manual já tinha. Sem blur, sem mola, sem 60px de
+ * deslize — offset pequeno o bastante para dar direção e pequeno demais para
+ * o olho perseguir o bloco.
+ *
+ * `data-nav` na raiz escolhe o quadro. Quem escreve é `transicao-de-tela.tsx`.
+ * ------------------------------------------------------------------------- */
+
+.tela-em-transicao {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  view-transition-name: tela;
+}
+
+.icone-vivo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+}
+
+/* O overlay da API captura clique durante a animação; sem isto o toque na
+ * aba seguinte se perde no meio da troca. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* A raiz carrega a moldura e o palco. Sem isto o UA aplica fade-in/out
+ * plus-lighter nela e a troca lampeja por baixo do chrome nomeado. */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* ---- Chrome: nomeado para NÃO deslizar com o conteúdo -------------------
+ * Sem nome, a barra entra no snapshot da raiz e some numa piscada (ou viaja
+ * com o slide). Com nome, o grupo fica; o conteúdo é que troca. */
+
+[data-view="mobile"] .barra-topo {
+  view-transition-name: barra-topo;
+}
+
+[data-view="mobile"] .barra-abas {
+  view-transition-name: barra-abas;
+}
+
+[data-view="mobile"] .barra-apps {
+  view-transition-name: barra-apps;
+}
+
+[data-view="web"] .menu-lateral {
+  view-transition-name: menu-lateral;
+}
+
+.canto {
+  view-transition-name: canto;
+}
+
+::view-transition-group(barra-topo),
+::view-transition-group(menu-lateral),
+::view-transition-group(canto) {
+  animation: none;
+  z-index: 130;
+}
+
+::view-transition-old(barra-topo),
+::view-transition-old(menu-lateral),
+::view-transition-old(canto) {
+  display: none;
+}
+
+::view-transition-new(barra-topo),
+::view-transition-new(menu-lateral),
+::view-transition-new(canto) {
+  animation: none;
+}
+
+/* A pílula ENGROSSA quando o botão Apps some: o grupo interpola a caixa.
+ * Old/new com animation none — o UA senão aplica fade plus-lighter a cada
+ * troca de aba, que é o lampejo que o chrome não pode ter. */
+::view-transition-group(barra-abas) {
+  animation-duration: var(--dur-3);
+  animation-timing-function: var(--ease-padrao);
+  z-index: 120;
+}
+
+::view-transition-old(barra-abas) {
+  display: none;
+}
+
+::view-transition-new(barra-abas) {
+  animation: none;
+}
+
+/* O botão Apps: escala só quando ELE entra ou sai (`:only-child` no par).
+ * Em troca de aba os dois snapshots existem — animação nenhuma, senão o
+ * laranja pulsaria a cada toque em Descobrir/Buscar. */
+::view-transition-group(barra-apps) {
+  z-index: 121;
+}
+
+::view-transition-old(barra-apps),
+::view-transition-new(barra-apps) {
+  animation: none;
+}
+
+::view-transition-old(barra-apps):only-child {
+  animation: barra-apps-sai var(--dur-3) var(--ease-saida) both;
+  transform-origin: center;
+}
+
+::view-transition-new(barra-apps):only-child {
+  animation: barra-apps-entra var(--dur-3) var(--ease-padrao) both;
+  transform-origin: center;
+}
+
+@keyframes barra-apps-sai {
+  to {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+}
+
+@keyframes barra-apps-entra {
+  from {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+}
+
+/* ---- Conteúdo da tela --------------------------------------------------- */
+
+::view-transition-old(tela),
+::view-transition-new(tela),
+::view-transition-old(.tela),
+::view-transition-new(.tela) {
+  animation-timing-function: var(--ease-padrao);
+  animation-fill-mode: both;
+}
+
+/* Irmã (aba ↔ aba, app ↔ app): só opacidade. Slide aqui mentiria hierarquia. */
+::view-transition-old(tela),
+::view-transition-old(.tela) {
+  animation: tela-some var(--dur-2) var(--ease-saida) both;
+}
+
+::view-transition-new(tela),
+::view-transition-new(.tela) {
+  animation: tela-irma-entra var(--dur-3) var(--ease-padrao) both;
+}
+
+html[data-nav="nav-forward"]::view-transition-old(tela),
+html[data-nav="nav-forward"]::view-transition-old(.tela) {
+  --sentido: -1;
+  animation:
+    tela-some var(--dur-2) var(--ease-saida) both,
+    tela-desliza-sai var(--dur-3) var(--ease-padrao) both;
+}
+
+html[data-nav="nav-forward"]::view-transition-new(tela),
+html[data-nav="nav-forward"]::view-transition-new(.tela) {
+  --sentido: 1;
+  animation:
+    tela-aparece var(--dur-2) var(--ease-padrao) var(--dur-1) both,
+    tela-desliza-entra var(--dur-3) var(--ease-padrao) both;
+}
+
+html[data-nav="nav-back"]::view-transition-old(tela),
+html[data-nav="nav-back"]::view-transition-old(.tela) {
+  --sentido: 1;
+  animation:
+    tela-some var(--dur-2) var(--ease-saida) both,
+    tela-desliza-sai var(--dur-3) var(--ease-padrao) both;
+}
+
+html[data-nav="nav-back"]::view-transition-new(tela),
+html[data-nav="nav-back"]::view-transition-new(.tela) {
+  --sentido: -1;
+  animation:
+    tela-aparece var(--dur-2) var(--ease-padrao) var(--dur-1) both,
+    tela-desliza-entra var(--dur-3) var(--ease-padrao) both;
+}
+
+/* Hub: a pasta abre. Escala curta, sem zoom de cartaz. */
+html[data-nav="nav-hub-abre"]::view-transition-old(tela),
+html[data-nav="nav-hub-abre"]::view-transition-old(.tela) {
+  animation: tela-some var(--dur-2) var(--ease-saida) both;
+}
+
+html[data-nav="nav-hub-abre"]::view-transition-new(tela),
+html[data-nav="nav-hub-abre"]::view-transition-new(.tela) {
+  animation: tela-hub-entra var(--dur-3) var(--ease-padrao) both;
+}
+
+html[data-nav="nav-hub-fecha"]::view-transition-old(tela),
+html[data-nav="nav-hub-fecha"]::view-transition-old(.tela) {
+  animation: tela-hub-sai var(--dur-2) var(--ease-saida) both;
+}
+
+html[data-nav="nav-hub-fecha"]::view-transition-new(tela),
+html[data-nav="nav-hub-fecha"]::view-transition-new(.tela) {
+  animation: tela-aparece var(--dur-2) var(--ease-padrao) var(--dur-1) both;
+}
+
+@keyframes tela-some {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes tela-aparece {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes tela-irma-entra {
+  from {
+    opacity: 0;
+    translate: 0 var(--deslize-irma);
+  }
+}
+
+@keyframes tela-desliza-entra {
+  from {
+    translate: calc(var(--sentido) * var(--deslize-tela)) 0;
+  }
+}
+
+@keyframes tela-desliza-sai {
+  to {
+    translate: calc(var(--sentido) * var(--deslize-tela)) 0;
+  }
+}
+
+@keyframes tela-hub-entra {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@keyframes tela-hub-sai {
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

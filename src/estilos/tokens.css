@@ -136,9 +136,13 @@
   /* ---- Motion ---- */
   --dur-1: 120ms; /* micro: hover, foco */
   --dur-2: 200ms; /* entrada de painel */
-  --dur-3: 320ms; /* drawer, folha */
+  --dur-3: 320ms; /* drawer, folha, troca de tela */
   --ease-padrao: cubic-bezier(0.2, 0, 0, 1);
   --ease-saida: cubic-bezier(0.3, 0, 1, 1);
+  /* Offset da troca de tela: pequeno de propósito. 60px (o exemplo do Next)
+   * faz o olho perseguir o bloco; 1.75rem dá direção sem virar cinema. */
+  --deslize-tela: 1.75rem;
+  --deslize-irma: 0.5rem;
 }
 
 /* Densidade da visão web: os mesmos papéis, medidas maiores. Trocar o token

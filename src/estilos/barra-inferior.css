@@ -90,6 +90,7 @@
   border-radius: var(--raio-g);
   background: var(--cor-superficie);
   box-shadow: var(--sombra-3);
+  transform-origin: top right;
 }
 
 [data-view="mobile"] .barra-conta-persona {

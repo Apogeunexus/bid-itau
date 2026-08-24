@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { marcarNavegacao } from "@/lib/movimento";
 import { useSessao } from "@/contexto/sessao";
 import { useVisao } from "@/contexto/visao";
 import type { Cenario, PassoDoRoteiro, RoteiroDTO } from "@/dados/roteiro";
@@ -178,6 +179,7 @@ function BlocoCenario({
 
 export function Roteiro({ roteiro }: { roteiro: RoteiroDTO }) {
   const router = useRouter();
+  const caminho = usePathname() ?? "";
   const { definirVisao, hidratado: visaoHidratada } = useVisao();
   const {
     definirPersona,
@@ -215,7 +217,10 @@ export function Roteiro({ roteiro }: { roteiro: RoteiroDTO }) {
 
     // 3 — a primeira rota do percurso.
     const destino = cenario.passos[0]?.rota;
-    if (destino) router.push(destino);
+    if (destino) {
+      marcarNavegacao(caminho, destino);
+      router.push(destino);
+    }
   }
 
   return (

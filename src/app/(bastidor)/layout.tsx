@@ -1,4 +1,5 @@
 import { AvisoDesktop } from "@/componentes/aviso-desktop";
+import { TransicaoDeTela } from "@/componentes/transicao-de-tela";
 
 /**
  * Layout das três superfícies de bastidor — Studio, Redação e Observatório.
@@ -12,7 +13,9 @@ export default function LayoutBastidor({ children }: { children: React.ReactNode
   return (
     <div className="min-h-full">
       <AvisoDesktop />
-      <div className="app:hidden">{children}</div>
+      <div className="app:hidden">
+        <TransicaoDeTela>{children}</TransicaoDeTela>
+      </div>
     </div>
   );
 }

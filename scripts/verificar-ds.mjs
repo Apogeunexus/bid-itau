@@ -60,6 +60,7 @@ const FOLHAS_MIGRADAS = [
   "studio-duplicatas.css",
   "studio-ocorrencias.css",
   "studio.css",
+  "transicao.css",
   "web-buscar.css",
   "web-descobrir.css",
   "web-evento.css",

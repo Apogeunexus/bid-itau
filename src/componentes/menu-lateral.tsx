@@ -16,6 +16,7 @@ import {
   ICONE_PLAY,
   ICONE_SALVOS,
 } from "@/componentes/base/icones";
+import { IconeVivo } from "@/componentes/icone-vivo";
 import { AssinaturaIc, Chancela } from "@/componentes/marca";
 import { useSessao } from "@/contexto/sessao";
 import { personaPorId } from "@/dados/personas";
@@ -96,7 +97,7 @@ function ItemDeMenu({ item, caminho }: { item: Item; caminho: string }) {
         aria-current={caminho === item.href ? "page" : undefined}
         className="menu-item tipo-detalhe"
       >
-        {item.icone}
+        {item.icone ? <IconeVivo ativo={ativo}>{item.icone}</IconeVivo> : null}
         <span>{item.rotulo}</span>
       </Link>
       {item.filhos && ativo ? (

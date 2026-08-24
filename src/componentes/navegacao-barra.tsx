@@ -1,8 +1,9 @@
 "use client";
 
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ICONE_ACONTECE,
   ICONE_APPS,
@@ -11,11 +12,15 @@ import {
   ICONE_PERFIL,
   ICONE_SALVOS,
 } from "@/componentes/base/icones";
+import { IconeVivo, pulsarGradeApps } from "@/componentes/icone-vivo";
 import { AssinaturaIc } from "@/componentes/marca";
 import { SeletorDeTema } from "@/componentes/seletor-tema";
 import { useSessao } from "@/contexto/sessao";
 import { ATALHOS_CONTA } from "@/dados/apps";
 import { personaPorId } from "@/dados/personas";
+import { transicaoDe } from "@/lib/movimento";
+
+const AbaLink = motion.create(Link);
 
 /**
  * navegacao-barra.tsx — a navegação da VISÃO APP desde 2026-08-23: cabeçalho
@@ -66,6 +71,10 @@ export function NavegacaoBarra() {
   const { personaId } = useSessao();
   const persona = personaPorId(personaId);
   const [contaAberta, setContaAberta] = useState(false);
+  const botaoConta = useRef<HTMLButtonElement>(null);
+  const reduzir = useReducedMotion();
+  const toque = transicaoDe("--dur-1", reduzir === true);
+  const painel = transicaoDe("--dur-2", reduzir === true);
 
   // Trocar de tela FECHA o menu. Sem isto ele sobreviveria à navegação e
   // reapareceria aberto sobre a tela seguinte, que nunca é o que se espera.
@@ -95,11 +104,14 @@ export function NavegacaoBarra() {
             if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setContaAberta(false);
           }}
           onKeyDown={(e) => {
-            if (e.key === "Escape") setContaAberta(false);
+            if (e.key !== "Escape") return;
+            setContaAberta(false);
+            botaoConta.current?.focus();
           }}
         >
           <button
             type="button"
+            ref={botaoConta}
             data-conta
             aria-expanded={contaAberta}
             aria-controls="menu-da-conta"
@@ -107,28 +119,40 @@ export function NavegacaoBarra() {
             className="barra-conta-botao"
             onClick={() => setContaAberta((v) => !v)}
           >
-            {ICONE_PERFIL}
+            <IconeVivo ativo={contaAberta}>{ICONE_PERFIL}</IconeVivo>
           </button>
 
-          {contaAberta ? (
-            <div id="menu-da-conta" className="barra-conta-menu">
-              <p className="barra-conta-persona tipo-micro">
-                você está como {persona?.nome ?? "…"}
-              </p>
-              {ATALHOS_CONTA.map((atalho) => (
-                <Link
-                  key={atalho.href}
-                  href={atalho.href}
-                  className="barra-conta-item"
-                  onClick={() => setContaAberta(false)}
-                >
-                  <span className="barra-conta-rotulo tipo-detalhe">{atalho.rotulo}</span>
-                  <span className="barra-conta-descricao tipo-legenda">{atalho.descricao}</span>
-                </Link>
-              ))}
-              <SeletorDeTema />
-            </div>
-          ) : null}
+          <AnimatePresence initial={false}>
+            {contaAberta ? (
+              <motion.div
+                key="menu-da-conta"
+                id="menu-da-conta"
+                className="barra-conta-menu"
+                initial={{ opacity: 0, scale: 0.96, y: -8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98, y: -4 }}
+                transition={painel}
+                style={{ transformOrigin: "top right" }}
+                inert={contaAberta ? undefined : true}
+              >
+                <p className="barra-conta-persona tipo-micro">
+                  você está como {persona?.nome ?? "…"}
+                </p>
+                {ATALHOS_CONTA.map((atalho) => (
+                  <Link
+                    key={atalho.href}
+                    href={atalho.href}
+                    className="barra-conta-item"
+                    onClick={() => setContaAberta(false)}
+                  >
+                    <span className="barra-conta-rotulo tipo-detalhe">{atalho.rotulo}</span>
+                    <span className="barra-conta-descricao tipo-legenda">{atalho.descricao}</span>
+                  </Link>
+                ))}
+                <SeletorDeTema />
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
         </div>
       </header>
 
@@ -136,14 +160,16 @@ export function NavegacaoBarra() {
         <ul className="barra-abas">
           {ABAS.map((aba) => (
             <li key={aba.href}>
-              <Link
+              <AbaLink
                 href={aba.href}
                 aria-current={dentroDe(aba.href) ? "page" : undefined}
                 className="barra-aba"
+                whileTap={reduzir ? undefined : { scale: 0.96 }}
+                transition={toque}
               >
-                {aba.icone}
+                <IconeVivo ativo={dentroDe(aba.href)}>{aba.icone}</IconeVivo>
                 <span className="tipo-legenda">{aba.rotulo}</span>
-              </Link>
+              </AbaLink>
             </li>
           ))}
         </ul>
@@ -154,7 +180,11 @@ export function NavegacaoBarra() {
             única AÇÃO em destaque da tela sem ter ação para oferecer. As quatro
             abas continuam, que é por onde se sai daqui. */}
         {dentroDe(HREF_APPS) ? null : (
-          <Link href={HREF_APPS} className="barra-apps">
+          <Link
+            href={HREF_APPS}
+            className="barra-apps"
+            onPointerDown={(evento) => pulsarGradeApps(evento.currentTarget)}
+          >
             {ICONE_APPS}
             <span className="tipo-micro">Apps</span>
           </Link>

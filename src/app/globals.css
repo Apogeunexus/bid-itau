@@ -18,6 +18,10 @@
 @import "../estilos/barra-inferior.css";
 @import "../estilos/hub.css";
 
+/* Troca de tela (View Transitions) e o chrome que não viaja junto. Depois da
+ * barra porque nomeia os mesmos elementos que ela desenha. */
+@import "../estilos/transicao.css";
+
 /* ---------------------------------------------------------------------------
  * As folhas por tela, reunidas aqui.
  *
