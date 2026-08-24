@@ -18,9 +18,15 @@ const traco = {
   strokeLinejoin: "round",
 } as const;
 
-export function Icone({ children }: { children: React.ReactNode }) {
+export function Icone({
+  children,
+  className = "size-6 shrink-0",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden focusable="false" className="size-6 shrink-0">
+    <svg viewBox="0 0 24 24" aria-hidden focusable="false" className={className}>
       {children}
     </svg>
   );
@@ -167,6 +173,27 @@ export const ICONE_APPS = (
     <rect x="13.5" y="3.5" width="7" height="7" rx="2" {...traco} />
     <rect x="3.5" y="13.5" width="7" height="7" rx="2" {...traco} />
     <rect x="13.5" y="13.5" width="7" height="7" rx="2" {...traco} />
+  </Icone>
+);
+
+/** Chevron da faixa de datas em Acontece — o mesmo traço nas duas direções. */
+export const ICONE_CHEVRON_ESQUERDA = (
+  <Icone>
+    <path d="M15 5.5 8.5 12 15 18.5" {...traco} />
+  </Icone>
+);
+
+export const ICONE_CHEVRON_DIREITA = (
+  <Icone>
+    <path d="M9 5.5 15.5 12 9 18.5" {...traco} />
+  </Icone>
+);
+
+/** Relógio da meta do cartão de agenda. */
+export const ICONE_RELOGIO = (
+  <Icone>
+    <circle cx="12" cy="12" r="8" {...traco} />
+    <path d="M12 8v4.5l3 1.5" {...traco} />
   </Icone>
 );
 

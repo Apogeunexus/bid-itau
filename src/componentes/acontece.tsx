@@ -1,11 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ICONE_ACONTECE,
+  ICONE_CHEVRON_DIREITA,
+  ICONE_CHEVRON_ESQUERDA,
+  ICONE_FILTROS,
+  ICONE_MAPA,
+  ICONE_RELOGIO,
+  ICONE_SALVOS,
+} from "@/componentes/base/icones";
 import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
-import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
-import { Grafismo } from "@/componentes/grafismo";
-import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
+import { CapaDeCartao, CapaSemImagem } from "@/componentes/capa-sem-imagem";
+import { linguagemPorId, SelosDeLinguagem } from "@/componentes/selo-linguagem";
 import type { Agenda, DiaDaAgenda, EventoDaAgenda } from "@/dados/agenda";
 import type { MapaDaAgenda } from "@/dados/mapa-agenda";
 import {
@@ -39,11 +47,9 @@ import {
  * escrita na tela — um «passado» calculado contra uma data que o leitor não conhece é
  * pior do que nenhuma informação.
  *
- * O QUE NÃO EXISTE AQUI, DE PROPÓSITO. `docs/telas.md` (tela 8) prevê «atalho para
- * filtros» e «distância em tempo». Filtros são Camada 2, fase 5: o atalho seria link
- * morto na demonstração. Distância exigiria a localização de quem usa e o espaço da
- * sessão, e o acervo não publica o segundo em 2.425 de 2.425 sessões — qualquer
- * distância seria inventada.
+ * Distância em tempo (tela 8) continua de fora: exigiria a localização de quem usa e o
+ * espaço da sessão, e o acervo não publica o segundo em 2.425 de 2.425 sessões — qualquer
+ * distância seria inventada. O atalho de filtros aponta para `/filtros/`, que existe.
  */
 
 // ---------------------------------------------------------------------------
@@ -88,6 +94,21 @@ const MESES = [
   "dezembro",
 ];
 
+const MESES_CURTOS = [
+  "jan",
+  "fev",
+  "mar",
+  "abr",
+  "mai",
+  "jun",
+  "jul",
+  "ago",
+  "set",
+  "out",
+  "nov",
+  "dez",
+];
+
 function partesDaData(iso: string) {
   const [data, resto = ""] = iso.split("T");
   const [ano, mes, dia] = data.split("-").map(Number);
@@ -112,6 +133,31 @@ export function curta(iso: string): string {
 
 export function pedacosDoDia(iso: string) {
   return partesDaData(iso);
+}
+
+/** «22 de agosto de 2026» — a data de referência por extenso, sem o dia da semana. */
+export function dataPorExtenso(iso: string): string {
+  const { ano, mes, dia } = partesDaData(iso);
+  return `${dia} de ${MESES[mes - 1]} de ${ano}`;
+}
+
+/** «22 AGO 2026». A caixa alta sai do CSS (`text-transform`), para «sáb» virar «SÁB». */
+export function dataAgenda(iso: string): string {
+  const { ano, mes, dia } = partesDaData(iso);
+  return `${dia} ${MESES_CURTOS[mes - 1]} ${ano}`;
+}
+
+/** «11h00». */
+export function horaAgenda(hhmm: string): string {
+  return hhmm.replace(":", "h");
+}
+
+function rotulosDeLinguagem(ids: string[]): string {
+  return ids
+    .map(linguagemPorId)
+    .filter((l): l is NonNullable<typeof l> => Boolean(l))
+    .map((l) => l.rotulo)
+    .join(" · ");
 }
 
 /**
@@ -229,14 +275,13 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
   );
 
   const visiveis = Math.max(1, janelaSugerida.diasNoRecorte);
+  /** Dias passados que ficam no DOM à esquerda do escolhido — D-54 precisa vê-los, a
+   *  tela mostra o escolhido primeiro e eles entram pelo gesto à esquerda. */
+  const FOLGA_PASSADO = 8;
 
-  /** Enquadra a faixa para que um índice fique dentro dela, sem sair da lista. */
+  /** O dia escolhido abre a faixa: passado fica à esquerda, futuro à direita. */
   const enquadrar = useCallback(
-    (indice: number) =>
-      Math.min(
-        Math.max(0, dias.length - visiveis),
-        Math.max(0, indice - Math.floor(visiveis / 3)),
-      ),
+    (indice: number) => Math.min(Math.max(0, dias.length - visiveis), Math.max(0, indice)),
     [dias.length, visiveis],
   );
 
@@ -247,7 +292,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
   const [diaSelecionado, setDiaSelecionado] = useState<string>(
     dias[janelaSugerida.indiceDeHoje]?.data ?? dias[0]?.data ?? "",
   );
-  const [inicioFaixa, setInicioFaixa] = useState<number>(janelaSugerida.primeiroIndice);
+  const [inicioFaixa, setInicioFaixa] = useState<number>(janelaSugerida.indiceDeHoje);
 
   useEffect(() => {
     const aplicar = () => {
@@ -312,8 +357,59 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       );
   }, [dia, eventos]);
 
-  const faixa = dias.slice(inicioFaixa, inicioFaixa + visiveis);
+  const faixa = dias.slice(
+    Math.max(0, inicioFaixa - FOLGA_PASSADO),
+    inicioFaixa + visiveis,
+  );
   const anoDeReferencia = agenda.hoje.slice(0, 4);
+  const faixaEl = useRef<HTMLDivElement>(null);
+  const [destaqueIndice, setDestaqueIndice] = useState(0);
+
+  const destaques = useMemo(() => {
+    const comImagem = eventosDoDia.filter((e) => e.evento.imagem);
+    return (comImagem.length ? comImagem : eventosDoDia).slice(0, 5);
+  }, [eventosDoDia]);
+
+  useEffect(() => {
+    setDestaqueIndice(0);
+  }, [diaSelecionado]);
+
+  useEffect(() => {
+    const el = faixaEl.current;
+    const chip = el?.querySelector(`[data-dia="${diaSelecionado}"]`);
+    if (!el || !(chip instanceof HTMLElement)) return;
+    const alinhar = () => {
+      const esquerda =
+        chip.getBoundingClientRect().left - el.getBoundingClientRect().left + el.scrollLeft;
+      el.scrollLeft = Math.max(0, esquerda);
+    };
+    alinhar();
+    const quadro = requestAnimationFrame(alinhar);
+    return () => cancelAnimationFrame(quadro);
+  }, [diaSelecionado, inicioFaixa]);
+
+  const avancarFaixa = useCallback(
+    (dir: -1 | 1) => {
+      const el = faixaEl.current;
+      if (!el) return;
+      const chip = el.querySelector(".dia-chip");
+      const passo = chip instanceof HTMLElement ? chip.offsetWidth + 8 : 72;
+      const noInicio = el.scrollLeft <= 2;
+      const noFim = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+      if (dir < 0 && noInicio) {
+        setInicioFaixa((i) => Math.max(0, i - 1));
+        return;
+      }
+      if (dir > 0 && noFim) {
+        setInicioFaixa((i) => Math.min(Math.max(0, dias.length - visiveis), i + 1));
+        return;
+      }
+      el.scrollBy({ left: dir * passo, behavior: "smooth" });
+    },
+    [dias.length, visiveis],
+  );
+
+  const destaque = destaques[Math.min(destaqueIndice, Math.max(0, destaques.length - 1))];
 
   const lente = dia
     ? hashDeLente(
@@ -330,18 +426,22 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {/*     que ela deliberadamente não contém — procedência é o argumento  */}
       {/*     da proposta, não a nota de rodapé sobre ele.                    */}
       {/* ================================================================== */}
-      <header className="flex flex-col gap-2">
-        <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
-          <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Acontece</h1>
+      <header className="flex flex-col gap-3">
+        <div className="flex items-start justify-between gap-3">
+          <h1 className="tipo-titulo-1 font-bold">Acontece</h1>
+          <Link href="/filtros/" className="acontece-filtros">
+            {ICONE_FILTROS}
+            Filtros
+          </Link>
         </div>
 
-        <p className="max-w-prose text-sm leading-relaxed text-tinta-2">
-          {`${milhar(diagnostico.eventosComSessao)} dos ${milhar(diagnostico.eventosNoAcervo)} eventos do acervo têm sessão datada, e são eles que aparecem aqui.`}
+        <p className="tipo-detalhe text-tinta-2">
+          {`${milhar(diagnostico.eventosComSessao)} eventos culturais disponíveis por todo o Brasil.`}
         </p>
 
-        <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
-          {`data de referência · ${curta(agenda.hoje)}`}
+        <p className="acontece-referencia">
+          {ICONE_ACONTECE}
+          {`Data de referência: ${dataPorExtenso(agenda.hoje)}`}
         </p>
       </header>
 
@@ -500,69 +600,60 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {/*     dias com sessão. Dia vazio não existe aqui por construção.      */}
       {/* ================================================================== */}
       <section className="flex flex-col gap-2">
-        <div className="flex items-center justify-between gap-2">
+        <div className="faixa-dias-envolve">
           <button
             type="button"
-            onClick={() => setInicioFaixa((i) => Math.max(0, i - visiveis))}
-            disabled={inicioFaixa === 0}
-            className="cursor-pointer rounded-full border border-borda-forte px-3 py-1 text-xs font-semibold disabled:cursor-default disabled:opacity-35"
+            className="dia-seta"
+            aria-label="Dias anteriores"
+            onClick={() => avancarFaixa(-1)}
           >
-            dias anteriores
+            {ICONE_CHEVRON_ESQUERDA}
           </button>
 
-          {/* Todo teto de exibição é DITO, no padrão que a fase 2 fixou: o recorte contra
-              o total, sempre, para ninguém confundir «a faixa mostra 23» com «o acervo
-              tem 23». */}
-          <span className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
-            {`${milhar(faixa.length)} de ${milhar(diagnostico.diasDistintos)} dias exibidos`}
-          </span>
+          <div
+            ref={faixaEl}
+            className="faixa-dias"
+            role="group"
+            aria-label="Dias com sessão no acervo"
+          >
+            {faixa.map((d) => {
+              const p = pedacosDoDia(d.data);
+              return (
+                <button
+                  key={d.data}
+                  type="button"
+                  data-dia={d.data}
+                  data-tempo={d.tempo}
+                  aria-pressed={d.data === diaSelecionado}
+                  aria-label={`${porExtenso(d.data)} — ${plural(d.totalEventos, "evento", "eventos")}, ${
+                    d.tempo === "passado"
+                      ? "sessões já realizadas"
+                      : d.tempo === "hoje"
+                        ? "data de referência"
+                        : "sessões ainda por acontecer"
+                  }`}
+                  onClick={() => selecionar(d.data)}
+                  className="dia-chip"
+                >
+                  <span className="dia-chip-semana">{p.semanaCurta}</span>
+                  <span className="dia-chip-data">{p.dia}</span>
+                  <span className="dia-chip-mes">
+                    {MESES_CURTOS[p.mes - 1]}
+                    {String(p.ano) === anoDeReferencia ? "" : ` ${p.ano}`}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
           <button
             type="button"
-            onClick={() =>
-              setInicioFaixa((i) => Math.min(Math.max(0, dias.length - visiveis), i + visiveis))
-            }
-            disabled={inicioFaixa >= dias.length - visiveis}
-            className="cursor-pointer rounded-full border border-borda-forte px-3 py-1 text-xs font-semibold disabled:cursor-default disabled:opacity-35"
+            className="dia-seta"
+            aria-label="Dias seguintes"
+            onClick={() => avancarFaixa(1)}
           >
-            dias seguintes
+            {ICONE_CHEVRON_DIREITA}
           </button>
-        </div>
-
-        <div className="faixa-dias" role="group" aria-label="Dias com sessão no acervo">
-          {faixa.map((d) => {
-            const p = pedacosDoDia(d.data);
-            return (
-              <button
-                key={d.data}
-                type="button"
-                data-dia={d.data}
-                data-tempo={d.tempo}
-                aria-pressed={d.data === diaSelecionado}
-                aria-label={`${porExtenso(d.data)} — ${plural(d.totalEventos, "evento", "eventos")}, ${
-                  d.tempo === "passado"
-                    ? "sessões já realizadas"
-                    : d.tempo === "hoje"
-                      ? "data de referência"
-                      : "sessões ainda por acontecer"
-                }`}
-                onClick={() => selecionar(d.data)}
-                className="dia-chip"
-              >
-                <span className="dia-chip-semana">{p.semanaCurta}</span>
-                <span className="dia-chip-data">
-                  {`${String(p.dia).padStart(2, "0")}.${String(p.mes).padStart(2, "0")}`}
-                </span>
-                {/* O ano só aparece quando difere do de referência. Com 1.071 dias
-                    espalhados por dez anos, é ele que evita ler «14.08» de 2019 como se
-                    fosse deste mês. */}
-                {String(p.ano) === anoDeReferencia ? null : (
-                  <span className="dia-chip-semana">{p.ano}</span>
-                )}
-                <span className="dia-chip-contagem">{`${d.totalEventos} ev`}</span>
-              </button>
-            );
-          })}
         </div>
       </section>
 
@@ -570,38 +661,102 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {/* 3 e 4 — O DIA SELECIONADO E A LISTA DE EVENTOS (D-53 e D-54).       */}
       {/* ================================================================== */}
       {dia ? (
-        <section className="flex flex-col gap-3">
-          <header className="flex flex-col gap-1.5">
-            <h2 className="text-lg leading-tight font-bold">{porExtenso(dia.data)}</h2>
-            <p className="text-xs text-tinta-2">
-              {`${plural(dia.totalEventos, "evento", "eventos")} · ${plural(dia.totalSessoes, "sessão", "sessões")} neste dia`}
+        <section className="flex flex-col gap-4">
+          <div className="acontece-dia-barra">
+            <p>
+              {`${plural(dia.totalEventos, "evento", "eventos")} · ${plural(dia.totalSessoes, "sessão", "sessões")}`}
             </p>
+            {/* `<a>` e não `<Link>`: `trailingSlash: true` faz o Link reescrever
+                `/mapa#…` como `/mapa/#…`, e a gramática do hash é contrato de fase. */}
+            <a href={lente} className="acontece-mapa">
+              {ICONE_MAPA}
+              Ver este dia no mapa
+            </a>
+          </div>
 
-            {/* D-54, EXPLÍCITO E EM TEXTO DE PRODUTO. O passado não é filtrado, e o
-                motivo é dito — porque um passado que aparece sem explicação parece
-                defeito, e um passado escondido seria mentira sobre o que existe. */}
-            {dia.tempo === "passado" ? (
-              <p className="max-w-prose rounded-lg bg-superficie-2 px-3 py-2 text-xs leading-relaxed text-tinta-2">
-                {`Este dia é anterior à data de referência: as ${milhar(diagnostico.sessoesPassadas)} sessões passadas continuam na tela.`}
-              </p>
-            ) : null}
+          {dia.tempo === "passado" ? (
+            <p className="tipo-legenda text-tinta-2">
+              {`Este dia já passou: as ${milhar(diagnostico.sessoesPassadas)} sessões passadas continuam na tela.`}
+            </p>
+          ) : null}
 
-            {/* 6 — A LENTE PARA O MAPA (D-59). O mapa é lente sobre um resultado,
-                   alcançado daqui, preservando o conjunto — nunca porta de entrada.
-                   `<a>` e não `<Link>`: `trailingSlash: true` faz o Link reescrever
-                   `/mapa#…` como `/mapa/#…`, e a gramática do hash é contrato de fase. */}
-            <div className="flex flex-col gap-1">
-              <a
-                href={lente}
-                className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao no-underline transition-opacity hover:opacity-90"
-              >
-                Ver este dia no mapa
-              </a>
-              <p className="text-[0.65rem] leading-relaxed text-tinta-3">
-                {`O mapa abre como lente sobre estes ${plural(eventosDoDia.length, "evento", "eventos")}, e não como uma busca nova. O recorte e o caminho de volta viajam no endereço.`}
-              </p>
+          {destaque ? (
+            <div>
+              <article className="destaque-agenda">
+                <Link
+                  href={`/evento/${destaque.evento.slug}/`}
+                  className="destaque-agenda-link"
+                >
+                  {destaque.evento.imagem ? (
+                    // `images.unoptimized` sob output: "export" — o arquivo já está em public/acervo.
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={destaque.evento.imagem}
+                      alt={destaque.evento.titulo}
+                      loading="lazy"
+                      decoding="async"
+                      className="destaque-agenda-foto"
+                    />
+                  ) : (
+                    <CapaSemImagem
+                      titulo={destaque.evento.titulo}
+                      classe={destaque.evento.classe}
+                      linguagens={destaque.evento.linguagens}
+                      className="destaque-agenda-foto"
+                    />
+                  )}
+                  <span className="destaque-agenda-veu" aria-hidden />
+                  <span className="destaque-agenda-corpo">
+                    <span className="destaque-agenda-selo">Evento</span>
+                    <h2>{destaque.evento.titulo}</h2>
+                    {rotulosDeLinguagem(destaque.evento.linguagens) ? (
+                      <p className="destaque-agenda-sub">
+                        {rotulosDeLinguagem(destaque.evento.linguagens)}
+                      </p>
+                    ) : null}
+                    <p className="destaque-agenda-meta">
+                      <span>
+                        {ICONE_ACONTECE}
+                        {dataAgenda(dia.data)}
+                      </span>
+                      <span>
+                        {ICONE_RELOGIO}
+                        {destaque.horas.map(horaAgenda).join(" e ")}
+                      </span>
+                      <span>
+                        {plural(destaque.evento.totalSessoes, "sessão", "sessões")}
+                      </span>
+                    </p>
+                  </span>
+                </Link>
+                <Link
+                  href={`/evento/${destaque.evento.slug}/sessoes/`}
+                  className="destaque-agenda-salvar"
+                  aria-label={`Escolher sessão de ${destaque.evento.titulo} para salvar`}
+                >
+                  {ICONE_SALVOS}
+                </Link>
+              </article>
+              {destaques.length > 1 ? (
+                <div
+                  className="destaque-agenda-pontos"
+                  role="group"
+                  aria-label="Eventos em destaque neste dia"
+                >
+                  {destaques.map((item, i) => (
+                    <button
+                      key={item.evento.slug}
+                      type="button"
+                      aria-current={i === destaqueIndice ? "true" : undefined}
+                      aria-label={`Mostrar ${item.evento.titulo}`}
+                      className="destaque-agenda-ponto"
+                      onClick={() => setDestaqueIndice(i)}
+                    />
+                  ))}
+                </div>
+              ) : null}
             </div>
-          </header>
+          ) : null}
 
           {eventosDoDia.length ? (
             <ul className="flex flex-col gap-3">
@@ -612,71 +767,78 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
                     data-evento={evento.slug}
                     data-sessoes={evento.totalSessoes}
                   >
-                    <Link href={`/evento/${evento.slug}/`} className="flex flex-col gap-2 no-underline">
+                    <Link
+                      href={`/evento/${evento.slug}/`}
+                      className="cartao-agenda-capa no-underline"
+                    >
                       <CapaDeCartao
                         titulo={evento.titulo}
                         classe={evento.classe}
                         linguagens={evento.linguagens}
                         imagem={evento.imagem ?? undefined}
-                        creditoImagem={evento.creditoImagem ?? undefined}
-                        className="h-24 w-full rounded-lg"
+                        className="size-full"
                       />
-                      <h3 className="text-base leading-snug font-bold">{evento.titulo}</h3>
                     </Link>
 
-                    {/* A CONTAGEM DE OCORRÊNCIAS — o elemento que torna D-53 sensível.
-                        No vocabulário que a fase 2 já usa na página do evento. */}
-                    <p className="contagem-sessoes">
-                      <Grafismo
-                        variacao="barra"
-                        className="mt-0.5 h-3.5 w-auto shrink-0 text-acao-tinta"
-                      />
-                      <span>
-                        <strong>{plural(evento.totalSessoes, "sessão", "sessões")}</strong>
-                        {evento.proximaSessao
-                          ? ` · a próxima ${porExtenso(evento.proximaSessao)}`
-                          : ` · a última ${porExtenso(evento.ultimaSessao)}`}
-                      </span>
-                    </p>
+                    <div className="cartao-agenda-corpo">
+                      <div className="cartao-agenda-topo">
+                        <Link
+                          href={`/evento/${evento.slug}/`}
+                          className="min-w-0 flex-1 no-underline"
+                        >
+                          <h3>{evento.titulo}</h3>
+                        </Link>
+                        <Link
+                          href={`/evento/${evento.slug}/sessoes/`}
+                          className="cartao-agenda-salvar"
+                          aria-label={`Escolher sessão de ${evento.titulo} para salvar`}
+                        >
+                          {ICONE_SALVOS}
+                        </Link>
+                      </div>
 
-                    {evento.linguagens.length ? (
-                      <SelosDeLinguagem ids={evento.linguagens} limite={3} />
-                    ) : null}
-
-                    <p className="flex flex-wrap gap-1.5">
-                      {/* A sessão DESTE dia, marcada como passada quando o dia é passado.
-                          É a forma visível de D-54 dentro do cartão. */}
-                      <span className="selo-acervo" data-tom={dia.tempo}>
-                        {dia.tempo === "passado"
-                          ? `sessão às ${horas.join(" e ").replace(/:/g, "h")} — já aconteceu`
-                          : dia.tempo === "hoje"
-                            ? `sessão hoje às ${horas.join(" e ").replace(/:/g, "h")}`
-                            : `sessão às ${horas.join(" e ").replace(/:/g, "h")}`}
-                      </span>
-
-                      {evento.gratuitas > 0 ? (
-                        <span className="selo-acervo">{SELO_GRATUIDADE}</span>
-                      ) : null}
-
-                      {evento.comLibras > 0 ? (
-                        <span className="selo-acervo">
-                          {`Libras em ${milhar(evento.comLibras)} de ${plural(evento.totalSessoes, "sessão", "sessões")}`}
+                      <p className="cartao-agenda-meta">
+                        <span>
+                          {ICONE_ACONTECE}
+                          {dataAgenda(dia.data)}
                         </span>
-                      ) : null}
-                    </p>
+                        <span>
+                          {ICONE_RELOGIO}
+                          {horas.map(horaAgenda).join(" e ")}
+                        </span>
+                      </p>
 
-                    <Link
-                      href={`/evento/${evento.slug}/sessoes/`}
-                      className="w-fit text-xs font-semibold text-acao-tinta underline underline-offset-2"
-                    >
-                      escolher e salvar uma sessão
-                    </Link>
+                      <p className="contagem-sessoes">
+                        <strong>{plural(evento.totalSessoes, "sessão", "sessões")}</strong>
+                      </p>
+
+                      <p className="cartao-agenda-pills">
+                        {dia.tempo === "passado" ? (
+                          <span className="selo-acervo" data-tom="passado">
+                            já aconteceu
+                          </span>
+                        ) : null}
+                        {evento.gratuitas > 0 ? (
+                          <>
+                            <span className="selo-acervo">Gratuito</span>
+                            <span className="selo-acervo">Sem ingresso</span>
+                          </>
+                        ) : null}
+                      </p>
+
+                      <Link
+                        href={`/evento/${evento.slug}/sessoes/`}
+                        className="cartao-agenda-escolher"
+                      >
+                        Escolher sessão ›
+                      </Link>
+                    </div>
                   </article>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="rounded-xl border border-dashed border-borda p-3 text-xs leading-relaxed text-tinta-2">
+            <p className="rounded-xl border border-dashed border-borda p-3 tipo-legenda leading-relaxed text-tinta-2">
               Nenhum evento neste dia. Escolha outro na faixa acima.
             </p>
           )}

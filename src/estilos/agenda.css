@@ -26,46 +26,79 @@
 /* ---------------------------------------------------------------------------
  * A FAIXA DE DATAS (D-55).
  *
- * Rolagem horizontal com encaixe: a faixa navega os dias que o acervo TEM, e o encaixe
- * deixa a leitura de cada dia inteira em vez de meio cortada. `overscroll-behavior-x:
+ * Setas nos dois lados e chips grandes: a faixa mostra o dia escolhido à esquerda
+ * do recorte visível, e o resto entra por gesto ou pelas setas. Rolagem com
+ * encaixe para o dia inteiro caber, não meio cortado. `overscroll-behavior-x:
  * contain` impede que o gesto lateral vaze para a rolagem vertical da moldura.
+ *
+ * A máscara de continuação SAIU: com setas desenhadas dos dois lados, o fade
+ * contra o botão lia como chip partido. A barra nativa continua escondida — o
+ * Windows desenha setas cinza que não há CSS que remova, e duas setas de sistema
+ * coladas nas nossas leem como outro controle.
  * ------------------------------------------------------------------------- */
+.faixa-dias-envolve {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .faixa-dias {
   display: flex;
-  gap: 0.5rem;
+  flex: 1;
+  gap: 0.25rem;
+  min-width: 0;
   overflow-x: auto;
   overscroll-behavior-x: contain;
-  scroll-snap-type: x proximate;
-  padding-bottom: 0.25rem;
-  /* Mesmo tratamento do trilho de chips, pelo mesmo motivo: a barra nativa `thin`
-   * do Windows desenha botões de seta que não há CSS que remova, e dois botões
-   * cinza colados numa fileira de chips de data leem como outro controle. O
-   * sinal de continuação vira a máscara, que é do design system. A barra fina
-   * continua nos painéis de conteúdo — a regra universal está em `base.css`. */
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 0;
+  padding-bottom: 0.75rem;
   scrollbar-width: none;
-  mask-image: linear-gradient(
-    to right,
-    black calc(100% - var(--espaco-tela)),
-    transparent 100%
-  );
+}
+
+.dia-seta {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  cursor: pointer;
+}
+
+.dia-seta:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.dia-seta svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .dia-chip {
+  position: relative;
   display: flex;
   flex: none;
   flex-direction: column;
   align-items: center;
-  gap: 0rem;
-  scroll-snap-align: center;
+  gap: 0.25rem;
+  scroll-snap-align: start;
   min-width: 3.5rem;
-  padding: 0.5rem 0.5rem;
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-m);
+  min-height: 4.5rem;
+  padding: 0.5rem 0.25rem;
+  justify-content: center;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-g);
   background: var(--cor-superficie);
   cursor: pointer;
   transition:
     border-color var(--dur-1) var(--ease-padrao),
-    background-color var(--dur-1) var(--ease-padrao);
+    background-color var(--dur-1) var(--ease-padrao),
+    color var(--dur-1) var(--ease-padrao);
 }
 
 .dia-chip:hover {
@@ -83,24 +116,42 @@
 }
 
 .dia-chip[data-tempo="hoje"] {
-  border-color: var(--cor-tinta);
   font-weight: 700;
 }
 
+/* Selecionado é AÇÃO, não data pintada: o laranja marca o controle pressionado,
+ * a mesma regra do botão primário. A tinta por cima é `--cor-sobre-acao` porque
+ * branco sobre o laranja da marca mede 2,64:1 e reprova. */
 .dia-chip[aria-pressed="true"] {
   border-color: var(--cor-acao);
-  background: var(--cor-acao-lavada);
-  color: var(--cor-tinta);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-weight: 700;
+}
+
+/* O ponto abaixo do chip escolhido. Absoluto contra o padding da faixa, para o
+ * layout dos chips não pular quando o estado muda. */
+.dia-chip[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  transform: translateX(-50%);
 }
 
 .dia-chip-data {
-  font-size: var(--tipo-detalhe);
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
   line-height: 1.1;
   font-weight: 700;
 }
 
 .dia-chip-semana,
-.dia-chip-contagem {
+.dia-chip-mes {
   font-size: var(--tipo-micro);
   line-height: 1.2;
   letter-spacing: 0.04em;
@@ -108,27 +159,307 @@
 }
 
 /* ---------------------------------------------------------------------------
+ * O DESTAQUE DO DIA.
+ *
+ * Foto cheia com texto por cima, o mesmo véu dos cartazes de `/apps`. A tinta é
+ * branca nos dois temas porque está SOBRE a fotografia, que não inverte — a
+ * mesma razão do crédito em `capa-sem-imagem.tsx` e do título do hub.
+ * ------------------------------------------------------------------------- */
+.destaque-agenda {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  border-radius: var(--raio-g);
+  background: var(--ic-preto);
+}
+
+.destaque-agenda::before {
+  content: "";
+  grid-area: 1 / 1;
+  aspect-ratio: 16 / 9;
+}
+
+.destaque-agenda-link {
+  position: relative;
+  grid-area: 1 / 1;
+  display: block;
+  min-width: 0;
+  height: 100%;
+  color: var(--ic-branco);
+  text-decoration: none;
+}
+
+.destaque-agenda-foto {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.destaque-agenda .capa-sem-imagem > span {
+  display: none;
+}
+
+.destaque-agenda-veu {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--ic-preto) 0%,
+    color-mix(in srgb, var(--ic-preto) 86%, transparent) 52%,
+    color-mix(in srgb, var(--ic-preto) 46%, transparent) 100%
+  );
+}
+
+.destaque-agenda-corpo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--espaco-cartao);
+}
+
+.destaque-agenda-selo {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: var(--raio-pilula);
+  padding: 0.25rem 0.5rem;
+  background: color-mix(in srgb, var(--ic-branco) 18%, transparent);
+  color: var(--ic-branco);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.destaque-agenda-corpo h2 {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
+  line-height: 1.15;
+  font-weight: 700;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.destaque-agenda-sub {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.destaque-agenda-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0;
+  margin-top: 0.25rem;
+  font-size: var(--tipo-legenda);
+  font-weight: 600;
+}
+
+.destaque-agenda-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.destaque-agenda-meta svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.destaque-agenda-salvar {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--raio-pilula);
+  background: color-mix(in srgb, var(--ic-preto) 42%, transparent);
+  color: var(--ic-branco);
+  text-decoration: none;
+}
+
+.destaque-agenda-salvar svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.destaque-agenda-pontos {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.destaque-agenda-ponto {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-borda-forte);
+  cursor: pointer;
+}
+
+.destaque-agenda-ponto[aria-current="true"] {
+  background: var(--cor-acao);
+}
+
+/* ---------------------------------------------------------------------------
  * O CARTÃO DE EVENTO DA AGENDA (D-53).
  *
- * Deliberadamente parecido com `.cartao` de Descobrir, e deliberadamente outro elemento:
- * o cartão de Descobrir carrega o selo de motivo, que é o argumento daquela tela; este
- * carrega a CONTAGEM DE SESSÕES, que é o argumento desta. Reaproveitar `.cartao` faria a
- * contagem parecer um detalhe do mesmo componente em vez da coisa que a tela existe para
- * mostrar.
+ * Miniatura à esquerda, título e meta à direita, marcar para salvar no canto.
+ * Deliberadamente outro elemento que `.cartao` de Descobrir: aquele carrega o
+ * selo de motivo; este carrega a CONTAGEM DE SESSÕES, que é o argumento desta
+ * tela. A contagem fica compacta para não brigar com a densidade da lista, mas
+ * continua visível — a lista é de EVENTOS, não de sessões soltas.
  * ------------------------------------------------------------------------- */
 .cartao-agenda {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.75rem;
+  gap: 0.75rem;
+  padding: 0.5rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
   background: var(--cor-superficie);
 }
 
-/* A contagem de ocorrências com peso de primeira ordem. É ela que torna visível que a
- * lista é de EVENTOS e não de sessões soltas — rebaixá-la a legenda cinza desmontaria a
- * decisão de modelagem que esta tela existe para demonstrar. */
+.cartao-agenda-capa {
+  display: block;
+  flex: none;
+  width: 5.5rem;
+  height: 5.5rem;
+  overflow: hidden;
+  border-radius: var(--raio-p);
+  text-decoration: none;
+}
+
+.cartao-agenda-capa .absolute.right-0 {
+  display: none;
+}
+
+.cartao-agenda-corpo {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cartao-agenda-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cartao-agenda-corpo h3 {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.3;
+  font-weight: 700;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.cartao-agenda-salvar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin: -0.25rem -0.25rem 0 0;
+  color: var(--cor-tinta-2);
+  text-decoration: none;
+}
+
+.cartao-agenda-salvar svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.cartao-agenda-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  font-weight: 600;
+}
+
+.cartao-agenda-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cartao-agenda-meta svg,
+.acontece-referencia svg,
+.acontece-filtros svg,
+.acontece-mapa svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.cartao-agenda-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cartao-agenda-escolher {
+  width: fit-content;
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* A contagem de ocorrências. Compacta neste cartão para caber na linha, mas
+ * continua com peso próprio: é ela que torna visível que a lista é de EVENTOS
+ * e não de sessões soltas. Fora deste cartão (página de escolha de sessão) o
+ * bloco laranja de antes segue valendo — ver o seletor abaixo. */
+.cartao-agenda .contagem-sessoes {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.cartao-agenda .contagem-sessoes strong {
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  color: var(--cor-tinta);
+}
+
 .contagem-sessoes {
   display: flex;
   align-items: baseline;
@@ -147,6 +478,60 @@
 .contagem-sessoes strong {
   font-size: var(--tipo-corpo);
   font-weight: 700;
+}
+
+.acontece-filtros {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.acontece-referencia {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+}
+
+.acontece-dia-barra {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.acontece-dia-barra p {
+  min-width: 0;
+  margin: 0;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+}
+
+.acontece-mapa {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 /* Selo de fato do acervo: gratuidade qualificada, Libras, sessão passada. Sempre com
@@ -231,10 +616,24 @@
   border-radius: var(--raio-g);
 }
 
+[data-view="web"] .cartao-agenda-capa {
+  width: 7rem;
+  height: 7rem;
+}
+
+[data-view="web"] .cartao-agenda-corpo h3 {
+  font-size: var(--tipo-destaque);
+}
+
 [data-view="web"] .contagem-sessoes {
   font-size: var(--tipo-detalhe);
 }
 
 [data-view="web"] .dia-chip {
-  min-width: 4rem;
+  min-width: 4.5rem;
+  padding: 1rem 0.75rem;
+}
+
+[data-view="web"] .destaque-agenda::before {
+  aspect-ratio: 16 / 7;
 }
