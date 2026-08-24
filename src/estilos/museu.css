@@ -1,0 +1,414 @@
+/* ===========================================================================
+ * museu.css — Museu virtual, o hub museal (reformulação da referência de 23/08)
+ *
+ * A FORMA: abertura com as três portas, mosaico de cartaz (um em pé, dois
+ * paisagem, o resto em faixa) e lista dos espaços. É o mesmo vocabulário de
+ * portes do hub de /apps, aplicado ao recorte museal.
+ *
+ * O que esta folha se recusa a copiar da referência: data inventada, «online»
+ * onde o CMS diz o contrário, e foto de prédio — nenhum dos 22 espaços tem
+ * imagem no acervo (medido). A capa sem imagem é o cartão, não a reserva.
+ *
+ * REGRAS DA CASA:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS é
+ *    `src/app/layout.tsx → ./globals.css`.
+ *  - Nenhum hex do manual: `var(--ic-*)` e `color-mix`.
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]`.
+ *  - Folha nascida migrada: só tokens e múltiplos da grade de 0.25rem.
+ * ======================================================================== */
+
+.museu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+  padding: var(--espaco-tela);
+  padding-block-end: var(--espaco-secao);
+}
+
+[data-view="web"] .museu {
+  max-inline-size: 72rem;
+  margin-inline: auto;
+  padding: var(--espaco-secao) var(--espaco-tela);
+}
+
+/* ---------------------------------------------------------------------------
+ * A abertura. Cartão rebaixado, não foto sangrando: o hero de Descobrir e o
+ * destaque do Play são fotografia sob véu; aqui a referência é papel quente e
+ * um desenho. Laranja entra lavado no fundo — é o creme da marca, não ação.
+ * ------------------------------------------------------------------------ */
+.museu-destaque {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(6.5rem, 38%);
+  align-items: end;
+  overflow: hidden;
+  border-radius: var(--raio-g);
+  background: color-mix(in srgb, var(--cor-superficie) 82%, var(--ic-laranja));
+}
+
+.museu-destaque-texto {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: var(--espaco-cartao) var(--espaco-tela);
+  padding-block: 1.25rem;
+}
+
+.museu-kicker {
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+}
+
+.museu-titulo {
+  font-weight: 700;
+}
+
+.museu-linha {
+  max-inline-size: 36rem;
+  color: var(--cor-tinta-2);
+}
+
+.museu-portas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-block-start: 0.25rem;
+}
+
+.museu-glifo {
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex: none;
+}
+
+/* O desenho do prédio. `currentColor` no traço, o arco cheio na cor da marca
+   lavada — o laranja aqui é o mesmo creme da abertura, não um botão. */
+.museu-ilustra {
+  justify-self: end;
+  align-self: end;
+  inline-size: 100%;
+  max-inline-size: 11rem;
+  block-size: auto;
+  margin-block-end: -0.5rem;
+  color: color-mix(in srgb, var(--cor-acao-tinta) 70%, var(--cor-tinta-3));
+  pointer-events: none;
+}
+
+.museu-ilustra-arco {
+  fill: color-mix(in srgb, var(--ic-laranja) 78%, var(--ic-branco));
+}
+
+[data-view="web"] .museu-destaque-texto {
+  padding: var(--espaco-secao);
+}
+
+[data-view="web"] .museu-ilustra {
+  max-inline-size: 16rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Cabeçalho de seção: título à esquerda, ação à direita. Mesma ficha de
+ * prateleira do Play — laranja só no «ver todas», que é ação.
+ * ------------------------------------------------------------------------ */
+.museu-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.museu-secao-cabecalho {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.museu-secao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-inline-size: 0;
+  font-weight: 700;
+}
+
+.museu-secao-n {
+  color: var(--cor-tinta-3);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+}
+
+.museu-secao-tudo {
+  flex: none;
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+}
+
+.museu-secao-tudo:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+ * O mosaico. Duas colunas; o primeiro cartaz (`--alto`) ocupa as duas fileiras
+ * da esquerda e a altura vem do que se empilha à direita. Sem razão fixa no
+ * `--alto`: qualquer uma brigaria com a coluna vizinha.
+ * ------------------------------------------------------------------------ */
+.museu-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.museu-cartaz {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--raio-g);
+  background: var(--ic-preto);
+  box-shadow: var(--sombra-1);
+}
+
+.museu-cartaz-link {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
+  block-size: 100%;
+  color: var(--ic-branco);
+  text-decoration: none;
+}
+
+.museu-cartaz-link::before {
+  content: "";
+  grid-area: 1 / 1 / -1 / -1;
+}
+
+.museu-cartaz-foto {
+  position: absolute;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-2) var(--ease-padrao);
+}
+
+.museu-cartaz-link:hover .museu-cartaz-foto {
+  transform: scale(1.04);
+}
+
+.museu-cartaz-veu {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--ic-preto) 88%, transparent) 0%,
+    color-mix(in srgb, var(--ic-preto) 42%, transparent) 42%,
+    transparent 76%
+  );
+}
+
+.museu-cartaz-miolo {
+  position: relative;
+  grid-row: 3;
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: var(--espaco-cartao);
+  padding-inline-end: 2.75rem;
+}
+
+.museu-cartaz-selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.museu-cartaz-selo {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-p);
+  background: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--ic-branco);
+  font-weight: 700;
+}
+
+.museu-cartaz-selo--tipo {
+  background: color-mix(in srgb, var(--ic-laranja) 82%, var(--ic-preto));
+  color: var(--cor-sobre-acao);
+}
+
+.museu-cartaz-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.museu-cartaz-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
+}
+
+.museu-cartaz-ir {
+  position: absolute;
+  right: var(--espaco-cartao);
+  bottom: var(--espaco-cartao);
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: var(--raio-pilula);
+  background: color-mix(in srgb, var(--ic-branco) 14%, transparent);
+  color: var(--ic-branco);
+  backdrop-filter: blur(0.5rem);
+}
+
+.museu-cartaz--paisagem .museu-cartaz-link::before {
+  aspect-ratio: 5 / 4;
+}
+
+.museu-cartaz--faixa {
+  grid-column: 1 / -1;
+}
+
+.museu-cartaz--faixa .museu-cartaz-link::before {
+  aspect-ratio: 15 / 7;
+}
+
+.museu-cartaz--alto {
+  grid-row: span 2;
+}
+
+.museu-cartaz--alto .museu-cartaz-titulo {
+  -webkit-line-clamp: 4;
+}
+
+.museu-cartaz-link:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+ * A lista de espaços. Superfície sobre o papel, capa à esquerda, lugar à
+ * direita. Nenhum dos 22 tem fotografia — a capa é a composição de marca.
+ * ------------------------------------------------------------------------ */
+.museu-espacos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.museu-espaco {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  text-decoration: none;
+  transition:
+    background-color var(--dur-1) var(--ease-padrao),
+    border-color var(--dur-1) var(--ease-padrao);
+}
+
+.museu-espaco:hover {
+  border-color: var(--cor-borda-forte);
+  background: var(--cor-superficie-2);
+}
+
+.museu-espaco:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.museu-espaco-capa {
+  inline-size: 4.5rem;
+  block-size: 4.5rem;
+  border-radius: var(--raio-p);
+}
+
+.museu-espaco-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-inline-size: 0;
+}
+
+.museu-espaco-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-weight: 700;
+}
+
+.museu-espaco-resumo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--cor-tinta-2);
+}
+
+.museu-espaco-lugar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--cor-tinta-3);
+}
+
+.museu-espaco-ir {
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * «Explorar todos os espaços»: o resto da lista, atrás de um <details>.
+ * Sem `text-align: center` — a centralização é do flex, e o portão do DS
+ * recusa o alinhamento de bloco.
+ * ------------------------------------------------------------------------ */
+.museu-explorar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.museu-explorar > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-block: 0.5rem;
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.museu-explorar > summary::-webkit-details-marker {
+  display: none;
+}
+
+.museu-explorar > summary:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.museu-explorar[open] > summary {
+  color: var(--cor-tinta-3);
+  font-weight: 600;
+}
+
+.museu-explorar[open] > summary .museu-glifo {
+  transform: rotate(90deg);
+}

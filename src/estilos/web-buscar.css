@@ -112,6 +112,17 @@
   background: var(--cor-superficie);
 }
 
+[data-view="web"] [data-grade-resultados] > .busca-resultado[data-destaque] {
+  grid-column: 1 / -1;
+  padding: 0;
+  border: 0;
+  background: var(--ic-preto);
+}
+
+[data-view="web"] [data-busca-inteligente] {
+  display: none;
+}
+
 /* ---------------------------------------------------------------------------
  * O QUE APARECE EM UMA VISÃO E NÃO NA OUTRA — SEMPRE POR CSS, NUNCA POR RAMO.
  *

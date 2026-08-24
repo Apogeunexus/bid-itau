@@ -3731,7 +3731,9 @@ async function blocoContratosCruzados(cdp, base) {
     "05-04": ["fila-redacao", "item-fila", "procedencia-item", "score-ia", "acao-redacao", "escopo-curador", "passo-trilha", "motivo-passo", "publicavel", "sugestao-ia", "limites-ia", "slug-trilha"],
     "05-05": ["observatorio", "procedencia-painel", "procedencia-fatia", "indicador", "publico", "leitura-procedencia", "mapa-desertos"],
     "05-06": ["filtros", "dimensao-acessibilidade", "declarado-ausente", "nao-declarado", "criterio-inexistente", "sem-resultado", "afrouxamento", "beco", "trilha-relacionada"],
-    "05-07": ["play", "categoria", "midia", "player", "concluir", "assistido", "sem-arquivo"],
+    // `veja-isto` continua na lista: ele saiu da VITRINE em 23/08, mas segue sendo o
+    // bloco de eventos relacionados na página do item, que é a outra rota deste plano.
+    "05-07": ["play", "categoria", "midia", "player", "concluir", "assistido", "veja-isto", "sem-arquivo"],
   };
   const COMPARTILHADOS = ["denominador", "nao-sustenta", "realcado", "contador-vivo"];
 

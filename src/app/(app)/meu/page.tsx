@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Grafismo } from "@/componentes/grafismo";
+import { SeletorDisposicao } from "@/componentes/seletor-disposicao";
 import { TrocaPersona } from "@/componentes/troca-persona";
 import { repertorioDe } from "@/dados/repertorio";
 import { PERSONAS } from "@/dados/personas";
@@ -35,6 +36,8 @@ export default function Meu() {
 
       {/* D-45 — trocar de persona é um toque, e vale para o produto inteiro. */}
       <TrocaPersona />
+
+      <SeletorDisposicao permanente />
 
       <nav aria-label="Atalhos do perfil" className="grid gap-3 desk:grid-cols-2">
         <Link href="/meu/repertorio" className="cartao no-underline">

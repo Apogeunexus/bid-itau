@@ -1,0 +1,905 @@
+/* ===========================================================================
+ * ia.css — /ia e o roteiro que ela devolve.
+ *
+ * A FORMA é a de um chat de ferramenta (compositor grudado, bolha de pedido,
+ * artefato enquanto «pensa», resposta como cartão). A CARA é deste design
+ * system: papel creme, grafismo, laranja só em ação e em progresso, chip
+ * preto-cheio, tipografia do manual.
+ *
+ * O QUE ESTA TELA SE RECUSA A COPIAR. Degradê roxo, estrelinha em todo
+ * canto, «pergunte qualquer coisa», horário inventado, pinos laranja de
+ * enfeite. Laranja é AÇÃO e PROGRESSO — o enviar, a trilha do percurso, o
+ * passo ativo. O mascote genérico de robô não atravessa: o avatar é o
+ * mesmo traço da navegação (ICONE_IA).
+ *
+ * REGRAS DA CASA:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS é
+ *    `src/app/layout.tsx → ./globals.css`.
+ *  - Nenhum hex do manual: `var(--ic-*)` e `color-mix`.
+ *  - Divergência por visão em CSS puro sob `[data-view]`.
+ *  - Nada de `position: fixed` — o compositor é `sticky` contra
+ *    `.moldura-rolagem`. Folha nascida migrada: só tokens e a grade de 0.25rem.
+ * ======================================================================== */
+
+.ia {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100%;
+  padding-inline: var(--espaco-tela);
+  padding-block-start: var(--espaco-tela);
+}
+
+[data-view="web"] .ia {
+  max-inline-size: 48rem;
+  margin-inline: auto;
+  padding: var(--espaco-secao) var(--espaco-tela);
+}
+
+/* ---------------------------------------------------------------------------
+ * TOPO — o nome da tela, não um slogan. O h1 diz ONDE a pessoa está.
+ * ------------------------------------------------------------------------ */
+.ia-topo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  margin-block-end: var(--espaco-tela);
+}
+
+.ia-topo-linha {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.ia-topo-marca {
+  inline-size: 1.25rem;
+  block-size: auto;
+  color: var(--cor-acao-tinta);
+}
+
+.ia-topo-titulo {
+  font-weight: 700;
+}
+
+.ia-kicker {
+  color: var(--cor-tinta-3);
+}
+
+.ia-voltar {
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ia-voltar:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+ * ABERTURA — papel quente + ilustração do percurso. Texto à esquerda, o
+ * desenho à direita: a foto já nasceu com creme no lado do título, então o
+ * recorte (`object-position`) puxa os prédios para a ponta, não para o meio.
+ * Laranja lavado no fundo é o creme da marca, não um botão (mesmo argumento
+ * da abertura do Museu).
+ * ------------------------------------------------------------------------ */
+.ia-abertura {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  min-block-size: 14rem;
+  border-radius: var(--raio-g);
+  background: color-mix(in srgb, var(--cor-superficie) 82%, var(--ic-laranja));
+}
+
+.ia-abertura-foto {
+  position: absolute;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: 92% center;
+  pointer-events: none;
+}
+
+.ia-abertura-texto {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  max-inline-size: 22rem;
+  padding: var(--espaco-cartao) var(--espaco-tela);
+  padding-block: 1.25rem;
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--cor-superficie) 88%, var(--ic-laranja)) 0%,
+    color-mix(in srgb, var(--cor-superficie) 55%, transparent) 72%,
+    transparent 100%
+  );
+}
+
+.ia-abertura-frase {
+  font-weight: 700;
+}
+
+.ia-abertura-linha {
+  max-inline-size: 34ch;
+  color: var(--cor-tinta-2);
+}
+
+.ia-valores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.ia-valor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cor-tinta-2);
+}
+
+.ia-glifo {
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex: none;
+}
+
+[data-view="web"] .ia-abertura {
+  min-block-size: 16rem;
+}
+
+[data-view="web"] .ia-abertura-texto {
+  max-inline-size: 26rem;
+  padding: var(--espaco-secao);
+}
+
+/* ---------------------------------------------------------------------------
+ * FIO — as mensagens. Na abertura o vazio ocupa o miolo; em conversa ele
+ * vira a coluna de bolhas.
+ * ------------------------------------------------------------------------ */
+.ia-fio {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: var(--espaco-tela);
+  padding-block-end: var(--espaco-tela);
+}
+
+.ia-vazio {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--espaco-secao);
+  flex: 1 1 auto;
+}
+
+.ia-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ia-secao-titulo {
+  font-weight: 700;
+}
+
+/* Sugestões: cartão com foto do acervo, não pill genérica. */
+.ia-sugestoes {
+  display: grid;
+  gap: 0.75rem;
+}
+
+[data-view="web"] .ia-sugestoes {
+  grid-template-columns: 1fr 1fr;
+}
+
+.ia-sugestao {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  min-inline-size: 0;
+  padding: 0;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease-padrao),
+    box-shadow var(--dur-1) var(--ease-padrao);
+}
+
+.ia-sugestao:hover {
+  border-color: var(--cor-acao);
+  box-shadow: var(--sombra-1);
+}
+
+.ia-sugestao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.ia-sugestao-capa {
+  flex: none;
+  inline-size: 5.5rem;
+  min-block-size: 5.5rem;
+  overflow: hidden;
+  background: var(--cor-superficie-2);
+}
+
+.ia-sugestao-capa img,
+.ia-sugestao-capa .capa-sem-imagem {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.ia-sugestao-texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  min-inline-size: 0;
+  padding: 0.75rem;
+}
+
+.ia-sugestao-pedido {
+  color: var(--cor-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.ia-sugestao-meta {
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * CONVERSA — bolha do pedido à direita (lavada), resposta em coluna cheia
+ * com o avatar da marca. Texto sempre à esquerda DENTRO da bolha: o
+ * alinhamento do bloco é do flex, não de `text-align`.
+ * ------------------------------------------------------------------------ */
+.ia-msgs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ia-msg {
+  display: flex;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+
+.ia-msg-usuario {
+  justify-content: flex-end;
+}
+
+.ia-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+}
+
+.ia-avatar .ia-glifo {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.ia-balao {
+  max-inline-size: 85%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--raio-g);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.ia-balao-usuario {
+  background: var(--cor-acao-lavada);
+  border-radius: var(--raio-g) var(--raio-g) var(--raio-p) var(--raio-g);
+}
+
+.ia-balao-assistente {
+  flex: 1 1 auto;
+  max-inline-size: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.ia-fala {
+  margin: 0;
+  max-inline-size: 48ch;
+}
+
+.ia-msg-corpo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-inline-size: 0;
+  flex: 1 1 auto;
+}
+
+.ia-nota {
+  max-inline-size: 48ch;
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * ARTEFATO DE PENSAMENTO — o que a tela mostra ENQUANTO monta o roteiro.
+ * Três passos (progresso = laranja) e três painéis: critérios, mapa
+ * esquemático, avaliação com números do acervo. Nenhum número é inventado.
+ * ------------------------------------------------------------------------ */
+.ia-pensar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+.ia-passos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.ia-passo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cor-tinta-3);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+.ia-passo[data-estado="ativo"] {
+  color: var(--cor-acao-tinta);
+}
+
+.ia-passo[data-estado="feito"] {
+  color: var(--cor-tinta);
+}
+
+.ia-passo-marca {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border: 1px solid currentColor;
+  border-radius: var(--raio-pilula);
+}
+
+.ia-passo[data-estado="ativo"] .ia-passo-marca {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+  animation: ia-pulso calc(var(--dur-3) * 4) var(--ease-padrao) infinite;
+}
+
+.ia-passo[data-estado="feito"] .ia-passo-marca {
+  border-color: var(--cor-tinta);
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
+}
+
+.ia-passo-risco {
+  flex: 1 1 1.5rem;
+  min-inline-size: 1.5rem;
+  max-inline-size: 3rem;
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+.ia-passo-risco[data-estado="feito"],
+.ia-passo-risco[data-estado="ativo"] {
+  border-block-start-color: var(--cor-acao);
+}
+
+.ia-paineis {
+  display: grid;
+  gap: 0.75rem;
+}
+
+[data-view="web"] .ia-paineis {
+  grid-template-columns: 1fr 1.1fr 1fr;
+}
+
+.ia-painel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+}
+
+.ia-painel-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+.ia-criterio {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+}
+
+.ia-criterio-rotulo {
+  flex: none;
+  color: var(--cor-tinta-3);
+}
+
+.ia-mapa-esquema {
+  display: block;
+  width: 100%;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie);
+}
+
+.ia-mapa-legenda {
+  color: var(--cor-tinta-3);
+}
+
+.ia-aval {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+  color: var(--cor-tinta-2);
+}
+
+@keyframes ia-pulso {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ia-passo[data-estado="ativo"] .ia-passo-marca {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * COMPOSITOR — grudado no fim da conversa. `sticky`, nunca `fixed`: na visão
+ * app a barra inferior já cobre 6rem do rodapé da moldura, então o
+ * compositor senta ACIMA dela. Na web, cola no fundo da janela de conteúdo.
+ * ------------------------------------------------------------------------ */
+.ia-compositor {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding: 0.75rem var(--espaco-tela);
+  background: color-mix(in srgb, var(--cor-fundo) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+[data-view="mobile"] .ia-compositor {
+  bottom: 6rem;
+}
+
+[data-view="web"] .ia-compositor {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+.ia-compositor-rotulo {
+  color: var(--cor-tinta-3);
+}
+
+.ia-compositor-caixa {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+.ia-compositor-caixa:focus-within {
+  border-color: var(--cor-acao);
+  box-shadow: 0 0 0 2px var(--cor-acao-lavada);
+}
+
+.ia-compositor-campo {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  max-block-size: 7.5rem;
+  padding: 0.35rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--cor-tinta);
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+  resize: none;
+}
+
+.ia-compositor-campo:focus {
+  outline: none;
+}
+
+.ia-compositor-campo:disabled {
+  opacity: 0.6;
+}
+
+.ia-enviar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  cursor: pointer;
+}
+
+.ia-enviar:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.ia-enviar:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.ia-enviar:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.ia-compositor-nota {
+  color: var(--cor-tinta-3);
+}
+
+.ia-compositor-voltar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ia-compositor-voltar:hover {
+  border-color: var(--cor-acao);
+  color: var(--cor-tinta);
+}
+
+/* ---------------------------------------------------------------------------
+ * SALVOS — cartões, não uma lista de slugs. Remover pede confirmação no
+ * próprio cartão: não há `window.confirm` no produto.
+ * ------------------------------------------------------------------------ */
+.ia-salvos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ia-salvo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.ia-salvo-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  color: inherit;
+  text-decoration: none;
+}
+
+.ia-salvo-titulo {
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+.ia-salvo-meta {
+  color: var(--cor-tinta-3);
+}
+
+.ia-salvo-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex: none;
+}
+
+.ia-remover {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ia-remover:hover,
+.ia-remover[data-perigo="sim"] {
+  color: var(--cor-tinta);
+}
+
+.ia-confirmar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ia-confirmar-pergunta {
+  color: var(--cor-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
+ * ARTEFATO DO ROTEIRO — a resposta. Foto dominante, número da parada, sem
+ * horário inventado (D-48). Ações no topo: ver no mapa e salvar.
+ * ------------------------------------------------------------------------ */
+.ia-artefato {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+.ia-artefato-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.ia-artefato-titulo {
+  font-weight: 700;
+}
+
+.ia-artefato-meta {
+  color: var(--cor-tinta-2);
+}
+
+.ia-artefato-lead {
+  max-inline-size: 54ch;
+  color: var(--cor-tinta-2);
+}
+
+.ia-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ia-acao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ia-acao:hover {
+  border-color: var(--cor-acao);
+}
+
+.ia-acao-primaria {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+}
+
+.ia-acao-primaria:hover {
+  opacity: 0.9;
+}
+
+.ia-acao[aria-pressed="true"] {
+  border-color: var(--cor-tinta);
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
+}
+
+.ia-dia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-block-start: 0.75rem;
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+.ia-dia-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+}
+
+.ia-dia-titulo {
+  font-weight: 700;
+}
+
+.ia-dia-meta {
+  color: var(--cor-tinta-3);
+}
+
+.ia-paradas {
+  display: flex;
+  gap: var(--espaco-pilha);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  padding-block-end: 0.25rem;
+}
+
+.ia-parada {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: 11.5rem;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  scroll-snap-align: start;
+  text-decoration: none;
+  color: inherit;
+}
+
+.ia-parada-capa {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--cor-superficie-2);
+}
+
+.ia-parada-n {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+.ia-parada-miolo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.6rem 0.7rem 0.75rem;
+}
+
+.ia-parada-titulo {
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.ia-parada-meta {
+  color: var(--cor-tinta-3);
+}
+
+.ia-trilha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+}
+
+.ia-trilha-passo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.ia-trilha-n {
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+}
+
+.ia-regras {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  padding: 0.75rem 1rem;
+  background: var(--cor-superficie-2);
+}
+
+.ia-regras summary {
+  cursor: pointer;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+.ia-regras ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.75rem 0 0;
+  padding-inline-start: 1.25rem;
+}
+
+.ia-ajuste {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ia-ajuste-rotulo {
+  color: var(--cor-tinta-3);
+}

@@ -709,6 +709,42 @@ function contarPor<T>(lista: readonly T[], chave: (item: T) => string): Record<s
   return saida;
 }
 
+/** Foto da entidade; se ela não tem, a do vizinho que a trouxe na caminhada. */
+function imagemDoCandidato(candidato: Candidato): {
+  imagem?: string;
+  creditoImagem?: string;
+} {
+  const propria = candidato.entidade;
+  if (propria.imagem) {
+    return { imagem: propria.imagem, creditoImagem: propria.creditoImagem };
+  }
+  // Trilha autorada: a capa é a do destino (último passo com foto), não um
+  // placeholder — a cadeia já escolheu as entidades, a foto só acompanha.
+  if (propria.classe === "trilha") {
+    const passos = (propria.extra as { passos?: unknown } | undefined)?.passos;
+    if (Array.isArray(passos)) {
+      for (let i = passos.length - 1; i >= 0; i -= 1) {
+        const id = passos[i];
+        if (typeof id !== "string") continue;
+        const no = porId(id);
+        if (no?.imagem) {
+          return { imagem: no.imagem, creditoImagem: no.creditoImagem };
+        }
+      }
+    }
+  }
+  for (const passo of candidato.caminho) {
+    for (const id of [passo.deId, passo.paraId]) {
+      if (id === propria.id) continue;
+      const vizinha = porId(id);
+      if (vizinha?.imagem) {
+        return { imagem: vizinha.imagem, creditoImagem: vizinha.creditoImagem };
+      }
+    }
+  }
+  return {};
+}
+
 /** Candidato → DTO. É aqui que a `Entidade` para e o serializável começa (DP-F). */
 export function paraCartao(
   candidato: Candidato,
@@ -716,6 +752,7 @@ export function paraCartao(
   assinatura?: string,
 ): Cartao {
   const { entidade } = candidato;
+  const foto = imagemDoCandidato(candidato);
   const cartao: Cartao = {
     id: entidade.id,
     classe: entidade.classe,
@@ -728,8 +765,8 @@ export function paraCartao(
     viaConcentrador: candidato.viaConcentrador,
     caminho: candidato.caminho,
   };
-  if (entidade.imagem) cartao.imagem = entidade.imagem;
-  if (entidade.creditoImagem) cartao.creditoImagem = entidade.creditoImagem;
+  if (foto.imagem) cartao.imagem = foto.imagem;
+  if (foto.creditoImagem) cartao.creditoImagem = foto.creditoImagem;
   if (especial) cartao.especial = especial;
   if (assinatura) cartao.assinatura = assinatura;
   return cartao;

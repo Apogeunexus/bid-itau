@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Grafismo } from "@/componentes/grafismo";
 import { HEROIS } from "@/dados/heroi";
 
@@ -73,17 +72,6 @@ export function Heroi() {
           Programação, exposições, obras e artistas — do acervo inteiro, não do que está em
           cartaz esta semana.
         </p>
-        {/* Âncora e não rota: o feed está logo abaixo, nesta mesma tela, e mandar
-            para outra página quem já chegou onde queria seria um desvio. O alvo
-            é `descobrir/page.tsx`, que carrega o id.
-
-            O nome NÃO é «feed» por um motivo bobo e real: `#feed` são quatro
-            dígitos hexadecimais válidos, e o portão que proíbe hex fora de
-            globals.css o acusou como cor. Um portão que confunde âncora com cor
-            é um falso positivo; um nome que não parece cor custa nada. */}
-        <Link href={`#${ANCORA_DO_FEED}`} className="heroi-botao">
-          Explorar agora
-        </Link>
       </div>
 
     </section>

@@ -1,0 +1,593 @@
+/* ===========================================================================
+ * noticias.css — a capa editorial, no vocabulário de um jornal de verdade.
+ *
+ * O QUE ESTA TELA COPIA do G1, da Folha e dos grandes: hierarquia assimétrica
+ * (uma manchete grande, laterais empilhadas, chamadas só de texto), cadernos
+ * com desenho diferente um do outro, expediente no topo, editorias num trilho
+ * com sublinhado no atual. Foto na frente. Data em preto.
+ *
+ * O QUE ELA SE RECUSA A COPIAR. Barra vermelha, «ao vivo», «mais lidas» sem
+ * dado de leitura, laranja de enfeite. Laranja é AÇÃO — o botão que manda
+ * para a fonte. O marcador de seção continua sendo o `\` do manual.
+ *
+ * REGRAS DA CASA:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`.
+ *  - Nenhum hex do manual: `var(--ic-*)` e `color-mix`.
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]`.
+ *  - Nada de `position: fixed` fora de `casca.tsx`.
+ * ======================================================================== */
+
+.noticias {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+  padding: 0 var(--espaco-tela) var(--espaco-secao);
+}
+
+/* ---------------------------------------------------------------------------
+ * EXPEDIENTE — o nome da publicação, não um título de tela de app.
+ * ------------------------------------------------------------------------ */
+.noticias-expediente {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-block: 0.75rem 0.5rem;
+  border-block-end: 2px solid var(--cor-tinta);
+}
+
+.noticias-expediente-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+}
+
+.noticias-expediente-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.noticias-expediente-marca svg {
+  block-size: 0.8em;
+  inline-size: auto;
+  color: var(--cor-acao-tinta);
+}
+
+.noticias-expediente h1 {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-1);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.noticias-expediente-meta {
+  margin-inline-start: auto;
+  color: var(--cor-tinta-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.noticias-expediente-linha-baixa {
+  max-inline-size: 36rem;
+  color: var(--cor-tinta-2);
+}
+
+/* ---------------------------------------------------------------------------
+ * EDITORIAS — cadernos, não pílulas de filtro. O atual ganha o fio de baixo.
+ * ------------------------------------------------------------------------ */
+.noticias-editorias {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  scroll-padding-inline: var(--espaco-tela);
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+  border-block-end: 1px solid var(--cor-borda);
+}
+
+.noticias-editorias::-webkit-scrollbar {
+  display: none;
+}
+
+.noticias-editoria {
+  flex: none;
+  padding: 0.75rem 0.5rem;
+  margin-block-end: -1px;
+  border-block-end: 2px solid transparent;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.noticias-editoria:hover {
+  color: var(--cor-tinta);
+}
+
+.noticias-editoria[aria-current="page"] {
+  color: var(--cor-tinta);
+  border-block-end-color: var(--cor-tinta);
+}
+
+.noticias-editoria:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+ * MANCHETE — principal à esquerda, laterais à direita (na web).
+ * ------------------------------------------------------------------------ */
+.noticias-manchete {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+}
+
+.noticias-manchete-principal {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0;
+}
+
+.noticias-laterais,
+.noticias-chamadas,
+.noticias-lista,
+.noticias-opiniao-lista,
+.noticias-entrevista-lista {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.noticias-laterais > li,
+.noticias-chamadas > li,
+.noticias-lista > li,
+.noticias-opiniao-lista > li,
+.noticias-entrevista-lista > li {
+  min-width: 0;
+}
+
+.noticias-laterais {
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+/* ---------------------------------------------------------------------------
+ * FAIXA — mais da capa, em trilho no app e em quatro colunas na web.
+ * ------------------------------------------------------------------------ */
+.noticias-faixa {
+  display: flex;
+  gap: var(--espaco-cartao);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+}
+
+.noticias-faixa::-webkit-scrollbar {
+  display: none;
+}
+
+.noticias-faixa .leitura {
+  flex: none;
+  inline-size: 10.5rem;
+  scroll-snap-align: start;
+}
+
+/* ---------------------------------------------------------------------------
+ * CADERNOS — cada seção com um desenho. A regra de cima é o fio do jornal.
+ * ------------------------------------------------------------------------ */
+.noticias-secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-cartao);
+  padding-block-start: var(--espaco-cartao);
+  border-block-start: 2px solid var(--cor-tinta);
+}
+
+.noticias-secao-topo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.noticias-secao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.noticias-secao-titulo svg {
+  block-size: 0.75em;
+  inline-size: auto;
+  color: var(--cor-acao-tinta);
+}
+
+.noticias-secao-tudo {
+  margin-inline-start: auto;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.noticias-secao-tudo:hover {
+  color: var(--cor-acao-tinta);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.noticias-secao-tudo:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.noticias-grade {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espaco-cartao);
+}
+
+.noticias-colunas {
+  display: flex;
+  gap: var(--espaco-cartao);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+}
+
+.noticias-colunas::-webkit-scrollbar {
+  display: none;
+}
+
+.noticias-colunas .leitura {
+  flex: none;
+  inline-size: 11rem;
+  scroll-snap-align: start;
+}
+
+.noticias-cadernos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+}
+
+.noticias-corte,
+.noticias-resto p {
+  color: var(--cor-tinta-2);
+}
+
+.noticias-resto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.noticias-resto-acao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.noticias-resto-acao svg {
+  block-size: 1.25rem;
+  inline-size: 1.25rem;
+}
+
+.noticias-resto-acao:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.noticias-resto-acao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+ * O CARTÃO — um vocabulário, sete portes. Foto cresce no hover; o título
+ * sublinha. A data nunca pinta de laranja.
+ * ------------------------------------------------------------------------ */
+.leitura {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.leitura:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.leitura-figura {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+}
+
+.leitura-foto {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+.leitura-foto > img {
+  transition: transform var(--dur-2) var(--ease-padrao);
+}
+
+.leitura:hover .leitura-foto > img,
+.leitura:focus-visible .leitura-foto > img {
+  transform: scale(1.04);
+}
+
+.leitura-credito {
+  color: var(--cor-tinta-3);
+  font-size: var(--tipo-micro);
+  line-height: 1.35;
+}
+
+.leitura-corpo {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.leitura-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.leitura-secao {
+  font-family: var(--fonte-texto);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
+
+.leitura-data {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  color: var(--cor-tinta);
+}
+
+.leitura-titulo {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-destaque);
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.leitura:hover .leitura-titulo,
+.leitura:focus-visible .leitura-titulo {
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.leitura-deck {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+}
+
+.leitura-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-block-start: 0.25rem;
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+.leitura-cta svg {
+  block-size: 1rem;
+  inline-size: 1rem;
+}
+
+.leitura:hover .leitura-cta {
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.leitura-aspas {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-cartaz);
+  line-height: 0.8;
+  color: var(--cor-tinta-3);
+}
+
+.leitura--capa .leitura-titulo {
+  font-size: var(--tipo-titulo-1);
+  line-height: 1.15;
+}
+
+.leitura--capa .leitura-deck {
+  -webkit-line-clamp: 4;
+}
+
+.leitura--lateral,
+.leitura--lista {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding-block: 0.75rem;
+  border-block-end: 1px solid var(--cor-borda);
+}
+
+.leitura--lista {
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  align-items: center;
+}
+
+.leitura--lateral .leitura-figura,
+.leitura--lista .leitura-figura {
+  min-width: 0;
+}
+
+.leitura--lateral .leitura-foto,
+.leitura--lista .leitura-foto {
+  inline-size: 100%;
+}
+
+.leitura--lateral .leitura-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-size: var(--tipo-destaque);
+}
+
+.leitura--lista .leitura-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: var(--tipo-detalhe);
+  font-family: var(--fonte-display);
+  line-height: 1.3;
+}
+
+.leitura--lateral:hover,
+.leitura--lista:hover {
+  background: var(--cor-superficie-2);
+}
+
+.leitura--chamada {
+  gap: 0.25rem;
+  padding-block: 0.75rem;
+  padding-inline-start: 0.75rem;
+  border-block-start: 1px solid var(--cor-borda);
+  border-inline-start: 2px solid var(--cor-tinta);
+}
+
+.leitura--chamada .leitura-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-size: var(--tipo-destaque);
+}
+
+.leitura--grade .leitura-titulo,
+.leitura--coluna .leitura-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.leitura--opiniao {
+  gap: 0.5rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.leitura--opiniao .leitura-titulo {
+  font-size: var(--tipo-titulo-3);
+}
+
+.leitura--opiniao .leitura-deck {
+  -webkit-line-clamp: 3;
+}
+
+/* ---------------------------------------------------------------------------
+ * VISÃO WEB — densidade e simultaneidade, não largura esticada.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .noticias-editorias {
+  margin-inline: 0;
+  padding-inline: 0;
+  overflow: visible;
+}
+
+[data-view="web"] .noticias-manchete {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--espaco-secao);
+  align-items: start;
+}
+
+[data-view="web"] .leitura--capa .leitura-titulo {
+  font-size: var(--tipo-cartaz);
+  line-height: 1.1;
+}
+
+[data-view="web"] .noticias-faixa {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: visible;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+[data-view="web"] .noticias-faixa .leitura {
+  inline-size: auto;
+}
+
+[data-view="web"] .noticias-grade {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+[data-view="web"] .noticias-colunas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: visible;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+[data-view="web"] .noticias-colunas .leitura {
+  inline-size: auto;
+}
+
+[data-view="web"] .noticias-cadernos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--espaco-secao);
+  align-items: start;
+}

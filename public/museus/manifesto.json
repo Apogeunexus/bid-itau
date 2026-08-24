@@ -1,0 +1,125 @@
+[
+  {
+    "slug": "kunstmuseum-thun-suica",
+    "ok": true,
+    "arquivo": "dbf6c54f4cda5d29.jpg",
+    "bytes": 2237431,
+    "credito": "Gidoca / Wikimedia Commons (CC BY-SA 3.0)",
+    "fonte": "https://commons.wikimedia.org/wiki/File:Thunerhof2.jpg",
+    "wiki": "https://de.wikipedia.org/wiki/Kunstmuseum_Thun",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/8/86/Thunerhof2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+  },
+  {
+    "slug": "museu-casa-dos-contos-centro-de-estudos-do-ciclo-do-ouro-ouro-preto-mg-ouro-preto",
+    "ok": true,
+    "arquivo": "03fcd63fe0b318a2.jpg",
+    "bytes": 904449,
+    "credito": "Luis Rizo / Wikimedia Commons (Public domain)",
+    "fonte": "https://commons.wikimedia.org/wiki/File:Casadoscontos.JPG",
+    "wiki": "https://pt.wikipedia.org/wiki/Casa_dos_Contos_(Ouro_Preto)",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Casadoscontos.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+  },
+  {
+    "slug": "museu-da-imagem-e-do-som-mis-sp-sao-paulo",
+    "ok": false,
+    "motivo": "Error: HTTP 429 https://upload.wikimedia.org/wikipedia/commons/8/88/MIS%2C_SP%2C_6_%28entrada%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "wiki": "https://pt.wikipedia.org/wiki/Museu_da_Imagem_e_do_Som_(S%C3%A3o_Paulo)"
+  },
+  {
+    "slug": "museu-de-arte-brasileira-mab-faap-sao-paulo",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-contemporanea-da-universidade-de-sao-paulo-mac-usp-sao-paulo",
+    "ok": false,
+    "motivo": "Error: HTTP 429 https://upload.wikimedia.org/wikipedia/commons/0/02/Fachada-mac-usp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "wiki": "https://pt.wikipedia.org/wiki/Museu_de_Arte_Contempor%C3%A2nea_da_Universidade_de_S%C3%A3o_Paulo"
+  },
+  {
+    "slug": "museu-de-arte-contemporanea-do-parana-mac-parana-curitiba",
+    "ok": false,
+    "motivo": "Error: HTTP 429 https://upload.wikimedia.org/wikipedia/commons/2/2a/MAC-PR.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "wiki": "https://pt.wikipedia.org/wiki/Museu_de_Arte_Contempor%C3%A2nea_do_Paran%C3%A1"
+  },
+  {
+    "slug": "museu-de-arte-contemporanea-do-rio-grande-do-sul-macrs-porto-alegre",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-contemporanea-jose-pancetti-macc-campinas",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-de-belem-mabe-belem",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-de-ribeirao-preto-pedro-manuel-gismondi-marp-ribeirao-preto",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-de-santa-catarina-masc-florianopolis",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-do-parana-map-curitiba",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-do-rio-grande-do-sul-ado-malagoli-margs-porto-alegre",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-moderna-do-rio-de-janeiro-mam-rio-rio-de-janeiro",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-sacra-do-para-belem",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-arte-sacra-mas-salvador",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-de-artes-brasil-estados-unidos-mabeu-belem",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-do-estado-de-pernambuco-mepe-recife",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-do-estado-do-para-mep-belem",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-nacional-da-republica-brasilia",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-oscar-niemeyer-mon-curitiba",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  },
+  {
+    "slug": "museu-paraense-emilio-goeldi-belem",
+    "ok": false,
+    "motivo": "sem página/imagem na Wikipédia"
+  }
+]

@@ -532,6 +532,86 @@ export function catalogoNoFio(): CatalogoNoFio {
   return estado().fio;
 }
 
+/**
+ * A COLEÇÃO A QUE UMA MÍDIA PERTENCE, com as irmãs dela — o que a página do item mostra
+ * como «Episódios» numa série e como a listagem do programa num podcast.
+ *
+ * ELA NÃO É UMA CONSULTA NOVA AO GRAFO. É a mesma partição que a vitrine desenha
+ * (`prateleirasDe`, em `prateleiras.ts`), lida do outro lado: em vez de «quais itens tem
+ * esta fileira», «de que fileira este item é». Reusar a partição é o que garante que a
+ * página do episódio e a prateleira da vitrine digam a MESMA coisa — duas montagens
+ * separadas divergiriam na primeira vez que o agrupamento mudasse.
+ *
+ * A ORIGEM VIAJA JUNTO, e a tela muda de rótulo com ela. Quando a fileira nasceu do nome
+ * repetido no título (`colecao`), as irmãs são episódios de um mesmo programa e o cabeçalho
+ * pode dizer isso. Quando ela nasceu do tema ou da categoria, elas são só mídias que
+ * dividem um assunto — chamar aquilo de «episódios» seria afirmar uma série que o acervo
+ * não declara.
+ *
+ * A ORDEM É A MAIS RECENTE PRIMEIRO, que é a ordem do catálogo (`montar()` ordena por
+ * publicação decrescente) e a ordem em que um programa de áudio se lê.
+ */
+export interface ColecaoDaMidia {
+  rotulo: string;
+  origem: "colecao" | "tema" | "categoria";
+  /** As OUTRAS da fileira. Sem a própria — ela já é o assunto da página. */
+  irmas: ItemDoPlay[];
+  /** O tamanho da fileira INTEIRA, contando esta. É o número que o cabeçalho declara. */
+  total: number;
+}
+
+let colecoesMemo: Map<string, ColecaoDaMidia> | null = null;
+
+function colecoes(): Map<string, ColecaoDaMidia> {
+  if (colecoesMemo) return colecoesMemo;
+  const itens = estado().itens;
+  const montadas = prateleirasDe(itens, (categoria) => ROTULOS_DO_RESTO[categoria] ?? categoria);
+  const mapa = new Map<string, ColecaoDaMidia>();
+  for (const p of montadas) {
+    for (const item of p.itens) {
+      mapa.set(item.slug, {
+        rotulo: p.rotulo,
+        origem: p.origem,
+        irmas: p.itens.filter((o) => o.slug !== item.slug),
+        total: p.itens.length,
+      });
+    }
+  }
+  colecoesMemo = mapa;
+  return mapa;
+}
+
+export function colecaoDaMidia(slug: string): ColecaoDaMidia | undefined {
+  return colecoes().get(slug);
+}
+
+/**
+ * As mídias SEMELHANTES a esta, pela aresta `semelhante_a` do grafo.
+ *
+ * POR QUE ELA VOLTOU. A primeira versão desta rota escreveu, no cabeçalho, «nada de lista
+ * de semelhantes»: o DTO de 529 páginas paga HTML, e a lista era peso sem pedido. O pedido
+ * veio em 23/08 — a página do item tinha de sugerir para onde ir depois, como a referência
+ * faz. O custo foi medido antes de entrar: são no máximo {@link TETO_DE_SEMELHANTES}
+ * entradas de ~120 bytes, ou seja menos de 1 KB por página.
+ *
+ * O QUE ELA NÃO FAZ: inventar semelhança. `semelhante_a` é aresta DERIVADA e declarada no
+ * grafo, com motivo próprio — não é «porque você assistiu», que dependeria de um dado de
+ * uso que este acervo não tem. Mídia que não tem a aresta devolve lista vazia, e a tela
+ * simplesmente não desenha a seção em vez de encher com o que estiver à mão.
+ */
+export const TETO_DE_SEMELHANTES = 12;
+
+export function semelhantesDaMidia(id: string): ItemDoPlay[] {
+  const porId = new Map(estado().itens.map((i) => [i.id, i]));
+  const saida: ItemDoPlay[] = [];
+  for (const v of vizinhos(id, "semelhante_a")) {
+    const item = porId.get(v.entidade.id);
+    if (item) saida.push(item);
+    if (saida.length === TETO_DE_SEMELHANTES) break;
+  }
+  return saida;
+}
+
 /*
  * O QUE FOI CORTADO DO FIO, E POR QUÊ.
  *

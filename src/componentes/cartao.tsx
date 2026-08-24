@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
-import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
-import type { Cartao as CartaoDTO, OrigemMotivo } from "@/dados/cartao";
+import type { Cartao as CartaoDTO } from "@/dados/cartao";
 import type { ClasseEntidade } from "@/dados/tipos";
 
 /**
@@ -65,16 +64,33 @@ function rotaDaExplicacao(cartao: CartaoDTO): string {
 // Procedência do texto do motivo
 // ---------------------------------------------------------------------------
 
-const ROTULO_ORIGEM: Record<OrigemMotivo, string> = {
-  escrito: "escrito no acervo",
-  composto: "montado a partir da relação",
-  "sem-aresta": "fora da caminhada",
-};
-
 const ROTULO_ESPECIAL: Record<NonNullable<CartaoDTO["especial"]>, string> = {
   curado: "Destaque curado",
   serendipidade: "Fora do seu repertório, de propósito",
 };
+
+/** Classe da ontologia → o nome da categoria na tag. Espelha `buscar.tsx`. */
+const ROTULO_CLASSE: Partial<Record<ClasseEntidade, string>> = {
+  conteudo: "editorial",
+  pessoa: "pessoa",
+  midia: "mídia",
+  termo: "verbete",
+  territorio: "território",
+  evento: "evento",
+  instituicao: "instituição",
+  obra: "obra",
+  coletivo: "coletivo",
+  espaco: "espaço",
+  tema: "tema",
+  formacao: "formação",
+  publicacao: "publicação",
+  linguagem: "linguagem",
+  trilha: "trilha",
+};
+
+function rotuloDaClasse(classe: ClasseEntidade): string {
+  return ROTULO_CLASSE[classe] ?? classe;
+}
 
 // ---------------------------------------------------------------------------
 // Componente
@@ -119,42 +135,34 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
         </div>
       )}
 
-      {cartao.linguagens.length ? (
-        <SelosDeLinguagem ids={cartao.linguagens} limite={3} />
-      ) : null}
+      {/* A tag é a CATEGORIA (obra, evento, pessoa), não a linguagem — linguagem
+          no selo e de novo no motivo era o mesmo dado duas vezes. A cor da
+          linguagem continua na capa sem foto. */}
+      <p className="m-0">
+        <span className="inline-flex items-center rounded-full border border-borda-forte px-2.5 py-0.5 text-sm leading-tight font-semibold">
+          {rotuloDaClasse(cartao.classe)}
+        </span>
+      </p>
 
       {/* ------------------------------------------------------------------ */}
       {/* O selo de motivo. D-28: sem ele o cartão não deveria existir.       */}
       {/* ------------------------------------------------------------------ */}
-      <p
-        className="selo-motivo"
+      <Link
+        href={rotaDaExplicacao(cartao)}
+        className="selo-motivo no-underline"
         data-motivo={cartao.motivo.texto}
         data-origem-motivo={cartao.motivo.origemMotivo}
       >
         <Grafismo
           variacao="barra"
-          className="mt-0.5 h-3.5 w-auto shrink-0 text-acao-tinta"
+          className="h-3 w-auto shrink-0 text-acao-tinta"
         />
         <span>{cartao.motivo.texto}</span>
-      </p>
+      </Link>
 
       {cartao.assinatura ? (
-        <p className="text-xs leading-snug text-tinta-2 italic">{cartao.assinatura}</p>
+        <p className="tipo-legenda text-tinta-2 italic">{cartao.assinatura}</p>
       ) : null}
-
-      <footer className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-        <span className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
-          motivo {ROTULO_ORIGEM[cartao.motivo.origemMotivo]}
-          {cartao.saltos > 0 ? ` · ${cartao.saltos} salto${cartao.saltos > 1 ? "s" : ""}` : ""}
-          {cartao.viaConcentrador ? " · via concentrador" : ""}
-        </span>
-        <Link
-          href={rotaDaExplicacao(cartao)}
-          className="text-xs font-semibold text-acao-tinta underline underline-offset-2"
-        >
-          por que isto apareceu?
-        </Link>
-      </footer>
     </article>
   );
 }

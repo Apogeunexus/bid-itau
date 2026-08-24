@@ -37,55 +37,45 @@ type Compositor = (de: Entidade, para: Entidade, papel?: string) => string;
  * `tipos.ts` sem escrever a frase aqui vira erro de compilação, não cartão mudo.
  */
 const COMPOSITORES: Record<Relacao, Compositor> = {
-  influenciou: (de, para) => `${de.titulo} influenciou ${para.titulo}.`,
+  influenciou: (de) => `Influência de ${de.titulo}`,
 
-  dialoga_com: (de, para) => `${de.titulo} dialoga com ${para.titulo}.`,
+  dialoga_com: (_de, para) => `Diálogo com ${para.titulo}`,
 
-  deriva_de: (de, para) => `${de.titulo} deriva de ${para.titulo}.`,
+  deriva_de: (_de, para) => `Deriva de ${para.titulo}`,
 
-  // O caso mais frequente do acervo: 13.000 arestas. Linguagem e tema são os dois eixos
-  // de classificação e leem diferente — pertencer a uma linguagem é ser daquele campo
-  // artístico; pertencer a um tema é falar daquele assunto.
-  pertence_a: (de, para) => {
-    if (para.classe === "linguagem") return `${de.titulo} é de ${para.titulo}.`;
-    if (para.classe === "tema") return `${de.titulo} trata de ${para.titulo}.`;
-    return `${de.titulo} pertence a ${para.titulo}.`;
+  // Nomeia o CAMPO, sem remendar o título do cartão — «90-00: cuentos… é de
+  // literatura» lia como banner gerado. A categoria já está na tag; aqui é a
+  // descrição da aresta.
+  pertence_a: (_de, para) => {
+    if (para.classe === "linguagem") return `É de ${para.titulo}`;
+    if (para.classe === "tema") return `Trata de ${para.titulo}`;
+    return `Pertence a ${para.titulo}`;
   },
 
   // D-41: o papel MORA NA ARESTA. Quando a aresta não traz papel, a frase diz a relação
   // e para por aí — inferir "diretor" a partir de qualquer outro campo seria fabricar
   // atribuição sobre pessoa real.
-  atua_em: (de, para, papel) =>
-    papel?.trim()
-      ? `${de.titulo} participa de ${para.titulo} como ${papel.trim()}.`
-      : `${de.titulo} participa de ${para.titulo}.`,
+  atua_em: (_de, para, papel) =>
+    papel?.trim() ? `${papel.trim()} em ${para.titulo}` : `Em ${para.titulo}`,
 
-  curou: (de, para) => `${de.titulo} assina a curadoria de ${para.titulo}.`,
+  curou: (de) => `Curadoria de ${de.titulo}`,
 
-  // A instituição é o sujeito: 527 arestas `instituicao -realiza-> evento`.
-  realiza: (de, para) => `${de.titulo} realiza ${para.titulo}.`,
+  realiza: (de) => `Realizado por ${de.titulo}`,
 
-  ocorre_em: (de, para) => `${de.titulo} acontece dentro de ${para.titulo}.`,
+  ocorre_em: (_de, para) => `Acontece em ${para.titulo}`,
 
-  situado_em: (de, para) => `${de.titulo} fica em ${para.titulo}.`,
+  situado_em: (_de, para) => `Fica em ${para.titulo}`,
 
-  // O conteúdo é o sujeito: 887 arestas `conteudo -aprofunda-> evento|formacao|publicacao`.
-  aprofunda: (de, para) => `${de.titulo} aprofunda ${para.titulo}.`,
+  aprofunda: (de) => `Aprofunda ${de.titulo}`,
 
-  fala_sobre: (de, para) => `${de.titulo} fala sobre ${para.titulo}.`,
+  fala_sobre: (_de, para) => `Fala sobre ${para.titulo}`,
 
-  // Nomeia a trilha, que é sempre a ponta de origem das 4 arestas `contextualiza`.
   contextualiza: (de, para) =>
-    de.classe === "trilha"
-      ? `A trilha «${de.titulo}» passa por ${para.titulo}.`
-      : `${de.titulo} contextualiza ${para.titulo}.`,
+    de.classe === "trilha" ? `Passa por ${para.titulo}` : `Contextualiza ${para.titulo}`,
 
-  // Na prática nunca cai aqui: todas as 47.259 `semelhante_a` do grafo têm motivo escrito.
-  // A frase existe porque o `Record` é completo e porque o gerador pode mudar.
-  semelhante_a: (de, para) => `${de.titulo} e ${para.titulo} são próximos no acervo.`,
+  semelhante_a: (_de, para) => `Próximo de ${para.titulo}`,
 
-  duplicata_suspeita: (de, para) =>
-    `${de.titulo} é suspeita de duplicar ${para.titulo}.`,
+  duplicata_suspeita: (_de, para) => `Possível duplicata de ${para.titulo}`,
 };
 
 /**

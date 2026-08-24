@@ -10,7 +10,7 @@ import {
 import { Feed } from "@/componentes/feed";
 import { Grafismo } from "@/componentes/grafismo";
 import { ANCORA_DO_FEED, Heroi } from "@/componentes/heroi";
-import { SeletorDisposicao } from "@/componentes/seletor-disposicao";
+
 import { montarAgenda } from "@/dados/agenda";
 import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { cidadesComAcervo } from "@/dados/cidade";
@@ -107,9 +107,6 @@ export default function Descobrir() {
         </header>
 
         <BuscaDeDescobrir sessoesDeHoje={SESSOES_DE_HOJE} />
-
-        {/* D-32 — a disposição visível em texto e editável em um toque, no topo do feed. */}
-        <SeletorDisposicao />
 
         {/* O destaque curado abre o feed como seção própria e o restante segue sob
             «Para você» — a partição acontece em `feed.tsx`, sobre a MESMA combinação. */}

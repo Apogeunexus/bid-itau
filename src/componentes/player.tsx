@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ICONE_CONFERIDO, ICONE_MAIS, ICONE_TOCAR } from "@/componentes/base/icones";
+import { CHAVE_LISTA_PLAY, useMinhaLista } from "@/componentes/base/minha-lista";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { FichaDeAcessibilidade } from "@/componentes/ficha-acessibilidade";
 import { gravarConcluidas, lerConcluidas } from "@/componentes/play";
@@ -17,45 +19,57 @@ import type { Acessibilidade } from "@/dados/tipos";
  * player.tsx — a página de uma mídia (D-92, `docs/telas.md` tela 20).
  *
  * ─────────────────────────────────────────────────────────────────────────────────────
+ * REFORMULAÇÃO DE 23/08 — A FICHA VIRA A PÁGINA DE UM TÍTULO.
+ *
+ * A tela era um documento: cabeçalho, capa, aviso, resumo, ficha, botão, links. Cada
+ * bloco no seu quadrado, tudo com o mesmo peso, e nada dizendo para onde ir depois. A
+ * referência da reunião (Netflix, Spotify) resolve isso com três coisas, e são estas três
+ * que esta tela passou a ter:
+ *
+ * 1. **A CAPA SANGRA E O TEXTO ENTRA POR CIMA DELA.** No telefone ela é uma faixa 16:9
+ *    com o título e o botão logo abaixo; na web ela é um painel largo com o texto na
+ *    metade esquerda. A imagem deixou de ser uma figura no meio da página e virou o fundo
+ *    do título, que é o que o vocabulário de streaming faz.
+ *
+ * 2. **A COLEÇÃO INTEIRA, LOGO ABAIXO.** É a lista de episódios da Netflix e a lista do
+ *    programa no Spotify — a mesma peça, porque no acervo é o mesmo dado: as irmãs de
+ *    fileira desta mídia, na ordem em que foram publicadas. O rótulo muda com a ORIGEM da
+ *    fileira: só quando ela nasceu do nome repetido no título é que se pode chamar aquilo
+ *    de programa. Quando nasceu do tema, são mídias que dividem um assunto, e dizer
+ *    «episódios» afirmaria uma série que o acervo não declara (`colecaoDaMidia`).
+ *
+ * 3. **SEMELHANTES, PELA ARESTA DO GRAFO.** Não é «porque você assistiu» — isso exigiria
+ *    dado de uso, que este acervo não tem e que a vitrine já se recusou a fabricar.
+ *    `semelhante_a` é aresta declarada, derivada, e mídia sem ela simplesmente não desenha
+ *    a seção.
+ *
+ * O QUE NÃO VEIO DA REFERÊNCIA, e por quê: nada de porcentagem de compatibilidade, nada de
+ * classificação indicativa, nada de «Top 10», nada de trailer, nada de avaliação com
+ * polegar. Os cinco dependem de dado que o acervo não publica.
+ * ─────────────────────────────────────────────────────────────────────────────────────
+ *
  * O PLAYER NÃO TOCA MÍDIA, E ISSO NÃO É UM DEFEITO ESCONDIDO: É A TELA DIZENDO O QUE É.
  *
- * Duas coisas diferentes, as duas verdadeiras, e a tela declara AS DUAS:
+ * O acervo carregado traz a FICHA e a CAPA de cada mídia. O arquivo de áudio ou vídeo não
+ * está aqui e não é buscado de lugar nenhum: nada nesta tela carrega de fora — nem `<img>`
+ * remoto, nem `<iframe>`, nem `<video>`/`<audio>` com `src` remoto, nem `fetch` (T-05-33).
  *
- * 1. O acervo carregado traz a FICHA e a CAPA de cada mídia. O arquivo de áudio ou vídeo
- *    não faz parte destes dados — não há o que tocar, e fingir um controle de reprodução
- *    sobre nada seria a mentira mais barata desta fase.
- * 2. `fonte` aponta para itaucultural.org.br, e buscar de lá quebraria a promessa medida
- *    de ZERO REQUISIÇÃO EXTERNA, que vale para o protótipo inteiro desde a fase 2 e é
- *    medida a cada verificação, de dentro da página.
+ * POR ISSO O BOTÃO PRIMÁRIO É UM LINK PARA A FONTE, e não um triângulo que finge. Ele tem
+ * a forma do play da referência — disco claro, triângulo preto — e o rótulo do que
+ * realmente acontece: a página do Itaú Cultural, onde o vídeo está. Quando a mídia não
+ * declara `fonte`, o botão não existe: um play que não leva a lugar nenhum é pior que
+ * nenhum play. O bloco que explica a ausência do arquivo continua na tela, mais abaixo.
  *
- * Por isso NADA aqui carrega de fora: nem `<img>` remoto, nem `<iframe>`, nem `<video>`
- * ou `<audio>` com `src` remoto, nem `fetch`, nem `preconnect`, nem `dns-prefetch`.
- * `fonte` aparece como LINK que a pessoa clica — **um link que a pessoa clica não é uma
- * requisição que o protótipo faz**, e a diferença é exatamente o que o gate mede
- * (T-05-33).
+ * A CONCLUSÃO É UM GESTO HUMANO, NUNCA AUTOMÁTICA (D-92, T-05-36). Nada de temporizador,
+ * nada de gravar ao abrir, nada de «assistido» por rolagem. `data-assistido` mede ZERO até
+ * o clique. Um protótipo que registra sozinho estaria inventando um dado de uso que
+ * ninguém produziu.
  *
- * ─────────────────────────────────────────────────────────────────────────────────────
- * A CONCLUSÃO É UM GESTO HUMANO, NUNCA AUTOMÁTICA (D-92, T-05-36).
- *
- * Nada de temporizador, nada de gravar ao abrir, nada de «assistido» por rolagem.
- * `data-assistido` mede ZERO até o clique — é a mesma disciplina de «zero decisão antes
- * do clique» que a fase 4 fixou no Studio, e o gate a mede do mesmo jeito. Um protótipo
- * que registra sozinho estaria inventando um dado de uso que ninguém produziu.
- *
- * O registro é um CONJUNTO, não uma pilha: concluir a mesma mídia duas vezes deixa uma
- * entrada. E ele mora numa chave própria do espaço `agenda-cultural:`, definida em
- * `play.tsx` — **`src/contexto/sessao.tsx` não foi tocado**, porque é compartilhado com
- * a fase inteira.
+ * O carimbo da conclusão vem da DATA DE REFERÊNCIA DO BUILD, jamais do relógio do runtime:
+ * sob `output: "export"` o HTML é gerado no build, e um `new Date()` no cliente faria o
+ * HTML exportado e a página hidratada divergirem.
  */
 
-/**
- * O carimbo da conclusão vem da DATA DE REFERÊNCIA DO BUILD, jamais do relógio do
- * runtime. Sob `output: "export"` o HTML é gerado no build: um `new Date()` no cliente
- * faria o HTML exportado e a página hidratada divergirem, e ainda exporia o fuso de quem
- * avalia. É o mesmo padrão de `DATA_DE_REFERENCIA_DO_STUDIO`.
- *
- * Ela chega por propriedade, do módulo de servidor — este arquivo não a inventa.
- */
 export interface MidiaDoPlayer {
   slug: string;
   titulo: string;
@@ -80,14 +94,38 @@ export interface LigacaoNomeada {
   motivo?: string;
 }
 
+/** Uma irmã de coleção ou uma semelhante — o que cabe num cartão, sem resumo. */
+export interface MidiaVizinha {
+  slug: string;
+  titulo: string;
+  rota: string;
+  imagem?: string;
+  rotuloCategoria: string;
+  dia?: number;
+  libras?: boolean;
+}
+
+export interface ColecaoNoFio {
+  rotulo: string;
+  origem: "colecao" | "tema" | "categoria";
+  total: number;
+  irmas: MidiaVizinha[];
+}
+
 export function Player({
   midia,
+  colecao,
+  semelhantes,
   eventos,
   aprofunda,
   dataDeReferencia,
   semArquivo,
 }: {
   midia: MidiaDoPlayer;
+  /** A fileira a que esta mídia pertence, com as irmãs. Ausente é estado válido. */
+  colecao?: ColecaoNoFio;
+  /** `semelhante_a` saindo desta mídia, com teto. Vazio para quem não tem a aresta. */
+  semelhantes: MidiaVizinha[];
   /** Os eventos de que ESTA mídia fala — `fala_sobre`, a única ponte real. */
   eventos: LigacaoNomeada[];
   /** As arestas `aprofunda` que saem desta mídia. Medido no acervo: ZERO nas 529. */
@@ -97,6 +135,7 @@ export function Player({
 }) {
   const [concluidas, setConcluidas] = useState<string[]>([]);
   const [hidratado, setHidratado] = useState(false);
+  const minhaLista = useMinhaLista(CHAVE_LISTA_PLAY);
 
   // A leitura mora no efeito: ler `localStorage` no primeiro render divergiria da
   // hidratação, porque o HTML foi gerado no build.
@@ -106,6 +145,7 @@ export function Player({
   }, []);
 
   const assistida = concluidas.includes(midia.slug);
+  const naLista = minhaLista.tem(midia.slug);
 
   function concluir() {
     // CONJUNTO, não pilha: o `Set` é o que torna a conclusão idempotente.
@@ -120,87 +160,193 @@ export function Player({
     gravarConcluidas(proximo);
   }
 
-  return (
-    <article
-      data-player={midia.slug}
-      data-assistido={assistida ? "1" : "0"}
-      className="flex flex-col gap-6 p-4 desk:mx-auto desk:max-w-[64rem] desk:p-8"
-    >
-      {/* ------------------------------------------------------------------- cabeçalho */}
-      <header className="flex flex-col gap-2">
-        <p className="text-[0.65rem] font-bold tracking-widest text-tinta-3 uppercase">
-          {midia.rotuloCategoria}
-        </p>
-        <h1 className="text-xl leading-tight font-bold desk:text-3xl">{midia.titulo}</h1>
-        <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs text-tinta-2">
-          <time dateTime={diaParaIso(midia.dia)}>Publicado em {diaParaTexto(midia.dia)}</time>
-          <span>Acervo do Itaú Cultural</span>
-        </p>
-      </header>
+  /**
+   * O RÓTULO DA LISTA DE IRMÃS MUDA COM A ORIGEM DA FILEIRA, e é aqui que a honestidade
+   * dessa seção mora. «Episódios» afirma uma série; o acervo só sustenta isso quando a
+   * fileira nasceu do nome repetido no título.
+   */
+  const tituloDaColecao =
+    colecao?.origem === "colecao" ? `Episódios · ${colecao.rotulo}` : `Mais em ${colecao?.rotulo}`;
 
+  return (
+    <article data-player={midia.slug} data-assistido={assistida ? "1" : "0"} className="midia">
       {/* ------------------------------------------------------------------------ capa */}
-      <figure className="flex flex-col gap-1">
+      <header className="midia-capa">
         {midia.imagem ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={midia.imagem}
             alt={midia.imagemAlt ?? midia.titulo}
             decoding="async"
-            className="w-full rounded-lg bg-superficie-2 object-cover"
+            className="midia-capa-foto"
           />
         ) : (
           <CapaSemImagem
             titulo={midia.titulo}
             classe="midia"
             linguagens={midia.linguagens}
-            className="aspect-video w-full rounded-lg"
+            className="midia-capa-foto"
           />
         )}
-        {midia.creditoImagem ? (
-          /* Crédito obrigatório quando há imagem: o acervo é de terceiros e a procedência
-             é argumento da proposta, não rodapé. */
-          <figcaption className="text-xs text-tinta-2">Foto: {midia.creditoImagem}</figcaption>
-        ) : null}
-      </figure>
+        <span className="midia-capa-veu" aria-hidden />
 
-      {/* --------------------------------------- o arquivo que não existe (T-05-33) */}
-      <section
-        data-sem-arquivo
-        className="flex flex-col gap-2 rounded-lg border border-dashed border-borda-forte p-3"
-      >
-        <h2 className="text-sm font-bold">{semArquivo.titulo}</h2>
-        <p className="text-xs leading-relaxed">{semArquivo.acervo}</p>
-        <p className="text-xs leading-relaxed">{semArquivo.rede}</p>
-        {midia.fonte ? (
-          <p className="text-xs leading-relaxed">
-            <a
-              data-fonte
-              href={midia.fonte}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="break-all underline decoration-borda-forte underline-offset-4"
+        <div className="midia-capa-texto">
+          <p className="midia-capa-tipo tipo-micro">
+            {midia.rotuloCategoria}
+            {colecao?.origem === "colecao" ? ` · ${colecao.rotulo}` : ""}
+          </p>
+          <h1 className="midia-capa-titulo tipo-titulo-1">{midia.titulo}</h1>
+
+          <p className="midia-capa-meta tipo-legenda">
+            <time dateTime={diaParaIso(midia.dia)}>{diaParaTexto(midia.dia)}</time>
+            <span>Acervo do Itaú Cultural</span>
+            {midia.acessibilidade.libras ? <span className="midia-selo">Libras</span> : null}
+            {colecao?.origem === "colecao" ? (
+              <span>
+                {colecao.total} {colecao.total === 1 ? "episódio" : "episódios"}
+              </span>
+            ) : null}
+          </p>
+
+          {midia.resumo ? (
+            /* O resumo INTEIRO, e ele sobe para a capa: é a sinopse, e é o que a
+               referência põe embaixo do título. Ele não viaja no catálogo — esta rota é
+               de servidor e não paga chunk. */
+            <p data-resumo className="midia-capa-resumo tipo-detalhe">
+              {midia.resumo}
+            </p>
+          ) : null}
+
+          <div className="midia-capa-acoes">
+            {midia.fonte ? (
+              <a
+                data-fonte
+                href={midia.fonte}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="midia-botao midia-botao--primario tipo-detalhe"
+              >
+                {ICONE_TOCAR}
+                Assistir no Itaú Cultural
+              </a>
+            ) : null}
+
+            <button
+              type="button"
+              data-na-lista={naLista ? "sim" : "nao"}
+              aria-pressed={naLista}
+              onClick={() => minhaLista.alternar(midia.slug)}
+              className="midia-botao tipo-detalhe"
             >
-              {midia.fonte}
-            </a>
-          </p>
-        ) : null}
-      </section>
+              {naLista ? ICONE_CONFERIDO : ICONE_MAIS}
+              {naLista ? "Na minha lista" : "Minha lista"}
+            </button>
+          </div>
 
-      {/* --------------------------------------------------------------------- resumo */}
-      {midia.resumo ? (
-        <section className="flex flex-col gap-1">
-          <h2 className="text-sm font-bold">Sobre</h2>
-          {/* O resumo INTEIRO. Ele não viaja no catálogo — esta rota é de servidor e não
-              paga chunk, então é aqui que ele aparece sem corte. */}
-          <p data-resumo className="text-sm leading-relaxed">
-            {midia.resumo}
+          {midia.creditoImagem ? (
+            /* Crédito obrigatório quando há imagem: o acervo é de terceiros e a
+               procedência é argumento da proposta, não rodapé. */
+            <p className="midia-capa-credito tipo-micro">Foto: {midia.creditoImagem}</p>
+          ) : null}
+        </div>
+      </header>
+
+      {/* ------------------------------------------------- a coleção: episódios ou tema
+       *
+       * A MESMA PEÇA SERVE SÉRIE E PODCAST, porque no acervo é o mesmo dado. O que muda é
+       * o rótulo, e ele vem da ORIGEM da fileira. */}
+      {colecao?.irmas.length ? (
+        <section data-colecao={colecao.rotulo} className="midia-secao">
+          <h2 className="midia-secao-titulo tipo-titulo-3">{tituloDaColecao}</h2>
+          <ol className="midia-episodios">
+            {colecao.irmas.map((o) => (
+              <li key={o.slug}>
+                <Link href={o.rota} data-irma={o.slug} className="midia-episodio">
+                  <span className="midia-episodio-quadro">
+                    {o.imagem ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={o.imagem}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="midia-episodio-foto"
+                      />
+                    ) : (
+                      <CapaSemImagem
+                        titulo={o.titulo}
+                        classe="midia"
+                        rotulo={o.rotuloCategoria}
+                        linguagens={[]}
+                        className="size-full"
+                      />
+                    )}
+                    <span className="midia-episodio-play" aria-hidden>
+                      {ICONE_TOCAR}
+                    </span>
+                  </span>
+                  <span className="midia-episodio-texto">
+                    <span className="midia-episodio-titulo tipo-detalhe">{o.titulo}</span>
+                    <span className="midia-episodio-pe tipo-micro">
+                      {o.dia ? (
+                        <time dateTime={diaParaIso(o.dia)}>{diaParaTexto(o.dia)}</time>
+                      ) : null}
+                      {o.libras ? <span className="midia-selo">Libras</span> : null}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ) : null}
+
+      {/* -------------------------------------------------------------- semelhantes */}
+      {semelhantes.length ? (
+        <section data-semelhantes={semelhantes.length} className="midia-secao">
+          <h2 className="midia-secao-titulo tipo-titulo-3">Semelhantes no acervo</h2>
+          {/* O QUE ELAS SÃO, EM UMA LINHA. Sem isto a fileira parece recomendação
+              personalizada, que é justamente o que ela não é. */}
+          <p className="tipo-legenda text-tinta-3">
+            Ligadas a esta pela relação «semelhante a» do acervo — não por histórico de uso,
+            que este acervo não tem.
           </p>
+          <ul className="midia-trilho">
+            {semelhantes.map((o) => (
+              <li key={o.slug}>
+                <Link href={o.rota} data-semelhante={o.slug} className="midia-vizinha">
+                  <span className="midia-vizinha-quadro">
+                    {o.imagem ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={o.imagem}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="midia-vizinha-foto"
+                      />
+                    ) : (
+                      <CapaSemImagem
+                        titulo={o.titulo}
+                        classe="midia"
+                        rotulo={o.rotuloCategoria}
+                        linguagens={[]}
+                        className="size-full"
+                      />
+                    )}
+                  </span>
+                  <span className="midia-vizinha-tipo tipo-micro">{o.rotuloCategoria}</span>
+                  <span className="midia-vizinha-titulo tipo-legenda">{o.titulo}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
       ) : null}
 
       {/* --------------------------------------- acessibilidade em evidência (tela 20) */}
-      <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-bold">Recursos de acessibilidade desta mídia</h2>
+      <section className="midia-secao">
+        <h2 className="midia-secao-titulo tipo-titulo-3">Recursos de acessibilidade</h2>
 
         {/* Os TRÊS da tela 20 como controles de primeira ordem — legenda, Libras e
             audiodescrição —, cada um dizendo se ESTA mídia declara aquela dimensão. E,
@@ -245,12 +391,12 @@ export function Player({
       </section>
 
       {/* ------------------------------------------- concluir → repertório (D-92) */}
-      <section className="flex flex-col gap-2 rounded-lg border border-borda p-3">
-        <h2 className="text-sm font-bold">Marcar no meu repertório</h2>
+      <section className="midia-painel">
+        <h2 className="tipo-detalhe font-bold">Marcar no meu repertório</h2>
 
         {assistida ? (
           <>
-            <p data-registro className="text-sm">
+            <p data-registro className="tipo-detalhe">
               Registrada no seu repertório em{" "}
               <time dateTime={dataDeReferencia}>
                 {diaParaTexto(Number(dataDeReferencia.replace(/-/g, "")))}
@@ -265,7 +411,7 @@ export function Player({
                 type="button"
                 data-desfazer
                 onClick={desfazer}
-                className="text-xs underline decoration-borda-forte underline-offset-4"
+                className="tipo-legenda underline decoration-borda-forte underline-offset-4"
               >
                 desfazer
               </button>
@@ -273,7 +419,7 @@ export function Player({
           </>
         ) : (
           <>
-            <p className="text-xs leading-relaxed text-tinta-2">
+            <p className="tipo-legenda text-tinta-2">
               {hidratado
                 ? "Nada foi registrado ainda."
                 : "Lendo o que ficou guardado neste navegador…"}
@@ -289,30 +435,53 @@ export function Player({
             </button>
           </>
         )}
-
       </section>
 
       {eventos.length || aprofunda.length ? (
-        <section data-veja-isto className="flex flex-col gap-2">
-          <h2 className="text-sm font-bold">Eventos relacionados</h2>
+        <section data-veja-isto className="midia-painel">
+          <h2 className="tipo-detalhe font-bold">Eventos relacionados</h2>
           <ul className="flex flex-col gap-1">
             {[...eventos, ...aprofunda].map((l) => (
               <li key={l.rota}>
                 <Link
                   href={l.rota}
                   data-ligacao={l.slug}
-                  className="text-sm underline decoration-borda-forte underline-offset-4 hover:decoration-current"
+                  className="tipo-detalhe underline decoration-borda-forte underline-offset-4 hover:decoration-current"
                 >
                   {l.titulo}
                 </Link>
-                {l.motivo ? <span className="text-xs text-tinta-2"> — {l.motivo}</span> : null}
+                {l.motivo ? <span className="tipo-legenda text-tinta-2"> — {l.motivo}</span> : null}
               </li>
             ))}
           </ul>
         </section>
       ) : null}
 
-      <p className="text-xs">
+      {/* --------------------------------------- o arquivo que não existe (T-05-33)
+       *
+       * DESCEU PARA O FIM DA PÁGINA em 23/08, e continua inteiro. Ele explica por que não
+       * há reprodução aqui, e essa é uma informação sobre o PROTÓTIPO: no alto da tela ela
+       * vinha antes do conteúdo, que é a queixa que reformulou o Cast e o Play. O botão da
+       * capa já leva a pessoa ao lugar onde o vídeo está. */}
+      <section data-sem-arquivo className="midia-nota">
+        <h2 className="tipo-detalhe font-bold">{semArquivo.titulo}</h2>
+        <p className="tipo-legenda">{semArquivo.acervo}</p>
+        <p className="tipo-legenda">{semArquivo.rede}</p>
+        {midia.fonte ? (
+          <p className="tipo-legenda">
+            <a
+              href={midia.fonte}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="break-all underline decoration-borda-forte underline-offset-4"
+            >
+              {midia.fonte}
+            </a>
+          </p>
+        ) : null}
+      </section>
+
+      <p className="tipo-legenda">
         <Link href="/play/" className="underline decoration-borda-forte underline-offset-4">
           ← voltar ao catálogo
         </Link>

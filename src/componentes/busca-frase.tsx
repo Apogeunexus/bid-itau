@@ -736,15 +736,9 @@ export function BuscaFrase({
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* 5. A declaração de D-65 — texto de produto                         */}
+      {/* 5. As regras que leem a frase (D-65)                                */}
       {/* ------------------------------------------------------------------ */}
       <section className="frase-sem-ia" data-sem-ia>
-        <p>
-          <strong>Esta busca não chama IA.</strong> A frase é lida por{" "}
-          {AS_REGRAS.length} regras declaradas, e você pode ver todas. O que está sendo
-          mostrado não é um modelo que adivinha — é uma consulta que você controla, e é por
-          isso que cada pedaço dela é removível.
-        </p>
         <button
           type="button"
           className="frase-botao w-fit"
@@ -769,7 +763,6 @@ export function BuscaFrase({
             ))}
           </div>
         ) : null}
-
       </section>
 
       {/* ------------------------------------------------------------------ */}
@@ -790,22 +783,6 @@ export function BuscaFrase({
         ) : null}
       </section>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* O que o critério de texto NÃO alcança — declarado, não escondido    */}
-      {/* ------------------------------------------------------------------ */}
-      <section className="flex flex-col gap-1">
-        <p className="text-sm leading-snug text-tinta-2">
-          <strong>O que esta tela não alcança, dito com número.</strong> «Parecido com» é
-          casado por TEXTO sobre o índice único de {milhar(indice.total)} entradas — o
-          índice não tem campo de vizinhança, e  ele não ganha um. Das{" "}
-          {milhar(vizinhanca.arestas)} ligações «semelhante a» que saem do que casa com
-          «Bienal», {milhar(vizinhanca.vizinhos)} chegam a entidades distintas;{" "}
-          {milhar(vizinhanca.alcancaveis)} delas também casam por texto e explicam-se aqui
-          com o motivo escrito no acervo, e {milhar(vizinhanca.foraDoAlcance)} ficam fora
-          do alcance deste critério. Buscar pela vizinhança inteira é Camada 2 — e dizer o
-          número é o que impede esta tela de parecer mais do que é.
-        </p>
-      </section>
     </div>
   );
 }

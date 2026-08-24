@@ -85,6 +85,21 @@
  * diverge — cartão sem moldura contra o cartaz do Play. */
 @import "../estilos/cast.css";
 
+/* A vitrine de formação (2026-08): catálogo no molde de escola digital, com a
+ * cara deste design system. Depois do Cast porque as duas são vitrines e é
+ * Cursos que diverge — cartão 16:9 de catálogo contra o cartaz de streaming. */
+@import "../estilos/cursos.css";
+
+/* A capa editorial (2026-08): hierarquia de jornal — manchete, laterais,
+ * cadernos. Depois das vitrines de catálogo porque o vocabulário é outro:
+ * foto de reportagem e expediente, não cartaz de streaming. */
+@import "../estilos/noticias.css";
+
+/* Museu virtual (23/08): abertura, mosaico de cartaz e lista de espaços.
+ * Depois do Cast porque as duas são vitrines de acervo; o Museu diverge —
+ * papel quente e desenho, não fotografia sangrando. */
+@import "../estilos/museu.css";
+
 /* ---------------------------------------------------------------------------
  * A base visual (camada base tipográfica, moldura D-03, cartão)
  * vem DEPOIS das folhas de tela, na mesma posição do cascade que essas regras

@@ -1,0 +1,676 @@
+/* ===========================================================================
+ * cursos.css — Cursos, a vitrine de formação da Escola Itaú Cultural.
+ *
+ * A FORMA é a de um catálogo de escola digital (Udemy, Coursera, Domestika):
+ * abertura com busca, categorias com capa, cartão 16:9 com meta e saída na
+ * fonte. A CARA é deste design system — grafismo, laranja só em ação, papel
+ * creme, chip preto-cheio, tipografia do manual. Não é um clone: é o vocabulário
+ * que a pessoa já opera, desenhado com as peças da casa.
+ *
+ * O QUE ESTA TELA SE RECUSA A COPIAR da referência: nota, preço, «mais
+ * vendido», contagem de alunos. O acervo não tem nenhum dos quatro, e inventá-los
+ * seria autorar um fato sobre o Itaú Cultural.
+ *
+ * Regras da casa: nenhum hex; medida só na grade de 0.25rem; `fixed` só no
+ * `.canto`; divergência por visão em CSS puro sob `[data-view]`.
+ * ======================================================================== */
+
+.cursos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+  padding: var(--espaco-tela) var(--espaco-tela) var(--espaco-secao);
+}
+
+/* ---------------------------------------------------------------------------
+ * ABERTURA — título da tela, o número medido, a busca.
+ * Não é o destaque da formação: é ONDE a pessoa está. O h1 diz «Cursos» como
+ * nas outras trinta telas; a formação em evidência mora mais abaixo.
+ * ------------------------------------------------------------------------ */
+.cursos-abertura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+}
+
+.cursos-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--cor-acao-tinta);
+}
+
+.cursos-titulo {
+  font-weight: 700;
+}
+
+.cursos-olho {
+  max-inline-size: 40rem;
+  color: var(--cor-tinta-2);
+}
+
+.cursos-olho strong {
+  color: var(--cor-tinta);
+  font-family: var(--fonte-display);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
+ * BUSCA — a peça que a referência põe no alto e que esta tela não tinha.
+ * A caixa é a pílula, o input é transparente dentro dela: o mesmo desenho de
+ * `/buscar`, para a pessoa não aprender um segundo campo.
+ * ------------------------------------------------------------------------ */
+.cursos-busca {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-inline-size: 40rem;
+}
+
+.cursos-busca-caixa {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.25rem 0.25rem 1rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+}
+
+.cursos-busca-caixa:focus-within {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.cursos-busca-lupa {
+  display: flex;
+  flex: none;
+  color: var(--cor-tinta-3);
+}
+
+.cursos-busca-lupa svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.cursos-busca-campo {
+  flex: 1;
+  min-inline-size: 0;
+  padding: 0.75rem 0.25rem;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: var(--tipo-corpo);
+  line-height: 1.3;
+  color: var(--cor-tinta);
+}
+
+.cursos-busca-campo::placeholder {
+  color: var(--cor-tinta-3);
+}
+
+.cursos-busca-campo:focus {
+  outline: none;
+}
+
+.cursos-busca-limpar {
+  flex: none;
+  min-block-size: 2.25rem;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: transparent;
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cursos-busca-limpar:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+ * CATEGORIAS — cartões com a capa da formação mais recente de cada formato.
+ * É a fileira de «áreas» da referência, e a capa é DADO: o item mais recente
+ * daquela partição, não uma ilustração inventada.
+ * ------------------------------------------------------------------------ */
+.cursos-recorte,
+.cursos-categorias {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cursos-categorias-trilho {
+  display: flex;
+  gap: var(--espaco-pilha);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+  padding-block: 0.25rem;
+}
+
+.cursos-categoria {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  inline-size: 9.5rem;
+  scroll-snap-align: start;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease-padrao),
+    box-shadow var(--dur-1) var(--ease-padrao);
+}
+
+.cursos-categoria:hover {
+  border-color: var(--cor-borda-forte);
+  box-shadow: var(--sombra-1);
+}
+
+.cursos-categoria:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.cursos-categoria[aria-pressed="true"] {
+  border-color: var(--cor-tinta);
+  box-shadow: var(--sombra-2);
+}
+
+.cursos-categoria-capa {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--cor-superficie-2);
+}
+
+.cursos-categoria-capa img,
+.cursos-categoria-capa .capa-sem-imagem {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.cursos-categoria-pe {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem 0.75rem;
+}
+
+.cursos-categoria-pe svg {
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  color: var(--cor-acao-tinta);
+}
+
+.cursos-categoria[aria-pressed="true"] .cursos-categoria-pe svg {
+  color: var(--cor-tinta);
+}
+
+.cursos-categoria-nome {
+  display: flex;
+  min-inline-size: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cursos-categoria-rotulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-block-size: 2.5rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.cursos-categoria-n {
+  color: var(--cor-tinta-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * DESTAQUE — a formação mais recente, em cartão largo. Ordem, não curadoria.
+ * ------------------------------------------------------------------------ */
+.cursos-destaque {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-1);
+}
+
+.cursos-destaque-quadro {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--cor-superficie-2);
+}
+
+.cursos-destaque-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.cursos-destaque-credito {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  max-inline-size: 70%;
+  overflow: hidden;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-p);
+  background: color-mix(in srgb, var(--ic-preto) 70%, transparent);
+  color: var(--ic-branco);
+  font-size: var(--tipo-micro);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cursos-destaque-corpo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: var(--espaco-cartao);
+}
+
+.cursos-destaque-kicker {
+  color: var(--cor-tinta-3);
+}
+
+.cursos-destaque-titulo {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.cursos-destaque-resumo {
+  color: var(--cor-tinta-2);
+}
+
+.cursos-destaque-meta {
+  color: var(--cor-tinta-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * AÇÃO — o botão laranja. Laranja é AÇÃO: inscrever-se é o que a pessoa pode
+ * fazer, e a inscrição vive na fonte. Preto sobre laranja, 9,1:1.
+ * ------------------------------------------------------------------------ */
+.cursos-acao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  padding: 0 1.25rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity var(--dur-1) var(--ease-padrao);
+}
+
+.cursos-acao svg {
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.cursos-acao:hover {
+  opacity: 0.9;
+}
+
+.cursos-acao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.cursos-acao--fantasma {
+  background: transparent;
+  color: var(--cor-acao-tinta);
+  padding-inline: 0;
+  min-block-size: 0;
+}
+
+.cursos-acao--fantasma:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+ * CARTÃO — a unidade do catálogo. 16:9, meta, título, resumo, saída.
+ * Sem nota, sem preço, sem «mais vendido».
+ * ------------------------------------------------------------------------ */
+.cursos-cartao {
+  position: relative;
+  display: flex;
+  block-size: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-1);
+  transition:
+    border-color var(--dur-1) var(--ease-padrao),
+    box-shadow var(--dur-1) var(--ease-padrao);
+}
+
+.cursos-cartao:hover,
+.cursos-cartao:focus-within {
+  border-color: var(--cor-borda-forte);
+  box-shadow: var(--sombra-2);
+}
+
+.cursos-cartao-quadro {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--cor-superficie-2);
+}
+
+.cursos-cartao-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-2) var(--ease-padrao);
+}
+
+.cursos-cartao:hover .cursos-cartao-foto,
+.cursos-cartao:focus-within .cursos-cartao-foto {
+  transform: scale(1.04);
+}
+
+.cursos-cartao-quadro > .capa-sem-imagem {
+  block-size: 100%;
+}
+
+.cursos-cartao-selos {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  max-inline-size: calc(100% - 3.5rem);
+}
+
+.cursos-cartao-selo {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+  font-weight: 700;
+}
+
+.cursos-cartao-selo[data-aviso="sim"] {
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+}
+
+.cursos-cartao-lista {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity var(--dur-2) var(--ease-padrao);
+}
+
+.cursos-cartao:hover .cursos-cartao-lista,
+.cursos-cartao:focus-within .cursos-cartao-lista {
+  opacity: 1;
+}
+
+.cursos-cartao-corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.cursos-cartao-meta {
+  color: var(--cor-tinta-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.cursos-cartao-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* O título é o link, e o `::after` cobre o cartão — os botões sobem por cima
+   com z-index. Mesmo truque do cartaz do Play: `<button>` dentro de `<a>` é
+   HTML inválido. */
+.cursos-cartao-titulo::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+}
+
+.cursos-cartao-titulo:focus-visible::after {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: -2px;
+}
+
+.cursos-cartao-resumo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--cor-tinta-2);
+}
+
+.cursos-cartao-linguas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cursos-cartao-lingua {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cor-tinta-2);
+}
+
+.cursos-cartao-lingua-ponto {
+  flex: none;
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-chip);
+}
+
+.cursos-cartao-pe {
+  display: flex;
+  align-items: center;
+  margin-block-start: auto;
+  padding-block-start: 0.25rem;
+  /* O título é o link e cobre o cartão por `::after`. Este pé é só o recado
+     visual — se ele receber clique, o cartão inteiro deixa de ser o alvo. */
+  pointer-events: none;
+}
+
+.cursos-cartao-pe .cursos-acao {
+  min-block-size: 0;
+  padding: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * GRADE, PRATELEIRA, VAZIO
+ * ------------------------------------------------------------------------ */
+.cursos-grade {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  min-inline-size: 0;
+}
+
+.cursos-grade > li {
+  min-inline-size: 0;
+}
+
+.cursos-prateleira {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cursos-prateleira-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.cursos-prateleira-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-inline-size: 0;
+  font-weight: 700;
+}
+
+.cursos-prateleira-n {
+  color: var(--cor-tinta-3);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+}
+
+.cursos-trilho {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximate;
+  scrollbar-width: none;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+  padding-block: 0.25rem;
+}
+
+.cursos-trilho > li {
+  flex: none;
+  inline-size: 14rem;
+  scroll-snap-align: start;
+}
+
+.cursos-vazio {
+  padding: var(--espaco-cartao);
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+}
+
+.cursos-vazio-titulo {
+  font-weight: 700;
+}
+
+.cursos-vazio-olho {
+  margin-block-start: 0.25rem;
+  color: var(--cor-tinta-2);
+}
+
+.cursos-vazio .cursos-acao {
+  margin-block-start: 0.75rem;
+}
+
+.cursos-aviso-lista {
+  color: var(--cor-tinta-2);
+}
+
+/* Sem ponteiro, o botão de lista não pode viver no hover. */
+@media (hover: none) {
+  .cursos-cartao-lista {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursos-cartao,
+  .cursos-cartao-foto,
+  .cursos-cartao-lista,
+  .cursos-categoria,
+  .cursos-acao {
+    transition: none;
+  }
+
+  .cursos-cartao:hover .cursos-cartao-foto,
+  .cursos-cartao:focus-within .cursos-cartao-foto {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Visão web: mesma árvore, outras medidas. Destaque vira duas colunas; a grade
+ * abre em três; as categorias deixam de rolar.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .cursos {
+  max-inline-size: 76rem;
+  margin-inline: auto;
+}
+
+[data-view="web"] .cursos-destaque {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: stretch;
+}
+
+[data-view="web"] .cursos-destaque-quadro {
+  aspect-ratio: auto;
+  min-block-size: 18rem;
+}
+
+[data-view="web"] .cursos-grade {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+[data-view="web"] .cursos-trilho {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+[data-view="web"] .cursos-categorias-trilho {
+  flex-wrap: wrap;
+  overflow: visible;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+[data-view="web"] .cursos-categoria {
+  inline-size: 11rem;
+}

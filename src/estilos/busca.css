@@ -19,17 +19,54 @@
 /* --- O campo (D-63) ------------------------------------------------------
  * Um campo só, para todos os tipos. Grudado no topo porque a pessoa reformula a busca
  * lendo os resultados — subir para alcançar o campo quebraria o ciclo. `sticky` e não
- * `fixed`: o contexto de rolagem é a moldura.                                        */
+ * `fixed`: o contexto de rolagem é a moldura.
+ *
+ * A CAIXA É A PÍLULA, o input é transparente dentro dela. Ícone à esquerda e o botão
+ * de filtros à direita moram na mesma superfície, para o toque não ter que achar um
+ * controle solto ao lado do campo.                                                     */
 
-.busca-campo {
+.busca-caixa-wrap {
   position: sticky;
   top: 0;
   z-index: 2;
-  width: 100%;
-  padding: 0.75rem 1rem;
+  padding-block: 0.5rem;
+  margin-block: -0.5rem;
+  background: var(--cor-fundo);
+}
+
+.busca-caixa {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.25rem 0.25rem 1rem;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-pilula);
   background: var(--cor-superficie);
+}
+
+.busca-caixa:focus-within {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.busca-caixa-lupa {
+  display: flex;
+  flex: none;
+  color: var(--cor-tinta-3);
+}
+
+.busca-caixa-lupa .busca-glifo {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.busca-campo {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75rem 0.25rem;
+  border: 0;
+  background: transparent;
   font: inherit;
   font-size: var(--tipo-corpo);
   line-height: 1.3;
@@ -40,10 +77,117 @@
   color: var(--cor-tinta-3);
 }
 
-.busca-campo:focus-visible {
+.busca-campo:focus {
+  outline: none;
+}
+
+.busca-caixa-filtro {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta);
+  cursor: pointer;
+}
+
+.busca-caixa-filtro:focus-visible {
   outline: 2px solid var(--cor-acao);
   outline-offset: 2px;
-  border-color: transparent;
+}
+
+.busca-caixa-filtro-n {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.25rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+svg.busca-glifo {
+  display: block;
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* --- Abas de tipo --------------------------------------------------------
+ * Escolha EXCLUSIVA de família de conteúdo, não recorte opcional. Por isso não
+ * é a primitiva Chip (selecionado preto, vários ligados): o selecionado aqui é
+ * AÇÃO — laranja com tinta preta, o único par que passa no contraste.               */
+
+.busca-aba {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+  min-height: 2.25rem;
+  padding: 0 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.busca-aba:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.busca-aba[aria-pressed="true"] {
+  background: var(--cor-acao);
+  border-color: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-weight: 700;
+}
+
+.busca-aba .busca-glifo {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* --- Atalhos de contexto (hoje, mapa, filtros) --------------------------- */
+
+.busca-atalhos .chip .busca-glifo {
+  width: 1rem;
+  height: 1rem;
+}
+
+.busca-filtro-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  margin-left: 0.25rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
 
 /* --- Blocos e seus títulos ----------------------------------------------
@@ -61,6 +205,36 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--cor-tinta-3);
+}
+
+.busca-secao-cabeca {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.busca-secao-cabeca .busca-bloco-titulo,
+.busca-secao-cabeca h2 {
+  margin: 0;
+}
+
+.busca-secao-acao {
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.busca-secao-acao:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
 }
 
 /* --- Fichas e facetas: MUDARAM DE ENDEREÇO -------------------------------
@@ -142,35 +316,87 @@
   display: none;
 }
 
+#busca-facetas {
+  scroll-margin-top: 4.5rem;
+}
+
 /* --- Resultado ----------------------------------------------------------
- * Sem cartão e sem sombra: a lista mistura 15 classes (D-63) e uma moldura por item
- * pesaria a tela inteira. A separação é uma linha, e o que distingue os tipos é a
- * etiqueta, não o contêiner.                                                          */
+ * Cartão baixo, capa à esquerda, tipo etiquetado em cima do título. A lista
+ * mistura 15 classes (D-63) e o que distingue os tipos é a etiqueta, não o
+ * contêiner — a moldura é a mesma para evento, pessoa e verbete.                      */
 
 .busca-resultado {
   display: flex;
   gap: 0.75rem;
-  align-items: flex-start;
-  padding: 0.75rem 0;
-  border-top: 1px solid var(--cor-borda);
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
   color: inherit;
   text-decoration: none;
 }
 
-.busca-resultado:first-child {
-  border-top: 0;
+.busca-resultado-corpo {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  gap: 0.75rem;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.busca-resultado-capa {
+  flex: none;
+  width: 4.5rem;
+  height: 4.5rem;
+  overflow: hidden;
+  border-radius: var(--raio-p);
+}
+
+.busca-resultado[data-tipo="pessoa"] .busca-resultado-capa,
+.busca-resultado[data-tipo="coletivo"] .busca-resultado-capa {
+  border-radius: var(--raio-pilula);
+}
+
+.busca-resultado-texto {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.busca-titulo {
+  font-size: var(--tipo-corpo);
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .busca-resultado:hover .busca-titulo,
-.busca-resultado:focus-visible .busca-titulo {
+.busca-resultado:focus-visible .busca-titulo,
+.busca-resultado-corpo:hover .busca-titulo,
+.busca-resultado-corpo:focus-visible .busca-titulo {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.busca-resultado:focus-visible {
+.busca-resultado:focus-visible,
+.busca-resultado-corpo:focus-visible {
   outline: 2px solid var(--cor-acao);
   outline-offset: 2px;
-  border-radius: 4px;
+}
+
+.busca-meta {
+  color: var(--cor-tinta-3);
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+}
+
+.busca-casamento {
+  background: var(--cor-acao-lavada);
+  border-radius: 0.25rem;
 }
 
 /* --- A etiqueta de tipo -------------------------------------------------
@@ -180,8 +406,9 @@
 
 .busca-tipo {
   display: inline-block;
+  width: fit-content;
   padding: 0.25rem 0.5rem;
-  border-radius: 3px;
+  border-radius: 0.25rem;
   background: color-mix(in srgb, var(--cor-tinta-crua) 8%, transparent);
   font-size: var(--tipo-micro);
   font-weight: 700;
@@ -189,6 +416,142 @@
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--cor-tinta-2);
+}
+
+/* --- Destaque: o primeiro resultado, em cartão alto ---------------------
+ * Sem fotografia no índice (o caminho não viaja no DTO), a capa composta da
+ * linguagem ocupa o fundo. O scrim é o que garante o texto, como no hero.           */
+
+.busca-resultado[data-destaque] {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--raio-g);
+  background: var(--ic-preto);
+}
+
+.busca-destaque-link {
+  display: block;
+  position: relative;
+  min-height: 14rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.busca-destaque-link:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
+}
+
+.busca-resultado[data-destaque] .busca-destaque-capa {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.busca-resultado[data-destaque] .busca-destaque-capa > span {
+  display: none;
+}
+
+.busca-destaque-miolo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  min-height: 14rem;
+  padding: 1.25rem 3.5rem 1.25rem 1.25rem;
+  background: linear-gradient(
+    to top,
+    var(--ic-preto) 0%,
+    color-mix(in srgb, transparent 25%, var(--ic-preto)) 42%,
+    transparent 78%
+  );
+  color: var(--ic-branco);
+  text-decoration: none;
+}
+
+.busca-destaque-miolo .busca-tipo {
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+}
+
+.busca-destaque-miolo .busca-titulo {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--ic-branco);
+}
+
+.busca-destaque-miolo .busca-meta,
+.busca-destaque-miolo .busca-casamento {
+  color: color-mix(in srgb, transparent 15%, var(--ic-branco));
+  background: transparent;
+}
+
+.busca-destaque-ir {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  pointer-events: none;
+}
+
+.busca-destaque-ir .busca-glifo {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* --- Cabeçalho da lista ------------------------------------------------- */
+
+.busca-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.busca-ordem summary {
+  cursor: pointer;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  list-style: none;
+}
+
+.busca-ordem summary::-webkit-details-marker {
+  display: none;
+}
+
+.busca-ordem summary::after {
+  content: " ▾";
+}
+
+.busca-ordem p {
+  margin: 0.5rem 0 0;
+  max-width: 36rem;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+}
+
+.busca-ordem summary:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
 }
 
 /* --- Afrouxamento (D-66) ------------------------------------------------
@@ -202,9 +565,9 @@
   justify-content: space-between;
   gap: 0.75rem;
   width: 100%;
-  padding: 0.75rem 0.75rem;
+  padding: 0.75rem;
   border: 1px solid color-mix(in srgb, var(--cor-acao) 40%, transparent);
-  border-radius: 10px;
+  border-radius: var(--raio-m);
   background: color-mix(in srgb, var(--cor-acao) 6%, var(--cor-papel-cru));
   font-size: var(--tipo-detalhe);
   line-height: 1.35;
@@ -234,22 +597,280 @@
   color: var(--cor-acao-tinta);
 }
 
+/* --- Mapa, pessoas, leituras, busca inteligente ------------------------- */
+
+.busca-mapa {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--raio-g);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.busca-mapa:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
+}
+
+.busca-mapa-rotulo {
+  flex: 1;
+  min-width: 0;
+}
+
+.busca-mapa .busca-glifo:last-child {
+  margin-left: auto;
+  color: var(--cor-acao-tinta);
+}
+
+.busca-pessoas {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  padding-bottom: 0.25rem;
+}
+
+.busca-pessoa {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 4.5rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.busca-pessoa:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
+  border-radius: var(--raio-p);
+}
+
+.busca-pessoa-capa {
+  width: 4.5rem;
+  height: 4.5rem;
+  overflow: hidden;
+  border-radius: var(--raio-pilula);
+}
+
+.busca-pessoa-capa > span {
+  display: none;
+}
+
+.busca-pessoa-nome {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: var(--tipo-legenda);
+  font-weight: 600;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.busca-leituras {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.busca-leitura {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.busca-leitura:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
+  border-radius: var(--raio-p);
+}
+
+.busca-leitura-capa {
+  aspect-ratio: 5 / 3;
+  width: 100%;
+  border-radius: var(--raio-p);
+}
+
+.busca-leitura-capa > span {
+  display: none;
+}
+
+.busca-leitura-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.busca-inteligente {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border-radius: var(--raio-g);
+  background: var(--cor-acao-lavada);
+}
+
+.busca-inteligente-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+.busca-inteligente-kicker .busca-glifo {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.busca-inteligente p {
+  margin: 0;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.4;
+}
+
 /* --- A visão web (D-01, D-02) -------------------------------------------
  * O gatilho é `data-view`, o estado da aplicação, e nunca uma media query: o alternador
  * precisa funcionar numa telona de apresentação, onde a janela é larga em ambas as
  * visões. Classe semântica não aceita variante Tailwind, então a regra é escrita à mão.
  * Na web há largura para as facetas respirarem e para o resultado ganhar densidade.   */
 
+[data-view="web"] .busca-caixa {
+  padding: 0.25rem 0.5rem 0.25rem 1.25rem;
+}
+
 [data-view="web"] .busca-campo {
-  padding: 1rem 1rem;
+  padding: 1rem 0.5rem;
   font-size: var(--tipo-destaque);
 }
 
 [data-view="web"] .busca-resultado {
-  padding: 1rem 0;
+  padding: 1rem;
   gap: 1rem;
 }
 
 [data-view="web"] .busca-bloco {
   margin-block: 1.75rem;
+}
+
+[data-view="web"] .busca-leituras {
+  grid-template-columns: 1fr 1fr;
+}
+
+[data-view="web"] .busca-resultado[data-destaque] {
+  padding: 0;
+}
+
+/* --- Folha de filtros (ícone ao lado do campo) --------------------------
+ * Absolute contra a `.moldura` (relative), não `fixed`: o overlay cobre o
+ * telefone e não a janela inteira (D-03). Mobile sobe de baixo; web entra
+ * pela direita.                                                               */
+
+.busca-folha-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 44;
+  border: 0;
+  background: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  cursor: pointer;
+}
+
+.busca-folha {
+  position: absolute;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-3);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.busca-folha[data-aberta] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.busca-folha-cabeca {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.busca-folha-cabeca h2 {
+  margin: 0;
+}
+
+.busca-folha-fechar {
+  flex: none;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.busca-folha-fechar:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.busca-folha-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1rem 1.25rem 2rem;
+}
+
+[data-view="mobile"] .busca-folha {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-height: 85%;
+  border-radius: var(--raio-g) var(--raio-g) 0 0;
+  transform: translateY(100%);
+  transition: transform var(--dur-3) var(--ease-padrao), visibility var(--dur-3);
+}
+
+[data-view="mobile"] .busca-folha[data-aberta] {
+  transform: translateY(0);
+}
+
+[data-view="web"] .busca-folha {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 24rem;
+  max-width: 100%;
+  border-radius: var(--raio-g) 0 0 var(--raio-g);
+  transform: translateX(100%);
+  transition: transform var(--dur-3) var(--ease-padrao), visibility var(--dur-3);
+}
+
+[data-view="web"] .busca-folha[data-aberta] {
+  transform: translateX(0);
 }

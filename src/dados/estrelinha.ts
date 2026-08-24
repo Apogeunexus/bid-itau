@@ -130,4 +130,77 @@ export function roteiroDaEstrelinha(combinacao: string): RoteiroDaEstrelinha | n
   return { combinacao: c, roteiro, cobertura: { doGosto, total: itens.length, rotuloLinguagem }, regras };
 }
 
+/**
+ * Quatro pedidos prontos para a abertura de /ia. O texto é o que a pessoa
+ * «diria»; a combinação é o endereço pré-computado. A capa é a primeira
+ * imagem real do roteiro — se o acervo daquela combinação não tem foto, a
+ * tela cai no cartão só de texto em vez de emprestar uma imagem de outro
+ * lugar.
+ */
+export interface SugestaoDaEstrelinha {
+  id: string;
+  texto: string;
+  gosto: string;
+  companhia: string;
+  dias: number;
+  cidade: string;
+  capa: string | null;
+  creditoCapa: string | null;
+  altCapa: string;
+}
+
+export function sugestoesDaEstrelinha(): SugestaoDaEstrelinha[] {
+  const cidades = cidadesComAcervo();
+  if (cidades.length === 0) return [];
+  const a = cidades[0];
+  const b = cidades[1] ?? a;
+  const c = cidades[2] ?? a;
+
+  const pedidos: Array<Omit<SugestaoDaEstrelinha, "capa" | "creditoCapa" | "altCapa"> & { id: string }> = [
+    {
+      id: "musica-sozinho",
+      texto: `Quatro dias em ${a.titulo}, com música. Vou só.`,
+      gosto: "musica",
+      companhia: "sozinho",
+      dias: 4,
+      cidade: a.slug,
+    },
+    {
+      id: "teatro-dois",
+      texto: `Um fim de semana de teatro em ${b.titulo}, a dois.`,
+      gosto: "teatro",
+      companhia: "a-dois",
+      dias: 2,
+      cidade: b.slug,
+    },
+    {
+      id: "surpresa-grupo",
+      texto: `Me surpreenda em ${c.titulo}: três dias, em grupo.`,
+      gosto: "surpresa",
+      companhia: "em-grupo",
+      dias: 3,
+      cidade: c.slug,
+    },
+    {
+      id: "visuais-crianca",
+      texto: `Artes visuais em ${a.titulo}, três dias, com criança.`,
+      gosto: "artes-visuais",
+      companhia: "com-crianca",
+      dias: 3,
+      cidade: a.slug,
+    },
+  ];
+
+  return pedidos.map((p) => {
+    const r = roteiroDaEstrelinha(`${p.cidade}--${p.dias}-dias--${p.gosto}`);
+    const item = r?.roteiro.dias.flatMap((d) => d.itens).find((i) => i.imagem);
+    return {
+      ...p,
+      capa: item?.imagem ?? null,
+      creditoCapa: item?.creditoImagem ?? null,
+      altCapa: item ? item.titulo : p.texto,
+    };
+  });
+}
+
 export { OPCOES_DE_DIAS };

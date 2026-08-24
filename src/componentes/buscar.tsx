@@ -1,13 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useId, useMemo, useState } from "react";
+import { cloneElement, useCallback, useEffect, useId, useMemo, useState } from "react";
+import type { ReactElement } from "react";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
-import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
+import {
+  ICONE_BUSCAR,
+  ICONE_FILTROS,
+  ICONE_IA,
+  ICONE_MAPA,
+  ICONE_SETA,
+} from "@/componentes/base/icones";
+import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
 import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
-import { useSessao } from "@/contexto/sessao";
-import { DISPOSICOES } from "@/dados/disposicoes";
 // A frase literal do Cenário 5 do RFP, e ela vem de `frase.ts` em vez de ser redigitada
 // aqui: duas cópias de uma frase de roteiro divergem na primeira correção, e a que a banca
 // leria seria a errada. `frase.ts` importa SÓ `./indice` e `./tipos`, os mesmos dois que
@@ -27,11 +33,13 @@ import {
   consultar,
   expandirIndice,
   facetasDe,
+  REGRA_ORDENACAO,
   type CampoCriterio,
   type Criterio,
   type EntradaIndice,
   type IndiceDTO,
   type OpcaoFaceta,
+  type ResultadoBusca,
 } from "@/dados/indice";
 import type { ClasseEntidade } from "@/dados/tipos";
 
@@ -176,6 +184,23 @@ const ROTULO_CAMPO: Record<CampoCriterio, string> = {
   territorio: "território",
 };
 
+/**
+ * As cinco famílias da porta de busca. São escolha exclusiva (uma aba), não
+ * recorte opcional — marcar «Eventos» substitui o critério de classe, não soma.
+ * «Lugares» junta espaço, instituição e território no mesmo campo, que o índice
+ * já trata como OU (filtrar).
+ */
+function Mini({ icone }: { icone: ReactElement }) {
+  return cloneElement(icone as ReactElement<{ className?: string }>, { className: "busca-glifo" });
+}
+
+function metaDoResultado(resultado: ResultadoBusca): string {
+  const partes: string[] = [];
+  if (resultado.territorioRotulo) partes.push(resultado.territorioRotulo);
+  if (resultado.temImagem) partes.push("com imagem no acervo");
+  return partes.join(" · ");
+}
+
 // ---------------------------------------------------------------------------
 // Ajudantes puros
 // ---------------------------------------------------------------------------
@@ -295,8 +320,6 @@ function lerHash(
 // ---------------------------------------------------------------------------
 
 export function Buscar({ indice }: { indice: IndiceDTO }) {
-  const { definirDisposicoes } = useSessao();
-
   const [texto, setTexto] = useState("");
   const [criterios, setCriterios] = useState<Criterio[]>([]);
   const [recentes, setRecentes] = useState<string[]>([]);
@@ -304,6 +327,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
   const [lidoDoHash, setLidoDoHash] = useState(false);
   const [todosOsTemas, setTodosOsTemas] = useState(false);
   const [sugestao, setSugestao] = useState(0);
+  const [mostrarFiltros, setMostrarFiltros] = useState(false);
 
   /** Todas as opções de faceta do índice, por `campo:valor`. Valida o hash e nomeia. */
   const conhecidas = useMemo(() => {
@@ -383,6 +407,47 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
     );
   }, []);
 
+  const escolherAba = useCallback(
+    (classes: readonly ClasseEntidade[]) => {
+      setCriterios((atual) => {
+        const semClasse = atual.filter((c) => c.campo !== "classe");
+        if (!classes.length) return semClasse;
+        const novas: Criterio[] = [];
+        for (const valor of classes) {
+          const opcao = conhecidas.get(`classe:${valor}`);
+          if (opcao) {
+            novas.push({ campo: opcao.campo, valor: opcao.valor, rotulo: opcao.rotulo });
+          }
+        }
+        return [...semClasse, ...novas];
+      });
+    },
+    [conhecidas],
+  );
+
+  const irAosFiltros = useCallback(() => {
+    setMostrarFiltros(true);
+  }, []);
+
+  const fecharFiltros = useCallback(() => {
+    setMostrarFiltros(false);
+  }, []);
+
+  useEffect(() => {
+    if (!mostrarFiltros) return;
+    const noEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMostrarFiltros(false);
+    };
+    window.addEventListener("keydown", noEscape);
+    const raiz = document.querySelector(".moldura-rolagem");
+    const previa = raiz instanceof HTMLElement ? raiz.style.overflowY : "";
+    if (raiz instanceof HTMLElement) raiz.style.overflowY = "hidden";
+    return () => {
+      window.removeEventListener("keydown", noEscape);
+      if (raiz instanceof HTMLElement) raiz.style.overflowY = previa;
+    };
+  }, [mostrarFiltros]);
+
   const ativa = texto.trim().length > 0 || criterios.length > 0;
 
   // A CONSULTA. Filtro em memória sobre o DTO recebido por props — nenhuma travessia de
@@ -404,15 +469,15 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
     [criterios],
   );
 
-  // A VITRINE do estado inicial (reformulação 2026-08: a busca vira índice de acervo,
-  // não campo vazio). Duas entradas por classe navegável, preferindo as que declaram
-  // linguagem — é a linguagem que dá cor à capa (D-08). Ordem do índice, determinística.
+  // A VITRINE do estado inicial. Duas entradas por classe navegável, preferindo
+  // as que têm imagem local — a amostra abre com foto, não com capa composta.
+  // Ordem do índice, determinística.
   const vitrine = useMemo(() => {
     const porClasse = new Map<ClasseEntidade, EntradaIndice[]>();
     for (const preferir of [true, false]) {
       for (const e of expandirIndice(indice)) {
         if (!ROTA_POR_CLASSE[e.classe]) continue;
-        if (preferir && e.linguagens.length === 0) continue;
+        if (preferir && !e.imagem) continue;
         const lista = porClasse.get(e.classe) ?? [];
         if (lista.length < 2 && !lista.some((x) => x.chave === e.chave)) lista.push(e);
         porClasse.set(e.classe, lista);
@@ -436,6 +501,17 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
 
   const total = resposta?.total ?? 0;
   const exibidos = resposta?.resultados.length ?? 0;
+  const criteriosVisiveis = criterios.filter((c) => c.campo !== "classe");
+  const nFiltros = criteriosVisiveis.length;
+  const chaveDestaque = resposta?.resultados[0]?.chave;
+  const pessoasRelacionadas = (resposta?.resultados ?? []).filter(
+    (r) => (r.classe === "pessoa" || r.classe === "coletivo") && r.chave !== chaveDestaque,
+  );
+  const conteudosRelacionados = (resposta?.resultados ?? []).filter(
+    (r) => r.classe === "conteudo" && r.chave !== chaveDestaque,
+  );
+  const nPessoas = (resposta?.porClasse.pessoa ?? 0) + (resposta?.porClasse.coletivo ?? 0);
+  const nConteudos = resposta?.porClasse.conteudo ?? 0;
 
   return (
     // `desk:max-w-6xl` e não `5xl`: a moldura da visão web já é `max-w-6xl` em `casca.tsx`,
@@ -446,58 +522,73 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
-          <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Buscar</h1>
+          <h1 className="tipo-titulo-1 font-bold">Buscar</h1>
         </div>
 
-        {/* O QUE ESTA FRASE PRECISA DIZER é o que a pessoa ganha, em UMA linha.
-            Antes desta versão a frase ainda explicava o mecanismo — «aparecem no
-            mesmo resultado, cada um com o seu tipo» —, e explicava para o leitor
-            aquilo que a primeira lista de resultados mostra sozinha: a etiqueta de
-            tipo em cada linha é a prova de D-63, não este parágrafo. */}
-        <p className="text-sm leading-snug">
-          Encontre eventos, artistas, obras, vídeos e muito mais em um só lugar.
+        <p className="tipo-detalhe text-tinta-2">
+          Encontre eventos, artistas, lugares, obras e histórias.
         </p>
-
       </header>
 
       {/* ------------------------------------------------------------------ */}
       {/* 1. O campo único                                                    */}
       {/* ------------------------------------------------------------------ */}
       <form
+        className="busca-caixa-wrap"
         role="search"
         onSubmit={(e) => {
           e.preventDefault();
           registrarRecente(texto);
         }}
       >
-        <label className="sr-only" htmlFor="busca-campo">
-          Buscar no acervo
-        </label>
-        <input
-          id="busca-campo"
-          className="busca-campo"
-          type="search"
-          autoFocus
-          autoComplete="off"
-          // A sugestão é convite, e por isso ela troca: «bienal, teatro, Belém, Lygia
-          // Clark…» era uma lista de quatro exemplos parada, que se lê como sintaxe. Uma
-          // sugestão por vez, começando pelo que se PODE buscar e passando pelo que
-          // existe de verdade no acervo, é a diferença entre um campo e um convite.
-          placeholder={`Busque por ${SUGESTOES[sugestao]}…`}
-          value={texto}
-          onChange={(e) => setTexto(e.target.value)}
-          onBlur={() => registrarRecente(texto)}
-        />
+        <div className="busca-caixa">
+          <span className="busca-caixa-lupa" aria-hidden>
+            <Mini icone={ICONE_BUSCAR} />
+          </span>
+          <label className="sr-only" htmlFor="busca-campo">
+            Buscar no acervo
+          </label>
+          <input
+            id="busca-campo"
+            className="busca-campo"
+            type="search"
+            autoFocus
+            autoComplete="off"
+            placeholder={`Busque por ${SUGESTOES[sugestao]}…`}
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+            onBlur={() => registrarRecente(texto)}
+          />
+          <button
+            type="button"
+            className="busca-caixa-filtro"
+            aria-label={
+              nFiltros
+                ? `Ir para os filtros, ${milhar(nFiltros)} ${nFiltros === 1 ? "ativo" : "ativos"}`
+                : "Ir para os filtros"
+            }
+            aria-controls="busca-facetas"
+            aria-expanded={mostrarFiltros}
+            onClick={irAosFiltros}
+          >
+            <Mini icone={ICONE_FILTROS} />
+            {nFiltros ? (
+              <span className="busca-caixa-filtro-n" aria-hidden>
+                {milhar(nFiltros)}
+              </span>
+            ) : null}
+          </button>
+        </div>
       </form>
 
       {/* Critérios marcados: fichas visíveis e removíveis, cada uma dizendo quantos
           resultados haveria SEM ela (D-64). É a informação que o plano 03-06 usa para
           recalcular ao vivo quando a pessoa tira uma ficha. */}
-      {criterios.length ? (
+      {criteriosVisiveis.length ? (
         <section className="flex flex-col gap-1.5">
           <p className="busca-bloco-titulo">critérios marcados · toque para tirar</p>
           <TrilhoDeChips rotulo="Critérios marcados">
-            {criterios.map((criterio) => (
+            {criteriosVisiveis.map((criterio) => (
               // O «sem ela: 340» saiu daqui. Era o número do que a tela mostraria
               // se este critério fosse retirado — informação útil UMA vez, e ruído
               // quando repetida em cada chip de uma fileira. Quem quer saber o
@@ -517,7 +608,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
       ) : null}
 
       {descartados > 0 ? (
-        <p className="text-sm leading-snug text-tinta-2">
+        <p className="tipo-detalhe text-tinta-2">
           {descartados === 1
             ? "Um critério do endereço não existe neste índice e foi descartado."
             : `${milhar(descartados)} critérios do endereço não existem neste índice e foram descartados.`}
@@ -558,15 +649,18 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
               mudaria a visão app, que tem de continuar como a fase 3 a deixou. Quem some
               em cada visão é a caixa, por CSS, em `web-buscar.css` — nunca as duas juntas,
               nunca nenhuma. */}
-          <section data-frase-natural="sim" className="web-painel">
+          <section data-frase-natural="sim" className="web-painel busca-inteligente">
+            <p className="busca-inteligente-kicker">
+              <Mini icone={ICONE_IA} />
+              Busca inteligente
+            </p>
             <p className="web-painel-titulo">não sabe o nome do que procura?</p>
-            <p className="text-sm leading-snug">
+            <p className="tipo-detalhe">
               Descreva com uma frase — <strong>«{FRASE_DO_CENARIO_5}»</strong> — e ela vira{" "}
               <strong>critérios visíveis e editáveis</strong>, um a um, com o que não foi
               entendido dito na cara: não é uma resposta de chatbot.
             </p>
             <Chip href="/buscar/frase/" className="w-fit font-semibold">
-              <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
               traduzir esta frase em critérios
             </Chip>
           </section>
@@ -592,7 +686,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     internos do modelo de dados na primeira fileira que a pessoa vê. É
                     exatamente o que o mapa de rótulos existe para impedir, e a faceta
                     «tipo» lá embaixo já o usava; aqui faltava. */}
-                <TrilhoDeChips rotulo="Explorar por seção do acervo">
+                <TrilhoDeChips rotulo="Explorar por seção do acervo" className="trilho-chips-rola">
                   {facetas.classe.map((opcao) => (
                     <Chip
                       key={chaveCriterio(opcao)}
@@ -617,10 +711,12 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                       href={`${ROTA_POR_CLASSE[entrada.classe]}/${entrada.slug}/`}
                       className="flex flex-col gap-1.5 no-underline"
                     >
-                      <CapaSemImagem
+                      <CapaDeCartao
                         titulo={entrada.titulo}
                         classe={entrada.classe}
                         linguagens={entrada.linguagens}
+                        imagem={entrada.imagem}
+                        creditoImagem={entrada.creditoImagem}
                         className="aspect-square w-full rounded-p"
                       />
                       <span className="line-clamp-2 text-sm leading-snug font-semibold">
@@ -631,95 +727,9 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 </div>
               </section>
 
-              {/* A DESCOBERTA VEM ANTES DOS FILTROS, e essa ordem é o assunto da
-                  reformulação. Quem chega sem um nome na cabeça precisa de uma porta de
-                  saída antes de encontrar um formulário; empurrar as duas portas — a
-                  caminhada e a frase — para depois da fileira de facetas era pedir que a
-                  pessoa desistisse no meio do caminho.
-
-                  AS DUAS PORTAS FICAM NO MESMO BLOCO porque respondem à mesma pergunta.
-                  Só o pedaço da frase carrega `data-convite-frase="app"`: na web ele some
-                  por CSS, e quem diz a mesma coisa lá é o painel permanente do topo. Se o
-                  atributo estivesse na seção inteira, a web perderia junto o convite para
-                  Descobrir, que não tem substituto nenhum. */}
-              <section className="busca-bloco flex flex-col gap-2">
-                <p className="busca-bloco-titulo">não sabe o que procurar?</p>
-                <p className="text-sm leading-snug">
-                  Deixe o acervo te surpreender: Descobrir monta uma{" "}
-                  <strong>caminhada</strong> em vez de pedir um termo.
-                </p>
-                <Chip href="/descobrir/" className="w-fit font-semibold">
-                  <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
-                  quero descobrir algo
-                </Chip>
-                <TrilhoDeChips rotulo="Ir para Descobrir com uma disposição marcada">
-                  {DISPOSICOES.map((disposicao) => (
-                    <Chip
-                      key={disposicao.id}
-                      href="/descobrir/"
-                      onClick={() => definirDisposicoes([disposicao.id])}
-                    >
-                      {disposicao.rotulo}
-                    </Chip>
-                  ))}
-                </TrilhoDeChips>
-
-                {/* O convite da fase 3, intacto no conteúdo e só mudado de endereço — e
-                    ele some na WEB, onde o bloco permanente `[data-frase-natural]` já diz
-                    a mesma coisa com a frase por extenso e sem depender de a busca estar
-                    vazia. Dois convites para a mesma tela na mesma página seriam ruído. */}
-                <div data-convite-frase="app" className="flex flex-col gap-2">
-                  <p className="text-sm leading-snug">
-                    Ou descreva com uma frase — «algo parecido com a Bienal, gratuito e perto
-                    de mim» — e a frase vira{" "}
-                    {/* smaug-ignore ui-strings: «editáveis» é pt-BR; o casador lê o prefixo «edit» */}
-                    <strong>critérios visíveis e editáveis</strong>, não uma resposta de
-                    chatbot.
-                  </p>
-                  <Chip href="/buscar/frase/" className="w-fit font-semibold">
-                    <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
-                    buscar por frase
-                  </Chip>
-                </div>
-              </section>
-
-              {/* «atalhos por linguagem» virou «explore por linguagem»: o par com
-                  «explore por seção» é o que diz que os dois trilhos são a mesma oferta —
-                  entrar no acervo por um corte — e não um menu de atalhos solto no meio
-                  da tela. */}
-              <section className="busca-bloco">
-                <p className="busca-bloco-titulo">explore por linguagem</p>
-                <TrilhoDeChips rotulo="Explorar por linguagem artística">
-                  {facetas.linguagem.slice(0, 12).map((opcao) => (
-                    <Chip
-                      key={chaveCriterio(opcao)}
-                      data-faceta={chaveCriterio(opcao)}
-                      cor={opcao.cor ?? "--ic-preto"}
-                      onClick={() => alternarCriterio(opcao)}
-                    >
-                      {opcao.rotulo}
-                    </Chip>
-                  ))}
-                </TrilhoDeChips>
-              </section>
-
-              <section className="busca-bloco">
-                <p className="busca-bloco-titulo">buscas recentes</p>
-                {recentes.length ? (
-                  <TrilhoDeChips rotulo="Buscas recentes">
-                    {recentes.map((termo) => (
-                      <Chip key={termo} onClick={() => setTexto(termo)}>
-                        {termo}
-                      </Chip>
-                    ))}
-                  </TrilhoDeChips>
-                ) : (
-                  <p className="text-sm leading-snug text-tinta-2">
-                    Você ainda não buscou nada neste navegador.
-                  </p>
-                )}
-              </section>
-
+              <Chip href="/buscar/frase/" data-convite-frase="app" className="w-fit font-semibold">
+                buscar por frase
+              </Chip>
             </div>
           ) : null}
 
@@ -737,22 +747,32 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
               data-resultados-total={total}
               data-resultados-exibidos={exibidos}
             >
-              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                <p className="text-sm font-semibold">
-                  {total === 0
-                    ? "Nenhum resultado"
-                    : exibidos < total
-                      ? `Mostrando ${milhar(exibidos)} de ${milhar(total)} resultados`
-                      : `${milhar(total)} resultado${total > 1 ? "s" : ""}`}
-                </p>
-                {total > 0 ? (
-                  <p className="text-sm text-tinta-2">
-                    em{" "}
-                    {Object.entries(resposta.porClasse)
-                      .sort((a, b) => b[1] - a[1])
-                      .map(([classe, n]) => `${rotuloDaClasse(classe as ClasseEntidade)} ${n}`)
-                      .join(" · ")}
+              <div className="busca-cabeca">
+                <div className="flex min-w-0 flex-col gap-1">
+                  <p className="tipo-detalhe font-semibold">
+                    {total === 0
+                      ? "Nenhum resultado"
+                      : texto.trim()
+                        ? `${milhar(total)} resultado${total > 1 ? "s" : ""} para «${texto.trim()}»`
+                        : exibidos < total
+                          ? `Mostrando ${milhar(exibidos)} de ${milhar(total)} resultados`
+                          : `${milhar(total)} resultado${total > 1 ? "s" : ""}`}
                   </p>
+                  {total > 0 ? (
+                    <p className="tipo-legenda text-tinta-2">
+                      em{" "}
+                      {Object.entries(resposta.porClasse)
+                        .sort((a, b) => b[1] - a[1])
+                        .map(([classe, n]) => `${rotuloDaClasse(classe as ClasseEntidade)} ${n}`)
+                        .join(" · ")}
+                    </p>
+                  ) : null}
+                </div>
+                {total > 0 ? (
+                  <details className="busca-ordem">
+                    <summary>Mais relevantes</summary>
+                    <p>{REGRA_ORDENACAO}</p>
+                  </details>
                 ) : null}
               </div>
 
@@ -770,73 +790,14 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     data-grade-resultados="sim"
                     className="web-grade flex list-none flex-col gap-2 p-0"
                   >
-                    {resposta.resultados.map((resultado) => {
-                      const base = ROTA_POR_CLASSE[resultado.classe];
-                      const rota = base ? `${base}/${resultado.slug}/` : null;
-                      const etiqueta = (
-                        <span className="busca-tipo" data-tipo-rotulo>
-                          {rotuloDaClasse(resultado.classe)}
-                        </span>
-                      );
-                      const titulo = (
-                        <span className="text-base leading-snug font-bold">
-                          {pedacos(resultado.titulo, texto).map((pedaco, i) => (
-                            <span key={i} className={pedaco.casa ? "busca-casamento" : undefined}>
-                              {pedaco.t}
-                            </span>
-                          ))}
-                        </span>
-                      );
-
-                      return (
-                        <li
-                          key={resultado.chave}
-                          className="busca-resultado"
-                          data-resultado={resultado.chave}
-                          data-tipo={resultado.classe}
-                        >
-                          {/* A capa desenhada de `<CapaSemImagem>`: o índice carrega se a
-                              entidade TEM imagem local, mas não o caminho dela — a imagem não
-                              viaja sem o crédito, e caminho mais crédito somam 108 KB medidos
-                              num orçamento de 480 KB. A imagem com crédito continua na página
-                              da entidade, que é onde ela é argumento. */}
-                          <CapaSemImagem
-                            titulo={resultado.titulo}
-                            classe={resultado.classe}
-                            linguagens={resultado.linguagens}
-                            className="size-14 shrink-0 rounded-lg"
-                          />
-                          <div className="flex min-w-0 flex-1 flex-col gap-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              {etiqueta}
-                              {resultado.territorioRotulo ? (
-                                <span className="text-xs text-tinta-2">
-                                  {resultado.territorioRotulo}
-                                </span>
-                              ) : null}
-                              {resultado.temImagem ? (
-                                <span className="text-xs text-tinta-3">com imagem no acervo</span>
-                              ) : null}
-                            </div>
-                            {rota ? (
-                              <Link href={rota} className="no-underline">
-                                {titulo}
-                              </Link>
-                            ) : (
-                              titulo
-                            )}
-                            {resultado.linguagens.length ? (
-                              <SelosDeLinguagem ids={resultado.linguagens} limite={2} />
-                            ) : null}
-                            {!rota ? (
-                              <span className="text-xs text-tinta-3">
-                                sem página própria 
-                              </span>
-                            ) : null}
-                          </div>
-                        </li>
-                      );
-                    })}
+                    {resposta.resultados.map((resultado, i) => (
+                      <ItemResultado
+                        key={resultado.chave}
+                        resultado={resultado}
+                        texto={texto}
+                        destaque={i === 0}
+                      />
+                    ))}
                   </ul>
 
                   {exibidos < total ? (
@@ -887,88 +848,195 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
               ) : null}
             </section>
           ) : null}
+
+          {ativa && pessoasRelacionadas.length ? (
+            <section className="busca-bloco">
+              <div className="busca-secao-cabeca">
+                <h2 className="busca-bloco-titulo">Pessoas relacionadas</h2>
+                {nPessoas > 6 ? (
+                  <button
+                    type="button"
+                    className="busca-secao-acao"
+                    onClick={() => escolherAba(["pessoa", "coletivo"])}
+                  >
+                    Ver todas
+                  </button>
+                ) : null}
+              </div>
+              <div className="busca-pessoas">
+                {pessoasRelacionadas.slice(0, 6).map((pessoa) => {
+                  const base = ROTA_POR_CLASSE[pessoa.classe];
+                  const rota = base ? `${base}/${pessoa.slug}/` : null;
+                  const miolo = (
+                    <>
+                      <CapaDeCartao
+                        titulo={pessoa.titulo}
+                        classe={pessoa.classe}
+                        linguagens={pessoa.linguagens}
+                        imagem={pessoa.imagem}
+                        creditoImagem={pessoa.creditoImagem}
+                        compacta
+                        className="busca-pessoa-capa"
+                      />
+                      <span className="busca-pessoa-nome">{pessoa.titulo}</span>
+                    </>
+                  );
+                  return rota ? (
+                    <Link key={pessoa.chave} href={rota} className="busca-pessoa">
+                      {miolo}
+                    </Link>
+                  ) : (
+                    <div key={pessoa.chave} className="busca-pessoa">
+                      {miolo}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          ) : null}
+
+          {ativa && conteudosRelacionados.length ? (
+            <section className="busca-bloco">
+              <div className="busca-secao-cabeca">
+                <h2 className="busca-bloco-titulo">Conteúdos para se aprofundar</h2>
+                {nConteudos > 2 ? (
+                  <button
+                    type="button"
+                    className="busca-secao-acao"
+                    onClick={() => escolherAba(["conteudo"])}
+                  >
+                    Ver todos
+                  </button>
+                ) : null}
+              </div>
+              <div className="busca-leituras">
+                {conteudosRelacionados.slice(0, 2).map((item) => (
+                  <article key={item.chave} className="busca-leitura">
+                    <CapaDeCartao
+                      titulo={item.titulo}
+                      classe={item.classe}
+                      linguagens={item.linguagens}
+                      imagem={item.imagem}
+                      creditoImagem={item.creditoImagem}
+                      compacta
+                      className="busca-leitura-capa"
+                    />
+                    <span className="busca-tipo">{rotuloDaClasse(item.classe)}</span>
+                    <span className="busca-leitura-titulo">{item.titulo}</span>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
         </div>
 
-        {/* ------------------------------------------------------------------ */}
-        {/* A COLUNA DE FACETAS — permanente na web, seção empilhada no app     */}
-        {/* ------------------------------------------------------------------ */}
-        {/* D-80: na web não se troca de tela para filtrar. O recorte e o resultado ficam
-            à vista ao mesmo tempo, que é a diferença entre filtrar e navegar — e a coluna
-            acompanha a rolagem por `.web-coluna-fixa`, que a cola no topo e a faz rolar
-            POR DENTRO. Sem esse rolar por dentro, uma coluna com cinco campos de faceta
-            ficaria mais alta que a janela e o pé dela seria inalcançável: coluna colada
-            nunca rola para revelar o próprio fim.
+      </div>
 
-            NA VISÃO APP NADA DISTO EXISTE. `.web-coluna-fixa` é escrita inteira sob
-            `[data-view="web"]`, então aqui o `div` é uma caixa de bloco comum e as
-            facetas seguem sendo a seção empilhada de sempre, no mesmo lugar. */}
-        <div data-coluna-facetas="sim" className="web-coluna-fixa flex flex-col gap-4">
-          {/* ------------------------------------------------------------------ */}
-          {/* 5. Facetas derivadas da ontologia                                   */}
-          {/* ------------------------------------------------------------------ */}
+      {mostrarFiltros ? (
+        <button
+          type="button"
+          className="busca-folha-scrim"
+          aria-label="Fechar filtros"
+          onClick={fecharFiltros}
+        />
+      ) : null}
+
+      <div
+        id="busca-facetas"
+        data-coluna-facetas="sim"
+        data-aberta={mostrarFiltros ? "sim" : undefined}
+        className="busca-folha"
+        role="dialog"
+        aria-modal={mostrarFiltros}
+        aria-labelledby="busca-folha-titulo"
+      >
+        <div className="busca-folha-cabeca">
+          <h2 id="busca-folha-titulo" className="tipo-titulo-3 font-bold">
+            Filtros
+          </h2>
+          <button type="button" className="busca-folha-fechar" onClick={fecharFiltros}>
+            Fechar
+          </button>
+        </div>
+        <div className="busca-folha-corpo">
+          <section>
+            <p className="busca-bloco-titulo">Explore por linguagem</p>
+            <TrilhoDeChips rotulo="Explorar por linguagem artística" className="trilho-chips-rola">
+              {facetas.linguagem.slice(0, 12).map((opcao) => (
+                <Chip
+                  key={chaveCriterio(opcao)}
+                  data-faceta={chaveCriterio(opcao)}
+                  cor={opcao.cor ?? "--ic-preto"}
+                  selecionado={marcados.has(chaveCriterio(opcao))}
+                  onClick={() => alternarCriterio(opcao)}
+                >
+                  {opcao.rotulo}
+                </Chip>
+              ))}
+            </TrilhoDeChips>
+          </section>
+
+          <section>
+            <p className="busca-bloco-titulo">Buscas recentes</p>
+            {recentes.length ? (
+              <TrilhoDeChips rotulo="Buscas recentes">
+                {recentes.map((termo) => (
+                  <Chip
+                    key={termo}
+                    onClick={() => {
+                      setTexto(termo);
+                      fecharFiltros();
+                    }}
+                  >
+                    {termo}
+                  </Chip>
+                ))}
+              </TrilhoDeChips>
+            ) : (
+              <p className="tipo-detalhe text-tinta-2">
+                Você ainda não buscou nada neste navegador.
+              </p>
+            )}
+          </section>
+
+          <Link href={lente} className="busca-mapa">
+            <Mini icone={ICONE_MAPA} />
+            <span className="busca-mapa-rotulo">
+              {idsLente.length
+                ? `Ver ${milhar(idsLente.length)} no mapa`
+                : "Ver no mapa"}
+            </span>
+            <Mini icone={ICONE_SETA} />
+          </Link>
+          {total > idsLente.length ? (
+            <p className="tipo-legenda text-tinta-2">
+              A lente leva os primeiros {milhar(idsLente.length)} de {milhar(total)}.
+            </p>
+          ) : null}
+
           <section className="flex flex-col gap-3">
-            <div className="flex flex-col gap-1">
-              {/* «recortar» virou «filtre o acervo» porque este bloco deixou de ser a
-                  primeira coisa que a pessoa vê ao rolar: com os grupos recolhidos, o
-                  título é o que anuncia o que há lá dentro, e um verbo solto não anuncia
-                  nada. O vocabulário de recorte segue valendo no texto abaixo, onde ele
-                  descreve o que os números querem dizer. */}
-              <p className="busca-bloco-titulo">filtre o acervo</p>
-              {/* «As facetas saem da própria ontologia — classe, linguagem, tema,
-                  procedência e território da entidade» era a lista dos CAMPOS do
-                  modelo de dados, dita a quem só queria filtrar. O que a pessoa
-                  precisa saber é a promessa: o número ao lado é o resultado real,
-                  e não há caminho que leve a nada. Os títulos de cada trilho já
-                  dizem por que se está recortando. */}
-            </div>
-
-            {/* A PORTA PARA `/filtros/`, E O QUE ELA DIZ IMPORTA MAIS QUE ELA EXISTIR.
-                As facetas acima saem da ontologia e recortam o índice; a acessibilidade
-                não está entre elas, e a razão não é esquecimento — ela é CRITÉRIO DE
-                PRIMEIRA CLASSE (D-91) e mora numa tela que sabe distinguir «declarado
-                ausente» de «não declarado», distinção que uma ficha de faceta com um
-                número ao lado não comporta.
-
-                `/filtros/` é criada pelo plano 05-06, nesta mesma onda, e NÃO EXISTE
-                enquanto este arquivo é escrito. O export estático não valida href interno
-                e o build não quebra; quem prova que o link resolve é o gate de 05-08. É
-                link para frente, do mesmo tipo que a fase 2 fez para `/trilha/[slug]`.
-
-                Ele fica FORA da visão app por CSS: a porta de entrada de Filtros no app é
-                de 05-06, e abrir uma segunda aqui empurraria a tela que a fase 3 congelou. */}
+            <p className="busca-bloco-titulo">Filtre o acervo</p>
             <Chip href="/filtros/" data-link-filtros="sim" className="w-fit font-semibold">
-              <Grafismo
-                variacao="barra"
-                className="h-3.5 w-auto shrink-0 text-acao-tinta"
-              />
-              filtrar por acessibilidade — as 8 dimensões como critério, não como selo
+              Acessibilidade
             </Chip>
-
-            {/* `recolhivel={!ativa}` — E O QUE ISSO SIGNIFICA EM CADA VISÃO.
-                Enquanto ninguém buscou nada, os cinco grupos são cinco fileiras de
-                fichas que ninguém pediu, e no telefone elas empurram para muito longe
-                tudo o que vem depois. Com a busca em curso as facetas são a FERRAMENTA
-                em uso, e recolher o que a pessoa está manejando seria o defeito oposto.
-
-                NA WEB NADA DISSO ACONTECE, e não por um ramo em JavaScript: o alternador
-                é `display: none` sob `[data-view="web"]` e a regra que esconde o corpo do
-                grupo é escrita só para a app (`busca.css`). D-80 pede a coluna à vista o
-                tempo todo, e ela continua à vista — inclusive com a busca vazia, que é o
-                estado que o gate WEB-04 mede. */}
             <BlocoFaceta
               titulo="tipo"
               opcoes={facetas.classe}
               marcados={marcados}
-              recolhivel={!ativa}
               rotulo={(valor) => rotuloDaClasse(valor as ClasseEntidade)}
               aoTocar={alternarCriterio}
             />
-            <BlocoFaceta titulo="linguagem" opcoes={facetas.linguagem.slice(0, 12)} marcados={marcados} recolhivel={!ativa} aoTocar={alternarCriterio} />
+            <BlocoFaceta
+              titulo="linguagem"
+              opcoes={facetas.linguagem.slice(0, 12)}
+              marcados={marcados}
+              aoTocar={alternarCriterio}
+            />
             <BlocoFaceta
               titulo="tema"
               opcoes={todosOsTemas ? facetas.tema : facetas.tema.slice(0, TEMAS_VISIVEIS)}
               marcados={marcados}
-              recolhivel={!ativa}
               aoTocar={alternarCriterio}
               rodape={
                 facetas.tema.length > TEMAS_VISIVEIS ? (
@@ -984,52 +1052,135 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 ) : null
               }
             />
-            <BlocoFaceta titulo="procedência" opcoes={facetas.procedencia} marcados={marcados} recolhivel={!ativa} aoTocar={alternarCriterio} />
+            <BlocoFaceta titulo="procedência" opcoes={facetas.procedencia} marcados={marcados} aoTocar={alternarCriterio} />
             <BlocoFaceta
               titulo="território"
               opcoes={facetas.territorio.slice(0, 12)}
               marcados={marcados}
-              recolhivel={!ativa}
               aoTocar={alternarCriterio}
               rodape={
-                <p className="text-xs leading-snug text-tinta-2">
+                <p className="tipo-legenda text-tinta-2">
                   {milhar(indice.diagnostico.comTerritorioBrasileiro)} das {milhar(indice.total)}{" "}
                   entradas estão situadas num estado brasileiro.
                 </p>
               }
             />
-
-            {/* T-03-24: a gratuidade NÃO é oferecida como faceta — as 2.425 sessões saem
-                todas gratuitas porque `gratuito` é a negação de um campo de ingresso que
-                nenhum dos 300 eventos declara, e o filtro passaria 100% do acervo. O
-                parágrafo que explicava isso saiu da tela em 23/08 junto com os outros
-                textos de sistema; quem sustenta a declaração com número é a ficha de
-                critério de `busca-frase.tsx`, que o portão da fase 3 lê. */}
           </section>
         </div>
       </div>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* 6. A lente do mapa (D-59)                                           */}
-      {/* ------------------------------------------------------------------ */}
-      <section className="busca-bloco">
-        <p className="busca-bloco-titulo">ver este recorte no mapa</p>
-        <Chip href={lente} className="w-fit font-semibold">
-          <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
-          {idsLente.length
-            ? `abrir ${milhar(idsLente.length)} no mapa`
-            : "abrir o mapa sem recorte"}
-        </Chip>
-        {/* O corte CONTINUA declarado — lista que encolhe em silêncio é defeito, e a
-            regra de fluxo da casa exige dizer —, mas sem o parágrafo que explicava o
-            porquê do limite do endereço. */}
-        {total > idsLente.length ? (
-          <p className="text-xs leading-snug text-tinta-2">
-            A lente leva os primeiros {milhar(idsLente.length)} de {milhar(total)}.
-          </p>
-        ) : null}
-      </section>
     </div>
+  );
+}
+
+function TituloResultado({ titulo, texto }: { titulo: string; texto: string }) {
+  return (
+    <span className="busca-titulo">
+      {pedacos(titulo, texto).map((pedaco, i) => (
+        <span key={i} className={pedaco.casa ? "busca-casamento" : undefined}>
+          {pedaco.t}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function ItemResultado({
+  resultado,
+  texto,
+  destaque,
+}: {
+  resultado: ResultadoBusca;
+  texto: string;
+  destaque: boolean;
+}) {
+  const base = ROTA_POR_CLASSE[resultado.classe];
+  const rota = base ? `${base}/${resultado.slug}/` : null;
+  const etiqueta = (
+    <span className="busca-tipo" data-tipo-rotulo>
+      {rotuloDaClasse(resultado.classe)}
+    </span>
+  );
+  const meta = metaDoResultado(resultado);
+
+  if (destaque) {
+    const miolo = (
+      <>
+        <CapaDeCartao
+          titulo={resultado.titulo}
+          classe={resultado.classe}
+          linguagens={resultado.linguagens}
+          imagem={resultado.imagem}
+          creditoImagem={resultado.creditoImagem}
+          compacta
+          className="busca-destaque-capa"
+        />
+        <span className="busca-destaque-miolo">
+          {etiqueta}
+          <TituloResultado titulo={resultado.titulo} texto={texto} />
+          {meta ? <span className="busca-meta">{meta}</span> : null}
+        </span>
+        {rota ? (
+          <span className="busca-destaque-ir" aria-hidden>
+            <Mini icone={ICONE_SETA} />
+          </span>
+        ) : null}
+      </>
+    );
+    return (
+      <li
+        className="busca-resultado"
+        data-destaque=""
+        data-resultado={resultado.chave}
+        data-tipo={resultado.classe}
+      >
+        {rota ? (
+          <Link href={rota} className="busca-destaque-link">
+            {miolo}
+          </Link>
+        ) : (
+          <div className="busca-destaque-link">{miolo}</div>
+        )}
+      </li>
+    );
+  }
+
+  const corpo = (
+    <>
+      <CapaDeCartao
+        titulo={resultado.titulo}
+        classe={resultado.classe}
+        linguagens={resultado.linguagens}
+        imagem={resultado.imagem}
+        creditoImagem={resultado.creditoImagem}
+        compacta
+        className="busca-resultado-capa"
+      />
+      <div className="busca-resultado-texto">
+        {etiqueta}
+        <TituloResultado titulo={resultado.titulo} texto={texto} />
+        {meta ? <span className="busca-meta">{meta}</span> : null}
+        {resultado.linguagens.length ? (
+          <SelosDeLinguagem ids={resultado.linguagens} limite={2} />
+        ) : null}
+        {!rota ? <span className="busca-meta">sem página própria</span> : null}
+      </div>
+    </>
+  );
+
+  return (
+    <li
+      className="busca-resultado"
+      data-resultado={resultado.chave}
+      data-tipo={resultado.classe}
+    >
+      {rota ? (
+        <Link href={rota} className="busca-resultado-corpo">
+          {corpo}
+        </Link>
+      ) : (
+        <div className="busca-resultado-corpo">{corpo}</div>
+      )}
+    </li>
   );
 }
 

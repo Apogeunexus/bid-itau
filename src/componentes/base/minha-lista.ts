@@ -28,6 +28,7 @@ import { useCallback, useEffect, useState } from "react";
 
 export const CHAVE_LISTA_PLAY = "agenda-cultural:play-minha-lista";
 export const CHAVE_LISTA_CAST = "agenda-cultural:cast-minha-lista";
+export const CHAVE_LISTA_CURSOS = "agenda-cultural:cursos-minha-lista";
 
 /**
  * Leitura tolerante, no molde de `lerLista` de `sessao.tsx`: o valor vem de storage

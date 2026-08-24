@@ -621,3 +621,412 @@
   border-color: var(--cor-acao);
   color: var(--cor-sobre-acao);
 }
+
+/* ---------------------------------------------------------------------------
+ * A PÃGINA DE UM TÃTULO (`.midia-*`) â€” reformulaÃ§Ã£o de 23/08.
+ *
+ * O porquÃª da forma estÃ¡ no cabeÃ§alho de `src/componentes/player.tsx`. Aqui mora sÃ³ o
+ * desenho: a capa que sangra, a lista da coleÃ§Ã£o e o trilho de semelhantes.
+ *
+ * O PREFIXO Ã‰ `midia-` E NÃƒO `player-`, e isso Ã© intencional: `player-` jÃ¡ nomeia os dois
+ * controles antigos (a pastilha de recurso e o botÃ£o de concluir), que continuam valendo.
+ * Reusar o prefixo faria a folha ter dois vocabulÃ¡rios com o mesmo nome.
+ * ------------------------------------------------------------------------ */
+.midia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+  padding: 0 var(--espaco-tela) var(--espaco-secao);
+}
+
+/* ---- A capa: a imagem Ã© o fundo do tÃ­tulo, nÃ£o uma figura no meio da pÃ¡gina ---- */
+.midia-capa {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  /* Sangra atÃ© a borda da tela: a capa Ã© a abertura, e uma margem lateral aqui a
+     transformaria de volta numa figura dentro de um documento. */
+  margin-inline: calc(var(--espaco-tela) * -1);
+  /* A altura Ã© PISO e nÃ£o trava â€” o tÃ­tulo e a sinopse crescem, e uma razÃ£o fixa cortaria
+     o texto em janela estreita. Mesma correÃ§Ã£o que o hub levou. */
+  min-block-size: clamp(20rem, 52vh, 28rem);
+  /* Preto fixo nos dois temas: Ã© o que estÃ¡ debaixo do vÃ©u, e Ã© contra ele que o branco
+     do tÃ­tulo mede. Herdando o papel, no tema claro o nÃºmero deixaria de ser o que se vÃª. */
+  background: var(--ic-preto);
+}
+
+.midia-capa-foto {
+  position: absolute;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* O vÃ©u sobe do pÃ©: no telefone o texto fica embaixo da imagem inteira. */
+.midia-capa-veu {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--ic-preto) 0%,
+    color-mix(in srgb, var(--ic-preto) 88%, transparent) 34%,
+    color-mix(in srgb, var(--ic-preto) 40%, transparent) 62%,
+    color-mix(in srgb, var(--ic-preto) 18%, transparent) 100%
+  );
+}
+
+.midia-capa-texto {
+  position: relative;
+  display: flex;
+  align-self: flex-end;
+  flex-direction: column;
+  gap: 0.5rem;
+  inline-size: 100%;
+  padding: var(--espaco-tela);
+}
+
+.midia-capa-tipo {
+  color: color-mix(in srgb, var(--ic-branco) 78%, transparent);
+}
+
+.midia-capa-titulo {
+  color: var(--ic-branco);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.midia-capa-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
+}
+
+.midia-capa-resumo {
+  max-inline-size: 44rem;
+  color: color-mix(in srgb, var(--ic-branco) 90%, transparent);
+}
+
+.midia-capa-credito {
+  color: color-mix(in srgb, var(--ic-branco) 62%, transparent);
+}
+
+.midia-capa-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block-start: 0.25rem;
+}
+
+/* ---- Os botÃµes da capa: o primÃ¡rio tem a forma do play da referÃªncia ---- */
+.midia-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--ic-branco) 55%, transparent);
+  border-radius: var(--raio-pilula);
+  background: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  color: var(--ic-branco);
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(0.5rem);
+  transition: background-color var(--dur-1) var(--ease-padrao);
+}
+
+.midia-botao svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.midia-botao:hover {
+  background: color-mix(in srgb, var(--ic-preto) 72%, transparent);
+}
+
+.midia-botao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* Branco cheio com tinta preta: 21:1, o par que a referÃªncia usa e o que mede melhor
+   sobre fotografia. */
+.midia-botao--primario {
+  border-color: var(--ic-branco);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+}
+
+.midia-botao--primario:hover {
+  background: color-mix(in srgb, var(--ic-branco) 86%, transparent);
+}
+
+/* JÃ¡ na lista: laranja de AÃ‡ÃƒO com tinta preta â€” o Ãºnico par que passa sobre este
+   laranja (9,1:1). O glifo troca junto, e `aria-pressed` diz o mesmo sem cor nenhuma. */
+.midia-botao[data-na-lista="sim"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+}
+
+.midia-botao[data-na-lista="sim"]:hover {
+  background: color-mix(in srgb, var(--cor-acao) 85%, var(--ic-preto));
+}
+
+/* O selo de Libras sobre a capa: branco e preto fixos, porque estÃ¡ sobre fotografia. */
+.midia-selo {
+  padding: 0 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+  font-weight: 700;
+}
+
+/* ---- As seÃ§Ãµes ---- */
+.midia-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.midia-secao-titulo {
+  font-weight: 700;
+}
+
+/* ---- A coleÃ§Ã£o: a lista de episÃ³dios da referÃªncia, e a do programa no Ã¡udio ----
+ *
+ * LINHA E NÃƒO GRADE. Um episÃ³dio se distingue do irmÃ£o pelo TÃTULO, nÃ£o pela capa â€” num
+ * programa de podcast as capas sÃ£o a mesma arte com o nome do convidado por cima. Em grade
+ * de cartazes, doze capas iguais nÃ£o dizem nada; em linha, o tÃ­tulo tem a largura toda. */
+.midia-episodios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.midia-episodio {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: var(--raio-m);
+  transition: background-color var(--dur-1) var(--ease-padrao);
+}
+
+.midia-episodio:hover {
+  background: var(--cor-superficie-2);
+}
+
+.midia-episodio:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.midia-episodio-quadro {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  flex: none;
+  inline-size: 7rem;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+.midia-episodio-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* O disco de play sobre a miniatura, no gesto do Spotify: ele aparece quando o ponteiro
+   para na linha, e fica sempre visÃ­vel onde nÃ£o hÃ¡ ponteiro (`cartaz-acoes.css`). */
+.midia-episodio-play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  color: var(--ic-branco);
+  opacity: 0;
+  transition: opacity var(--dur-1) var(--ease-padrao);
+}
+
+.midia-episodio-play svg {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+
+.midia-episodio:hover .midia-episodio-play,
+.midia-episodio:focus-visible .midia-episodio-play {
+  opacity: 1;
+}
+
+.midia-episodio-texto {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.midia-episodio-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--cor-tinta);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.midia-episodio-pe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cor-tinta-3);
+}
+
+/* O selo dentro da linha estÃ¡ sobre PAPEL, nÃ£o sobre foto: ele gira com o tema. */
+.midia-episodio-pe .midia-selo {
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+}
+
+/* ---- Semelhantes: trilho de cartazes pequenos ---- */
+.midia-trilho {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximate;
+  scrollbar-width: none;
+  margin: 0;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding: 0;
+  padding-inline: var(--espaco-tela);
+  padding-block-end: 0.25rem;
+  list-style: none;
+}
+
+.midia-trilho > li {
+  flex: none;
+  inline-size: 9rem;
+  scroll-snap-align: start;
+}
+
+.midia-vizinha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.midia-vizinha-quadro {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+  box-shadow: var(--sombra-1);
+}
+
+.midia-vizinha-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-2) var(--ease-padrao);
+}
+
+.midia-vizinha:hover .midia-vizinha-foto {
+  transform: scale(1.04);
+}
+
+.midia-vizinha:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.midia-vizinha-tipo {
+  color: var(--cor-tinta-3);
+}
+
+.midia-vizinha-titulo {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  color: var(--cor-tinta);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* ---- Painel e nota: os blocos de ficha, que continuam sendo documento ---- */
+.midia-painel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+}
+
+.midia-nota {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: var(--espaco-cartao);
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  color: var(--cor-tinta-2);
+}
+
+/* ---- VisÃ£o web: a capa vira painel largo com o texto na metade esquerda ---- */
+[data-view="web"] .midia {
+  max-width: 64rem;
+  margin-inline: auto;
+}
+
+[data-view="web"] .midia-capa {
+  margin-inline: 0;
+  border-radius: var(--raio-g);
+}
+
+/* O vÃ©u gira de baixo-para-cima para esquerda-para-direita: numa peÃ§a larga o texto cabe
+   ao lado da imagem, e Ã© assim que a referÃªncia desenha no computador. */
+[data-view="web"] .midia-capa-veu {
+  background: linear-gradient(
+    to right,
+    var(--ic-preto) 0%,
+    color-mix(in srgb, var(--ic-preto) 86%, transparent) 42%,
+    color-mix(in srgb, var(--ic-preto) 30%, transparent) 68%,
+    transparent 96%
+  );
+}
+
+[data-view="web"] .midia-capa-texto {
+  align-self: center;
+  max-inline-size: 60%;
+  padding: var(--espaco-secao);
+}
+
+[data-view="web"] .midia-trilho {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+[data-view="web"] .midia-trilho > li {
+  inline-size: 11rem;
+}
+
+[data-view="web"] .midia-episodio-quadro {
+  inline-size: 10rem;
+}
+

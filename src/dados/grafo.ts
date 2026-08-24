@@ -13,6 +13,7 @@
  * em nenhuma delas.
  */
 
+import { CAPAS_EXTRA } from "./capas-extra";
 import entidadesJson from "./gerado/entidades.json";
 import arestasJson from "./gerado/arestas.json";
 import ocorrenciasJson from "./gerado/ocorrencias.json";
@@ -29,7 +30,25 @@ import type {
   Vizinho,
 } from "./tipos";
 
-const ENTIDADES = entidadesJson as unknown as Entidade[];
+/**
+ * Capa que o crawl não internou — só entra se a entidade ainda não tem foto.
+ * O arquivo já está em `public/acervo/`; aqui só amarra id → caminho + crédito.
+ */
+function comCapasExtras(lista: readonly Entidade[]): Entidade[] {
+  return lista.map((e) => {
+    if (e.imagem) return e;
+    const extra = CAPAS_EXTRA[e.id];
+    if (!extra) return e;
+    return {
+      ...e,
+      imagem: `/acervo/${extra.arquivo}`,
+      creditoImagem: extra.credito,
+      extra: { ...e.extra, imagemFonte: extra.fonte },
+    };
+  });
+}
+
+const ENTIDADES = comCapasExtras(entidadesJson as unknown as Entidade[]);
 const ARESTAS = arestasJson as unknown as Aresta[];
 const OCORRENCIAS = ocorrenciasJson as unknown as OcorrenciasPorEvento;
 

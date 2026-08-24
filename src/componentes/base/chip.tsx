@@ -1,5 +1,7 @@
+"use client";
+
 import Link from "next/link";
-import type { ComponentPropsWithoutRef, CSSProperties, ReactNode } from "react";
+import { useRef, type ComponentPropsWithoutRef, type CSSProperties, type ReactNode } from "react";
 
 /**
  * chip.tsx — a primeira primitiva de `base/`, e a que o projeto mais devia.
@@ -126,11 +128,40 @@ export function TrilhoDeChips({
 }: { rotulo: string } & Omit<ComponentPropsWithoutRef<"div">, "className"> & {
     className?: string;
   }) {
+  const trilho = useRef<HTMLDivElement>(null);
+  const arrasto = useRef<{ x: number; scroll: number } | null>(null);
+  const arrastou = useRef(false);
+
   return (
     <div
+      ref={trilho}
       role="group"
       aria-label={rotulo}
       className={`trilho-chips${className ? ` ${className}` : ""}`}
+      onPointerDown={(e) => {
+        if (e.pointerType !== "mouse" || e.button !== 0) return;
+        arrasto.current = { x: e.clientX, scroll: trilho.current?.scrollLeft ?? 0 };
+        arrastou.current = false;
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }}
+      onPointerMove={(e) => {
+        if (!arrasto.current || !trilho.current) return;
+        const dx = e.clientX - arrasto.current.x;
+        if (Math.abs(dx) > 6) arrastou.current = true;
+        trilho.current.scrollLeft = arrasto.current.scroll - dx;
+      }}
+      onPointerUp={() => {
+        arrasto.current = null;
+      }}
+      onPointerCancel={() => {
+        arrasto.current = null;
+      }}
+      onClickCapture={(e) => {
+        if (!arrastou.current) return;
+        e.preventDefault();
+        e.stopPropagation();
+        arrastou.current = false;
+      }}
       {...resto}
     >
       {children}

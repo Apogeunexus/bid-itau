@@ -53,6 +53,7 @@ export function CapaSemImagem({
   rotulo,
   linguagens,
   className,
+  compacta,
 }: {
   titulo: string;
   classe: ClasseEntidade;
@@ -65,6 +66,11 @@ export function CapaSemImagem({
   rotulo?: string;
   linguagens: string[];
   className?: string;
+  /**
+   * Sem pastilha — a tela já etiqueta o tipo ao lado. O `alt` continua
+   * anunciando que não há imagem no acervo.
+   */
+  compacta?: boolean;
 }) {
   // Primeira linguagem que o vocabulário conhece. `find` e não `[0]`: a entidade pode
   // declarar uma linguagem que o vocabulário não promoveu, e cair no preto por causa
@@ -88,9 +94,11 @@ export function CapaSemImagem({
       <Textura className="-translate-x-px -translate-y-px text-[var(--ic-branco)] opacity-30" />
       <Textura className="translate-x-px translate-y-px text-[var(--ic-preto)] opacity-[0.16]" />
 
-      <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
-        {rotulo ?? classe}
-      </span>
+      {compacta ? null : (
+        <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
+          {rotulo ?? classe}
+        </span>
+      )}
     </div>
   );
 }
@@ -109,15 +117,27 @@ export function CapaDeCartao({
   imagem,
   creditoImagem,
   className,
+  compacta,
+  alt,
+  prioridade,
 }: {
   titulo: string;
   classe: ClasseEntidade;
   /** O texto da pastilha quando a classe do modelo não é o que a tela diz — ver `CapaSemImagem`. */
   rotulo?: string;
   linguagens: string[];
-  imagem?: string;
-  creditoImagem?: string;
+  imagem?: string | null;
+  creditoImagem?: string | null;
   className?: string;
+  /**
+   * Sem pastilha e sem faixa de crédito — a tela já etiqueta o tipo ao lado.
+   * O crédito continua no `alt`, que é onde quem não vê a imagem o encontra.
+   */
+  compacta?: boolean;
+  /** Substitui o alt composto. Use quando a fonte já descreve a foto (`imagemAlt`). */
+  alt?: string;
+  /** A peça de abertura: baixa na hora, não preguiçosa. */
+  prioridade?: boolean;
 }) {
   if (!imagem) {
     return (
@@ -127,9 +147,12 @@ export function CapaDeCartao({
         rotulo={rotulo}
         linguagens={linguagens}
         className={className}
+        compacta={compacta}
       />
     );
   }
+
+  const altFinal = alt?.trim() || (creditoImagem ? `${titulo}. ${creditoImagem}` : titulo);
 
   return (
     <div className={`relative flex overflow-hidden bg-superficie-2 ${className ?? ""}`}>
@@ -138,19 +161,22 @@ export function CapaDeCartao({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={imagem}
-        alt={titulo}
-        loading="lazy"
+        alt={altFinal}
+        loading={prioridade ? "eager" : "lazy"}
+        fetchPriority={prioridade ? "high" : undefined}
         decoding="async"
         className="absolute inset-0 size-full object-cover"
       />
-      <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
-        {rotulo ?? classe}
-      </span>
-      {creditoImagem ? (
+      {compacta ? null : (
+        <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
+          {rotulo ?? classe}
+        </span>
+      )}
+      {compacta || !creditoImagem ? null : (
         <span className="absolute right-0 bottom-0 max-w-[70%] truncate bg-[var(--ic-preto)]/70 px-1.5 py-0.5 text-[0.6rem] text-[var(--ic-branco)]">
           {creditoImagem}
         </span>
-      ) : null}
+      )}
     </div>
   );
 }

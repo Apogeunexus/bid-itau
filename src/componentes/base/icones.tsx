@@ -205,6 +205,15 @@ export const ICONE_CHEVRON_DIREITA = (
   </Icone>
 );
 
+/** Fones — visitas guiadas, áudio de mediação. */
+export const ICONE_FONES = (
+  <Icone>
+    <path d="M4.5 13v2.2A1.8 1.8 0 0 0 6.3 17H8v-5.5H6.3A1.8 1.8 0 0 0 4.5 13Z" {...traco} />
+    <path d="M19.5 13v2.2a1.8 1.8 0 0 1-1.8 1.8H16V11.5h1.7a1.8 1.8 0 0 1 1.8 1.5Z" {...traco} />
+    <path d="M4.5 13a7.5 7.5 0 0 1 15 0" {...traco} />
+  </Icone>
+);
+
 /** Relógio da meta do cartão de agenda. */
 export const ICONE_RELOGIO = (
   <Icone>
@@ -218,6 +227,55 @@ export const ICONE_ALERTA = (
   <Icone>
     <path d="M12 4.5 20.5 19H3.5L12 4.5Z" {...traco} />
     <path d="M12 10v4M12 16.5h.01" {...traco} />
+  </Icone>
+);
+
+/** Oficina / ateliê — o lápis da formação prática. */
+export const ICONE_OFICINA = (
+  <Icone>
+    <path d="M14.2 4.8 19.2 9.8 9 20H4v-5L14.2 4.8Z" {...traco} />
+    <path d="M12.8 6.2 17.8 11.2" {...traco} />
+  </Icone>
+);
+
+/** Pós-graduação — o selo, distinto do capelo de `ICONE_CURSOS`. */
+export const ICONE_POS = (
+  <Icone>
+    <circle cx="12" cy="9.5" r="5" {...traco} />
+    <path d="M9.2 13.8 8 20l4-2.2L16 20l-1.2-6.2" {...traco} />
+  </Icone>
+);
+
+/** Encontro — duas pessoas, o formato presencial/virtual da Escola IC. */
+export const ICONE_ENCONTRO = (
+  <Icone>
+    <circle cx="9" cy="8" r="2.6" {...traco} />
+    <circle cx="16.2" cy="8.6" r="2.1" {...traco} />
+    <path d="M3.8 19.5c.6-3.4 2.9-5.2 5.2-5.2s4.6 1.8 5.2 5.2" {...traco} />
+    <path d="M14.2 14.6c1.8.2 3.5 1.6 4 4.9" {...traco} />
+  </Icone>
+);
+
+/** Sai do app — a inscrição da formação vive no site do Itaú Cultural. */
+export const ICONE_EXTERNO = (
+  <Icone>
+    <path d="M14 5h5v5M19 5 10 14" {...traco} />
+    <path d="M17 13.5V19H5V7h5.5" {...traco} />
+  </Icone>
+);
+
+/** Enviar o pedido — a seta para cima do compositor de /ia. */
+export const ICONE_ENVIAR = (
+  <Icone>
+    <path d="M12 19V6M6.5 11.5 12 6l5.5 5.5" {...traco} />
+  </Icone>
+);
+
+/** Critérios do artefato de pensamento — o traço da ficha, não da busca. */
+export const ICONE_FICHA = (
+  <Icone>
+    <rect x="5" y="3.5" width="14" height="17" rx="2" {...traco} />
+    <path d="M8.5 8h7M8.5 12h7M8.5 16h4" {...traco} />
   </Icone>
 );
 

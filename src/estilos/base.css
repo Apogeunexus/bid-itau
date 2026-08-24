@@ -212,21 +212,27 @@ body {
   text-transform: uppercase;
 }
 
-/* O SELO DE MOTIVO. Peso visual de primeira ordem de propósito: é o elemento que
- * diferencia mediação legível de recomendador opaco, e é o que vai para a foto do
- * slide. Rebaixá-lo a legenda cinza desmontaria o argumento da tela. */
+/* O SELO DE MOTIVO continua no DOM (D-28: data-motivo visível, altura > 0).
+ * O desenho NÃO é mais faixa: a faixa laranja sob um título longo lia como
+ * banner gerado. Agora é uma linha discreta sob a ficha. */
 .selo-motivo {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.5rem;
-  border-left: 3px solid var(--cor-acao);
-  border-radius: 0 var(--raio-p) var(--raio-p) 0;
-  /* color-mix e não um rgb() literal: o hex do laranja tem UMA fonte de verdade,
-   * que é o token em globals.css. Repetir 255 120 0 aqui criaria a segunda (D-06). */
-  background: var(--cor-acao-lavada);
-  font-size: var(--tipo-detalhe);
-  line-height: 1.35;
+  margin: 0;
+  padding: 0;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
   font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.selo-motivo > span {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .capa-sem-imagem {
@@ -462,6 +468,7 @@ body {
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximate;
+  cursor: grab;
 
   /* AQUI A BARRA SOME, e só aqui. Medido neste Chrome: `::-webkit-scrollbar` é
      inerte — a barra nativa `thin` do Windows continua desenhando os botões de
@@ -488,6 +495,10 @@ body {
   padding-inline: var(--espaco-tela);
 }
 
+.trilho-chips:active {
+  cursor: grabbing;
+}
+
 /* Na web há largura de sobra e rolagem horizontal seria pior que quebrar linha.
    Mesma árvore de JSX, outra medida — a mesma escolha que `.cartao` faz logo
    abaixo, e a razão de não existir um componente irmão por visão (D-05). */
@@ -501,6 +512,20 @@ body {
   mask-image: none;
 }
 
+/* Fileira que PRECISA rolar também na web — «explore por seção» tem 15 classes
+ * e no computador o wrap empilhava tudo, sem jeito de arrastar. */
+[data-view="web"] .trilho-chips.trilho-chips-rola {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  cursor: grab;
+  scrollbar-width: thin;
+  mask-image: linear-gradient(to right, black var(--fim-do-trilho), transparent 100%);
+}
+
+[data-view="web"] .trilho-chips.trilho-chips-rola:active {
+  cursor: grabbing;
+}
+
 .chip {
   display: inline-flex;
   align-items: center;
@@ -509,6 +534,7 @@ body {
   scroll-snap-align: start;
   min-height: 2.25rem;
   padding: 0 0.75rem;
+  overflow: hidden;
   border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
   background: var(--cor-superficie);
@@ -542,6 +568,15 @@ body {
   border-color: var(--cor-tinta);
   color: var(--cor-fundo);
   font-weight: 700;
+}
+
+/* O rótulo é flex para um ícone SVG não vazar da pílula: em `inline` o glifo
+   alinha na baseline e pinta fora da borda — o defeito da fileira de atalhos. */
+.chip-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
 }
 
 /* A CONTAGEM SEM POLUIÇÃO. Um degrau abaixo do rótulo e em tinta-3: ela informa
@@ -629,6 +664,56 @@ body {
   background: var(--cor-tinta);
   color: var(--cor-fundo);
   font-weight: 700;
+}
+
+.disposicao-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--raio-g);
+  background: var(--cor-acao-lavada);
+}
+
+.disposicao-banner-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.disposicao-banner-kicker {
+  margin: 0 0 0.25rem;
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.disposicao-banner-frase {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-destaque);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.disposicao-banner-acao {
+  flex: none;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.disposicao-banner-acao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
 }
 
 /* Cartão grande de disposição — tela 2, DESC-01. */

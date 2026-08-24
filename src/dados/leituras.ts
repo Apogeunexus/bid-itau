@@ -57,6 +57,8 @@ export interface Leitura {
   resumo: string;
   imagem?: string;
   creditoImagem?: string;
+  /** `imagemAlt` da fonte, quando o CMS descreveu a foto. */
+  imagemAlt?: string;
   /** `AAAAMMDD` comparável; 0 quando a fonte não declara data — e o 0 é declarado. */
   dia: number;
   publicadoEm: string;
@@ -134,6 +136,7 @@ function montar(): Montado {
       resumo: e.resumo ?? "",
       imagem: e.imagem,
       creditoImagem: e.creditoImagem,
+      imagemAlt: typeof e.extra?.imagemAlt === "string" && e.extra.imagemAlt ? e.extra.imagemAlt : undefined,
       dia: diaDe(publicadoEm),
       publicadoEm,
       fonte: e.fonte,

@@ -231,10 +231,18 @@ export interface IndiceDTO {
   /** Vetores paralelos. `t` título, `s` slug ("" quando derivável do título). */
   t: string[];
   s: string[];
-  /** Um caractere por entrada: classe, procedência, imagem local (`0`/`1`). */
+  /** Um caractere por entrada: classe, procedência. */
   c: string;
   p: string;
-  im: string;
+  /**
+   * Arquivos internados de `public/acervo/` (só o nome). O caminho `/acervo/` é
+   * reconstruído na leitura — repetir o prefixo em cada entrada era peso morto.
+   */
+  arq: string[];
+  /** Crédito internado, paralelo a `arq`. Vazio quando o acervo não declara. */
+  crd: string[];
+  /** Índice em `arq`/`crd`, um por entrada, separado por vírgula. Vazio = sem imagem. */
+  ia: string;
   /** Códigos separados por vírgula, um grupo por entrada. Vazio = ausente. */
   g: string;
   l: string;
@@ -359,7 +367,10 @@ export function montarIndice(fonte: FonteDoGrafo): IndiceDTO {
   const s: string[] = [];
   const c: string[] = [];
   const p: string[] = [];
-  const im: string[] = [];
+  const arq: string[] = [];
+  const crd: string[] = [];
+  const idxArq = new Map<string, number>();
+  const ia: string[] = [];
   const g: string[] = [];
   const l: string[] = [];
   const m: string[] = [];
@@ -389,9 +400,19 @@ export function montarIndice(fonte: FonteDoGrafo): IndiceDTO {
     p.push(codificar(iProc, 1));
     contagemProcedencia.set(e.procedencia, (contagemProcedencia.get(e.procedencia) ?? 0) + 1);
 
-    const tem = Boolean(e.imagem);
-    im.push(tem ? "1" : "0");
-    if (tem) comImagem += 1;
+    if (e.imagem) {
+      let iImg = idxArq.get(e.imagem);
+      if (iImg === undefined) {
+        iImg = arq.length;
+        idxArq.set(e.imagem, iImg);
+        arq.push(e.imagem.startsWith("/acervo/") ? e.imagem.slice("/acervo/".length) : e.imagem);
+        crd.push(e.creditoImagem ?? "");
+      }
+      ia.push(String(iImg));
+      comImagem += 1;
+    } else {
+      ia.push("");
+    }
 
     porClasse[e.classe] = (porClasse[e.classe] ?? 0) + 1;
 
@@ -514,7 +535,9 @@ export function montarIndice(fonte: FonteDoGrafo): IndiceDTO {
     s,
     c: c.join(""),
     p: p.join(""),
-    im: im.join(""),
+    arq,
+    crd,
+    ia: ia.join(","),
     g: g.join(","),
     l: l.join(","),
     m: m.join(","),
@@ -575,6 +598,9 @@ export interface EntradaIndice {
   procedencia: Procedencia;
   territorio: string | null;
   temImagem: boolean;
+  /** Caminho local `/acervo/…`, ou `null` quando o acervo não tem arquivo. */
+  imagem: string | null;
+  creditoImagem: string | null;
 }
 
 const EXPANDIDOS = new WeakMap<IndiceDTO, EntradaIndice[]>();
@@ -595,6 +621,7 @@ export function expandirIndice(indice: IndiceDTO): EntradaIndice[] {
   const gs = indice.g.split(",");
   const ls = indice.l.split(",");
   const ms = indice.m.split(",");
+  const ias = indice.ia.split(",");
 
   const entradas: EntradaIndice[] = [];
   for (let i = 0; i < indice.total; i += 1) {
@@ -619,6 +646,10 @@ export function expandirIndice(indice: IndiceDTO): EntradaIndice[] {
     const codigoG = gs[i] ?? "";
     const territorio = codigoG === "" ? null : (indice.territorios[Number(codigoG)]?.valor ?? null);
 
+    const iImg = ias[i] === "" || ias[i] === undefined ? -1 : Number(ias[i]);
+    const arquivo = iImg >= 0 ? (indice.arq[iImg] ?? null) : null;
+    const credito = iImg >= 0 ? (indice.crd[iImg] || null) : null;
+
     entradas.push({
       chave: `${classe}_${slug}`,
       classe,
@@ -629,7 +660,9 @@ export function expandirIndice(indice: IndiceDTO): EntradaIndice[] {
       temas,
       procedencia: indice.procedencias[decodificar(indice.p[i])],
       territorio,
-      temImagem: indice.im[i] === "1",
+      temImagem: arquivo !== null,
+      imagem: arquivo ? `/acervo/${arquivo}` : null,
+      creditoImagem: credito,
     });
   }
 
@@ -665,6 +698,8 @@ export interface ResultadoBusca {
   territorio: string | null;
   territorioRotulo: string | null;
   temImagem: boolean;
+  imagem: string | null;
+  creditoImagem: string | null;
   /** Posição do primeiro casamento no título normalizado; -1 quando não houve texto. */
   posicao: number;
   /** O casamento começa no início do título ou de uma palavra dele. */
@@ -924,6 +959,8 @@ export function consultar(consulta: Consulta = {}, indice?: IndiceDTO): Resposta
           ? (rotuloTerritorio.get(entrada.territorio) ?? null)
           : null,
         temImagem: entrada.temImagem,
+        imagem: entrada.imagem,
+        creditoImagem: entrada.creditoImagem,
         posicao: casamento.posicao,
         noInicio: casamento.noInicio,
       } satisfies ResultadoBusca;

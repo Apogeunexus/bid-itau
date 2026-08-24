@@ -28,6 +28,7 @@ const ROTAS = [
   "/apps/",
   "/acontece/",
   "/play/",
+  "/cursos/",
   "/buscar/",
   "/mapa/",
   "/meu/",

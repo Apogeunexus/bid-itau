@@ -1,7 +1,13 @@
 import { Player } from "@/componentes/player";
 import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { slugsPorTipo, vizinhos } from "@/dados/grafo";
-import { eventosDaMidia, itemDoPlay, SEM_ARQUIVO } from "@/dados/play";
+import {
+  colecaoDaMidia,
+  eventosDaMidia,
+  itemDoPlay,
+  semelhantesDaMidia,
+  SEM_ARQUIVO,
+} from "@/dados/play";
 
 /**
  * A rota de uma mídia — **529 páginas**, o maior acréscimo desta fase (D-92).
@@ -16,8 +22,12 @@ import { eventosDaMidia, itemDoPlay, SEM_ARQUIVO } from "@/dados/play";
  *
  * O DTO POR PÁGINA É ENXUTO DE PROPÓSITO. Ele não paga chunk — o payload de uma rota
  * exportada viaja no HTML da própria página, como 05-01 mediu —, mas paga HTML, e são
- * 529 arquivos. Por isso vai daqui só o que ESTA página mostra: nada de catálogo, nada
- * de lista de semelhantes, nada de vizinhança que a tela não usa.
+ * 529 arquivos. Vai daqui só o que ESTA página mostra, e nada de catálogo.
+ *
+ * EM 23/08 ENTRARAM DUAS LISTAS, e o cabeçalho antes dizia que nenhuma entraria. A página
+ * do item era uma ficha e virou a página de um TÍTULO, no molde da referência: quem chega
+ * nela precisa saber para onde ir depois. As duas foram medidas antes de entrar —
+ * a coleção manda só campo de cartão (sem resumo), e os semelhantes têm teto de 12.
  */
 export function generateStaticParams() {
   const slugs = slugsPorTipo("midia");
@@ -113,6 +123,33 @@ export default async function PaginaDaMidia({ params }: { params: Promise<{ slug
         declaraAcessibilidade: item.declaraAcessibilidade,
         procedencia: item.procedencia,
       }}
+      colecao={(() => {
+        const c = colecaoDaMidia(item.slug);
+        if (!c) return undefined;
+        return {
+          rotulo: c.rotulo,
+          origem: c.origem,
+          total: c.total,
+          // SÓ CAMPO DE CARTÃO, sem resumo: são até 70 irmãs numa coleção grande, e um
+          // resumo de ~200 bytes em cada multiplicaria o HTML de 529 páginas.
+          irmas: c.irmas.map((o) => ({
+            slug: o.slug,
+            titulo: o.titulo,
+            rota: o.rota,
+            imagem: o.imagem,
+            dia: o.dia,
+            rotuloCategoria: o.rotuloCategoria,
+            libras: o.acessibilidade.libras,
+          })),
+        };
+      })()}
+      semelhantes={semelhantesDaMidia(item.id).map((o) => ({
+        slug: o.slug,
+        titulo: o.titulo,
+        rota: o.rota,
+        imagem: o.imagem,
+        rotuloCategoria: o.rotuloCategoria,
+      }))}
       eventos={eventosDaMidia(item.slug)}
       aprofunda={aprofunda}
       dataDeReferencia={DATA_DE_REFERENCIA}

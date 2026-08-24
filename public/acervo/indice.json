@@ -9526,5 +9526,17 @@
   "fffca9d0bd3e2fdf.jpg": {
     "url": "https://s3.sa-east-1.amazonaws.com/prd.editor.fundacaoitau.org.br/public/image/1062/file/optimized-7673e41523e3fd61c7ef8c52c76ef40c.jpg",
     "dono": "publicacao:13616"
+  },
+  "3720987e4b32d6ad.jpg": {
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Alberto_Nepomuceno,_sem_data.tif?width=1200",
+    "dono": "enc:pessoa:22367"
+  },
+  "38355a68f31891ad.jpg": {
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Retrato_do_Maestro_Alberto_Nepomuceno_-_Pintado_por_Eliseu_Visconti_em_1895.jpg",
+    "dono": "enc:pessoa:22367"
+  },
+  "e60f2f7c1f6882e9.jpg": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/8/83/Centro_Cultural_Drag%C3%A3o_do_Mar_-_Fortaleza%28CE%29.jpg",
+    "dono": "enc:evento:163529"
   }
 }

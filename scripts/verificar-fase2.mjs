@@ -656,14 +656,26 @@ function sobreposicao(a, b) {
  * O botão é um alternador: clicar às cegas duas vezes o fecha, e o sintoma seria «não há
  * opções» num painel que existe. Estado lido antes de agir.
  */
+async function irAoPerfil(cdp) {
+  const origem = await cdp.avaliar("location.href");
+  await cdp.navegar(new URL("/meu/", origem).href);
+  await new Promise((r) => setTimeout(r, 300));
+  return origem;
+}
+
 async function abrirSeletor(cdp) {
-  const aberto = await cdp.avaliar(
-    `document.querySelector('[data-abrir-disposicao]')?.getAttribute('aria-expanded') === 'true'`,
+  const origem = await irAoPerfil(cdp);
+  const n = await cdp.avaliar(
+    `Array.from(document.querySelectorAll('[data-disposicao]')).filter((b) => {
+       const r = b.getBoundingClientRect();
+       return r.width > 0 && r.height > 0;
+     }).length`,
   );
-  if (!aberto) {
+  if (!n) {
     await cdp.clicar("document.querySelector('[data-abrir-disposicao]')");
     await new Promise((r) => setTimeout(r, 300));
   }
+  return origem;
 }
 
 async function trocarPersona(cdp, nome) {
@@ -732,10 +744,12 @@ async function cenario1(cdp, base) {
   await cdp.navegar(`${base}/descobrir/`);
   // Volta ao estado limpo: as duas disposições do passo 1 continuam gravadas, e o roteiro da
   // banca começa o feed sem corte. Sem isto o número de cartões mediria outro feed.
-  await abrirSeletor(cdp);
+  // A escolha de disposição mora no perfil (/meu), não no feed.
+  const voltaFeed = await abrirSeletor(cdp);
   await cdp
-    .clicar(`Array.from(document.querySelectorAll('button')).find(b => /^limpar as /i.test((b.textContent || '').trim()))`)
-    .catch(() => {}); // já limpo: o botão só existe quando há disposição marcada
+    .clicar(`Array.from(document.querySelectorAll('button')).find(b => /limpar/i.test((b.textContent || '').trim()))`)
+    .catch(() => {});
+  await cdp.navegar(voltaFeed);
   await new Promise((r) => setTimeout(r, 450));
 
   const feedMaria = await cdp.avaliar(LER_FEED);
@@ -792,16 +806,21 @@ async function cenario1(cdp, base) {
   const urlAntes = await cdp.avaliar("location.pathname + location.search");
   const titulosAntes = feedMaria.map((c) => c.titulo);
 
-  await abrirSeletor(cdp);
+  const origemFeed = await abrirSeletor(cdp);
+  const pathPerfil = await cdp.avaliar("location.pathname");
   const disposicaoEscolhida = await cdp.avaliar(
     naPagina(`const b = visiveis('[data-disposicao]')[0]; return b ? b.getAttribute('data-disposicao') : null;`),
   );
-  exigir(!!disposicaoEscolhida, "seletor de disposição abre com opções", disposicaoEscolhida ?? "nenhuma", "≥ 1 opção");
+  exigir(!!disposicaoEscolhida, "seletor de disposição no perfil com opções", disposicaoEscolhida ?? "nenhuma", "≥ 1 opção");
   await cdp.clicar("document.querySelectorAll('[data-disposicao]')[0]");
   await new Promise((r) => setTimeout(r, 500));
+  const pathPerfilDepois = await cdp.avaliar("location.pathname");
+  exigir(pathPerfilDepois === pathPerfil, "D-32 · marcar disposição no perfil NÃO navega", pathPerfilDepois, pathPerfil);
+  await cdp.navegar(origemFeed);
+  await new Promise((r) => setTimeout(r, 450));
 
   const urlDepois = await cdp.avaliar("location.pathname + location.search");
-  exigir(urlDepois === urlAntes, "D-32 · trocar disposição NÃO navega", urlDepois, urlAntes);
+  exigir(urlDepois === urlAntes, "D-32 · o feed continua em /descobrir/", urlDepois, urlAntes);
 
   const feedComDisposicao = await cdp.avaliar(LER_FEED);
   const titulosDepois = feedComDisposicao.map((c) => c.titulo);
@@ -822,7 +841,9 @@ async function cenario1(cdp, base) {
   );
 
   // Volta à disposição vazia para o resto do roteiro medir o feed base.
+  const origemLimpa = await abrirSeletor(cdp);
   await cdp.clicar("document.querySelectorAll('[data-disposicao]')[0]");
+  await cdp.navegar(origemLimpa);
   await new Promise((r) => setTimeout(r, 450));
 
   // ---- 4. Troca de persona (D-45) ----
