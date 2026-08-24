@@ -27,7 +27,8 @@ import {
  * só primitivo. A forma é a da referência de 23/08: abertura com as três portas,
  * mosaico de cartaz (um em pé, dois paisagem, o resto em faixa) e a lista dos
  * espaços-museu. O que a referência inventava — data de encerramento, «online»
- * em ocupação presencial, foto de prédio que o acervo não tem — não atravessa.
+ * em ocupação presencial — não atravessa. As fachadas dos espaços vêm da web
+ * (Wikimedia Commons), não do acervo do IC, que não publica imagem de espaço.
  *
  * Os chips NÃO recortam a grade. A referência pinta «Exposições» como ativo e
  * mesmo assim mostra ocupações embaixo: são atalhos, não filtro. Recortar de
@@ -144,6 +145,7 @@ function LinhaDeEspaco({ espaco }: { espaco: EspacoDoMuseu }) {
           linguagens={espaco.linguagens}
           imagem={espaco.imagem}
           creditoImagem={espaco.creditoImagem}
+          alt={espaco.altImagem}
           compacta
           className="museu-espaco-capa"
         />

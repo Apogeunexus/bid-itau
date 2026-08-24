@@ -9,15 +9,16 @@
  * DP-F: importa `@/dados/grafo` por valor. Nenhum `"use client"` pode importá-lo.
  */
 
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { CAPAS_MUSEU } from "./capas-museu";
 import { UNIDADES_FEDERATIVAS } from "./contorno-brasil";
 import { porSlug, slugsPorTipo } from "./grafo";
 import { leituras } from "./leituras";
 import type { Entidade } from "./tipos";
 
-/** Os 22 espaços-museu. Afirmar o número; se o grafo mudar, o build cai. */
-const ESPACOS_ESPERADOS = 22;
+/** Os 22 espaços-museu no grafo. Afirmar o número; se o grafo mudar, o build cai. */
+const ESPACOS_NO_GRAFO = 22;
 
 /**
  * Os 5 eventos expositivos ÚNICOS. O sexto registro do recorte é clone de
@@ -27,6 +28,9 @@ const ESPACOS_ESPERADOS = 22;
 const CARTAZ_ESPERADO = 5;
 
 const VISITAS_ESPERADAS = 4;
+
+/** A vitrine só lista quem tem fachada. MAP não tem foto livre do prédio — some. */
+const ESPACOS_NA_VITRINE = 21;
 
 const SIGLA_POR_ESTADO = new Map(UNIDADES_FEDERATIVAS.map((u) => [u.titulo, u.sigla]));
 
@@ -62,8 +66,9 @@ export interface EspacoDoMuseu {
   titulo: string;
   rota: string;
   resumo: string;
-  imagem?: string;
-  creditoImagem?: string;
+  imagem: string;
+  creditoImagem: string;
+  altImagem: string;
   linguagens: string[];
   lugar: string;
 }
@@ -277,27 +282,43 @@ function montar(): HubDoMuseu {
     porte: portes[i] ?? "faixa",
   }));
 
-  const espacos: EspacoDoMuseu[] = [];
+  const noGrafo: Entidade[] = [];
   for (const slug of slugsPorTipo("espaco")) {
     const e = porSlug("espaco", slug);
-    if (!e || !/museu/i.test(e.titulo)) continue;
+    if (e && /museu/i.test(e.titulo)) noGrafo.push(e);
+  }
+  if (noGrafo.length !== ESPACOS_NO_GRAFO) {
+    quebrar(
+      `montou ${noGrafo.length} espaços-museu no grafo e o acervo declara ${ESPACOS_NO_GRAFO}. ` +
+        `A lista AFIRMA o número; corrija a afirmação junto com a medida.`,
+    );
+  }
+
+  const espacos: EspacoDoMuseu[] = [];
+  for (const e of noGrafo) {
+    const foto = CAPAS_MUSEU[e.slug];
+    if (!foto) continue;
+    if (!existsSync(join(process.cwd(), "public", "museus", foto.arquivo))) {
+      quebrar(`foto de «${e.slug}» ausente em public/museus/${foto.arquivo}`);
+    }
     espacos.push({
       slug: e.slug,
       titulo: e.titulo,
       rota: `/produtor/${e.slug}/`,
       resumo: e.resumo ?? "",
-      imagem: e.imagem,
-      creditoImagem: e.creditoImagem,
+      imagem: `/museus/${foto.arquivo}`,
+      creditoImagem: foto.credito,
+      altImagem: `Fachada de ${e.titulo}. Foto: ${foto.credito}`,
       linguagens: e.linguagens,
       lugar: lugarDoEspaco(e),
     });
   }
   espacos.sort((a, b) => porChave(a.slug, b.slug));
 
-  if (espacos.length !== ESPACOS_ESPERADOS) {
+  if (espacos.length !== ESPACOS_NA_VITRINE) {
     quebrar(
-      `montou ${espacos.length} espaços-museu e o acervo declara ${ESPACOS_ESPERADOS}. ` +
-        `A lista AFIRMA o número; corrija a afirmação junto com a medida.`,
+      `a vitrine montou ${espacos.length} espaços com foto e declara ${ESPACOS_NA_VITRINE}. ` +
+        `MAP some de propósito; qualquer outro buraco é foto que faltou baixar.`,
     );
   }
 
@@ -341,7 +362,7 @@ export function hubDoMuseu(): HubDoMuseu {
   return memo;
 }
 
-export const TOTAL_DE_ESPACOS_MUSEU = ESPACOS_ESPERADOS;
+export const TOTAL_DE_ESPACOS_MUSEU = ESPACOS_NA_VITRINE;
 export const TOTAL_DO_CARTAZ = CARTAZ_ESPERADO;
 
 /** Quantos espaços a lista mostra antes do «explorar todos». O resto continua na página. */

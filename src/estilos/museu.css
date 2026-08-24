@@ -5,9 +5,9 @@
  * paisagem, o resto em faixa) e lista dos espaços. É o mesmo vocabulário de
  * portes do hub de /apps, aplicado ao recorte museal.
  *
- * O que esta folha se recusa a copiar da referência: data inventada, «online»
- * onde o CMS diz o contrário, e foto de prédio — nenhum dos 22 espaços tem
- * imagem no acervo (medido). A capa sem imagem é o cartão, não a reserva.
+ * O que esta folha se recusa a copiar da referência: data inventada e «online»
+ * onde o CMS diz o contrário. As fachadas dos espaços vêm da web (Commons),
+ * não do acervo — ele não publica imagem de espaço. MAP some da lista.
  *
  * REGRAS DA CASA:
  *  - NUNCA importe esta folha de um componente. O único `import` de CSS é
@@ -335,6 +335,7 @@
 .museu-espaco-capa {
   inline-size: 4.5rem;
   block-size: 4.5rem;
+  overflow: hidden;
   border-radius: var(--raio-p);
 }
 
