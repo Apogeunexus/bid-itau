@@ -166,6 +166,22 @@ export const ICONE_ONDA = (
   </Icone>
 );
 
+/* ---------------------------------------------------------------------------
+ * Os dois estados do botão «minha lista», nas paredes do Play e do Cast.
+ * ------------------------------------------------------------------------- */
+
+export const ICONE_MAIS = (
+  <Icone>
+    <path d="M12 5v14M5 12h14" {...traco} />
+  </Icone>
+);
+
+export const ICONE_CONFERIDO = (
+  <Icone>
+    <path d="m4.8 12.6 4.6 4.6L19.2 7.4" {...traco} />
+  </Icone>
+);
+
 /** O botão que abre o hub — quatro campos, que é o que o hub mostra. */
 export const ICONE_APPS = (
   <Icone>

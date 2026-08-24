@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { AcoesDoCartaz } from "@/componentes/base/acoes-do-cartaz";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
+import { CHAVE_LISTA_CAST, useMinhaLista } from "@/componentes/base/minha-lista";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
 import { lerConcluidas } from "@/componentes/play";
@@ -110,20 +112,36 @@ const LIMIAR_COMPACTO = 8;
 function CartaoDoEpisodio({
   item,
   programa,
+  naLista,
+  aoAlternarLista,
 }: {
   item: ItemDoPlayNoCliente;
   /** O nome da fileira, mostrado só onde ela não o diz — ou seja, na grade. */
   programa?: string;
+  naLista: boolean;
+  aoAlternarLista: () => void;
 }) {
   return (
     <li data-midia={item.slug}>
-      <Link href={item.rota} className="cast-cartao">
+      {/* Artigo com um link dentro, e não um link envolvendo tudo: os dois controles do
+          hover são `<button>`, e `<button>` dentro de `<a>` é HTML inválido. O link cobre
+          o cartão por `::after` — mesma correção do cartaz do Play, mesmo motivo. */}
+      <article className="cast-cartao">
         <span className="cast-cartao-quadro">
           <Capa item={item} className="cast-cartao-foto" />
+          <AcoesDoCartaz
+            rota={item.rota}
+            titulo={item.titulo}
+            naLista={naLista}
+            aoAlternarLista={aoAlternarLista}
+            className="cast-cartao-acoes"
+          />
         </span>
         {programa ? <span className="cast-cartao-programa tipo-micro">{programa}</span> : null}
-        <span className="cast-cartao-titulo tipo-detalhe">{item.titulo}</span>
-      </Link>
+        <Link href={item.rota} className="cast-cartao-titulo tipo-detalhe">
+          {item.titulo}
+        </Link>
+      </article>
     </li>
   );
 }
@@ -185,6 +203,7 @@ export function Cast({
   const [linguagem, setLinguagem] = useState<string>(SEM_RECORTE);
   const [concluidas, setConcluidas] = useState<string[]>([]);
   const [hidratado, setHidratado] = useState(false);
+  const minhaLista = useMinhaLista(CHAVE_LISTA_CAST);
 
   // A leitura do storage mora no efeito, nunca no primeiro render: sob
   // `output: "export"` o HTML é gerado no build, e ler `localStorage` no render
@@ -201,6 +220,16 @@ export function Cast({
   );
 
   const porSlug = useMemo(() => new Map(itens.map((i) => [i.slug, i])), [itens]);
+
+  /**
+   * A lista da pessoa, resolvida contra o catálogo. O `filter` não é cinto de segurança de
+   * graça: o storage é EDITÁVEL por quem avalia, e um slug que não existe mais simplesmente
+   * não desenha, em vez de derrubar a fileira.
+   */
+  const naMinhaLista = useMemo(
+    () => minhaLista.slugs.map((s) => porSlug.get(s)).filter((i) => i !== undefined),
+    [minhaLista.slugs, porSlug],
+  );
 
   /**
    * As fileiras, montadas a partir dos ÍNDICES que o build conferiu. Não há um
@@ -355,7 +384,13 @@ export function Cast({
           ) : (
             <ul className="cast-grade">
               {recorte.map((i) => (
-                <CartaoDoEpisodio key={i.slug} item={i} programa={fileiraPorSlug.get(i.slug)} />
+                <CartaoDoEpisodio
+                  key={i.slug}
+                  item={i}
+                  programa={fileiraPorSlug.get(i.slug)}
+                  naLista={minhaLista.tem(i.slug)}
+                  aoAlternarLista={() => minhaLista.alternar(i.slug)}
+                />
               ))}
             </ul>
           )}
@@ -393,6 +428,42 @@ export function Cast({
             </ul>
           </section>
 
+          {/* ------------------------------------------------------------- minha lista
+           *
+           * A FILEIRA DA PESSOA VEM ANTES DAS DO ACERVO, e só existe quando tem item. Ela
+           * é o destino do «+» dos cartões: sem ela o botão seria uma gaveta sem porta.
+           * Não carrega `data-prateleira` porque não é uma fileira do acervo — as do
+           * acervo somam as 336 e cada episódio cai em exatamente uma; esta repete de
+           * propósito o que já está em outra. O porquê inteiro está em
+           * `base/minha-lista.ts`. */}
+          {minhaLista.hidratado && naMinhaLista.length ? (
+            <section data-minha-lista={naMinhaLista.length} className="cast-prateleira">
+              <div className="cast-prateleira-cabecalho">
+                <h2 className="cast-prateleira-titulo">
+                  Minha lista
+                  <span className="cast-prateleira-n tipo-detalhe">{naMinhaLista.length}</span>
+                </h2>
+              </div>
+              {!minhaLista.persistida ? (
+                <p className="tipo-legenda text-tinta-2">
+                  Este navegador não deixou guardar a lista — ela vale só enquanto esta aba
+                  estiver aberta.
+                </p>
+              ) : null}
+              <ul className="cast-trilho">
+                {naMinhaLista.map((i) => (
+                  <CartaoDoEpisodio
+                    key={i.slug}
+                    item={i}
+                    programa={fileiraPorSlug.get(i.slug)}
+                    naLista
+                    aoAlternarLista={() => minhaLista.alternar(i.slug)}
+                  />
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
           {/* AS FILEIRAS, nos três portes. Elas SOMAM as 336. */}
           {fileiras.map((p) => (
             <section
@@ -428,7 +499,12 @@ export function Cast({
               ) : (
                 <ul className="cast-trilho">
                   {p.episodios.map((i) => (
-                    <CartaoDoEpisodio key={i.slug} item={i} />
+                    <CartaoDoEpisodio
+                      key={i.slug}
+                      item={i}
+                      naLista={minhaLista.tem(i.slug)}
+                      aoAlternarLista={() => minhaLista.alternar(i.slug)}
+                    />
                   ))}
                 </ul>
               )}

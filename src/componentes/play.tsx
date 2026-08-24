@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { AcoesDoCartaz } from "@/componentes/base/acoes-do-cartaz";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
+import { CHAVE_LISTA_PLAY, useMinhaLista } from "@/componentes/base/minha-lista";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
 import {
@@ -151,10 +153,23 @@ const LIMIAR_COMPACTO = 8;
  * fileira e a grade divirjam de aparência e a tela passe a ter dois cartões para a mesma
  * coisa, que é exatamente a dívida que a primitiva `Chip` veio pagar.
  */
-function Cartaz({ item }: { item: ItemDoPlayNoCliente }) {
+function Cartaz({
+  item,
+  naLista,
+  aoAlternarLista,
+}: {
+  item: ItemDoPlayNoCliente;
+  naLista: boolean;
+  aoAlternarLista: () => void;
+}) {
   return (
     <li data-midia={item.slug} data-categoria-do-item={item.categoria}>
-      <Link href={item.rota} className="play-cartaz">
+      {/* O CARTAZ DEIXOU DE SER UM LINK E VIROU UM ARTIGO COM UM LINK DENTRO (23/08).
+          Ele ganhou dois controles no hover, e `<button>` dentro de `<a>` é HTML inválido:
+          o teclado alcança o botão e o clique cai no link. Agora o link cobre o cartão por
+          `::after` (ver `play.css`) e os controles sobem por cima dele. Um link e dois
+          botões, cada um fazendo o que diz. */}
+      <article className="play-cartaz">
         <span className="play-cartaz-quadro">
           {item.imagem ? (
             /* `alt=""`: o título está logo abaixo, como texto, dentro do mesmo link.
@@ -184,12 +199,24 @@ function Cartaz({ item }: { item: ItemDoPlayNoCliente }) {
           {item.acessibilidade.libras ? (
             <span className="play-cartaz-selo tipo-micro">Libras</span>
           ) : null}
+
+          <AcoesDoCartaz
+            rota={item.rota}
+            titulo={item.titulo}
+            naLista={naLista}
+            aoAlternarLista={aoAlternarLista}
+            className="play-cartaz-acoes"
+          />
         </span>
         <span className="play-cartaz-faixa">
           <span className="play-cartaz-tipo tipo-micro">{item.rotuloCategoria}</span>
-          <span className="play-cartaz-titulo tipo-detalhe">{item.titulo}</span>
+          {/* É ESTE link que cobre o cartaz inteiro, por `::after`. Ele fica no TÍTULO
+              porque é o título que um leitor de tela deve anunciar ao chegar nele. */}
+          <Link href={item.rota} className="play-cartaz-titulo tipo-detalhe">
+            {item.titulo}
+          </Link>
         </span>
-      </Link>
+      </article>
     </li>
   );
 }
@@ -253,6 +280,7 @@ export function Play({
   const [dimensoesMarcadas, setDimensoesMarcadas] = useState<DimensaoAcessibilidade[]>([]);
   const [concluidas, setConcluidas] = useState<string[]>([]);
   const [hidratado, setHidratado] = useState(false);
+  const minhaLista = useMinhaLista(CHAVE_LISTA_PLAY);
 
   // A leitura do storage mora no efeito, nunca no primeiro render: sob `output: "export"`
   // o HTML é gerado no build e ler `localStorage` no render divergiria da hidratação.
@@ -268,6 +296,16 @@ export function Play({
   );
 
   const porSlug = useMemo(() => new Map(itens.map((i) => [i.slug, i])), [itens]);
+
+  /**
+   * A lista da pessoa, resolvida contra o catálogo — e o `filter(Boolean)` não é cinto de
+   * segurança de graça: o storage é EDITÁVEL por quem avalia, e um slug que não existe mais
+   * no recorte simplesmente não desenha, em vez de derrubar a fileira.
+   */
+  const naMinhaLista = useMemo(
+    () => minhaLista.slugs.map((s) => porSlug.get(s)).filter((i) => i !== undefined),
+    [minhaLista.slugs, porSlug],
+  );
 
   /**
    * As prateleiras, montadas a partir dos ÍNDICES que o build conferiu — coleção pelo
@@ -496,15 +534,59 @@ export function Play({
           ) : (
             <ul className="play-grade">
               {recorte.map((i) => (
-                <Cartaz key={i.slug} item={i} />
+                <Cartaz
+                  key={i.slug}
+                  item={i}
+                  naLista={minhaLista.tem(i.slug)}
+                  aoAlternarLista={() => minhaLista.alternar(i.slug)}
+                />
               ))}
             </ul>
           )}
         </section>
       ) : (
-        /* SEM RECORTE, AS PRATELEIRAS — e elas somam as 113: cada mídia aparece em
-           exatamente uma fileira. Nada de `slice`, nada de teto de exibição. */
-        prateleiras.map((p) => (
+        <>
+          {/* ------------------------------------------------------------ minha lista
+           *
+           * A FILEIRA DA PESSOA VEM ANTES DAS DO ACERVO, e só existe quando tem item.
+           * Ela é o destino do «+» dos cartazes: sem ela o botão seria uma gaveta sem
+           * porta — dá para pôr e não dá para ver. Tirar é o mesmo gesto de pôr, no
+           * mesmo cartaz, aqui ou na fileira de origem.
+           *
+           * ELA NÃO CARREGA `data-prateleira`, e não é descuido: as prateleiras são uma
+           * PARTIÇÃO do recorte — cada mídia em exatamente uma fileira, somando o total.
+           * Esta é da pessoa e repete de propósito o que já está em outra fileira. */}
+          {minhaLista.hidratado && naMinhaLista.length ? (
+            <section data-minha-lista={naMinhaLista.length} className="play-prateleira">
+              <div className="play-prateleira-cabecalho">
+                <h2 className="play-prateleira-titulo tipo-titulo-3">
+                  <Grafismo variacao="barra" className="h-[0.8em] w-auto text-acao-tinta" />
+                  Minha lista
+                  <span className="play-prateleira-n tipo-detalhe">{naMinhaLista.length}</span>
+                </h2>
+              </div>
+              {!minhaLista.persistida ? (
+                <p className="tipo-legenda text-tinta-2">
+                  Este navegador não deixou guardar a lista — ela vale só enquanto esta aba
+                  estiver aberta.
+                </p>
+              ) : null}
+              <ul className="play-trilho">
+                {naMinhaLista.map((i) => (
+                  <Cartaz
+                    key={i.slug}
+                    item={i}
+                    naLista
+                    aoAlternarLista={() => minhaLista.alternar(i.slug)}
+                  />
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          {/* SEM RECORTE, AS PRATELEIRAS — e elas somam as 113: cada mídia aparece em
+              exatamente uma fileira. Nada de `slice`, nada de teto de exibição. */}
+          {prateleiras.map((p) => (
           <section
             key={p.valor}
             data-prateleira={p.valor}
@@ -535,12 +617,18 @@ export function Play({
             ) : (
               <ul className="play-trilho">
                 {p.midias.map((i) => (
-                  <Cartaz key={i.slug} item={i} />
+                  <Cartaz
+                    key={i.slug}
+                    item={i}
+                    naLista={minhaLista.tem(i.slug)}
+                    aoAlternarLista={() => minhaLista.alternar(i.slug)}
+                  />
                 ))}
               </ul>
             )}
           </section>
-        ))
+          ))}
+        </>
       )}
 
       {/* ---------------------------------------------------- já concluídas por você

@@ -37,6 +37,7 @@ const FOLHAS_MIGRADAS = [
   "barra-inferior.css",
   "base.css",
   "busca.css",
+  "cartaz-acoes.css",
   "cast.css",
   "cidade.css",
   "filtros.css",

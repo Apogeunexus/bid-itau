@@ -69,9 +69,12 @@
   margin-inline: calc(var(--espaco-tela) * -1);
   /* PRETO FIXO, e não `--cor-tinta`: ver o cabeçalho desta folha. */
   background: var(--ic-preto);
-  /* `clamp` porque a peça divide a altura com a primeira prateleira: numa
-     moldura de 844px ela não pode comer a dobra inteira. Múltiplos da grade. */
-  min-block-size: clamp(21rem, 56vh, 30rem);
+  /* `clamp` porque a peça DIVIDE a altura com a primeira prateleira: ela não pode comer a
+     dobra inteira. Baixou de `clamp(21rem, 56vh, 30rem)` em 23/08 — com 56vh ela levava
+     mais da metade da tela e a primeira fileira começava depois da dobra, então quem
+     abria o Play via um cartaz e nada do catálogo. Agora sobra a borda de cima da
+     primeira prateleira, que é o que convida a rolar. Múltiplos da grade. */
+  min-block-size: clamp(17rem, 42vh, 24rem);
 }
 
 .play-destaque-foto {
@@ -242,7 +245,10 @@
   scrollbar-width: none;
   margin-inline: calc(var(--espaco-tela) * -1);
   padding-inline: var(--espaco-tela);
-  padding-block-end: 0.25rem;
+  /* O RESPIRO EM CIMA E EMBAIXO É O ESPAÇO DO CRESCIMENTO. `overflow-x: auto` corta
+     também na vertical, e o cartaz cresce 4% ao receber o ponteiro: sem folga, o topo e
+     o pé dele eram decepados pela própria fileira. */
+  padding-block: 0.5rem 0.75rem;
 }
 
 .play-trilho > li {
@@ -257,7 +263,16 @@
  * A largura vem de `--play-cartaz`, declarada em `.play` lá em cima: uma linha
  * por visão reflui o trilho e a grade juntos.
  * ------------------------------------------------------------------------ */
+/* O CARTAZ CRESCE QUANDO O PONTEIRO PARA EM CIMA (23/08), no gesto da Netflix e do
+ * Spotify. Ele não é mais um `<a>`: virou `<article>` com um link no título e dois botões
+ * na foto — `<button>` dentro de `<a>` é HTML inválido, e o porquê está no cabeçalho de
+ * `base/acoes-do-cartaz.tsx`.
+ *
+ * `:focus-within` ANDA JUNTO COM `:hover`, e não é enfeite de acessibilidade: sem ele, os
+ * dois controles aparecem ao receber o foco do teclado e somem no quadro seguinte, porque
+ * o cartaz só «abre» para quem tem ponteiro. */
 .play-cartaz {
+  position: relative;
   display: flex;
   block-size: 100%;
   flex-direction: column;
@@ -267,18 +282,32 @@
   background: var(--cor-superficie);
   box-shadow: var(--sombra-1);
   transition:
+    transform var(--dur-2) var(--ease-padrao),
     border-color var(--dur-1) var(--ease-padrao),
     box-shadow var(--dur-1) var(--ease-padrao);
 }
 
-.play-cartaz:hover {
+.play-cartaz:hover,
+.play-cartaz:focus-within {
+  z-index: 1;
   border-color: var(--cor-borda-forte);
-  box-shadow: var(--sombra-2);
+  box-shadow: var(--sombra-3);
+  transform: scale(1.04);
 }
 
-.play-cartaz:focus-visible {
+/* O LINK ESTICADO: o título é o link, e o `::after` dele cobre o cartaz inteiro. É o que
+   mantém «o cartaz todo é clicável» sem transformar os botões em filhos de um `<a>`.
+   `z-index` explícito nos dois porque a ordem do DOM poria a barra por baixo. */
+.play-cartaz-titulo::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+}
+
+.play-cartaz-titulo:focus-visible::after {
   outline: 2px solid var(--cor-foco);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 
 .play-cartaz-quadro {
@@ -299,8 +328,47 @@
   transition: transform var(--dur-2) var(--ease-padrao);
 }
 
-.play-cartaz:hover .play-cartaz-foto {
+.play-cartaz:hover .play-cartaz-foto,
+.play-cartaz:focus-within .play-cartaz-foto {
   transform: scale(1.04);
+}
+
+/* ---------------------------------------------------------------------------
+ * A BARRA DE AÇÕES — o que o hover «abre».
+ *
+ * Ela é ABSOLUTA sobre o rodapé da foto, e essa é a diferença entre abrir e empurrar:
+ * uma barra em fluxo somaria altura ao cartaz e reflowaria a fileira inteira a cada
+ * passada de ponteiro. Assim ela aparece POR CIMA e o layout não se mexe.
+ *
+ * O vocabulário dos botões (`.cartaz-acao`) é compartilhado com o Cast e mora no fim
+ * desta folha, junto com a regra de ponteiro grosso.
+ * ------------------------------------------------------------------------ */
+.play-cartaz-acoes {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 0.5rem 0.5rem;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--ic-preto) 82%, transparent) 0%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition:
+    opacity var(--dur-2) var(--ease-padrao),
+    transform var(--dur-2) var(--ease-padrao);
+  transform: translateY(0.5rem);
+}
+
+.play-cartaz:hover .play-cartaz-acoes,
+.play-cartaz:focus-within .play-cartaz-acoes {
+  opacity: 1;
+  transform: none;
 }
 
 /* A capa de marca de `capa-sem-imagem.tsx` preenche o quadro do mesmo jeito.
@@ -456,7 +524,9 @@
 [data-view="web"] .play-destaque {
   border-radius: var(--raio-g);
   margin-inline: 0;
-  min-block-size: clamp(24rem, 52vh, 34rem);
+  /* Mesma correção da visão app, e aqui ela pesa mais: numa janela de 900px de altura,
+     52vh eram 468px de peça só para chegar na primeira fileira. */
+  min-block-size: clamp(19rem, 40vh, 26rem);
 }
 
 [data-view="web"] .play-trilho {

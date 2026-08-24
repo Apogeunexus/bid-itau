@@ -1,0 +1,91 @@
+/* ---------------------------------------------------------------------------
+ * CARTAZ-ACOES — os dois botões que aparecem quando o ponteiro para em cima de um cartaz,
+ * nas paredes do Play e do Cast.
+ *
+ * FOLHA COMPARTILHADA, no molde de `studio.css`: ela vem ANTES de `play.css` e de
+ * `cast.css` em `globals.css`, e as duas podem sobrescrevê-la. Ela existe porque o botão é
+ * o MESMO objeto nas duas telas — mesma forma, mesmo tamanho, mesmo estado de «na lista» —
+ * e duas cópias divergiriam na primeira correção.
+ *
+ * O QUE FICA AQUI: o botão. O que NÃO fica: onde a barra se ancora e como ela aparece —
+ * isso é do cartaz de cada tela, porque os dois cartazes têm formas diferentes.
+ *
+ * O PORQUÊ DO GESTO está no cabeçalho de `src/componentes/base/acoes-do-cartaz.tsx`,
+ * inclusive o motivo de o botão redondo não tocar nada.
+ * ------------------------------------------------------------------------ */
+
+.cartaz-acao {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: var(--raio-pilula);
+  /* Branco e preto FIXOS nos dois temas: os botões estão sobre FOTOGRAFIA, que não inverte
+     quando o sistema vira para o escuro. Mesma regra do crédito sobre a capa em
+     `capa-sem-imagem.tsx` e do selo de Libras aqui do lado. */
+  border: 1px solid color-mix(in srgb, var(--ic-branco) 45%, transparent);
+  background: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--ic-branco);
+  backdrop-filter: blur(0.5rem);
+  transition:
+    background-color var(--dur-1) var(--ease-padrao),
+    transform var(--dur-1) var(--ease-padrao);
+}
+
+.cartaz-acao svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.cartaz-acao:hover {
+  background: color-mix(in srgb, var(--ic-preto) 78%, transparent);
+  transform: scale(1.08);
+}
+
+.cartaz-acao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* O botão de abrir é o primário da barra: branco cheio com o triângulo preto, que é a
+   forma que a referência usa e a que mede melhor sobre fotografia (21:1). */
+.cartaz-acao--tocar {
+  border-color: var(--ic-branco);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+}
+
+.cartaz-acao--tocar:hover {
+  background: color-mix(in srgb, var(--ic-branco) 88%, transparent);
+}
+
+/* JÁ NA LISTA: o botão acende no laranja de AÇÃO com tinta preta, que é o único par que
+   passa contraste sobre este laranja (9,1:1 — ver `--cor-sobre-acao` em tokens.css). O
+   estado não depende só da cor: o glifo troca de «+» para o visto, e `aria-pressed` diz o
+   mesmo para quem não vê nenhum dos dois. */
+.cartaz-acao--lista[data-na-lista="sim"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+}
+
+.cartaz-acao--lista[data-na-lista="sim"]:hover {
+  background: color-mix(in srgb, var(--cor-acao) 85%, var(--ic-preto));
+}
+
+/* ---------------------------------------------------------------------------
+ * SEM PONTEIRO, A BARRA NÃO SE ESCONDE.
+ *
+ * É a terceira @media legítima do projeto, e ela não é sobre TAMANHO de janela — as outras
+ * duas são o colapso da moldura e `prefers-reduced-motion`. Esta é sobre a existência do
+ * ponteiro: num telefone não há hover, e uma ação que só aparece no hover é uma ação que o
+ * telefone não tem. Ali a barra fica sempre visível, que é o que o Spotify faz no celular.
+ * ------------------------------------------------------------------------ */
+@media (hover: none) {
+  .play-cartaz-acoes,
+  .cast-cartao-acoes {
+    opacity: 1;
+    transform: none;
+  }
+}

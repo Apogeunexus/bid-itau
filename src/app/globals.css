@@ -74,6 +74,9 @@
 @import "../estilos/observatorio.css";
 @import "../estilos/filtros.css";
 @import "../estilos/sem-resultado.css";
+/* O vocabulário dos botões que o hover abre no cartaz, compartilhado pelas duas paredes.
+ * Vem ANTES das duas folhas que o consomem, como `studio.css` faz na fase 4. */
+@import "../estilos/cartaz-acoes.css";
 @import "../estilos/play.css";
 
 /* A folha do Cast (23/08): a tela dos podcasts virou app de áudio, no molde da

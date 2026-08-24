@@ -221,7 +221,9 @@
   scrollbar-width: none;
   margin-inline: calc(var(--espaco-tela) * -1);
   padding-inline: var(--espaco-tela);
-  padding-block-end: 0.25rem;
+  /* Respiro em cima e embaixo: `overflow-x: auto` corta também na vertical, e a capa
+     cresce ao receber o ponteiro. Sem folga, a fileira decepa o próprio cartão. */
+  padding-block: 0.5rem 0.75rem;
 }
 
 .cast-trilho > li {
@@ -233,10 +235,28 @@
 /* ---------------------------------------------------------------------------
  * O CARTÃO DO EPISÓDIO — capa em 3:2 sobre o papel, texto solto embaixo.
  * ------------------------------------------------------------------------ */
+/* O cartão deixou de ser um `<a>` e virou `<article>` com o link no título (23/08): ele
+   ganhou dois botões, e `<button>` dentro de `<a>` é HTML inválido. Ver o cabeçalho de
+   `base/acoes-do-cartaz.tsx`. */
 .cast-cartao {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+/* O link esticado: o título é o link e o `::after` dele cobre o cartão. `z-index`
+   explícito porque a barra de ações precisa ficar por cima dele. */
+.cast-cartao-titulo::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+}
+
+.cast-cartao-titulo:focus-visible::after {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
 }
 
 .cast-cartao-quadro {
@@ -247,6 +267,48 @@
   border-radius: var(--raio-m);
   background: var(--cor-superficie-2);
   box-shadow: var(--sombra-1);
+  transition:
+    transform var(--dur-2) var(--ease-padrao),
+    box-shadow var(--dur-1) var(--ease-padrao);
+}
+
+/* CRESCE O QUADRO, NÃO O CARTÃO INTEIRO. No Cast o texto fica FORA da capa, solto no
+   papel: escalar o cartão todo mexeria no título, que é texto de corpo e treme ao ser
+   reescalado. A capa cresce, o texto fica onde está. */
+.cast-cartao:hover .cast-cartao-quadro,
+.cast-cartao:focus-within .cast-cartao-quadro {
+  box-shadow: var(--sombra-3);
+  transform: scale(1.04);
+}
+
+/* A BARRA DE AÇÕES — absoluta sobre o pé da capa, para não empurrar a fileira. O
+   vocabulário dos botões mora em `cartaz-acoes.css`. */
+.cast-cartao-acoes {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 0.5rem 0.5rem;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--ic-preto) 82%, transparent) 0%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition:
+    opacity var(--dur-2) var(--ease-padrao),
+    transform var(--dur-2) var(--ease-padrao);
+  transform: translateY(0.5rem);
+}
+
+.cast-cartao:hover .cast-cartao-acoes,
+.cast-cartao:focus-within .cast-cartao-acoes {
+  opacity: 1;
+  transform: none;
 }
 
 .cast-cartao-foto {
