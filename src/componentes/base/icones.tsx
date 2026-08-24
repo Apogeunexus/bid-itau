@@ -1,3 +1,5 @@
+import { cloneElement, isValidElement } from "react";
+
 /**
  * icones.tsx — o traço único da navegação principal.
  *
@@ -278,4 +280,89 @@ export const ICONE_FICHA = (
     <path d="M8.5 8h7M8.5 12h7M8.5 16h4" {...traco} />
   </Icone>
 );
+
+/** Livro aberto — editorial, verbete, publicação. */
+export const ICONE_LIVRO = (
+  <Icone>
+    <path d="M12 6.5c-1.6-1-3.7-1.5-6.5-1.5H4.5v13H6c2.6 0 4.5.6 6 1.5 1.5-.9 3.4-1.5 6-1.5h1.5v-13H18.5c-2.8 0-4.9.5-6.5 1.5Z" {...traco} />
+    <path d="M12 6.5v13" {...traco} />
+  </Icone>
+);
+
+/** Prédio — instituição. */
+export const ICONE_PREDIO = (
+  <Icone>
+    <path d="M5 20.5V7.5l7-3.5 7 3.5v13" {...traco} />
+    <path d="M3.5 20.5h17" {...traco} />
+    <path d="M9 9.5h1.5M13.5 9.5H15M9 13h1.5M13.5 13H15M9 16.5h1.5M13.5 16.5H15" {...traco} />
+  </Icone>
+);
+
+/** Quadro — obra. */
+export const ICONE_OBRA = (
+  <Icone>
+    <rect x="4" y="5" width="16" height="14" rx="1.5" {...traco} />
+    <path d="m8 15 3-3.5 2.5 2.5 2-2.5 3.5 3.5" {...traco} />
+    <circle cx="9.5" cy="9" r="1" {...traco} />
+  </Icone>
+);
+
+/** Etiqueta — tema. */
+export const ICONE_TAG = (
+  <Icone>
+    <path d="M4.5 12V6.5H10l8.5 8.5-5.5 5.5L4.5 12Z" {...traco} />
+    <circle cx="8.2" cy="9.2" r="1.1" {...traco} />
+  </Icone>
+);
+
+/** Caminho — trilha. */
+export const ICONE_TRILHA = (
+  <Icone>
+    <path d="M5 18c2.2-4 3.2-4 5.2-1.2S13.5 19 16 16s3.2-6 4-8" {...traco} />
+    <circle cx="5" cy="18" r="1.6" {...traco} />
+    <circle cx="19.5" cy="8" r="1.6" {...traco} />
+  </Icone>
+);
+
+/** Fala — linguagem. */
+export const ICONE_FALA = (
+  <Icone>
+    <path d="M5 6.5h14v9H12l-4 3.5V15.5H5V6.5Z" {...traco} />
+  </Icone>
+);
+
+/** Casa/porta — espaço cultural. */
+export const ICONE_CASA = (
+  <Icone>
+    <path d="M4.5 20.5V10.5L12 4.5l7.5 6v10" {...traco} />
+    <path d="M10 20.5v-6h4v6" {...traco} />
+  </Icone>
+);
+
+/**
+ * Ícone da CLASSE da ontologia — o mesmo traço em todo filtrador de seção.
+ * A chave é o valor cru (`conteudo`, `termo`), nunca o rótulo em português.
+ */
+export const ICONE_POR_CLASSE: Record<string, React.ReactNode> = {
+  conteudo: ICONE_LIVRO,
+  pessoa: ICONE_PERFIL,
+  midia: ICONE_TOCAR,
+  termo: ICONE_FICHA,
+  territorio: ICONE_MAPA,
+  evento: ICONE_ACONTECE,
+  instituicao: ICONE_PREDIO,
+  obra: ICONE_OBRA,
+  coletivo: ICONE_ENCONTRO,
+  espaco: ICONE_CASA,
+  tema: ICONE_TAG,
+  formacao: ICONE_CURSOS,
+  publicacao: ICONE_NOTICIAS,
+  linguagem: ICONE_FALA,
+  trilha: ICONE_TRILHA,
+};
+
+export function iconeDaClasse(classe: string): React.ReactNode {
+  const icone = ICONE_POR_CLASSE[classe] ?? ICONE_FICHA;
+  return isValidElement(icone) ? cloneElement(icone) : icone;
+}
 

@@ -120,6 +120,7 @@ export function Filtros({
   const [marcadas, setMarcadas] = useState<DimensaoAcessibilidade[]>([]);
   const [recorteDeFicha, setRecorteDeFicha] = useState<RecorteDeFicha>("");
   const [criterios, setCriterios] = useState<Criterio[]>([]);
+  const [todasAsLinguagens, setTodasAsLinguagens] = useState(false);
 
   // ---- as estruturas de leitura do DTO, montadas UMA vez --------------------
   //
@@ -383,10 +384,14 @@ export function Filtros({
       {/* ---------------------------------------------------------------- */}
       <section className="filtros-bloco" data-bloco="ontologia">
         <h2 className="filtros-bloco-titulo">Linguagem e território</h2>
-        <TrilhoDeChips rotulo="Recortar por linguagem artística">
-          {facetas.linguagem.slice(0, TETO_LINGUAGENS).map((o) => (
+        <TrilhoDeChips rotulo="Recortar por linguagem artística" className="trilho-chips-rola" setas>
+          {(todasAsLinguagens
+            ? facetas.linguagem
+            : facetas.linguagem.slice(0, TETO_LINGUAGENS)
+          ).map((o) => (
             <Chip
               key={`${o.campo}:${o.valor}`}
+              variante="explorar"
               selecionado={criterioMarcado(o)}
               onClick={() => alternarCriterio(o)}
               // O nome do token, e não a cor: a bolinha é pintada pelo CSS a
@@ -397,12 +402,22 @@ export function Filtros({
               {o.rotulo}
             </Chip>
           ))}
+          {!todasAsLinguagens && facetas.linguagem.length > TETO_LINGUAGENS ? (
+            <Chip
+              variante="explorar"
+              onClick={() => setTodasAsLinguagens(true)}
+              contagem={milhar(facetas.linguagem.length)}
+            >
+              Todas
+            </Chip>
+          ) : null}
         </TrilhoDeChips>
 
-        <TrilhoDeChips rotulo="Recortar por território">
+        <TrilhoDeChips rotulo="Recortar por território" className="trilho-chips-rola" setas>
           {facetas.territorio.slice(0, TETO_TERRITORIOS).map((o) => (
             <Chip
               key={`${o.campo}:${o.valor}`}
+              variante="explorar"
               selecionado={criterioMarcado(o)}
               onClick={() => alternarCriterio(o)}
               contagem={milhar(o.n)}

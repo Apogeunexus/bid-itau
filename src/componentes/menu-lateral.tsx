@@ -16,7 +16,7 @@ import {
   ICONE_PLAY,
   ICONE_SALVOS,
 } from "@/componentes/base/icones";
-import { Grafismo } from "@/componentes/grafismo";
+import { AssinaturaIc, Chancela } from "@/componentes/marca";
 import { useSessao } from "@/contexto/sessao";
 import { personaPorId } from "@/dados/personas";
 
@@ -128,44 +128,46 @@ export function MenuLateral() {
   const persona = personaPorId(personaId);
 
   return (
-    <nav className="menu-lateral" aria-label="Navegação principal">
-      <div className="menu-marca">
-        <Grafismo variacao="completo" className="h-5 w-auto shrink-0 text-acao-tinta" />
-        <span>Itaú Cultural</span>
-      </div>
+    <div className="menu-lateral">
+      <nav className="menu-lateral-nav" aria-label="Navegação principal">
+        <div className="menu-marca">
+          <AssinaturaIc prioridade />
+        </div>
 
-      <div className="menu-grupos">
-        <ul>
-          {PRINCIPAIS.map((item) => (
-            <ItemDeMenu key={item.href} item={item} caminho={caminho} />
-          ))}
-        </ul>
-
-        <p className="menu-rotulo-grupo tipo-micro">Planejar</p>
-        <ul>
-          {PLANEJAR.map((item) => (
-            <ItemDeMenu key={item.href} item={item} caminho={caminho} />
-          ))}
-        </ul>
-
-        {/* Bastidor: as rotas existem nas duas visões, mas no app cada uma se declara
-            «só web» — o atalho só na web evita anunciar um beco. */}
-        <div className="hidden desk:block">
-          <p className="menu-rotulo-grupo tipo-micro">Bastidor</p>
+        <div className="menu-grupos">
           <ul>
-            {BASTIDOR.map((item) => (
+            {PRINCIPAIS.map((item) => (
               <ItemDeMenu key={item.href} item={item} caminho={caminho} />
             ))}
           </ul>
-        </div>
-      </div>
 
-      <div className="menu-rodape">
-        <Link href="/meu" className="tipo-legenda block text-tinta-2">
-          Você está como <strong className="text-tinta">{persona?.nome ?? "…"}</strong>
-          <span className="text-acao-tinta"> · trocar</span>
-        </Link>
-      </div>
-    </nav>
+          <p className="menu-rotulo-grupo tipo-micro">Planejar</p>
+          <ul>
+            {PLANEJAR.map((item) => (
+              <ItemDeMenu key={item.href} item={item} caminho={caminho} />
+            ))}
+          </ul>
+
+          {/* Bastidor: as rotas existem nas duas visões, mas no app cada uma se declara
+              «só web» — o atalho só na web evita anunciar um beco. */}
+          <div className="hidden desk:block">
+            <p className="menu-rotulo-grupo tipo-micro">Bastidor</p>
+            <ul>
+              {BASTIDOR.map((item) => (
+                <ItemDeMenu key={item.href} item={item} caminho={caminho} />
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="menu-rodape">
+          <Link href="/meu" className="tipo-legenda block text-tinta-2">
+            Você está como <strong className="text-tinta">{persona?.nome ?? "…"}</strong>
+            <span className="text-acao-tinta"> · trocar</span>
+          </Link>
+        </div>
+      </nav>
+      <Chancela />
+    </div>
   );
 }

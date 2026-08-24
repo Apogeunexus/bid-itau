@@ -1,19 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 
 /**
- * entrevista-estrelinha.tsx — as quatro perguntas da IA (reformulação 2026-08).
+ * entrevista-estrelinha.tsx — persistência e controles compartilhados da IA.
  *
- * A entrevista NÃO computa nada: cada resposta é um pedaço do endereço, e o botão
- * final navega para a página pré-computada da combinação. A pergunta seguinte só
- * aparece depois da anterior respondida — é uma entrevista, não um formulário — e
- * o botão de gerar fica desabilitado até as quatro terem resposta.
+ * A conversa mora em `ia-conversa.tsx`. Aqui ficam a chave de roteiros salvos
+ * (fora da sessão de persona), o botão de salvar, o recado do pedido e a troca
+ * de combinação que preserva a companhia.
  *
- * DP-F: tudo chega por props do componente de servidor; nenhum import de
- * `@/dados/estrelinha` por valor.
+ * DP-F: nenhum import de `@/dados/estrelinha` por valor.
  */
 
 export interface OpcaoDaEntrevista {
@@ -21,32 +17,8 @@ export interface OpcaoDaEntrevista {
   rotulo: string;
   /** Legenda opcional (ex.: o acervo da cidade). */
   detalhe?: string;
-}
-
-interface Props {
-  gostos: OpcaoDaEntrevista[];
-  companhias: OpcaoDaEntrevista[];
-  dias: number[];
-  cidades: OpcaoDaEntrevista[];
-}
-
-function Pergunta({
-  numero,
-  titulo,
-  children,
-}: {
-  numero: number;
-  titulo: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="flex flex-col gap-2">
-      <h2 className="tipo-destaque font-bold">
-        <span className="text-acao-tinta">{numero}.</span> {titulo}
-      </h2>
-      {children}
-    </section>
-  );
+  /** Contagem medida no build — o artefato de pensamento lê este número. */
+  total?: number;
 }
 
 /** Os roteiros salvos neste navegador. Chave própria, fora da sessão de persona. */
@@ -73,91 +45,30 @@ export function gravarRoteiroSalvo(combinacao: string, salvar: boolean): string[
   return proxima;
 }
 
-export function EntrevistaEstrelinha({ gostos, companhias, dias, cidades }: Props) {
-  const router = useRouter();
-  const [gosto, setGosto] = useState<string | null>(null);
-  const [companhia, setCompanhia] = useState<string | null>(null);
-  const [nDias, setNDias] = useState<number | null>(null);
-  const [cidade, setCidade] = useState<string | null>(null);
-
-  const completa = gosto !== null && companhia !== null && nDias !== null && cidade !== null;
-
-  return (
-    <div className="flex flex-col gap-5">
-      <Pergunta numero={1} titulo="O que te chama?">
-        <TrilhoDeChips rotulo="O que te chama">
-          {gostos.map((g) => (
-            <Chip key={g.slug} selecionado={gosto === g.slug} onClick={() => setGosto(g.slug)}>
-              {g.rotulo}
-            </Chip>
-          ))}
-        </TrilhoDeChips>
-      </Pergunta>
-
-      {gosto !== null ? (
-        <Pergunta numero={2} titulo="Com quem você vai?">
-          <TrilhoDeChips rotulo="Com quem você vai">
-            {companhias.map((c) => (
-              <Chip key={c.slug} selecionado={companhia === c.slug} onClick={() => setCompanhia(c.slug)}>
-                {c.rotulo}
-              </Chip>
-            ))}
-          </TrilhoDeChips>
-          <p className="tipo-legenda text-tinta-3">
-            Esta resposta não filtra o acervo — ele não declara classificação etária, e o
-            roteiro diz isso em vez de fingir o recorte.
-          </p>
-        </Pergunta>
-      ) : null}
-
-      {companhia !== null ? (
-        <Pergunta numero={3} titulo="Quantos dias?">
-          <TrilhoDeChips rotulo="Quantos dias">
-            {dias.map((d) => (
-              <Chip key={d} selecionado={nDias === d} onClick={() => setNDias(d)}>
-                {d} dias
-              </Chip>
-            ))}
-          </TrilhoDeChips>
-        </Pergunta>
-      ) : null}
-
-      {nDias !== null ? (
-        <Pergunta numero={4} titulo="Em que cidade?">
-          <TrilhoDeChips rotulo="Em que cidade">
-            {cidades.map((c) => (
-              <Chip key={c.slug} selecionado={cidade === c.slug} onClick={() => setCidade(c.slug)}>
-                {c.rotulo}
-                {c.detalhe ? <span className="ml-1 opacity-60">{c.detalhe}</span> : null}
-              </Chip>
-            ))}
-          </TrilhoDeChips>
-        </Pergunta>
-      ) : null}
-
-      <button
-        type="button"
-        disabled={!completa}
-        onClick={() => {
-          if (!completa) return;
-          router.push(`/ia/roteiro/${cidade}--${nDias}-dias--${gosto}/#companhia=${companhia}`);
-        }}
-        className="w-fit rounded-pilula bg-acao px-5 py-2.5 text-sm font-bold text-sobre-acao transition-opacity disabled:opacity-40"
-      >
-        ✦ Montar meu roteiro
-      </button>
-      {!completa ? (
-        <p className="tipo-legenda text-tinta-3">
-          O botão libera quando as quatro perguntas tiverem resposta.
-        </p>
-      ) : null}
-    </div>
-  );
+function rotuloDaCombinacao(
+  combinacao: string,
+  cidades: readonly OpcaoDaEntrevista[],
+  gostos: readonly OpcaoDaEntrevista[],
+): { titulo: string; meta: string } {
+  const partes = combinacao.split("--");
+  if (partes.length !== 3) return { titulo: combinacao, meta: "roteiro salvo" };
+  const [cidadeSlug, diasPart, gostoSlug] = partes;
+  const cidade = cidades.find((c) => c.slug === cidadeSlug)?.rotulo ?? cidadeSlug.replaceAll("-", " ");
+  const dias = diasPart.replace("-dias", "");
+  const gosto = gostos.find((g) => g.slug === gostoSlug)?.rotulo ?? gostoSlug.replaceAll("-", " ");
+  return { titulo: `${gosto} em ${cidade}`, meta: `${dias} dias` };
 }
 
-/** A lista de roteiros salvos neste navegador — usada em /ia e no perfil. */
-export function RoteirosSalvos() {
+/** A lista de roteiros salvos neste navegador — usada em /ia. */
+export function RoteirosSalvos({
+  cidades,
+  gostos,
+}: {
+  cidades: readonly OpcaoDaEntrevista[];
+  gostos: readonly OpcaoDaEntrevista[];
+}) {
   const [salvos, setSalvos] = useState<string[] | null>(null);
+  const [confirmando, setConfirmando] = useState<string | null>(null);
   useEffect(() => {
     setSalvos(lerRoteirosSalvos());
   }, []);
@@ -166,20 +77,46 @@ export function RoteirosSalvos() {
   if (salvos.length === 0) {
     return (
       <p className="tipo-legenda text-tinta-2">
-        Nenhum roteiro salvo neste navegador ainda — a estrelinha guarda aqui os que você
-        salvar.
+        Nenhum roteiro salvo neste navegador — quando você salvar um, ele aparece aqui.
       </p>
     );
   }
   return (
-    <ul className="flex flex-col gap-1.5">
-      {salvos.map((c) => (
-        <li key={c}>
-          <a href={`/ia/roteiro/${c}/`} className="text-sm font-semibold text-acao-tinta">
-            ✦ {c.replaceAll("--", " · ").replaceAll("-", " ")}
-          </a>
-        </li>
-      ))}
+    <ul className="ia-salvos">
+      {salvos.map((c) => {
+        const { titulo, meta } = rotuloDaCombinacao(c, cidades, gostos);
+        return (
+          <li key={c} className="ia-salvo">
+            <a href={`/ia/roteiro/${c}/`} className="ia-salvo-link">
+              <span className="ia-salvo-titulo">{titulo}</span>
+              <span className="ia-salvo-meta tipo-legenda">{meta}</span>
+            </a>
+            {confirmando === c ? (
+              <div className="ia-confirmar" role="group" aria-label={`Remover ${titulo}`}>
+                <span className="ia-confirmar-pergunta">Remover este roteiro?</span>
+                <button
+                  type="button"
+                  className="ia-remover"
+                  data-perigo="sim"
+                  onClick={() => {
+                    setSalvos(gravarRoteiroSalvo(c, false));
+                    setConfirmando(null);
+                  }}
+                >
+                  Remover
+                </button>
+                <button type="button" className="ia-remover" onClick={() => setConfirmando(null)}>
+                  Cancelar
+                </button>
+              </div>
+            ) : (
+              <button type="button" className="ia-remover" onClick={() => setConfirmando(c)}>
+                Remover
+              </button>
+            )}
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -187,27 +124,58 @@ export function RoteirosSalvos() {
 /** O botão de salvar/remover na página do roteiro. */
 export function SalvarRoteiro({ combinacao }: { combinacao: string }) {
   const [salvo, setSalvo] = useState<boolean | null>(null);
+  const [confirmando, setConfirmando] = useState(false);
   useEffect(() => {
     setSalvo(lerRoteirosSalvos().includes(combinacao));
   }, [combinacao]);
 
   if (salvo === null) return null;
+
+  if (salvo && confirmando) {
+    return (
+      <div className="ia-confirmar" role="group" aria-label="Confirmar remoção do roteiro">
+        <span className="ia-confirmar-pergunta">Remover este roteiro salvo?</span>
+        <button
+          type="button"
+          // smaug-ignore ui-strings: «acao» é o token CSS do DS (ia-acao), não texto de interface
+          className="ia-acao"
+          data-perigo="sim"
+          onClick={() => {
+            gravarRoteiroSalvo(combinacao, false);
+            setSalvo(false);
+            setConfirmando(false);
+          }}
+        >
+          Remover
+        </button>
+        <button
+          type="button"
+          // smaug-ignore ui-strings: «acao» é o token CSS do DS (ia-acao), não texto de interface
+          className="ia-acao"
+          onClick={() => setConfirmando(false)}
+        >
+          Cancelar
+        </button>
+      </div>
+    );
+  }
+
   return (
     <button
       type="button"
       aria-pressed={salvo}
+      // smaug-ignore ui-strings: «acao» é o token CSS do DS (ia-acao), não texto de interface
+      className={salvo ? "ia-acao" : "ia-acao ia-acao-primaria"}
       onClick={() => {
-        gravarRoteiroSalvo(combinacao, !salvo);
-        setSalvo(!salvo);
+        if (salvo) {
+          setConfirmando(true);
+          return;
+        }
+        gravarRoteiroSalvo(combinacao, true);
+        setSalvo(true);
       }}
-      className={
-        salvo
-          ? "w-fit rounded-pilula bg-tinta px-4 py-2 text-sm font-bold text-fundo"
-          : // smaug-ignore ui-strings: «acao» aqui é nome de classe CSS (bg-acao/text-acao-tinta), não texto de interface
-            "w-fit rounded-pilula border-2 border-acao px-4 py-2 text-sm font-bold text-acao-tinta transition-colors hover:bg-acao hover:text-sobre-acao"
-      }
     >
-      {salvo ? "✓ Roteiro salvo — remover" : "✦ Salvar este roteiro"}
+      {salvo ? "Roteiro salvo" : "Salvar roteiro"}
     </button>
   );
 }
@@ -258,9 +226,37 @@ export function AvisoDaCompanhia({ rotulos }: { rotulos: Record<string, string> 
   if (!companhia) return null;
   return (
     <p className="rounded-m border border-borda bg-superficie-2 px-3 py-2 text-sm leading-snug">
-      Você disse que vai <strong>{companhia.toLowerCase()}</strong>. O acervo não declara
-      classificação etária, então <strong>nada foi cortado por isso</strong> — o aviso fica
-      aqui em vez de um filtro fingido.
+      Você disse «{companhia}». O acervo não declara classificação etária, então{" "}
+      <strong>nada foi cortado por isso</strong> — o aviso fica aqui em vez de um filtro
+      fingido.
     </p>
   );
+}
+
+/** Bolha do pedido, reconstruída das respostas da URL — a companhia vem do hash. */
+export function RecadoDoPedido({
+  cidade,
+  dias,
+  gosto,
+  rotulosCompanhia,
+}: {
+  cidade: string;
+  dias: number;
+  gosto: string;
+  rotulosCompanhia: Record<string, string>;
+}) {
+  const [companhia, setCompanhia] = useState<string | null>(null);
+  useEffect(() => {
+    const m = window.location.hash.match(/companhia=([a-z-]+)/);
+    setCompanhia(m ? (rotulosCompanhia[m[1]] ?? null) : null);
+    // A navegação é client-side e quem rola é `.moldura-rolagem`, não a janela —
+    // sem isto o roteiro abre no miolo da tela anterior.
+    document.querySelector(".moldura-rolagem")?.scrollTo({ top: 0 });
+  }, [rotulosCompanhia]);
+
+  const texto = companhia
+    ? `${dias} dias em ${cidade}, com ${gosto}. ${companhia}.`
+    : `${dias} dias em ${cidade}, com ${gosto}.`;
+
+  return <p className="ia-balao ia-balao-usuario">{texto}</p>;
 }

@@ -3,6 +3,7 @@ import { Casca } from "@/componentes/casca";
 import { SessaoProvider } from "@/contexto/sessao";
 import { ViewProvider } from "@/contexto/visao";
 import { HEROIS } from "@/dados/heroi";
+import { itauDisplay, itauText } from "./tipografia";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -40,7 +41,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // `data-heroi-total` sai da lista curada e é lido pelo script para sortear.
     // O total viaja pelo HTML em vez de ser repetido no JavaScript porque assim
     // não existe uma segunda contagem para ficar defasada.
-    <html lang="pt-BR" data-heroi-total={HEROIS.length} suppressHydrationWarning>
+    <html
+      lang="pt-BR"
+      className={`${itauText.variable} ${itauDisplay.variable}`}
+      data-heroi-total={HEROIS.length}
+      suppressHydrationWarning
+    >
       <body className="antialiased">
         {/* Primeiro filho do body e SEM `async`, para bloquear o parser e rodar
             antes da primeira pintura — ver o cabeçalho do próprio arquivo. */}

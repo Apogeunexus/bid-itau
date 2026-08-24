@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { cloneElement, useCallback, useEffect, useId, useMemo, useState } from "react";
 import type { ReactElement } from "react";
-import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
+import { Chip, Estante, TrilhoDeChips } from "@/componentes/base/chip";
 import {
   ICONE_BUSCAR,
   ICONE_FILTROS,
   ICONE_IA,
   ICONE_MAPA,
   ICONE_SETA,
+  iconeDaClasse,
 } from "@/componentes/base/icones";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
@@ -326,6 +327,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
   const [descartados, setDescartados] = useState(0);
   const [lidoDoHash, setLidoDoHash] = useState(false);
   const [todosOsTemas, setTodosOsTemas] = useState(false);
+  const [todasAsLinguagens, setTodasAsLinguagens] = useState(false);
   const [sugestao, setSugestao] = useState(0);
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
 
@@ -673,8 +675,14 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   busca abre como um índice de blog, com as seções selecionáveis e a
                   contagem REAL de cada uma. Marcar uma seção é marcar o critério de
                   classe: o mesmo mecanismo de faceta de sempre, só que na porta. */}
-              <section className="busca-bloco">
-                <p className="busca-bloco-titulo">explore por seção</p>
+              <Estante
+                className="busca-bloco"
+                titulo="Explore por seção"
+                rotulo="Explorar por seção do acervo"
+              >
+                {/* Sem «Ver todas»: as 15 classes já estão no trilho. A seta é
+                    o recado de que há mais — um link que não leva a uma página
+                    de seções mentiria o destino. */}
                 {/* A contagem FICA aqui, e sai dos filtros abaixo. A diferença não é
                     de gosto: numa lista de seções o número é o conteúdo — «quantas
                     exposições existem» é a pergunta que a seção responde. Num chip
@@ -686,19 +694,19 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     internos do modelo de dados na primeira fileira que a pessoa vê. É
                     exatamente o que o mapa de rótulos existe para impedir, e a faceta
                     «tipo» lá embaixo já o usava; aqui faltava. */}
-                <TrilhoDeChips rotulo="Explorar por seção do acervo" className="trilho-chips-rola">
-                  {facetas.classe.map((opcao) => (
-                    <Chip
-                      key={chaveCriterio(opcao)}
-                      data-faceta={chaveCriterio(opcao)}
-                      onClick={() => alternarCriterio(opcao)}
-                      contagem={milhar(opcao.n)}
-                    >
-                      {rotuloDaClasse(opcao.valor as ClasseEntidade)}
-                    </Chip>
-                  ))}
-                </TrilhoDeChips>
-              </section>
+                {facetas.classe.map((opcao) => (
+                  <Chip
+                    key={chaveCriterio(opcao)}
+                    variante="explorar"
+                    data-faceta={chaveCriterio(opcao)}
+                    onClick={() => alternarCriterio(opcao)}
+                    contagem={milhar(opcao.n)}
+                  >
+                    {iconeDaClasse(opcao.valor)}
+                    {rotuloDaClasse(opcao.valor as ClasseEntidade)}
+                  </Chip>
+                ))}
+              </Estante>
 
               {/* A VITRINE: cartões reais do índice com a capa na cor da linguagem —
                   a aparência dominante do produto (M-6), sem custo novo de bytes. */}
@@ -960,22 +968,32 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           </button>
         </div>
         <div className="busca-folha-corpo">
-          <section>
-            <p className="busca-bloco-titulo">Explore por linguagem</p>
-            <TrilhoDeChips rotulo="Explorar por linguagem artística" className="trilho-chips-rola">
-              {facetas.linguagem.slice(0, 12).map((opcao) => (
-                <Chip
-                  key={chaveCriterio(opcao)}
-                  data-faceta={chaveCriterio(opcao)}
-                  cor={opcao.cor ?? "--ic-preto"}
-                  selecionado={marcados.has(chaveCriterio(opcao))}
-                  onClick={() => alternarCriterio(opcao)}
-                >
-                  {opcao.rotulo}
-                </Chip>
-              ))}
-            </TrilhoDeChips>
-          </section>
+          <Estante
+            titulo="Explore por linguagem"
+            rotulo="Explorar por linguagem artística"
+            verTodas={
+              facetas.linguagem.length > 12
+                ? {
+                    onClick: () => setTodasAsLinguagens((v) => !v),
+                    rotulo: todasAsLinguagens ? "Mostrar menos" : "Ver todas",
+                  }
+                : undefined
+            }
+          >
+            {(todasAsLinguagens ? facetas.linguagem : facetas.linguagem.slice(0, 12)).map((opcao) => (
+              <Chip
+                key={chaveCriterio(opcao)}
+                variante="explorar"
+                data-faceta={chaveCriterio(opcao)}
+                cor={opcao.cor ?? "--ic-preto"}
+                selecionado={marcados.has(chaveCriterio(opcao))}
+                onClick={() => alternarCriterio(opcao)}
+                contagem={milhar(opcao.n)}
+              >
+                {opcao.rotulo}
+              </Chip>
+            ))}
+          </Estante>
 
           <section>
             <p className="busca-bloco-titulo">Buscas recentes</p>
@@ -1251,18 +1269,20 @@ function BlocoFaceta({
           // decoração de chip. O que continua fora é o «sem ela: 340» dos
           // critérios já marcados: aquele é o mesmo número repetido em cada
           // pílula de uma fileira, e ninguém prometeu nada sobre ele.
-          <TrilhoDeChips rotulo={`Recortar por ${titulo}`}>
+          <TrilhoDeChips rotulo={`Recortar por ${titulo}`} className="trilho-chips-rola" setas>
             {opcoes.map((opcao) => {
               const chave = chaveCriterio(opcao);
               return (
                 <Chip
                   key={chave}
+                  variante="explorar"
                   selecionado={marcados.has(chave)}
                   data-faceta={chave}
                   cor={opcao.cor ?? undefined}
                   contagem={milhar(opcao.n)}
                   onClick={() => aoTocar(opcao)}
                 >
+                  {titulo === "tipo" ? iconeDaClasse(opcao.valor) : null}
                   {rotulo ? rotulo(opcao.valor) : opcao.rotulo}
                 </Chip>
               );

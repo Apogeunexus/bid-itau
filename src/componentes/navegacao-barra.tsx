@@ -11,7 +11,7 @@ import {
   ICONE_PERFIL,
   ICONE_SALVOS,
 } from "@/componentes/base/icones";
-import { Grafismo } from "@/componentes/grafismo";
+import { AssinaturaIc } from "@/componentes/marca";
 import { SeletorDeTema } from "@/componentes/seletor-tema";
 import { useSessao } from "@/contexto/sessao";
 import { ATALHOS_CONTA } from "@/dados/apps";
@@ -76,10 +76,7 @@ export function NavegacaoBarra() {
   return (
     <>
       <header className="barra-topo">
-        <span className="flex items-center gap-2 font-display font-bold">
-          <Grafismo variacao="completo" className="h-5 w-auto text-acao-tinta" />
-          Itaú Cultural
-        </span>
+        <AssinaturaIc prioridade />
 
         {/* A CONTA VIRA ÍCONE, e o que era a seção «Sua conta» no fim de /apps
             mora aqui dentro (pedido de 23/08). O nome da persona saiu do

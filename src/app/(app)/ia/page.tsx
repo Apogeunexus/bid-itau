@@ -1,54 +1,39 @@
 import type { Metadata } from "next";
-import { EntrevistaEstrelinha, RoteirosSalvos } from "@/componentes/entrevista-estrelinha";
-import { Grafismo } from "@/componentes/grafismo";
+import { ConversaDaIa } from "@/componentes/ia-conversa";
 import { cidadesComAcervo } from "@/dados/cidade";
-import { COMPANHIAS, GOSTOS, OPCOES_DE_DIAS } from "@/dados/estrelinha";
+import {
+  COMPANHIAS,
+  GOSTOS,
+  OPCOES_DE_DIAS,
+  sugestoesDaEstrelinha,
+} from "@/dados/estrelinha";
 
-export const metadata: Metadata = { title: "IA — Agenda Cultural BR" };
+export const metadata: Metadata = { title: "Roteiros — Itaú Cultural" };
 
 /**
- * IA — a estrelinha (reformulação 2026-08): entrevista de quatro perguntas e um
- * roteiro pré-computado por combinação. COMPONENTE DE SERVIDOR: as opções descem
- * por props (DP-F); a entrevista é cliente e só navega. A declaração de simulação
- * é PRODUTO — fica na tela nos dois modos, porque «IA amplia, nunca substitui a
- * mediação» é princípio do RFP e a transparência é o argumento.
+ * IA — conversa que monta um roteiro sobre o acervo (reformulação 2026-08).
+ *
+ * COMPONENTE DE SERVIDOR: as opções e as sugestões descem por props (DP-F);
+ * a conversa é cliente e só navega para a combinação pré-computada. A
+ * declaração de que nenhum modelo é chamado fica no kicker — é produto, não
+ * rodapé.
  */
 export default function Ia() {
   const cidades = cidadesComAcervo();
+  const sugestoes = sugestoesDaEstrelinha();
 
   return (
-    <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
-      <header className="flex flex-col gap-1">
-        <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
-          <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Roteiros com IA ✦</h1>
-        </div>
-        <p className="max-w-prose text-sm leading-snug">
-          Quatro perguntas e a estrelinha monta um roteiro dia a dia sobre o acervo — com o
-          percurso no mapa e o motivo de cada parada visível.
-        </p>
-        {/* PRODUTO, não comentário: a simulação declarada é o argumento. */}
-        <p className="max-w-prose rounded-m border border-borda bg-superficie-2 px-3 py-2 text-sm leading-snug">
-          <strong>Nenhum modelo de IA é chamado aqui.</strong> O roteiro é montado por
-          regras fixas, e elas vêm escritas no resultado.
-        </p>
-      </header>
-
-      <EntrevistaEstrelinha
-        gostos={GOSTOS.map((g) => ({ slug: g.slug, rotulo: g.rotulo }))}
-        companhias={COMPANHIAS.map((c) => ({ slug: c.slug, rotulo: c.rotulo }))}
-        dias={[...OPCOES_DE_DIAS]}
-        cidades={cidades.map((c) => ({
-          slug: c.slug,
-          rotulo: c.titulo,
-          detalhe: `${c.total} registros`,
-        }))}
-      />
-
-      <section className="flex flex-col gap-2 border-t border-borda pt-4">
-        <h2 className="tipo-titulo-3 font-bold">Seus roteiros salvos</h2>
-        <RoteirosSalvos />
-      </section>
-    </div>
+    <ConversaDaIa
+      gostos={GOSTOS.map((g) => ({ slug: g.slug, rotulo: g.rotulo }))}
+      companhias={COMPANHIAS.map((c) => ({ slug: c.slug, rotulo: c.rotulo }))}
+      dias={[...OPCOES_DE_DIAS]}
+      cidades={cidades.map((c) => ({
+        slug: c.slug,
+        rotulo: c.titulo,
+        detalhe: `${c.total} registros`,
+        total: c.total,
+      }))}
+      sugestoes={sugestoes}
+    />
   );
 }

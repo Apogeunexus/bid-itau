@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
-import { ICONE_BUSCAR, ICONE_FILTROS } from "@/componentes/base/icones";
+import { cloneElement, type ReactElement } from "react";
+import { Chip, Estante, TrilhoDeChips } from "@/componentes/base/chip";
+import { ICONE_BUSCAR, ICONE_FILTROS, ICONE_MAPA } from "@/componentes/base/icones";
 import { CartaoLeitura, dataCurta } from "@/componentes/cartao-leitura";
 import type { Leitura } from "@/dados/leituras";
 
@@ -103,16 +104,23 @@ export interface CidadeDaVitrine {
 export function MapaCultural({ cidades }: { cidades: readonly CidadeDaVitrine[] }) {
   if (!cidades.length) return null;
   return (
-    <section className="flex flex-col gap-3">
-      <CabecalhoDeSecao titulo="Mapa cultural" href="/mapa/" rotuloDoLink="Ver mapa completo" />
-      <TrilhoDeChips rotulo="Cidades com acervo">
-        {cidades.map((cidade) => (
-          <Chip key={cidade.slug} href={`/cidade/${cidade.slug}/`} contagem={cidade.total}>
-            {cidade.titulo}
-          </Chip>
-        ))}
-      </TrilhoDeChips>
-    </section>
+    <Estante
+      titulo="Mapa cultural"
+      rotulo="Cidades com acervo"
+      verTodas={{ href: "/mapa/", rotulo: "Ver mapa completo" }}
+    >
+      {cidades.map((cidade) => (
+        <Chip
+          key={cidade.slug}
+          variante="explorar"
+          href={`/cidade/${cidade.slug}/`}
+          contagem={cidade.total}
+        >
+          {cloneElement(ICONE_MAPA as ReactElement)}
+          {cidade.titulo}
+        </Chip>
+      ))}
+    </Estante>
   );
 }
 
@@ -139,26 +147,27 @@ export function ExplorePorLinguagens({
 }) {
   if (!linguagens.length) return null;
   return (
-    <section className="flex flex-col gap-3">
-      <CabecalhoDeSecao titulo="Explore por linguagens" />
-      <TrilhoDeChips rotulo="Linguagens artísticas">
-        {linguagens.map((linguagem) => (
-          <Chip
-            key={linguagem.valor}
-            href={`/buscar/#f=linguagem:${linguagem.valor}`}
-            cor={linguagem.cor}
-            contagem={linguagem.n}
-          >
-            {linguagem.rotulo}
-          </Chip>
-        ))}
-        {total > linguagens.length ? (
-          <Chip href="/buscar/" contagem={total}>
-            Todas
-          </Chip>
-        ) : null}
-      </TrilhoDeChips>
-    </section>
+    <Estante titulo="Explore por linguagens" rotulo="Linguagens artísticas">
+      {linguagens.map((linguagem) => (
+        <Chip
+          key={linguagem.valor}
+          variante="explorar"
+          href={`/buscar/#f=linguagem:${linguagem.valor}`}
+          cor={linguagem.cor}
+          contagem={linguagem.n}
+        >
+          {linguagem.rotulo}
+        </Chip>
+      ))}
+      {/* Porta para o acervo, não «as linguagens que faltam»: /buscar/ não lista
+          as 23 que o teto cortou, lista o índice. O rótulo é Todas, e o número
+          é quantas linguagens o acervo tem. */}
+      {total > linguagens.length ? (
+        <Chip variante="explorar" href="/buscar/" contagem={total}>
+          Todas
+        </Chip>
+      ) : null}
+    </Estante>
   );
 }
 

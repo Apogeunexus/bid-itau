@@ -467,7 +467,7 @@ body {
   gap: var(--espaco-pilha);
   overflow-x: auto;
   overscroll-behavior-x: contain;
-  scroll-snap-type: x proximate;
+  scroll-snap-type: x proximity;
   cursor: grab;
 
   /* AQUI A BARRA SOME, e só aqui. Medido neste Chrome: `::-webkit-scrollbar` é
@@ -609,6 +609,187 @@ body {
   block-size: 0.5rem;
   border-radius: var(--raio-pilula);
   background: var(--cor-chip);
+}
+
+/* ---------------------------------------------------------------------------
+ * CHIP EXPLORAR e ESTANTE — o filtrador de seção.
+ *
+ * Não é outro vocabulário de pílula: é o mesmo `.chip`, mais largo, com glifo
+ * e a contagem EMPILHADA sob o rótulo. Selecionado continua tinta cheia —
+ * o vinho do mockup era decoração, e laranja de fundo reprova contraste.
+ * ------------------------------------------------------------------------- */
+
+.chip-explorar {
+  align-items: center;
+  min-block-size: 3.5rem;
+  padding: 0.5rem 0.75rem;
+  border-color: var(--cor-borda);
+  border-radius: var(--raio-m);
+  box-shadow: var(--sombra-1);
+}
+
+.chip-explorar .chip-texto {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.chip-explorar .chip-rotulo {
+  display: block;
+  font-weight: 700;
+}
+
+/* Só a primeira letra: «editorial» vira «Editorial», e «Rio de Janeiro»
+   continua com o «de» minúsculo. `capitalize` no chip inteiro fazia «De». */
+.chip-explorar .chip-rotulo::first-letter {
+  text-transform: uppercase;
+}
+
+.chip-explorar .chip-glifo {
+  display: flex;
+  flex: none;
+  color: var(--cor-tinta-2);
+  pointer-events: none;
+}
+
+.chip-explorar .chip-glifo svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.chip-explorar .chip-ponto {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  pointer-events: none;
+}
+
+.chip-explorar[aria-pressed="true"] .chip-glifo {
+  color: var(--cor-fundo);
+}
+
+.estante {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-cartao);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie-2);
+}
+
+.estante-cabeca {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-pilha);
+}
+
+.estante-titulo {
+  margin: 0;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--cor-tinta);
+}
+
+.estante-ver {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.estante-ver svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.estante-ver:hover {
+  color: var(--cor-tinta);
+}
+
+.estante-ver:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* Dentro da estante o trilho NÃO sangra: o painel já recua, e a seta é o
+   recado de «tem mais». A máscara desbotaria o último cartão por baixo do
+   botão e faria o controle parecer um defeito. */
+.estante .trilho-chips {
+  margin-inline: 0;
+  padding-inline: 0;
+  padding-bottom: 0;
+  mask-image: none;
+}
+
+[data-view="web"] .estante .trilho-chips {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  cursor: grab;
+  mask-image: none;
+}
+
+.trilho-chips-caixa {
+  position: relative;
+}
+
+.trilho-chips-caixa .trilho-chips {
+  padding-inline-end: 2.5rem;
+  mask-image: none;
+}
+
+.trilho-chips-seta {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-2);
+  color: var(--cor-tinta);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.trilho-chips-seta-frente {
+  right: 0;
+}
+
+.trilho-chips-seta-tras {
+  left: 0;
+}
+
+.trilho-chips-seta svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.trilho-chips-seta:hover {
+  border-color: var(--cor-tinta);
+}
+
+.trilho-chips-seta:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
 }
 
 /* ---------------------------------------------------------------------------

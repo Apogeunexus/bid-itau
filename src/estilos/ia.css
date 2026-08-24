@@ -21,18 +21,31 @@
  *    `.moldura-rolagem`. Folha nascida migrada: só tokens e a grade de 0.25rem.
  * ======================================================================== */
 
+[data-view="mobile"] main:has(.ia) {
+  display: flex;
+  flex-direction: column;
+}
+
+/* A chancela no pé do layout empurra o compositor para o meio da tela.
+ * Nesta rota o campo tem que sentar em cima da barra, como num chat. */
+[data-view="mobile"] main:has(.ia) + div {
+  display: none;
+}
+
 .ia {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   min-block-size: 100%;
   padding-inline: var(--espaco-tela);
-  padding-block-start: var(--espaco-tela);
+  padding-block-start: 0.75rem;
 }
 
 [data-view="web"] .ia {
   max-inline-size: 48rem;
   margin-inline: auto;
-  padding: var(--espaco-secao) var(--espaco-tela);
+  min-block-size: 100vh;
+  padding: 0.75rem var(--espaco-tela) 0;
 }
 
 /* ---------------------------------------------------------------------------
@@ -40,10 +53,11 @@
  * ------------------------------------------------------------------------ */
 .ia-topo {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.25rem;
-  margin-block-end: var(--espaco-tela);
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-block-end: 0.5rem;
 }
 
 .ia-topo-linha {
@@ -64,6 +78,52 @@
 
 .ia-kicker {
   color: var(--cor-tinta-3);
+}
+
+.ia-nova {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: transparent;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ia-nova:hover {
+  color: var(--cor-tinta);
+}
+
+.ia-topo-salvos {
+  position: relative;
+  font-size: var(--tipo-legenda);
+}
+
+.ia-topo-salvos summary {
+  cursor: pointer;
+  color: var(--cor-tinta-2);
+  font-weight: 700;
+}
+
+.ia-topo-salvos[open] summary {
+  color: var(--cor-tinta);
+}
+
+.ia-topo-salvos .ia-salvos {
+  position: absolute;
+  z-index: 30;
+  right: var(--espaco-tela);
+  width: min(20rem, calc(100% - 2rem));
+  margin-block-start: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-2);
 }
 
 .ia-voltar {
@@ -89,7 +149,7 @@
   position: relative;
   display: grid;
   overflow: hidden;
-  min-block-size: 14rem;
+  min-block-size: 11rem;
   border-radius: var(--raio-g);
   background: color-mix(in srgb, var(--cor-superficie) 82%, var(--ic-laranja));
 }
@@ -114,7 +174,7 @@
   gap: 0.75rem;
   max-inline-size: 22rem;
   padding: var(--espaco-cartao) var(--espaco-tela);
-  padding-block: 1.25rem;
+  padding-block: 1rem;
   background: linear-gradient(
     to right,
     color-mix(in srgb, var(--cor-superficie) 88%, var(--ic-laranja)) 0%,
@@ -169,15 +229,46 @@
   flex-direction: column;
   flex: 1 1 auto;
   gap: var(--espaco-tela);
-  padding-block-end: var(--espaco-tela);
 }
 
 .ia-vazio {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
-  gap: var(--espaco-secao);
+  gap: 1.25rem;
   flex: 1 1 auto;
+  padding-block: 1rem;
+}
+
+.ia-vazio-marca {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 3rem;
+  block-size: 3rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+}
+
+.ia-vazio-glifo {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+
+.ia-vazio-titulo {
+  font-weight: 700;
+}
+
+.ia-fim {
+  height: 1px;
+  scroll-margin-bottom: 6rem;
+}
+
+[data-view="mobile"] .ia-fim,
+[data-view="mobile"] .ia-destino {
+  scroll-margin-bottom: 11.5rem;
 }
 
 .ia-secao {
@@ -190,14 +281,11 @@
   font-weight: 700;
 }
 
-/* Sugestões: cartão com foto do acervo, não pill genérica. */
 .ia-sugestoes {
   display: grid;
-  gap: 0.75rem;
-}
-
-[data-view="web"] .ia-sugestoes {
   grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  width: 100%;
 }
 
 .ia-sugestao {
@@ -229,10 +317,14 @@
 
 .ia-sugestao-capa {
   flex: none;
-  inline-size: 5.5rem;
-  min-block-size: 5.5rem;
+  inline-size: 3.5rem;
+  min-block-size: 3.5rem;
   overflow: hidden;
   background: var(--cor-superficie-2);
+}
+
+[data-view="mobile"] .ia-sugestao-capa {
+  display: none;
 }
 
 .ia-sugestao-capa img,
@@ -326,6 +418,75 @@
 .ia-fala {
   margin: 0;
   max-inline-size: 48ch;
+}
+
+.ia-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-inline-start: 0.25rem;
+  vertical-align: text-bottom;
+  background: var(--cor-tinta);
+  animation: ia-pulso calc(var(--dur-3) * 3) var(--ease-padrao) infinite;
+}
+
+.ia-destino {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-inline-size: 28rem;
+  padding: 0.5rem;
+  scroll-margin-bottom: 6rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  text-decoration: none;
+}
+
+.ia-destino:hover {
+  border-color: var(--cor-acao);
+}
+
+.ia-destino-capa {
+  flex: none;
+  inline-size: 3.5rem;
+  block-size: 3.5rem;
+  overflow: hidden;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+.ia-destino-capa img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.ia-destino-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-inline-size: 0;
+  flex: 1 1 auto;
+}
+
+.ia-destino-titulo {
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+.ia-destino-meta {
+  color: var(--cor-tinta-3);
+}
+
+.ia-destino-acao {
+  flex: none;
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
 }
 
 .ia-msg-corpo {
@@ -472,7 +633,7 @@
 .ia-aval {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -506,14 +667,20 @@
   flex-direction: column;
   gap: 0.5rem;
   margin-inline: calc(var(--espaco-tela) * -1);
-  padding: 0.75rem var(--espaco-tela);
+  padding: 0.75rem var(--espaco-tela) 1rem;
   background: color-mix(in srgb, var(--cor-fundo) 92%, transparent);
   backdrop-filter: blur(8px);
-  border-block-start: 1px solid var(--cor-borda);
 }
 
 [data-view="mobile"] .ia-compositor {
   bottom: 6rem;
+}
+
+/* No vazio o campo já senta no fim do flex, acima do padding da moldura.
+ * O offset de 6rem só vale na conversa, quando o compositor gruda e
+ * precisaria cobrir a barra. */
+[data-view="mobile"] .ia[data-fase="vazio"] .ia-compositor {
+  bottom: 0;
 }
 
 [data-view="web"] .ia-compositor {
@@ -522,17 +689,22 @@
 }
 
 .ia-compositor-rotulo {
-  color: var(--cor-tinta-3);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 
 .ia-compositor-caixa {
   display: flex;
   align-items: flex-end;
   gap: 0.5rem;
-  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
   border: 1px solid var(--cor-borda-forte);
-  border-radius: var(--raio-g);
+  border-radius: 1.5rem;
   background: var(--cor-superficie);
+  box-shadow: var(--sombra-1);
 }
 
 .ia-compositor-caixa:focus-within {
@@ -544,7 +716,7 @@
   flex: 1 1 auto;
   min-inline-size: 0;
   max-block-size: 7.5rem;
-  padding: 0.35rem 0;
+  padding: 0.25rem 0;
   border: 0;
   background: transparent;
   color: var(--cor-tinta);
@@ -574,6 +746,11 @@
   background: var(--cor-acao);
   color: var(--cor-sobre-acao);
   cursor: pointer;
+}
+
+.ia-enviar svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
 }
 
 .ia-enviar:hover:not(:disabled) {
@@ -609,6 +786,11 @@
   text-decoration: none;
 }
 
+.ia-compositor-voltar svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
 .ia-compositor-voltar:hover {
   border-color: var(--cor-acao);
   color: var(--cor-tinta);
@@ -640,7 +822,7 @@
 .ia-salvo-link {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.25rem;
   min-inline-size: 0;
   flex: 1 1 auto;
   color: inherit;
@@ -707,10 +889,14 @@
 
 .ia-artefato-cabeca {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 0.75rem;
+}
+
+[data-view="web"] .ia-artefato-cabeca {
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .ia-artefato-titulo {
@@ -735,8 +921,8 @@
 .ia-acao {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.5rem 0.9rem;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
   border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pilula);
   background: var(--cor-superficie);
@@ -745,6 +931,11 @@
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
+}
+
+.ia-acao svg {
+  inline-size: 1rem;
+  block-size: 1rem;
 }
 
 .ia-acao:hover {
@@ -841,7 +1032,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  padding: 0.6rem 0.7rem 0.75rem;
+  padding: 0.5rem 0.75rem 0.75rem;
 }
 
 .ia-parada-titulo {
@@ -857,7 +1048,7 @@
 .ia-trilha {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem 0.5rem;
+  gap: 0.25rem 0.5rem;
   color: var(--cor-tinta-2);
   font-size: var(--tipo-legenda);
 }
@@ -865,7 +1056,7 @@
 .ia-trilha-passo {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.35rem;
+  gap: 0.25rem;
 }
 
 .ia-trilha-n {
@@ -889,7 +1080,7 @@
 .ia-regras ul {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
   margin: 0.75rem 0 0;
   padding-inline-start: 1.25rem;
 }

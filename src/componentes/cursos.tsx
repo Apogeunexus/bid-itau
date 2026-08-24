@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, type FormEvent, type ReactNode } from "react";
-import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
+import { Chip, Estante } from "@/componentes/base/chip";
 import {
   ICONE_BUSCAR,
   ICONE_CONFERIDO,
@@ -298,9 +298,9 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
       </section>
 
       <section className="cursos-recorte">
-        <h2 className="tipo-micro text-tinta-3">Linguagens</h2>
-        <TrilhoDeChips rotulo="Recortar por linguagem">
+        <Estante titulo="Linguagens" rotulo="Recortar por linguagem">
           <Chip
+            variante="explorar"
             selecionado={linguagem === SEM_RECORTE}
             onClick={() => setLinguagem(SEM_RECORTE)}
             contagem={catalogo.total}
@@ -310,6 +310,7 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
           {catalogo.linguagens.map((l) => (
             <Chip
               key={l.valor}
+              variante="explorar"
               cor={l.cor}
               data-linguagem={l.valor}
               selecionado={linguagem === l.valor}
@@ -319,13 +320,13 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
               {l.rotulo}
             </Chip>
           ))}
-        </TrilhoDeChips>
+        </Estante>
 
-        <h2 className="tipo-micro mt-1 text-tinta-3">Recursos de acessibilidade</h2>
-        <TrilhoDeChips rotulo="Filtrar por recurso de acessibilidade">
+        <Estante titulo="Recursos de acessibilidade" rotulo="Filtrar por recurso de acessibilidade">
           {catalogo.acessibilidade.map((a) => (
             <Chip
               key={a.campo}
+              variante="explorar"
               data-acessibilidade-do-curso={a.campo}
               {...(a.n === 0 ? { "data-nao-sustenta": "sim" } : {})}
               selecionado={recurso === a.campo}
@@ -336,7 +337,7 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
               {a.rotulo}
             </Chip>
           ))}
-        </TrilhoDeChips>
+        </Estante>
       </section>
 
       {!recortando ? (

@@ -1,0 +1,76 @@
+/* ---------------------------------------------------------------------------
+ * MARCA — assinatura Fix do Itaú Cultural e chancela da Fundação Itaú.
+ *
+ * Arquivos oficiais em /marca. O lettering não é texto: é o SVG. A altura do
+ * "I" no cabeçalho fica acima do mínimo digital do manual (12 px) porque a
+ * peça inteira tem 1.5 rem. A Fundação pede 80 px de altura no digital; no
+ * corpo de 16 px isso é 5 rem.
+ * ------------------------------------------------------------------------- */
+
+.marca-ic {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+}
+
+.marca-ic-arquivo,
+.chancela-fit-arquivo {
+  display: grid;
+}
+
+.marca-ic-arquivo > *,
+.chancela-fit-arquivo > * {
+  grid-area: 1 / 1;
+}
+
+.marca-ic-arquivo-positivo,
+.marca-ic-arquivo-negativo {
+  height: 1.5rem;
+  width: auto;
+  max-width: 12rem;
+}
+
+.chancela-fit {
+  display: inline-flex;
+  align-items: center;
+  min-height: 5rem;
+}
+
+.chancela-fit-arquivo-positivo,
+.chancela-fit-arquivo-negativo {
+  height: 5rem;
+  width: auto;
+}
+
+.marca-ic-arquivo-positivo,
+.chancela-fit-arquivo-positivo {
+  display: var(--marca-positivo);
+}
+
+.marca-ic-arquivo-negativo,
+.chancela-fit-arquivo-negativo {
+  display: var(--marca-negativo);
+}
+
+.chancela {
+  padding: 0.75rem var(--espaco-tela) 1rem;
+  border-top: 1px solid var(--cor-borda);
+}
+
+/* A barra inferior cobre os últimos 6 rem do telefone. Sem isto, focar o
+ * link da Fundação (ou um scrollIntoView) esconderia a peça atrás da pílula. */
+[data-view="mobile"] .chancela {
+  scroll-margin-bottom: 6rem;
+}
+
+.chancela-rotulo {
+  margin: 0 0 0.75rem;
+  color: var(--cor-tinta-3);
+}
+
+.chancela-regua {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+}

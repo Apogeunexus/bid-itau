@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AcoesDoCartaz } from "@/componentes/base/acoes-do-cartaz";
-import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
+import { Chip, Estante } from "@/componentes/base/chip";
 import { CHAVE_LISTA_CAST, useMinhaLista } from "@/componentes/base/minha-lista";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
@@ -322,8 +322,9 @@ export function Cast({
           declaram tema nenhum, e um filtro que deixa 201 de fora promete um
           acervo que não existe. O número vem ao lado de cada pílula antes de
           qualquer marcação, como D-90 fixou no Play. */}
-      <TrilhoDeChips rotulo="Recortar os episódios por linguagem artística">
+      <Estante titulo="Linguagens" rotulo="Recortar os episódios por linguagem artística">
         <Chip
+          variante="explorar"
           data-linguagem="todas"
           selecionado={linguagem === SEM_RECORTE}
           onClick={() => setLinguagem(SEM_RECORTE)}
@@ -334,6 +335,7 @@ export function Cast({
         {linguagens.map((l) => (
           <Chip
             key={l.valor}
+            variante="explorar"
             data-linguagem={l.valor}
             cor={l.cor}
             selecionado={linguagem === l.valor}
@@ -343,7 +345,7 @@ export function Cast({
             {l.rotulo}
           </Chip>
         ))}
-      </TrilhoDeChips>
+      </Estante>
 
       {recortando ? (
         /* COM RECORTE A FILEIRA VIRA GRADE — a mesma troca do Play. Com recorte

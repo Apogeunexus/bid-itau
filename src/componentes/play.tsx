@@ -1,10 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import {
+  cloneElement,
+  isValidElement,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { AcoesDoCartaz } from "@/componentes/base/acoes-do-cartaz";
-import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
-import { ICONE_CONFERIDO, ICONE_MAIS, ICONE_TOCAR } from "@/componentes/base/icones";
+import { Chip, Estante } from "@/componentes/base/chip";
+import {
+  ICONE_ACONTECE,
+  ICONE_APPS,
+  ICONE_CAST,
+  ICONE_CONFERIDO,
+  ICONE_FICHA,
+  ICONE_MAIS,
+  ICONE_MUSEU,
+  ICONE_NOTICIAS,
+  ICONE_ONDA,
+  ICONE_PLAY,
+  ICONE_TOCAR,
+} from "@/componentes/base/icones";
 import { CHAVE_LISTA_PLAY, useMinhaLista } from "@/componentes/base/minha-lista";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
@@ -147,6 +167,18 @@ const SEM_RECORTE = "";
  * é melhor que pedir o gesto de rolar meio palmo. O trilho existe para o que não cabe.
  */
 const LIMIAR_COMPACTO = 8;
+
+const ICONE_DA_CATEGORIA: Record<string, ReactNode> = {
+  podcasts: ICONE_CAST,
+  series: ICONE_PLAY,
+  videos: ICONE_TOCAR,
+  noticias: ICONE_NOTICIAS,
+  entrevista: ICONE_ONDA,
+  colunistas: ICONE_FICHA,
+  playlists: ICONE_ONDA,
+  "agenda-cultural": ICONE_ACONTECE,
+  acervos: ICONE_MUSEU,
+};
 
 /**
  * O cartaz — a unidade da parede, usada IGUAL no trilho e na grade.
@@ -471,32 +503,36 @@ export function Play({
        * lado de cada recurso, antes de qualquer marcação (D-90).
        */}
       <section className="play-recorte">
-        <h2 className="tipo-micro text-tinta-3">Categorias</h2>
-        <TrilhoDeChips rotulo="Recortar o catálogo por categoria">
+        <Estante titulo="Categorias" rotulo="Recortar o catálogo por categoria">
           <Chip
+            variante="explorar"
             data-categoria={SEM_RECORTE || "todas"}
             selecionado={categoria === SEM_RECORTE}
             onClick={() => setCategoria(SEM_RECORTE)}
             contagem={catalogo.total}
           >
+            {ICONE_APPS}
             Todas
           </Chip>
           {catalogo.categorias.map((c) => (
             <Chip
               key={c.valor}
+              variante="explorar"
               data-categoria={c.valor}
               selecionado={categoria === c.valor}
               onClick={() => setCategoria(c.valor === categoria ? SEM_RECORTE : c.valor)}
               contagem={c.n}
             >
+              {isValidElement(ICONE_DA_CATEGORIA[c.valor] ?? ICONE_TOCAR)
+                ? cloneElement((ICONE_DA_CATEGORIA[c.valor] ?? ICONE_TOCAR) as ReactElement)
+                : ICONE_TOCAR}
               {c.rotulo}
             </Chip>
           ))}
-        </TrilhoDeChips>
+        </Estante>
 
         {/* -------------------------------------- filtro de acessibilidade (D-90) */}
-        <h2 className="tipo-micro mt-1 text-tinta-3">Recursos de acessibilidade</h2>
-        <TrilhoDeChips rotulo="Filtrar por recurso de acessibilidade">
+        <Estante titulo="Recursos de acessibilidade" rotulo="Filtrar por recurso de acessibilidade">
           {DIMENSOES_DO_FILTRO.map((campo) => {
             const d = dimensoes.find((x) => x.campo === campo);
             const n = d?.n ?? 0;
@@ -504,6 +540,7 @@ export function Play({
             return (
               <Chip
                 key={campo}
+                variante="explorar"
                 data-acessibilidade-do-play={campo}
                 {...(n === 0 ? { "data-nao-sustenta": "sim" } : {})}
                 selecionado={marcada}
@@ -522,7 +559,7 @@ export function Play({
               </Chip>
             );
           })}
-        </TrilhoDeChips>
+        </Estante>
       </section>
 
       {/* ------------------------------------------------------------------- a vitrine */}

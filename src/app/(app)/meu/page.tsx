@@ -67,9 +67,9 @@ export default function Meu() {
           <span className="tipo-legenda font-bold text-acao-tinta">configurar →</span>
         </Link>
         <Link href="/ia" className="cartao no-underline">
-          <span className="tipo-detalhe font-bold">Roteiros com IA ✦</span>
+          <span className="tipo-detalhe font-bold">Roteiros</span>
           <span className="tipo-legenda text-tinta-2">
-            Os roteiros que a estrelinha montou para você, guardados neste navegador.
+            Os roteiros que você montou a partir do acervo, guardados neste navegador.
           </span>
           <span className="tipo-legenda font-bold text-acao-tinta">ver →</span>
         </Link>

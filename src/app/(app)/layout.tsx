@@ -1,3 +1,4 @@
+import { Chancela } from "@/componentes/marca";
 import { NavegacaoPrincipal } from "@/componentes/navegacao-principal";
 
 /**
@@ -17,7 +18,12 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-full flex-col desk:flex-row">
       <NavegacaoPrincipal />
-      <main className="min-w-0 flex-1">{children}</main>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <main className="min-w-0 flex-1">{children}</main>
+        <div className="desk:hidden">
+          <Chancela />
+        </div>
+      </div>
     </div>
   );
 }

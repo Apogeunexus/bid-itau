@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import {
+  ICONE_IA,
+  ICONE_MAPA,
+  ICONE_SETA,
+} from "@/componentes/base/icones";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import {
   AvisoDaCompanhia,
   LinkDaCombinacao,
+  RecadoDoPedido,
   SalvarRoteiro,
 } from "@/componentes/entrevista-estrelinha";
 import { Grafismo } from "@/componentes/grafismo";
@@ -19,12 +25,11 @@ import {
 } from "@/dados/estrelinha";
 
 /**
- * `/ia/roteiro/[combinacao]` — o roteiro da estrelinha (reformulação 2026-08).
+ * `/ia/roteiro/[combinacao]` — a resposta da conversa (reformulação 2026-08).
  *
- * 360 PÁGINAS PRÉ-COMPUTADAS, uma por combinação da entrevista. Os chips do topo
- * são a CONSULTA VISÍVEL E EDITÁVEL (o argumento de D-64 aplicado à IA): trocar
- * gosto, janela ou cidade navega para a combinação vizinha — nada recalcula no
- * navegador, porque a vizinha também já existe. COMPONENTE DE SERVIDOR (DP-F).
+ * 360 PÁGINAS PRÉ-COMPUTADAS. Os chips do ajuste são a CONSULTA visível e
+ * editável: trocar gosto ou janela navega para a combinação vizinha. Sem
+ * horário inventado — o acervo não declara sessão futura com lugar (D-48).
  */
 
 export function generateStaticParams() {
@@ -38,12 +43,17 @@ export async function generateMetadata({
   const dados = roteiroDaEstrelinha(combinacao);
   return {
     title: dados
-      ? `Roteiro ✦ ${dados.combinacao.cidade.titulo}, ${dados.combinacao.dias} dias — Agenda Cultural BR`
-      : "Roteiro — Agenda Cultural BR",
+      ? `Roteiro em ${dados.combinacao.cidade.titulo} — Itaú Cultural`
+      : "Roteiro — Itaú Cultural",
   };
 }
 
 const km = (v: number) => v.toFixed(1).replace(".", ",");
+
+function hashDeLente(recorte: readonly string[], titulo: string, volta: string): string {
+  const r = recorte.map(encodeURIComponent).join("~");
+  return `/mapa/#r=${r}&t=${encodeURIComponent(titulo)}&v=${encodeURIComponent(volta)}`;
+}
 
 export default async function RoteiroDaIa({ params }: PageProps<"/ia/roteiro/[combinacao]">) {
   const { combinacao } = await params;
@@ -52,20 +62,143 @@ export default async function RoteiroDaIa({ params }: PageProps<"/ia/roteiro/[co
 
   const { cidade, dias, gosto } = dados.combinacao;
   const { roteiro, cobertura, regras } = dados;
+  const chaves = roteiro.dias.flatMap((d) => d.itens.map((i) => i.chave));
+  const mapaHref = hashDeLente(
+    chaves,
+    `Roteiro em ${cidade.titulo}, ${dias} dias`,
+    `/ia/roteiro/${combinacao}/`,
+  );
+  const rotulosCompanhia = Object.fromEntries(COMPANHIAS.map((c) => [c.slug, c.rotulo]));
 
   return (
-    <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
-      <header className="flex flex-col gap-2">
-        <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
-          <h1 className="text-2xl leading-tight font-bold desk:text-3xl">
-            ✦ {cidade.titulo}, {dias} dias
-          </h1>
+    <div className="ia ia-resposta">
+      <header className="ia-topo">
+        <Link href="/ia/" className="ia-voltar">
+          ← Roteiros
+        </Link>
+        <div className="ia-topo-linha">
+          <Grafismo variacao="barra" className="ia-topo-marca" />
+          <h1 className="ia-topo-titulo tipo-titulo-1">Seu roteiro em {cidade.titulo}</h1>
+        </div>
+        <p className="ia-kicker tipo-legenda">
+          Nenhum modelo de IA é chamado — as regras deste percurso vêm escritas abaixo.
+        </p>
+      </header>
+
+      <div className="ia-fio">
+        <div className="ia-msgs">
+          <div className="ia-msg ia-msg-usuario">
+            <RecadoDoPedido
+              cidade={cidade.titulo}
+              dias={dias}
+              gosto={gosto.rotulo}
+              rotulosCompanhia={rotulosCompanhia}
+            />
+          </div>
+
+          <div className="ia-msg">
+            <span className="ia-avatar" aria-hidden>
+              {ICONE_IA}
+            </span>
+            <div className="ia-msg-corpo">
+              <p className="ia-fala">
+                Pronto. Montei o percurso no acervo de {cidade.titulo}
+                {cobertura.rotuloLinguagem
+                  ? ` — ${cobertura.doGosto} das ${cobertura.total} paradas declaram ${cobertura.rotuloLinguagem}, e o resto é o que a cidade tem.`
+                  : ` — ${cobertura.total} paradas pelo rodízio do acervo, porque você pediu surpresa.`}
+              </p>
+
+              <AvisoDaCompanhia rotulos={rotulosCompanhia} />
+
+              <article className="ia-artefato">
+                <header className="ia-artefato-cabeca">
+                  <div>
+                    <p className="ia-artefato-titulo tipo-titulo-3">
+                      {dias} dias · {cidade.titulo}
+                      {cidade.estado && cidade.estado !== cidade.titulo ? `, ${cidade.estado}` : ""}
+                    </p>
+                    <p className="ia-artefato-meta tipo-legenda">
+                      {cobertura.total} paradas no acervo
+                    </p>
+                  </div>
+                  <div className="ia-acoes">
+                    <Link href={mapaHref} className="ia-acao">
+                      {ICONE_MAPA} Ver no mapa
+                    </Link>
+                    <SalvarRoteiro combinacao={combinacao} />
+                  </div>
+                </header>
+
+                {roteiro.dias.map((dia) => (
+                  <section key={dia.numero} className="ia-dia" data-dia-roteiro={dia.numero}>
+                    <header className="ia-dia-cabeca">
+                      <h2 className="ia-dia-titulo tipo-titulo-3">Dia {dia.numero}</h2>
+                      <p className="ia-dia-meta tipo-legenda">
+                        {dia.ancoradosNoCentroide === dia.itens.length
+                          ? "deslocamento não estimável — paradas no centroide do município"
+                          : `${km(dia.deslocamentoKm)} km em linha reta`}
+                      </p>
+                    </header>
+                    <p className="ia-artefato-lead tipo-legenda">{dia.justificativa}</p>
+
+                    <MapaDoDia itens={dia.itens} numero={dia.numero} />
+
+                    <div className="ia-paradas">
+                      {dia.itens.map((item, i) => {
+                        const miolo = (
+                          <>
+                            <div className="ia-parada-capa">
+                              <span className="ia-parada-n">{i + 1}</span>
+                              <CapaDeCartao
+                                titulo={item.titulo}
+                                classe={item.classe}
+                                linguagens={item.linguagens}
+                                imagem={item.imagem}
+                                creditoImagem={item.creditoImagem}
+                                compacta
+                                className="size-full"
+                              />
+                            </div>
+                            <div className="ia-parada-miolo">
+                              <p className="ia-parada-titulo">{item.titulo}</p>
+                              <p className="ia-parada-meta tipo-legenda">
+                                {item.rotuloClasse}
+                                {item.dataDeclarada ? ` · ${item.dataDeclarada}` : ""}
+                              </p>
+                              <SelosDeLinguagem ids={item.linguagens} />
+                            </div>
+                          </>
+                        );
+                        return item.rota ? (
+                          <Link key={item.chave} href={item.rota} className="ia-parada">
+                            {miolo}
+                          </Link>
+                        ) : (
+                          <div key={item.chave} className="ia-parada">
+                            {miolo}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <p className="ia-trilha">
+                      {dia.itens.map((item, i) => (
+                        <span key={item.chave} className="ia-trilha-passo">
+                          {i > 0 ? <span aria-hidden>→</span> : null}
+                          <span className="ia-trilha-n">{i + 1}</span>
+                          {item.titulo}
+                        </span>
+                      ))}
+                    </p>
+                  </section>
+                ))}
+              </article>
+            </div>
+          </div>
         </div>
 
-        {/* A CONSULTA, visível e editável: cada chip navega para a combinação vizinha. */}
-        <nav aria-label="Editar as respostas da entrevista" className="flex flex-col gap-1.5">
-          <p className="tipo-micro text-tinta-3">Suas respostas · toque para trocar</p>
+        <nav className="ia-ajuste" aria-label="Ajustar as respostas da entrevista">
+          <p className="ia-ajuste-rotulo tipo-micro">Ajustar o pedido · toque para trocar</p>
           <div className="flex flex-wrap gap-1.5">
             {GOSTOS.map((g) => (
               <LinkDaCombinacao
@@ -96,88 +229,24 @@ export default async function RoteiroDaIa({ params }: PageProps<"/ia/roteiro/[co
           </div>
         </nav>
 
-        <AvisoDaCompanhia rotulos={Object.fromEntries(COMPANHIAS.map((c) => [c.slug, c.rotulo]))} />
-
-        <p className="max-w-prose text-sm leading-snug">
-          {cobertura.rotuloLinguagem ? (
-            <>
-              <strong>
-                {cobertura.doGosto} das {cobertura.total} paradas
-              </strong>{" "}
-              declaram {cobertura.rotuloLinguagem} — o acervo de {cidade.titulo} manda no
-              resto, e o número fica dito em vez de maquiado.
-            </>
-          ) : (
-            <>
-              {cobertura.total} paradas escolhidas pelo rodízio do acervo — você pediu
-              surpresa, e a surpresa é o acervo inteiro concorrendo.
-            </>
-          )}{" "}
-          <SalvarRoteiro combinacao={combinacao} />
-        </p>
-      </header>
-
-      {roteiro.dias.map((dia) => (
-        <article key={dia.numero} className="cartao" data-dia-roteiro={dia.numero}>
-          <header className="flex items-baseline gap-2">
-            <h2 className="tipo-titulo-3 font-bold">Dia {dia.numero}</h2>
-            <p className="tipo-legenda text-tinta-2">
-              {dia.ancoradosNoCentroide === dia.itens.length
-                ? "deslocamento não estimável — paradas no centroide do município"
-                : `${km(dia.deslocamentoKm)} km em linha reta`}
-            </p>
-          </header>
-          <p className="tipo-legenda leading-snug text-tinta-2">{dia.justificativa}</p>
-
-          <MapaDoDia itens={dia.itens} numero={dia.numero} />
-
-          <ol className="flex flex-col gap-2">
-            {dia.itens.map((item, i) => (
-              <li key={item.chave} className="flex items-start gap-3">
-                <span className="tipo-destaque w-6 shrink-0 text-center font-bold text-acao-tinta">
-                  {i + 1}
-                </span>
-                <div className="w-16 shrink-0">
-                  <CapaDeCartao
-                    titulo={item.titulo}
-                    classe={item.classe}
-                    linguagens={item.linguagens}
-                    imagem={item.imagem}
-                    creditoImagem={item.creditoImagem}
-                    className="h-12 w-full rounded-p"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  {item.rota ? (
-                    <Link href={item.rota} className="text-sm leading-snug font-semibold">
-                      {item.titulo}
-                    </Link>
-                  ) : (
-                    <span className="text-sm leading-snug font-semibold">{item.titulo}</span>
-                  )}
-                  <p className="tipo-legenda text-tinta-3">
-                    {item.rotuloClasse}
-                    {item.dataDeclarada ? ` · ${item.dataDeclarada}` : ""}
-                  </p>
-                  <SelosDeLinguagem ids={item.linguagens} />
-                </div>
+        <details className="ia-regras">
+          <summary>As regras deste roteiro — o gerador inteiro</summary>
+          <ul>
+            {regras.map((r) => (
+              <li key={r} className="tipo-legenda leading-snug text-tinta-2">
+                {r}
               </li>
             ))}
-          </ol>
-        </article>
-      ))}
+          </ul>
+        </details>
+      </div>
 
-      <section className="flex flex-col gap-2 rounded-g border border-borda bg-superficie-2 p-4">
-        <h2 className="tipo-detalhe font-bold">As regras deste roteiro — o gerador inteiro</h2>
-        <ul className="flex list-disc flex-col gap-1 pl-5">
-          {regras.map((r) => (
-            <li key={r} className="tipo-legenda leading-snug text-tinta-2">
-              {r}
-            </li>
-          ))}
-        </ul>
-      </section>
-
+      <div className="ia-compositor">
+        <Link href="/ia/" className="ia-compositor-voltar">
+          <span>Pedir outro roteiro</span>
+          {ICONE_SETA}
+        </Link>
+      </div>
     </div>
   );
 }

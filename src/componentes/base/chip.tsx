@@ -1,7 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, type ComponentPropsWithoutRef, type CSSProperties, type ReactNode } from "react";
+import {
+  Children,
+  isValidElement,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ComponentPropsWithoutRef,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { ICONE_CHEVRON_DIREITA, ICONE_CHEVRON_ESQUERDA } from "@/componentes/base/icones";
 
 /**
  * chip.tsx — a primeira primitiva de `base/`, e a que o projeto mais devia.
@@ -23,7 +34,14 @@ import { useRef, type ComponentPropsWithoutRef, type CSSProperties, type ReactNo
  * `/play` lê `chip.innerText.match(/(\d+)\s*$/)` para conferir que o número
  * anunciado bate com o número entregue. Soldar a posição na primitiva é o que
  * impede que a próxima tela quebre esse contrato sem ninguém perceber.
+ *
+ * VARIANTE EXPLORAR. O filtrador de seção (ícone + rótulo + contagem numa
+ * pastilha larga) não é outra primitiva: é o mesmo chip, com o mesmo
+ * `aria-pressed` e a mesma contagem no fim. A pílula continua o padrão; o
+ * cartão é o recorte que a pessoa EXPLORA, não o atalho que ela dispara.
  */
+
+type VarianteChip = "pilula" | "explorar";
 
 type PropsComuns = {
   /**
@@ -40,6 +58,11 @@ type PropsComuns = {
    * fonte de verdade que D-08 existe para impedir.
    */
   cor?: string;
+  /**
+   * `pilula` é o padrão (atalho, critério marcado, recorte curto).
+   * `explorar` é o explorador: ícone à esquerda, rótulo e contagem empilhados.
+   */
+  variante?: VarianteChip;
   children: ReactNode;
   className?: string;
 };
@@ -62,26 +85,75 @@ type PropsLink = PropsComuns &
 
 export type PropsChip = PropsBotao | PropsLink;
 
-function Miolo({ cor, contagem, chaveDaContagem, children }: PropsComuns) {
+/**
+ * Se o primeiro filho é um SVG, ele é o glifo; o resto é o rótulo.
+ * Passar o ícone como filho (e não como prop) deixa o cartão usável a partir
+ * de um Server Component — JSX nomeado na prop não atravessa a fronteira.
+ */
+function partirIcone(children: ReactNode): { icone: ReactNode; rotulo: ReactNode } {
+  const itens = Children.toArray(children);
+  // Qualquer elemento no primeiro filho é o glifo (`<Icone>` ou `<svg>`).
+  // `type === "svg"` falhava: os glifos da casa são o componente `Icone`.
+  if (itens.length >= 2 && isValidElement(itens[0])) {
+    return { icone: itens[0], rotulo: itens.slice(1) };
+  }
+  return { icone: null, rotulo: children };
+}
+
+function Miolo({
+  cor,
+  contagem,
+  chaveDaContagem,
+  children,
+  variante = "pilula",
+}: PropsComuns) {
+  const n =
+    contagem != null ? (
+      <span className="chip-n" data-denominador={chaveDaContagem}>
+        {contagem}
+      </span>
+    ) : null;
+
+  if (variante === "explorar") {
+    const { icone, rotulo } = partirIcone(children);
+    return (
+      <>
+        {icone ? (
+          <span className="chip-glifo" aria-hidden>
+            {icone}
+          </span>
+        ) : cor ? (
+          <span aria-hidden className="chip-ponto" />
+        ) : null}
+        <span className="chip-texto">
+          <span className="chip-rotulo">{rotulo}</span>
+          {n}
+        </span>
+      </>
+    );
+  }
+
   return (
     <>
       {cor ? <span aria-hidden className="chip-ponto" /> : null}
       <span className="chip-rotulo">{children}</span>
-      {contagem != null ? (
-        <span className="chip-n" data-denominador={chaveDaContagem}>
-          {contagem}
-        </span>
-      ) : null}
+      {n}
     </>
   );
 }
 
 export function Chip(props: PropsChip) {
-  const { contagem, chaveDaContagem, cor, children, className, ...resto } = props;
-  const classe = `chip${className ? ` ${className}` : ""}`;
+  const { contagem, chaveDaContagem, cor, children, className, variante = "pilula", ...resto } =
+    props;
+  const classe = `chip${variante === "explorar" ? " chip-explorar" : ""}${className ? ` ${className}` : ""}`;
   const estilo = cor ? ({ "--cor-chip": `var(${cor})` } as CSSProperties) : undefined;
   const miolo = (
-    <Miolo cor={cor} contagem={contagem} chaveDaContagem={chaveDaContagem}>
+    <Miolo
+      cor={cor}
+      contagem={contagem}
+      chaveDaContagem={chaveDaContagem}
+      variante={variante}
+    >
       {children}
     </Miolo>
   );
@@ -119,20 +191,57 @@ export function Chip(props: PropsChip) {
  * Na visão web ele volta a quebrar linha — lá há largura de sobra e rolagem
  * horizontal seria pior. Isso mora no CSS, sob `[data-view="web"]`, e não num
  * ramo de JavaScript: mesma árvore de JSX, outra medida (D-05).
+ *
+ * `setas` desenha os botões circulares de avançar/voltar — o mesmo recado
+ * visual da máscara, em controle. Só aparece quando a fileira realmente
+ * transborda; sem overflow o botão mentiria que há mais.
  */
 export function TrilhoDeChips({
   rotulo,
   children,
   className,
+  setas = false,
   ...resto
-}: { rotulo: string } & Omit<ComponentPropsWithoutRef<"div">, "className"> & {
+}: { rotulo: string; setas?: boolean } & Omit<ComponentPropsWithoutRef<"div">, "className"> & {
     className?: string;
   }) {
   const trilho = useRef<HTMLDivElement>(null);
   const arrasto = useRef<{ x: number; scroll: number } | null>(null);
   const arrastou = useRef(false);
+  const [mais, setMais] = useState({ atras: false, frente: false });
 
-  return (
+  useEffect(() => {
+    if (!setas) return;
+    const el = trilho.current;
+    if (!el) return;
+    const medir = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = el;
+      setMais({
+        atras: scrollLeft > 4,
+        frente: scrollLeft + clientWidth < scrollWidth - 4,
+      });
+    };
+    medir();
+    el.addEventListener("scroll", medir, { passive: true });
+    const ro = new ResizeObserver(medir);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", medir);
+      ro.disconnect();
+    };
+  }, [setas, children]);
+
+  function rolar(direcao: -1 | 1) {
+    const el = trilho.current;
+    if (!el) return;
+    const reduzir = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollBy({
+      left: direcao * Math.max(el.clientWidth * 0.7, 1),
+      behavior: reduzir ? "auto" : "smooth",
+    });
+  }
+
+  const miolo = (
     <div
       ref={trilho}
       role="group"
@@ -166,5 +275,88 @@ export function TrilhoDeChips({
     >
       {children}
     </div>
+  );
+
+  if (!setas) return miolo;
+
+  return (
+    <div className="trilho-chips-caixa">
+      {miolo}
+      {mais.atras ? (
+        <button
+          type="button"
+          className="trilho-chips-seta trilho-chips-seta-tras"
+          aria-label="Ver as opções anteriores"
+          onClick={() => rolar(-1)}
+        >
+          {ICONE_CHEVRON_ESQUERDA}
+        </button>
+      ) : null}
+      {mais.frente ? (
+        <button
+          type="button"
+          className="trilho-chips-seta trilho-chips-seta-frente"
+          aria-label="Ver as próximas opções"
+          onClick={() => rolar(1)}
+        >
+          {ICONE_CHEVRON_DIREITA}
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+/** Porta à direita da estante — só existe quando leva a algum lugar. */
+export type PortaDaEstante =
+  | { href: string; rotulo: string }
+  | { onClick: () => void; rotulo: string };
+
+/**
+ * O painel do explorador: título, porta opcional («Ver todas» só quando há
+ * destino), trilho com seta. Sem porta o recorte inteiro já está no trilho —
+ * inventar um «ver todas» que não leva a lugar nenhum seria mentira.
+ */
+export function Estante({
+  titulo,
+  rotulo,
+  verTodas,
+  children,
+  className,
+}: {
+  titulo: string;
+  rotulo: string;
+  verTodas?: PortaDaEstante;
+  children: ReactNode;
+  className?: string;
+}) {
+  const id = useId();
+  if (Children.count(children) === 0) return null;
+  return (
+    <section
+      className={`estante${className ? ` ${className}` : ""}`}
+      aria-labelledby={id}
+    >
+      <div className="estante-cabeca">
+        <p id={id} className="estante-titulo">
+          {titulo}
+        </p>
+        {verTodas ? (
+          "href" in verTodas ? (
+            <Link href={verTodas.href} className="estante-ver">
+              {verTodas.rotulo}
+              {ICONE_CHEVRON_DIREITA}
+            </Link>
+          ) : (
+            <button type="button" className="estante-ver" onClick={verTodas.onClick}>
+              {verTodas.rotulo}
+              {ICONE_CHEVRON_DIREITA}
+            </button>
+          )
+        ) : null}
+      </div>
+      <TrilhoDeChips rotulo={rotulo} className="trilho-chips-rola" setas>
+        {children}
+      </TrilhoDeChips>
+    </section>
   );
 }

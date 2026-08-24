@@ -7,6 +7,9 @@
  * ------------------------------------------------------------------------- */
 @import "../estilos/tokens.css";
 
+/* Assinatura Fix e chancela — compartilhado pelas duas navegações. */
+@import "../estilos/marca.css";
+
 /* A navegação da visão web: o trilho lateral. */
 @import "../estilos/menu-lateral.css";
 
@@ -100,6 +103,10 @@
  * papel quente e desenho, não fotografia sangrando. */
 @import "../estilos/museu.css";
 
+/* Roteiros: conversa, artefato de pensamento e resposta em cartão.
+ * Depois do Museu porque as duas aberturas são papel quente com ilustração. */
+@import "../estilos/ia.css";
+
 /* ---------------------------------------------------------------------------
  * A base visual (camada base tipográfica, moldura D-03, cartão)
  * vem DEPOIS das folhas de tela, na mesma posição do cascade que essas regras
@@ -141,10 +148,9 @@
   /* -------------------------------------------------------------------------
    * Tipografia (D-09, D-10).
    *
-   * Itaú Text e Itaú Display são proprietárias e não estão em disco. O próprio
-   * manual prevê Myriad e Arial como substitutas — a stack nomeia as reais
-   * primeiro, então instalar as fontes depois faz elas assumirem sozinhas, sem
-   * tocar em uma linha de código.
+   * Itaú Text e Itaú Display entram via `next/font/local` em `tipografia.ts`.
+   * As variáveis `--fonte-itau-*-face` nascem no `<html>`. O fallback nomeado
+   * é Arial — a substituta que o próprio manual autoriza (p. 13).
    *
    * A regra de tamanho do manual vira TOKEN em vez de convenção verbal: o corte
    * é 12 pt ≈ 16 px. Até 16 px usa-se a stack de texto; de 17 px para cima, a de
@@ -152,6 +158,6 @@
    * h1..h4 em display — para a próxima tela não depender da disciplina de quem
    * a escreve. Fora dos títulos, o utilitário `font-display` é a saída explícita.
    * --------------------------------------------------------------------- */
-  --fonte-texto: "Itaú Text", "Itaú Display", Myriad, Arial, Helvetica, sans-serif;
-  --fonte-display: "Itaú Display", "Itaú Text", Myriad, Arial, Helvetica, sans-serif;
+  --fonte-texto: var(--fonte-itau-text-face, "Itaú Text"), Myriad, Arial, Helvetica, sans-serif;
+  --fonte-display: var(--fonte-itau-display-face, "Itaú Display"), var(--fonte-itau-text-face, "Itaú Text"), Myriad, Arial, Helvetica, sans-serif;
 }

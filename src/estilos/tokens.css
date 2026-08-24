@@ -99,6 +99,9 @@
   --cor-borda: color-mix(in srgb, var(--cor-tinta-crua) 12%, transparent);
   --cor-borda-forte: color-mix(in srgb, var(--cor-tinta-crua) 28%, transparent);
   --cor-foco: var(--ic-laranja);
+  /* Qual arquivo da assinatura/chancela aparece. Consomido em marca.css. */
+  --marca-positivo: block;
+  --marca-negativo: none;
 
   /* ---- Tipografia: um degrau = tamanho + entrelinha ----------------------
    * O corte do manual (Itaú Text ≤16px, Itaú Display ≥17px) está soldado nos
@@ -211,6 +214,10 @@
     --cor-acao-lavada: color-mix(in srgb, transparent 82%, var(--ic-laranja));
     /* No escuro o laranja cheio mede 7,94:1 contra preto — nada a corrigir. */
     --cor-acao-tinta: var(--ic-laranja);
+
+    /* Qual arquivo da assinatura/chancela aparece. Consomido em marca.css. */
+    --marca-positivo: none;
+    --marca-negativo: block;
   }
 }
 
@@ -237,6 +244,8 @@
   --cor-borda-forte: color-mix(in srgb, var(--ic-branco) 38%, transparent);
   --cor-acao-lavada: color-mix(in srgb, transparent 82%, var(--ic-laranja));
   --cor-acao-tinta: var(--ic-laranja);
+  --marca-positivo: none;
+  --marca-negativo: block;
 }
 
 /* Exposição ao Tailwind: os utilitários leem o token, e trocar o token troca a

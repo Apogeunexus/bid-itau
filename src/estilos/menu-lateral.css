@@ -24,13 +24,17 @@
   background: var(--cor-superficie);
 }
 
+.menu-lateral-nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .menu-marca {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   padding: 1rem var(--espaco-tela);
-  font-family: var(--fonte-display);
-  font-weight: 700;
 }
 
 .menu-grupos {
