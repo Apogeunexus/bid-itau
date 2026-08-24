@@ -13,8 +13,15 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { CAPAS_MUSEU } from "./capas-museu";
 import { UNIDADES_FEDERATIVAS } from "./contorno-brasil";
+import {
+  EXPOSICOES_PERMANENTES,
+  TOTAL_DE_PERMANENTES,
+  type ExposicaoPermanente,
+  type RelacionadoDaExposicao,
+} from "./exposicoes-permanentes";
 import { porSlug, slugsPorTipo } from "./grafo";
 import { leituras } from "./leituras";
+import { rotaDaEntidade } from "./rotas";
 import type { Entidade } from "./tipos";
 
 /** Os 22 espaços-museu no grafo. Afirmar o número; se o grafo mudar, o build cai. */
@@ -74,13 +81,14 @@ export interface EspacoDoMuseu {
 }
 
 export interface PortaDoMuseu {
-  id: "exposicoes" | "ocupacoes" | "visitas";
+  id: "permanentes" | "exposicoes" | "ocupacoes" | "visitas";
   rotulo: string;
   href: string;
   n: number;
 }
 
 export interface HubDoMuseu {
+  permanentes: readonly ExposicaoPermanente[];
   cartaz: CartazDoMuseu[];
   espacos: EspacoDoMuseu[];
   portas: PortaDoMuseu[];
@@ -330,10 +338,35 @@ function montar(): HubDoMuseu {
     );
   }
 
+  if (EXPOSICOES_PERMANENTES.length !== TOTAL_DE_PERMANENTES) {
+    quebrar(
+      `declara ${TOTAL_DE_PERMANENTES} exposições permanentes e o catálogo tem ${EXPOSICOES_PERMANENTES.length}.`,
+    );
+  }
+  for (const expo of EXPOSICOES_PERMANENTES) {
+    const arquivos = [
+      expo.imagem,
+      ...expo.galeria.map((g) => g.arquivo),
+      ...expo.percursos.map((p) => p.imagem),
+    ];
+    for (const src of arquivos) {
+      const rel = src.replace(/^\//, "");
+      if (!existsSync(join(process.cwd(), "public", rel))) {
+        quebrar(`foto de «${expo.slug}» ausente em public/${rel}`);
+      }
+    }
+  }
+
   const nExposicoes = cartaz.filter((c) => c.categoria !== "ocupacao").length;
   const nOcupacoes = cartaz.filter((c) => c.categoria === "ocupacao").length;
 
   const portas: PortaDoMuseu[] = [
+    {
+      id: "permanentes",
+      rotulo: "Permanentes",
+      href: "#permanentes",
+      n: TOTAL_DE_PERMANENTES,
+    },
     {
       id: "exposicoes",
       rotulo: "Exposições",
@@ -354,7 +387,7 @@ function montar(): HubDoMuseu {
     },
   ];
 
-  return { cartaz, espacos, portas, visitas };
+  return { permanentes: EXPOSICOES_PERMANENTES, cartaz, espacos, portas, visitas };
 }
 
 export function hubDoMuseu(): HubDoMuseu {
@@ -364,6 +397,33 @@ export function hubDoMuseu(): HubDoMuseu {
 
 export const TOTAL_DE_ESPACOS_MUSEU = ESPACOS_NA_VITRINE;
 export const TOTAL_DO_CARTAZ = CARTAZ_ESPERADO;
+
+const TETO_RELACIONADOS = 6;
+
+/** Matérias e eventos do acervo que falam do espaço — não da cátedra homônima. */
+export function relacionadosDaExposicao(slug: string): RelacionadoDaExposicao[] {
+  const trecho =
+    slug === "espaco-olavo-setubal"
+      ? /espaco-olavo-setubal/
+      : /numismatica|filatelia|herculano/;
+  const itens: RelacionadoDaExposicao[] = [];
+  for (const classe of ["evento", "conteudo"] as const) {
+    for (const s of slugsPorTipo(classe)) {
+      if (/catedra/.test(s) || !trecho.test(s)) continue;
+      const e = porSlug(classe, s);
+      if (!e) continue;
+      const rota = rotaDaEntidade(classe, s);
+      if (!rota) continue;
+      itens.push({
+        titulo: e.titulo,
+        rota,
+        rotulo: classe === "evento" ? "Evento" : "Matéria",
+      });
+      if (itens.length >= TETO_RELACIONADOS) return itens;
+    }
+  }
+  return itens;
+}
 
 /** Quantos espaços a lista mostra antes do «explorar todos». O resto continua na página. */
 export const TETO_DA_LISTA_DE_ESPACOS = 5;

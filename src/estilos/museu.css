@@ -1,9 +1,10 @@
 /* ===========================================================================
  * museu.css — Museu virtual, o hub museal (reformulação da referência de 23/08)
  *
- * A FORMA: abertura com as três portas, mosaico de cartaz (um em pé, dois
- * paisagem, o resto em faixa) e lista dos espaços. É o mesmo vocabulário de
- * portes do hub de /apps, aplicado ao recorte museal.
+ * A FORMA: as duas exposições permanentes da sede abrem a página, depois o
+ * mosaico de cartaz (um em pé, dois paisagem, o resto em faixa) e a lista dos
+ * espaços. É o mesmo vocabulário de portes do hub de /apps, aplicado ao recorte
+ * museal.
  *
  * O que esta folha se recusa a copiar da referência: data inventada e «online»
  * onde o CMS diz o contrário. As fachadas dos espaços vêm da web (Commons),
@@ -30,29 +31,14 @@
 }
 
 /* ---------------------------------------------------------------------------
- * A abertura. Cartão rebaixado, não foto sangrando: o hero de Descobrir e o
- * destaque do Play são fotografia sob véu; aqui a referência é papel quente e
- * um desenho. Laranja entra lavado no fundo — é o creme da marca, não ação.
+ * A abertura. Título da tela, as portas. O destaque visual são as duas
+ * exposições permanentes, logo abaixo — fotografia, não desenho.
  * ------------------------------------------------------------------------ */
-.museu-destaque {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(6.5rem, 38%);
-  align-items: end;
-  overflow: hidden;
-  border-radius: var(--raio-g);
-  background: color-mix(in srgb, var(--cor-superficie) 82%, var(--ic-laranja));
-}
-
-.museu-destaque-texto {
-  position: relative;
-  z-index: 1;
+.museu-abertura {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.75rem;
-  padding: var(--espaco-cartao) var(--espaco-tela);
-  padding-block: 1.25rem;
 }
 
 .museu-kicker {
@@ -80,31 +66,6 @@
   inline-size: 1rem;
   block-size: 1rem;
   flex: none;
-}
-
-/* O desenho do prédio. `currentColor` no traço, o arco cheio na cor da marca
-   lavada — o laranja aqui é o mesmo creme da abertura, não um botão. */
-.museu-ilustra {
-  justify-self: end;
-  align-self: end;
-  inline-size: 100%;
-  max-inline-size: 11rem;
-  block-size: auto;
-  margin-block-end: -0.5rem;
-  color: color-mix(in srgb, var(--cor-acao-tinta) 70%, var(--cor-tinta-3));
-  pointer-events: none;
-}
-
-.museu-ilustra-arco {
-  fill: color-mix(in srgb, var(--ic-laranja) 78%, var(--ic-branco));
-}
-
-[data-view="web"] .museu-destaque-texto {
-  padding: var(--espaco-secao);
-}
-
-[data-view="web"] .museu-ilustra {
-  max-inline-size: 16rem;
 }
 
 /* ---------------------------------------------------------------------------
@@ -410,4 +371,361 @@
 
 .museu-explorar[open] > summary .museu-glifo {
   transform: rotate(90deg);
+}
+
+/* ---------------------------------------------------------------------------
+ * As duas permanentes. Cartaz fotográfico, dois na largura da web, um embaixo
+ * do outro no app. O véu é o mesmo do mosaico de cartaz.
+ * ------------------------------------------------------------------------ */
+.museu-permanentes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.museu-permanente {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  border-radius: var(--raio-g);
+  background: var(--ic-preto);
+  color: var(--ic-branco);
+  text-decoration: none;
+  box-shadow: var(--sombra-1);
+}
+
+.museu-permanente::before {
+  content: "";
+  aspect-ratio: 4 / 3;
+}
+
+.museu-permanente-foto {
+  position: absolute;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-2) var(--ease-padrao);
+}
+
+.museu-permanente:hover .museu-permanente-foto {
+  transform: scale(1.04);
+}
+
+.museu-permanente-veu {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--ic-preto) 88%, transparent) 0%,
+    color-mix(in srgb, var(--ic-preto) 42%, transparent) 48%,
+    transparent 78%
+  );
+}
+
+.museu-permanente-miolo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: var(--espaco-cartao);
+  padding-inline-end: 2.75rem;
+}
+
+.museu-permanente-selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.museu-permanente-titulo {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.museu-permanente-sub,
+.museu-permanente-meta {
+  color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
+}
+
+.museu-permanente-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.museu-permanente:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+[data-view="web"] .museu-permanentes {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+[data-view="web"] .museu-permanente::before {
+  aspect-ratio: 5 / 4;
+}
+
+/* ---------------------------------------------------------------------------
+ * A ficha de uma permanente. Leitor de exposição: hero, visita, palco, galeria
+ * em fileira, percurso. Palco herda o click-to-load de materia.css.
+ * ------------------------------------------------------------------------ */
+.museu-expo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+  padding: 0 var(--espaco-tela) var(--espaco-secao);
+}
+
+.museu-expo-abertura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+}
+
+.museu-expo-hero {
+  margin-inline: calc(var(--espaco-tela) * -1);
+}
+
+.museu-expo-hero-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--cor-superficie-2);
+}
+
+.museu-expo-hero-credito {
+  padding: 0.25rem var(--espaco-tela) 0;
+  color: var(--cor-tinta-3);
+}
+
+.museu-expo-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--cor-tinta-2);
+}
+
+.museu-expo-kicker svg {
+  color: var(--cor-acao-tinta);
+}
+
+.museu-expo-titulo {
+  font-weight: 700;
+  text-wrap: balance;
+  max-inline-size: 22ch;
+}
+
+.museu-expo-subtitulo {
+  color: var(--cor-tinta-2);
+}
+
+.museu-expo-lead {
+  max-inline-size: 38rem;
+  color: var(--cor-tinta-2);
+}
+
+.museu-expo-visita {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  margin: 0;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.museu-expo-visita dt {
+  color: var(--cor-tinta-3);
+  font-weight: 700;
+}
+
+.museu-expo-visita dd {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+}
+
+.museu-expo-visita-linha {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.museu-expo-visita dd svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+  color: var(--cor-acao-tinta);
+}
+
+[data-view="web"] .museu-expo-visita {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+}
+
+.museu-expo-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.museu-expo-secao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700;
+}
+
+.museu-expo-autor {
+  color: var(--cor-tinta);
+}
+
+.museu-expo-texto {
+  max-inline-size: 38rem;
+}
+
+.museu-expo-galeria {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+  scroll-snap-type: x mandatory;
+}
+
+.museu-expo-galeria li {
+  flex: none;
+  inline-size: 18rem;
+  scroll-snap-align: start;
+}
+
+.museu-expo-galeria img {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+}
+
+.museu-expo-galeria figcaption {
+  padding-block-start: 0.25rem;
+  color: var(--cor-tinta-3);
+}
+
+.museu-expo-percursos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+}
+
+.museu-expo-passo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.museu-expo-passo img {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+}
+
+.museu-expo-passo-n {
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+}
+
+.museu-expo-passo h3 {
+  font-weight: 700;
+}
+
+.museu-expo-passo-credito {
+  color: var(--cor-tinta-3);
+}
+
+[data-view="web"] .museu-expo-passo {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+}
+
+.museu-expo-irma {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  text-decoration: none;
+}
+
+.museu-expo-irma:hover {
+  border-color: var(--cor-borda-forte);
+  background: var(--cor-superficie-2);
+}
+
+.museu-expo-irma:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.museu-expo-irma img {
+  display: block;
+  inline-size: 6rem;
+  block-size: 4.5rem;
+  object-fit: cover;
+  border-radius: var(--raio-p);
+}
+
+.museu-expo-irma span:nth-child(2) {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.museu-expo-segue {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.museu-expo-segue-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  text-decoration: none;
+}
+
+.museu-expo-segue-item:hover {
+  border-color: var(--cor-borda-forte);
+  background: var(--cor-superficie-2);
+}
+
+.museu-expo-segue-item:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.museu-expo-voltar {
+  margin-block-start: 0.5rem;
 }

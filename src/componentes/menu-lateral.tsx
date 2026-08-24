@@ -69,7 +69,11 @@ const PRINCIPAIS: Item[] = [
     href: "/museu",
     rotulo: "Museu",
     icone: ICONE_MUSEU,
-    filhos: [{ href: "/museu/exposicoes", rotulo: "Exposições", icone: ICONE_OBRA }],
+    filhos: [
+      { href: "/museu/espaco-olavo-setubal", rotulo: "Olavo Setubal", icone: ICONE_MUSEU },
+      { href: "/museu/espaco-herculano-pires", rotulo: "Herculano Pires", icone: ICONE_MUSEU },
+      { href: "/museu/exposicoes", rotulo: "Exposições", icone: ICONE_OBRA },
+    ],
   },
   { href: "/ia", rotulo: "IA", icone: ICONE_IA },
   { href: "/cursos", rotulo: "Cursos", icone: ICONE_CURSOS },
