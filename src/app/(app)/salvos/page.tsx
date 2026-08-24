@@ -26,7 +26,7 @@ const par = parDeDemonstracao({ hoje: DATA_DE_REFERENCIA });
 
 export default function PaginaSalvos() {
   return (
-    <div className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-3xl desk:p-8">
+    <div className="flex flex-col gap-4 p-5 desk:p-8">
       {/* Fala SOBRE a tela — o que ela prova e por que ela existe no roteiro. Quem usa o
           app recebe a mesma ideia em produto no cabeçalho de `<Salvos>` e na frase que
           fecha o alerta, as duas escritas na segunda pessoa. */}

@@ -12,6 +12,7 @@ import {
   ICONE_MAPA,
   ICONE_MUSEU,
   ICONE_NOTICIAS,
+  ICONE_OBRA,
   ICONE_PERFIL,
   ICONE_PLAY,
   ICONE_SALVOS,
@@ -54,7 +55,7 @@ interface Item {
   rotulo: string;
   icone?: React.ReactNode;
   /** Subitens (ex.: Exposições dentro de Museu) — só renderizados com o pai ativo. */
-  filhos?: { href: string; rotulo: string }[];
+  filhos?: { href: string; rotulo: string; icone?: React.ReactNode }[];
 }
 
 const PRINCIPAIS: Item[] = [
@@ -68,7 +69,7 @@ const PRINCIPAIS: Item[] = [
     href: "/museu",
     rotulo: "Museu",
     icone: ICONE_MUSEU,
-    filhos: [{ href: "/museu/exposicoes", rotulo: "Exposições" }],
+    filhos: [{ href: "/museu/exposicoes", rotulo: "Exposições", icone: ICONE_OBRA }],
   },
   { href: "/ia", rotulo: "IA", icone: ICONE_IA },
   { href: "/cursos", rotulo: "Cursos", icone: ICONE_CURSOS },
@@ -109,6 +110,11 @@ function ItemDeMenu({ item, caminho }: { item: Item; caminho: string }) {
                 aria-current={caminho === filho.href ? "page" : undefined}
                 className="menu-item menu-subitem tipo-detalhe"
               >
+                {filho.icone ? (
+                  <IconeVivo ativo={caminho === filho.href || caminho.startsWith(`${filho.href}/`)}>
+                    {filho.icone}
+                  </IconeVivo>
+                ) : null}
                 {filho.rotulo}
               </Link>
             </li>

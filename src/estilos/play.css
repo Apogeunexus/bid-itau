@@ -510,9 +510,7 @@
  * A visão web (D-79/D-80): mesma árvore de JSX, outras medidas.
  * ------------------------------------------------------------------------ */
 [data-view="web"] .play {
-  --play-cartaz: 12rem;
-  max-inline-size: 76rem;
-  margin-inline: auto;
+  --play-cartaz: var(--web-piso-poster);
 }
 
 [data-view="web"] .play-destaque {
@@ -529,7 +527,10 @@
 }
 
 [data-view="web"] .play-grade {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, var(--web-piso-poster)), 1fr)
+  );
   gap: 1.5rem 1rem;
 }
 
@@ -982,12 +983,7 @@
   color: var(--cor-tinta-2);
 }
 
-/* ---- VisÃ£o web: a capa vira painel largo com o texto na metade esquerda ---- */
-[data-view="web"] .midia {
-  max-width: 64rem;
-  margin-inline: auto;
-}
-
+/* ---- Visão web: a capa vira painel largo com o texto na metade esquerda ---- */
 [data-view="web"] .midia-capa {
   margin-inline: 0;
   border-radius: var(--raio-g);

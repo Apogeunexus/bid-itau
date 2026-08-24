@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   title: "Itaú Cultural",
   description:
     "Protótipo de agenda cultural brasileira sobre o acervo do Itaú Cultural — uma visão app e uma visão web, do mesmo conjunto de componentes.",
+  appleWebApp: {
+    capable: true,
+    title: "Itaú Cultural",
+    statusBarStyle: "black-translucent",
+  },
 };
 
 /**

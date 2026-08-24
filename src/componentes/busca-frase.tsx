@@ -356,7 +356,7 @@ export function BuscaFrase({
   const lente = `/mapa#r=${idsLente.join("~")}&t=${encodeURIComponent(tituloLente)}&v=${encodeURIComponent(volta)}`;
 
   return (
-    <div className="flex flex-col gap-2 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+    <div className="flex flex-col gap-2 p-5 desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />

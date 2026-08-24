@@ -43,6 +43,7 @@ import {
   type Disposicao,
 } from "./disposicoes";
 import { GRAU_HUB, ocorrenciasDe, porId, porSlug, slugsPorTipo, vizinhos } from "./grafo";
+import { capaDe } from "./imagem";
 import { motivoDaAresta } from "./motivo";
 import { personaPorId, type Persona } from "./personas";
 import type { Aresta, ClasseEntidade, Entidade } from "./tipos";
@@ -726,37 +727,20 @@ function contarPor<T>(lista: readonly T[], chave: (item: T) => string): Record<s
   return saida;
 }
 
-/** Foto da entidade; se ela não tem, a do vizinho que a trouxe na caminhada. */
+/** Foto da entidade; se ela não tem, a do caminho da caminhada ou a reserva da classe. */
 function imagemDoCandidato(candidato: Candidato): {
   imagem?: string;
   creditoImagem?: string;
 } {
-  const propria = candidato.entidade;
-  if (propria.imagem) {
-    return { imagem: propria.imagem, creditoImagem: propria.creditoImagem };
-  }
-  // Trilha autorada: a capa é a do destino (último passo com foto), não um
-  // placeholder — a cadeia já escolheu as entidades, a foto só acompanha.
-  if (propria.classe === "trilha") {
-    const passos = (propria.extra as { passos?: unknown } | undefined)?.passos;
-    if (Array.isArray(passos)) {
-      for (let i = passos.length - 1; i >= 0; i -= 1) {
-        const id = passos[i];
-        if (typeof id !== "string") continue;
-        const no = porId(id);
-        if (no?.imagem) {
-          return { imagem: no.imagem, creditoImagem: no.creditoImagem };
-        }
-      }
-    }
-  }
+  const herdada = capaDe(candidato.entidade);
+  if (herdada.imagem) return herdada;
   for (const passo of candidato.caminho) {
     for (const id of [passo.deId, passo.paraId]) {
-      if (id === propria.id) continue;
+      if (id === candidato.entidade.id) continue;
       const vizinha = porId(id);
-      if (vizinha?.imagem) {
-        return { imagem: vizinha.imagem, creditoImagem: vizinha.creditoImagem };
-      }
+      if (!vizinha) continue;
+      const foto = capaDe(vizinha);
+      if (foto.imagem) return foto;
     }
   }
   return {};

@@ -551,9 +551,55 @@
 
 [data-view="web"] .noticias-manchete {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: var(--espaco-secao);
+  grid-template-columns: minmax(0, 1.65fr) minmax(16rem, 22rem);
+  grid-template-rows: auto auto auto;
+  column-gap: var(--espaco-secao);
+  row-gap: var(--espaco-cartao);
   align-items: start;
+}
+
+/* A foto e as laterais compartilham a PRIMEIRA fileira — as três chamadas
+ * com foto ficam do lado da imagem da manchete, centradas nela, e o título
+ * da capa desce para a fileira de baixo. */
+[data-view="web"] .noticias-manchete-principal {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: grid;
+  grid-template-rows: subgrid;
+  min-width: 0;
+}
+
+[data-view="web"] .noticias-manchete .leitura--capa {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: 1 / span 2;
+  min-width: 0;
+}
+
+[data-view="web"] .noticias-manchete .leitura--capa > .sr-only {
+  position: absolute;
+}
+
+[data-view="web"] .noticias-laterais {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  border-block-start: 0;
+  border-inline-start: 1px solid var(--cor-borda);
+  padding-inline-start: var(--espaco-cartao);
+}
+
+[data-view="web"] .noticias-chamadas {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espaco-cartao);
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+[data-view="web"] .noticias-chamadas > li {
+  min-width: 0;
 }
 
 [data-view="web"] .leitura--capa .leitura-foto {
@@ -567,7 +613,10 @@
 
 [data-view="web"] .noticias-faixa {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, var(--web-piso-cartao)), 1fr)
+  );
   overflow: visible;
   margin-inline: 0;
   padding-inline: 0;
@@ -578,12 +627,18 @@
 }
 
 [data-view="web"] .noticias-grade {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, var(--web-piso-cartao)), 1fr)
+  );
 }
 
 [data-view="web"] .noticias-colunas {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, var(--web-piso-cartao)), 1fr)
+  );
   overflow: visible;
   margin-inline: 0;
   padding-inline: 0;
@@ -598,4 +653,39 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--espaco-secao);
   align-items: start;
+}
+
+@container canvas (max-width: 36rem) {
+  .noticias-manchete.noticias-manchete {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+  }
+
+  .noticias-manchete-principal,
+  .noticias-manchete .leitura--capa,
+  .noticias-laterais,
+  .noticias-chamadas {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .noticias-manchete-principal,
+  .noticias-manchete .leitura--capa {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .noticias-laterais {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+    align-self: stretch;
+  }
+
+  .noticias-chamadas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .noticias-cadernos.noticias-cadernos {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

@@ -42,6 +42,7 @@ import { porId, porSlug, slugsPorTipo, vizinhos } from "@/dados/grafo";
 import type {
   ClasseEntidade,
   Coordenada,
+  Entidade,
   MetodoCoordenada,
   Vocabulario,
 } from "@/dados/tipos";
@@ -435,6 +436,51 @@ const CLASSES: readonly ClasseEntidade[] = [
   "trilha",
 ];
 
+const CLASSES_DE_CAPA = new Set([
+  "obra",
+  "evento",
+  "conteudo",
+  "espaco",
+  "midia",
+  "pessoa",
+]);
+
+function idDoExtra(extra: Record<string, unknown> | undefined, chave: string): string | null {
+  const valor = extra?.[chave];
+  return typeof valor === "string" && valor.length > 0 ? valor : null;
+}
+
+/**
+ * Foto da própria entidade, ou a de quem a ancora: evento da temporada, espaço
+ * de onde veio a coordenada, vizinho com capa. Sem isto o mapa mostra textura
+ * de marca na maioria dos cartões — 115 de 790 pinos têm foto própria.
+ */
+function imagemResolvida(entidade: Entidade): string {
+  if (entidade.imagem) return entidade.imagem;
+  const candidatos = [
+    entidade.derivadoDe,
+    idDoExtra(entidade.extra, "eventoId"),
+    idDoExtra(entidade.extra, "espacoId"),
+  ];
+  for (const id of candidatos) {
+    if (!id || id === entidade.id) continue;
+    const ligada = porId(id);
+    if (ligada?.imagem) return ligada.imagem;
+  }
+  const r = coordenadaDe(entidade.id);
+  if (r?.origemId && r.origemId !== entidade.id) {
+    const origem = porId(r.origemId);
+    if (origem?.imagem) return origem.imagem;
+  }
+  for (const v of vizinhos(entidade.id)) {
+    if (v.entidade.id === entidade.id) continue;
+    if (v.entidade.imagem && CLASSES_DE_CAPA.has(v.entidade.classe)) {
+      return v.entidade.imagem;
+    }
+  }
+  return "";
+}
+
 let indiceMemorizado: PinoIndexado[] | null = null;
 
 /**
@@ -479,7 +525,7 @@ export function indiceDePinos(): PinoIndexado[] {
         // percorrer relação por relação, e não presume qual relação liga gente a
         // evento — se o acervo ganhar outra, ela conta sozinha.
         vizinhos(entidade.id).filter((v) => v.entidade.classe === "evento").length,
-        entidade.imagem ?? "",
+        imagemResolvida(entidade),
       ]);
     }
   }

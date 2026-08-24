@@ -184,18 +184,18 @@ export function NoticiasHub() {
         <section aria-label="Manchete" className="noticias-manchete">
           <div className="noticias-manchete-principal">
             <CartaoLeitura leitura={capa} porte="capa" />
-            <ListaDeLeituras
-              itens={chamadas}
-              porte="chamada"
-              rotulo="Outras chamadas"
-              className="noticias-chamadas"
-            />
           </div>
           <ListaDeLeituras
             itens={laterais}
             porte="lateral"
             rotulo="Outros destaques"
             className="noticias-laterais"
+          />
+          <ListaDeLeituras
+            itens={chamadas}
+            porte="chamada"
+            rotulo="Outras chamadas"
+            className="noticias-chamadas"
           />
         </section>
       ) : null}

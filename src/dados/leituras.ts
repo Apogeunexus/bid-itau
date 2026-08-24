@@ -1,4 +1,5 @@
 import { porSlug, slugsPorTipo } from "./grafo";
+import { capaDe } from "./imagem";
 import type { Entidade } from "./tipos";
 
 /**
@@ -127,6 +128,7 @@ function montar(): Montado {
       );
     }
     const publicadoEm = typeof e.extra?.publicadoEm === "string" ? e.extra.publicadoEm : "";
+    const capa = capaDe(e);
     return {
       id: e.id,
       slug: e.slug,
@@ -134,8 +136,8 @@ function montar(): Montado {
       categoria,
       rotuloCategoria: rotulo,
       resumo: e.resumo ?? "",
-      imagem: e.imagem,
-      creditoImagem: e.creditoImagem,
+      imagem: capa.imagem,
+      creditoImagem: capa.creditoImagem ?? e.creditoImagem,
       imagemAlt: typeof e.extra?.imagemAlt === "string" && e.extra.imagemAlt ? e.extra.imagemAlt : undefined,
       dia: diaDe(publicadoEm),
       publicadoEm,

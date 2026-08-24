@@ -416,31 +416,33 @@
   color: var(--cor-tinta-3);
 }
 
-/* ---- Visão web: a MESMA grade, com um teto de largura -------------------
+/* ---- Visão web: a grade acompanha o canvas -------------------------------
  *
- * A grade não vira três colunas como era antes. Os portes desta folha são de
- * duas colunas — a faixa atravessa `1 / -1` e o cartaz em pé conta com um
- * vizinho só —, e em três colunas a faixa viraria uma tarja de 64rem e o ritmo
- * «lado» abriria dois buracos na fileira. O que a janela larga ganha é ar em
- * volta, não uma coluna a mais. */
-[data-view="web"] .hub {
-  max-width: 48rem;
+ * Sem teto de página. `auto-fill` no piso de cartaz do hub: 2 colunas no
+ * tablet, 3 no laptop, 4 no desktop. A faixa continua `1 / -1`. O cartaz em pé
+ * (`alto`, span 2 fileiras) cabe em qualquer contagem ≥ 2. A abertura e a
+ * faixa têm teto de ALTURA para não comerem a dobra em ultrawide. */
+[data-view="web"] .hub-grade {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, var(--web-piso-hub)), 1fr)
+  );
+  gap: var(--web-gap);
 }
 
-/* AS FORMAS DE LARGURA CHEIA ACHATAM, e as de meia coluna não. A razão de um
-   cartaz é desenhada para 11rem de largura; na web a faixa e a abertura passam a
-   ter 48rem, e a mesma razão as faz ocupar meia janela de altura cada uma. As
-   duas achatam. O RETRATO fica como está de propósito: ele é o corte mais
-   estreito da folha, e é ele que tira da capa do Cast o letreiro gravado na
-   foto — um retrato mais largo devolve o «Mekukradjá» para dentro do quadro. */
 [data-view="web"] .hub-abertura {
   aspect-ratio: 21 / 9;
+  max-block-size: 22rem;
 }
 
 [data-view="web"] .hub-cartaz--faixa {
   aspect-ratio: 3 / 1;
+  max-block-size: 14rem;
 }
 
 [data-view="web"] .hub-atalhos {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, 16rem), 1fr)
+  );
 }

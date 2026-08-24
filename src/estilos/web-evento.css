@@ -92,11 +92,8 @@
 /* ---------------------------------------------------------------------------
  * 3. VISÃO WEB — duas colunas, e a lateral colada.
  *
- * `max-width: none` desfaz o `desk:max-w-5xl` da fase 2: 1.024 px menos a
- * lateral de 22 rem deixaria a coluna principal com 584 px, e uma tabela de
- * cinco colunas em 584 px é a rolagem horizontal que o gate proíbe. A moldura
- * já limita tudo em `max-w-6xl`, então isto não estica nada além do que D-03
- * permite.
+ * `max-width: none` desfaz qualquer teto de página da ficha: a tabela de
+ * ocorrências precisa da coluna principal inteira, senão rola na horizontal.
  * ------------------------------------------------------------------------ */
 [data-view="web"] .ev-tela {
   max-width: none;

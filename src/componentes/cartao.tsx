@@ -106,7 +106,7 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
       linguagens={cartao.linguagens}
       imagem={cartao.imagem}
       creditoImagem={cartao.creditoImagem}
-      className="h-24 w-full rounded-lg"
+      className="cartao-capa h-24 w-full rounded-lg"
     />
   );
 
@@ -121,48 +121,50 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
         </p>
       ) : null}
 
-      {/* O cartão inteiro é link para a entidade — quando a rota existe. O link de
-          explicação fica FORA deste bloco: link dentro de link é HTML inválido. */}
-      {rota ? (
-        <Link href={rota} className="flex flex-col gap-2 no-underline">
-          {capa}
-          {titulo}
-        </Link>
-      ) : (
-        <div className="flex flex-col gap-2">
-          {capa}
-          {titulo}
+      {/* Capa e texto são irmãos, não um link envolvendo os dois: na web o
+          destaque curado põe a foto ao lado do bloco de texto, e o selo de
+          motivo (outro link) precisa viver nesse bloco sem aninhar âncoras. */}
+      <div className="cartao-miolo">
+        {rota ? (
+          <Link href={rota} className="cartao-capa-link no-underline">
+            {capa}
+          </Link>
+        ) : (
+          capa
+        )}
+        <div className="cartao-texto">
+          {rota ? (
+            <Link href={rota} className="no-underline">
+              {titulo}
+            </Link>
+          ) : (
+            titulo
+          )}
+
+          <p className="m-0">
+            <span className="inline-flex items-center rounded-full border border-borda-forte px-2.5 py-0.5 text-sm leading-tight font-semibold">
+              {rotuloDaClasse(cartao.classe)}
+            </span>
+          </p>
+
+          <Link
+            href={rotaDaExplicacao(cartao)}
+            className="selo-motivo no-underline"
+            data-motivo={cartao.motivo.texto}
+            data-origem-motivo={cartao.motivo.origemMotivo}
+          >
+            <Grafismo
+              variacao="barra"
+              className="h-3 w-auto shrink-0 text-acao-tinta"
+            />
+            <span>{cartao.motivo.texto}</span>
+          </Link>
+
+          {cartao.assinatura ? (
+            <p className="tipo-legenda text-tinta-2 italic">{cartao.assinatura}</p>
+          ) : null}
         </div>
-      )}
-
-      {/* A tag é a CATEGORIA (obra, evento, pessoa), não a linguagem — linguagem
-          no selo e de novo no motivo era o mesmo dado duas vezes. A cor da
-          linguagem continua na capa sem foto. */}
-      <p className="m-0">
-        <span className="inline-flex items-center rounded-full border border-borda-forte px-2.5 py-0.5 text-sm leading-tight font-semibold">
-          {rotuloDaClasse(cartao.classe)}
-        </span>
-      </p>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* O selo de motivo. D-28: sem ele o cartão não deveria existir.       */}
-      {/* ------------------------------------------------------------------ */}
-      <Link
-        href={rotaDaExplicacao(cartao)}
-        className="selo-motivo no-underline"
-        data-motivo={cartao.motivo.texto}
-        data-origem-motivo={cartao.motivo.origemMotivo}
-      >
-        <Grafismo
-          variacao="barra"
-          className="h-3 w-auto shrink-0 text-acao-tinta"
-        />
-        <span>{cartao.motivo.texto}</span>
-      </Link>
-
-      {cartao.assinatura ? (
-        <p className="tipo-legenda text-tinta-2 italic">{cartao.assinatura}</p>
-      ) : null}
+      </div>
     </article>
   );
 }

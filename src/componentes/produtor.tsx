@@ -304,7 +304,7 @@ export function Produtor({
     `Não inventamos a ligação que encheria este bloco.`;
 
   return (
-    <div className="pr-tela flex flex-col gap-6 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+    <div className="pr-tela flex flex-col gap-6 p-5 desk:p-8">
       {/* 1 — NOME, IMAGEM E PROCEDÊNCIA ---------------------------------- */}
       <section
         data-bloco-produtor="identificacao"

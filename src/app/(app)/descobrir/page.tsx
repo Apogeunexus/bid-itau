@@ -99,14 +99,9 @@ export default function Descobrir() {
           cartão de foto em vez de uma abertura. */}
       <Heroi />
 
-      {/* `desk:max-w-6xl` e não `5xl`: a moldura da visão web já é `max-w-6xl` em
-          `casca.tsx`, e o teto de 5xl estreitava o conteúdo em 128px dentro dela — pagando
-          com a largura dos cartões um limite que a moldura não pedia. Com 1.152px menos os
-          64px de respiro sobram 1.088px, que dão três colunas de ~347px (D-80: o que muda na
-          web é densidade, não largura). */}
       <div
         id={ANCORA_DO_FEED}
-        className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-6xl desk:gap-6 desk:p-8"
+        className="flex flex-col gap-4 p-5 desk:gap-6 desk:p-8"
       >
         <header className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />

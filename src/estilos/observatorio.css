@@ -364,7 +364,7 @@
    caracteres e a leitura viraria coluna de jornal; em uma só, o público teria de
    rolar sete vezes para comparar dois indicadores. */
 [data-view="web"] .obs-indicadores {
-  --web-colunas: 2;
+  --web-piso-cartao: 22rem;
   margin: 0.25rem 0 0;
   padding: 0;
   list-style: none;

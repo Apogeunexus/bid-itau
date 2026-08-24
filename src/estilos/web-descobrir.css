@@ -36,20 +36,12 @@
 /* ---------------------------------------------------------------------------
  * A GRADE (D-80, tela 25).
  *
- * Três colunas, e o número sai da variável que `.web-grade` de `web.css` expõe — não de
- * uma classe numerada e não de uma media query. A visão é ESTADO DA APLICAÇÃO e não
- * tamanho de janela (D-01, D-02): a única media query legítima do projeto é a da moldura,
- * em `globals.css`, e ela é sobre o telefone de verdade, não sobre a visão escolhida.
- *
- * Por que 3 e não 4: a moldura da web é `max-w-6xl` (1.152px) e a tela tira 64px de
- * respiro, sobrando 1.088px. Com o `--web-gap` de 1,5rem, três colunas dão 346,7px de
- * cartão e quatro dariam 254px — abaixo dos 280px em que o título de duas linhas mais o
- * selo de motivo começam a brigar por espaço. O selo é o argumento da tela (D-28), e é ele
- * que decide a contagem de colunas, não o contrário.
+ * Colunas saem do `auto-fill` + `--web-piso-cartao` em `web.css`. O piso de
+ * 17rem é o que guarda o selo de motivo (D-28) com duas linhas de título —
+ * abaixo disso o selo briga com o cartão. A visão continua ESTADO, não janela
+ * (D-01): quem responde ao canvas é a geometria da grade, não uma media query.
  * ------------------------------------------------------------------------ */
 [data-view="web"] [data-grade-web] {
-  --web-colunas: 3;
-
   /* `stretch` e não o `start` que `.web-grade` traz por padrão. Com `start`, cada cartão
    * fica com a própria altura e a linha inteira termina em serrilha — três pés de cartão
    * em três alturas diferentes, que numa foto de slide lê como desalinhamento e não como
@@ -122,6 +114,31 @@
  * 1.088px o selo de corpo pequeno lê como legenda, e o selo é o argumento da
  * tela (D-28).
  * ------------------------------------------------------------------------ */
+[data-view="web"] .descobrir-destaque .cartao-miolo {
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--web-gap);
+}
+
+[data-view="web"] .descobrir-destaque .cartao-capa-link,
+[data-view="web"] .descobrir-destaque .cartao-miolo > .cartao-capa {
+  flex: 0 1 24rem;
+  width: 24rem;
+  max-width: 42%;
+}
+
+[data-view="web"] .descobrir-destaque .cartao-capa {
+  width: 100%;
+  height: auto;
+  min-height: 16rem;
+  aspect-ratio: 4 / 3;
+}
+
+[data-view="web"] .descobrir-destaque .cartao-texto {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
 [data-view="web"] .descobrir-destaque .selo-motivo {
   padding: 0.75rem 0.75rem;
   font-size: var(--tipo-corpo);
@@ -129,5 +146,22 @@
 
 [data-view="web"] .descobrir-destaque .cartao h3 {
   font-size: var(--tipo-titulo-3);
+}
+
+[data-view="web"] .descobrir-destaque .cartao-capa-link {
+  display: flex;
+}
+
+@container canvas (max-width: 36rem) {
+  .descobrir-destaque .cartao-miolo.cartao-miolo {
+    flex-direction: column;
+  }
+
+  .descobrir-destaque .cartao-capa-link,
+  .descobrir-destaque .cartao-miolo > .cartao-capa {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
+  }
 }
 

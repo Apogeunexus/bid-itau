@@ -41,7 +41,7 @@ export default async function PaginaObra({ params }: { params: Promise<{ slug: s
 
   if (!entidade) {
     return (
-      <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+      <div className="flex flex-col gap-5 p-5 desk:p-8">
         <Cabecalho
           nome="Página da obra"
           objetivo="A rota existe e responde; nenhuma obra do acervo corresponde a este endereço."
@@ -53,7 +53,7 @@ export default async function PaginaObra({ params }: { params: Promise<{ slug: s
   const grupos = vinculosDe(entidade.id);
 
   return (
-    <div className="flex flex-col gap-6 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+    <div className="flex flex-col gap-6 p-5 desk:p-8">
       <header className="flex flex-col gap-3">
         <div className="flex items-start gap-3">
           <CapaDeCartao

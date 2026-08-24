@@ -643,11 +643,6 @@
  * Visão web: mesma árvore, outras medidas. Destaque vira duas colunas; a grade
  * abre em três; as categorias deixam de rolar.
  * ------------------------------------------------------------------------ */
-[data-view="web"] .cursos {
-  max-inline-size: 76rem;
-  margin-inline: auto;
-}
-
 [data-view="web"] .cursos-destaque {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
@@ -660,7 +655,10 @@
 }
 
 [data-view="web"] .cursos-grade {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, var(--web-piso-cartao)), 1fr)
+  );
   gap: 1.5rem;
 }
 
@@ -671,7 +669,7 @@
 
 [data-view="web"] .cursos-categorias-trilho {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
   overflow: visible;
   margin-inline: 0;
   padding-inline: 0;
@@ -679,4 +677,10 @@
 
 [data-view="web"] .cursos-categoria {
   inline-size: auto;
+}
+
+@container canvas (max-width: 36rem) {
+  .cursos-destaque.cursos-destaque {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

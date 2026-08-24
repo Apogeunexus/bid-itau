@@ -150,7 +150,7 @@
 [data-view="web"] {
   --tipo-titulo-1: 2.125rem; /* 34px */
   --tipo-cartaz: 2.75rem; /* 44px */
-  --espaco-tela: 1.5rem;
+  --espaco-tela: 2rem;
   --espaco-secao: 3rem;
   --espaco-cartao: 1.25rem;
   --espaco-pilha: 0.75rem;

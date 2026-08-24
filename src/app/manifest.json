@@ -1,0 +1,31 @@
+{
+  "name": "Itaú Cultural",
+  "short_name": "Itaú Cultural",
+  "description": "Agenda cultural brasileira sobre o acervo do Itaú Cultural — descubra a cultura pelo que te move.",
+  "start_url": "/apps/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#F47920",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/icones/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icones/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icones/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

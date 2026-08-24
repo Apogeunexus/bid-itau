@@ -132,7 +132,7 @@ export function SelecaoDeOcorrencia({ evento }: { evento: SelecaoDeOcorrenciaDTO
   }, [visiveis]);
 
   return (
-    <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+    <div className="flex flex-col gap-5 p-5 desk:p-8">
       {/* ================================================================== */}
       {/* 1 — CABEÇALHO: de onde se veio, o que é este evento, e a contagem.  */}
       {/* ================================================================== */}

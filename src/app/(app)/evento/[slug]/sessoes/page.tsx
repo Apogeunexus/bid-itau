@@ -77,7 +77,7 @@ export default async function PaginaSessoes({ params }: { params: Promise<{ slug
    * lança durante o export derruba o build inteiro em vez de falhar numa página. */
   if (!entidade || !sessoesDoGrafo.length) {
     return (
-      <div className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+      <div className="flex flex-col gap-4 p-5 desk:p-8">
         <h1 className="text-2xl leading-tight font-bold">Sessões</h1>
         <p className="max-w-prose text-sm text-tinta-2">
           Nenhum evento com sessão datada corresponde a este endereço.

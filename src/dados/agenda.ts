@@ -24,6 +24,7 @@
  */
 
 import { ocorrenciasDe, porSlug, slugsPorTipo } from "./grafo";
+import { capaDe } from "./imagem";
 import type {
   ClasseEntidade,
   DimensaoAcessibilidade,
@@ -307,10 +308,8 @@ export function montarAgenda({ hoje }: { hoje: string }): Agenda {
       titulo: entidade.titulo,
       classe: entidade.classe,
       linguagens: entidade.linguagens,
-      /* `null` DECLARADO e não campo ausente: é o que faz a capa sem imagem ser um
-       * estado do produto em vez de um bloco que some. */
-      imagem: entidade.imagem ?? null,
-      creditoImagem: entidade.creditoImagem ?? null,
+      imagem: capaDe(entidade).imagem ?? null,
+      creditoImagem: capaDe(entidade).creditoImagem ?? entidade.creditoImagem ?? null,
       procedencia: entidade.procedencia,
       totalSessoes: sessoes.length,
       primeiraSessao: sessoes[0].inicio,

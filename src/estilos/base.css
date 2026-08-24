@@ -193,6 +193,26 @@ body {
   background: var(--cor-superficie);
 }
 
+.cartao-miolo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.cartao-capa-link {
+  display: block;
+  min-width: 0;
+  color: inherit;
+}
+
+.cartao-texto {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 /* Cartão especial: o destaque curado (D-29) e a serendipidade (D-30) precisam ser
  * VISIVELMENTE outra coisa, senão o rótulo textual vira letra miúda que ninguém lê. */
 .cartao[data-especial] {
@@ -265,6 +285,12 @@ body {
   background: var(--ic-preto);
 }
 
+[data-view="web"] .heroi {
+  /* A tela larga virava uma tira 3,7:1 e o cover comia o assunto. 52vh com
+     teto de 38rem deixa a foto perto de 2,5:1 — cinema, não banner. */
+  block-size: clamp(22rem, 52vh, 38rem);
+}
+
 .heroi-trilho,
 .heroi-slide,
 .heroi-foto {
@@ -306,7 +332,7 @@ body {
 }
 
 .heroi-foto {
-  background-position: center;
+  background-position: center 32%;
   background-size: cover;
 }
 
@@ -924,6 +950,10 @@ body {
 [data-view="web"] .cartao {
   padding: 1rem;
   border-radius: var(--raio-g);
+}
+
+[data-view="web"] .cartao-capa {
+  height: 12rem;
 }
 
 [data-view="web"] .selo-motivo {

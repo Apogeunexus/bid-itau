@@ -18,10 +18,11 @@
  * uma regra que vazasse para lá quebraria a agenda da fase 3 sem que nada nesta
  * fase a estivesse verificando.
  *
- * O QUE MUDA NA WEB NÃO É LARGURA, É DENSIDADE E SIMULTANEIDADE (D-80). É por
- * isso que o vocabulário aqui é de GRADE e de COLUNA COLADA, e não de
- * `max-width`: pôr duas coisas na tela ao mesmo tempo é o produto; esticar uma
- * só é a adaptação que esta fase existe para não entregar.
+ * O QUE MUDA NA WEB NÃO É UMA COLUNA NO MEIO, É DENSIDADE E SIMULTANEIDADE
+ * (D-80). O canvas usa a janela: o menu cola na borda esquerda, o conteúdo usa
+ * o resto. O vocabulário aqui é de GRADE e de COLUNA COLADA, não de
+ * `max-width` de página — teto de medida fica no texto corrido (`ch` / prose),
+ * nunca no layout.
  *
  * NENHUM HEX DO MANUAL APARECE AQUI (D-06, D-08). Cor sai de `var(--ic-*)`, e
  * transparência sai de `color-mix`, nunca de um `rgb()` literal que criaria uma
@@ -42,6 +43,33 @@
   --web-lateral: 22rem;
   --web-raio: 1rem;
   --web-borda: 1px solid color-mix(in srgb, var(--cor-tinta-crua) 12%, transparent);
+  --web-piso-cartao: 17rem;
+  --web-piso-poster: 12rem;
+  --web-piso-hub: 20rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Canvas da visão web: a janela inteira, menu na borda, conteúdo no resto.
+ *
+ * A moldura de celular (390×844, overflow hidden) é regra de `[data-view="mobile"]`
+ * em `base.css` e não se toca. Aqui a `.moldura` deixa de ser uma página de
+ * 1152px centralizada e vira o palco do sistema. Quem rola é o documento; o
+ * menu continua `sticky` na viewport.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .palco,
+[data-view="web"] .moldura,
+[data-view="web"] .moldura-rolagem {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* O `main` do grupo app é o canvas de densidade: duas colunas e span de
+ * destaque respondem a ESTA largura (janela menos o menu), não à janela bruta.
+ * Container query não troca visão — D-01 continua intacto. */
+[data-view="web"] main {
+  container-type: inline-size;
+  container-name: canvas;
 }
 
 /* ---------------------------------------------------------------------------
@@ -71,22 +99,21 @@
 }
 
 /* ---------------------------------------------------------------------------
- * .web-grade — grade de cartões com o número de colunas parametrizado.
+ * .web-grade — grade de cartões que acompanha o canvas.
  *
- * Cada tela escolhe o seu `--web-colunas` em style ou na própria folha; o padrão
- * de 3 é o que Descobrir quer. O parâmetro é variável CSS e não classe numerada
- * (`.web-grade-3`) porque 05-02, 05-06 e 05-07 escolhem números diferentes e
- * nenhuma delas pode precisar editar ESTE arquivo para isso.
- *
- * `repeat(var(--web-colunas), …)` é substituído aqui de forma confiável porque a
- * variável é lida em tempo de cascata sobre um valor completo; o caso que a fase
- * 4 registrou como não-confiável era outro — `repeat(var(--n), …)` montado a
- * partir de dado do componente, que ali foi resolvido escrevendo a grade em
- * `style`. Quem tiver número vindo de dado continua fazendo assim.
+ * `auto-fill` + piso em `--web-piso-cartao`: 2 colunas no tablet, 3–4 no laptop,
+ * 4–5 no desktop. Travar em 3 era conta da moldura de 1152px; com a janela
+ * inteira, o número de colunas é geometria, não gosto. Telas que ainda querem
+ * um piso diferente reescrevem `--web-piso-cartao` na própria folha.
  * ------------------------------------------------------------------------ */
 [data-view="web"] .web-grade {
   display: grid;
-  grid-template-columns: repeat(var(--web-colunas, 3), minmax(0, 1fr));
+  /* `min(100%, piso)` evita coluna implícita quando o canvas é mais estreito
+   * que o piso (iPad retrato). Sem o min, `auto-fill` + `span 2` estoura. */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, var(--web-piso-cartao)), 1fr)
+  );
   align-items: start;
   gap: var(--web-gap);
 }
@@ -345,4 +372,27 @@
   max-height: var(--web-altura-mapa, 62vh);
   border-radius: 0.5rem;
   background: var(--cor-superficie-2);
+}
+
+/* ---------------------------------------------------------------------------
+ * Canvas estreito (tablet retrato, janela ~768px menos o menu).
+ *
+ * O container é o `main` da visão web, não a janela: D-01 continua — a visão
+ * não muda, só a densidade. 36rem é o ponto em que duas colunas de 22rem + 1fr
+ * já brigam. Empilha; o destaque largo deixa de pedir uma coluna que não existe.
+ *
+ * Só casa quando o `main` é container, o que só acontece em `[data-view="web"]`.
+ * ------------------------------------------------------------------------ */
+@container canvas (max-width: 36rem) {
+  /* Classe dobrada: empata a especificidade de `[data-view="web"] .web-duas-colunas`
+   * e ganha por vir depois. Folhas que REDECLARAM as colunas (buscar, filtros)
+   * repetem o @container no próprio arquivo — web.css entra antes delas. */
+  .web-duas-colunas.web-duas-colunas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .web-grade > .web-grade-largo,
+  .web-grade > [data-destaque-curado] {
+    grid-column: auto;
+  }
 }

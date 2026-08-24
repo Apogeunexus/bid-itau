@@ -52,7 +52,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
   // build inteiro por causa de um slug.
   if (!entidade) {
     return (
-      <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+      <div className="flex flex-col gap-5 p-5 desk:p-8">
         <Cabecalho
           nome="Página do artista"
           objetivo="A rota existe e responde; nenhuma pessoa ou coletivo do acervo corresponde a este endereço."
@@ -75,7 +75,7 @@ export default async function PaginaArtista({ params }: { params: Promise<{ slug
   const contextualiza = grupos.get("contextualiza");
 
   return (
-    <div className="flex flex-col gap-6 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+    <div className="flex flex-col gap-6 p-5 desk:p-8">
       {/* 1 — identidade, imagem e OS PAPÉIS, vindos da aresta ------------------ */}
       <header className="flex flex-col gap-3">
         <div className="flex items-start gap-3">

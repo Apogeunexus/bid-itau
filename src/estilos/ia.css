@@ -46,6 +46,7 @@
   margin-inline: auto;
   min-block-size: 100vh;
   padding: 0.75rem var(--espaco-tela) 0;
+  background: var(--cor-superficie);
 }
 
 /* ---------------------------------------------------------------------------
@@ -686,6 +687,12 @@
 [data-view="web"] .ia-compositor {
   margin-inline: 0;
   padding-inline: 0;
+  background: var(--cor-superficie);
+  backdrop-filter: none;
+}
+
+[data-view="web"] .ia-compositor-caixa {
+  background: var(--cor-superficie);
 }
 
 .ia-compositor-rotulo {

@@ -780,6 +780,7 @@ a.mapa-cartao-alvo:hover .mapa-cartao-titulo {
  * ------------------------------------------------------------------------- */
 .mapa-capa {
   object-fit: cover;
+  object-position: center;
   background: var(--cor-superficie-2);
 }
 

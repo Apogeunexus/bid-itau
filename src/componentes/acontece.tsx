@@ -420,7 +420,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
     : "/mapa/";
 
   return (
-    <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+    <div className="flex flex-col gap-5 p-5 desk:p-8">
       {/* ================================================================== */}
       {/* 1 — ENQUADRAMENTO. Texto de PRODUTO: diz o que esta agenda é e o    */}
       {/*     que ela deliberadamente não contém — procedência é o argumento  */}

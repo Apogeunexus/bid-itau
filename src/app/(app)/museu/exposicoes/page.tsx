@@ -19,7 +19,7 @@ export default function Exposicoes() {
   const itens = leituras().filter((l) => CATEGORIAS_MUSEAIS.includes(l.categoria));
 
   return (
-    <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-6xl desk:p-8">
+    <div className="flex flex-col gap-5 p-5 desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />

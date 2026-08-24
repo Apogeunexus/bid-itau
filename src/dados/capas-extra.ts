@@ -36,4 +36,9 @@ export const CAPAS_EXTRA: Readonly<Record<string, CapaExtra>> = {
     credito: "Claiton Luis Moraes / Wikimedia Commons",
     fonte: "https://commons.wikimedia.org/wiki/File:Centro_Cultural_Dragão_do_Mar_-_Fortaleza(CE).jpg",
   },
+  "espaco:derivado:galeria-de-arte-sao-paulo-sao-paulo": {
+    arquivo: "bf5789d440da330b.jpg",
+    credito: "Digitalizado do original — catálogo da exposição «Deus», 1993",
+    fonte: "https://enciclopedia.itaucultural.org.br/eventos/148452-deus",
+  },
 };

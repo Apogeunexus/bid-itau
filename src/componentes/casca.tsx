@@ -73,7 +73,7 @@ export function Casca({ children }: { children: ReactNode }) {
   const { visao, hidratado, janelaDeTelefone } = useVisao();
 
   // No telefone, com o app na tela, não há escolha a oferecer: a pessoa já ESTÁ
-  // no aparelho que a visão app imita, e a visão web é desenhada para 1440px.
+  // no aparelho que a visão app imita. A visão web usa a janela do computador.
   // A condição olha a visão junto com a janela de propósito — se algo puser a
   // visão web num telefone (o aviso das superfícies de bastidor faz isso), o
   // controle reaparece, porque senão não haveria caminho de volta.
@@ -97,7 +97,7 @@ export function Casca({ children }: { children: ReactNode }) {
             system: ela é `relative; overflow: hidden` e quem rola é `.moldura-rolagem`,
             filho dela. É isso que permite à gaveta do menu lateral posicionar `absolute`
             contra o telefone — sobreposta, sem rolar junto e sem `fixed` (D-03/D-04). */}
-        <div className="moldura desk:mx-auto desk:w-full desk:max-w-6xl">
+        <div className="moldura desk:w-full">
           <div className="moldura-rolagem">{children}</div>
         </div>
       </div>

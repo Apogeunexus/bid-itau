@@ -861,16 +861,25 @@ svg.busca-glifo {
 }
 
 [data-view="web"] .busca-folha {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 24rem;
-  max-width: 100%;
-  border-radius: var(--raio-g) 0 0 var(--raio-g);
-  transform: translateX(100%);
-  transition: transform var(--dur-3) var(--ease-padrao), visibility var(--dur-3);
+  position: static;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  width: auto;
+  max-width: none;
+  box-shadow: none;
+  border-radius: var(--web-raio);
 }
 
-[data-view="web"] .busca-folha[data-aberta] {
-  transform: translateX(0);
+[data-view="web"] .busca-folha-cabeca {
+  display: none;
+}
+
+[data-view="web"] .busca-folha-corpo {
+  padding: 0;
+  overflow: visible;
+}
+
+[data-view="web"] .busca-folha-scrim {
+  display: none;
 }

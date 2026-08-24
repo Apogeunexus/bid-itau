@@ -31,7 +31,7 @@ export default async function PaginaTrilha({
   const trilha = trilhaCompletaPorSlug(slug);
 
   return (
-    <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+    <div className="flex flex-col gap-5 p-5 desk:p-8">
       {trilha ? (
         <TelaTrilha trilha={trilha} />
       ) : (

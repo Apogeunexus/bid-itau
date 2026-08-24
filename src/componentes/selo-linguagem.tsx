@@ -33,7 +33,7 @@ export function SeloLinguagem({
   return (
     <span
       style={{ "--cor-linguagem": `var(${token})` } as React.CSSProperties}
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--cor-linguagem)] px-2.5 py-0.5 text-sm leading-tight font-semibold text-[var(--ic-preto)] ${className ?? ""}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--cor-linguagem)] bg-superficie px-2.5 py-0.5 text-sm leading-tight font-semibold text-tinta ${className ?? ""}`}
     >
       <span aria-hidden className="size-2 rounded-full bg-[var(--cor-linguagem)]" />
       {linguagem.rotulo}

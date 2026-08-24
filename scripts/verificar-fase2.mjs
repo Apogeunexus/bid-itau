@@ -421,9 +421,9 @@ async function gatesEstruturais() {
   exigir(entidades >= 1690, "páginas de entidade em out/", entidades, "≥ 1690");
 
   exigir(
-    existsSync(path.join(OUT, "icon.svg")),
-    "out/icon.svg (o 404 de favicon que quebrava o console)",
-    existsSync(path.join(OUT, "icon.svg")) ? "presente" : "AUSENTE",
+    existsSync(path.join(OUT, "icon.png")),
+    "out/icon.png (favicon da assinatura oficial)",
+    existsSync(path.join(OUT, "icon.png")) ? "presente" : "AUSENTE",
     "presente",
   );
 }

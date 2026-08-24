@@ -22,7 +22,7 @@ const indice = indiceDeSalvaveis();
 
 export default function MapaDeRepertorio() {
   return (
-    <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+    <div className="flex flex-col gap-5 p-5 desk:p-8">
       <header className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />

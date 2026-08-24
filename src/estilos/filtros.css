@@ -419,8 +419,6 @@
   grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
   align-items: start;
   gap: 1.25rem;
-  max-width: 72rem;
-  margin: 0 auto;
   padding: 1.5rem 1.5rem 3rem;
 }
 
@@ -455,4 +453,15 @@
 
 [data-view="web"] .filtros-previa {
   max-height: 28rem;
+}
+
+@container canvas (max-width: 36rem) {
+  .filtros.filtros {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .filtros-criterios.filtros-criterios,
+  .filtros-saida.filtros-saida {
+    grid-column: 1;
+  }
 }

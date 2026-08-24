@@ -50,9 +50,8 @@
  * resultados — presente, visível, e visivelmente errada.
  * ------------------------------------------------------------------------ */
 [data-view="web"] .busca-corpo {
-  /* 20rem = 320px. A conta: 1.088px úteis dentro da moldura `max-w-6xl` menos 24px de
-   * `--web-gap` deixam 744px para os resultados, que dão duas colunas de 360px — largura
-   * em que o título de um resultado cabe em duas linhas ao lado da capa de 56px. */
+  /* Facetas 20rem; o resto é resultados. Sem teto de página — a coluna de
+   * resultados cresce com o canvas e a grade de cards acompanha o piso. */
   grid-template-columns: var(--busca-facetas, 20rem) minmax(0, 1fr);
 }
 
@@ -94,7 +93,9 @@
  * tipo de todo resultado deslocado do resultado.
  * ------------------------------------------------------------------------ */
 [data-view="web"] [data-grade-resultados] {
-  --web-colunas: 2;
+  /* 22rem: título + etiqueta de tipo + selos cabem em duas linhas. Piso
+   * maior que o cartão de Descobrir porque o resultado é uma linha densa. */
+  --web-piso-cartao: 22rem;
 }
 
 /* Na visão app o resultado é uma LINHA separada da anterior por um traço (`busca.css`), e
@@ -150,4 +151,22 @@
  * do plano 05-06 e esta tela não abre uma segunda. */
 [data-view="mobile"] [data-link-filtros] {
   display: none;
+}
+
+/* Canvas estreito: facetas acima, resultados abaixo. Especificidade empata
+ * `[data-view="web"] .busca-corpo` e ganha neste arquivo. */
+@container canvas (max-width: 36rem) {
+  .busca-corpo.busca-corpo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .busca-corpo.busca-corpo > [data-coluna-facetas] {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .busca-corpo.busca-corpo > [data-coluna-resultados] {
+    grid-column: 1;
+    grid-row: 2;
+  }
 }

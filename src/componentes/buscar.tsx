@@ -516,11 +516,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
   const nConteudos = resposta?.porClasse.conteudo ?? 0;
 
   return (
-    // `desk:max-w-6xl` e não `5xl`: a moldura da visão web já é `max-w-6xl` em `casca.tsx`,
-    // e com o teto de 5xl a coluna de facetas de 20rem deixaria 616px para os resultados —
-    // duas colunas de 296px, estreitas demais para o título mais a etiqueta de tipo mais os
-    // selos de linguagem. Com 1.088px úteis sobram 744px, que dão dois resultados de 360px.
-    <div className="flex flex-col gap-4 p-5 desk:mx-auto desk:max-w-6xl desk:p-8">
+    <div className="flex flex-col gap-4 p-5 desk:p-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-baseline gap-2">
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
@@ -939,17 +935,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
 
         </div>
 
-      </div>
-
-      {mostrarFiltros ? (
-        <button
-          type="button"
-          className="busca-folha-scrim"
-          aria-label="Fechar filtros"
-          onClick={fecharFiltros}
-        />
-      ) : null}
-
       <div
         id="busca-facetas"
         data-coluna-facetas="sim"
@@ -1086,6 +1071,16 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           </section>
         </div>
       </div>
+      </div>
+
+      {mostrarFiltros ? (
+        <button
+          type="button"
+          className="busca-folha-scrim"
+          aria-label="Fechar filtros"
+          onClick={fecharFiltros}
+        />
+      ) : null}
     </div>
   );
 }

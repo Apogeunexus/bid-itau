@@ -6,8 +6,7 @@
  * genuinamente compartilhado, 04-03. Regra que só serve a uma tela mora na folha
  * daquela tela — `studio-duplicatas.css` ou `studio-ocorrencias.css` —, e não aqui.
  *
- * A LARGURA DE PROJETO É 1.152px, que é a largura útil da moldura na visão web
- * (`desk:max-w-6xl`, 72rem). O Studio só existe nessa visão (D-67): ninguém resolve
+ * O Studio só existe na visão web (D-67): ninguém resolve
  * uma fila de mil duplicatas em 390px, e a tela declara isso em vez de espremer a
  * tabela. Por isso não há aqui nenhuma regra sob `[data-view="mobile"]` — o layout
  * de bastidor já esconde o conteúdo na visão app e mostra o aviso de superfície.

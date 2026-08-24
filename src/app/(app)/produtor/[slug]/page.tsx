@@ -230,7 +230,7 @@ export default async function PaginaProdutor({ params }: { params: Promise<{ slu
   // build inteiro por causa de um slug, e nesta fase a ausência não é erro de programa.
   if (!entidade) {
     return (
-      <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+      <div className="flex flex-col gap-5 p-5 desk:p-8">
         <header className="flex flex-col gap-2">
           <div className="flex items-baseline gap-2">
             <Grafismo

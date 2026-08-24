@@ -102,7 +102,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
 
   if (!entidade) {
     return (
-      <div className="flex flex-col gap-5 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+      <div className="flex flex-col gap-5 p-5 desk:p-8">
         <Cabecalho
           nome="Página do evento"
           objetivo="A rota existe e responde; nenhum evento do acervo corresponde a este endereço."
@@ -179,7 +179,7 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
   const blocosDoPainel = doPainel.filter(Boolean).length;
 
   return (
-    <div className="ev-tela web-duas-colunas flex flex-col gap-6 p-5 desk:mx-auto desk:max-w-5xl desk:p-8">
+    <div className="ev-tela web-duas-colunas flex flex-col gap-6 p-5 desk:p-8">
       {/* 1 — imagem, título e selos de linguagem -------------------------- */}
       <header className="ev-cabecalho flex flex-col gap-3">
         <CapaDeCartao
