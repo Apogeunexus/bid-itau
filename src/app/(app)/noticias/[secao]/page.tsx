@@ -19,7 +19,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/noticias/[secao]">): Promise<Metadata> {
   const { secao } = await params;
   const dados = secaoPorSlug(secao);
-  return { title: `${dados?.secao.rotulo ?? "Seção"} — Agenda Cultural BR` };
+  return { title: `${dados?.secao.rotulo ?? "Seção"} — Itaú Cultural` };
 }
 
 export default async function Secao({ params }: PageProps<"/noticias/[secao]">) {

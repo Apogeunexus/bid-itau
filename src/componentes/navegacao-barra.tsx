@@ -78,7 +78,7 @@ export function NavegacaoBarra() {
       <header className="barra-topo">
         <span className="flex items-center gap-2 font-display font-bold">
           <Grafismo variacao="completo" className="h-5 w-auto text-acao-tinta" />
-          Agenda Cultural BR
+          Itaú Cultural
         </span>
 
         {/* A CONTA VIRA ÍCONE, e o que era a seção «Sua conta» no fim de /apps

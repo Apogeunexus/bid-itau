@@ -5,7 +5,7 @@ import { TelaRepertorio } from "@/componentes/repertorio";
 import { PERSONAS } from "@/dados/personas";
 import { indiceDeSalvaveis, repertorioDe, type RepertorioDaPersona } from "@/dados/repertorio";
 
-export const metadata: Metadata = { title: "Mapa de repertório — Agenda Cultural BR" };
+export const metadata: Metadata = { title: "Mapa de repertório — Itaú Cultural" };
 
 /**
  * `/meu/repertorio` — o MAPA DE REPERTÓRIO como tela própria (tela 22, Parte 6

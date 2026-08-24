@@ -6,7 +6,7 @@ import { HEROIS } from "@/dados/heroi";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Agenda Cultural BR",
+  title: "Itaú Cultural",
   description:
     "Protótipo de agenda cultural brasileira sobre o acervo do Itaú Cultural — uma visão app e uma visão web, do mesmo conjunto de componentes.",
 };

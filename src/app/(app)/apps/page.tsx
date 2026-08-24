@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { HubApps } from "@/componentes/hub-apps";
 
-export const metadata: Metadata = { title: "Apps — Agenda Cultural BR" };
+export const metadata: Metadata = { title: "Apps — Itaú Cultural" };
 
 /**
  * `/apps` — o destino do quinto botão da barra inferior.

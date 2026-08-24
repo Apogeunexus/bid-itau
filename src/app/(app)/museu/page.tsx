@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Museu } from "@/componentes/museu";
 
-export const metadata: Metadata = { title: "Museu — Agenda Cultural BR" };
+export const metadata: Metadata = { title: "Museu — Itaú Cultural" };
 
 /**
  * Museu virtual — o hub museal. O recorte (5 eventos únicos, 22 espaços, 4

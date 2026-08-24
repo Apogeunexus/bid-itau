@@ -7,7 +7,7 @@ import {
   PROCEDENCIA_DAS_MIDIAS,
 } from "@/dados/play";
 
-export const metadata: Metadata = { title: "Play — Agenda Cultural BR" };
+export const metadata: Metadata = { title: "Play — Itaú Cultural" };
 
 /**
  * Página do Play (D-92, revisada na reformulação de 2026-08 por decisão do

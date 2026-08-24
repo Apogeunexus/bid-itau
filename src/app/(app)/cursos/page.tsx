@@ -3,7 +3,7 @@ import { Cursos } from "@/componentes/cursos";
 import { catalogoDeCursos } from "@/dados/cursos";
 
 export const metadata: Metadata = {
-  title: "Cursos — Agenda Cultural BR",
+  title: "Cursos — Itaú Cultural",
   description:
     "As formações da Escola Itaú Cultural — cursos, oficinas e pós-graduação, com a inscrição na fonte.",
 };

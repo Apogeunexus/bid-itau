@@ -131,7 +131,7 @@ export function MenuLateral() {
     <nav className="menu-lateral" aria-label="Navegação principal">
       <div className="menu-marca">
         <Grafismo variacao="completo" className="h-5 w-auto shrink-0 text-acao-tinta" />
-        <span>Agenda Cultural BR</span>
+        <span>Itaú Cultural</span>
       </div>
 
       <div className="menu-grupos">

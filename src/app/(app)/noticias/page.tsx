@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { NoticiasHub } from "@/componentes/noticias";
 
-export const metadata: Metadata = { title: "Notícias — Agenda Cultural BR" };
+export const metadata: Metadata = { title: "Notícias — Itaú Cultural" };
 
 /**
  * Notícias — a capa editorial. A página só despacha: o recorte e o desenho

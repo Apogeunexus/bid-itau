@@ -5,7 +5,7 @@
       "nome": "Maria",
       "resumo": "Ouve rap desde a adolescência e nunca foi ao teatro. É a persona do Cenário 1: a recomendação precisa explicar por que a poesia falada se parece com o que ela já ouve.",
       "procedencia": "autorado",
-      "fonte": "protótipo Agenda Cultural BR — dado autorado, rotulado como tal na tela",
+      "fonte": "protótipo Itaú Cultural — dado autorado, rotulado como tal na tela",
       "repertorio": {
         "id": "repertorio:autorado:maria",
         "pessoaUsuariaId": "pessoa-usuaria:autorado:maria",
@@ -35,7 +35,7 @@
       "nome": "Carlos",
       "resumo": "Vai passar quatro dias em Belém e quer saber o que a cidade tem de cultura. É a persona do Cenário 2: o repertório é de território, não de gênero.",
       "procedencia": "autorado",
-      "fonte": "protótipo Agenda Cultural BR — dado autorado, rotulado como tal na tela",
+      "fonte": "protótipo Itaú Cultural — dado autorado, rotulado como tal na tela",
       "repertorio": {
         "id": "repertorio:autorado:carlos",
         "pessoaUsuariaId": "pessoa-usuaria:autorado:carlos",
@@ -67,7 +67,7 @@
       "nome": "Joana",
       "resumo": "Frequentadora antiga, com repertório largo e agenda cheia. É a persona do Cenário 4: tem ocorrência salva que pode ser alterada para disparar o alerta de mudança.",
       "procedencia": "autorado",
-      "fonte": "protótipo Agenda Cultural BR — dado autorado, rotulado como tal na tela",
+      "fonte": "protótipo Itaú Cultural — dado autorado, rotulado como tal na tela",
       "repertorio": {
         "id": "repertorio:autorado:joana",
         "pessoaUsuariaId": "pessoa-usuaria:autorado:joana",

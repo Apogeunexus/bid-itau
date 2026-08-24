@@ -4,7 +4,7 @@ import { CartaoLeitura } from "@/componentes/cartao-leitura";
 import { Grafismo } from "@/componentes/grafismo";
 import { leituras, milhar } from "@/dados/leituras";
 
-export const metadata: Metadata = { title: "Exposições — Agenda Cultural BR" };
+export const metadata: Metadata = { title: "Exposições — Itaú Cultural" };
 
 /** As categorias museais do acervo editorial, com o rótulo que a tela usa. */
 const CATEGORIAS_MUSEAIS = ["exposicoes", "visitas", "acervos", "ocupacao"];

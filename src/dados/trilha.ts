@@ -504,7 +504,7 @@ export function trilhaEhPublicavel(trilhaId: string): Publicabilidade {
 /** D-29: quem assina a curadoria, derivado da procedência — nunca nome inventado. */
 function assinaturaDaCuradoria(trilha: Entidade): string {
   return trilha.procedencia === "autorado"
-    ? "Curadoria autorada para o protótipo Agenda Cultural BR, sobre entidades reais do acervo do Itaú Cultural."
+    ? "Curadoria autorada para este protótipo, sobre entidades reais do acervo do Itaú Cultural."
     : "Curadoria com procedência declarada no acervo do Itaú Cultural.";
 }
 

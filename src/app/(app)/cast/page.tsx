@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Cast } from "@/componentes/cast";
 import { catalogoNoFioCast, linguagensDoCast } from "@/dados/cast";
 
-export const metadata: Metadata = { title: "Cast — Agenda Cultural BR" };
+export const metadata: Metadata = { title: "Cast — Itaú Cultural" };
 
 /**
  * Página do Cast — os 336 podcasts do acervo em porta própria (reformulação de
