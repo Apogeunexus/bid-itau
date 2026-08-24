@@ -305,9 +305,8 @@ export const ATALHOS_BASTIDOR: readonly Atalho[] = [
 /**
  * Quantos aplicativos o hub anuncia. Contado, nunca digitado.
  *
- * Os atalhos de conta saíram desta soma em 23/08, junto com a seção «Sua conta»:
- * eles deixaram o hub e foram para o menu do ícone de conta, no alto da tela. O
- * hub anuncia o que ele mostra.
+ * Só os cartazes. Conta e bastidor não entram: os da conta saíram do hub em
+ * 23/08, e os do bastidor são ferramenta da visão web — no app a seção nem
+ * aparece. O hub anuncia o que ele mostra.
  */
-export const TOTAL_APPS =
-  GRUPOS_APPS.reduce((n, g) => n + g.apps.length, 0) + ATALHOS_BASTIDOR.length;
+export const TOTAL_APPS = GRUPOS_APPS.reduce((n, g) => n + g.apps.length, 0);
