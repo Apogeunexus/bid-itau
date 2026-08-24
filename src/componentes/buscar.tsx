@@ -42,6 +42,7 @@ import {
   type OpcaoFaceta,
   type ResultadoBusca,
 } from "@/dados/indice";
+import { ROTA_POR_CLASSE } from "@/dados/rotas";
 import type { ClasseEntidade } from "@/dados/tipos";
 
 /**
@@ -159,22 +160,6 @@ const ROTULO_CLASSE: Partial<Record<ClasseEntidade, string>> = {
 function rotuloDaClasse(classe: ClasseEntidade): string {
   return ROTULO_CLASSE[classe] ?? classe;
 }
-
-/**
- * As rotas de entidade que a fase 1 realmente exportou. As classes ausentes deste mapa
- * não têm rota, e por isso não recebem link: fabricar `/termo/[slug]` para o resultado
- * parecer completo produziria 404 na demonstração ao vivo, que é pior do que um resultado
- * sem link. Mesma decisão, e mesma lista, de `cartao.tsx`.
- */
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-  trilha: "/trilha",
-};
 
 const ROTULO_CAMPO: Record<CampoCriterio, string> = {
   texto: "texto",

@@ -30,6 +30,7 @@ import type { Cartao } from "./cartao";
 import { ocorrenciasDe, porId, porSlug, slugsPorTipo } from "./grafo";
 import { vizinhos } from "./grafo";
 import { PERSONAS, personaPorId } from "./personas";
+import { ROTA_POR_CLASSE } from "./rotas";
 import type { ClasseEntidade, Entidade } from "./tipos";
 
 // ---------------------------------------------------------------------------
@@ -50,15 +51,7 @@ const CARTAVEL = new Set<ClasseEntidade>(CLASSES_CARTAVEIS);
 /** Bucket de quem não declara linguagem nenhuma. Nomeado, não silencioso. */
 const SEM_LINGUAGEM = "(sem linguagem declarada)";
 
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-  trilha: "/trilha",
-};
+
 
 // ---------------------------------------------------------------------------
 // DP-D — o mesmo desempate semeado pela persona que `caminhada.ts` usa

@@ -66,6 +66,8 @@ export interface CursoNoCliente {
   titulo: string;
   resumo: string;
   fonte: string;
+  /** Destino interno da ficha. */
+  rota: string;
   imagem: string;
   creditoImagem: string;
   imagemAlt: string;

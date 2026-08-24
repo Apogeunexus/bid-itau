@@ -36,32 +36,10 @@ import {
   vizinhos,
 } from "./grafo";
 import { motivoDaAresta } from "./motivo";
+import { ROTA_POR_CLASSE } from "./rotas";
 import type { ClasseEntidade, Entidade, Procedencia, Relacao } from "./tipos";
 
-// ---------------------------------------------------------------------------
-// Rotas
-// ---------------------------------------------------------------------------
 
-/**
- * Classe → rota, restrito ao que a trilha pode alcançar. Espelha o mapa de
- * `cartao.tsx`, que não o exporta; duplicá-lo aqui em quatro linhas custa menos do que
- * abrir a fronteira de um componente de cliente para um módulo de dados.
- *
- * `termo` NÃO ESTÁ AQUI de propósito: `/termo/[slug]` não existe nesta fase. Os três
- * primeiros passos da trilha são termos e ficam sem link. Fabricar a rota para o passo
- * "parecer navegável" produziria 404 na demonstração ao vivo, que é pior do que um nó
- * sem link — e a navegabilidade que D-36 pede é a da ARESTA (de onde, para onde, por
- * quê), não a de um href.
- */
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-  trilha: "/trilha",
-};
 
 // ---------------------------------------------------------------------------
 // DTO — o que atravessa a fronteira servidor→cliente

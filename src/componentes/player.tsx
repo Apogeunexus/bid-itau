@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ICONE_CONFERIDO, ICONE_MAIS, ICONE_TOCAR } from "@/componentes/base/icones";
+import { CtaSpotify, PalcoYoutube } from "@/componentes/palco";
 import { CHAVE_LISTA_PLAY, useMinhaLista } from "@/componentes/base/minha-lista";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { FichaDeAcessibilidade } from "@/componentes/ficha-acessibilidade";
@@ -14,6 +15,7 @@ import {
   DIMENSOES_DO_FILTRO,
   ROTULOS_DE_DIMENSAO,
 } from "@/dados/play-wire";
+import type { EspecieSpotify } from "@/dados/corpos-wire";
 import type { Acessibilidade } from "@/dados/tipos";
 
 /**
@@ -86,6 +88,8 @@ export interface MidiaDoPlayer {
   acessibilidade: Acessibilidade;
   declaraAcessibilidade: boolean;
   procedencia: string;
+  youtubeId?: string;
+  spotify?: { url: string; especie: EspecieSpotify };
 }
 
 export interface LigacaoNomeada {
@@ -120,7 +124,6 @@ export function Player({
   eventos,
   aprofunda,
   dataDeReferencia,
-  semArquivo,
 }: {
   midia: MidiaDoPlayer;
   /** A fileira a que esta mídia pertence, com as irmãs. Ausente é estado válido. */
@@ -132,7 +135,6 @@ export function Player({
   /** As arestas `aprofunda` que saem desta mídia. Medido no acervo: ZERO nas 529. */
   aprofunda: LigacaoNomeada[];
   dataDeReferencia: string;
-  semArquivo: { titulo: string; acervo: string; rede: string };
 }) {
   const [concluidas, setConcluidas] = useState<string[]>([]);
   const [hidratado, setHidratado] = useState(false);
@@ -172,7 +174,10 @@ export function Player({
   return (
     <article data-player={midia.slug} data-assistido={assistida ? "1" : "0"} className="midia">
       {/* ------------------------------------------------------------------------ capa */}
-      <header className="midia-capa">
+      <header
+        className="midia-capa"
+        data-sem-arquivo={midia.youtubeId || midia.spotify ? undefined : ""}
+      >
         {midia.imagem ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -219,17 +224,8 @@ export function Player({
           ) : null}
 
           <div className="midia-capa-acoes">
-            {midia.fonte ? (
-              <a
-                data-fonte
-                href={midia.fonte}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="midia-botao midia-botao--primario tipo-detalhe"
-              >
-                {ICONE_TOCAR}
-                Assistir no Itaú Cultural
-              </a>
+            {midia.spotify ? (
+              <CtaSpotify url={midia.spotify.url} especie={midia.spotify.especie} />
             ) : null}
 
             <button
@@ -255,6 +251,10 @@ export function Player({
           ) : null}
         </div>
       </header>
+
+      {midia.youtubeId ? (
+        <PalcoYoutube id={midia.youtubeId} titulo={midia.titulo} poster={midia.imagem} />
+      ) : null}
 
       {/* ------------------------------------------------- a coleção: episódios ou tema
        *
@@ -461,30 +461,6 @@ export function Player({
           </ul>
         </section>
       ) : null}
-
-      {/* --------------------------------------- o arquivo que não existe (T-05-33)
-       *
-       * DESCEU PARA O FIM DA PÁGINA em 23/08, e continua inteiro. Ele explica por que não
-       * há reprodução aqui, e essa é uma informação sobre o PROTÓTIPO: no alto da tela ela
-       * vinha antes do conteúdo, que é a queixa que reformulou o Cast e o Play. O botão da
-       * capa já leva a pessoa ao lugar onde o vídeo está. */}
-      <section data-sem-arquivo className="midia-nota">
-        <h2 className="tipo-detalhe font-bold">{semArquivo.titulo}</h2>
-        <p className="tipo-legenda">{semArquivo.acervo}</p>
-        <p className="tipo-legenda">{semArquivo.rede}</p>
-        {midia.fonte ? (
-          <p className="tipo-legenda">
-            <a
-              href={midia.fonte}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="break-all underline decoration-borda-forte underline-offset-4"
-            >
-              {midia.fonte}
-            </a>
-          </p>
-        ) : null}
-      </section>
 
       <p className="tipo-legenda">
         <Link href="/play/" className="underline decoration-borda-forte underline-offset-4">

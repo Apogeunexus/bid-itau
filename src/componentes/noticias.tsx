@@ -171,8 +171,7 @@ export function NoticiasHub() {
         titulo="Notícias"
         meta={dataDaCapa ? `Capa de ${dataDaCapa}` : "Capa editorial"}
       >
-        O lado editorial do acervo — {milhar(TOTAL_DE_CONTEUDOS)} textos. Cada um abre na
-        fonte, no site do Itaú Cultural.
+        O lado editorial do acervo — {milhar(TOTAL_DE_CONTEUDOS)} textos.
       </Expediente>
 
       <NoticiasEditorias
@@ -320,8 +319,7 @@ export function NoticiasSecao({
     >
       <Expediente titulo={secao.rotulo} meta={`${milhar(secao.n)} textos nesta seção`}>
         Por data de publicação
-        {dataDaCapa ? `, a mais recente em ${dataDaCapa}` : ""}. Cada texto abre na fonte, no
-        site do Itaú Cultural.
+        {dataDaCapa ? `, a mais recente em ${dataDaCapa}` : ""}.
       </Expediente>
 
       <NoticiasEditorias

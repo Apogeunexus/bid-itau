@@ -69,6 +69,7 @@ import {
   type IndiceDTO,
 } from "./indice";
 import { trilhas, type TrilhaResumo } from "./trilha";
+import { ROTA_POR_CLASSE } from "./rotas";
 import type { ClasseEntidade, DimensaoAcessibilidade, Entidade } from "./tipos";
 
 // ---------------------------------------------------------------------------
@@ -724,17 +725,7 @@ const ROTULO_DE_CLASSE: Partial<Record<ClasseEntidade, string>> = {
   trilha: "trilha",
 };
 
-/** As rotas de entidade que a fase 1 exportou. Classe ausente não recebe link. */
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-  territorio: "/cidade",
-  trilha: "/trilha",
-};
+
 
 function rotaDe(classe: ClasseEntidade, slug: string): string | null {
   const base = ROTA_POR_CLASSE[classe];

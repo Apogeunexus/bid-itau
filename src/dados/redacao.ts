@@ -39,6 +39,7 @@ import { motivoDaAresta } from "./motivo";
 import { DATA_DE_REFERENCIA } from "./alerta";
 import { trilhaCompletaPorSlug, trilhaEhPublicavel, trilhas } from "./trilha";
 import type { OrigemMotivo } from "./cartao";
+import { ROTA_POR_CLASSE } from "./rotas";
 import type { ClasseEntidade, Entidade, Procedencia, Relacao } from "./tipos";
 
 // ---------------------------------------------------------------------------
@@ -312,21 +313,7 @@ export interface Escopo {
   alcance: number;
 }
 
-/**
- * Rota por classe, restrito ao que a fila alcança. Espelha o mapa de `trilha.ts`, que não
- * o exporta. `termo`, `conteudo` e `midia` NÃO estão aqui: `/termo/[slug]` e
- * `/conteudo/[slug]` não existem nesta fase, e fabricar a rota para o item "parecer
- * navegável" produziria 404 na demonstração ao vivo.
- */
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-  trilha: "/trilha",
-};
+
 
 function rotaDe(e: Entidade): string | null {
   const base = ROTA_POR_CLASSE[e.classe];

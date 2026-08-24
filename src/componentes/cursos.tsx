@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState, type FormEvent, type ReactNode } from "react";
 import { Chip, Estante } from "@/componentes/base/chip";
 import {
@@ -7,8 +8,8 @@ import {
   ICONE_CONFERIDO,
   ICONE_CURSOS,
   ICONE_ENCONTRO,
-  ICONE_EXTERNO,
   ICONE_MAIS,
+  ICONE_SETA,
   ICONE_OFICINA,
   ICONE_POS,
 } from "@/componentes/base/icones";
@@ -32,9 +33,8 @@ import {
  * referência teria de nota, preço e «mais vendido» não entra — o acervo não
  * declara nenhum dos três.
  *
- * A inscrição NÃO ACONTECE AQUI. Cada formação abre a página no site do Itaú
- * Cultural (`fonte`), em aba nova. Um botão «inscrever-se» que não inscreve
- * seria a mentira desta tela, do mesmo jeito que «assistir» seria no Play.
+ * A ficha da formação mora em `/cursos/[slug]`. A inscrição de outro sistema
+ * não vira botão que não inscreve.
  *
  * DP-F: este arquivo NÃO alcança `@/dados/cursos` nem `@/dados/grafo`. O
  * catálogo chega por propriedade, montado no build.
@@ -54,8 +54,8 @@ function milhar(n: number): string {
   return new Intl.NumberFormat("pt-BR").format(n);
 }
 
-function rotuloDaFonte(curso: CursoNoCliente): string {
-  return `Abrir «${curso.titulo}» no site do Itaú Cultural`;
+function rotuloDaFicha(curso: CursoNoCliente): string {
+  return `Abrir a ficha de «${curso.titulo}»`;
 }
 
 function BotaoDaLista({
@@ -147,21 +147,19 @@ function Cartao({
             </>
           ) : null}
         </p>
-        <a
-          href={curso.fonte}
-          target="_blank"
-          rel="noreferrer"
+        <Link
+          href={curso.rota}
           className="cursos-cartao-titulo tipo-destaque no-underline"
-          aria-label={rotuloDaFonte(curso)}
+          aria-label={rotuloDaFicha(curso)}
         >
           {curso.titulo}
-        </a>
+        </Link>
         <p className="cursos-cartao-resumo tipo-legenda">{curso.resumo}</p>
         <Linguas curso={curso} />
         <p className="cursos-cartao-pe" aria-hidden>
           <span className="cursos-acao cursos-acao--fantasma tipo-detalhe">
-            Abrir na fonte
-            {ICONE_EXTERNO}
+            Ver formação
+            {ICONE_SETA}
           </span>
         </p>
       </div>
@@ -227,7 +225,7 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
           <strong data-denominador="formacoes" className="tipo-destaque">
             {milhar(catalogo.total)} formações
           </strong>{" "}
-          do acervo — cursos, oficinas e pós-graduação, com a inscrição na fonte.
+          do acervo — cursos, oficinas e pós-graduação.
         </p>
 
         <form role="search" className="cursos-busca" onSubmit={semNavegar}>
@@ -356,7 +354,11 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
           </span>
           <div className="cursos-destaque-corpo">
             <p className="cursos-destaque-kicker tipo-micro">Em destaque · a mais recente do acervo</p>
-            <h2 className="cursos-destaque-titulo tipo-titulo-2">{catalogo.destaque.titulo}</h2>
+            <h2 className="cursos-destaque-titulo tipo-titulo-2">
+              <Link href={catalogo.destaque.rota} className="no-underline">
+                {catalogo.destaque.titulo}
+              </Link>
+            </h2>
             <p className="cursos-destaque-resumo tipo-detalhe">{catalogo.destaque.resumo}</p>
             <p className="cursos-destaque-meta tipo-legenda">
               {catalogo.destaque.rotuloFormato}
@@ -370,16 +372,14 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
               ) : null}
             </p>
             <Linguas curso={catalogo.destaque} />
-            <a
-              href={catalogo.destaque.fonte}
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              href={catalogo.destaque.rota}
               className="cursos-acao tipo-detalhe"
-              aria-label={rotuloDaFonte(catalogo.destaque)}
+              aria-label={rotuloDaFicha(catalogo.destaque)}
             >
-              Abrir na fonte
-              {ICONE_EXTERNO}
-            </a>
+              Ver formação
+              {ICONE_SETA}
+            </Link>
           </div>
         </article>
       ) : null}

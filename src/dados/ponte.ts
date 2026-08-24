@@ -45,8 +45,11 @@
 
 import { porId, vizinhos } from "./grafo";
 import { motivoDaAresta } from "./motivo";
+import { rotaDaEntidade } from "./rotas";
 import type { MotivoCartao } from "./cartao";
 import type { Aresta, ClasseEntidade, Coordenada, Entidade, Relacao } from "./tipos";
+
+export { rotaDaEntidade } from "./rotas";
 
 // ---------------------------------------------------------------------------
 // Contrato
@@ -116,35 +119,6 @@ export interface GrupoVinculo {
 export interface PapelDoAgente {
   papel: string;
   contagem: number;
-}
-
-// ---------------------------------------------------------------------------
-// Rotas
-// ---------------------------------------------------------------------------
-
-/**
- * Classe → rota, espelhando as 18 rotas que a fase 1 exportou e o mapa de `cartao.tsx`.
- * `pessoa` e `coletivo` caem em `/artista` porque artista é PAPEL e não classe (DADO-03);
- * `instituicao` e `espaco` caem em `/produtor` pelo mesmo motivo do outro lado do vínculo.
- *
- * As classes ausentes — `termo`, `conteudo`, `midia`, `formacao`, `publicacao`,
- * `temporada`, `linguagem`, `tema`, `territorio` — NÃO TÊM ROTA nesta fase, e por isso o
- * item aparece sem link. Fabricar `/conteudo/[slug]` para o bloco parecer completo daria
- * 404 na demonstração ao vivo, que é pior do que uma linha sem link.
- */
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-  trilha: "/trilha",
-};
-
-export function rotaDaEntidade(classe: ClasseEntidade, slug: string): string | null {
-  const base = ROTA_POR_CLASSE[classe];
-  return base ? `${base}/${slug}/` : null;
 }
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,387 @@
+/* ===========================================================================
+ * materia.css — leitor de texto, palco de YouTube e etiqueta de verbete.
+ *
+ * Cada família muda de cara: notícia sangra, entrevista retrata, coluna fala,
+ * opinião cita, publicação empilha capa de livro. O palco só puxa o YouTube
+ * depois do toque.
+ *
+ * Regras da casa: nenhum hex; `fixed` só no `.canto`; divergência por visão
+ * em CSS puro sob `[data-view]`.
+ * ======================================================================== */
+
+.materia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+  padding: 0 var(--espaco-tela) var(--espaco-secao);
+}
+
+.materia-abertura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+}
+
+.materia-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  color: var(--cor-tinta-2);
+}
+
+.materia-kicker svg {
+  color: var(--cor-acao-tinta);
+}
+
+.materia-titulo {
+  font-weight: 700;
+  text-wrap: balance;
+  max-inline-size: 22ch;
+}
+
+.materia-autor {
+  font-size: var(--tipo-detalhe);
+}
+
+.materia-lead {
+  max-inline-size: 38rem;
+  color: var(--cor-tinta-2);
+}
+
+.materia-hero {
+  margin-inline: calc(var(--espaco-tela) * -1);
+  margin-block-end: 0.25rem;
+}
+
+.materia-hero-foto {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--cor-superficie-2);
+}
+
+.materia-hero-credito {
+  padding: 0.35rem var(--espaco-tela) 0;
+  color: var(--cor-tinta-3);
+  font-size: var(--tipo-micro);
+}
+
+.materia[data-familia="entrevista"] .materia-hero-foto {
+  aspect-ratio: 4 / 5;
+  object-position: top;
+}
+
+.materia-livro {
+  position: relative;
+  inline-size: min(12rem, 42%);
+}
+
+.materia-livro-capa {
+  aspect-ratio: 2 / 3;
+  border-radius: var(--raio-p);
+  box-shadow: var(--sombra-2);
+}
+
+.materia-livro-marca {
+  position: absolute;
+  right: -0.6rem;
+  bottom: -0.6rem;
+  display: grid;
+  place-items: center;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  border-radius: 50%;
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+}
+
+.materia-aspas {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-cartaz);
+  line-height: 0.7;
+  color: var(--cor-tinta-3);
+}
+
+.materia[data-familia="coluna"] .materia-abertura,
+.materia[data-familia="opiniao"] .materia-abertura {
+  padding-block-start: 0.5rem;
+  border-block-start: 4px solid var(--cor-tinta);
+}
+
+.materia-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-inline-size: 38rem;
+}
+
+.materia-p {
+  font-size: var(--tipo-corpo);
+  line-height: 1.55;
+}
+
+.materia-p:first-child::first-letter {
+  font-family: var(--fonte-display);
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 0.85;
+  float: left;
+  padding-inline-end: 0.35rem;
+}
+
+.materia[data-familia="entrevista"] .materia-p:first-child::first-letter,
+.materia[data-familia="publicacao"] .materia-p:first-child::first-letter {
+  float: none;
+  font-size: inherit;
+  padding: 0;
+}
+
+.materia-h {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
+  font-weight: 700;
+  line-height: 1.25;
+  margin-block-start: 0.5rem;
+}
+
+.materia-citacao {
+  margin: 0;
+  padding: 0.75rem 0 0.75rem 1rem;
+  border-inline-start: 3px solid var(--cor-acao);
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-destaque);
+  line-height: 1.4;
+}
+
+.materia-segue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+}
+
+.materia-segue-titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.5rem;
+}
+
+.materia-segue-titulo svg {
+  color: var(--cor-acao-tinta);
+}
+
+.materia-segue-lista {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+.materia-segue-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 0.75rem;
+  padding-block: 0.75rem;
+  border-block-end: 1px solid var(--cor-borda);
+  text-decoration: none;
+}
+
+.materia-segue-tipo {
+  grid-column: 1;
+  color: var(--cor-tinta-3);
+}
+
+.materia-segue-nome {
+  grid-column: 1;
+  font-weight: 700;
+}
+
+.materia-segue-motivo {
+  grid-column: 1;
+  color: var(--cor-tinta-2);
+}
+
+.materia-segue-item svg {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: center;
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+  color: var(--cor-acao-tinta);
+}
+
+.materia-voltar {
+  margin-block-start: 0.5rem;
+}
+
+/* ---- palco YouTube (click-to-load) e saída Spotify ---- */
+
+.palco-yt {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  border: 0;
+  padding: 0;
+  background: var(--ic-preto);
+  cursor: pointer;
+  color: var(--ic-branco);
+}
+
+.palco-yt-foto,
+.palco-yt-fundo {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.palco-yt-fundo {
+  background: var(--ic-preto);
+}
+
+.palco-yt-veu {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ic-preto) 35%, transparent);
+}
+
+.palco-yt-play {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--raio-pilula);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+.palco-yt-play svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.palco-yt:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.palco-yt--ligado {
+  cursor: default;
+}
+
+.palco-yt-frame {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+}
+
+.cta-spotify {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  min-block-size: 2.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cta-spotify svg {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+}
+
+.midia-capa-acoes .cta-spotify {
+  border: 1px solid var(--ic-branco);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+}
+
+/* ---- verbete de termo ---- */
+
+.verbete-pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+  padding: var(--espaco-tela) var(--espaco-tela) var(--espaco-secao);
+}
+
+.verbete-pagina-abertura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+}
+
+.verbete-pagina-abertura .tipo-micro {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--cor-tinta-2);
+}
+
+.verbete-pagina-abertura .tipo-micro svg {
+  color: var(--cor-acao-tinta);
+}
+
+.verbete-pagina-identidade {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.verbete-pagina-capa {
+  inline-size: 6rem;
+  block-size: 7.5rem;
+  flex: none;
+  border-radius: var(--raio-m);
+}
+
+[data-view="web"] .materia-titulo {
+  max-inline-size: 28ch;
+}
+
+[data-view="web"] .materia-hero,
+[data-view="web"] .palco-yt {
+  margin-inline: 0;
+  border-radius: var(--raio-g);
+}
+
+[data-view="web"] .materia[data-familia="entrevista"] {
+  display: grid;
+  grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+  column-gap: var(--espaco-secao);
+  align-items: start;
+}
+
+[data-view="web"] .materia[data-familia="entrevista"] .materia-abertura {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+[data-view="web"] .materia[data-familia="entrevista"] .materia-hero {
+  grid-row: 1 / span 4;
+}
+
+[data-view="web"] .materia[data-familia="entrevista"] .materia-corpo {
+  grid-column: 2;
+}

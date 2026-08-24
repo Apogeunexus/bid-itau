@@ -116,20 +116,6 @@ export function Verbete({
       {vazio === "curto" ? (
         <p className="text-xs leading-relaxed text-tinta-2">{fraseDoTextoCurto}</p>
       ) : null}
-
-      {entidade.fonte ? (
-        <a
-          href={entidade.fonte}
-          rel="noreferrer"
-          className="w-fit text-xs font-semibold text-acao-tinta underline underline-offset-2"
-        >
-          conferir a entrada na fonte
-        </a>
-      ) : (
-        <p className="text-xs text-tinta-3">
-          Esta entrada não registra URL de origem no acervo.
-        </p>
-      )}
     </section>
   );
 }

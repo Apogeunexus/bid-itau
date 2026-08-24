@@ -638,25 +638,4 @@ export const PROCEDENCIA_DAS_MIDIAS = {
   n: MIDIAS_ESPERADAS,
 } as const;
 
-/**
- * O protótipo NÃO CARREGA ARQUIVO DE MÍDIA NENHUM, e a tela diz isso em vez de esconder.
- *
- * Duas coisas diferentes, e as duas verdadeiras: (1) o acervo carregado traz a ficha e a
- * capa, não o arquivo de áudio ou vídeo — ele não existe nestes dados; (2) `fonte` aponta
- * para itaucultural.org.br, e buscar de lá quebraria a promessa medida de ZERO requisição
- * externa, que vale para o protótipo inteiro desde a fase 2.
- *
- * `fonte` aparece como LINK que a pessoa clica. Um link que a pessoa clica não é uma
- * requisição que o protótipo faz, e a diferença é exatamente o que o gate mede.
- */
-export const SEM_ARQUIVO = {
-  titulo: "Por que não há player de verdade aqui",
-  acervo:
-    "O acervo carregado neste protótipo traz a ficha e a capa de cada mídia — o arquivo de " +
-    "áudio ou vídeo não faz parte dele.",
-  rede:
-    "E nada é buscado do site do Itaú Cultural: este protótipo não faz nenhuma requisição " +
-    "para fora do servidor local, e isso é medido a cada verificação. O endereço da fonte " +
-    "está aqui como link para quem quiser ir ver — clicar num link é uma escolha de quem " +
-    "usa, não uma requisição que o protótipo faz por conta própria.",
-} as const;
+

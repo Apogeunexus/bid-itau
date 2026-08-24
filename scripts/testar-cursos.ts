@@ -113,6 +113,7 @@ const esqueleto = (parcial: Partial<CursoNoCliente> & Pick<CursoNoCliente, "titu
   slug: "x",
   resumo: "",
   fonte: "https://www.itaucultural.org.br/",
+  rota: "/cursos/x/",
   imagem: "/acervo/x.jpg",
   creditoImagem: "",
   imagemAlt: "",

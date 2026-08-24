@@ -24,7 +24,7 @@ import type { Entidade } from "./tipos";
 const CONTEUDOS_ESPERADOS = 1805;
 
 /** Categoria crua do CMS → português. ÚNICO lugar dessa tradução (molde de play.ts). */
-const ROTULOS: Record<string, string> = {
+export const ROTULOS: Record<string, string> = {
   noticias: "Notícia",
   entrevista: "Entrevista",
   colunistas: "Coluna",
@@ -65,6 +65,8 @@ export interface Leitura {
   publicadoEm: string;
   fonte?: string;
   linguagens: string[];
+  /** Destino interno. Nunca a URL da fonte. */
+  rota: string;
 }
 
 /** Uma seção editorial do hub: o recorte que o cliente pediu como submenu. */
@@ -143,6 +145,7 @@ function montar(): Montado {
       publicadoEm,
       fonte: e.fonte,
       linguagens: e.linguagens,
+      rota: `/materia/${e.slug}/`,
     };
   });
 

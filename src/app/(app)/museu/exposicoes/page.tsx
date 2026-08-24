@@ -12,7 +12,7 @@ const CATEGORIAS_MUSEAIS = ["exposicoes", "visitas", "acervos", "ocupacao"];
 /**
  * `/museu/exposicoes` — o submenu de Museu pedido pelo cliente: o acervo digital
  * expositivo. MEDIDO: 67 conteúdos nas categorias exposições, visitas, acervos e
- * ocupação — cada um abre na fonte. Os eventos expositivos em cartaz ficam no hub
+ * ocupação. Os eventos expositivos em cartaz ficam no hub
  * de Museu, que é onde têm página própria. COMPONENTE DE SERVIDOR (DP-F).
  */
 export default function Exposicoes() {
@@ -27,8 +27,7 @@ export default function Exposicoes() {
         </div>
         <p className="max-w-prose text-sm leading-snug">
           O acervo digital expositivo — <strong>{milhar(itens.length)} conteúdos</strong> entre
-          exposições, visitas, acervos e ocupações, por publicação. Cada um abre na fonte,
-          no site do Itaú Cultural.
+          exposições, visitas, acervos e ocupações, por publicação.
         </p>
         <nav aria-label="Museu" className="flex flex-wrap gap-2 pt-1">
           <Link

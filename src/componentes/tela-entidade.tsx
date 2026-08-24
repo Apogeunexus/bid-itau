@@ -48,15 +48,7 @@ export function TelaEntidade({
             <p className="text-xs text-tinta-3">
               {entidade.classe} · procedência {entidade.procedencia}
             </p>
-            {entidade.fonte ? (
-              <a
-                href={entidade.fonte}
-                className="w-fit text-xs font-semibold text-acao-tinta underline underline-offset-2"
-                rel="noreferrer"
-              >
-                fonte no acervo do Itaú Cultural
-              </a>
-            ) : null}
+
           </div>
         </div>
 

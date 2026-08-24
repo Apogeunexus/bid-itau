@@ -60,24 +60,28 @@ function linguagensDe(ids: readonly string[]): LinguagemDoCurso[] {
 function deEntidade(e: Entidade): CursoNoCliente {
   const publicadoEm = typeof e.extra?.publicadoEm === "string" ? e.extra.publicadoEm : "";
   const imagemAlt = typeof e.extra?.imagemAlt === "string" ? e.extra.imagemAlt : "";
-  if (!e.fonte) quebrar(`a formação «${e.slug}» não declara fonte — o cartão ficaria sem saída`);
-  if (!e.imagem) quebrar(`a formação «${e.slug}» não tem imagem local — o acervo mede 54/54`);
-  if (!e.resumo) quebrar(`a formação «${e.slug}» não declara resumo`);
-  const formato = classificarFormato(e.titulo, e.resumo, e.linguagens);
+  const fonte = e.fonte;
+  const imagem = e.imagem;
+  const resumo = e.resumo;
+  if (!fonte) quebrar(`a formação «${e.slug}» não declara fonte — o cartão ficaria sem saída`);
+  if (!imagem) quebrar(`a formação «${e.slug}» não tem imagem local — o acervo mede 54/54`);
+  if (!resumo) quebrar(`a formação «${e.slug}» não declara resumo`);
+  const formato = classificarFormato(e.titulo, resumo, e.linguagens);
   return {
     slug: e.slug,
     titulo: e.titulo,
-    resumo: e.resumo,
-    fonte: e.fonte,
-    imagem: e.imagem,
+    resumo,
+    fonte,
+    rota: `/cursos/${e.slug}/`,
+    imagem,
     creditoImagem: e.creditoImagem ?? "",
     imagemAlt: imagemAlt || e.titulo,
     dia: diaDe(publicadoEm),
     formato,
     rotuloFormato: ROTULOS_DE_FORMATO[formato],
     linguagens: linguagensDe(e.linguagens),
-    gratuito: textoTemGratuito(e.titulo, e.resumo),
-    cancelado: textoEstaCancelado(e.titulo, e.resumo),
+    gratuito: textoTemGratuito(e.titulo, resumo),
+    cancelado: textoEstaCancelado(e.titulo, resumo),
     libras: e.acessibilidade.libras,
     legenda: e.acessibilidade.subtitle,
   };
@@ -158,4 +162,26 @@ function montar(): CatalogoDeCursos {
 export function catalogoDeCursos(): CatalogoDeCursos {
   memo ??= montar();
   return memo;
+}
+
+export function cursoPorSlug(slug: string): CursoNoCliente | undefined {
+  const itens = catalogoDeCursos().itens;
+  const tentativas = new Set<string>([slug]);
+  try {
+    tentativas.add(decodeURIComponent(slug));
+  } catch (erro) {
+    if (!(erro instanceof URIError)) throw erro;
+  }
+  for (const t of [...tentativas]) {
+    tentativas.add(t.normalize("NFC"));
+    tentativas.add(t.normalize("NFD"));
+    tentativas.add(t.trim());
+  }
+  for (const item of itens) {
+    if (tentativas.has(item.slug)) return item;
+    if (tentativas.has(item.slug.normalize("NFC"))) return item;
+    if (tentativas.has(item.slug.normalize("NFD"))) return item;
+    if (tentativas.has(item.slug.trim())) return item;
+  }
+  return undefined;
 }

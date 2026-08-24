@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
 import type { Cartao as CartaoDTO } from "@/dados/cartao";
+import { rotaDaEntidade } from "@/dados/rotas";
 import type { ClasseEntidade } from "@/dados/tipos";
 
 /**
@@ -35,24 +36,12 @@ import type { ClasseEntidade } from "@/dados/tipos";
  * `trilha` aponta para `/trilha/[slug]`, que o plano 02-03 cria. É link para frente, não
  * link morto — e é ele que amarra os dois planos.
  *
- * As classes ausentes deste mapa — `termo`, `conteudo`, `midia`, `formacao`,
- * `publicacao` — NÃO TÊM ROTA nesta fase e por isso não recebem link principal. Fabricar
- * `/termo/[slug]` para o cartão parecer completo produziria 404 na demonstração ao vivo,
- * que é pior do que um cartão sem link.
+ * A tabela vive em `rotas.ts` — editorial, mídia, formação, publicação e termo
+ * passaram a ter página própria e não saem mais para o site do Itaú Cultural.
  */
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-  trilha: "/trilha",
-};
 
-function rotaDaEntidade(cartao: CartaoDTO): string | null {
-  const base = ROTA_POR_CLASSE[cartao.classe];
-  return base ? `${base}/${cartao.slug}/` : null;
+function rotaDoCartao(cartao: CartaoDTO): string | null {
+  return rotaDaEntidade(cartao.classe, cartao.slug);
 }
 
 /** A rota de explicação de D-33, criada pelo plano 02-02. Chave `{classe}_{slug}`. */
@@ -97,7 +86,7 @@ function rotuloDaClasse(classe: ClasseEntidade): string {
 // ---------------------------------------------------------------------------
 
 export function Cartao({ cartao }: { cartao: CartaoDTO }) {
-  const rota = rotaDaEntidade(cartao);
+  const rota = rotaDoCartao(cartao);
 
   const capa = (
     <CapaDeCartao

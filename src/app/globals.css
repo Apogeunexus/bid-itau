@@ -101,6 +101,7 @@
  * cadernos. Depois das vitrines de catálogo porque o vocabulário é outro:
  * foto de reportagem e expediente, não cartaz de streaming. */
 @import "../estilos/noticias.css";
+@import "../estilos/materia.css";
 
 /* Museu virtual (23/08): abertura, mosaico de cartaz e lista de espaços.
  * Depois do Cast porque as duas são vitrines de acervo; o Museu diverge —

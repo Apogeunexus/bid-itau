@@ -18,6 +18,7 @@ import {
   type CriterioTraduzido,
   type VizinhancaDeSemelhanca,
 } from "@/dados/frase";
+import { ROTA_POR_CLASSE } from "@/dados/rotas";
 import type { ClasseEntidade } from "@/dados/tipos";
 
 /**
@@ -93,20 +94,7 @@ const ROTULO_CLASSE: Partial<Record<ClasseEntidade, string>> = {
   trilha: "trilha",
 };
 
-/**
- * As rotas de entidade que a fase 1 realmente exportou. Classe ausente não recebe link:
- * fabricar `/termo/[slug]` produziria 404 na demonstração ao vivo, que é pior do que um
- * resultado sem link. Mesma lista de `cartao.tsx` e de `buscar.tsx`.
- */
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-  trilha: "/trilha",
-};
+
 
 // ---------------------------------------------------------------------------
 // Ajudantes puros

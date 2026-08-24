@@ -1,6 +1,7 @@
 import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { coordenadaDe, distanciaKm, projetar, type ViaCoordenada } from "@/dados/geo";
 import { ocorrenciasDe, porId, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "@/dados/grafo";
+import { ROTA_POR_CLASSE } from "@/dados/rotas";
 import type { ClasseEntidade, Coordenada, Entidade, MetodoCoordenada } from "@/dados/tipos";
 
 /**
@@ -122,18 +123,7 @@ function pluralDe(classe: ClasseEntidade, n: number): string {
 }
 
 /**
- * Classe → rota de entidade, a mesma tabela de `cartao.tsx`. As classes ausentes não têm
- * rota nesta fase e por isso não recebem link: fabricar `/termo/[slug]` produziria 404 na
- * demonstração ao vivo, que é pior do que um item sem link.
- */
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-};
+
 
 /**
  * Comparação de texto por PONTO DE CÓDIGO, e nunca `localeCompare`.

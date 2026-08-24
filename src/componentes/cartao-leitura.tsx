@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ICONE_SETA } from "@/componentes/base/icones";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import type { Leitura } from "@/dados/leituras";
@@ -12,7 +13,7 @@ import type { Leitura } from "@/dados/leituras";
  * Os portes de jornal (`capa`, `lateral`, `chamada`, `grade`, `lista`,
  * `coluna`, `opiniao`) são a ficha da capa — foto dominante, kicker, data em
  * Display bold PRETO (laranja é ação, nunca data). COMPONENTE DE SERVIDOR: o
- * conteúdo liga para a fonte no site do Itaú Cultural.
+ * conteúdo liga para `/materia/[slug]`, dentro do app.
  */
 
 const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
@@ -74,19 +75,10 @@ function LeituraVitrine({ leitura }: { leitura: Leitura }) {
     </>
   );
 
-  if (!leitura.fonte) {
-    return <article className="flex flex-col gap-1.5">{miolo}</article>;
-  }
-
   return (
-    <a
-      href={leitura.fonte}
-      target="_blank"
-      rel="noreferrer"
-      className="flex flex-col gap-1.5 no-underline"
-    >
+    <Link href={leitura.rota} className="flex flex-col gap-1.5 no-underline">
       {miolo}
-    </a>
+    </Link>
   );
 }
 
@@ -135,24 +127,19 @@ function LeituraJornal({
         </p>
         <Tag className="leitura-titulo">{leitura.titulo}</Tag>
         {comResumo ? <p className="leitura-deck">{leitura.resumo}</p> : null}
-        {porte === "capa" && leitura.fonte ? (
+        {porte === "capa" ? (
           <span className="leitura-cta">
-            Abrir no site do Itaú Cultural
+            Ler a matéria
             {ICONE_SETA}
           </span>
         ) : null}
       </div>
-      <span className="sr-only"> (abre no site do Itaú Cultural)</span>
     </>
   );
 
-  if (!leitura.fonte) {
-    return <article className={classe}>{miolo}</article>;
-  }
-
   return (
-    <a href={leitura.fonte} target="_blank" rel="noreferrer" className={classe}>
+    <Link href={leitura.rota} className={classe}>
       {miolo}
-    </a>
+    </Link>
   );
 }

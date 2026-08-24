@@ -204,16 +204,7 @@ function PassoFinal({ final }: { final: DestinoFinal }) {
           Medido: {final.sessoesSemEspaco} de {final.sessoes.length}{" "}
           {final.sessoes.length === 1 ? "sessão" : "sessões"} sem espaço declarado.
         </p>
-        {final.evento.fonte ? (
-          <a
-            href={final.evento.fonte}
-            target="_blank"
-            rel="noreferrer"
-            className="text-xs font-semibold text-acao-tinta underline underline-offset-2"
-          >
-            conferir na fonte
-          </a>
-        ) : null}
+
       </div>
 
       {/* ---- Elenco: ausência estrutural, declarada em texto ---- */}

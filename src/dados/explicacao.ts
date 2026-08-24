@@ -36,6 +36,7 @@ import { cartaoDoFeed, IDS_DA_UNIAO } from "./feeds";
 import { DISPOSICOES, type ResultadoPredicado } from "./disposicoes";
 import { caminho, ocorrenciasDe, porId, porSlug, vizinhos } from "./grafo";
 import { PERSONAS, personaPorId, PERSONA_PADRAO, type Persona } from "./personas";
+import { ROTA_POR_CLASSE } from "./rotas";
 import type { ClasseEntidade, Entidade, Passo, Procedencia } from "./tipos";
 
 // ---------------------------------------------------------------------------
@@ -168,20 +169,7 @@ export interface PaginaExplicacao {
  */
 const MAX_CAMINHOS = Number.POSITIVE_INFINITY;
 
-/**
- * Classe → rota de entidade. Espelha `ROTA_POR_CLASSE` de `cartao.tsx`, que não a exporta.
- * As classes ausentes não têm rota nesta fase e por isso o título não vira link — fabricar
- * `/termo/[slug]` produziria 404 na demonstração ao vivo.
- */
-const ROTA_POR_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  evento: "/evento",
-  pessoa: "/artista",
-  coletivo: "/artista",
-  obra: "/obra",
-  instituicao: "/produtor",
-  espaco: "/produtor",
-  trilha: "/trilha",
-};
+
 
 const CONTEXTO_PREDICADO = { ocorrenciasDe };
 

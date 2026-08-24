@@ -1,13 +1,14 @@
 import { Player } from "@/componentes/player";
 import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { slugsPorTipo, vizinhos } from "@/dados/grafo";
+import { corpoPorSlug } from "@/dados/corpos";
 import {
   colecaoDaMidia,
   eventosDaMidia,
   itemDoPlay,
   semelhantesDaMidia,
-  SEM_ARQUIVO,
 } from "@/dados/play";
+import { rotaDaEntidade } from "@/dados/rotas";
 
 /**
  * A rota de uma mídia — **529 páginas**, o maior acréscimo desta fase (D-92).
@@ -98,12 +99,20 @@ export default async function PaginaDaMidia({ params }: { params: Promise<{ slug
    * vazia escrita à mão: se o grafo for regerado com essas arestas, a tela passa a
    * mostrá-las sem que ninguém precise lembrar de voltar aqui.
    */
-  const aprofunda = vizinhos(item.id, "aprofunda").map((v) => ({
-    slug: v.entidade.slug,
-    titulo: v.entidade.titulo,
-    rota: `/${v.entidade.classe}/${v.entidade.slug}/`,
-    motivo: v.aresta.motivo,
-  }));
+  const aprofunda = vizinhos(item.id, "aprofunda").flatMap((v) => {
+    const rota = rotaDaEntidade(v.entidade.classe, v.entidade.slug);
+    if (!rota) return [];
+    return [
+      {
+        slug: v.entidade.slug,
+        titulo: v.entidade.titulo,
+        rota,
+        motivo: v.aresta.motivo,
+      },
+    ];
+  });
+  const corpo = corpoPorSlug(item.slug);
+  const spotify = corpo?.spotify;
 
   return (
     <Player
@@ -122,6 +131,8 @@ export default async function PaginaDaMidia({ params }: { params: Promise<{ slug
         acessibilidade: item.acessibilidade,
         declaraAcessibilidade: item.declaraAcessibilidade,
         procedencia: item.procedencia,
+        youtubeId: corpo?.youtubeId,
+        spotify,
       }}
       colecao={(() => {
         const c = colecaoDaMidia(item.slug);
@@ -153,7 +164,6 @@ export default async function PaginaDaMidia({ params }: { params: Promise<{ slug
       eventos={eventosDaMidia(item.slug)}
       aprofunda={aprofunda}
       dataDeReferencia={DATA_DE_REFERENCIA}
-      semArquivo={SEM_ARQUIVO}
     />
   );
 }
