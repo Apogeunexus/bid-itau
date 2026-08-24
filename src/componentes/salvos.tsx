@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
-import { Grafismo } from "@/componentes/grafismo";
+import {
+  ICONE_ACONTECE,
+  ICONE_ALERTA,
+  ICONE_RELOGIO,
+  ICONE_SALVOS,
+} from "@/componentes/base/icones";
+import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { useSessao } from "@/contexto/sessao";
 import type { AlteracaoAutorada, ParDeDemonstracao } from "@/dados/alerta";
 import type { IndiceSalvaveis } from "@/dados/repertorio";
@@ -12,50 +18,37 @@ import type { IndiceSalvaveis } from "@/dados/repertorio";
  *
  * A AFIRMAÇÃO QUE ESTA TELA EXISTE PARA TORNAR VISÍVEL. Uma mudança de horário atinge UMA
  * OCORRÊNCIA e não invalida o evento — então só quem salvou aquela sessão é avisado, e as
- * irmãs do mesmo evento seguem como estavam. Isso é consequência direta de DADO-02, que
- * separa evento, temporada e ocorrência em registros próprios em vez de aninhar datas
- * dentro do evento. Num modelo de catálogo, onde o evento carrega um array de datas, o
- * aviso só poderia ser do evento inteiro — e todo mundo receberia o alerta de uma sessão
- * que não é a sua.
+ * irmãs do mesmo evento seguem como estavam. Isso é consequência direta de DADO-02.
  *
- * POR ISSO A FILA É DE SESSÕES E DIZ QUE É (D-56). Se a pessoa salvou duas sessões do
- * mesmo evento, aparecem DUAS LINHAS. Isso não é duplicação a corrigir: é a modelagem
- * ficando legível. Colapsar as duas numa linha de evento apagaria da tela exatamente a
- * distinção que o Cenário 4 vem provar.
- *
- * O QUE É AUTORADO E O QUE NÃO É (D-57, D-37). A alteração é escrita por nós e carrega o
- * rótulo na tela. A sessão, a data, o horário e o evento são reais, do acervo. A regra de
- * corte quando o conteúdo não cabe na moldura é essa mesma: o dado do acervo e o rótulo
- * de procedência ficam sempre visíveis.
+ * POR ISSO A FILA É DE SESSÕES E DIZ QUE É (D-56). Duas sessões do mesmo evento viram
+ * DUAS LINHAS. Colapsar as duas numa linha de evento apagaria a distinção do Cenário 4.
  *
  * T-03-09: todo id vindo de `localStorage` é resolvido contra o índice do build antes de
- * virar linha. Id desconhecido é descartado e CONTADO — a contagem aparece declarada em
- * vez de o item sumir em silêncio.
+ * virar linha. Id desconhecido é descartado e CONTADO.
  *
- * DP-F: `import type` em tudo que vem de `@/dados/alerta` e `@/dados/repertorio`. Os dois
- * módulos importam `grafo.ts`, que carrega 23 MB de JSON; um import de valor arrastaria o
- * grafo inteiro para o navegador. O que atravessa a fronteira são os DTOs, montados no
- * build pela página de servidor.
+ * DP-F: `import type` em tudo que vem de `@/dados/alerta` e `@/dados/repertorio`.
  */
 
-// ---------------------------------------------------------------------------
-// Vocabulário de tela
-// ---------------------------------------------------------------------------
+const MESES_CURTOS = [
+  "jan",
+  "fev",
+  "mar",
+  "abr",
+  "mai",
+  "jun",
+  "jul",
+  "ago",
+  "set",
+  "out",
+  "nov",
+  "dez",
+];
 
-/**
- * A explicação curta do rótulo, em PRODUTO e não em comentário.
- *
- * Mora no componente pelo mesmo caminho que `ROTULO_PROCEDENCIA` mora em `trilha.tsx`: o
- * dado diz que a alteração é autorada, a tela diz o que isso significa para quem lê. A
- * honestidade do dado é o argumento da proposta, não a nota de rodapé sobre ele.
- */
-const ROTULO_CURTO =
-  "«autorado»: escrito por nós, sobre sessão real. O acervo não publica histórico de " +
-  "alteração — é a lacuna que a tela demonstra.";
-
-// ---------------------------------------------------------------------------
-// DTO interno
-// ---------------------------------------------------------------------------
+function dataAgenda(iso: string): string {
+  const [ano, mes, dia] = iso.slice(0, 10).split("-");
+  const nome = MESES_CURTOS[Number(mes) - 1];
+  return nome ? `${Number(dia)} ${nome} ${ano}` : iso.slice(0, 10);
+}
 
 interface LinhaSalva {
   ocorrenciaId: string;
@@ -68,56 +61,73 @@ interface LinhaSalva {
   hora: string;
   gratuito: boolean;
   passada: boolean;
+  imagem: string | null;
+  linguagens: string[];
   alteracao: AlteracaoAutorada | undefined;
 }
 
-// ---------------------------------------------------------------------------
-// Blocos
-// ---------------------------------------------------------------------------
-
 /**
- * O bloco de alerta (D-57) — o que mudou, quando, quem informou, e a frase que fecha o
- * cenário. Todos VISÍVEIS na tela ao mesmo tempo: um alerta que esconde o informante atrás
- * de um toque não prova nada numa demonstração de dois minutos.
+ * O bloco de alerta (D-57). Os dois horários, o selo autorado e as palavras
+ * «informado» / «por» ficam no texto — o portão do Cenário 4 lê isso.
  */
-function BlocoAlerta({ alteracao }: { alteracao: AlteracaoAutorada }) {
+function BlocoAlerta({
+  alteracao,
+  imagem,
+  linguagens,
+}: {
+  alteracao: AlteracaoAutorada;
+  imagem: string | null;
+  linguagens: string[];
+}) {
   return (
     <article data-alerta={alteracao.ocorrenciaId} className="alerta-alteracao">
-      <div className="alerta-cabeca">
-        <Grafismo
-          variacao="barra"
-          className="h-3.5 w-auto shrink-0 text-acao-tinta"
+      <Link href={alteracao.rota} className="alerta-capa no-underline">
+        <CapaDeCartao
+          titulo={alteracao.eventoTitulo}
+          classe="evento"
+          linguagens={linguagens}
+          imagem={imagem ?? undefined}
+          className="size-full"
         />
-        <span data-procedencia-alerta={alteracao.procedencia} className="alerta-selo">
-          {alteracao.procedencia}
-        </span>
-        <span className="alerta-campo">{alteracao.campoRotulo}</span>
+      </Link>
+
+      <div className="alerta-corpo">
+        <div className="alerta-cabeca">
+          <span className="alerta-icone" aria-hidden>
+            {ICONE_ALERTA}
+          </span>
+          <span className="alerta-campo">{alteracao.campoRotulo}</span>
+          <span data-procedencia-alerta={alteracao.procedencia} className="alerta-selo">
+            {alteracao.procedencia}
+          </span>
+        </div>
+
+        <Link href={alteracao.rota} className="alerta-titulo no-underline">
+          {alteracao.eventoTitulo}
+        </Link>
+
+        <p className="alerta-mudanca">
+          <span className="alerta-de">{alteracao.de}</span>
+          <span aria-hidden className="alerta-seta">
+            →
+          </span>
+          <span className="alerta-para">{alteracao.para}</span>
+        </p>
+
+        <p className="alerta-meta">
+          <span>
+            {ICONE_ACONTECE}
+            {dataAgenda(alteracao.inicioReal)}
+          </span>
+        </p>
+
+        <p className="alerta-ficha">
+          informado {alteracao.informadoEmCurto} · por{" "}
+          {alteracao.informanteDoAcervo ? alteracao.quemInformou : "curadoria"}
+        </p>
+
+        <p className="alerta-cenario">Só quem salvou esta sessão foi avisado.</p>
       </div>
-
-      <p className="alerta-titulo">{alteracao.eventoTitulo}</p>
-
-      {/* O que mudou, lado a lado. `de` é o horário REAL da sessão no grafo. */}
-      <p className="alerta-mudanca">
-        <span className="alerta-de">{alteracao.de}</span>
-        <span aria-hidden className="alerta-seta">
-          →
-        </span>
-        <span className="alerta-para">{alteracao.para}</span>
-        <span className="alerta-quando">· sessão de {alteracao.dataCurta}</span>
-      </p>
-
-      <dl className="alerta-ficha">
-        <dt>informado</dt>
-        <dd>{alteracao.informadoEmCurto}</dd>
-        <dt>por</dt>
-        <dd>{alteracao.quemInformou}</dd>
-      </dl>
-
-      {/* A frase que fecha o Cenário 4. É a conclusão da tela, e por isso ela é a única
-          coisa aqui com fundo próprio. */}
-      <p className="alerta-cenario">{alteracao.fraseDoCenario}</p>
-
-      <p className="alerta-rotulo-curto">{ROTULO_CURTO}</p>
     </article>
   );
 }
@@ -137,42 +147,59 @@ function LinhaDaFila({
       data-salvo-passada={linha.passada ? "sim" : "nao"}
       className="salvos-item"
     >
-      <p className="salvos-linha-topo">
-        <span className="salvos-data">{linha.dataCurta}</span>
-        <span className="salvos-hora">{linha.hora}</span>
-        <span
-          className={`salvos-marca ${alertada ? "salvos-marca-alertada" : "salvos-marca-intacta"}`}
-        >
-          {alertada ? "alterada" : "sem alteração"}
-        </span>
-      </p>
-
-      <Link href={linha.rota} className="salvos-evento">
-        {linha.eventoTitulo}
+      <Link href={linha.rota} className="salvos-capa no-underline">
+        <CapaDeCartao
+          titulo={linha.eventoTitulo}
+          classe="evento"
+          linguagens={linha.linguagens}
+          imagem={linha.imagem ?? undefined}
+          className="size-full"
+        />
       </Link>
 
-      <p className="salvos-rodape">
-        <span>
-          {linha.passada ? "sessão passada · " : ""}
-          {/* Medido: 0 dos 300 eventos declara ingresso, então `gratuito` não distingue
-              nada e o rótulo carrega o qualificador em vez de afirmar gratuidade. */}
-          {linha.gratuito ? "sem ingresso declarado na fonte" : "com ingresso"}
-        </span>
+      <div className="salvos-corpo">
+        <Link href={linha.rota} className="salvos-evento no-underline">
+          {linha.eventoTitulo}
+        </Link>
+
+        <p className="salvos-meta">
+          <span>
+            {ICONE_ACONTECE}
+            {dataAgenda(linha.inicio)}
+          </span>
+          <span>
+            {ICONE_RELOGIO}
+            {linha.hora}
+          </span>
+          <span
+            className={`salvos-marca ${alertada ? "salvos-marca-alertada" : "salvos-marca-intacta"}`}
+          >
+            {alertada ? "alterada" : "sem alteração"}
+          </span>
+        </p>
+
+        <p className="salvos-pills">
+          {linha.gratuito ? (
+            <>
+              <span className="selo-acervo">Gratuito</span>
+              <span className="selo-acervo">Sem ingresso</span>
+            </>
+          ) : (
+            <span className="selo-acervo">com ingresso</span>
+          )}
+        </p>
+
         <button
           type="button"
           className="salvos-remover"
           onClick={() => aoRemover(linha.ocorrenciaId)}
         >
-          remover
+          Remover
         </button>
-      </p>
+      </div>
     </li>
   );
 }
-
-// ---------------------------------------------------------------------------
-// A tela
-// ---------------------------------------------------------------------------
 
 export function Salvos({
   indice,
@@ -180,13 +207,9 @@ export function Salvos({
   par,
   hoje,
 }: {
-  /** Ocorrência → evento, montado no build. O navegador não tem o grafo (DP-F). */
   indice: IndiceSalvaveis;
-  /** As alterações autoradas, resolvidas no build contra a data de referência. */
   alteracoes: AlteracaoAutorada[];
-  /** As duas sessões do mesmo evento que tornam D-57 demonstrável. */
   par: ParDeDemonstracao;
-  /** A data de referência do build. Nunca o relógio do runtime (T-03-10). */
   hoje: string;
 }) {
   const { salvos, alternarSalvo, hidratado } = useSessao();
@@ -197,28 +220,16 @@ export function Salvos({
     return mapa;
   }, [alteracoes]);
 
-  /**
-   * Os ids salvos resolvidos em linhas, em ordem cronológica.
-   *
-   * Antes de hidratar a lista é vazia de propósito: sob `output: "export"` o HTML sai do
-   * build, e ler `localStorage` no primeiro render divergiria da hidratação. É o mesmo
-   * cuidado de `sessao.tsx` e `visao.tsx`, e é por isso que o estado vazio é o que aparece
-   * no HTML exportado.
-   */
-  const { linhas, trilhas, descartados } = useMemo(() => {
+  const { linhas, trilhas } = useMemo(() => {
     if (!hidratado) {
-      return { linhas: [] as LinhaSalva[], trilhas: [] as string[], descartados: 0 };
+      return { linhas: [] as LinhaSalva[], trilhas: [] as string[] };
     }
 
     const saida: LinhaSalva[] = [];
     const trilhasSalvas: string[] = [];
-    let naoResolvidos = 0;
     const vistos = new Set<string>();
 
     for (const id of salvos) {
-      // A marcação de trilha da fase 2 grava o id da TRILHA nesta mesma lista
-      // (`trilha.tsx`). Trilha não é sessão e não entra numa fila cronológica — ela é
-      // contada e declarada abaixo, em vez de virar linha sem data ou sumir sem explicação.
       if (id.startsWith("trilha:")) {
         trilhasSalvas.push(id);
         continue;
@@ -226,69 +237,39 @@ export function Salvos({
       if (vistos.has(id)) continue;
       vistos.add(id);
 
-      // T-03-09. A MESMA regra de chave do servidor, dirigida pelo `prefixo` que veio
-      // JUNTO com o índice — `chaveDeOcorrencia` não pode ser importada aqui porque o
-      // módulo dela arrasta `grafo.ts` para o cliente (DP-F).
       const chave =
         indice.prefixo && id.startsWith(indice.prefixo) ? id.slice(indice.prefixo.length) : id;
       const entrada = indice.ocorrencias[chave];
-      if (!entrada) {
-        naoResolvidos += 1;
-        continue;
-      }
+      if (!entrada) continue;
       const [posicao, inicio, gratuito] = entrada;
       const evento = indice.eventos[posicao];
-      if (!evento) {
-        naoResolvidos += 1;
-        continue;
-      }
-      const [slug, titulo] = evento;
+      if (!evento) continue;
+      const [slug, titulo, imagem, linguagens] = evento;
       const [ano, mes, dia] = inicio.slice(0, 10).split("-");
 
       saida.push({
         ocorrenciaId: id,
         eventoSlug: slug,
         eventoTitulo: titulo,
-        // A página do evento lista as sessões e deixa salvar cada uma; é o destino que
-        // existe hoje e que continua existindo qualquer que seja o desfecho da tela de
-        // seleção de ocorrência, que é de outro plano desta mesma onda.
         rota: `/evento/${slug}/`,
         inicio,
         dataCurta: `${dia}.${mes}.${ano}`,
         hora: inicio.slice(11, 16),
         gratuito: gratuito === 1,
-        // D-54: sessão passada continua na fila, marcada como passada.
         passada: inicio.slice(0, 10) < hoje,
+        imagem,
+        linguagens,
         alteracao: porOcorrencia.get(id),
       });
     }
 
-    // Cronológica, e o id como desempate para a ordem não depender da ordem de inserção
-    // no `localStorage` — duas sessões no mesmo minuto sairiam trocadas entre recargas.
     saida.sort((a, b) => a.inicio.localeCompare(b.inicio) || a.ocorrenciaId.localeCompare(b.ocorrenciaId));
 
-    return { linhas: saida, trilhas: trilhasSalvas, descartados: naoResolvidos };
+    return { linhas: saida, trilhas: trilhasSalvas };
   }, [hidratado, salvos, indice, porOcorrencia, hoje]);
 
   const alertadas = useMemo(() => linhas.filter((l) => l.alteracao), [linhas]);
 
-  /** O par inteiro está salvo? É a condição da prova visível do item 4. */
-  const parCompleto = useMemo(() => {
-    const ids = new Set(linhas.map((l) => l.ocorrenciaId));
-    return ids.has(par.atingida.id) && ids.has(par.intacta.id);
-  }, [linhas, par]);
-
-  /**
-   * A semeadura do Cenário 4 — salva as DUAS sessões do par de uma vez.
-   *
-   * Não é enfeite de estado vazio: é o ponto de entrada com estado pré-semeado de que o
-   * roteiro dos cenários precisa. Sem ele, quem avalia teria de sair daqui, achar o evento
-   * certo entre 300, achar as duas sessões certas entre 53, e voltar — e o Cenário 4
-   * morreria na logística antes de chegar ao argumento.
-   *
-   * `alternarSalvo` ALTERNA, então salvar o que já está salvo removeria. Daí a conferência
-   * antes de cada chamada, em vez de confiar em o controle só aparecer no estado vazio.
-   */
   const semear = useCallback(() => {
     for (const id of [par.atingida.id, par.intacta.id]) {
       if (!salvos.includes(id)) alternarSalvo(id);
@@ -296,33 +277,27 @@ export function Salvos({
   }, [par, salvos, alternarSalvo]);
 
   return (
-    <div data-salvos={linhas.length} className="flex flex-col gap-3">
-      {/* ---- 1. Cabeçalho: a fila é de sessões, não de eventos (D-56) ---- */}
+    <div data-salvos={linhas.length} className="flex flex-col gap-4">
       <header className="flex flex-col gap-1">
-        <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
-          <h1 className="text-2xl leading-tight font-bold">Salvos</h1>
-        </div>
+        <h1 className="tipo-titulo-1 font-bold">Salvos</h1>
+        <p className="tipo-detalhe text-tinta-2">
+          {linhas.length
+            ? `${linhas.length} ${linhas.length === 1 ? "sessão guardada" : "sessões guardadas"}`
+            : "As sessões que você guardou."}
+        </p>
       </header>
 
-      {/* ---- 2. O alerta, no topo e destacado (D-57) ---- */}
       {alertadas.map((linha) =>
         linha.alteracao ? (
-          <BlocoAlerta key={linha.ocorrenciaId} alteracao={linha.alteracao} />
+          <BlocoAlerta
+            key={linha.ocorrenciaId}
+            alteracao={linha.alteracao}
+            imagem={linha.imagem}
+            linguagens={linha.linguagens}
+          />
         ) : null,
       )}
 
-      {/* ---- 4. A prova visível: as duas linhas do mesmo evento, marcadas diferente ---- */}
-      {parCompleto ? (
-        <p className="salvos-prova">
-          As duas linhas abaixo são do <strong className="font-bold">mesmo evento</strong>:{" "}
-          {par.atingida.dataCurta} {par.atingida.hora} está marcada como alterada,{" "}
-          {par.intacta.dataCurta} {par.intacta.hora} não. O aviso foi para a sessão, não
-          para o evento.
-        </p>
-      ) : null}
-
-      {/* ---- 3. A fila, em ordem cronológica ---- */}
       {linhas.length ? (
         <ul className="salvos-lista">
           {linhas.map((linha) => (
@@ -330,35 +305,26 @@ export function Salvos({
           ))}
         </ul>
       ) : (
-        /* ---- 5. O estado vazio — o estado inicial de quem abre a tela ---- */
         <div className="salvos-vazio">
-          <p className="text-sm leading-snug">
-            <strong className="font-bold">Nada salvo neste navegador.</strong> Guarde uma
-            sessão na página de um evento para ela aparecer aqui.
+          <span className="salvos-vazio-icone" aria-hidden>
+            {ICONE_SALVOS}
+          </span>
+          <p className="salvos-vazio-titulo">Nada salvo ainda</p>
+          <p className="salvos-vazio-texto">
+            Guarde uma sessão na página de um evento para ela aparecer aqui.
           </p>
-
           <button type="button" data-semear-cenario-4 className="salvos-semear" onClick={semear}>
-            Ver o cenário 4 com o par de exemplo
+            Ver o par de exemplo
           </button>
-
-          <p className="text-xs leading-snug text-tinta-2">
-            Salva duas sessões de <strong className="font-bold">{par.eventoTitulo}</strong>,
-            em {par.atingida.dataCurta} às {par.atingida.hora} e em {par.intacta.dataCurta}{" "}
-            às {par.intacta.hora} — uma alterada, a outra não.
-          </p>
-
         </div>
       )}
 
-      {/* O NÚMERO de trilhas fica — ele é o que a pessoa guardou, e elas não
-          aparecem nesta fila porque não têm data. A explicação de por que só se
-          salva sessão, e o discurso sobre o descarte de id inválido, saíram da
-          tela em 23/08: eram sobre o modelo, não sobre o que está guardado. */}
       <p className="salvos-declarado">
-        <strong className="font-bold">
-          Trilhas salvas: {trilhas.length === 0 ? "nenhuma neste navegador" : trilhas.length}
-        </strong>{" "}
-        — elas aparecem em Meu Repertório, fora desta fila cronológica.
+        Trilhas salvas: {trilhas.length === 0 ? "nenhuma" : trilhas.length}
+        {" · "}
+        <Link href="/meu/repertorio/" className="salvos-declarado-link">
+          ver em Meu Repertório
+        </Link>
       </p>
     </div>
   );

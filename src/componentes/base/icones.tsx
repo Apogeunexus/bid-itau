@@ -197,3 +197,11 @@ export const ICONE_RELOGIO = (
   </Icone>
 );
 
+/** O triângulo do alerta de sessão alterada. */
+export const ICONE_ALERTA = (
+  <Icone>
+    <path d="M12 4.5 20.5 19H3.5L12 4.5Z" {...traco} />
+    <path d="M12 10v4M12 16.5h.01" {...traco} />
+  </Icone>
+);
+

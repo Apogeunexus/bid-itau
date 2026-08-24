@@ -160,9 +160,12 @@ export interface RepertorioDaPersona {
  * compacto de propósito — 129 eventos numa tabela e a data fatiada em 16 caracteres, o
  * que dá ~127 KB no HTML exportado contra ~522 KB de um índice ingênuo.
  */
+/** slug, titulo, imagem, linguagens — a capa da fila de Salvos sai daqui. */
+export type EventoDoIndice = [string, string, string | null, string[]];
+
 export interface IndiceSalvaveis {
-  /** `[slug, titulo]` por evento. O índice de ocorrência aponta para a posição aqui. */
-  eventos: Array<[string, string]>;
+  /** Um por evento com sessão. O índice de ocorrência aponta para a posição aqui. */
+  eventos: EventoDoIndice[];
   /**
    * Prefixo comum removido das chaves. As 2.425 ocorrências do grafo começam todas por
    * `"ocorrencia:derivado:"`, e repetir 20 caracteres 2.425 vezes custa 48 KB no HTML
@@ -191,7 +194,7 @@ let CACHE_INDICE: IndiceSalvaveis | null = null;
 export function indiceDeSalvaveis(): IndiceSalvaveis {
   if (CACHE_INDICE) return CACHE_INDICE;
 
-  const eventos: Array<[string, string]> = [];
+  const eventos: EventoDoIndice[] = [];
   const ocorrencias: Record<string, [number, string, 0 | 1]> = {};
 
   for (const slug of slugsPorTipo("evento")) {
@@ -200,7 +203,7 @@ export function indiceDeSalvaveis(): IndiceSalvaveis {
     const lista = ocorrenciasDe(evento.id);
     if (!lista.length) continue;
     const posicao = eventos.length;
-    eventos.push([evento.slug, evento.titulo]);
+    eventos.push([evento.slug, evento.titulo, evento.imagem ?? null, evento.linguagens]);
     for (const o of lista) {
       ocorrencias[chaveDeOcorrencia(o.id, PREFIXO_OCORRENCIA)] = [
         posicao,
