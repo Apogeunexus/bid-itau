@@ -12,10 +12,10 @@ import { useCallback, useEffect, useState } from "react";
  * São duas listas porque são duas coisas: uma é «vou nesse dia», a outra é «quero ver
  * depois».
  *
- * POR QUE UMA CHAVE POR TELA, e não uma só. O Play cataloga mídia de streaming e o Cast
- * cataloga episódio de podcast; as duas paredes leem catálogos diferentes e cada uma só
- * sabe resolver os próprios slugs. Uma chave compartilhada faria a fileira do Cast tentar
- * desenhar um vídeo que ela não tem.
+ * POR QUE UMA CHAVE POR TELA, e não uma só. O Play cataloga mídia de streaming, o Cast
+ * cataloga episódio de podcast e Cursos cataloga formação; cada parede lê o próprio
+ * catálogo e só sabe resolver os próprios slugs. Uma chave compartilhada faria a
+ * fileira do Cast tentar desenhar um vídeo que ela não tem.
  *
  * ONDE ELA APARECE. Numa fileira «Minha lista» no alto da própria parede, e só quando tem
  * item. É a regra de não deixar beco: uma lista em que se pode pôr coisas e que não se

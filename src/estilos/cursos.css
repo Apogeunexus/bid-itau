@@ -186,7 +186,13 @@
 
 .cursos-categoria[aria-pressed="true"] {
   border-color: var(--cor-tinta);
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
   box-shadow: var(--sombra-2);
+}
+
+.cursos-categoria[aria-pressed="true"] .cursos-categoria-n {
+  color: color-mix(in srgb, var(--cor-fundo) 72%, transparent);
 }
 
 .cursos-categoria-capa {
@@ -219,7 +225,7 @@
 }
 
 .cursos-categoria[aria-pressed="true"] .cursos-categoria-pe svg {
-  color: var(--cor-tinta);
+  color: var(--cor-fundo);
 }
 
 .cursos-categoria-nome {
@@ -235,7 +241,6 @@
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  min-block-size: 2.5rem;
   font-weight: 700;
   overflow-wrap: anywhere;
 }
@@ -665,12 +670,13 @@
 }
 
 [data-view="web"] .cursos-categorias-trilho {
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   overflow: visible;
   margin-inline: 0;
   padding-inline: 0;
 }
 
 [data-view="web"] .cursos-categoria {
-  inline-size: 11rem;
+  inline-size: auto;
 }
