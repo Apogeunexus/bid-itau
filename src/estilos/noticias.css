@@ -439,6 +439,10 @@
   color: var(--cor-tinta-3);
 }
 
+.leitura--capa .leitura-foto {
+  aspect-ratio: 16 / 9;
+}
+
 .leitura--capa .leitura-titulo {
   font-size: var(--tipo-titulo-1);
   line-height: 1.15;
@@ -550,6 +554,10 @@
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   gap: var(--espaco-secao);
   align-items: start;
+}
+
+[data-view="web"] .leitura--capa .leitura-foto {
+  aspect-ratio: 3 / 2;
 }
 
 [data-view="web"] .leitura--capa .leitura-titulo {
