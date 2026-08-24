@@ -134,6 +134,44 @@ export function diaParaIso(dia: number): string {
   return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
 }
 
+/**
+ * Os valores de `creditoImagem` que NÃO NOMEIAM NINGUÉM, medidos no acervo.
+ *
+ * «Foto: divulgação» não é crédito: é a etiqueta que o material de imprensa usa quando não
+ * há autoria a declarar. Ela aparece em 175 das 529 mídias, e mais 17 trazem «frame de
+ * vídeo» ou «frame do filme» — juntos, 36% do catálogo carregava uma linha de crédito que
+ * não credita. Numa tela onde a capa sangra, essa linha é ruído embaixo de cada imagem.
+ *
+ * O QUE FICA: tudo que nomeia alguém ou alguma instituição — «Matheus Dias», «Agência
+ * Ophelia», «Itaú Cultural», «Acervo Funarte». Crédito de verdade é obrigatório e não
+ * negociável: o acervo é de terceiros e a procedência é argumento da proposta, não rodapé.
+ * «Acervo pessoal» também fica: ele diz de ONDE a imagem veio, que é mais do que nada.
+ *
+ * A lista é fechada e escrita à mão porque foi MEDIDA, não adivinhada. Um valor novo que
+ * também não credite passa a aparecer — e aparecer é o comportamento seguro: o erro de
+ * mostrar um crédito a mais é menor que o de engolir a autoria de alguém.
+ */
+const CREDITOS_QUE_NAO_CREDITAM = new Set([
+  "divulgacao",
+  "frame de video",
+  "frame do filme",
+  "reproducao",
+  "sem credito",
+]);
+
+/** O crédito quando ele nomeia alguém; `undefined` quando não nomeia. */
+export function creditoQueCredita(credito?: string): string | undefined {
+  if (!credito) return undefined;
+  const chave = credito
+    .trim()
+    .toLocaleLowerCase("pt-BR")
+    .normalize("NFD")
+    // `\p{M}` e não uma faixa escrita à mão: a faixa exigiria acentos combinantes
+    // literais no código, que são invisíveis no editor e no diff.
+    .replace(/\p{M}/gu, "");
+  return CREDITOS_QUE_NAO_CREDITAM.has(chave) ? undefined : credito;
+}
+
 /** Uma categoria do acervo, contada. `valor` é a chave crua do CMS; `rotulo` é a tela. */
 export interface CategoriaContada {
   valor: string;

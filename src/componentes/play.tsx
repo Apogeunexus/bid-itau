@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AcoesDoCartaz } from "@/componentes/base/acoes-do-cartaz";
 import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
+import { ICONE_CONFERIDO, ICONE_MAIS, ICONE_TOCAR } from "@/componentes/base/icones";
 import { CHAVE_LISTA_PLAY, useMinhaLista } from "@/componentes/base/minha-lista";
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
 import {
+  creditoQueCredita,
   diaParaIso,
   diaParaTexto,
   DIMENSOES_DO_FILTRO,
@@ -388,8 +390,14 @@ export function Play({
         ) : null}
         <span className="play-destaque-veu" aria-hidden />
 
-        {destaque.creditoImagem ? (
-          <span className="play-destaque-credito">Foto: {destaque.creditoImagem}</span>
+        {/* O crédito só aparece quando NOMEIA ALGUÉM. «Foto: divulgação» é a etiqueta do
+            material de imprensa para «não há autoria a declarar», e ela cobre 175 das 529
+            mídias — uma tarja sobre a abertura que não credita ninguém. Quem decide o que
+            é crédito de verdade é `creditoQueCredita`, em `play-wire.ts`, com a medição. */}
+        {creditoQueCredita(destaque.creditoImagem) ? (
+          <span className="play-destaque-credito">
+            Foto: {creditoQueCredita(destaque.creditoImagem)}
+          </span>
         ) : null}
 
         <div className="play-destaque-texto">
@@ -409,16 +417,39 @@ export function Play({
           {destaque.resumo ? (
             <p className="play-destaque-resumo tipo-detalhe">{destaque.resumo}</p>
           ) : null}
-          {/* «Abrir» e não «assistir»: o acervo traz a ficha e a capa, não o arquivo.
-              A ressalva por extenso é da página do player — aqui basta o rótulo do
-              botão não prometer o que não existe. */}
-          <Link
-            href={destaque.rota}
-            className="play-destaque-botao tipo-detalhe"
-            aria-label={`Abrir «${destaque.titulo}»`}
-          >
-            Abrir
-          </Link>
+          {/* OS DOIS BOTÕES DA ABERTURA, sempre visíveis — a abertura não tem hover para
+              esconder nada atrás. São o mesmo par da página de um título, com o glifo à
+              esquerda do rótulo, e por isso usam o mesmo vocabulário (`.midia-botao`): dois
+              desenhos para o mesmo botão em duas telas irmãs divergiriam na primeira
+              correção.
+
+              «DAR PLAY» ABRE A PÁGINA DA MÍDIA, DENTRO DO APP — decisão de 23/08. Ela
+              chegou a apontar para o site do Itaú Cultural, onde o arquivo realmente está,
+              e o cliente pediu o contrário: o gesto tem de continuar dentro do protótipo,
+              mesmo sem player do outro lado. É a página do título que recebe — capa
+              sangrando, sinopse, a coleção inteira e as semelhantes —, e é lá que o link
+              para a fonte existe, com o rótulo dizendo que ele sai daqui. */}
+          <div className="play-destaque-acoes">
+            <Link
+              href={destaque.rota}
+              className="midia-botao midia-botao--primario tipo-detalhe"
+              aria-label={`Dar play em «${destaque.titulo}»`}
+            >
+              {ICONE_TOCAR}
+              Dar play
+            </Link>
+
+            <button
+              type="button"
+              data-na-lista={minhaLista.tem(destaque.slug) ? "sim" : "nao"}
+              aria-pressed={minhaLista.tem(destaque.slug)}
+              onClick={() => minhaLista.alternar(destaque.slug)}
+              className="midia-botao tipo-detalhe"
+            >
+              {minhaLista.tem(destaque.slug) ? ICONE_CONFERIDO : ICONE_MAIS}
+              {minhaLista.tem(destaque.slug) ? "Na minha lista" : "Adicionar na lista"}
+            </button>
+          </div>
         </div>
       </section>
 

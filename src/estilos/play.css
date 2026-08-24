@@ -145,24 +145,18 @@
   color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
 }
 
-/* O par laranja-sobre-preto do DS: 9,1:1, e o único par de contraste que passa
-   nos dois temas (ver `--cor-sobre-acao` em tokens.css). */
-.play-destaque-botao {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-block-size: 2.75rem;
-  margin-block-start: 0.25rem;
-  padding: 0 1.25rem;
-  border-radius: var(--raio-pilula);
-  background: var(--cor-acao);
-  color: var(--cor-sobre-acao);
-  font-weight: 700;
-  transition: opacity var(--dur-1) var(--ease-padrao);
-}
+/* OS DOIS BOTÕES DA ABERTURA. O desenho deles é `.midia-botao`, lá no fim desta folha —
+   o mesmo par da página de um título, porque é o mesmo botão em duas telas irmãs. Aqui
+   mora só o arranjo: eles ficam lado a lado, sempre visíveis. A abertura não tem hover
+   para esconder nada atrás.
 
-.play-destaque-botao:hover {
-  opacity: 0.9;
+   O botão único e laranja que morava aqui (`.play-destaque-botao`) saiu em 23/08: ele
+   dizia «Abrir» e era um só, enquanto o cartaz de cada mídia já oferecia dois. */
+.play-destaque-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block-start: 0.25rem;
 }
 
 /* O crédito FLUTUA no canto, com recuo. Colado nas duas bordas ele virava uma

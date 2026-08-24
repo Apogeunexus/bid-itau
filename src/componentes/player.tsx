@@ -8,6 +8,7 @@ import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { FichaDeAcessibilidade } from "@/componentes/ficha-acessibilidade";
 import { gravarConcluidas, lerConcluidas } from "@/componentes/play";
 import {
+  creditoQueCredita,
   diaParaIso,
   diaParaTexto,
   DIMENSOES_DO_FILTRO,
@@ -243,10 +244,14 @@ export function Player({
             </button>
           </div>
 
-          {midia.creditoImagem ? (
-            /* Crédito obrigatório quando há imagem: o acervo é de terceiros e a
-               procedência é argumento da proposta, não rodapé. */
-            <p className="midia-capa-credito tipo-micro">Foto: {midia.creditoImagem}</p>
+          {/* Crédito obrigatório QUANDO ELE CREDITA: o acervo é de terceiros e a
+              procedência é argumento da proposta, não rodapé. «Foto: divulgação» não
+              credita ninguém e cobre um terço do catálogo — quem separa uma coisa da outra
+              é `creditoQueCredita`, em `play-wire.ts`, com a medição. */}
+          {creditoQueCredita(midia.creditoImagem) ? (
+            <p className="midia-capa-credito tipo-micro">
+              Foto: {creditoQueCredita(midia.creditoImagem)}
+            </p>
           ) : null}
         </div>
       </header>
