@@ -51,6 +51,12 @@ const ROTAS = [
   { rota: "/acontece/", visao: "mobile" }, // faixa de dias, cartão de agenda, mapa
   { rota: "/buscar/", visao: "mobile" }, // campo, facetas, vitrine
   { rota: "/play/", visao: "mobile" }, // chips, grade de mídia
+  // A PÁGINA DE UM TÍTULO, acrescentada em 23/08 junto com a reformulação dela: ela é a
+  // segunda tela do projeto com texto branco FIXO sobre fotografia sob véu — o par que o
+  // tema escuro costuma quebrar —, e as 529 rotas dela usam o mesmo componente, então
+  // medir uma mede o desenho. Slug fixo: se o acervo mudar e ele sumir, o gate reprova
+  // com «a página não carregou», que é o barulho certo.
+  { rota: "/play/lousinha--ic-para-criancas--tecidos/", visao: "mobile" },
   { rota: "/filtros/", visao: "mobile" }, // caixas de marcação, contador vivo
   { rota: "/salvos/", visao: "mobile" }, // lista densa
   { rota: "/meu/", visao: "mobile" }, // hub, troca de persona
