@@ -1,7 +1,7 @@
 import { Player } from "@/componentes/player";
 import { DATA_DE_REFERENCIA } from "@/dados/alerta";
 import { slugsPorTipo, vizinhos } from "@/dados/grafo";
-import { eventosDaMidia, itemDoPlay, PONTE_COM_EVENTO, SEM_ARQUIVO } from "@/dados/play";
+import { eventosDaMidia, itemDoPlay, SEM_ARQUIVO } from "@/dados/play";
 
 /**
  * A rota de uma mídia — **529 páginas**, o maior acréscimo desta fase (D-92).
@@ -117,11 +117,6 @@ export default async function PaginaDaMidia({ params }: { params: Promise<{ slug
       aprofunda={aprofunda}
       dataDeReferencia={DATA_DE_REFERENCIA}
       semArquivo={SEM_ARQUIVO}
-      coberturaDaPonte={{
-        midiasDistintas: PONTE_COM_EVENTO.midiasDistintas,
-        deQuantas: PONTE_COM_EVENTO.deQuantas,
-        eventosAlcancados: PONTE_COM_EVENTO.eventosAlcancados,
-      }}
     />
   );
 }

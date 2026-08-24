@@ -86,7 +86,6 @@ export function Player({
   aprofunda,
   dataDeReferencia,
   semArquivo,
-  coberturaDaPonte,
 }: {
   midia: MidiaDoPlayer;
   /** Os eventos de que ESTA mídia fala — `fala_sobre`, a única ponte real. */
@@ -95,7 +94,6 @@ export function Player({
   aprofunda: LigacaoNomeada[];
   dataDeReferencia: string;
   semArquivo: { titulo: string; acervo: string; rede: string };
-  coberturaDaPonte: { midiasDistintas: number; deQuantas: number; eventosAlcancados: number };
 }) {
   const [concluidas, setConcluidas] = useState<string[]>([]);
   const [hidratado, setHidratado] = useState(false);
@@ -294,14 +292,9 @@ export function Player({
 
       </section>
 
-      {/* ------------------------------------------------ o que isto aprofunda (tela 20) */}
-      <section
-        data-veja-isto
-        className="flex flex-col gap-2 rounded-lg border border-borda p-3"
-      >
-        <h2 className="text-sm font-bold">O que esta mídia aprofunda</h2>
-
-        {eventos.length || aprofunda.length ? (
+      {eventos.length || aprofunda.length ? (
+        <section data-veja-isto className="flex flex-col gap-2">
+          <h2 className="text-sm font-bold">Eventos relacionados</h2>
           <ul className="flex flex-col gap-1">
             {[...eventos, ...aprofunda].map((l) => (
               <li key={l.rota}>
@@ -316,17 +309,8 @@ export function Player({
               </li>
             ))}
           </ul>
-        ) : (
-          /* O bloco NÃO some: declara com o denominador. Sumir faria parecer que a
-             funcionalidade não existe; declarado, o vazio vira a medida do acervo. */
-          <p data-sem-ligacao className="text-sm leading-relaxed">
-            Esta mídia não declara ligação com nenhum evento do acervo. Só{" "}
-            <strong data-denominador="com-ponte">{coberturaDaPonte.midiasDistintas}</strong>{" "}
-            das <strong data-denominador="total">{coberturaDaPonte.deQuantas}</strong> mídias
-            declaram — juntas elas alcançam {coberturaDaPonte.eventosAlcancados} eventos.
-          </p>
-        )}
-      </section>
+        </section>
+      ) : null}
 
       <p className="text-xs">
         <Link href="/play/" className="underline decoration-borda-forte underline-offset-4">
