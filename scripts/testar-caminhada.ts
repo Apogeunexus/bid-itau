@@ -1,5 +1,5 @@
 /**
- * testar-caminhada.ts — as nove asserções do motor de feed, sobre o GRAFO REAL.
+ * testar-caminhada.ts — as asserções do motor de feed, sobre o GRAFO REAL.
  *
  * Não há mock e não há fixture: 7.810 entidades e 66.563 arestas, as mesmas que a tela
  * usa. Um motor que passa em fixture e colapsa no acervo não prova nada — e as três
@@ -44,7 +44,7 @@ function exigir(condicao: boolean, mensagem: string): asserts condicao {
 const feedDe = (personaId: string, disposicoes: string[] = []) =>
   montarFeed({ personaId, disposicoes, limite: LIMITE });
 
-console.log(`Motor de caminhada — 9 asserções sobre o grafo real (${PERSONAS.length} personas)\n`);
+console.log(`Motor de caminhada — 10 asserções sobre o grafo real (${PERSONAS.length} personas)\n`);
 
 // ---------------------------------------------------------------------------
 // 1 — Rodízio (DP-B, D-27)
@@ -227,9 +227,24 @@ assercao("9 salto 3 é reserva: só entra em classe sem candidato de 1 ou 2 salt
   }
 });
 
+// ---------------------------------------------------------------------------
+// 10 — Fora do feed (cartão que lia como banner gerado)
+// ---------------------------------------------------------------------------
+assercao("10 Descobrir não mostra «90-00: cuentos brasileños contemporâneos»", () => {
+  const slug = "90-00-cuentos-brasilenos-contemporaneos";
+  for (const persona of PERSONAS) {
+    const { cartoes } = feedDe(persona.id);
+    const bateu = cartoes.find((c) => c.slug === slug);
+    exigir(
+      !bateu,
+      `${persona.nome}: o feed ainda traz «${bateu?.titulo}»`,
+    );
+  }
+});
+
 console.log("");
 if (falhas) {
-  console.error(`${falhas} de 9 asserções falharam.`);
+  console.error(`${falhas} de 10 asserções falharam.`);
   process.exit(1);
 }
-console.log("9 de 9 asserções passaram.");
+console.log("10 de 10 asserções passaram.");

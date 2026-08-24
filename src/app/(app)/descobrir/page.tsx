@@ -61,11 +61,18 @@ const PROGRAMACAO: ProgramacaoDaVitrine | null = diaEmFoco
       data: diaEmFoco.data,
       eHoje: diaEmFoco.data === agenda.hoje,
       totalSessoes: diaEmFoco.totalSessoes,
-      sessoes: diaEmFoco.eventos.slice(0, TETO_DE_SESSOES).map((indice, i) => ({
-        hora: diaEmFoco.horas[i],
-        titulo: agenda.eventos[indice].titulo,
-        slug: agenda.eventos[indice].slug,
-      })),
+      sessoes: diaEmFoco.eventos.slice(0, TETO_DE_SESSOES).map((indice, i) => {
+        const evento = agenda.eventos[indice];
+        return {
+          hora: diaEmFoco.horas[i],
+          titulo: evento.titulo,
+          slug: evento.slug,
+          classe: evento.classe,
+          linguagens: evento.linguagens,
+          imagem: evento.imagem,
+          creditoImagem: evento.creditoImagem,
+        };
+      }),
     }
   : null;
 

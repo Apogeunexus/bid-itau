@@ -76,6 +76,21 @@ export const CLASSES_CARTAVEIS: readonly ClasseEntidade[] = [
 const CARTAVEL = new Set<ClasseEntidade>(CLASSES_CARTAVEIS);
 
 /**
+ * A caminhada ATRAVESSA estas entidades — aresta, busca e página seguem no
+ * grafo — mas elas não viram cartão em Descobrir.
+ *
+ * «90-00: cuentos brasileños contemporâneos» é o caso que `motivo.ts` já
+ * nomeou: no feed o título + «É de literatura» lê como banner gerado, não
+ * como mediação. Sem imagem, sem tema, a pastilha de classe é o cartão
+ * inteiro. Fica fora da rotação até o cartão ter o que mostrar além da tag.
+ */
+const FORA_DO_FEED = new Set<string>(["90-00-cuentos-brasilenos-contemporaneos"]);
+
+function viraCartao(entidade: Entidade): boolean {
+  return CARTAVEL.has(entidade.classe) && !FORA_DO_FEED.has(entidade.slug);
+}
+
+/**
  * DP-B — a rotação de classes do rodízio.
  *
  * Escolher sempre a classe com MAIS candidatos colapsa o feed em
@@ -291,7 +306,7 @@ export function expandir(persona: Persona): Expansao {
           caminho: [...no.caminho, passo],
         };
         proxima.push(proximo);
-        if (CARTAVEL.has(entidade.classe)) candidatos.push(proximo);
+        if (viraCartao(entidade)) candidatos.push(proximo);
       }
     }
     fronteira = proxima;
@@ -316,6 +331,7 @@ export function expandir(persona: Persona): Expansao {
       for (let i = 0; i < teto; i++) {
         const { aresta, entidade } = adjacencia[i];
         if (!alvo.has(entidade.classe)) continue;
+        if (FORA_DO_FEED.has(entidade.slug)) continue;
         if (visitados.has(entidade.id)) continue;
         if ((contagem.get(entidade.classe) ?? 0) >= TETO_RESERVA) continue;
         visitados.add(entidade.id);
@@ -495,6 +511,7 @@ function escolherSerendipidade(
     for (const slug of slugsPorTipo(classe)) {
       const e = porSlug(classe, slug);
       if (!e) continue;
+      if (FORA_DO_FEED.has(e.slug)) continue;
       if (expansao.visitados.has(e.id)) continue;
       if (!permitido(e)) continue;
       const chave = semear(personaId, e.id);

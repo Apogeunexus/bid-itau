@@ -2,8 +2,10 @@ import Link from "next/link";
 import { cloneElement, type ReactElement } from "react";
 import { Chip, Estante, TrilhoDeChips } from "@/componentes/base/chip";
 import { ICONE_BUSCAR, ICONE_FILTROS, ICONE_MAPA } from "@/componentes/base/icones";
+import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { CartaoLeitura, dataCurta } from "@/componentes/cartao-leitura";
 import type { Leitura } from "@/dados/leituras";
+import type { ClasseEntidade } from "@/dados/tipos";
 
 /**
  * descobrir-vitrines.tsx — as seções de descoberta que cercam o feed (redesenho
@@ -179,6 +181,11 @@ export interface SessaoDaVitrine {
   hora: string;
   titulo: string;
   slug: string;
+  classe: ClasseEntidade;
+  linguagens: string[];
+  /** Caminho local, ou `null` declarado — a capa sem imagem entra no lugar. */
+  imagem: string | null;
+  creditoImagem: string | null;
 }
 
 export interface ProgramacaoDaVitrine {
@@ -201,17 +208,33 @@ export function ProgramacaoDoDia({ programacao }: { programacao: ProgramacaoDaVi
         href="/acontece/"
         rotuloDoLink="Ver agenda completa"
       />
-      <ol className="flex flex-col rounded-xl border border-borda bg-superficie">
+      <ol
+        data-programacao-do-dia
+        className="flex flex-col rounded-xl border border-borda bg-superficie"
+      >
         {sessoes.map((sessao) => (
           // Chave composta: o acervo de hoje tem UMA sessão por par evento-dia
           // (agenda.ts), mas a estrutura permite duas — e aí o slug sozinho colidiria.
           <li key={`${sessao.hora}-${sessao.slug}`} className="border-t border-borda first:border-t-0">
             <Link
               href={`/evento/${sessao.slug}/`}
-              className="flex items-baseline gap-3 px-3 py-2.5 no-underline"
+              className="flex items-center gap-3 px-3 py-2 no-underline"
             >
-              <span className="font-display shrink-0 text-sm font-bold">{sessao.hora}</span>
-              <span className="min-w-0 text-sm leading-snug font-semibold">{sessao.titulo}</span>
+              <CapaDeCartao
+                titulo={sessao.titulo}
+                classe={sessao.classe}
+                linguagens={sessao.linguagens}
+                imagem={sessao.imagem}
+                creditoImagem={sessao.creditoImagem}
+                compacta
+                className="size-16 shrink-0 rounded-p"
+              />
+              <span className="flex min-w-0 flex-col gap-0.5">
+                <span className="font-display text-sm font-bold">{sessao.hora}</span>
+                <span className="line-clamp-2 text-sm leading-snug font-semibold">
+                  {sessao.titulo}
+                </span>
+              </span>
             </Link>
           </li>
         ))}
