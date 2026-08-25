@@ -1,0 +1,1016 @@
+<title>Seis Sessões</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#E7ECED; --surface:#FDFEFE; --surface-2:#F2F6F6;
+  --ink:#0F1619; --ink-2:#516168; --ink-3:#8B9AA0;
+  --linha:#CFD9DB; --linha-forte:#A9B8BC;
+  --aguardando:#9CACB2; --rodando:#C0751B; --entregue:#1C7562; --bloqueada:#AF4830;
+  --aguardando-fundo:#DFE6E7; --rodando-fundo:#F7E7CE; --entregue-fundo:#D3E8E2; --bloqueada-fundo:#F2DBD4;
+  --critico:#4A3A6B; --critico-fundo:#E2DDEC;
+  --sombra:0 1px 2px rgba(15,22,25,.06),0 4px 14px rgba(15,22,25,.05);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0C1215; --surface:#141C20; --surface-2:#192327;
+  --ink:#E4EBED; --ink-2:#94A6AC; --ink-3:#5F7178;
+  --linha:#263338; --linha-forte:#3A4A50;
+  --aguardando:#697B82; --rodando:#D99236; --entregue:#3E9E88; --bloqueada:#CC6248;
+  --aguardando-fundo:#1C262B; --rodando-fundo:#33261440; --entregue-fundo:#14322C; --bloqueada-fundo:#331E18;
+  --critico:#9B87C4; --critico-fundo:#221D30;
+  --sombra:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
+}}
+:root[data-theme="dark"]{
+  --ground:#0C1215; --surface:#141C20; --surface-2:#192327;
+  --ink:#E4EBED; --ink-2:#94A6AC; --ink-3:#5F7178;
+  --linha:#263338; --linha-forte:#3A4A50;
+  --aguardando:#697B82; --rodando:#D99236; --entregue:#3E9E88; --bloqueada:#CC6248;
+  --aguardando-fundo:#1C262B; --rodando-fundo:#33261440; --entregue-fundo:#14322C; --bloqueada-fundo:#331E18;
+  --critico:#9B87C4; --critico-fundo:#221D30;
+  --sombra:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:Archivo,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.pagina{max-width:1240px; margin:0 auto; padding:32px 24px 72px; display:flex; flex-direction:column; gap:34px}
+@media (max-width:640px){.pagina{padding:22px 14px 56px; gap:26px}}
+
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.rotulo{font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3)}
+
+/* ---- cabeçalho ---- */
+.topo{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px;
+  border-bottom:2px solid var(--linha-forte); padding-bottom:18px}
+.topo h1{margin:0; font-size:clamp(26px,4vw,38px); font-weight:700; letter-spacing:-.022em; text-wrap:balance}
+.topo p{margin:6px 0 0; color:var(--ink-2); font-size:14px; max-width:60ch}
+.carimbo{text-align:right; display:flex; flex-direction:column; gap:3px}
+.carimbo .quando{font-size:15px; font-weight:600}
+.carimbo .aviso{font-size:11.5px; color:var(--ink-3); max-width:26ch; line-height:1.4}
+
+/* ---- KPI ---- */
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr)); gap:1px;
+  background:var(--linha); border:1px solid var(--linha); border-radius:3px; overflow:hidden}
+.kpi{background:var(--surface); padding:14px 16px 15px; display:flex; flex-direction:column; gap:5px}
+.kpi .n{font-size:29px; font-weight:600; line-height:1; letter-spacing:-.02em}
+.kpi .n small{font-size:15px; font-weight:500; color:var(--ink-3); letter-spacing:0}
+.kpi .leg{font-size:12px; color:var(--ink-2); line-height:1.35}
+.kpi[data-sinal="alerta"]{background:var(--bloqueada-fundo)}
+.kpi[data-sinal="alerta"] .n{color:var(--bloqueada)}
+.kpi[data-sinal="bom"] .n{color:var(--entregue)}
+
+/* ---- gantt ---- */
+.bloco{display:flex; flex-direction:column; gap:12px}
+.bloco > header{display:flex; align-items:baseline; justify-content:space-between; gap:14px; flex-wrap:wrap}
+.bloco h2{margin:0; font-size:17px; font-weight:600; letter-spacing:-.012em}
+.bloco .sub{font-size:12.5px; color:var(--ink-2)}
+
+.rolagem{overflow-x:auto; border:1px solid var(--linha); border-radius:3px; background:var(--surface)}
+.grade{min-width:940px}
+.eixo{display:grid; grid-template-columns:var(--colunas); border-bottom:1px solid var(--linha);
+  background:var(--surface-2); position:sticky; top:0; z-index:2}
+.eixo .canto{padding:8px 12px; border-right:1px solid var(--linha)}
+.eixo .u{padding:8px 0 7px; text-align:center; font-size:10.5px; color:var(--ink-3);
+  font-family:"IBM Plex Mono",monospace; border-right:1px solid var(--linha)}
+.eixo .u[data-marco="1"]{color:var(--ink-2); font-weight:600; background:var(--ground)}
+
+.faixa{display:grid; grid-template-columns:var(--colunas); border-bottom:1px solid var(--linha)}
+.faixa:last-child{border-bottom:0}
+.faixa .idt{padding:11px 12px; border-right:1px solid var(--linha); display:flex; flex-direction:column; gap:3px;
+  background:var(--surface)}
+.faixa .idt .nome{font-size:13.5px; font-weight:600; letter-spacing:-.008em}
+.faixa .idt .meta{font-size:11px; color:var(--ink-3); display:flex; gap:7px; align-items:center; flex-wrap:wrap}
+.faixa .cel{border-right:1px solid var(--linha); padding:5px 3px; min-height:52px}
+.faixa .cel:last-child{border-right:0}
+.faixa[data-critico="1"] .idt{box-shadow:inset 3px 0 0 var(--critico)}
+
+.t{width:100%; height:100%; min-height:42px; border-radius:2px; border:1px solid; padding:5px 6px;
+  display:flex; flex-direction:column; gap:2px; cursor:default; text-align:left; font:inherit;
+  transition:transform .12s ease, box-shadow .12s ease}
+.t:hover,.t:focus-visible{transform:translateY(-1px); box-shadow:var(--sombra); z-index:3; position:relative}
+.t:focus-visible{outline:2px solid var(--ink); outline-offset:1px}
+.t .n{font-size:9.5px; font-weight:600; font-family:"IBM Plex Mono",monospace; opacity:.75}
+.t .r{font-size:10.5px; line-height:1.2; font-weight:500}
+.t[data-e="aguardando"]{background:var(--aguardando-fundo); border-color:var(--aguardando); color:var(--ink-2)}
+.t[data-e="rodando"]{background:var(--rodando-fundo); border-color:var(--rodando); color:var(--ink);
+  box-shadow:inset 0 0 0 1px var(--rodando)}
+.t[data-e="entregue"]{background:var(--entregue-fundo); border-color:var(--entregue); color:var(--ink)}
+.t[data-e="bloqueada"]{background:var(--bloqueada-fundo); border-color:var(--bloqueada); color:var(--ink-2)}
+.t .h{font-size:9px; font-family:"IBM Plex Mono",monospace; color:var(--entregue); font-weight:600}
+
+.espera{grid-column:var(--span); display:flex; align-items:center; padding:0 10px; margin:6px 3px;
+  border:1px dashed var(--critico); border-radius:2px; background:var(--critico-fundo);
+  font-size:11px; color:var(--critico); font-weight:600; letter-spacing:.02em}
+
+.legenda{display:flex; flex-wrap:wrap; gap:8px 18px; font-size:12px; color:var(--ink-2); align-items:center}
+.legenda span{display:inline-flex; align-items:center; gap:6px}
+.legenda i{width:11px; height:11px; border-radius:2px; border:1px solid; display:inline-block}
+
+/* ---- tabelas ---- */
+table{width:100%; border-collapse:collapse; font-size:13.5px}
+th{text-align:left; font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-3); padding:9px 12px; border-bottom:1px solid var(--linha-forte); white-space:nowrap}
+td{padding:10px 12px; border-bottom:1px solid var(--linha); vertical-align:top}
+tr:last-child td{border-bottom:0}
+.vazio{padding:20px 12px; color:var(--ink-3); font-size:13px}
+
+.pin{display:inline-block; padding:1px 7px; border-radius:2px; font-size:11px; font-weight:600;
+  border:1px solid; letter-spacing:.01em}
+.pin[data-e="rodando"]{color:var(--rodando); border-color:var(--rodando); background:var(--rodando-fundo)}
+.pin[data-e="entregue"],.pin[data-e="encerrada"]{color:var(--entregue); border-color:var(--entregue); background:var(--entregue-fundo)}
+.pin[data-e="aguardando"]{color:var(--ink-2); border-color:var(--aguardando); background:var(--aguardando-fundo)}
+.pin[data-e="bloqueada"]{color:var(--bloqueada); border-color:var(--bloqueada); background:var(--bloqueada-fundo)}
+
+.rodape{font-size:12px; color:var(--ink-3); border-top:1px solid var(--linha); padding-top:16px; line-height:1.6}
+.rodape code{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="pagina">
+  <header class="topo">
+    <div>
+      <h1>Seis Sessões</h1>
+      <p>64 tarefas construindo o bastidor da Agenda Cultural BR em paralelo. Estado lido dos
+         seis arquivos de sessão e cruzado com o histórico do git.</p>
+    </div>
+    <div class="carimbo">
+      <span class="rotulo">Última varredura</span>
+      <span class="quando mono" id="carimbo">—</span>
+      <span class="aviso">Não é tempo real. É tão fresco quanto esta varredura.</span>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="bloco">
+    <header>
+      <div>
+        <h2>As 64 tarefas</h2>
+        <span class="sub">A unidade é a tarefa, não a hora — não há base para estimar duração.</span>
+      </div>
+      <div class="legenda">
+        <span><i style="background:var(--entregue-fundo);border-color:var(--entregue)"></i>entregue</span>
+        <span><i style="background:var(--rodando-fundo);border-color:var(--rodando)"></i>em curso</span>
+        <span><i style="background:var(--aguardando-fundo);border-color:var(--aguardando)"></i>aguardando</span>
+        <span><i style="background:var(--critico-fundo);border-color:var(--critico);border-style:dashed"></i>espera do caminho crítico</span>
+      </div>
+    </header>
+    <div class="rolagem"><div class="grade" id="grade"></div></div>
+  </section>
+
+  <section class="bloco">
+    <header><h2>O que mudou</h2><span class="sub">A nota de cada entrega, como a sessão a escreveu.</span></header>
+    <div class="rolagem"><div id="notas"></div></div>
+  </section>
+
+  <section class="bloco">
+    <header><h2>Dependências entre sessões</h2><span class="sub">A condição é sempre um commit, nunca arquivo no disco.</span></header>
+    <div class="rolagem"><div id="deps"></div></div>
+  </section>
+
+  <section class="bloco">
+    <header><h2>Precisa de você</h2><span class="sub">O que não se resolve entre sessões.</span></header>
+    <div class="rolagem"><div id="humano"></div></div>
+  </section>
+
+  <footer class="rodape">
+    Gerado por <code>node scripts/gerar-painel.mjs</code>, que lê <code>.planning/estado/S*.md</code>
+    e o <code>git log</code>. Nenhum número desta página é digitado à mão.
+  </footer>
+</div>
+
+<script>
+/* DADOS:INICIO */
+const DADOS = {
+  "varredura": "25/08, 20:17",
+  "kpi": {
+    "concluidas": 0,
+    "totalTarefas": 64,
+    "ativas": 2,
+    "bloqueadas": 4,
+    "divergencias": 0,
+    "sujos": 51,
+    "folgaS6": 11,
+    "pedidos": 0
+  },
+  "dependencias": [
+    {
+      "de": "S7",
+      "tarefaDe": 1,
+      "para": "S3",
+      "tarefaPara": 5,
+      "o_que": "armazém do produtor",
+      "duro": false
+    },
+    {
+      "de": "S7",
+      "tarefaDe": 1,
+      "para": "S1",
+      "tarefaPara": 6,
+      "o_que": "tipos-acesso.ts",
+      "duro": false
+    },
+    {
+      "de": "S3",
+      "tarefaDe": 1,
+      "para": "S5",
+      "tarefaPara": 1,
+      "o_que": "split de redacao.ts",
+      "duro": false
+    },
+    {
+      "de": "S7",
+      "tarefaDe": 11,
+      "para": "S6",
+      "tarefaPara": 1,
+      "o_que": "a pasta (bastidor)/studio",
+      "duro": true
+    }
+  ],
+  "sessoes": [
+    {
+      "id": "S7",
+      "nome": "Studio · Produtor",
+      "onda": 1,
+      "pasta": "src/app/(bastidor)/studio",
+      "sessaoNome": null,
+      "estado": "rodando",
+      "feitas": 0,
+      "total": 11,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "contrato e seed",
+          "inicio": 0,
+          "estado": "rodando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "P2 identidade",
+          "inicio": 1,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "P5 grade de ocorrências",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "P3 obra e elenco",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "P4 espaço e temporada",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "P6 ficha de acessibilidade",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "P7 comercial e classificação",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "P8 revisão e envio",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "P1 painel",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "E1 alteração · E2 duplicata",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 11,
+          "rot": "suíte e medidas",
+          "inicio": 10,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "nome": "Moderação",
+      "onda": 1,
+      "pasta": "src/app/(bastidor)/moderacao",
+      "sessaoNome": null,
+      "estado": "rodando",
+      "feitas": 0,
+      "total": 11,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "separação de território",
+          "inicio": 1,
+          "estado": "rodando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "M1 fila",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "M2 ficha do item",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "M9 histórico",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "integração com a S7",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "M3 revisão da IA",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "M8 escopo e escalonamento",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "M5 elenco · M6 reconciliação",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "M4 similaridade",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "M7 duplicatas",
+          "inicio": 10,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 11,
+          "rot": "suíte e medidas",
+          "inicio": 11,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "nome": "Gestor · Observatório",
+      "onda": 2,
+      "pasta": "src/app/(bastidor)/observatorio",
+      "sessaoNome": null,
+      "estado": "aguardando",
+      "feitas": 0,
+      "total": 10,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "recorte do DTO",
+          "inicio": 0,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "G1 público",
+          "inicio": 1,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "G3 impacto cultural",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "G5 procedência",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "G6 ausência declarada",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "G4 território",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "G2 KPIs de produto",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "G7 exportação",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "G8 leitura da moderação",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "suíte e medidas",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S1",
+      "nome": "Admin",
+      "onda": 2,
+      "pasta": "src/app/(bastidor)/admin",
+      "sessaoNome": null,
+      "estado": "aguardando",
+      "feitas": 0,
+      "total": 11,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "folha admin.css",
+          "inicio": 1,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "dados admin.ts",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "A2 motor",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "A3 territórios",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "A6 observabilidade",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "A1 papéis e escopos",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "A7 auditoria",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "A4 vocabulário · A5 limites da IA",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "A8 titulares · A9 governança",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "A10 desempenho da moderação",
+          "inicio": 10,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 11,
+          "rot": "suíte e medidas",
+          "inicio": 11,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "nome": "Editor · Curador",
+      "onda": 2,
+      "pasta": "src/app/(bastidor)/redacao",
+      "sessaoNome": null,
+      "estado": "aguardando",
+      "feitas": 0,
+      "total": 10,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "reancorar redacao.ts",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "E1 trilha",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "E3 arestas de sentido",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "E9 assinaturas",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "E2 destaque",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "E4 tesauro",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "E5 redação editorial",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "E7 motor editorial",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "E6 especiais · E8 calendário",
+          "inicio": 10,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "suíte e medidas",
+          "inicio": 11,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S6",
+      "nome": "Organização",
+      "onda": 2,
+      "pasta": "src/app/(bastidor)/studio",
+      "sessaoNome": null,
+      "estado": "aguardando",
+      "feitas": 0,
+      "total": 11,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "ler o que a S7 deixou",
+          "inicio": 11,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "O2 espaços",
+          "inicio": 12,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "O1 ficha da instituição",
+          "inicio": 13,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "O7 equipe e alçadas",
+          "inicio": 14,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "O5 mídia",
+          "inicio": 15,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "O3 programa",
+          "inicio": 16,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "O4 formação",
+          "inicio": 17,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "O6 editais",
+          "inicio": 18,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "O8 integração",
+          "inicio": 19,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "O9 alcance · O10 conformidade",
+          "inicio": 20,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 11,
+          "rot": "suíte e medidas",
+          "inicio": 21,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    }
+  ],
+  "notas": []
+};
+/* DADOS:FIM */
+
+const NADA = '<p class="vazio">Nada aqui nesta varredura.</p>';
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function kpis(d){
+  const k = d.kpi;
+  const cartoes = [
+    { n:`${k.concluidas}<small> / ${k.totalTarefas}</small>`, leg:"tarefas com commit", sinal:k.concluidas>0?"bom":"" },
+    { n:k.ativas, leg:"sessões em curso" },
+    { n:k.bloqueadas, leg:"sessões aguardando liberação" },
+    { n:k.divergencias, leg:"entregas declaradas sem hash no git", sinal:k.divergencias>0?"alerta":"bom" },
+    { n:k.sujos, leg:"arquivos sem commit na árvore", sinal:k.sujos>20?"alerta":"bom" },
+    { n:k.pedidos, leg:"pedidos de contrato abertos", sinal:k.pedidos>0?"alerta":"" },
+    { n:k.folgaS6, leg:"tarefas até a S6 poder começar" },
+  ];
+  return cartoes.map((c)=>`<div class="kpi"${c.sinal?` data-sinal="${c.sinal}"`:""}>
+    <span class="n mono">${c.n}</span><span class="leg">${esc(c.leg)}</span></div>`).join("");
+}
+
+function grade(d){
+  const fim = Math.max(...d.sessoes.flatMap((s)=>s.tarefas.map((t)=>t.inicio))) + 1;
+  const cols = `260px repeat(${fim}, minmax(46px,1fr))`;
+  let h = `<div class="eixo" style="--colunas:${cols}"><div class="canto rotulo">sessão</div>`;
+  for(let u=0; u<fim; u++) h += `<div class="u" data-marco="${u%5===0?1:0}">${u}</div>`;
+  h += `</div>`;
+
+  for(const s of d.sessoes){
+    const critico = s.id==="S7"||s.id==="S6" ? 1 : 0;
+    h += `<div class="faixa" data-critico="${critico}" style="--colunas:${cols}">
+      <div class="idt">
+        <span class="nome">${esc(s.id)} · ${esc(s.nome)}</span>
+        <span class="meta">
+          <span class="pin" data-e="${esc(s.estado)}">${esc(s.estado)}</span>
+          <span class="mono">${s.feitas}/${s.total}</span>
+          ${s.frescor?`<span class="mono">${esc(s.frescor)}</span>`:""}
+        </span>
+        ${s.bloqueios.length?`<span class="meta" style="color:var(--bloqueada)">${esc(s.bloqueios[0])}</span>`:""}
+      </div>`;
+
+    const porCol = new Map(s.tarefas.map((t)=>[t.inicio,t]));
+    const primeiro = Math.min(...s.tarefas.map((t)=>t.inicio));
+    for(let u=0; u<fim; u++){
+      if(u < primeiro){
+        if(u===0 && primeiro>0){
+          h += `<div class="cel" style="grid-column:span ${primeiro}">
+            <div class="espera">espera · ${esc(s.id==="S6"?"a S7 desocupar a pasta":"liberação")}</div></div>`;
+        }
+        if(primeiro>0) { u = primeiro-1; continue; }
+      }
+      const t = porCol.get(u);
+      if(!t){ h += `<div class="cel"></div>`; continue; }
+      const titulo = [`${s.id} · tarefa ${t.n}`, t.rot, t.commit?`commit ${t.commit}`:null, t.nota].filter(Boolean).join(" — ");
+      h += `<div class="cel"><button class="t" data-e="${t.estado}" title="${esc(titulo)}">
+        <span class="n">${t.n}</span><span class="r">${esc(t.rot)}</span>
+        ${t.commit?`<span class="h mono">${esc(t.commit)}</span>`:""}</button></div>`;
+    }
+    h += `</div>`;
+  }
+  return h;
+}
+
+function notas(d){
+  if(!d.notas.length) return NADA;
+  return `<table><thead><tr><th>sessão</th><th>tarefa</th><th>nota</th><th>quando</th></tr></thead><tbody>`
+    + d.notas.map((n)=>`<tr><td class="mono">${esc(n.sessao)}</td><td>${n.n}. ${esc(n.rot)}</td>
+        <td>${esc(n.nota)}</td><td class="mono">${esc(n.quando??"—")}</td></tr>`).join("")
+    + `</tbody></table>`;
+}
+
+function deps(d){
+  return `<table><thead><tr><th>de</th><th>para</th><th>o que destrava</th><th>tipo</th></tr></thead><tbody>`
+    + d.dependencias.map((x)=>`<tr>
+        <td class="mono">${esc(x.de)} · tarefa ${x.tarefaDe}</td>
+        <td class="mono">${esc(x.para)} · tarefa ${x.tarefaPara}</td>
+        <td>${esc(x.o_que)}</td>
+        <td>${x.duro?'<span class="pin" data-e="bloqueada">bloqueio total</span>':'<span class="pin" data-e="aguardando">uma tarefa</span>'}</td>
+      </tr>`).join("") + `</tbody></table>`;
+}
+
+function humano(d){
+  const itens = [];
+  for(const s of d.sessoes) for(const p of s.pedidos) itens.push({ quem:s.id, o_que:p, tipo:"pedido de contrato" });
+  if(d.kpi.sujos > 20) itens.push({ quem:"árvore", o_que:`${d.kpi.sujos} arquivos sem commit — trabalho sem ponto de retorno`, tipo:"higiene" });
+  if(d.kpi.divergencias > 0) itens.push({ quem:"coordenação", o_que:`${d.kpi.divergencias} entrega(s) declarada(s) sem hash conhecido pelo git`, tipo:"divergência" });
+  if(!itens.length) return NADA;
+  return `<table><thead><tr><th>quem</th><th>o quê</th><th>tipo</th></tr></thead><tbody>`
+    + itens.map((i)=>`<tr><td class="mono">${esc(i.quem)}</td><td>${esc(i.o_que)}</td><td>${esc(i.tipo)}</td></tr>`).join("")
+    + `</tbody></table>`;
+}
+
+if(DADOS){
+  document.getElementById("carimbo").textContent = DADOS.varredura;
+  document.getElementById("kpis").innerHTML = kpis(DADOS);
+  document.getElementById("grade").innerHTML = grade(DADOS);
+  document.getElementById("notas").innerHTML = notas(DADOS);
+  document.getElementById("deps").innerHTML = deps(DADOS);
+  document.getElementById("humano").innerHTML = humano(DADOS);
+}
+</script>

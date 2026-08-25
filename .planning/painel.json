@@ -1,0 +1,728 @@
+{
+  "varredura": "25/08, 20:17",
+  "kpi": {
+    "concluidas": 0,
+    "totalTarefas": 64,
+    "ativas": 2,
+    "bloqueadas": 4,
+    "divergencias": 0,
+    "sujos": 51,
+    "folgaS6": 11,
+    "pedidos": 0
+  },
+  "dependencias": [
+    {
+      "de": "S7",
+      "tarefaDe": 1,
+      "para": "S3",
+      "tarefaPara": 5,
+      "o_que": "armazém do produtor",
+      "duro": false
+    },
+    {
+      "de": "S7",
+      "tarefaDe": 1,
+      "para": "S1",
+      "tarefaPara": 6,
+      "o_que": "tipos-acesso.ts",
+      "duro": false
+    },
+    {
+      "de": "S3",
+      "tarefaDe": 1,
+      "para": "S5",
+      "tarefaPara": 1,
+      "o_que": "split de redacao.ts",
+      "duro": false
+    },
+    {
+      "de": "S7",
+      "tarefaDe": 11,
+      "para": "S6",
+      "tarefaPara": 1,
+      "o_que": "a pasta (bastidor)/studio",
+      "duro": true
+    }
+  ],
+  "sessoes": [
+    {
+      "id": "S7",
+      "nome": "Studio · Produtor",
+      "onda": 1,
+      "pasta": "src/app/(bastidor)/studio",
+      "sessaoNome": null,
+      "estado": "rodando",
+      "feitas": 0,
+      "total": 11,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "contrato e seed",
+          "inicio": 0,
+          "estado": "rodando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "P2 identidade",
+          "inicio": 1,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "P5 grade de ocorrências",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "P3 obra e elenco",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "P4 espaço e temporada",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "P6 ficha de acessibilidade",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "P7 comercial e classificação",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "P8 revisão e envio",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "P1 painel",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "E1 alteração · E2 duplicata",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 11,
+          "rot": "suíte e medidas",
+          "inicio": 10,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "nome": "Moderação",
+      "onda": 1,
+      "pasta": "src/app/(bastidor)/moderacao",
+      "sessaoNome": null,
+      "estado": "rodando",
+      "feitas": 0,
+      "total": 11,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "separação de território",
+          "inicio": 1,
+          "estado": "rodando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "M1 fila",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "M2 ficha do item",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "M9 histórico",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "integração com a S7",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "M3 revisão da IA",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "M8 escopo e escalonamento",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "M5 elenco · M6 reconciliação",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "M4 similaridade",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "M7 duplicatas",
+          "inicio": 10,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 11,
+          "rot": "suíte e medidas",
+          "inicio": 11,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "nome": "Gestor · Observatório",
+      "onda": 2,
+      "pasta": "src/app/(bastidor)/observatorio",
+      "sessaoNome": null,
+      "estado": "aguardando",
+      "feitas": 0,
+      "total": 10,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "recorte do DTO",
+          "inicio": 0,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "G1 público",
+          "inicio": 1,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "G3 impacto cultural",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "G5 procedência",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "G6 ausência declarada",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "G4 território",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "G2 KPIs de produto",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "G7 exportação",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "G8 leitura da moderação",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "suíte e medidas",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S1",
+      "nome": "Admin",
+      "onda": 2,
+      "pasta": "src/app/(bastidor)/admin",
+      "sessaoNome": null,
+      "estado": "aguardando",
+      "feitas": 0,
+      "total": 11,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "folha admin.css",
+          "inicio": 1,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "dados admin.ts",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "A2 motor",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "A3 territórios",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "A6 observabilidade",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "A1 papéis e escopos",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "A7 auditoria",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "A4 vocabulário · A5 limites da IA",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "A8 titulares · A9 governança",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "A10 desempenho da moderação",
+          "inicio": 10,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 11,
+          "rot": "suíte e medidas",
+          "inicio": 11,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "nome": "Editor · Curador",
+      "onda": 2,
+      "pasta": "src/app/(bastidor)/redacao",
+      "sessaoNome": null,
+      "estado": "aguardando",
+      "feitas": 0,
+      "total": 10,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "reancorar redacao.ts",
+          "inicio": 2,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "E1 trilha",
+          "inicio": 3,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "E3 arestas de sentido",
+          "inicio": 4,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "E9 assinaturas",
+          "inicio": 5,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "E2 destaque",
+          "inicio": 6,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "E4 tesauro",
+          "inicio": 7,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "E5 redação editorial",
+          "inicio": 8,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "E7 motor editorial",
+          "inicio": 9,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "E6 especiais · E8 calendário",
+          "inicio": 10,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "suíte e medidas",
+          "inicio": 11,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    },
+    {
+      "id": "S6",
+      "nome": "Organização",
+      "onda": 2,
+      "pasta": "src/app/(bastidor)/studio",
+      "sessaoNome": null,
+      "estado": "aguardando",
+      "feitas": 0,
+      "total": 11,
+      "commit": null,
+      "frescor": null,
+      "idadeMin": null,
+      "bloqueios": [],
+      "pedidos": [],
+      "tarefas": [
+        {
+          "n": 1,
+          "rot": "ler o que a S7 deixou",
+          "inicio": 11,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 2,
+          "rot": "O2 espaços",
+          "inicio": 12,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 3,
+          "rot": "O1 ficha da instituição",
+          "inicio": 13,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 4,
+          "rot": "O7 equipe e alçadas",
+          "inicio": 14,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 5,
+          "rot": "O5 mídia",
+          "inicio": 15,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 6,
+          "rot": "O3 programa",
+          "inicio": 16,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 7,
+          "rot": "O4 formação",
+          "inicio": 17,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 8,
+          "rot": "O6 editais",
+          "inicio": 18,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 9,
+          "rot": "O8 integração",
+          "inicio": 19,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 10,
+          "rot": "O9 alcance · O10 conformidade",
+          "inicio": 20,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        },
+        {
+          "n": 11,
+          "rot": "suíte e medidas",
+          "inicio": 21,
+          "estado": "aguardando",
+          "commit": null,
+          "nota": null,
+          "quando": null
+        }
+      ]
+    }
+  ],
+  "notas": []
+}

@@ -39,8 +39,23 @@ import type { NextConfig } from "next";
 
 // Export estático (D-24): o artefato final é uma pasta que abre em qualquer lugar,
 // sem servidor, sem server action e sem chamada de rede em runtime.
+/**
+ * SESSÕES SIMULTÂNEAS (25.08.2026).
+ *
+ * Seis sessões constroem o bastidor em paralelo neste mesmo repositório, e todas
+ * escreviam em `.next/` e `out/` — dois diretórios únicos. Dois `next build`
+ * concorrentes no mesmo `.next` corrompem o cache um do outro, e um `next dev`
+ * segura o diretório enquanto roda.
+ *
+ * `NEXT_SESSAO` dá a cada sessão os seus dois diretórios. Sem a variável, nada
+ * muda: `.next` e `out`, exatamente como antes, e o artefato que vai ao ar
+ * continua saindo de `npm run build` sem sufixo nenhum.
+ */
+const sessao = process.env.NEXT_SESSAO ? `-${process.env.NEXT_SESSAO}` : "";
+
 const nextConfig: NextConfig = {
   output: "export",
+  distDir: `.next${sessao}`,
   images: { unoptimized: true },
   trailingSlash: true,
 
