@@ -50,11 +50,6 @@
   font-weight: 700;
 }
 
-.museu-linha {
-  max-inline-size: 36rem;
-  color: var(--cor-tinta-2);
-}
-
 .museu-portas {
   display: flex;
   flex-wrap: wrap;
@@ -91,12 +86,6 @@
   gap: 0.25rem;
   min-inline-size: 0;
   font-weight: 700;
-}
-
-.museu-secao-n {
-  color: var(--cor-tinta-3);
-  font-variant-numeric: tabular-nums;
-  font-weight: 400;
 }
 
 .museu-secao-tudo {

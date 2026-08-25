@@ -191,10 +191,6 @@
   box-shadow: var(--sombra-2);
 }
 
-.cursos-categoria[aria-pressed="true"] .cursos-categoria-n {
-  color: color-mix(in srgb, var(--cor-fundo) 72%, transparent);
-}
-
 .cursos-categoria-capa {
   display: block;
   overflow: hidden;
@@ -243,11 +239,6 @@
   -webkit-line-clamp: 2;
   font-weight: 700;
   overflow-wrap: anywhere;
-}
-
-.cursos-categoria-n {
-  color: var(--cor-tinta-3);
-  font-variant-numeric: tabular-nums;
 }
 
 /* ---------------------------------------------------------------------------

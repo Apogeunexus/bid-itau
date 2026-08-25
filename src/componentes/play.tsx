@@ -99,10 +99,12 @@ import type { DimensaoAcessibilidade } from "@/dados/tipos";
  *
  * 1. **O FILTRO DE ACESSIBILIDADE.** A tela 19 pede legenda, Libras e audiodescrição como
  *    se fossem três recortes equivalentes. Medido no acervo: Libras recorta 3 de 113 e os
- *    outros dois recortam ZERO. Os três aparecem — com o NÚMERO AO LADO DO RÓTULO, antes
- *    de qualquer marcação —, os dois zerados carregam `data-nao-sustenta`, e marcá-los
- *    devolve um vazio explicado em vez de um vazio mudo (D-90, D-91). As 3 com Libras
- *    ganham selo no próprio cartaz: o argumento aparece na parede, não só no chip.
+ *    outros dois recortam ZERO. Os três aparecem, os dois zerados carregam
+ *    `data-nao-sustenta`, e marcá-los devolve um vazio explicado em vez de um vazio mudo
+ *    (D-90, D-91). As 3 com Libras ganham selo no próprio cartaz: o argumento aparece na
+ *    parede, não só no chip. O NÚMERO ao lado do rótulo saiu em 25/08 (pedido do cliente,
+ *    ver «AS CONTAGENS SAÍRAM DA TELA» abaixo) — a declaração do que não se sustenta
+ *    passou a ser inteiramente do `data-nao-sustenta` e do vazio explicado.
  *
  * 2. **A PONTE COM EVENTO.** «Não pode ir? veja isto» é sustentado por 14 das 529, não
  *    pelas 529. O bloco declara o denominador em vez de fingir cobertura. É PROIBIDO
@@ -113,10 +115,25 @@ import type { DimensaoAcessibilidade } from "@/dados/tipos";
  *    resumo custa ~200 bytes e ele é a peça que abre a tela. O porquê do corte está em
  *    `play.ts`, não na tela.
  *
- * A TELA NÃO SE EXPLICA (pedido de 23/08). Os números medidos ficam — o total, a
- * contagem em cada chip, os denominadores da ponte, que são o argumento —, mas os
- * parágrafos que justificavam o recorte, o custo em bytes e o descarte de storage
- * saíram do JSX. Eles viviam abaixo do conteúdo e faziam a tela falar de si.
+ * A TELA NÃO SE EXPLICA (pedido de 23/08). Os parágrafos que justificavam o recorte, o
+ * custo em bytes e o descarte de storage saíram do JSX. Eles viviam abaixo do conteúdo e
+ * faziam a tela falar de si.
+ *
+ * AS CONTAGENS SAÍRAM DA TELA (pedido de 25/08, sobre esta tela). Saíram QUATRO coisas,
+ * todas números: a linha «Série · a mais recente do acervo · 14.04.2025» sob a marca do
+ * destaque; a linha «113 mídias para assistir, de graça · acervo do Itaú Cultural»; o
+ * número dentro de cada chip — de categoria e de recurso de acessibilidade («3 de 113»);
+ * e o número ao lado do título de cada prateleira («IC para crianças 29»), junto com o
+ * «Ver 29 →», que virou «Ver tudo →».
+ *
+ * É a mesma direção do pedido de 23/08, um passo adiante: a vitrine mostra o acervo em
+ * vez de contá-lo. O QUE NÃO MUDOU é o compromisso debaixo dos números — as 113 continuam
+ * TODAS na parede, as prateleiras continuam sendo uma PARTIÇÃO que soma o total, e os
+ * dois recursos que o acervo não sustenta continuam declarando `data-nao-sustenta` antes
+ * de qualquer gesto. O que era prova POR ESCRITO virou prova POR MEDIÇÃO: o portão de
+ * `verificar-fase5.mjs` conta o DOM onde antes lia o rótulo. Os números medidos que
+ * sobraram na tela são os do RECORTE — «12 de 113 — séries» —, que não são vitrine: são
+ * a resposta a um gesto que a pessoa acabou de fazer.
  *
  * DP-F: este é um `"use client"` e por isso NÃO alcança `@/dados/play` nem
  * `@/dados/grafo`, nem transitivamente. O DTO chega por propriedade, e o vocabulário
@@ -302,12 +319,10 @@ export function Play({
   catalogo,
   destaque,
   dimensoes,
-  procedencia,
 }: {
   catalogo: CatalogoNoFio;
   destaque: DestaqueNoFio;
   dimensoes: readonly DimensaoContada[];
-  procedencia: { rotulo: string; n: number };
 }) {
   const [categoria, setCategoria] = useState<string>(SEM_RECORTE);
   const [fileira, setFileira] = useState<string>(SEM_RECORTE);
@@ -441,10 +456,6 @@ export function Play({
             <Grafismo variacao="barra" className="h-[0.9em] w-auto" />
             Play
           </h1>
-          <p className="play-destaque-tipo tipo-legenda">
-            {destaque.rotuloCategoria} · a mais recente do acervo ·{" "}
-            <time dateTime={diaParaIso(destaque.dia)}>{diaParaTexto(destaque.dia)}</time>
-          </p>
           <p className="play-destaque-titulo tipo-cartaz">{destaque.titulo}</p>
           {destaque.resumo ? (
             <p className="play-destaque-resumo tipo-detalhe">{destaque.resumo}</p>
@@ -485,22 +496,15 @@ export function Play({
         </div>
       </section>
 
-      {/* ------------------------------------------------------ o que a vitrine oferece */}
-      <p className="tipo-legenda text-tinta-3">
-        <strong data-denominador="midias" className="font-display text-tinta">
-          {catalogo.total} mídias
-        </strong>{" "}
-        para assistir, de graça · acervo do {procedencia.rotulo}
-      </p>
-
       {/* --------------------------------------------------------------- os recortes
        *
        * OS DOIS TRILHOS NUM BLOCO SÓ, logo abaixo do destaque. Estavam em duas seções
        * com título em negrito e um parágrafo de três frases entre eles, e o resultado
        * media meia tela de conversa sobre o sistema antes da primeira prateleira —
        * exatamente a queixa que reformulou o Cast («a página falava do sistema antes de
-       * falar do conteúdo»). O que o acervo precisa dizer continua dito: o número ao
-       * lado de cada recurso, antes de qualquer marcação (D-90).
+       * falar do conteúdo»). Os chips não trazem mais contagem (25/08): o que o acervo
+       * precisa dizer sobre o que NÃO sustenta continua dito por `data-nao-sustenta` e
+       * pelo vazio explicado que a marcação devolve (D-90).
        */}
       <section className="play-recorte">
         <Estante titulo="Categorias" rotulo="Recortar o catálogo por categoria">
@@ -509,7 +513,6 @@ export function Play({
             data-categoria={SEM_RECORTE || "todas"}
             selecionado={categoria === SEM_RECORTE}
             onClick={() => setCategoria(SEM_RECORTE)}
-            contagem={catalogo.total}
           >
             {ICONE_APPS}
             Todas
@@ -521,7 +524,6 @@ export function Play({
               data-categoria={c.valor}
               selecionado={categoria === c.valor}
               onClick={() => setCategoria(c.valor === categoria ? SEM_RECORTE : c.valor)}
-              contagem={c.n}
             >
               {isValidElement(ICONE_DA_CATEGORIA[c.valor] ?? ICONE_TOCAR)
                 ? cloneElement((ICONE_DA_CATEGORIA[c.valor] ?? ICONE_TOCAR) as ReactElement)
@@ -549,11 +551,6 @@ export function Play({
                     atual.includes(campo) ? atual.filter((x) => x !== campo) : [...atual, campo],
                   )
                 }
-                // «3 de 113» inteiro num nó só, e não quebrado em dois: o portão
-                // lê o rótulo com /3\s*de\s*113/ depois de colapsar as quebras de
-                // linha, e dois spans irmãos inserem um separador no innerText.
-                contagem={`${n} de ${catalogo.total}`}
-                chaveDaContagem={campo}
               >
                 {ROTULOS_DE_DIMENSAO[campo]}
               </Chip>
@@ -630,7 +627,6 @@ export function Play({
                 <h2 className="play-prateleira-titulo tipo-titulo-3">
                   <Grafismo variacao="barra" className="h-[0.8em] w-auto text-acao-tinta" />
                   Minha lista
-                  <span className="play-prateleira-n tipo-detalhe">{naMinhaLista.length}</span>
                 </h2>
               </div>
               {!minhaLista.persistida ? (
@@ -665,7 +661,6 @@ export function Play({
               <h2 className="play-prateleira-titulo tipo-titulo-3">
                 <Grafismo variacao="barra" className="h-[0.8em] w-auto text-acao-tinta" />
                 {p.rotulo}
-                <span className="play-prateleira-n tipo-detalhe">{p.midias.length}</span>
               </h2>
               <button
                 type="button"
@@ -673,7 +668,7 @@ export function Play({
                 onClick={() => setFileira(p.valor)}
                 className="play-prateleira-tudo tipo-detalhe"
               >
-                Ver {p.midias.length} →
+                Ver tudo →
               </button>
             </div>
             {p.porte === "compacta" ? (

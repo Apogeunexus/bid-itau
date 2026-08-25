@@ -22,6 +22,13 @@ import type { ClasseEntidade } from "@/dados/tipos";
  * `data-motivo` e `data-origem-motivo` no elemento do selo são contrato de verificação:
  * os gates da fase leem esses atributos do HTML exportado para provar que nenhum cartão
  * chegou à tela sem explicação.
+ *
+ * A NOTA DE CURADORIA NÃO É MAIS RENDERIZADA AQUI (pedido de 2026-08-25). A frase que
+ * declarava a procedência da trilha curada — «Curadoria humana, escrita pela curadoria…»
+ * — é informação de bastidor, e o bastidor já a tem: a Redação assina a trilha
+ * (`redacao-trilha.tsx`) e declara a procedência passo a passo. `cartao.assinatura`
+ * continua no DTO, medido a partir da procedência, para quem consome o cartão fora
+ * desta tela; o que saiu é a linha no app de quem visita.
  */
 
 // ---------------------------------------------------------------------------
@@ -130,28 +137,33 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
             titulo
           )}
 
-          <p className="m-0">
-            <span className="inline-flex items-center rounded-full border border-borda-forte px-2.5 py-0.5 text-sm leading-tight font-semibold">
-              {rotuloDaClasse(cartao.classe)}
-            </span>
-          </p>
-
-          <Link
-            href={rotaDaExplicacao(cartao)}
-            className="selo-motivo no-underline"
-            data-motivo={cartao.motivo.texto}
-            data-origem-motivo={cartao.motivo.origemMotivo}
-          >
-            <Grafismo
-              variacao="barra"
-              className="h-3 w-auto shrink-0 text-acao-tinta"
-            />
-            <span>{cartao.motivo.texto}</span>
-          </Link>
-
-          {cartao.assinatura ? (
-            <p className="tipo-legenda text-tinta-2 italic">{cartao.assinatura}</p>
+          {/* A DESCRIÇÃO DO ACERVO, sob a manchete (2026-08-25). É texto da fonte, não
+              frase montada aqui — por isso ela some quando o registro não tem uma, em vez
+              de cair no motivo como substituto. Trocar um pelo outro faria nossa frase
+              passar por texto do Itaú Cultural na primeira leitura, que é o erro que a
+              procedência do selo existe para evitar. 48 dos 75 cartões do feed têm
+              descrição; os outros 27 mostram título e tags. */}
+          {cartao.resumo ? (
+            <p className="cartao-descricao m-0">{cartao.resumo}</p>
           ) : null}
+
+          {/* CLASSE E MOTIVO NA MESMA LINHA DE PASTILHAS. O motivo deixou de ser a linha
+              solta no pé do cartão e virou tag, com o desenho de «trilha» e «evento».
+              Continua sendo o link para a explicação e continua carregando `data-motivo`
+              e `data-origem-motivo` — mudou a forma, não a promessa de que todo cartão
+              diz por que veio. O grafismo saiu junto: uma barra laranja ao lado da
+              pastilha de classe faria as duas parecerem de espécies diferentes. */}
+          <p className="m-0 flex flex-wrap items-center gap-2">
+            <span className="cartao-tag">{rotuloDaClasse(cartao.classe)}</span>
+            <Link
+              href={rotaDaExplicacao(cartao)}
+              className="selo-motivo cartao-tag no-underline"
+              data-motivo={cartao.motivo.texto}
+              data-origem-motivo={cartao.motivo.origemMotivo}
+            >
+              <span>{cartao.motivo.texto}</span>
+            </Link>
+          </p>
         </div>
       </div>
     </article>

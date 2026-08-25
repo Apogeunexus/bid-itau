@@ -81,10 +81,13 @@ import {
  * inteira mora em `prateleiras.ts`, com o porquê de derivar do título não ser
  * autorar um fato.
  *
- * A TELA NÃO SE EXPLICA (pedido de 23/08). Os números medidos ficam — a
- * contagem no chip, o total na abertura, o tamanho de cada fileira —, mas
- * nenhum parágrafo justifica o recorte, o método ou o orçamento. Esse
- * raciocínio mora aqui em cima e na mensagem do commit, nunca no JSX.
+ * A TELA NÃO SE EXPLICA (pedido de 23/08, ESTENDIDO EM 25/08 AOS NÚMEROS).
+ * Antes saía só a prosa e as contagens medidas ficavam; a revisão do cliente
+ * tirou também a descrição da abertura, o número do chip de linguagem, o do
+ * atalho e o do cabeçalho de cada fileira. O acervo continua inteiro na tela e
+ * a soma continua conferida no build (`fioDeItens`) — o que saiu foi o número
+ * IMPRESSO, não a régua. Sobra o nome da fileira e a capa. Esse raciocínio
+ * mora aqui em cima e na mensagem do commit, nunca no JSX.
  *
  * DP-F: este é um `"use client"` e por isso NÃO alcança `@/dados/cast` nem
  * `@/dados/play`. O DTO chega por propriedade.
@@ -310,25 +313,18 @@ export function Cast({
           <Grafismo variacao="barra" className="h-[0.8em] w-auto text-acao-tinta" />
           Cast
         </h1>
-        <p className="tipo-legenda text-tinta-3">
-          <strong data-denominador="podcasts" className="font-display text-tinta">
-            {catalogo.total} episódios
-          </strong>{" "}
-          · {catalogo.prateleiras.length} fileiras · acervo do Itaú Cultural
-        </p>
       </header>
 
       {/* O recorte é por LINGUAGEM e não por tema: medido, 201 dos 336 não
           declaram tema nenhum, e um filtro que deixa 201 de fora promete um
-          acervo que não existe. O número vem ao lado de cada pílula antes de
-          qualquer marcação, como D-90 fixou no Play. */}
+          acervo que não existe. SEM CONTAGEM na pílula (25/08): o cliente
+          tirou os números da tela e o chip vale pelo nome do recorte. */}
       <Estante titulo="Linguagens" rotulo="Recortar os episódios por linguagem artística">
         <Chip
           variante="explorar"
           data-linguagem="todas"
           selecionado={linguagem === SEM_RECORTE}
           onClick={() => setLinguagem(SEM_RECORTE)}
-          contagem={catalogo.total}
         >
           Todas
         </Chip>
@@ -340,7 +336,6 @@ export function Cast({
             cor={l.cor}
             selecionado={linguagem === l.valor}
             onClick={() => setLinguagem(l.valor === linguagem ? SEM_RECORTE : l.valor)}
-            contagem={l.n}
           >
             {l.rotulo}
           </Chip>
@@ -401,8 +396,8 @@ export function Cast({
         <>
           {/* OS ATALHOS — a grade de duas colunas da referência. Lá são os
               programas a que a pessoa volta; aqui são TODAS as fileiras do
-              acervo, com a contagem: em uma tela a pessoa vê do que o Cast é
-              feito, que é justamente o que a parede de 336 capas não contava. */}
+              acervo: em uma tela a pessoa vê do que o Cast é feito, que é
+              justamente o que a parede de 336 capas não contava. */}
           <section className="flex flex-col gap-3">
             <h2 className="tipo-titulo-3 font-bold">Programas</h2>
             <ul className="cast-atalhos">
@@ -417,13 +412,10 @@ export function Cast({
                     <span className="cast-atalho-quadro">
                       <Capa item={p.capa} className="cast-atalho-foto" />
                     </span>
-                    {/* O nome e a contagem NA MESMA CAIXA de texto: em duas
-                        colunas dentro da moldura de 390px sobram ~93px por
-                        atalho, e uma linha só para o número roubaria do nome a
-                        segunda linha — «Escritores-Leitores» viraria reticência. */}
-                    <span className="cast-atalho-texto tipo-legenda">
-                      {p.rotulo} <span className="cast-atalho-n">{p.episodios.length}</span>
-                    </span>
+                    {/* SÓ O NOME (25/08). Em duas colunas dentro da moldura de
+                        390px sobram ~93px por atalho; sem o número, as duas
+                        linhas do clamp são inteiras do nome. */}
+                    <span className="cast-atalho-texto tipo-legenda">{p.rotulo}</span>
                   </button>
                 </li>
               ))}
@@ -441,10 +433,7 @@ export function Cast({
           {minhaLista.hidratado && naMinhaLista.length ? (
             <section data-minha-lista={naMinhaLista.length} className="cast-prateleira">
               <div className="cast-prateleira-cabecalho">
-                <h2 className="cast-prateleira-titulo">
-                  Minha lista
-                  <span className="cast-prateleira-n tipo-detalhe">{naMinhaLista.length}</span>
-                </h2>
+                <h2 className="cast-prateleira-titulo">Minha lista</h2>
               </div>
               {!minhaLista.persistida ? (
                 <p className="tipo-legenda text-tinta-2">
@@ -478,17 +467,14 @@ export function Cast({
                 {p.porte === "destaque" ? (
                   <span className="cast-prateleira-selo tipo-micro">A maior do acervo</span>
                 ) : null}
-                <h2 className="cast-prateleira-titulo">
-                  {p.rotulo}
-                  <span className="cast-prateleira-n tipo-detalhe">{p.episodios.length}</span>
-                </h2>
+                <h2 className="cast-prateleira-titulo">{p.rotulo}</h2>
                 <button
                   type="button"
                   data-ver-tudo={p.valor}
                   onClick={() => setPrateleira(p.valor)}
                   className="cast-prateleira-tudo tipo-detalhe"
                 >
-                  Ver {p.episodios.length} →
+                  Ver tudo →
                 </button>
               </div>
 

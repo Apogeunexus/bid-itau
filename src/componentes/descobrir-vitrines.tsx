@@ -14,8 +14,14 @@ import type { ClasseEntidade } from "@/dados/tipos";
  * COMPONENTES DE SERVIDOR, todos. Nenhum estado, nenhum efeito: cada seção recebe
  * um recorte já MEDIDO no build por `descobrir/page.tsx` e o transforma em porta
  * para uma tela que existe — /buscar, /filtros, /mapa, /cidade, /acontece,
- * /noticias. Nada aqui calcula número: contagem que aparece veio medida do grafo,
- * e recorte exibido contra total é declarado (a regra da casa para todo teto).
+ * /noticias.
+ *
+ * CONTAGEM NÃO APARECE MAIS NESTA TELA (pedido de 2026-08-25). Os chips levam só
+ * o título; o número que os acompanhava — sessões de hoje, entidades por cidade,
+ * itens por linguagem — saiu da vitrine. A medição continua acontecendo no build:
+ * é ela que ordena as linguagens por tamanho e que decide se o chip «Todas»
+ * aparece. O que mudou é o que se mostra, não o que se sabe — e nenhum número
+ * escrito à mão entrou no lugar.
  *
  * O que o redesenho pediu e o dado NÃO sustenta ficou fora, com o motivo já
  * registrado no projeto: chip «Gratuitos» (gratuidade não discrimina — 100% das
@@ -56,7 +62,7 @@ function CabecalhoDeSecao({
 // Busca e atalhos — a porta de /buscar vestida de campo, mais os chips rápidos
 // ---------------------------------------------------------------------------
 
-export function BuscaDeDescobrir({ sessoesDeHoje }: { sessoesDeHoje: number }) {
+export function BuscaDeDescobrir() {
   return (
     <section className="flex flex-col gap-3" aria-label="Busca e atalhos">
       <div className="flex items-stretch gap-2">
@@ -82,9 +88,7 @@ export function BuscaDeDescobrir({ sessoesDeHoje }: { sessoesDeHoje: number }) {
       </div>
 
       <TrilhoDeChips rotulo="Atalhos de descoberta">
-        <Chip href="/acontece/" contagem={sessoesDeHoje > 0 ? sessoesDeHoje : undefined}>
-          Hoje
-        </Chip>
+        <Chip href="/acontece/">Hoje</Chip>
         <Chip href="/mapa/">Perto de mim</Chip>
         <Chip href="/filtros/">Acessibilidade</Chip>
       </TrilhoDeChips>
@@ -93,14 +97,12 @@ export function BuscaDeDescobrir({ sessoesDeHoje }: { sessoesDeHoje: number }) {
 }
 
 // ---------------------------------------------------------------------------
-// Mapa cultural — as cidades com acervo, com contagem medida
+// Mapa cultural — as cidades com acervo
 // ---------------------------------------------------------------------------
 
 export interface CidadeDaVitrine {
   slug: string;
   titulo: string;
-  /** Entidades que o acervo situa na cidade. Medido no grafo (`cidade.ts`). */
-  total: number;
 }
 
 export function MapaCultural({ cidades }: { cidades: readonly CidadeDaVitrine[] }) {
@@ -116,7 +118,6 @@ export function MapaCultural({ cidades }: { cidades: readonly CidadeDaVitrine[] 
           key={cidade.slug}
           variante="explorar"
           href={`/cidade/${cidade.slug}/`}
-          contagem={cidade.total}
         >
           {cloneElement(ICONE_MAPA as ReactElement)}
           {cidade.titulo}
@@ -127,15 +128,13 @@ export function MapaCultural({ cidades }: { cidades: readonly CidadeDaVitrine[] 
 }
 
 // ---------------------------------------------------------------------------
-// Explore por linguagens — as facetas do índice de busca, cor e contagem do dado
+// Explore por linguagens — as facetas do índice de busca, com a cor do dado
 // ---------------------------------------------------------------------------
 
 export interface LinguagemDaVitrine {
   /** O valor da faceta — vira `#f=linguagem:{valor}` em /buscar (T-03-22 valida). */
   valor: string;
   rotulo: string;
-  /** Contagem REAL no índice de busca, nunca estimada. */
-  n: number;
   /** Nome do token de cor que o vocabulário gerou (D-08). */
   cor?: string;
 }
@@ -156,16 +155,15 @@ export function ExplorePorLinguagens({
           variante="explorar"
           href={`/buscar/#f=linguagem:${linguagem.valor}`}
           cor={linguagem.cor}
-          contagem={linguagem.n}
         >
           {linguagem.rotulo}
         </Chip>
       ))}
       {/* Porta para o acervo, não «as linguagens que faltam»: /buscar/ não lista
-          as 23 que o teto cortou, lista o índice. O rótulo é Todas, e o número
-          é quantas linguagens o acervo tem. */}
+          as que o teto cortou, lista o índice. `total` continua entrando como
+          medida: é ele que decide se o chip aparece, mesmo sem ser exibido. */}
       {total > linguagens.length ? (
-        <Chip variante="explorar" href="/buscar/" contagem={total}>
+        <Chip variante="explorar" href="/buscar/">
           Todas
         </Chip>
       ) : null}
@@ -192,13 +190,12 @@ export interface ProgramacaoDaVitrine {
   /** `YYYY-MM-DD` do dia exibido — o de referência, ou o primeiro com sessão depois dele. */
   data: string;
   eHoje: boolean;
-  totalSessoes: number;
   sessoes: SessaoDaVitrine[];
 }
 
 export function ProgramacaoDoDia({ programacao }: { programacao: ProgramacaoDaVitrine | null }) {
   if (!programacao || !programacao.sessoes.length) return null;
-  const { data, eHoje, totalSessoes, sessoes } = programacao;
+  const { data, eHoje, sessoes } = programacao;
   const rotuloDoDia = dataCurta(Number(data.replace(/-/g, "")));
 
   return (
@@ -239,11 +236,6 @@ export function ProgramacaoDoDia({ programacao }: { programacao: ProgramacaoDaVi
           </li>
         ))}
       </ol>
-      {totalSessoes > sessoes.length ? (
-        <p className="tipo-legenda text-tinta-2">
-          {sessoes.length} de {totalSessoes} sessões do dia — o restante está na agenda.
-        </p>
-      ) : null}
     </section>
   );
 }

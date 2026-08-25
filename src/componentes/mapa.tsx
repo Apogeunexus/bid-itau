@@ -319,20 +319,6 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
     return recorte.foraDoBrasil.filter((p) => semAcento(p[TITULO]).includes(termo));
   }, [recorte.foraDoBrasil, busca]);
 
-  /** Quantos de cada família existem no recorte — o número que vai no chip. */
-  const porFamilia = useMemo(() => {
-    const conta = new Map<string, number>();
-    for (const f of FAMILIAS) {
-      conta.set(
-        f.id,
-        f.classes.length
-          ? recorte.posicionados.filter((p) => f.classes.includes(p[3])).length
-          : recorte.posicionados.length,
-      );
-    }
-    return conta;
-  }, [recorte.posicionados]);
-
   // ---- a descoberta: origem, o que há nela, e o que está perto dela ---------
 
   const origem = useMemo(
@@ -493,8 +479,7 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
                 texto TRANSFORMADO, então caixa alta faria o cabeçalho dizer «LENTE
                 SOBRE» — e `verificar-fase3.mjs:1213` compara com
                 `.includes("Lente sobre")`, que diferencia maiúscula de minúscula.
-                O portão passaria a reprovar uma tela correta. O «ACERVO» do outro
-                estado continua em caixa alta: lá não há string a honrar. */}
+                O portão passaria a reprovar uma tela correta. */}
             <p className="mapa-sobretitulo mapa-sobretitulo-lente">Lente sobre</p>
             <h1 className="mapa-titulo">{lente.titulo}</h1>
             {/* SEM «situados no Brasil»: o número é o conjunto INTEIRO — inclui o
@@ -506,16 +491,24 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
             </p>
           </>
         ) : (
-          <>
-            <p className="mapa-sobretitulo">Acervo</p>
-            <h1 className="mapa-titulo">Descubra a cultura brasileira por território</h1>
-            <p className="mapa-linha">
-              Pessoas, lugares, obras e eventos de todo o país — no ponto do mapa onde cada
-              um acontece.
-            </p>
-          </>
+          <h1 className="mapa-titulo">Descubra a cultura brasileira por território</h1>
         )}
       </header>
+
+      <label className="mapa-busca">
+        <span className="sr-only">Buscar no acervo desta tela</span>
+        <svg aria-hidden viewBox="0 0 20 20" className="mapa-busca-lupa">
+          <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M13.5 13.5 L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+        <input
+          type="search"
+          value={busca}
+          onChange={(e) => definirBusca(e.target.value)}
+          placeholder="Buscar eventos, lugares, pessoas…"
+          className="mapa-busca-campo"
+        />
+      </label>
 
       {/* A ORIGEM — «de onde você está olhando».
           Ela é ESCOLHIDA, e nunca adivinhada: o protótipo não pede localização e não
@@ -563,21 +556,6 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
         </TrilhoDeChips>
       ) : null}
 
-      <label className="mapa-busca">
-        <span className="sr-only">Buscar no acervo desta tela</span>
-        <svg aria-hidden viewBox="0 0 20 20" className="mapa-busca-lupa">
-          <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" strokeWidth="2" />
-          <path d="M13.5 13.5 L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-        <input
-          type="search"
-          value={busca}
-          onChange={(e) => definirBusca(e.target.value)}
-          placeholder="Buscar eventos, lugares, pessoas…"
-          className="mapa-busca-campo"
-        />
-      </label>
-
       {/* Os controles viraram UM trilho de chips, do mesmo vocabulário do resto do
           app. Antes eram três botões de aparência técnica — «Desertos culturais»,
           «Voltar para Acontece» — que liam como comandos de sistema no meio de uma
@@ -591,7 +569,6 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
             data-familia={f.id || "tudo"}
             selecionado={familia === f.id}
             onClick={() => definirFamilia(f.id === familia ? "" : f.id)}
-            contagem={porFamilia.get(f.id) ?? 0}
           >
             {f.rotulo}
           </Chip>
@@ -624,7 +601,6 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
 
           <FileiraPerto
             titulo={`Em ${origem.titulo}`}
-            apoio={`${fileiras.naCidade.length} dos ${origem.total} registros da cidade — o resto está na lista do mapa`}
             itens={fileiras.naCidade}
             pinos={dados.pinos}
             comDistancia={false}
@@ -633,7 +609,6 @@ export function Mapa({ dados }: { dados: DadosDoMapa }) {
 
           <FileiraPerto
             titulo="Mais perto daqui"
-            apoio={`O acervo mais próximo fora da cidade — ${dados.perto.fonteDaDistancia}.`}
             itens={fileiras.fora}
             pinos={dados.pinos}
             comDistancia
@@ -1029,22 +1004,19 @@ function Destaque({
 }
 
 /**
- * A FILEIRA — cabeçalho com procedência e um trilho que rola.
+ * A FILEIRA — cabeçalho e um trilho que rola.
  *
- * O apoio do cabeçalho carrega o denominador («8 de 217») em vez de deixar a fileira
- * parecer o conjunto inteiro: um trilho cortado em silêncio lê como «é só isso que existe»,
- * e o resto do acervo da cidade está na lista logo abaixo do mapa.
+ * O cabeçalho é só o título: a nota de apoio que carregava o denominador («8 de 217») saiu
+ * a pedido. O resto do acervo da cidade continua na lista logo abaixo do mapa.
  */
 function FileiraPerto({
   titulo,
-  apoio,
   itens,
   pinos,
   comDistancia,
   vazio,
 }: {
   titulo: string;
-  apoio: string;
   itens: readonly ItemPerto[];
   pinos: readonly PinoIndexado[];
   comDistancia: boolean;
@@ -1054,7 +1026,6 @@ function FileiraPerto({
     <section className="mapa-fileira">
       <div className="mapa-fileira-cabecalho">
         <h2 className="mapa-fileira-titulo">{titulo}</h2>
-        <p className="mapa-fileira-apoio">{apoio}</p>
       </div>
       {itens.length === 0 ? (
         <p className="mapa-fileira-vazio">{vazio}</p>

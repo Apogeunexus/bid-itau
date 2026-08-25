@@ -24,7 +24,7 @@
 }
 
 .marca-ic-arquivo-positivo,
-.marca-ic-arquivo-negativo {
+.marca-ic-arquivo img {
   height: 1.5rem;
   width: auto;
   max-width: 12rem;
@@ -37,7 +37,9 @@
 }
 
 .chancela-fit-arquivo-positivo,
-.chancela-fit-arquivo-negativo {
+/* Altura DEFINIDA nas duas variantes. Antes só a negativa a declarava, e no tema
+ * claro a marca caía no tamanho intrínseco. */
+.chancela-fit-arquivo img {
   height: 5rem;
   width: auto;
 }
@@ -52,8 +54,21 @@
   display: var(--marca-negativo);
 }
 
+/* A RÉGUA REAGE AO CONTÊINER, NÃO À JANELA (2026-08-25), e a diferença aqui não é
+ * teórica: este bloco vive em dois lugares de largura muito diferente, e um deles NÃO
+ * muda de tamanho quando a janela muda. O menu lateral da web tem 240px fixos num
+ * monitor de 1440px e num de 3840px — uma @media de viewport enxergaria «tela larga» e
+ * pediria três colunas onde só cabem duas. `container-type: inline-size` faz as regras
+ * abaixo perguntarem pela largura REAL disponível.
+ *
+ * O padding lateral era `var(--espaco-tela)`, que na web vale 2rem. Faz sentido como
+ * calha de tela inteira e é desperdício dentro de um menu de 240px: comia 64px, mais de
+ * um quarto da largura, para sobrar 175px de régua. Com 1rem sobram 207px — o bastante
+ * para duas casas com a Fundação na altura que o guia dela exige. Na moldura do app
+ * nada muda: lá `--espaco-tela` já valia 1rem. */
 .chancela {
-  padding: 0.75rem var(--espaco-tela) 1rem;
+  container-type: inline-size;
+  padding: 0.75rem 1rem 1rem;
   border-top: 1px solid var(--cor-borda);
 }
 
@@ -68,9 +83,117 @@
   color: var(--cor-tinta-3);
 }
 
+/* TRÊS CASAS DE LARGURA IGUAL — quando as três cabem (2026-08-25).
+ *
+ * Era `flex` com `wrap`: as marcas encostavam à esquerda e a sobra ficava toda à
+ * direita. `1fr 1fr 1fr` dá a cada realizadora o mesmo terço e `justify-items: center`
+ * centra cada uma na sua casa.
+ *
+ * `auto-fit` COM PISO DE 5.5rem, E NÃO `repeat(3, 1fr)` FIXO. Esta régua vive em dois
+ * contêineres de largura muito diferente: a moldura do app tem ~358px úteis, onde três
+ * casas de ~111px acomodam a Fundação (87px de largura nos 80px de altura que o guia
+ * dela exige); o menu lateral da web tem 175px, onde três casas dariam 50px e a marca
+ * seria esmagada ou teria de furar o mínimo do guia. Com o piso, a régua cai sozinha
+ * para menos colunas onde três não cabem — que é o que ela já fazia antes, quando eram
+ * duas marcas e o `wrap` decidia.
+ *
+ * NENHUMA MEDIDA EM PORCENTAGEM AQUI, e isso é cicatriz. `max-width: 100%` na imagem
+ * resolve contra um contêiner de largura indefinida durante a sizagem da grade,
+ * colapsa para zero e some com a marca — a da Fundação sumiu exatamente assim, com
+ * `display:block`, arquivo carregado e 0×0 medido no navegador. Altura definida e teto
+ * de largura em rem não têm esse ciclo. */
+/* OS TRÊS ARRANJOS, e o número que separa cada um sai da largura que a Fundação Itaú
+ * exige. O guia dela fixa 80px de altura mínima, e nessa altura a marca ocupa 88px de
+ * largura. Numa grade de casas iguais isso vira o piso da COLUNA, e o piso da coluna
+ * vira o ponto de virada da régua:
+ *
+ *   três casas  ·  3 × 88px + 2 vãos de 12px  =  288px  =  18rem
+ *   duas casas  ·  2 × 88px + 1 vão de 12px   =  188px  →  12rem, com folga
+ *   abaixo disso, pilha
+ *
+ * Não são números escolhidos por gosto: abaixo deles a Fundação teria de encolher
+ * abaixo do mínimo do guia, e essa é a única coisa nesta régua que não pode ceder.
+ * As duas assinaturas cedem — `object-fit` faz as duas caberem na casa que houver, sem
+ * distorcer o lettering.
+ *
+ * O teto de 30rem existe para o dia em que esta régua for para um rodapé de conteúdo
+ * largo: sem ele, três marcas ficariam boiando em 1200px de fileira. */
 .chancela-regua {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  max-width: 30rem;
+  grid-template-columns: 1fr;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.75rem;
+}
+
+/* Duas casas: a Fundação abre a régua sozinha, e as duas assinaturas dividem a linha
+ * de baixo. É o arranjo do menu lateral. */
+@container (min-width: 12rem) {
+  .chancela-regua {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chancela-fit {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Três casas de largura igual: o arranjo da moldura do app e de qualquer contêiner que
+ * dê 288px à régua. */
+@container (min-width: 18rem) {
+  .chancela-regua {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .chancela-fit {
+    grid-column: auto;
+  }
+}
+
+/* Cada casa OCUPA o terço inteiro, e a marca se centra DENTRO dela. Era
+ * `justify-items: center`, que faz o item encolher ao conteúdo — e aí a assinatura do
+ * Itaú Cultural, que pede 152px na altura dela, transbordava de uma coluna de 104px em
+ * vez de caber. Item esticado tem largura DEFINIDA, e é o que torna as medidas em
+ * porcentagem abaixo seguras. */
+.chancela-regua > * {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  justify-self: stretch;
+}
+
+/* `object-fit: contain` no lugar de `max-width`: a caixa é a casa da grade, a imagem
+ * se ajusta dentro dela pelo lado que apertar primeiro, e a proporção NUNCA distorce —
+ * que é o que o manual exige das três marcas. Com `max-width` sozinho a largura cedia
+ * e a altura não, e o lettering achatava. */
+.chancela-regua img {
+  width: 100%;
+  object-fit: contain;
+}
+
+.chancela-noz {
+  display: inline-flex;
+  align-items: center;
+}
+
+.chancela-noz-arquivo {
+  display: grid;
+}
+
+.chancela-noz-arquivo > * {
+  grid-area: 1 / 1;
+}
+
+.chancela-noz-arquivo-positivo {
+  display: var(--marca-positivo);
+}
+
+.chancela-noz-arquivo-negativo {
+  display: var(--marca-negativo);
+}
+
+.chancela-noz-arquivo img {
+  height: 1.75rem;
+  width: auto;
 }

@@ -86,9 +86,10 @@
 }
 
 /* ---- o cabeçalho editorial -------------------------------------------------
- * A tela abre como porta do acervo, e não como ferramenta de mapa: sobretítulo
- * curto, título grande em Display, uma linha de apoio. Com lente, o mesmo bloco
- * troca de voz e nomeia o recorte de onde a pessoa veio.
+ * A tela abre como porta do acervo, e não como ferramenta de mapa: sem lente é só
+ * o título grande em Display, sem sobretítulo e sem linha de apoio. Com lente, o
+ * mesmo bloco troca de voz e nomeia o recorte de onde a pessoa veio — aí sim com
+ * sobretítulo («Lente sobre») e uma linha que conta o conjunto.
  * ------------------------------------------------------------------------- */
 .mapa-cabecalho {
   display: flex;
@@ -366,17 +367,6 @@
   font-size: var(--tipo-titulo-3);
   font-weight: 700;
   line-height: 1.2;
-}
-
-/* O APOIO CARREGA O DENOMINADOR E A PROCEDÊNCIA. «8 de 217» impede a fileira de
-   parecer o conjunto inteiro, e a frase da distância impede o «92 km» de passar
-   por rota de trânsito. As duas coisas são a mesma regra da casa: número na tela
-   diz de onde veio. */
-.mapa-fileira-apoio {
-  margin: 0;
-  font-size: var(--tipo-legenda);
-  line-height: 1.4;
-  color: var(--cor-tinta-3);
 }
 
 .mapa-fileira-vazio {

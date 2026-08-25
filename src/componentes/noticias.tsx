@@ -59,7 +59,7 @@ function Expediente({
 }: {
   titulo: string;
   meta: string;
-  children: ReactNode;
+  children?: ReactNode;
 }) {
   return (
     <header className="noticias-expediente">
@@ -70,7 +70,9 @@ function Expediente({
         </div>
         <p className="noticias-expediente-meta tipo-legenda">{meta}</p>
       </div>
-      <p className="noticias-expediente-linha-baixa tipo-detalhe">{children}</p>
+      {children ? (
+        <p className="noticias-expediente-linha-baixa tipo-detalhe">{children}</p>
+      ) : null}
     </header>
   );
 }
@@ -170,9 +172,7 @@ export function NoticiasHub() {
       <Expediente
         titulo="Notícias"
         meta={dataDaCapa ? `Capa de ${dataDaCapa}` : "Capa editorial"}
-      >
-        O lado editorial do acervo — {milhar(TOTAL_DE_CONTEUDOS)} textos.
-      </Expediente>
+      />
 
       <NoticiasEditorias
         atual="capa"

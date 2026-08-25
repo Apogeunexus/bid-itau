@@ -52,8 +52,9 @@
 }
 
 /* ---------------------------------------------------------------------------
- * A abertura. Duas linhas e acabou: o cabeçalho alto empurrava a primeira capa
- * para fora da dobra, e a referência abre com conteúdo, não com título de tela.
+ * A abertura. UMA linha e acabou desde 25/08, quando o cliente tirou a
+ * descrição: o cabeçalho alto empurrava a primeira capa para fora da dobra, e a
+ * referência abre com conteúdo, não com título de tela.
  * ------------------------------------------------------------------------ */
 .cast-topo {
   display: flex;
@@ -146,13 +147,6 @@
   font-weight: 700;
 }
 
-/* A contagem um degrau abaixo do nome, como no chip: informa sem competir. */
-.cast-atalho-n {
-  color: var(--cor-tinta-3);
-  font-variant-numeric: tabular-nums;
-  font-weight: 400;
-}
-
 /* ---------------------------------------------------------------------------
  * A PRATELEIRA — cabeçalho de fileira + trilho que rola.
  *
@@ -191,12 +185,6 @@
   flex-basis: 100%;
   color: var(--cor-acao-tinta);
   font-weight: 700;
-}
-
-.cast-prateleira-n {
-  color: var(--cor-tinta-3);
-  font-variant-numeric: tabular-nums;
-  font-weight: 400;
 }
 
 .cast-prateleira-tudo {

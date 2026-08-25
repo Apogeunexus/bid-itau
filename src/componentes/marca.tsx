@@ -11,6 +11,14 @@ import Link from "next/link";
  *
  * A chancela segue o guia da Fundação Itaú (fev/2026): logo na altura mínima
  * digital (5rem = 80 px no corpo de 16 px) e alinhada ao centro da régua.
+ *
+ * A RÉGUA TEM TRÊS CASAS DESDE 2026-08-25 — Fundação Itaú, Itaú Cultural e Noz, cada
+ * uma com um terço da largura. A marca da Noz é PNG, e não SVG como as outras duas:
+ * foi o que chegou. Vale a mesma regra de sempre — a forma é a do arquivo recebido,
+ * ninguém redesenhou lettering. A versão escura é a MESMA silhueta em branco, gerada
+ * da máscara de alfa: o azul da marca (#00289A) mede 1,58:1 sobre a superfície escura
+ * e some; o branco mede 18,73:1. Se a Noz tiver uma negativa oficial, ela entra no
+ * lugar sem tocar em código.
  */
 
 function ParDeMarca({
@@ -88,6 +96,19 @@ export function Chancela() {
           />
         </a>
         <AssinaturaIc />
+        {/* NOZ, a terceira realizadora (2026-08-25). Sem link: as outras duas apontam
+            para endereços que eu conferi, e inventar uma URL para levar quem clica a
+            um lugar errado é pior do que não levar a lugar nenhum. Assim que o endereço
+            vier, isto vira um <a> igual ao da Fundação. */}
+        <span className="chancela-noz">
+          <ParDeMarca
+            claro="/marca/noz.png"
+            escuro="/marca/noz-negativo.png"
+            largura={564}
+            altura={206}
+            classe="chancela-noz-arquivo"
+          />
+        </span>
       </div>
     </footer>
   );

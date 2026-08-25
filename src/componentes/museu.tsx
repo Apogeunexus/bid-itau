@@ -176,10 +176,6 @@ export function Museu() {
       <header className="museu-abertura">
         <p className="museu-kicker tipo-micro">Museu</p>
         <h1 className="museu-titulo tipo-cartaz">Museu virtual</h1>
-        <p className="museu-linha tipo-detalhe">
-          As duas exposições permanentes da sede na Avenida Paulista — e os espaços-museu
-          que a Enciclopédia cita.
-        </p>
         <div role="group" aria-label="Portas do museu" className="museu-portas">
           {hub.portas.map((porta) => (
             <Chip key={porta.id} href={porta.href}>
@@ -195,9 +191,6 @@ export function Museu() {
           <h2 id="museu-permanentes-titulo" className="museu-secao-titulo tipo-titulo-3">
             <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
             Exposições permanentes
-            <span className="museu-secao-n tipo-legenda" data-denominador="permanentes">
-              {hub.permanentes.length}
-            </span>
           </h2>
         </div>
         <ul className="museu-permanentes">
@@ -212,9 +205,6 @@ export function Museu() {
           <h2 id="museu-cartaz-titulo" className="museu-secao-titulo tipo-titulo-3">
             <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
             Em cartaz e ocupações
-            <span className="museu-secao-n tipo-legenda" data-denominador="cartaz">
-              {hub.cartaz.length}
-            </span>
           </h2>
           <Link href="/museu/exposicoes/" className="museu-secao-tudo tipo-detalhe">
             Ver todas
@@ -232,9 +222,6 @@ export function Museu() {
           <h2 id="museu-espacos-titulo" className="museu-secao-titulo tipo-titulo-3">
             <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
             Espaços-museu do acervo
-            <span className="museu-secao-n tipo-legenda" data-denominador="espacos">
-              {hub.espacos.length}
-            </span>
           </h2>
           <a href="#explorar-espacos" className="museu-secao-tudo tipo-detalhe">
             Ver todos

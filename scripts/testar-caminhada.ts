@@ -176,9 +176,9 @@ assercao("7 serendipidade: exatamente 1 cartão, fora do alcance da caminhada", 
 });
 
 // ---------------------------------------------------------------------------
-// 8 — Destaque curado (D-29)
+// 8 — Destaque curado (D-29, revisto em 2026-08-25)
 // ---------------------------------------------------------------------------
-assercao("8 destaque curado: trilha alcançável ocupa a posição 0 e é assinada", () => {
+assercao("8 destaque curado: trilha alcançável ocupa a posição 0, sem nota de curadoria", () => {
   for (const persona of PERSONAS) {
     const alcancados = alcancadosDaPersona(persona.id);
     const temTrilha = [...alcancados].some((id) => porId(id)?.classe === "trilha");
@@ -196,9 +196,16 @@ assercao("8 destaque curado: trilha alcançável ocupa a posição 0 e é assina
       cartoes[0].especial === "curado" && cartoes[0].classe === "trilha",
       `${persona.nome}: a posição 0 é «${cartoes[0].classe}»/${cartoes[0].especial ?? "comum"}, não a trilha curada`,
     );
+    /* A nota de curadoria saiu do DTO em 2026-08-25 — é informação de bastidor, e a
+     * Redação já a mantém. A asserção inverteu em vez de sumir: sem ela, a linha voltaria
+     * calada ao payload de todo feed do app. O que assina o cartão agora é o motivo. */
     exigir(
-      Boolean(cartoes[0].assinatura?.trim()),
-      `${persona.nome}: a trilha curada não traz assinatura de quem curou`,
+      !("assinatura" in cartoes[0]),
+      `${persona.nome}: a trilha curada voltou a trazer nota de curadoria no DTO`,
+    );
+    exigir(
+      Boolean(cartoes[0].motivo?.texto?.trim()),
+      `${persona.nome}: a trilha curada não traz motivo`,
     );
   }
 });

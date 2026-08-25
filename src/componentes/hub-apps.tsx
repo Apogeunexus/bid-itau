@@ -72,6 +72,17 @@ const GLIFOS: Record<Glifo, React.ReactNode> = {
 function portesDoGrupo(quantos: number, ritmo: Ritmo): string[] {
   if (ritmo === "faixa") return new Array<string>(quantos).fill("faixa");
 
+  // Dois em linha, largura igual, ocupando a fileira inteira. Todos do mesmo porte de
+  // propósito: «dividida exatamente em dois» só é verdade se nenhum for exceção.
+  if (ritmo === "duo") return new Array<string>(quantos).fill("meio");
+
+  // Três em linha, largura igual. Mesmo contrato do duo, com outro divisor.
+  if (ritmo === "trio") return new Array<string>(quantos).fill("terco");
+
+  // Cada cartaz com a forma da abertura do hub — faixa larga, foto à direita, texto sobre
+  // o véu. A forma mora em `hub.css`, ao lado da própria abertura.
+  if (ritmo === "abertura") return new Array<string>(quantos).fill("abertura");
+
   if (ritmo === "lado") {
     // O primeiro fica EM PÉ na coluna da esquerda e a altura dele vem do que se
     // empilha à direita. Os de trás alternam paisagem e larga, que é o que dá à
@@ -121,7 +132,10 @@ function Cartaz({
                 capa-sem-imagem.tsx: sob `output: "export"` com
                 `images.unoptimized`, ele só acrescentaria peso ao pacote. */}
             <img
-              src={`/acervo/${capa.arquivo}`}
+              /* Caminho que começa com «/» é usado como está. É o que permite a um
+                 cartaz trazer arte que NÃO saiu do acervo sem escondê-la dentro de
+                 `/acervo/`, onde todo arquivo tem procedência de coleção. */
+              src={capa.arquivo.startsWith("/") ? capa.arquivo : `/acervo/${capa.arquivo}`}
               alt={capa.alt}
               data-foco={capa.foco ?? "centro"}
               className="hub-cartaz-foto"
@@ -183,7 +197,9 @@ export function HubApps() {
         const portes = portesDoGrupo(grupo.apps.length, grupo.ritmo);
         return (
           <section key={grupo.id} className="hub-grupo">
-            <h2 className="tipo-titulo-3 font-bold">{grupo.rotulo}</h2>
+            {grupo.rotulo ? (
+              <h2 className="tipo-titulo-3 font-bold">{grupo.rotulo}</h2>
+            ) : null}
             <ul className="hub-grade" data-ritmo={grupo.ritmo}>
               {grupo.apps.map((app, n) => (
                 <Cartaz
