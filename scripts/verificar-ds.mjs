@@ -48,6 +48,7 @@ const FOLHAS_MIGRADAS = [
   "mapa.css",
   "marca.css",
   "menu-lateral.css",
+  "moderacao.css",
   "museu.css",
   "noticias.css",
   "observatorio.css",

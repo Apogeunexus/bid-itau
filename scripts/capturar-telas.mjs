@@ -40,7 +40,7 @@ const ROTAS = [
   // apodreceria junto com o grafo.
   `/evento/${readdirSync(path.join(RAIZ, "out", "evento"))[0]}/`,
   "/studio/duplicatas/",
-  "/redacao/fila/",
+  "/moderacao/fila/",
   "/observatorio/",
   "/roteiro/",
 ];

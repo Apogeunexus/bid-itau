@@ -73,7 +73,7 @@ function montarDesertos(): DadosDesertos {
  * desktop. Enquanto não houver cabeçalho comum às seis rotas, o atalho mora na tela.
  */
 const ATALHOS = [
-  { href: "/redacao/fila/", rotulo: "Redação · fila" },
+  { href: "/moderacao/fila/", rotulo: "Moderação · fila" },
   { href: "/studio/duplicatas/", rotulo: "Studio · duplicatas" },
   { href: "/roteiro/", rotulo: "Roteiro da demonstração" },
 ] as const;

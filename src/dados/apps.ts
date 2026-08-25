@@ -297,7 +297,7 @@ export const ATALHOS_CONTA: readonly Atalho[] = [
 /** Bastidor: só na visão web — no app cada uma destas rotas se declara «só web». */
 export const ATALHOS_BASTIDOR: readonly Atalho[] = [
   { href: "/studio/duplicatas", rotulo: "Studio", descricao: "Publicar e deduplicar ocorrências" },
-  { href: "/redacao/fila", rotulo: "Redação", descricao: "Fila editorial e trilhas autoradas" },
+  { href: "/moderacao/fila", rotulo: "Moderação", descricao: "Fila com origem declarada e decisão com autor" },
   { href: "/observatorio", rotulo: "Observatório", descricao: "Indicadores e procedência do acervo" },
   { href: "/roteiro", rotulo: "Roteiro guiado", descricao: "A demonstração passo a passo" },
 ];

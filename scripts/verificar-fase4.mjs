@@ -733,7 +733,7 @@ async function gatesEstruturais() {
   // ---- 9. Rotas exportadas, e o total com a diferença explicada rota a rota ----
   const rotasFase1 = [
     "", "entrar", "verificacao", "acontece", "buscar", "descobrir", "mapa", "meu", "play",
-    "observatorio", "redacao/fila", "redacao/trilha", "studio/duplicatas", "studio/ocorrencias",
+    "observatorio", "moderacao/fila", "redacao/trilha", "studio/duplicatas", "studio/ocorrencias",
     "studio/publicar", "onboarding/1", "onboarding/2", "onboarding/3",
   ];
   const faltando1 = rotasFase1.filter((r) => !existsSync(path.join(OUT, r, "index.html")));

@@ -1,0 +1,528 @@
+/* ===========================================================================
+ * moderacao.css — a superfície de Moderação (funcionalidades 108 a 125)
+ *
+ * DE QUEM É: S3 · Moderação, onda 1.
+ * NASCEU NA TAREFA 1, do corte de `redacao.css`.
+ *
+ * POR QUE ELA EXISTE. A fila de moderação e o editor de trilha curada dividiam uma folha
+ * só porque nasceram na mesma tela da fase 5. São de níveis de acesso diferentes — o
+ * moderador decide o que entra, o editor escreve sentido — e vão ser editados por duas
+ * sessões. Enquanto a classe fosse a mesma, uma mudança de espaçamento do editor mexeria
+ * na fila sem ninguém perceber; por isso o vocabulário aqui é `moderacao-*` e o de lá
+ * continua `redacao-*`, e nenhuma classe é compartilhada entre as duas. O que as duas
+ * superfícies têm em comum vem de `studio.css` e de `web.css`, que é o reuso da casa.
+ *
+ * O QUE ELA COBRE: a fila com origem declarada e score de IA visíveis, as quatro ações, o
+ * motivo de veto obrigatório, o escopo do moderador no topo, o registro das decisões com
+ * autor e carimbo, e o rodapé de limites da IA.
+ *
+ * REGRAS DA CASA, herdadas das fases 3 a 5 e válidas para quem escrever aqui:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`, e há gate medindo isso.
+ *  - Nenhum hex do manual: use `var(--ic-*)` e `color-mix` para transparência
+ *    (D-06, D-08).
+ *  - Divergência por visão em CSS puro sob `[data-view="web"]` ou
+ *    `[data-view="mobile"]`. As variantes `desk:`/`app:` só prefixam
+ *    UTILITÁRIO do Tailwind e nunca alcançam uma classe semântica nossa.
+ *  - Reuse o vocabulário de `web.css` antes de escrever regra nova: ele já traz
+ *    duas colunas, grade parametrizada, coluna fixa, painel, realce, alternador,
+ *    declaração com denominador e lista densa.
+ *  - Nada de posicionamento preso à janela (`position: fixed`) fora de
+ *    `casca.tsx` — dentro da moldura de celular ele escapa e quebra D-03.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * A SUPERFÍCIE
+ *
+ * Tudo aqui vive dentro de `.studio`, que é o contêiner de página das telas de
+ * bastidor da fase 4. Reuso por CLASSE, sem tocar `studio.css`: as superfícies de
+ * bastidor — Studio, Moderação, Redação e Observatório — têm de parecer a mesma
+ * família, e a folha da fase 4 tem gates herdados sobre ela.
+ *
+ * Nenhuma regra sob `[data-view="mobile"]`: o layout de `(bastidor)` já esconde o
+ * conteúdo na visão app e monta o `<AvisoDesktop>`. Moderação existe só na web, que
+ * é a única exceção que D-05 autoriza.
+ * ------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+ * A SUPERFÍCIE
+ *
+ * Tudo aqui vive dentro de `.studio`, que é o contêiner de página das telas de
+ * bastidor da fase 4. Reuso por CLASSE, sem tocar `studio.css`: as três
+ * superfícies de bastidor — Studio, Redação e Observatório — têm de parecer a
+ * mesma família, e a folha da fase 4 tem gates herdados sobre ela.
+ *
+ * Nenhuma regra sob `[data-view="mobile"]`: o layout de `(bastidor)` já esconde o
+ * conteúdo na visão app e monta o `<AvisoDesktop>`. Redação existe só na web, que
+ * é a única exceção que D-05 autoriza.
+ * ------------------------------------------------------------------------- */
+
+.moderacao {
+  /* A fila é longa. A lista rola POR DENTRO para o painel do item escolhido
+   * continuar na primeira tela — sem isto a página inteira ganharia a altura de
+   * 60 linhas e o painel só apareceria depois de rolar, que é o gate verde sobre
+   * tela cortada que esta fase já pagou três vezes. */
+  --web-altura-lista: 52vh;
+}
+
+/* Duas colunas com a LISTA à esquerda. `.web-duas-colunas` põe o lateral à
+ * direita com 22rem, e 22rem não comporta uma ficha com tabela, cinco
+ * componentes de score e quatro ações — o painel é o lado largo aqui. Por isso a
+ * grade é própria: o vocabulário de `web.css` é reusado nas PEÇAS
+ * (`.web-painel`, `.web-lista-densa`, `.web-linha`, `.web-alternador`), e só a
+ * proporção das colunas é desta tela.
+ *
+ * `minmax(0, 1fr)` na segunda coluna, e não `1fr`: o mínimo automático de um item
+ * de grade é o tamanho do conteúdo, e uma URL de fonte sem espaço empurraria a
+ * coluna para fora da grade, estourando a linha inteira para a direita. */
+.moderacao-colunas {
+  display: grid;
+  grid-template-columns: 26rem minmax(0, 1fr);
+  align-items: start;
+  gap: var(--web-gap);
+}
+
+.moderacao-coluna-fila,
+.moderacao-coluna-painel {
+  min-width: 0;
+}
+
+.moderacao-coluna-painel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--web-gap);
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * O ESCOPO DO CURADOR — D-84 / D-89
+ * ------------------------------------------------------------------------- */
+
+.moderacao-escopos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+}
+
+.moderacao-escopo-descricao {
+  max-width: 88ch;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+  color: var(--cor-tinta-2);
+}
+
+/* ---------------------------------------------------------------------------
+ * A FILA
+ * ------------------------------------------------------------------------- */
+
+.moderacao-contagens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.moderacao-lista {
+  /* A lista rola por dentro; sem a folga à direita a barra de rolagem cobriria a
+   * borda do item realçado e o realce pareceria cortado. */
+  padding-right: 0.25rem;
+}
+
+.moderacao-linha {
+  padding: 0;
+}
+
+/* O alvo de clique é o botão, e ele ocupa a linha inteira: um alvo menor que a
+ * linha produz a falha em que o operador clica na borda e nada acontece — e num
+ * gate de hit-test de verdade isso aparece como «ponto central coberto». */
+.moderacao-linha-botao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.moderacao-linha-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+/* O selo de origem. Ele é o primeiro elemento da linha, e a sugestão de IA usa o
+ * laranja da marca porque é a origem que exige leitura — as outras duas afirmam. */
+.moderacao-selo-origem {
+  display: inline-flex;
+  align-items: center;
+  padding: 0rem 0.5rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* A tinta sobre o realce lavado, e não o laranja: o fundo já É laranja a 18% no
+   escuro, e laranja sobre laranja mede 3,98:1. Quem carrega a cor aqui é a
+   BORDA — o selo continua lendo como «isto é da IA» sem pagar a legibilidade. */
+.moderacao-selo-origem[data-origem="ia"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-tinta);
+}
+
+/* ---------------------------------------------------------------------------
+ * O SCORE — visível na linha, conferível no painel
+ * ------------------------------------------------------------------------- */
+
+.moderacao-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  padding: 0rem 0.5rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao-lavada);
+  white-space: nowrap;
+}
+
+.moderacao-score-rotulo {
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-2);
+}
+
+.moderacao-score-numero {
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A ausência de score é DITA, e não deixada em branco (D-90). */
+.moderacao-sem-score {
+  font-size: var(--tipo-micro);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+  white-space: nowrap;
+}
+
+.moderacao-sem-score-explicado {
+  border-left: 3px solid var(--cor-borda-forte);
+  padding-left: 0.75rem;
+}
+
+.moderacao-bloco-score {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-m);
+  background: color-mix(in srgb, var(--cor-acao) 4%, transparent);
+}
+
+/* Os cinco componentes, um por linha, com a marca à esquerda e o peso à direita.
+ * É esta lista que torna o número conferível a olho — e é por isso que ela não é
+ * um gráfico: quem confere um score compara CRITÉRIO a critério, e uma barra
+ * esconde exatamente a informação que a tela existe para mostrar. */
+.moderacao-componentes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.moderacao-componente {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr) 3.5rem;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.4;
+}
+
+.moderacao-componente[data-atende="nao"] {
+  color: var(--cor-tinta-3);
+}
+
+.moderacao-componente-marca {
+  color: var(--cor-acao-tinta);
+}
+
+.moderacao-componente[data-atende="nao"] .moderacao-componente-marca {
+  color: var(--cor-tinta-3);
+}
+
+.moderacao-componente-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  min-width: 0;
+}
+
+.moderacao-componente-peso {
+  text-align: right;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A regra por extenso, ao lado do número. Score sem regra é o recomendador opaco
+ * contra o qual a proposta inteira se posiciona. */
+.moderacao-regra-score {
+  max-width: 92ch;
+}
+
+/* ---------------------------------------------------------------------------
+ * A SUGESTÃO DA IA — a frase é a DA ARESTA, não do modelo
+ * ------------------------------------------------------------------------- */
+
+.moderacao-sugestao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * AS AÇÕES E O VETO — D-83
+ * ------------------------------------------------------------------------- */
+
+.moderacao-acoes {
+  gap: 0.5rem;
+}
+
+.moderacao-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.moderacao-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: 0.5rem;
+  background: var(--cor-superficie);
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.moderacao-textarea:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 1px;
+}
+
+/* O bloco do veto usa a moldura da declaração honesta de propósito: ele é o lugar
+ * onde a tela cobra explicação, e a família visual já significa isso. */
+.moderacao-veto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0 var(--raio-m) var(--raio-m) 0;
+  background: var(--cor-acao-lavada);
+}
+
+/* O botão travado tem de PARECER travado além de estar travado — as duas coisas,
+ * porque o gate mede `disabled` e o avaliador vê a opacidade. */
+.moderacao-veto .studio-botao[disabled] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.moderacao-aviso-veto {
+  font-size: var(--tipo-legenda);
+  line-height: 1.35;
+  color: var(--cor-tinta-2);
+}
+
+/* ---------------------------------------------------------------------------
+ * O REGISTRO — D-84: nunca sem autor, nunca sem carimbo
+ * ------------------------------------------------------------------------- */
+
+.moderacao-decisoes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.moderacao-decisao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+}
+
+.moderacao-decisao[data-acao-registrada="vetar"] {
+  border-left: 3px solid var(--cor-acao);
+}
+
+.moderacao-decisao-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.moderacao-decisao-titulo {
+  font-family: var(--fonte-display);
+  font-weight: 700;
+}
+
+/* O motivo do veto fica GUARDADO com a decisão e VISÍVEL no registro: um veto
+ * cujo motivo some é moderação silenciosa com um passo a mais. */
+.moderacao-decisao-motivo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: var(--raio-p);
+  background: var(--cor-acao-lavada);
+}
+
+.moderacao-decisao-assinatura {
+  font-size: var(--tipo-legenda);
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-tinta-2);
+}
+
+.moderacao-desfazer {
+  align-self: flex-start;
+  padding: 0.25rem 0.75rem;
+  font-size: var(--tipo-micro);
+}
+
+.moderacao-distribuicao {
+  gap: 0.75rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * OS TRÊS LIMITES DA IA — D-86
+ *
+ * Rodapé de PRODUTO: é a resposta à pergunta do RFP, não uma nota sobre o
+ * protótipo.
+ * ------------------------------------------------------------------------- */
+
+/* PAINEL ESCURO NOS DOIS TEMAS, e não invertido pela tinta corrente.
+ *
+ * Escrito com `background: var(--cor-tinta)`, ele acompanhava o tema e virava um
+ * bloco BRANCO no escuro — e o rótulo laranja por cima caía para 2,65:1. A troca
+ * do fundo não conserta sozinha: o token de laranja-texto foi calculado contra o
+ * PAPEL, então num painel invertido ele também erra, na direção oposta.
+ *
+ * A saída é a mesma do hero: um painel que é escuro POR CONSTRUÇÃO, nos dois
+ * temas, e não por herdar a tinta. Aí o par que funciona é fixo e conhecido —
+ * branco sobre preto (21:1) e o laranja CHEIO sobre preto (7,9:1). */
+.moderacao-limites {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--ic-preto);
+  border-radius: var(--raio-g);
+  background: var(--ic-preto);
+  color: var(--ic-branco);
+}
+
+/* O laranja CHEIO, porque o fundo aqui é sempre preto — ver acima. */
+.moderacao-limites .studio-nao-sustenta-rotulo {
+  color: var(--cor-acao);
+}
+
+.moderacao-limites ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.moderacao-limites li {
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--cor-acao);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+}
+
+/* A meta da linha vem de `.web-linha-meta`, que é só tipografia: sem esta regra a
+ * classe e o rótulo de procedência encostam um no outro e a linha lê
+ * «eventoPROCEDÊNCIA IC». Pego na foto, não no gate — presença não é legibilidade. */
+.moderacao-linha .web-linha-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+/* Densidade de D-80 na linha da fila: com o respiro padrão, quatro itens ocupavam a
+ * altura inteira da lista e a fila deixava de parecer fila. Aparado, cabem seis —
+ * e nenhum texto é cortado para isso, porque truncar título de evento esconde
+ * exatamente o que quem modera precisa ler. */
+.moderacao-linha .moderacao-linha-botao {
+  gap: 0.25rem;
+  padding: 0.5rem 0.5rem;
+}
+
+.moderacao-linha .web-linha-titulo {
+  font-size: var(--tipo-detalhe);
+  line-height: 1.25;
+}
+
+.moderacao-classe {
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * A PRÉVIA — o mesmo texto, na largura do app
+ *
+ * Não é um componente irmão (D-05/D-79 proíbem), e não é uma tela falsa: é o mesmo
+ * campo `motivo` renderizado com `.selo-motivo`, a classe que `/trilha/[slug]/`
+ * usa. A moldura só reproduz a LARGURA do app, para o curador ver a quebra de
+ * linha que o leitor verá.
+ * ------------------------------------------------------------------------- */
+
+.moderacao-previa {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 24.5rem; /* 390px — a largura da moldura de celular de D-03 */
+  padding: 1rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: 1.25rem;
+  background: var(--cor-superficie);
+}

@@ -1,10 +1,10 @@
-import { RedacaoFila } from "@/componentes/redacao-fila";
+import { ModeracaoFila } from "@/componentes/moderacao-fila";
 import {
-  ACOES_DA_REDACAO,
+  ACOES_DA_MODERACAO,
   CARIMBO_DA_DECISAO,
   COMPONENTES_DO_SCORE,
-  CURADOR_AUTORADO,
-  CURADOR_E_AUTORADO,
+  MODERADOR_AUTORADO,
+  MODERADOR_E_AUTORADO,
   ESCOPOS_DE_CURADORIA,
   FRASE_DA_ASSIMETRIA,
   FRASE_DA_ATRIBUICAO,
@@ -14,18 +14,18 @@ import {
   POR_QUE_RODIZIO_NA_IA,
   REGRA_DA_AMOSTRAGEM,
   REGRA_DO_SCORE,
-  declaracoesDaRedacao,
+  declaracoesDaModeracao,
   distribuicaoDeScore,
-  filaDaRedacao,
+  filaDaModeracao,
   itemInicialDaFila,
-  numerosDaRedacao,
-} from "@/dados/redacao";
+  numerosDaModeracao,
+} from "@/dados/moderacao";
 
 /**
- * Redação — fila de moderação (tela 34, WEB-05). **A resposta do protótipo à pergunta do
+ * Moderação — a fila (tela 34, WEB-05; funcionalidades 108, 109, 122). **A resposta do protótipo à pergunta do
  * RFP sobre o limite da IA.**
  *
- * PÁGINA DE SERVIDOR. É ela, e só ela, que chama `@/dados/redacao` por valor — no build. O
+ * PÁGINA DE SERVIDOR. É ela, e só ela, que chama `@/dados/moderacao` por valor — no build. O
  * componente de cliente recebe DTOs de primitivo e importa aquele módulo apenas por tipo. É
  * essa fronteira, e nenhuma outra, que impede 23 MB de grafo de atravessar para o navegador
  * (DP-F). Um `import` por valor daqui para lá seria invisível no código e mediria 23 MB no
@@ -47,14 +47,14 @@ import {
  *
  * Sob `output: "export"` (D-24) isto roda uma vez, na geração do artefato estático.
  */
-export default function PaginaRedacaoFila() {
+export default function PaginaModeracaoFila() {
   return (
-    <RedacaoFila
-      fila={filaDaRedacao()}
-      numeros={numerosDaRedacao()}
+    <ModeracaoFila
+      fila={filaDaModeracao()}
+      numeros={numerosDaModeracao()}
       escopos={ESCOPOS_DE_CURADORIA}
       origens={ORIGENS_DECLARADAS}
-      acoes={ACOES_DA_REDACAO}
+      acoes={ACOES_DA_MODERACAO}
       componentesDoScore={COMPONENTES_DO_SCORE}
       regraDoScore={REGRA_DO_SCORE}
       regraDaAmostragem={REGRA_DA_AMOSTRAGEM}
@@ -62,10 +62,10 @@ export default function PaginaRedacaoFila() {
       distribuicao={distribuicaoDeScore()}
       fraseDaAssimetria={FRASE_DA_ASSIMETRIA}
       fraseDaAtribuicao={FRASE_DA_ATRIBUICAO}
-      declaracoes={declaracoesDaRedacao()}
+      declaracoes={declaracoesDaModeracao()}
       limites={LIMITES_DA_IA}
-      curador={CURADOR_AUTORADO}
-      curadorEhAutorado={CURADOR_E_AUTORADO}
+      moderador={MODERADOR_AUTORADO}
+      moderadorEhAutorado={MODERADOR_E_AUTORADO}
       carimbo={CARIMBO_DA_DECISAO}
       itensPorOrigem={ITENS_POR_ORIGEM}
       itemInicial={itemInicialDaFila()}

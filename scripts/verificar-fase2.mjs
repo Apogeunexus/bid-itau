@@ -381,7 +381,7 @@ async function gatesEstruturais() {
     "meu",
     "play",
     "observatorio",
-    "redacao/fila",
+    "moderacao/fila",
     "redacao/trilha",
     "studio/duplicatas",
     "studio/ocorrencias",

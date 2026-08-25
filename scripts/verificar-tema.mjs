@@ -79,7 +79,7 @@ const ROTAS = [
   // Grupo bastidor — só existe na visão web.
   { rota: "/studio/duplicatas/", visao: "web" }, // painéis densos, selos pretos
   { rota: "/studio/publicar/", visao: "web" }, // formulário, botão primário
-  { rota: "/redacao/fila/", visao: "web" }, // painel invertido, selo de IA
+  { rota: "/moderacao/fila/", visao: "web" }, // painel invertido, selo de IA
   { rota: "/observatorio/", visao: "web" }, // etiquetas, barras, indicadores
   { rota: "/roteiro/", visao: "web" }, // blocos numerados
 ];

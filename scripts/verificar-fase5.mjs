@@ -50,7 +50,7 @@
  *  7. Atributo que só existe DURANTE uma interação mede 0 no HTML exportado. Ele é contado
  *     no arquivo esperando ZERO, com o zero declarado como proposital, e medido no DOM vivo
  *     DEPOIS de o gesto ser dirigido. Nesta fase são cinco: `data-realcado="sim"`,
- *     `data-motivo-veto`, `data-veto-bloqueado`, `data-decisao-redacao` e
+ *     `data-motivo-veto`, `data-veto-bloqueado`, `data-decisao-moderacao` e
  *     `data-assistido="1"`.
  *
  * ─────────────────────────────────────────────────────────────────────────────
@@ -128,7 +128,7 @@ const ORCAMENTO_POR_PLANO = [
   { plano: "05-01", teto: 60, medido: 0, nota: "o DTO viaja no flight payload da rota, não nos chunks" },
   { plano: "05-02", teto: 20, medido: 12.8, nota: "10,3 KB são frase.ts arrastada para o chunk de /buscar" },
   { plano: "05-03", teto: 20, medido: 3.4, nota: "medido por dois builds A/B; produtor.tsx é de servidor e custa 0" },
-  { plano: "05-04", teto: 60, medido: 37, nota: "dois chunks exclusivos das duas rotas de Redação" },
+  { plano: "05-04", teto: 60, medido: 37, nota: "dois chunks exclusivos das rotas de Moderação e Redação" },
   { plano: "05-05", teto: 60, medido: 29, nota: "16 KB de componente + 13,2 KB de regras .obs*" },
   { plano: "05-06", teto: 80, medido: null, nota: "não isolável: medido sobre árvore compartilhada por seis executores" },
   { plano: "05-07", teto: 100, medido: null, nota: "não isolável: o Turbopack co-empacotou a onda inteira" },
@@ -143,6 +143,7 @@ const FOLHAS_DA_FASE_5 = [
   "web-evento.css",
   "produtor.css",
   "redacao.css",
+  "moderacao.css",
   "observatorio.css",
   "filtros.css",
   "sem-resultado.css",
@@ -153,6 +154,7 @@ const FOLHAS_DA_FASE_5 = [
 const MODULOS_DE_BUILD_DA_FASE_5 = [
   "src/dados/mapa-agenda.ts",
   "src/dados/redacao.ts",
+  "src/dados/moderacao.ts",
   "src/dados/observatorio.ts",
   "src/dados/filtros.ts",
   "src/dados/play.ts",
@@ -175,7 +177,7 @@ const CLIENTES_DA_FASE_5 = [
   "src/componentes/feed.tsx",
   "src/componentes/buscar.tsx",
   "src/componentes/lista-ocorrencias.tsx",
-  "src/componentes/redacao-fila.tsx",
+  "src/componentes/moderacao-fila.tsx",
   "src/componentes/redacao-trilha.tsx",
   "src/componentes/observatorio.tsx",
   "src/componentes/filtros.tsx",
@@ -886,7 +888,7 @@ async function gatesEstruturais() {
   // ---- 13. As rotas HERDADAS, intactas ----
   const rotasFase1 = [
     "", "entrar", "verificacao", "acontece", "buscar", "descobrir", "mapa", "meu", "play",
-    "observatorio", "redacao/fila", "redacao/trilha", "studio/duplicatas", "studio/ocorrencias",
+    "observatorio", "moderacao/fila", "redacao/trilha", "studio/duplicatas", "studio/ocorrencias",
     "studio/publicar", "onboarding/1", "onboarding/2", "onboarding/3",
   ];
   const faltando1 = rotasFase1.filter((r) => !existsSync(path.join(OUT, r, "index.html")));
@@ -1214,7 +1216,7 @@ async function gateCoerencia(sonda) {
     "> 0",
   );
 
-  // ---- A Redação (05-04) ----
+  // ---- A Moderação e a Redação (05-04) ----
   const r = sonda.redacao;
   exigir(
     r.itensNaFila === 60 &&
@@ -1227,15 +1229,15 @@ async function gateCoerencia(sonda) {
       `${r.itensComScore} com score, e ${r.itensComScore - r.itensPorOrigem.ia} fora da IA`,
     "60 = 20+20+20, com score em exatamente os 20 da IA",
   );
-  const fila = await html("redacao/fila/index.html");
+  const fila = await html("moderacao/fila/index.html");
   exigir(
     contarAtributo(fila, "item-fila") === r.itensNaFila &&
       contarAtributo(fila, "score-ia") === r.itensComScore &&
-      contarAtributo(fila, "acao-redacao") === r.acoes &&
+      contarAtributo(fila, "acao-moderacao") === r.acoes &&
       contarAtributo(fila, "escopo-curador") === Object.keys(r.escopos).length,
     "05-04 · e a TELA da fila imprime exatamente esses números",
     `HTML: ${contarAtributo(fila, "item-fila")} itens · ${contarAtributo(fila, "score-ia")} scores · ` +
-      `${contarAtributo(fila, "acao-redacao")} ações · ${contarAtributo(fila, "escopo-curador")} escopos`,
+      `${contarAtributo(fila, "acao-moderacao")} ações · ${contarAtributo(fila, "escopo-curador")} escopos`,
     "os números do módulo, no HTML exportado",
   );
 
@@ -1253,7 +1255,8 @@ async function gateCoerencia(sonda) {
   // ---- Os DTOs que atravessam a fronteira, todos abaixo do próprio teto ----
   const dtos = [
     ["mapa-agenda", m.bytesDoDto, m.tetoDoDto],
-    ["redacao", r.bytesDoDto, r.tetoDoDto],
+    ["moderacao/fila", r.bytesDoDto, r.tetoDoDto],
+    ["redacao/trilha", r.bytesDoCatalogo, r.tetoDoDto],
     ["observatorio", sonda.observatorio.bytesDoDto, sonda.observatorio.tetoDoDto],
   ];
   const estourando = dtos.filter(([, b, t]) => b > t);
@@ -1305,14 +1308,14 @@ const CONTRATO_POR_ROTA = [
     esperado: { "tabela-ocorrencias": 1, "painel-aprofunda": 1 },
   },
   {
-    rota: "redacao/fila/index.html",
+    rota: "moderacao/fila/index.html",
     plano: "05-04",
     esperado: {
-      "fila-redacao": 1,
+      "fila-moderacao": 1,
       "item-fila": 60,
       "procedencia-item": 60,
       "score-ia": 20,
-      "acao-redacao": 4,
+      "acao-moderacao": 4,
       "escopo-curador": 3,
       "limites-ia": 1,
     },
@@ -1393,18 +1396,18 @@ const ATRIBUTOS_DE_INTERACAO = [
     porque: "o realce de D-81 nasce de um mouseover; no artefato os 268 dizem «nao»",
   },
   {
-    rota: "redacao/fila/index.html",
+    rota: "moderacao/fila/index.html",
     atributo: "motivo-veto",
     porque: "o campo de motivo só existe depois de clicar «vetar»",
   },
   {
-    rota: "redacao/fila/index.html",
+    rota: "moderacao/fila/index.html",
     atributo: "veto-bloqueado",
     porque: "o estado da trava só existe com o formulário de veto aberto",
   },
   {
-    rota: "redacao/fila/index.html",
-    atributo: "decisao-redacao",
+    rota: "moderacao/fila/index.html",
+    atributo: "decisao-moderacao",
     porque: "nada foi decidido sem um humano clicar — é o que T-05-14 exige",
   },
   {
@@ -1476,8 +1479,8 @@ async function gateContratoNoHtml() {
   // 05-05, e `data-nao-sustenta` vem da fase 4 e atravessa a fase inteira. Um gate que os
   // tratasse como exclusivos de um plano acusaria como colisão o reúso que o contrato manda.
   const compartilhados = [
-    ["denominador", ["acontece", "filtros", "observatorio", "redacao/fila", "play", "busca-nao-encontrada"]],
-    ["nao-sustenta", ["filtros", "observatorio", "redacao/fila", "redacao/trilha", "play"]],
+    ["denominador", ["acontece", "filtros", "observatorio", "moderacao/fila", "play", "busca-nao-encontrada"]],
+    ["nao-sustenta", ["filtros", "observatorio", "moderacao/fila", "redacao/trilha", "play"]],
   ];
   const linhas = [];
   for (const [attr, rotas] of compartilhados) {
@@ -1707,7 +1710,7 @@ async function gateDaRegua(cdp, base) {
   const app = await cdp.avaliar(naPagina5(`return limiteUtil();`));
   await porVisao(cdp, base, "/acontece/", "web");
   const web = await cdp.avaliar(naPagina5(`return limiteUtil();`));
-  await porVisao(cdp, base, "/redacao/fila/", "web");
+  await porVisao(cdp, base, "/moderacao/fila/", "web");
   const bastidor = await cdp.avaliar(naPagina5(`return limiteUtil();`));
 
   // Desde 2026-08-23 as duas visões divergem no pé, e a régua prova ISSO: no app a
@@ -1736,7 +1739,7 @@ async function gateDaRegua(cdp, base) {
   );
   info(
     "e uma rota de BASTIDOR, que não monta navegação nenhuma",
-    `/redacao/fila/: trilho ${bastidor.trilho} px · limite ${bastidor.limite} · «${bastidor.contra}»`,
+    `/moderacao/fila/: trilho ${bastidor.trilho} px · limite ${bastidor.limite} · «${bastidor.contra}»`,
   );
 
   resumo.push([
@@ -2411,7 +2414,7 @@ async function blocoEvento(cdp, base) {
 }
 
 // ---------------------------------------------------------------------------
-// WEB-05 · /redacao/fila — a curadoria com poder real, e a obrigação DIRIGIDA.
+// WEB-05 · /moderacao/fila — a curadoria com poder real, e a obrigação DIRIGIDA.
 //
 // «O botão está disabled» é a afirmação fácil. A afirmação que importa é «NENHUMA decisão
 // nasce», e ela só se prova dirigindo o gesto: clicar o botão travado, forçar Enter e forçar
@@ -2421,9 +2424,9 @@ async function blocoEvento(cdp, base) {
 // ---------------------------------------------------------------------------
 
 async function blocoRedacaoFila(cdp, base) {
-  titulo("── WEB-05 · /redacao/fila — origem, score e o veto que não conclui sem motivo (D-82, D-83, D-84) ──");
+  titulo("── WEB-05 · /moderacao/fila — origem, score e o veto que não conclui sem motivo (D-82, D-83, D-84) ──");
 
-  await porVisao(cdp, base, "/redacao/fila/", "web");
+  await porVisao(cdp, base, "/moderacao/fila/", "web");
 
   const aoChegar = await cdp.avaliar(
     naPagina5(`
@@ -2443,8 +2446,8 @@ async function blocoRedacaoFila(cdp, base) {
         itens: itens.length, origens,
         comScore: comScore.length, scoreForaDaIa: scoreForaDaIa.length,
         scores: [...new Set(comScore.map((i) => Number(i.querySelector('[data-score-ia]').getAttribute('data-score-ia'))))].sort((a, b) => a - b),
-        decisoes: conta('[data-decisao-redacao]'),
-        acoes: valores('[data-acao-redacao]', 'data-acao-redacao'),
+        decisoes: conta('[data-decisao-moderacao]'),
+        acoes: valores('[data-acao-moderacao]', 'data-acao-moderacao'),
         escopos: valores('[data-escopo-curador]', 'data-escopo-curador'),
         limitesVisivel: visivel(limites),
         limitesItens: limites ? limites.querySelectorAll('li').length : 0,
@@ -2477,7 +2480,7 @@ async function blocoRedacaoFila(cdp, base) {
   );
 
   // ---- O VETO, com o campo VAZIO. As três formas de forçar, e o zero exigido. ----
-  await cdp.clicar(`document.querySelector('[data-acao-redacao="vetar"]')`);
+  await cdp.clicar(`document.querySelector('[data-acao-moderacao="vetar"]')`);
   await respirar(500);
 
   const travado = await cdp.avaliar(
@@ -2489,7 +2492,7 @@ async function blocoRedacaoFila(cdp, base) {
         bloqueado: botao ? botao.getAttribute('data-veto-bloqueado') : null,
         disabled: botao ? botao.disabled : null,
         limite: limiteUtil(),
-        decisoes: conta('[data-decisao-redacao]'),
+        decisoes: conta('[data-decisao-moderacao]'),
       };
     `),
   );
@@ -2516,7 +2519,7 @@ async function blocoRedacaoFila(cdp, base) {
       botao.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
       try { form.requestSubmit ? form.requestSubmit() : form.submit(); } catch (e) {}
       await new Promise((r) => setTimeout(r, 400));
-      return { decisoes: conta('[data-decisao-redacao]'), bloqueado: botao.getAttribute('data-veto-bloqueado') };
+      return { decisoes: conta('[data-decisao-moderacao]'), bloqueado: botao.getAttribute('data-veto-bloqueado') };
     `),
   );
   exigir(
@@ -2560,7 +2563,7 @@ async function blocoRedacaoFila(cdp, base) {
   await respirar(600);
   const registrada = await cdp.avaliar(
     naPagina5(`
-      const ds = todos('[data-decisao-redacao]');
+      const ds = todos('[data-decisao-moderacao]');
       return {
         n: ds.length,
         acao: ds.length ? ds[0].getAttribute('data-acao-registrada') : null,
@@ -2602,7 +2605,7 @@ async function blocoRedacaoFila(cdp, base) {
 
   resumo.push([
     "WEB-05",
-    `/redacao/fila abre com 60 itens (20 por origem), score em exatamente os 20 de IA e ZERO decisão; ` +
+    `/moderacao/fila abre com 60 itens (20 por origem), score em exatamente os 20 de IA e ZERO decisão; ` +
       `clicar «vetar» com o campo vazio deixa o botão disabled com data-veto-bloqueado="sim", e clique, ` +
       `Enter e submit forçados produzem 0 decisões; escrito o motivo, um clique cria UMA decisão com o ` +
       `texto literal, o autor e o carimbo; trocar o escopo recorta ${escopo.antes}→${escopo.depois} sem mudar a URL`,
@@ -2759,7 +2762,7 @@ async function blocoRedacaoTrilha(cdp, base) {
       publicar.click();
       try { form.requestSubmit ? form.requestSubmit() : form.submit(); } catch (e) {}
       await new Promise((r) => setTimeout(r, 400));
-      return { publicavel: attr('[data-publicavel]', 'data-publicavel'), decisoes: conta('[data-decisao-redacao]') };
+      return { publicavel: attr('[data-publicavel]', 'data-publicavel'), decisoes: conta('[data-decisao-moderacao]') };
     `),
   );
   exigir(
@@ -3719,7 +3722,7 @@ async function blocoContratosCruzados(cdp, base) {
     "05-01": ["acontece/index.html"],
     "05-02": ["descobrir/index.html", "buscar/index.html"],
     "05-03": [`evento/${EVENTO_DO_CMS}/index.html`],
-    "05-04": ["redacao/fila/index.html", "redacao/trilha/index.html"],
+    "05-04": ["moderacao/fila/index.html", "redacao/trilha/index.html"],
     "05-05": ["observatorio/index.html"],
     "05-06": ["filtros/index.html", "busca-nao-encontrada/index.html", "agenda-nao-encontrada/index.html", "404.html"],
     "05-07": ["play/index.html", `play/${MIDIA_DE_AMOSTRA}/index.html`],
@@ -3728,7 +3731,7 @@ async function blocoContratosCruzados(cdp, base) {
     "05-01": ["acontece-web", "modo-lista", "interseccao", "par", "mapeavel", "item-lista", "pino", "lista-recorte", "mapa-acontece", "motivo-sem-pino"],
     "05-02": ["grade-web", "destaque-curado", "coluna-facetas", "coluna-resultados", "link-filtros"],
     "05-03": ["tabela-ocorrencias", "coluna-acessibilidade", "painel-aprofunda", "bloco-produtor"],
-    "05-04": ["fila-redacao", "item-fila", "procedencia-item", "score-ia", "acao-redacao", "escopo-curador", "passo-trilha", "motivo-passo", "publicavel", "sugestao-ia", "limites-ia", "slug-trilha"],
+    "05-04": ["fila-moderacao", "item-fila", "procedencia-item", "score-ia", "acao-moderacao", "escopo-curador", "passo-trilha", "motivo-passo", "publicavel", "sugestao-ia", "limites-ia", "slug-trilha"],
     "05-05": ["observatorio", "procedencia-painel", "procedencia-fatia", "indicador", "publico", "leitura-procedencia", "mapa-desertos"],
     "05-06": ["filtros", "dimensao-acessibilidade", "declarado-ausente", "nao-declarado", "criterio-inexistente", "sem-resultado", "afrouxamento", "beco", "trilha-relacionada"],
     // `veja-isto` continua na lista: ele saiu da VITRINE em 23/08, mas segue sendo o
@@ -3794,7 +3797,7 @@ async function blocoDeHonestidade(cdp, base) {
     ["/filtros/", "mobile"],
     ["/observatorio/", "web"],
     ["/play/", "mobile"],
-    ["/redacao/fila/", "web"],
+    ["/moderacao/fila/", "web"],
     ["/acontece/", "web"],
   ]) {
     await porVisao(cdp, base, rota, visao);
@@ -3895,7 +3898,7 @@ function imprimirResumo(estrutura) {
     ["2", "no mesmo lugar, troque para «por data»: 129 eventos, zero pino, e a interseção declarada com os cinco denominadores. É o acervo dizendo o que não sustenta."],
     ["3", "/descobrir/ e /buscar/ na visão WEB — a grade de três colunas com o destaque atravessando duas, e as facetas em coluna permanente à esquerda."],
     ["4", "/evento/<slug>/ na visão WEB — as 53 sessões em tabela com a coluna de acessibilidade, e o painel «aprofunda isto» colado ao lado."],
-    ["5", "/redacao/fila/ — clique «vetar» e tente confirmar com o campo vazio. O botão não conclui. É a resposta mecânica à pergunta mais difícil do RFP."],
+    ["5", "/moderacao/fila/ — clique «vetar» e tente confirmar com o campo vazio. O botão não conclui. É a resposta mecânica à pergunta mais difícil do RFP."],
     ["6", "/redacao/trilha/ — acrescente um passo do catálogo e mostre a trilha deixando de publicar, com o passo NOMEADO. Depois abra /trilha/<slug>/ e mostre que o motivo é o mesmo texto."],
     ["7", "/observatorio/ — o painel de procedência inteiro na primeira vista, e a inversão: o acervo deu as coisas, nós derivamos as ligações."],
     ["8", "/filtros/ — marque Libras e depois Audiodescrição. O zero chega explicado, com número, ao lado do próprio controle."],
@@ -3917,7 +3920,7 @@ function imprimirResumo(estrutura) {
     "5 das 8 dimensões de acessibilidade medem zero — e continuam marcáveis, porque o zero é o diagnóstico",
     "5.108 entidades preencheram a ficha de acessibilidade e 2.702 nunca declararam nada: «não tem» e «não sabemos» são coisas diferentes",
     "529 mídias no Play, das quais 3 declaram Libras e 14 falam de um evento do acervo — as outras 515 não, e nós não inventamos",
-    "60 itens na fila da Redação, 20 por origem, e score de confiança em exatamente os 20 de IA",
+    "60 itens na fila da Moderação, 20 por origem, e score de confiança em exatamente os 20 de IA",
   ]) {
     console.log(`     · ${l}`);
   }

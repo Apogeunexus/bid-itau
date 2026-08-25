@@ -88,7 +88,7 @@ const PLANEJAR: Item[] = [
 /** Só na visão web: as rotas de bastidor se declaram «só web» no app (AvisoDesktop). */
 const BASTIDOR: Item[] = [
   { href: "/studio/duplicatas", rotulo: "Studio" },
-  { href: "/redacao/fila", rotulo: "Redação" },
+  { href: "/moderacao/fila", rotulo: "Moderação" },
   { href: "/observatorio", rotulo: "Observatório" },
   { href: "/roteiro", rotulo: "Roteiro guiado" },
 ];

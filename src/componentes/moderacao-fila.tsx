@@ -3,20 +3,21 @@
 import { useMemo, useState } from "react";
 import type {
   AcaoDeclarada,
-  AcaoDaRedacao,
+  AcaoDaModeracao,
   ComponenteDoScore,
-  DeclaracaoDaRedacao,
+  DeclaracaoDaModeracao,
   Escopo,
   FaixaDeScore,
   IdDoEscopo,
   ItemDaFila,
-  NumerosDaRedacao,
+  NumerosDaModeracao,
   OrigemDeclarada,
   OrigemDoItem,
-} from "@/dados/redacao";
+} from "@/dados/moderacao";
 
 /**
- * redacao-fila.tsx — a fila de moderação da Redação (tela 34, D-82 a D-84 e D-86).
+ * moderacao-fila.tsx — a fila da Moderação (tela 34, D-82 a D-84 e D-86; funcionalidades
+ * 108, 109 e 122). Migrada da Redação na tarefa 1 da S3.
  *
  * ESTA TELA É A RESPOSTA À PERGUNTA MAIS DIFÍCIL DO RFP: onde a IA não deve ser utilizada.
  * A resposta não é o rodapé — é a mecânica. A sugestão da IA chega marcada, com score e com
@@ -33,7 +34,7 @@ import type {
  * silenciosa que D-83 existe para impedir. `data-veto-bloqueado` lê a MESMA expressão que
  * `disabled`, e não um espelho de estado separado que pode divergir do botão.
  *
- * DP-F: este arquivo é `"use client"` e importa `@/dados/redacao` **apenas por tipo**. O
+ * DP-F: este arquivo é `"use client"` e importa `@/dados/moderacao` **apenas por tipo**. O
  * módulo alcança 23 MB de grafo; o que atravessa a fronteira é o DTO, que é só primitivo, e
  * quem o monta é a página de servidor.
  *
@@ -50,7 +51,7 @@ interface Decisao {
   itemId: string;
   itemTitulo: string;
   origem: OrigemDoItem;
-  acao: AcaoDaRedacao;
+  acao: AcaoDaModeracao;
   /** Vazio nas ações que não pedem texto. NUNCA vazio no veto — ver `registrarVeto`. */
   motivo: string;
   /** Quem decidiu. Autorado e rotulado como tal: não há autenticação aqui (D-25). */
@@ -59,7 +60,7 @@ interface Decisao {
   quando: string;
 }
 
-const ROTULO_ACAO: Record<AcaoDaRedacao, string> = {
+const ROTULO_ACAO: Record<AcaoDaModeracao, string> = {
   aprovar: "aprovado",
   editar: "enviado para edição",
   vetar: "vetado",
@@ -92,7 +93,7 @@ function comoScore(n: number): string {
  */
 function SeloOrigem({ origem }: { origem: OrigemDoItem }) {
   return (
-    <span className="redacao-selo-origem" data-origem={origem}>
+    <span className="moderacao-selo-origem" data-origem={origem}>
       {ROTULO_ORIGEM[origem]}
     </span>
   );
@@ -109,30 +110,30 @@ function LinhaDaFila({
 }) {
   return (
     <li
-      className="web-linha web-realce redacao-linha"
+      className="web-linha web-realce moderacao-linha"
       data-item-fila={item.id}
       // D-82 — a origem vai na LINHA, não só no painel: a tela existe para que a
       // procedência de cada item seja legível varrendo a fila, sem abrir item nenhum.
       data-procedencia-item={item.origem}
       data-realcado={escolhido ? "sim" : "nao"}
     >
-      <button type="button" className="redacao-linha-botao" onClick={aoEscolher}>
-        <span className="redacao-linha-topo">
+      <button type="button" className="moderacao-linha-botao" onClick={aoEscolher}>
+        <span className="moderacao-linha-topo">
           <SeloOrigem origem={item.origem} />
           {item.score !== null ? (
-            <span className="redacao-score" data-score-ia={item.score}>
-              <span className="redacao-score-rotulo">confiança</span>
-              <span className="redacao-score-numero">{comoScore(item.score)}</span>
+            <span className="moderacao-score" data-score-ia={item.score}>
+              <span className="moderacao-score-rotulo">confiança</span>
+              <span className="moderacao-score-numero">{comoScore(item.score)}</span>
             </span>
           ) : (
             // Produtor e ingestão AFIRMAM; a IA estima. A ausência de score é dita em
             // texto em vez de virar espaço em branco, que é o que D-90 pede.
-            <span className="redacao-sem-score">sem score — origem que afirma</span>
+            <span className="moderacao-sem-score">sem score — origem que afirma</span>
           )}
         </span>
         <span className="web-linha-titulo">{item.titulo}</span>
         <span className="web-linha-meta">
-          <span className="redacao-classe">{item.classe}</span>
+          <span className="moderacao-classe">{item.classe}</span>
           <span className="studio-rotulo">procedência {item.procedencia}</span>
           {item.territorio ? <span>{item.territorio}</span> : null}
         </span>
@@ -150,19 +151,19 @@ function ComponentesDoScore({
   atendidos: string[];
 }) {
   return (
-    <ul className="redacao-componentes">
+    <ul className="moderacao-componentes">
       {componentes.map((c) => {
         const atende = atendidos.includes(c.id);
         return (
-          <li key={c.id} className="redacao-componente" data-atende={atende ? "sim" : "nao"}>
-            <span className="redacao-componente-marca" aria-hidden>
+          <li key={c.id} className="moderacao-componente" data-atende={atende ? "sim" : "nao"}>
+            <span className="moderacao-componente-marca" aria-hidden>
               {atende ? "●" : "○"}
             </span>
-            <span className="redacao-componente-texto">
+            <span className="moderacao-componente-texto">
               <strong>{c.rotulo}</strong>
               <span className="studio-nota">{c.observa}</span>
             </span>
-            <span className="redacao-componente-peso">
+            <span className="moderacao-componente-peso">
               {atende ? `+${comoScore(c.peso)}` : "0,00"}
             </span>
           </li>
@@ -176,7 +177,7 @@ function ComponentesDoScore({
 // A tela
 // ---------------------------------------------------------------------------
 
-export function RedacaoFila({
+export function ModeracaoFila({
   fila,
   numeros,
   escopos,
@@ -191,15 +192,15 @@ export function RedacaoFila({
   fraseDaAtribuicao,
   declaracoes,
   limites,
-  curador,
-  curadorEhAutorado,
+  moderador,
+  moderadorEhAutorado,
   carimbo,
   itensPorOrigem,
   itemInicial,
 }: {
   /** Os 60 itens já achatados em primitivo. Nenhuma `Entidade` atravessa a fronteira. */
   fila: ItemDaFila[];
-  numeros: NumerosDaRedacao;
+  numeros: NumerosDaModeracao;
   escopos: readonly Escopo[];
   origens: readonly OrigemDeclarada[];
   acoes: readonly AcaoDeclarada[];
@@ -210,10 +211,10 @@ export function RedacaoFila({
   distribuicao: FaixaDeScore[];
   fraseDaAssimetria: string;
   fraseDaAtribuicao: string;
-  declaracoes: DeclaracaoDaRedacao[];
+  declaracoes: DeclaracaoDaModeracao[];
   limites: readonly string[];
-  curador: string;
-  curadorEhAutorado: string;
+  moderador: string;
+  moderadorEhAutorado: string;
   /** Derivado da data de referência do build. Ver o cabeçalho deste arquivo. */
   carimbo: string;
   itensPorOrigem: number;
@@ -283,7 +284,7 @@ export function RedacaoFila({
   // As decisões. Só existe UM caminho para uma decisão nascer, e ele passa por aqui.
   // -------------------------------------------------------------------------
 
-  const registrar = (acao: AcaoDaRedacao, motivo: string) => {
+  const registrar = (acao: AcaoDaModeracao, motivo: string) => {
     if (!item) return;
     setDecisoes((antes) => [
       {
@@ -292,7 +293,7 @@ export function RedacaoFila({
         origem: item.origem,
         acao,
         motivo,
-        quem: curador,
+        quem: moderador,
         quando: carimbo,
       },
       ...antes.filter((d) => d.itemId !== item.id),
@@ -317,7 +318,7 @@ export function RedacaoFila({
     registrar("vetar", motivoAparado);
   };
 
-  const executar = (acao: AcaoDaRedacao) => {
+  const executar = (acao: AcaoDaModeracao) => {
     if (acao === "vetar") {
       setVetando(true);
       return;
@@ -336,12 +337,12 @@ export function RedacaoFila({
   const acaoDeDevolver = acoes.find((a) => a.id === "devolver");
 
   return (
-    <div className="studio redacao" data-fila-redacao>
+    <div className="studio moderacao" data-fila-moderacao>
       {/* ------------------------------------------------------------------ */}
       {/* Cabeçalho — quem opera, sobre o quê, e com qual ESCOPO (D-84).      */}
       {/* ------------------------------------------------------------------ */}
       <header className="studio-cabecalho">
-        <span className="studio-superficie">Redação · fila de moderação</span>
+        <span className="studio-superficie">Moderação · a fila</span>
         <h1 className="studio-titulo">
           {comSeparador(pendentes.length)} itens esperando decisão
         </h1>
@@ -351,8 +352,8 @@ export function RedacaoFila({
           decidir, e toda decisão fica com nome e carimbo.
         </p>
 
-        <div className="redacao-escopos">
-          <span className="studio-rotulo">escopo do curador</span>
+        <div className="moderacao-escopos">
+          <span className="studio-rotulo">escopo do moderador</span>
           <div className="web-alternador" role="group" aria-label="escopo de curadoria">
             {escopos.map((e) => (
               <button
@@ -367,22 +368,22 @@ export function RedacaoFila({
             ))}
           </div>
           <span className="studio-pastilha">
-            operando como <strong>{curador}</strong>
+            operando como <strong>{moderador}</strong>
           </span>
         </div>
 
-        <p className="redacao-escopo-descricao">{escopoAtivo.descricao}</p>
+        <p className="moderacao-escopo-descricao">{escopoAtivo.descricao}</p>
 
       </header>
 
-      <div className="redacao-colunas">
+      <div className="moderacao-colunas">
         {/* ---------------------------------------------------------------- */}
         {/* A fila                                                            */}
         {/* ---------------------------------------------------------------- */}
-        <section className="web-painel redacao-coluna-fila">
+        <section className="web-painel moderacao-coluna-fila">
           <h2 className="web-painel-titulo">a fila</h2>
 
-          <div className="redacao-contagens">
+          <div className="moderacao-contagens">
             {origens.map((o) => (
               <span
                 key={o.id}
@@ -399,7 +400,7 @@ export function RedacaoFila({
           </div>
 
           {pendentes.length ? (
-            <ul className="web-lista-densa redacao-lista">
+            <ul className="web-lista-densa moderacao-lista">
               {pendentes.map((i) => (
                 <LinhaDaFila
                   key={i.id}
@@ -434,10 +435,10 @@ export function RedacaoFila({
         {/* ---------------------------------------------------------------- */}
         {/* O item escolhido — a ficha, o score conferível, as quatro ações   */}
         {/* ---------------------------------------------------------------- */}
-        <div className="redacao-coluna-painel">
+        <div className="moderacao-coluna-painel">
           {item ? (
             <section
-              className="web-painel redacao-item"
+              className="web-painel moderacao-item"
               // `data-procedencia-item` NÃO se repete aqui: ele é atributo de LINHA da
               // fila, e um gate que conte 60 origens não pode encontrar 61 porque o
               // painel repetiu a do item aberto. O selo de origem abaixo diz a mesma
@@ -509,7 +510,7 @@ export function RedacaoFila({
 
               {/* ---- D-82: o score, e a regra que o produziu, lado a lado ---- */}
               {item.score !== null && item.componentes ? (
-                <div className="redacao-bloco-score">
+                <div className="moderacao-bloco-score">
                   <div className="studio-painel-cabeca">
                     <span className="studio-painel-nome">Score de confiança</span>
                     {/* SEM `data-score-ia` aqui. O atributo é de LINHA da fila, e
@@ -530,10 +531,10 @@ export function RedacaoFila({
                   />
                   {/* A regra fica na tela junto do número: score sem regra é o
                       recomendador opaco. */}
-                  <p className="studio-nota redacao-regra-score">{regraDoScore}</p>
+                  <p className="studio-nota moderacao-regra-score">{regraDoScore}</p>
                 </div>
               ) : (
-                <p className="studio-nota redacao-sem-score-explicado">
+                <p className="studio-nota moderacao-sem-score-explicado">
                   Este item não tem score porque a origem dele não estima: {""}
                   {origens.find((o) => o.id === item.origem)?.rotulo} afirma. Pontuar as três
                   origens achataria a distinção que esta tela existe para fazer.
@@ -542,7 +543,7 @@ export function RedacaoFila({
 
               {/* ---- D-86: a sugestão da IA, com a aresta que a produziu ---- */}
               {item.sugestao ? (
-                <div className="redacao-sugestao">
+                <div className="moderacao-sugestao">
                   <span className="studio-rotulo">por que a IA sugeriu isto</span>
                   <p className="selo-motivo">
                     <span>{item.sugestao.motivo}</span>
@@ -556,12 +557,12 @@ export function RedacaoFila({
               ) : null}
 
               {/* ---- D-83: as quatro ações ---- */}
-              <div className="studio-acoes redacao-acoes">
+              <div className="studio-acoes moderacao-acoes">
                 {acoes.map((a) => (
                   <button
                     key={a.id}
                     type="button"
-                    data-acao-redacao={a.id}
+                    data-acao-moderacao={a.id}
                     className={
                       a.id === "aprovar" ? "studio-botao studio-botao-primario" : "studio-botao"
                     }
@@ -578,7 +579,7 @@ export function RedacaoFila({
               {/* ================================================================ */}
               {vetando ? (
                 <form
-                  className="redacao-veto"
+                  className="moderacao-veto"
                   onSubmit={(e) => {
                     e.preventDefault();
                     registrarVeto();
@@ -593,7 +594,7 @@ export function RedacaoFila({
                   <textarea
                     id="motivo-veto"
                     data-motivo-veto
-                    className="redacao-textarea"
+                    className="moderacao-textarea"
                     rows={3}
                     autoFocus
                     value={motivoVeto}
@@ -624,7 +625,7 @@ export function RedacaoFila({
                       Cancelar
                     </button>
                     {!motivoAparado ? (
-                      <span className="redacao-aviso-veto">
+                      <span className="moderacao-aviso-veto">
                         O botão está desabilitado porque o motivo está vazio. Espaço em
                         branco não conta.
                       </span>
@@ -635,13 +636,13 @@ export function RedacaoFila({
               <p className="studio-nota">{fraseDaAssimetria}</p>
 
               {/* ---- O comentário OPCIONAL de devolver, rotulado como opcional ---- */}
-              <div className="redacao-campo">
+              <div className="moderacao-campo">
                 <label htmlFor="comentario-devolucao" className="studio-rotulo">
                   comentário para quem submeteu — opcional
                 </label>
                 <textarea
                   id="comentario-devolucao"
-                  className="redacao-textarea"
+                  className="moderacao-textarea"
                   rows={2}
                   value={comentarioDevolucao}
                   placeholder="Opcional. «Devolver» conclui com ou sem este texto."
@@ -663,7 +664,7 @@ export function RedacaoFila({
           {/* ---------------------------------------------------------------- */}
           {/* D-84 — o registro: quem decidiu, quando, e o motivo quando houve  */}
           {/* ---------------------------------------------------------------- */}
-          <section className="web-painel redacao-registro">
+          <section className="web-painel moderacao-registro">
             <div className="studio-painel-cabeca">
               <span className="studio-painel-nome">Decisões desta sessão</span>
               <span className="studio-pastilha">
@@ -673,33 +674,33 @@ export function RedacaoFila({
             </div>
 
             {decisoes.length ? (
-              <ul className="redacao-decisoes">
+              <ul className="moderacao-decisoes">
                 {decisoes.map((d) => (
                   <li
                     key={d.itemId}
-                    className="redacao-decisao"
-                    data-decisao-redacao={d.itemId}
+                    className="moderacao-decisao"
+                    data-decisao-moderacao={d.itemId}
                     data-acao-registrada={d.acao}
                   >
-                    <span className="redacao-decisao-cabeca">
+                    <span className="moderacao-decisao-cabeca">
                       <strong>{ROTULO_ACAO[d.acao]}</strong>
                       <SeloOrigem origem={d.origem} />
                     </span>
-                    <span className="redacao-decisao-titulo">{d.itemTitulo}</span>
+                    <span className="moderacao-decisao-titulo">{d.itemTitulo}</span>
                     {d.motivo ? (
-                      <span className="redacao-decisao-motivo">
+                      <span className="moderacao-decisao-motivo">
                         <span className="studio-rotulo">
                           {d.acao === "vetar" ? "motivo do veto" : "comentário"}
                         </span>
                         {d.motivo}
                       </span>
                     ) : null}
-                    <span className="redacao-decisao-assinatura">
+                    <span className="moderacao-decisao-assinatura">
                       {d.quem} · {d.quando}
                     </span>
                     <button
                       type="button"
-                      className="studio-botao redacao-desfazer"
+                      className="studio-botao moderacao-desfazer"
                       onClick={() => desfazer(d.itemId)}
                     >
                       desfazer
@@ -716,7 +717,7 @@ export function RedacaoFila({
 
             <div className="studio-nao-sustenta" data-nao-sustenta>
               <span className="studio-nao-sustenta-rotulo">sobre a autoria da decisão</span>
-              <p>{curadorEhAutorado}</p>
+              <p>{moderadorEhAutorado}</p>
             </div>
           </section>
         </div>
@@ -725,7 +726,7 @@ export function RedacaoFila({
       {/* ------------------------------------------------------------------ */}
       {/* A distribuição de score — o recorte E a população, nunca só o corte */}
       {/* ------------------------------------------------------------------ */}
-      <section className="web-painel redacao-distribuicao">
+      <section className="web-painel moderacao-distribuicao">
         <div className="studio-painel-cabeca">
           <span className="studio-painel-nome">A faixa de confiança, contada</span>
           <span className="studio-pastilha">
@@ -749,7 +750,7 @@ export function RedacaoFila({
             porque o painel do item só mostra score quando o item é de IA — e a regra
             precisa estar na tela mesmo quando o item aberto é de produtor. Score sem
             regra à vista é o recomendador opaco que esta tela existe para recusar. */}
-        <p className="studio-nota redacao-regra-score">{regraDoScore}</p>
+        <p className="studio-nota moderacao-regra-score">{regraDoScore}</p>
       </section>
 
       {/* ------------------------------------------------------------------ */}
@@ -771,7 +772,7 @@ export function RedacaoFila({
       {/* D-86 — OS TRÊS LIMITES. É produto: a resposta ao RFP, não uma nota */}
       {/* sobre o protótipo.                                                  */}
       {/* ================================================================== */}
-      <footer className="redacao-limites" data-limites-ia>
+      <footer className="moderacao-limites" data-limites-ia>
         <span className="studio-nao-sustenta-rotulo">onde a IA não é utilizada</span>
         <ul>
           {limites.map((l) => (
