@@ -106,7 +106,32 @@ Se aparecer outra falha além dessa, aí sim é sua.
 
 ---
 
-## 6. Só a sua pasta
+## 6. O app público é intocável
+
+As dez telas do item 8 — Descobrir, Acontece, Play, Cast, Museu, Notícias, Cursos, Mapa,
+Buscar e Roteiros com IA — **estão polidas e commitadas** em `59f2e26`. Elas não são
+território de nenhuma das seis sessões.
+
+**Não toque, em nenhuma hipótese:**
+
+- `src/app/(app)/` — as rotas do app
+- `src/componentes/` que não comecem com o prefixo da sua sessão (`studio-`, `moderacao-`,
+  `redacao-`, `admin-`, `observatorio-`)
+- `src/dados/` que não seja o módulo da sua sessão
+- `src/estilos/` que não seja a sua folha
+- **`scripts/verificar-fase*.mjs`** — as suítes existentes. Você cria a sua
+  (`verificar-<papel>.mjs`); não edita as que já existem
+
+Precisou de mudança em qualquer um deles — um campo novo, um comportamento diferente —
+**registre `PEDIDO` no seu arquivo de estado, avise a sessão de controle, e pare.** Não
+decida sozinha.
+
+A sessão de controle verifica isso a cada varredura, por hora de modificação. Arquivo fora
+do seu território tocado depois do último commit aparece como invasão.
+
+---
+
+## 7. Só a sua pasta
 
 Você escreve em: a sua pasta de rotas, os seus componentes, o seu módulo de dados, a sua
 folha de CSS, e o seu `estado/S<n>.md`. **Nada mais.**
@@ -120,7 +145,7 @@ escreva em **Pedidos de contrato** no seu arquivo de estado, avise a sessão de 
 
 ---
 
-## 7. A sessão de controle
+## 8. A sessão de controle
 
 Existe uma sessão que coordena as seis. Ela lê o seu `estado/S<n>.md`, cruza com o `git log`
 e libera as sessões bloqueadas.
@@ -137,7 +162,7 @@ Se ela mandar mensagem, responda. Se você travar, avise.
 
 ---
 
-## 8. Antes de cada tela
+## 9. Antes de cada tela
 
 Escreva o que vai fazer e **espere confirmação**. Depois: `npm run checar` verde, commit,
 e o arquivo de estado atualizado.
