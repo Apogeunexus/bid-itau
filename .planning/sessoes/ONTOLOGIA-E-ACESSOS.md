@@ -109,7 +109,7 @@ níveis 1 a 7 existem para inverter.
 | Eventos datados com artista vinculado | **0 de 129** |
 | Componentes da chave de identidade sustentados | **1 de 3** (só o título) |
 | Unidades da federação no acervo | **25 de 27** — faltam SE e TO |
-| Concentração | **59% de 773 entidades em 2 dos 27 estados** |
+| Concentração | **59,2% de 773 REGISTROS em 2 dos 27 estados** — os 773 são registros de `situado_em`, não entidades: por trás deles há **718 entidades distintas**, porque uma entidade pode estar situada em mais de um território. `densidadePorUf()` devolve `total` e `entidadesDistintas` em campos separados, e fundir os dois faz a tela afirmar mais concentração de acervo do que o acervo tem |
 | Faixa etária / classificação indicativa | **campo não existe** |
 
 ---
@@ -153,7 +153,8 @@ Daí a regra que organiza tudo:
 | **Tipo de conteúdo** | só mídia · só agenda · só editorial · só agentes |
 | **Fila** | só duplicatas · só revisão de IA · só direitos de imagem |
 
-Isso não é luxo: SP e RJ concentram 59% do acervo e dois estados não existem nele. Fila de
+Isso não é luxo: SP e RJ concentram 59,2% dos **registros** do acervo — 458 de 773 — e dois
+estados, Sergipe e Tocantins, não existem nele. Fila de
 moderação centralizada em São Paulo reproduziria na governança o deserto que o mapa
 denuncia.
 
