@@ -187,14 +187,14 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "25/08, 23:37",
+  "varredura": "25/08, 23:39",
   "kpi": {
-    "concluidas": 17,
+    "concluidas": 18,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 17,
+    "sujos": 11,
     "folgaS6": 9,
     "pedidos": 10
   },
@@ -813,7 +813,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-53 [913196]",
       "estado": "rodando",
-      "feitas": 3,
+      "feitas": 4,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -859,16 +859,16 @@ const DADOS = {
           "n": 4,
           "rot": "O7 equipe e alçadas",
           "inicio": 14,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "3234c72",
+          "nota": "As duas regras duras moram no **método**, não no botão: `remover()` recusa o titular, e nenhuma das cinco alçadas promove a moderador, editor ou admin. A sucessão move o título num passo e leva junto «gerir a equipe» — titular sem ela seria dono que não pode conceder nada. Toda decisão grava histórico com autor e carimbo **no mesmo método**: separar tornaria possível mudar alçada sem rastro. Os perfis são **papéis, não pessoas** — usar uma das 575 pessoas reais como colaboradora afirmaria um vínculo de emprego que ninguém declarou.",
+          "quando": "26.08 01:05"
         },
         {
           "n": 5,
           "rot": "O5 mídia",
           "inicio": 15,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -1049,6 +1049,13 @@ const DADOS = {
       "rot": "O1 ficha da instituição",
       "nota": "246 instituições, **0 com coordenada**, **0 declarando acessibilidade**, 22 com imagem e 19 com crédito — as **3 com imagem sem crédito** viraram campo bloqueante nomeado. A O1 **herda literalmente** o padrão da O2: o editor das 13 caixas mais o ato virou `studio-org-acessibilidade.tsx`, um componente só para as duas telas. A frase do ato perdeu o sujeito na mesma mudança. **A Organização não se verifica** — o método da loja não sabe escrever «verificada», e a impossibilidade é o ponto. As dez telas passam a aparecer no cabeçalho; as oito que faltam aparecem nomeadas e **inertes**, não como link para 404. Surpresa: o acervo **não tem** instituição chamada «Itaú Cultural» — a tela abre por regra na primeira das 127 que realizam evento, e declara isso.",
       "quando": "26.08 00:20"
+    },
+    {
+      "sessao": "S6",
+      "n": 4,
+      "rot": "O7 equipe e alçadas",
+      "nota": "As duas regras duras moram no **método**, não no botão: `remover()` recusa o titular, e nenhuma das cinco alçadas promove a moderador, editor ou admin. A sucessão move o título num passo e leva junto «gerir a equipe» — titular sem ela seria dono que não pode conceder nada. Toda decisão grava histórico com autor e carimbo **no mesmo método**: separar tornaria possível mudar alçada sem rastro. Os perfis são **papéis, não pessoas** — usar uma das 575 pessoas reais como colaboradora afirmaria um vínculo de emprego que ninguém declarou.",
+      "quando": "26.08 01:05"
     }
   ]
 };
