@@ -49,14 +49,22 @@ export type { EntradaDeHistorico };
  *
  * - `rascunho`      — só o produtor vê; nada saiu do Studio
  * - `em-moderacao`  — enviado; a decisão agora é da S3, e o produtor não edita
- * - `devolvido`     — a moderação pediu correção, com motivo; volta a ser editável
+ * - `devolvido`     — a moderação pediu correção; volta a ser editável
+ * - `vetado`        — barrado na moderação, com motivo obrigatório; NUNCA chegou ao acervo
  * - `publicado`     — está no acervo, com procedência `produtor`
  * - `suspenso`      — estava publicado e foi retirado; o histórico permanece
+ *
+ * `vetado` E `suspenso` NÃO SÃO O MESMO ESTADO, e trocar um pelo outro faria o histórico
+ * registrar uma publicação que não houve: vetar barra o que nunca entrou, suspender retira
+ * o que estava no ar. Sem o sexto valor, um item vetado sairia da fila sem estado nenhum —
+ * não voltou ao produtor, não foi publicado, e não estava publicado para ser retirado. É a
+ * moderação silenciosa que a tela existe para impedir.
  */
 export type Situacao =
   | "rascunho"
   | "em-moderacao"
   | "devolvido"
+  | "vetado"
   | "publicado"
   | "suspenso";
 
@@ -67,6 +75,7 @@ export const SITUACOES: readonly Situacao[] = [
   "devolvido",
   "rascunho",
   "em-moderacao",
+  "vetado",
   "publicado",
   "suspenso",
 ];
@@ -75,6 +84,7 @@ export const ROTULO_DA_SITUACAO: Record<Situacao, string> = {
   rascunho: "rascunho",
   "em-moderacao": "em moderação",
   devolvido: "devolvido",
+  vetado: "vetado",
   publicado: "publicado",
   suspenso: "suspenso",
 };
@@ -84,7 +94,10 @@ export const ROTULO_DA_SITUACAO: Record<Situacao, string> = {
 export const EXPLICACAO_DA_SITUACAO: Record<Situacao, string> = {
   rascunho: "Só você vê. Nada saiu do Studio ainda.",
   "em-moderacao": "A decisão é da moderação. Enquanto está na fila, o registro não é editável.",
-  devolvido: "A moderação pediu correção e disse o motivo. Voltou a ser editável.",
+  devolvido: "A moderação pediu correção. Voltou a ser editável, e o comentário dela está abaixo.",
+  vetado:
+    "A moderação barrou este registro, com motivo escrito. Ele não chegou ao acervo público " +
+    "e não volta a ser editável — para seguir, é preciso um registro novo.",
   publicado: "Está no acervo, com procedência «produtor» e o seu nome no carimbo.",
   suspenso: "Foi retirado do ar depois de publicado. O histórico continua registrado.",
 };
@@ -790,10 +803,20 @@ export function chaveDaSessao(r: RascunhoDoProdutor, o: OcorrenciaDoRascunho): s
  * e não a boa vontade das duas telas, que faz o produtor e o moderador concordarem sobre o
  * que aconteceu com o registro.
  */
-export type AcaoDeModeracao = "aprovar" | "devolver" | "suspender" | "adiar";
+export type AcaoDeModeracao =
+  /* as quatro da fila — funcionalidade 109, `ACOES_DA_MODERACAO` em `moderacao.ts` */
+  | "aprovar"
+  | "editar"
+  | "vetar"
+  | "devolver"
+  /* as duas de fora da fila: uma é pós-publicação, a outra adia sem decidir */
+  | "suspender"
+  | "adiar";
 
 export const ROTULO_DA_ACAO: Record<AcaoDeModeracao, string> = {
   aprovar: "aprovado",
+  editar: "editado e mantido na fila",
+  vetar: "vetado",
   devolver: "devolvido para correção",
   suspender: "suspenso",
   adiar: "adiado — segue na fila",
@@ -808,10 +831,11 @@ export const ROTULO_DA_ACAO: Record<AcaoDeModeracao, string> = {
  * dois arquivos é essa: **o que cruza entre níveis mora em `tipos-acesso.ts`; o que só um
  * nível lê mora no módulo daquele nível.**
  *
- * `motivo` é OBRIGATÓRIO em `devolver` e `suspender`. Não é rigor de formulário: §4 da
- * ontologia diz que o moderador escreve «decisões, com autor e motivo», e decisão sem
- * motivo chega ao produtor como uma parede — ele não sabe o que corrigir, e a porta de
- * volta que as três portas existem para garantir deixa de existir.
+ * `motivo` é OBRIGATÓRIO em `vetar` e `suspender`, e opcional no resto. A assimetria não é
+ * frouxidão: ela está IMPRESSA na tela da moderação, em `FRASE_DA_ASSIMETRIA`. Vetar e
+ * suspender encerram o assunto sem devolver a palavra a quem submeteu, e é por isso que só
+ * elas devem explicação por escrito. Devolver já devolve a palavra — o registro volta
+ * editável, e o comentário é ajuda, não condição.
  */
 export interface DecisaoDeModeracao {
   /** O id do registro decidido — `evento:produtor:<seq>` no caso da S7. */
@@ -827,12 +851,21 @@ export interface DecisaoDeModeracao {
   escopo: string | null;
 }
 
-/** A situação que cada ação produz. `adiar` não move o registro: ele segue na fila, e é
- *  por isso que devolve `"em-moderacao"` em vez de um estado próprio. */
+/**
+ * A situação que cada ação produz.
+ *
+ * `editar` e `adiar` devolvem `"em-moderacao"` porque nenhuma das duas TIRA o registro da
+ * fila: editar corrige e mantém, adiar nem decide. Dar estado próprio a elas faria o painel
+ * do produtor anunciar movimento onde não houve.
+ */
 export function situacaoApos(acao: AcaoDeModeracao): Situacao {
   switch (acao) {
     case "aprovar":
       return "publicado";
+    case "editar":
+      return "em-moderacao";
+    case "vetar":
+      return "vetado";
     case "devolver":
       return "devolvido";
     case "suspender":
@@ -846,7 +879,11 @@ export function situacaoApos(acao: AcaoDeModeracao): Situacao {
  *  em vez de reescrever a regra, e a S7 confere o que recebeu antes de exibir. */
 export function decisaoCompleta(d: DecisaoDeModeracao): boolean {
   if (d.autor.trim() === "" || d.quando.trim() === "") return false;
-  if (d.acao === "devolver" || d.acao === "suspender") {
+  // A ASSIMETRIA É DELIBERADA, e está impressa na tela da moderação: só vetar e suspender
+  // cobram motivo escrito, porque são as duas que encerram o assunto sem devolver a palavra
+  // a quem submeteu. Devolver aceita comentário e não o cobra — exigi-lo aqui faria o código
+  // contradizer a frase que a banca lê em `FRASE_DA_ASSIMETRIA`.
+  if (d.acao === "vetar" || d.acao === "suspender") {
     return (d.motivo ?? "").trim().length > 0;
   }
   return true;
