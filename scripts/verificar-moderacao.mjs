@@ -1228,7 +1228,14 @@ async function principal() {
           candidatos: cands.length,
           // NUNCA «similaridade 0,87». Se aparecer número de parecença, a tela virou o
           // recomendador opaco que a sessão recusa.
-          semPontuacao: !/similaridade\s*[:=]?\s*0[.,]\d/i.test(porque),
+          // SEM PADRÃO. Aqui a barra invertida colapsa e o teste vira sempre verdadeiro —
+          // foi o que a injeção provou: o gate afirmava «sem pontuação» sobre um texto que
+          // exibia «similaridade: 0,94». A verificação passa a ser por conteúdo literal,
+          // que é o que uma pontuação de parecença sempre traz.
+          semPontuacao:
+            !porque.toLowerCase().includes('similaridade') &&
+            !porque.toLowerCase().includes('confiança') &&
+            !/[0-9][.,][0-9]/.test(porque.replace(/[0-9]+\u002E[0-9]{3}/g, '')),
           dizPorqueApareceu: porque.includes('normalizado'),
           temEncaminhar: Boolean(document.querySelector('[data-encaminhar-criacao]')),
           temReconciliar: Boolean(document.querySelector('[data-reconciliar]')),
@@ -1479,7 +1486,167 @@ async function principal() {
   if (falhas.length) process.exitCode = 1;
 }
 
-principal().catch((erro) => {
-  console.error(`\nverificar-moderacao.mjs quebrou: ${erro.message}\n`);
-  process.exitCode = 1;
-});
+/**
+ * `--provar-ausencias` — o teste do teste.
+ *
+ * UM GATE VERDE SÓ SIGNIFICA ALGO SE ELE JÁ FOI VISTO VERMELHO. Sem isso, «nenhum X» é uma
+ * frase que continua verde no dia em que o conjunto medido virar vazio — o gate para de
+ * medir e segue reportando sucesso, que é o pior defeito possível numa ferramenta de
+ * verificação.
+ *
+ * Cada caso abaixo injeta UM defeito, roda a suíte inteira, e exige que o gate nomeado
+ * fique vermelho. O arquivo é restaurado byte a byte depois de cada um, e a árvore é
+ * conferida no fim.
+ *
+ * TRÊS ARMADILHAS APRENDIDAS DE OUTRAS SESSÕES, e cada uma produziu falso verde em alguém:
+ *
+ * 1. `replaceAll`, nunca a primeira ocorrência. Um identificador aparece na declaração, no
+ *    rótulo e no uso; trocar só o primeiro deixa o piso de pé nos outros e o caso passa
+ *    verde por metade da injeção.
+ * 2. Substituição por texto exato, nunca por padrão de tag: `<input[^>]*>` para de casar no
+ *    primeiro `=>` de qualquer `onChange`, e fica cego para todo atributo depois dele.
+ * 3. Restaurar do conteúdo original em memória, e conferir com `git diff` depois.
+ */
+const DEFEITOS = [
+  {
+    nome: "score de modelo",
+    arquivo: "src/dados/moderacao.ts",
+    de: "return Math.round((atendidos.length / COMPONENTES_DO_SCORE.length) * 100) / 100;",
+    para: "return 0.8;",
+    gateEsperado: "o score exibido É a soma dos componentes marcados",
+  },
+  {
+    // O VETO TEM TRÊS TRAVAS, e a primeira injeção provou que elas são independentes:
+    // derrubar `registrarVeto` sozinha não mudou nada, porque `disabled` e
+    // `decisaoCompleta` continuavam barrando. Não é falha do gate — é a defesa em
+    // profundidade funcionando. A injeção honesta derruba as três de uma vez.
+    nome: "veto sem motivo passa (as três travas derrubadas)",
+    arquivo: "src/componentes/moderacao-fila.tsx",
+    de: "disabled={!motivoAparado}",
+    para: "disabled={false}",
+    tambem: [
+      { de: "if (!motivoAparado) return;", para: "if (false) return;" },
+      { de: "if (!decisaoCompleta(decisao)) return;", para: "if (false) return;" },
+    ],
+    gateEsperado: "veto com campo VAZIO",
+  },
+  {
+    nome: "escopo esconde o que não alcança",
+    arquivo: "src/componentes/moderacao-escopo.tsx",
+    de: "data-valor={fora}",
+    para: "data-valor={0}",
+    // O gate do NACIONAL não exerce este defeito: lá o «fora» verdadeiro já é zero, e
+    // zerá-lo não muda a soma. Quem o exerce é o do territorial, onde ele vale 49.
+    gateEsperado: "no territorial o «fora» deixa de ser zero",
+  },
+  {
+    nome: "similaridade infla o revisado",
+    arquivo: "src/componentes/moderacao-similaridade.tsx",
+    de: "const semRevisao = panorama.totalDeArestas - alcancadas;",
+    para: "const semRevisao = 0;",
+    gateEsperado: "sem decisão nenhuma, a tela declara as 47.259 arestas como SEM revisão",
+  },
+  {
+    nome: "elenco confirma sem verbete",
+    arquivo: "src/componentes/moderacao-elenco.tsx",
+    de: "disabled={vinculo.proposto}",
+    para: "disabled={false}",
+    gateEsperado: "vínculo SEM verbete não se confirma",
+  },
+  {
+    nome: "reconciliação exibe pontuação de similaridade",
+    arquivo: "src/dados/moderacao.ts",
+    de: "`O nome digitado, normalizado, é idêntico ao título deste verbete ` +",
+    para: "`similaridade: 0,94 — ` +",
+    gateEsperado: "o candidato diz POR QUE apareceu",
+  },
+  {
+    nome: "duplicatas oferecem decisão de competência alheia",
+    arquivo: "src/componentes/moderacao-duplicatas.tsx",
+    de: '<div className="studio-nao-sustenta" data-nao-sustenta data-sem-acao>',
+    para: '<div className="studio-nao-sustenta" data-nao-sustenta data-sem-acao-REMOVIDO>',
+    gateEsperado: "não há botão de decisão sobre grupo de competência do produtor",
+  },
+];
+
+async function provarAusencias() {
+  const { readFile, writeFile } = await import("node:fs/promises");
+  const { execFileSync } = await import("node:child_process");
+  // `fileURLToPath`, e não `new URL(...).pathname`: o caminho deste repositório tem acento
+  // («bid-itaú»), e o `pathname` de uma URL devolve-o percent-encoded — o `node` receberia
+  // um caminho que não existe e todo caso «falharia» por MODULE_NOT_FOUND, dando o
+  // resultado certo pelo motivo errado.
+  const { fileURLToPath } = await import("node:url");
+  const esteArquivo = fileURLToPath(import.meta.url);
+
+  console.log(`\nPROVAR AUSÊNCIAS — ${DEFEITOS.length} defeitos injetados, um a um\n`);
+  const resultados = [];
+
+  for (const d of DEFEITOS) {
+    const original = await readFile(d.arquivo, "utf8");
+    if (!original.includes(d.de)) {
+      console.log(`  FALHA ${d.nome}: o alvo da injeção não existe mais em ${d.arquivo}`);
+      resultados.push({ ...d, ok: false, motivo: "alvo ausente" });
+      continue;
+    }
+    // `replaceAll`: trocar só a primeira ocorrência deixa o resto de pé e o caso passa
+    // verde por metade da injeção.
+    let comDefeito = original.replaceAll(d.de, d.para);
+    // Alguns defeitos só aparecem com mais de uma trava derrubada. Cada troca extra é
+    // conferida: um alvo ausente faria o caso passar por metade da injeção.
+    for (const extra of d.tambem ?? []) {
+      if (!comDefeito.includes(extra.de)) {
+        console.log(`  FALHA ${d.nome}: alvo extra ausente — «${extra.de.slice(0, 40)}»`);
+        comDefeito = original;
+        break;
+      }
+      comDefeito = comDefeito.replaceAll(extra.de, extra.para);
+    }
+    await writeFile(d.arquivo, comDefeito);
+    let saida = "";
+    try {
+      saida = execFileSync(process.execPath, [esteArquivo, "--base", BASE], {
+        encoding: "utf8",
+        maxBuffer: 32 * 1024 * 1024,
+      });
+    } catch (erro) {
+      saida = String(erro.stdout ?? "") + String(erro.stderr ?? "");
+    } finally {
+      await writeFile(d.arquivo, original);
+    }
+    const ficouVermelho = saida
+      .split("\n")
+      .some((l) => l.startsWith("  FALHA") && l.includes(d.gateEsperado));
+    console.log(
+      `  ${ficouVermelho ? "ok  " : "FALHA"} ${d.nome}: gate «${d.gateEsperado}» ${
+        ficouVermelho ? "ficou VERMELHO" : "seguiu verde — o gate não mede o que promete"
+      }`,
+    );
+    resultados.push({ ...d, ok: ficouVermelho });
+  }
+
+  const sujo = execFileSync("git", ["status", "--porcelain", ...DEFEITOS.map((d) => d.arquivo)], {
+    encoding: "utf8",
+  }).trim();
+  console.log(`\n  árvore restaurada: ${sujo === "" ? "sim, git status limpo" : "NÃO — " + sujo}`);
+
+  const falharam = resultados.filter((r) => !r.ok);
+  console.log(
+    `\n  ${resultados.length - falharam.length} de ${resultados.length} defeitos vistos vermelhos` +
+      (falharam.length ? ` · ${falharam.length} NÃO capturado(s)` : "") +
+      "\n",
+  );
+  if (falharam.length || sujo !== "") process.exitCode = 1;
+}
+
+if (process.argv.includes("--provar-ausencias")) {
+  provarAusencias().catch((erro) => {
+    console.error(`\nprovar-ausencias quebrou: ${erro.message}\n`);
+    process.exitCode = 1;
+  });
+} else {
+  principal().catch((erro) => {
+    console.error(`\nverificar-moderacao.mjs quebrou: ${erro.message}\n`);
+    process.exitCode = 1;
+  });
+}
