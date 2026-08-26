@@ -32,7 +32,12 @@ import {
 } from "./duplicatas";
 import { coordenadaDe, densidadePorUf } from "./geo";
 import { contagens, porSlug, slugsPorTipo, vizinhos } from "./grafo";
-import { COMPONENTES_DO_SCORE, LIMITES_DA_IA, REGRA_DO_SCORE } from "./moderacao";
+import {
+  COMPONENTES_DO_SCORE,
+  LIMITES_DA_IA,
+  REGRA_DO_SCORE,
+  numerosDaModeracao,
+} from "./moderacao";
 import { ROTULO_DA_PROCEDENCIA, aferirDto } from "./observatorio";
 import metaJson from "./gerado/meta.json";
 import type { ClasseEntidade, MetodoCoordenada, Procedencia } from "./tipos";
@@ -1172,6 +1177,122 @@ export const PODERES_OPERACIONAIS: readonly PoderOperacional[] = [
       "uma fica visível aqui para que o desligamento seja uma decisão, e não um efeito.",
   },
 ];
+
+
+// ---------------------------------------------------------------------------
+// A10 — desempenho da moderação por escopo (funcionalidade 169)
+// ---------------------------------------------------------------------------
+
+/**
+ * A REGRA QUE SEPARA ESTA TELA DA M9, e ela precisa estar impressa.
+ *
+ * A M9 é o histórico do moderador, para ele. Esta é a medição ENTRE moderadores, para o
+ * Admin. Confundir as duas transforma auditoria em vigilância de desempenho individual — e a
+ * diferença não está no dado, está em para que ele serve: detectar fila parada e censura
+ * silenciosa é sobre o sistema; ranquear pessoa por volume decidido é sobre a pessoa.
+ */
+export const O_RECORTE_DESTA_TELA =
+  "Esta tela mede a FILA, não a pessoa. A medição entre moderadores existe para achar fila " +
+  "parada e discordância sistemática — não para ranquear quem decide mais rápido. O " +
+  "histórico individual de cada moderador é da tela dele, e não sobe para cá: um painel de " +
+  "administração que ranqueia pessoas por volume transforma auditoria em vigilância, e a " +
+  "primeira coisa que ele produz é gente decidindo depressa para não aparecer embaixo.";
+
+export interface MedidaDaModeracao {
+  id: string;
+  medida: string;
+  oQueRevela: string;
+  /** O que precisaria existir para medir. Vazio quando já é medível hoje. */
+  precisaDe: string;
+  /** O valor de hoje, quando existe. */
+  hoje: string;
+  sustentada: boolean;
+}
+
+/**
+ * As cinco medidas da funcionalidade 169 — e NENHUMA DELAS É MEDÍVEL HOJE, porque as quatro
+ * primeiras exigem decisões tomadas, e a fila do protótipo nunca foi decidida por ninguém.
+ *
+ * A tela declara isso com denominador em vez de exibir zeros. Um «tempo médio de fila:
+ * 0min» seria a afirmação de que a fila é instantânea, quando o fato é que ninguém decidiu
+ * nada ainda. Zero medido e ausência de medição são coisas diferentes, e é a regra da casa.
+ *
+ * A quinta É medível pela metade, e é a mais interessante: a densidade por território existe
+ * no acervo, então a tela mostra o lado que sustenta — quais territórios têm pouco acervo —
+ * e declara que o outro lado, o tempo de fila, ainda não existe. Um território com pouco
+ * acervo e fila parada é abandono; com pouco acervo e sem fila, é só pouco acervo. Sem as
+ * duas pontas não se separa uma coisa da outra, e a tela diz isso.
+ */
+export function medidasDaModeracao(): MedidaDaModeracao[] {
+  const n = numerosDaModeracao();
+  const d = densidadePorUf();
+  const semDecisao =
+    "decisões tomadas na fila. A fila do protótipo tem itens e nunca foi decidida por " +
+    "ninguém — não há nenhuma decisão registrada para medir.";
+
+  return [
+    {
+      id: "tempo-de-fila",
+      medida: "Tempo de fila por escopo",
+      oQueRevela: "onde a moderação não dá conta, separado por território, classe e fila.",
+      precisaDe: semDecisao,
+      hoje: `${n.itensNaFila} itens na fila, ${n.ufsNaFila} unidades federativas representadas`,
+      sustentada: false,
+    },
+    {
+      id: "volume-decidido",
+      medida: "Volume decidido, por ação",
+      oQueRevela: "quanto foi aprovado, editado, vetado e devolvido.",
+      precisaDe: semDecisao,
+      hoje: `${n.acoes} ações possíveis, ${n.acoesQueExigemMotivo} delas exigindo motivo escrito`,
+      sustentada: false,
+    },
+    {
+      id: "concordancia",
+      medida: "Concordância entre moderadores",
+      oQueRevela:
+        "censura silenciosa. Dois moderadores decidindo o oposto sobre itens semelhantes é o " +
+        "sintoma que nenhum número de volume mostra.",
+      precisaDe:
+        "decisões de mais de um moderador sobre itens semelhantes. Não há nenhuma decisão, " +
+        "e não há mais de um moderador.",
+      hoje: "—",
+      sustentada: false,
+    },
+    {
+      id: "taxa-de-veto",
+      medida: "Taxa de veto, com motivo agrupado",
+      oQueRevela:
+        "se um motivo de veto está sendo usado como atalho — e é o motivo agrupado, não a " +
+        "pessoa, que responde isso.",
+      precisaDe: semDecisao,
+      hoje: `${n.motivosDeDenuncia} motivos declarados no vocabulário`,
+      sustentada: false,
+    },
+    {
+      id: "fila-por-territorio",
+      medida: "Fila parada por território, cruzada com a densidade",
+      oQueRevela:
+        "abandono. Um território com pouco acervo E fila parada é abandono; com pouco acervo " +
+        "e sem fila, é só pouco acervo. Sem as duas pontas não se separa uma coisa da outra.",
+      precisaDe:
+        "o tempo de fila por território. A densidade já existe: " +
+        `${d.semRegistro.length} unidades federativas sem nenhum registro e ` +
+        `${d.comUmRegistro.length} com um só.`,
+      hoje:
+        `${d.ufs.length} unidades medidas · ${d.semRegistro.map((u) => u.titulo).join(" e ")} ` +
+        `sem registro nenhum`,
+      sustentada: false,
+    },
+  ];
+}
+
+export const POR_QUE_NENHUMA_FECHA =
+  "As cinco medidas desta tela dependem de decisões tomadas, e a fila do protótipo nunca foi " +
+  "decidida. A tela mostra o que existe hoje ao lado de cada uma e declara o que falta, em " +
+  "vez de exibir cinco zeros — «tempo médio de fila: 0» afirmaria que a fila é instantânea, " +
+  "quando o fato é que ninguém decidiu nada ainda. Cada decisão que a Moderação registrar " +
+  "acende uma destas linhas sem ninguém tocar em código.";
 
 // ---------------------------------------------------------------------------
 // A7 — a trilha de auditoria, e a única tela do Admin sem escrita
