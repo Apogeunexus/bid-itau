@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { ROTULO_DA_ACAO, decisaoCompleta, situacaoApos } from "@/dados/tipos-acesso";
 import type {
   AcaoDeclarada,
   AcaoDaModeracao,
@@ -11,6 +12,7 @@ import type {
   IdDoEscopo,
   ConcentracaoMedida,
   IdDaOrdenacao,
+  DecisaoRegistrada,
   ItemDaFila,
   MotivoDeDenuncia,
   NumerosDaModeracao,
@@ -51,25 +53,13 @@ import type {
 // A decisão — D-84: nunca sem autor, nunca sem carimbo
 // ---------------------------------------------------------------------------
 
-interface Decisao {
-  itemId: string;
-  itemTitulo: string;
-  origem: OrigemDoItem;
-  acao: AcaoDaModeracao;
-  /** Vazio nas ações que não pedem texto. NUNCA vazio no veto — ver `registrarVeto`. */
-  motivo: string;
-  /** Quem decidiu. Autorado e rotulado como tal: não há autenticação aqui (D-25). */
-  quem: string;
-  /** Carimbo derivado da data de referência do build, nunca do relógio do runtime. */
-  quando: string;
-}
-
-const ROTULO_ACAO: Record<AcaoDaModeracao, string> = {
-  aprovar: "aprovado",
-  editar: "enviado para edição",
-  vetar: "vetado",
-  devolver: "devolvido a quem submeteu",
-};
+/**
+ * A decisão gravada é a do CONTRATO (`DecisaoRegistrada`, que estende `DecisaoDeModeracao`
+ * de `tipos-acesso.ts`), e não um formato desta tela. É o mesmo objeto que o Studio lê para
+ * mostrar ao produtor o que aconteceu com o registro dele — um formato próprio aqui
+ * obrigaria uma tradução no meio, e tradução entre dois níveis é onde o motivo se perde.
+ */
+type Decisao = DecisaoRegistrada;
 
 const ROTULO_ORIGEM: Record<OrigemDoItem, string> = {
   produtor: "produtor",
@@ -111,7 +101,7 @@ function lerArmazem(): Decisao[] {
         typeof d === "object" && d !== null &&
         typeof (d as Decisao).itemId === "string" &&
         typeof (d as Decisao).acao === "string" &&
-        typeof (d as Decisao).quem === "string" &&
+        typeof (d as Decisao).autor === "string" &&
         typeof (d as Decisao).quando === "string",
     );
   } catch {
@@ -439,18 +429,27 @@ export function ModeracaoFila({
 
   const registrar = (acao: AcaoDaModeracao, motivo: string) => {
     if (!item) return;
-    setDecisoes((antes) => [
-      {
-        itemId: item.id,
-        itemTitulo: item.titulo,
-        origem: item.origem,
-        acao,
-        motivo,
-        quem: moderador,
-        quando: carimbo,
-      },
-      ...antes.filter((d) => d.itemId !== item.id),
-    ]);
+    const decisao: Decisao = {
+      itemId: item.id,
+      itemTitulo: item.titulo,
+      origem: item.origem,
+      acao,
+      // `null` e não `""`: o contrato distingue «não houve motivo» de «houve e é vazio», e
+      // uma string vazia gravada faria `decisaoCompleta` recusar um `devolver` legítimo.
+      motivo: motivo.trim() ? motivo.trim() : null,
+      autor: moderador,
+      quando: carimbo,
+      escopo: escopoAtivo.id,
+      // Gravada junto, e derivada — nunca digitada. É o que o Studio lê para dizer ao
+      // produtor em que estado o registro dele ficou.
+      situacao: situacaoApos(acao),
+    };
+    // A TERCEIRA TRAVA, e é a do CONTRATO. `decisaoCompleta` mora em `tipos-acesso.ts` e é
+    // a mesma função que o Studio usa para conferir o que recebeu. Chamá-la aqui, em vez de
+    // reescrever a regra, é o que garante que os dois lados concordem sobre o que é uma
+    // decisão gravável — e não por boa vontade das duas telas.
+    if (!decisaoCompleta(decisao)) return;
+    setDecisoes((antes) => [decisao, ...antes.filter((d) => d.itemId !== item.id)]);
     setVetando(false);
     setMotivoVeto("");
     setComentarioDevolucao("");
@@ -470,6 +469,11 @@ export function ModeracaoFila({
     if (!motivoAparado) return;
     registrar("vetar", motivoAparado);
   };
+  // As três travas do veto, e cada uma cobre o que a anterior não cobre:
+  //   1. `disabled` no botão — impede o clique de mouse
+  //   2. `registrarVeto` recusa motivo vazio — cobre `el.click()`, `Enter` e `form.submit()`
+  //   3. `decisaoCompleta`, do contrato — cobre qualquer caminho novo que alguém abra
+  //      depois, inclusive um que não passe por `registrarVeto`
 
   const executar = (acao: AcaoDaModeracao) => {
     if (acao === "vetar") {
@@ -976,7 +980,7 @@ export function ModeracaoFila({
                     data-acao-registrada={d.acao}
                   >
                     <span className="moderacao-decisao-cabeca">
-                      <strong>{ROTULO_ACAO[d.acao]}</strong>
+                      <strong>{ROTULO_DA_ACAO[d.acao]}</strong>
                       <SeloOrigem origem={d.origem} />
                     </span>
                     <span className="moderacao-decisao-titulo">{d.itemTitulo}</span>
@@ -989,7 +993,7 @@ export function ModeracaoFila({
                       </span>
                     ) : null}
                     <span className="moderacao-decisao-assinatura">
-                      {d.quem} · {d.quando}
+                      {d.autor} · {d.quando}
                     </span>
                     <button
                       type="button"

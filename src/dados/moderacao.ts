@@ -44,6 +44,7 @@ import { DATA_DE_REFERENCIA } from "./alerta";
 import type { OrigemMotivo } from "./cartao";
 import { ROTA_POR_CLASSE } from "./rotas";
 import type { ClasseEntidade, Entidade, Procedencia, Relacao } from "./tipos";
+import type { AcaoDeModeracao, DecisaoDeModeracao, Situacao } from "./tipos-acesso";
 
 // ---------------------------------------------------------------------------
 // Autoria e carimbo — D-84, e o mesmo padrão de `ocorrencias-studio.ts`
@@ -364,6 +365,57 @@ export interface DenunciaDeclarada {
   quantas: number;
 }
 
+// ---------------------------------------------------------------------------
+// A cadeia de identidade — §6 da ontologia, conferida item a item
+// ---------------------------------------------------------------------------
+
+/**
+ * Os três componentes da chave de um evento, na ordem da ontologia.
+ *
+ * CONSTANTE DE MÓDULO, e o item manda só os bits — o precedente é
+ * `PROCEDENCIA_DA_ATRIBUICAO`, que virou constante porque, como campo por item, custava
+ * 2,2 KB para afirmar sessenta vezes a mesma coisa. Aqui o rótulo e a explicação de cada
+ * componente são idênticos nos 68 itens; o que varia é se cada um está sustentado, e isso
+ * cabe em três caracteres.
+ */
+export interface ComponenteDaChave {
+  id: string;
+  rotulo: string;
+  /** O que o acervo precisa ter para este componente se sustentar. */
+  observa: string;
+  /** De quem é a responsabilidade de preencher, quando falta. */
+  dequem: string;
+}
+
+export const COMPONENTES_DA_CHAVE: readonly ComponenteDaChave[] = [
+  {
+    id: "titulo",
+    rotulo: "título normalizado",
+    observa: "o campo `titulo` da entidade, normalizado",
+    dequem: "existe em todos — é o único dos três que o acervo sustenta hoje",
+  },
+  {
+    id: "agente",
+    rotulo: "agente realizador",
+    observa: "uma aresta para `pessoa`, `coletivo` ou `instituicao`",
+    dequem: "o produtor declara quem realiza (matriz da §5)",
+  },
+  {
+    id: "obra",
+    rotulo: "obra",
+    observa: "uma aresta para `obra`",
+    dequem: "o produtor vincula, e o verbete da obra é da Enciclopédia",
+  },
+];
+
+export const REGRA_DA_CHAVE =
+  "A identidade de um evento é título normalizado + agente realizador + obra — é o " +
+  "critério da ONTOLOGIA, não uma medida de parecença entre textos: ele afirma o que faz " +
+  "duas linhas serem a mesma coisa no mundo. Um registro sem os três não tem chave, e a " +
+  "fila de duplicatas passa a acusar o próprio sistema. A ficha marca cada componente como " +
+  "sustentado ou não, item a item, porque «1 de 3» dito sobre o acervo inteiro não diz a " +
+  "quem modera qual dos três falta NESTE registro.";
+
 export interface ItemDaFila {
   /** Chave estável do item na fila: `fila:{origem}:{entidadeId}`. */
   id: string;
@@ -402,6 +454,30 @@ export interface ItemDaFila {
   registrosNaUf: number | null;
   /** `null` fora da origem `denuncia`. */
   denuncia: DenunciaDeclarada | null;
+  /** A imagem declarada da entidade, ou `null`. Alimenta os direitos de imagem (114). */
+  imagem: string | null;
+  /**
+   * O crédito da imagem. `null` quando o acervo não o declara — e é o caso que a ficha
+   * existe para barrar: **imagem sem crédito não publica**. 26 dos 68 itens estão assim.
+   */
+  creditoImagem: string | null;
+  /**
+   * Os três componentes da chave, como bits na ordem de `COMPONENTES_DA_CHAVE`:
+   * `"100"` é título sustentado, agente e obra não.
+   *
+   * ACHATADO de propósito. Como três campos nomeados por item custaria 2,2 KB para dizer
+   * o que cabe em três caracteres, e o vocabulário que os lê é constante de módulo. O
+   * precedente é `PROCEDENCIA_DA_ATRIBUICAO`.
+   */
+  chave: string;
+  /**
+   * Termos do vocabulário controlado vinculados ao item, até três.
+   *
+   * É o que a porta 118 observa: termo fora do vocabulário vai para o Editor, e a
+   * moderação **encaminha, não decide**. Um item da fila tem termo — o acervo quase não os
+   * vincula, e a ficha declara isso com denominador em vez de deixar o campo em branco.
+   */
+  termos: string[];
   /** A rota pública da entidade, quando a classe tem uma nesta fase. */
   rota: string | null;
 }
@@ -430,6 +506,9 @@ export interface Escopo {
 }
 
 
+
+/** As classes que contam como agente realizador na chave de identidade (§6). */
+const AGENTES_REALIZADORES: readonly ClasseEntidade[] = ["pessoa", "coletivo", "instituicao"];
 
 function rotaDe(e: Entidade): string | null {
   const base = ROTA_POR_CLASSE[e.classe];
@@ -700,6 +779,14 @@ function paraItem(
 ): ItemDaFila {
   const ehIa = origem === "ia";
   const uf = ufPorEntidade().get(e.id) ?? null;
+  const vs = vizinhos(e.id);
+  // Os bits da chave, na ordem de `COMPONENTES_DA_CHAVE`. O título sempre se sustenta —
+  // uma entidade sem título não existe no acervo; os outros dois são medidos na aresta.
+  const chave = [
+    "1",
+    vs.some((v) => AGENTES_REALIZADORES.includes(v.entidade.classe)) ? "1" : "0",
+    vs.some((v) => v.entidade.classe === "obra") ? "1" : "0",
+  ].join("");
   return {
     id: `fila:${origem}:${e.id}`,
     entidadeId: e.id,
@@ -717,6 +804,15 @@ function paraItem(
     uf,
     registrosNaUf: uf ? (registrosPorUf().get(uf) ?? 0) : null,
     denuncia,
+    imagem: e.imagem ?? null,
+    creditoImagem: e.creditoImagem ?? null,
+    chave,
+    // Até três: o que a ficha precisa é saber SE há termo e quais, não listar um
+    // vocabulário inteiro por item — e cada termo a mais come do teto do DTO.
+    termos: vs
+      .filter((v) => v.entidade.classe === "termo")
+      .slice(0, 3)
+      .map((v) => v.entidade.titulo),
     rota: rotaDe(e),
   };
 }
@@ -974,7 +1070,22 @@ export function itemNoEscopo(item: ItemDaFila, campo: Escopo["campo"]): boolean 
 // D-83 — as quatro ações, e a assimetria que É o conteúdo
 // ---------------------------------------------------------------------------
 
-export type AcaoDaModeracao = "aprovar" | "editar" | "vetar" | "devolver";
+/**
+ * As quatro ações DA FILA, das seis do contrato.
+ *
+ * `AcaoDeModeracao` mora em `tipos-acesso.ts` porque atravessa dois níveis — a S3 escreve a
+ * decisão e o Studio a lê para mostrar ao produtor o que aconteceu com o registro dele. As
+ * outras duas do contrato não aparecem aqui: `suspender` age sobre o que JÁ FOI PUBLICADO e
+ * não está mais na fila, e `adiar` não decide nada. Este subconjunto é o que a ficha de um
+ * item pendente oferece.
+ *
+ * O tipo é ESTREITADO e não redeclarado: uma segunda união com os mesmos quatro nomes
+ * compilaria hoje e divergiria no dia em que o contrato ganhasse a sétima ação.
+ */
+export type AcaoDaModeracao = Extract<
+  AcaoDeModeracao,
+  "aprovar" | "editar" | "vetar" | "devolver"
+>;
 
 export interface AcaoDeclarada {
   id: AcaoDaModeracao;
@@ -1021,6 +1132,27 @@ export const ACOES_DA_MODERACAO: readonly AcaoDeclarada[] = [
       "encerra — e só quem encerra deve explicação.",
   },
 ];
+
+/**
+ * A decisão como ela é GRAVADA — o contrato mais o que a tela precisa para exibir.
+ *
+ * `DecisaoDeModeracao` vem de `tipos-acesso.ts` e é o que atravessa para o Studio. Os três
+ * campos daqui são de APRESENTAÇÃO e não pertencem ao contrato: título e origem existem
+ * para o histórico não ter que reabrir a fila só para escrever uma linha, e `situacao` é o
+ * resultado de `situacaoApos()`, gravado junto para que o registro diga em que estado o
+ * item ficou sem depender de quem o lê aplicar a função de novo.
+ *
+ * ELE ESTENDE, NÃO REDECLARA. Um registro com os mesmos campos escritos à mão passaria a
+ * divergir do contrato no primeiro campo que a S7 acrescentasse, e o sintoma seria o painel
+ * do produtor lendo `undefined` num campo que a moderação nunca soube que devia escrever.
+ */
+export interface DecisaoRegistrada extends DecisaoDeModeracao {
+  acao: AcaoDaModeracao;
+  itemTitulo: string;
+  origem: OrigemDoItem;
+  /** O estado em que o item ficou. Sempre `situacaoApos(acao)`, nunca digitado. */
+  situacao: Situacao;
+}
 
 /** A frase que a tela imprime sobre a assimetria. Produto, não comentário. */
 export const FRASE_DA_ASSIMETRIA =
