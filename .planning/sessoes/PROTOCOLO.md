@@ -231,6 +231,17 @@ semScore: document.querySelectorAll('[data-item-escolhido] [data-score-ia]').len
 `${todos.length} arquivos varridos · permitidos por nome: …`. Uma varredura vazia aparece
 como «0 arquivos varridos» em vez de passar em silêncio.
 
+**Duas armadilhas dentro da própria correção**, as duas achadas rodando o defeito injetado
+**sobre a correção** e não sobre o código:
+
+- **Injeção parcial produz falso verde no teste do teste.** A injeção trocava só a primeira
+  ocorrência do identificador; ele aparecia na declaração, no `Record` do rótulo e no campo
+  do cadastro, e as duas restantes seguravam o piso de pé. O caso passava **verde por metade
+  da injeção**. Use `replaceAll`
+- **`[^>]*` trunca no `=>` de qualquer `onChange`.** Um padrão que varre a tag inteira por
+  `<input[^>]*>` para de casar no primeiro arrow function e **não vê nada escrito depois
+  dele**. Meça por atributo, não por tag
+
 **Padrão mais estreito que a promessa** é a irmã menor da mesma classe: um gate que diz «sem
 relógio» e só pega `new Date(`, deixando `Date.now()` passar; um que diz «nenhum campo de
 latitude» e só casa atributo com aspas duplas literais, deixando `id={campoLat}` passar. Não
