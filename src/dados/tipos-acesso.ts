@@ -414,6 +414,25 @@ export interface ComponenteDaChave {
   sustentado: boolean;
 }
 
+/**
+ * `1304` → `"1.304"`.
+ *
+ * MORA NO CONTRATO E NÃO NUMA TELA porque as duas pontas formatam número: o produtor no
+ * quadro de conversão, a moderação na fila. Sem `toLocaleString` — o separador não pode
+ * depender do locale da máquina que roda o build, senão o número muda de forma entre dois
+ * builds. E duas grafias do mesmo número na mesma tela fazem quem lê gastar um segundo
+ * decidindo se são o mesmo.
+ */
+export function comSeparador(n: number): string {
+  const s = String(Math.trunc(Math.abs(n)));
+  let saida = "";
+  for (let i = 0; i < s.length; i += 1) {
+    if (i > 0 && (s.length - i) % 3 === 0) saida += ".";
+    saida += s[i];
+  }
+  return (n < 0 ? "-" : "") + saida;
+}
+
 const SEM_VALOR = "—";
 const SEPARADOR = "|";
 /** O separador que a chave do nível de cima usa quando embutida na de baixo. */
@@ -704,9 +723,27 @@ export interface LinhaDeConversao {
  * mede sobre o grafo. Um literal aqui faria a apresentação afirmar, na primeira regeração,
  * número que o acervo não sustenta.
  */
+/**
+ * O que o acervo mede HOJE — o «antes» de cada linha do quadro.
+ *
+ * Tudo entra por parâmetro e nada é literal. É a mesma disciplina que vale para o resto do
+ * projeto: um número digitado aqui faria a apresentação afirmar, na primeira regeração do
+ * grafo, coisa que o acervo não sustenta — e no quadro que carrega o argumento da proposta
+ * essa seria a contradição mais cara de todas.
+ */
+export interface MedidasDoAcervo {
+  ocorrencias: number;
+  ocorrenciasComEspaco: number;
+  eventos: number;
+  eventosQueDeclaramIngresso: number;
+  eventosDatados: number;
+  datadosComArtista: number;
+  registrosSemFicha: number;
+}
+
 export function conversaoDoEnvio(
   r: RascunhoDoProdutor,
-  acervo: { ocorrencias: number; ocorrenciasComEspaco: number; eventosQueDeclaramIngresso: number },
+  acervo: MedidasDoAcervo,
 ): LinhaDeConversao[] {
   const sessoes = r.ocorrencias.length;
   const comEspaco = r.ocorrencias.filter((o) => o.espacoId !== null).length;
@@ -717,19 +754,19 @@ export function conversaoDoEnvio(
   return [
     {
       medida: "procedência das ocorrências",
-      antes: `derivado (${acervo.ocorrencias} de ${acervo.ocorrencias} no acervo)`,
+      antes: `derivado (${comSeparador(acervo.ocorrencias)} de ${comSeparador(acervo.ocorrencias)} no acervo)`,
       depois: sessoes > 0 ? `produtor (${sessoes} sessões)` : "nada a converter",
       convertida: sessoes > 0,
     },
     {
       medida: "espaço declarado",
-      antes: `${acervo.ocorrenciasComEspaco} de ${acervo.ocorrencias}`,
+      antes: `${comSeparador(acervo.ocorrenciasComEspaco)} de ${comSeparador(acervo.ocorrencias)}`,
       depois: `${comEspaco} de ${sessoes}`,
       convertida: comEspaco > 0,
     },
     {
       medida: "ingresso declarado",
-      antes: `${acervo.eventosQueDeclaramIngresso} de 300 eventos`,
+      antes: `${comSeparador(acervo.eventosQueDeclaramIngresso)} de ${comSeparador(acervo.eventos)} eventos`,
       depois: r.canalIngresso !== null ? "1 de 1 — declarado" : "não declarado",
       convertida: r.canalIngresso !== null,
     },
@@ -741,13 +778,13 @@ export function conversaoDoEnvio(
     },
     {
       medida: "elenco em evento datado",
-      antes: "0 de 129 eventos datados",
+      antes: `${comSeparador(acervo.datadosComArtista)} de ${comSeparador(acervo.eventosDatados)} eventos datados`,
       depois: elenco > 0 ? `${elenco} vínculos, todos com papel` : "nenhum vínculo",
       convertida: elenco > 0,
     },
     {
       medida: "ficha de acessibilidade",
-      antes: "2.702 registros não declaram",
+      antes: `${comSeparador(acervo.registrosSemFicha)} registros não declaram`,
       depois: r.declaraAcessibilidade ? "declarada, inclusive a ausência" : "ainda em silêncio",
       convertida: r.declaraAcessibilidade,
     },

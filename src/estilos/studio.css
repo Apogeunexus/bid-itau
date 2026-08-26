@@ -1269,3 +1269,80 @@
   text-align: start;
   line-height: 1.4;
 }
+
+/* ===========================================================================
+ * P8 · REVISÃO E ENVIO — a ficha na ordem da ontologia e o quadro do argumento.
+ * ======================================================================== */
+
+.studio-ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+.studio-ficha-bloco {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Grade de duas colunas com o rótulo em largura FIXA. `max-content` conserta a
+ * quebra do rótulo e estraga o alinhamento: cada linha vira uma grade própria e
+ * os valores passam a começar em x diferente a cada linha — que é exatamente o
+ * que quem confere campo a campo usa para varrer a coluna. */
+.studio-ficha-lista {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: 0.25rem 1rem;
+  margin: 0;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+}
+
+.studio-ficha-lista dt {
+  font-weight: 600;
+  color: var(--cor-tinta-2);
+  overflow-wrap: anywhere;
+}
+
+.studio-ficha-lista dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* A linha do quadro de conversão tem três colunas, e não duas como
+ * `.studio-linha` da comparação de duplicatas. Ela redeclara a grade em vez de
+ * herdar: medida, antes, depois. */
+.studio-linha-conversao {
+  grid-template-columns: 11rem minmax(0, 1fr) minmax(0, 1fr);
+}
+
+/* A coluna do «depois» é a que carrega o argumento, e ganha peso quando a linha
+ * de fato converte. Quando não converte, ela fica igual às outras — esconder ou
+ * enfeitar o que não mudou faria o quadro afirmar mais do que o registro
+ * sustenta. */
+.studio-linha-conversao[data-convertida="sim"] .studio-celula-depois {
+  font-weight: 700;
+  color: var(--cor-acao-tinta);
+}
+
+.studio-linha-conversao[data-convertida="sim"] {
+  background: var(--cor-acao-lavada);
+}
+
+/* Depois do envio: o registro trocou de mãos, e a caixa diz para onde foi. Sem
+ * ela, o botão de enviar seria um botão que muda um selo. */
+.studio-enviado {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: 2px solid var(--cor-acao);
+  border-radius: var(--raio-g);
+  background: var(--cor-acao-lavada);
+}
