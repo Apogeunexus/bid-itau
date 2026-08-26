@@ -1,13 +1,13 @@
 {
-  "varredura": "26/08, 00:29",
+  "varredura": "26/08, 00:39",
   "kpi": {
-    "concluidas": 26,
+    "concluidas": 28,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 16,
-    "folgaS6": 9,
+    "sujos": 19,
+    "folgaS6": 8,
     "pedidos": 10
   },
   "dependencias": [
@@ -52,7 +52,7 @@
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-63",
       "estado": "rodando",
-      "feitas": 2,
+      "feitas": 3,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -85,16 +85,16 @@
           "n": 3,
           "rot": "P5 grade de ocorrências",
           "inicio": 2,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "1f18109",
+          "nota": "A tela onde a sessão datada passa a existir. Decidi **teto de 200 sessões por aplicação, declarado na prévia** — uma temporada de 87 dias × 7 dias × 3 horários passa de mil linhas, e limitar a entrada vem antes de otimizar o que veio. Decidi também **aritmética em `Date.UTC` com leitores `getUTC*`**, nunca `new Date(string)`: em fuso brasileiro a grade sairia deslocada em um dia sem nenhum portão ver. Extraí o seletor de registro para `studio-seletor.tsx` — segundo caso de uso chegou. E `.studio-botao` ganhou estado desabilitado, que faltava para as seis sessões.",
+          "quando": "26.08 00:05"
         },
         {
           "n": 4,
           "rot": "P3 obra e elenco",
           "inicio": 3,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -402,7 +402,7 @@
       "pasta": "src/app/(bastidor)/admin",
       "sessaoNome": "bid-ita-d4",
       "estado": "rodando",
-      "feitas": 4,
+      "feitas": 5,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -450,16 +450,16 @@
           "n": 5,
           "rot": "A6 observabilidade",
           "inicio": 5,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "e510b79",
+          "nota": "Primeira tela do Admin **inteiramente de servidor**: sem estado, sem armazenamento, zero JS no navegador. A conferência de três pontas passa a aparecer **antes** de derrubar o build, com o nome da fatia. Frescor sem relógio. Três defeitos vistos só no navegador: crase de código vazando para a frase, procedência saindo como enum cru (`ic`), caixa repetindo o próprio rótulo. Reusei `ROTULO_DA_PROCEDENCIA` do Observatório para as duas superfícies não batizarem a mesma fatia diferente",
+          "quando": "26.08 01:30"
         },
         {
           "n": 6,
           "rot": "A1 papéis e escopos",
           "inicio": 6,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -758,6 +758,13 @@
       "quando": "25.08 20:55"
     },
     {
+      "sessao": "S7",
+      "n": 3,
+      "rot": "P5 grade de ocorrências",
+      "nota": "A tela onde a sessão datada passa a existir. Decidi **teto de 200 sessões por aplicação, declarado na prévia** — uma temporada de 87 dias × 7 dias × 3 horários passa de mil linhas, e limitar a entrada vem antes de otimizar o que veio. Decidi também **aritmética em `Date.UTC` com leitores `getUTC*`**, nunca `new Date(string)`: em fuso brasileiro a grade sairia deslocada em um dia sem nenhum portão ver. Extraí o seletor de registro para `studio-seletor.tsx` — segundo caso de uso chegou. E `.studio-botao` ganhou estado desabilitado, que faltava para as seis sessões.",
+      "quando": "26.08 00:05"
+    },
+    {
       "sessao": "S3",
       "n": 1,
       "rot": "separação de território",
@@ -847,6 +854,13 @@
       "rot": "A3 territórios",
       "nota": "A alavanca virou operável: as origens de centroide-país são **cidades fora da tabela** — Paris 20, Nova York 19, Lisboa 8 —, e a tela diz quantas entidades cada uma move. Três achados: `meta.json` conta a **tabela** (472), o mapa resolve **1.380**, e a fatia de centroide-país é 45,3% numa e 29,1% na outra; origem sem território acima **é o país** (66 entidades presas, onde município não resolve); cidade dentro de homônimo lê como defeito e some. A trilha virou lista única com união discriminada, chave `admin.v2`. Dois defeitos de forma vistos só no navegador: régua do `.studio-acoes` em célula de tabela, e `45.3%` com ponto",
       "quando": "26.08 01:05"
+    },
+    {
+      "sessao": "S1",
+      "n": 5,
+      "rot": "A6 observabilidade",
+      "nota": "Primeira tela do Admin **inteiramente de servidor**: sem estado, sem armazenamento, zero JS no navegador. A conferência de três pontas passa a aparecer **antes** de derrubar o build, com o nome da fatia. Frescor sem relógio. Três defeitos vistos só no navegador: crase de código vazando para a frase, procedência saindo como enum cru (`ic`), caixa repetindo o próprio rótulo. Reusei `ROTULO_DA_PROCEDENCIA` do Observatório para as duas superfícies não batizarem a mesma fatia diferente",
+      "quando": "26.08 01:30"
     },
     {
       "sessao": "S5",
