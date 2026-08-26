@@ -725,3 +725,58 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
+/* ---------------------------------------------------------------------------
+ * G5 · o eixo do tempo e a conferência por extenso.
+ *
+ * O DEGRAU QUE AINDA NÃO EXISTE NÃO É CINZA-APAGADO. Ele tem a mesma superfície
+ * dos outros e um traço tracejado na borda: apagar visualmente as quatro
+ * procedências que abrem diria que elas são menos importantes, e elas são o
+ * argumento da proposta — é para elas que o bastidor inteiro existe. O tracejado
+ * diz «ainda não», e não «menos».
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-eixo {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+[data-view="web"] .obs-degrau {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+[data-view="web"] .obs-degrau[data-existe-hoje="nao"] {
+  border-style: dashed;
+}
+
+/* A procedência que não sobrevive ao bastidor entrar no ar. */
+[data-view="web"] .obs-degrau[data-em-producao="nao"] {
+  border-left: 4px solid var(--cor-borda-forte);
+}
+
+[data-view="web"] .obs-degrau-carimba {
+  margin: 0;
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+  color: var(--cor-tinta-2);
+}
+
+/* As três fontes da conferência, numeradas. Elas são o argumento de que o
+   painel é prova e não afirmação, então aparecem por extenso em vez de virarem
+   um selo «conferido». */
+[data-view="web"] .obs-fontes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-view="web"] .obs-fonte {
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+  color: var(--cor-tinta-2);
+}

@@ -1355,3 +1355,141 @@ export function montarImpacto(): DadosDoImpacto {
   };
   return impactoMemorizado;
 }
+
+// ---------------------------------------------------------------------------
+// G5 · Procedência — o eixo do tempo, e a união local que espera o contrato
+// ---------------------------------------------------------------------------
+
+/**
+ * As seis procedências de PRODUÇÃO, previstas no PRD §6.
+ *
+ * POR QUE ELA É UMA UNIÃO LOCAL E NÃO O TIPO `Procedencia`. `Procedencia` mora em
+ * `tipos.ts`, que não é território desta sessão, e todo `Record<Procedencia, …>` deste
+ * módulo é EXAUSTIVO: acrescentar quatro valores lá quebraria a varredura, a conferência de
+ * três pontas e provavelmente os módulos das outras sessões, tudo de uma vez. O pedido de
+ * contrato está registrado; enquanto ele não é atendido, o eixo do tempo se apoia nesta
+ * união, e ela sai no dia em que o tipo real abrir.
+ *
+ * `autorado` NÃO ESTÁ AQUI, e a ausência é o argumento: ela é a procedência do protótipo e
+ * a única que NÃO sobrevive ao bastidor entrar no ar. Cada um dos outros valores é um papel
+ * humano — os níveis de acesso não são uma camada de segurança sobre a ontologia, eles SÃO
+ * o vocabulário de procedência, e cada escrita carimba quem escreveu.
+ */
+export type ProcedenciaDeProducao = "ic" | "derivado" | "parceiro" | "produtor" | "ia" | "curador";
+
+/**
+ * Um degrau do eixo do tempo: uma procedência, o que ela conta hoje e o que ela vai contar.
+ *
+ * `hoje: null` com `existeHoje: false` é a MESMA distinção de D-90 aplicada ao vocabulário:
+ * o valor não existe no tipo, então não há o que contar — e isso é diferente de existir e
+ * medir zero. Um eixo que escrevesse `0` nas quatro procedências que ainda não abriram
+ * afirmaria que ninguém as usou, quando o certo é que ninguém PODE usá-las ainda.
+ */
+export interface DegrauDaProcedencia {
+  id: string;
+  rotulo: string;
+  /** Entidades hoje. `null` quando o valor ainda não existe no tipo. */
+  hoje: number | null;
+  /** Ligações hoje. `null` idem. */
+  hojeEmArestas: number | null;
+  existeHoje: boolean;
+  /** `autorado` é a única que não sobrevive ao bastidor entrar no ar. */
+  emProducao: boolean;
+  /** O nível de acesso que passa a carimbar esta procedência. */
+  quemCarimba: string;
+  significado: string;
+}
+
+export interface DadosDaProcedencia {
+  painel: PainelDeProcedencia;
+  eixo: DegrauDaProcedencia[];
+  /** Quantas procedências existem hoje e quantas o vocabulário terá. */
+  hoje: number;
+  emProducao: number;
+}
+
+const QUEM_CARIMBA: Record<string, string> = {
+  ic: "ninguém daqui — é o acervo do Itaú Cultural carregado como está, e é a única procedência que não é um papel",
+  derivado: "a regra, no build: escrita, auditável e nossa. Não é invenção, é leitura — mas é leitura NOSSA",
+  autorado: "nós, para a demonstração ter o que mostrar. Some quando houver gente escrevendo",
+  parceiro: "a instituição que traz acervo próprio para dentro da plataforma",
+  produtor: "o produtor cultural, nível 7 — o mesmo que hoje deixa 2.425 ocorrências em «derivado»",
+  ia: "a máquina, com revisão do moderador por regra: nível 3 decide, e a decisão fica assinada",
+  curador: "o editor ou curador, nível 5 — o único papel que escreve SENTIDO, e por isso assina",
+};
+
+const SIGNIFICADO_QUE_ABRE: Record<string, string> = {
+  parceiro:
+    "O acervo que não é do Itaú Cultural e não foi derivado por nós: entra com o nome de quem entregou, e o crédito viaja com o dado em vez de se dissolver no total.",
+  produtor:
+    "O acontecimento declarado por quem o produz — data, hora, preço, espaço e elenco. É a procedência que converte as 2.425 ocorrências que hoje dizem «derivado» e os dois terços da chave de identidade que hoje estão vazios.",
+  ia: "O que a máquina propôs e um humano decidiu. Ela já existe de fato — 71% das ligações de hoje são semelhança de máquina —, e o que falta não é a máquina: é o carimbo dizendo que ela foi revisada, e por quem.",
+  curador:
+    "O sentido escrito e assinado: influência, diálogo, derivação, curadoria. São as quatro relações que a ontologia declara e ninguém escreve — zero arestas hoje, nas quatro.",
+};
+
+const ROTULO_QUE_ABRE: Record<string, string> = {
+  parceiro: "parceiro",
+  produtor: "produtor",
+  ia: "revisado da IA",
+  curador: "curador",
+};
+
+let procedenciaMemorizada: DadosDaProcedencia | null = null;
+
+export function montarProcedencia(): DadosDaProcedencia {
+  if (procedenciaMemorizada) return procedenciaMemorizada;
+
+  const painel = painelDeProcedencia();
+  const emEntidades = new Map(painel.entidades.map((f) => [f.procedencia as string, f.n]));
+  const emArestas = new Map(painel.arestas.map((f) => [f.procedencia as string, f.n]));
+
+  // A ordem é a do TEMPO: primeiro as três que o acervo já tem, contadas; depois as quatro
+  // que abrem quando o bastidor entrar no ar. Ordenar por tamanho poria «autorado» no fim e
+  // esconderia o que a tela mais quer dizer — que aquela fatia é a que desaparece.
+  const existentes: string[] = [...PROCEDENCIAS];
+  const queAbrem = ["parceiro", "produtor", "ia", "curador"];
+
+  const eixo: DegrauDaProcedencia[] = [
+    ...existentes.map((p) => ({
+      id: p,
+      rotulo: ROTULO_DA_PROCEDENCIA[p as Procedencia],
+      hoje: emEntidades.get(p) ?? 0,
+      hojeEmArestas: emArestas.get(p) ?? 0,
+      existeHoje: true,
+      emProducao: p !== "autorado",
+      quemCarimba: QUEM_CARIMBA[p],
+      significado: SIGNIFICADO_DA_PROCEDENCIA[p as Procedencia],
+    })),
+    ...queAbrem.map((p) => ({
+      id: p,
+      rotulo: ROTULO_QUE_ABRE[p],
+      hoje: null,
+      hojeEmArestas: null,
+      existeHoje: false,
+      emProducao: true,
+      quemCarimba: QUEM_CARIMBA[p],
+      significado: SIGNIFICADO_QUE_ABRE[p],
+    })),
+  ];
+
+  for (const d of eixo) {
+    if ((d.hoje === null) !== (d.existeHoje === false)) {
+      throw new Error(
+        `observatorio.ts: o degrau «${d.id}» diz hoje=${JSON.stringify(d.hoje)} com existeHoje=${d.existeHoje}. ` +
+          `«não existe no tipo» e «existe e mede zero» são afirmações diferentes, e o eixo não pode achatá-las.`,
+      );
+    }
+    if (!d.quemCarimba || !d.significado) {
+      throw new Error(`observatorio.ts: o degrau «${d.id}» sem quem carimba ou sem significado.`);
+    }
+  }
+
+  procedenciaMemorizada = {
+    painel,
+    eixo,
+    hoje: existentes.length,
+    emProducao: eixo.filter((d) => d.emProducao).length,
+  };
+  return procedenciaMemorizada;
+}
