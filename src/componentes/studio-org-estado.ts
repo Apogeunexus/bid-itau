@@ -37,9 +37,12 @@ import type {
   Colaborador,
   DireitoDeDistribuicao,
   EntradaDeEquipe,
+  CadastroDeFormacao,
   EdicaoDePrograma,
   FichaTecnicaDeMidia,
+  MaterialDidatico,
   Programa,
+  VisitaEducativa,
 } from "@/dados/tipos-organizacao";
 
 /**
@@ -84,6 +87,10 @@ interface EstadoPersistido {
    *  não existe id de acervo para servir de chave. */
   programas: Programa[];
   atualProgramaId: string | null;
+  /** A O4: o que a organização acrescenta às 54 formações, e a agenda de visitas. */
+  formacoes: Record<string, CadastroDeFormacao>;
+  atualFormacaoId: string | null;
+  visitas: VisitaEducativa[];
 }
 
 export interface ContextoDaOrganizacao {
@@ -109,12 +116,14 @@ export interface SementeDaOrganizacao {
   instituicaoId?: string | null;
   equipe?: Colaborador[];
   midiaId?: string | null;
+  formacaoId?: string | null;
 }
 
 let primeiroId: string | null = null;
 let primeiraInstituicaoId: string | null = null;
 let equipeSemeada: Colaborador[] = [];
 let primeiraMidiaId: string | null = null;
+let primeiraFormacaoId: string | null = null;
 
 const ouvintes = new Set<() => void>();
 
@@ -179,6 +188,8 @@ function pareceEstado(v: unknown): v is EstadoPersistido {
   if (o.equipe !== undefined && !Array.isArray(o.equipe)) return false;
   if (o.midias !== undefined && (typeof o.midias !== "object" || o.midias === null)) return false;
   if (o.programas !== undefined && !Array.isArray(o.programas)) return false;
+  if (o.formacoes !== undefined && (typeof o.formacoes !== "object" || o.formacoes === null)) return false;
+  if (o.visitas !== undefined && !Array.isArray(o.visitas)) return false;
   if (o.historicoDaEquipe !== undefined && !Array.isArray(o.historicoDaEquipe)) return false;
   return Object.values(o.cadastros as Record<string, unknown>).every((c) => {
     if (typeof c !== "object" || c === null) return false;
@@ -208,6 +219,9 @@ function doZero(): EstadoPersistido {
     atualMidiaId: primeiraMidiaId,
     programas: [],
     atualProgramaId: null,
+    formacoes: {},
+    atualFormacaoId: primeiraFormacaoId,
+    visitas: [],
   };
 }
 
@@ -234,6 +248,7 @@ function hidratar(contextoNovo: ContextoDaOrganizacao, semente: SementeDaOrganiz
   if (semente.instituicaoId != null) primeiraInstituicaoId = semente.instituicaoId;
   if (semente.equipe && semente.equipe.length > 0) equipeSemeada = semente.equipe;
   if (semente.midiaId != null) primeiraMidiaId = semente.midiaId;
+  if (semente.formacaoId != null) primeiraFormacaoId = semente.formacaoId;
   if (estado !== null) return;
 
   let cru: string | null = null;
@@ -275,6 +290,9 @@ function hidratar(contextoNovo: ContextoDaOrganizacao, semente: SementeDaOrganiz
     atualMidiaId: lido.atualMidiaId ?? primeiraMidiaId,
     programas: lido.programas ?? [],
     atualProgramaId: lido.atualProgramaId ?? null,
+    formacoes: lido.formacoes ?? {},
+    atualFormacaoId: lido.atualFormacaoId ?? primeiraFormacaoId,
+    visitas: lido.visitas ?? [],
   };
   avisar();
 }
@@ -409,6 +427,31 @@ function comPrograma(id: string, transformar: (p: Programa) => Programa) {
   });
 }
 
+function formacaoVazia(formacaoId: string): CadastroDeFormacao {
+  return {
+    formacaoId,
+    inscricaoAberta: false,
+    vagas: null,
+    materiais: [],
+    autor: contexto.autor,
+    quando: contexto.dataDeReferencia,
+  };
+}
+
+function comFormacao(
+  formacaoId: string,
+  transformar: (c: CadastroDeFormacao) => CadastroDeFormacao,
+) {
+  if (estado === null) return;
+  const atual = estado.formacoes[formacaoId] ?? formacaoVazia(formacaoId);
+  const proximo = {
+    ...transformar(atual),
+    autor: contexto.autor,
+    quando: contexto.dataDeReferencia,
+  };
+  gravar({ ...estado, formacoes: { ...estado.formacoes, [formacaoId]: proximo } });
+}
+
 // ---------------------------------------------------------------------------
 // O gancho
 // ---------------------------------------------------------------------------
@@ -480,6 +523,19 @@ export interface Organizacao {
   alternarEvento: (id: string, eventoId: string) => void;
   acrescentarEdicao: (id: string, edicao: EdicaoDePrograma) => void;
   removerEdicao: (id: string, indice: number) => void;
+
+  // --- O4 · formação, biblioteca e visita educativa ------------------------
+  formacoes: Record<string, CadastroDeFormacao>;
+  atualFormacaoId: string | null;
+  visitas: VisitaEducativa[];
+  escolherFormacao: (id: string) => void;
+  alterarFormacao: (id: string, mudanca: Partial<Omit<CadastroDeFormacao, "formacaoId">>) => void;
+  acrescentarMaterial: (id: string, material: MaterialDidatico) => void;
+  removerMaterial: (id: string, indice: number) => void;
+  solicitarVisita: (visita: Omit<VisitaEducativa, "id" | "estado" | "autor" | "quando">) => void;
+  /** Responder é DECIDIR, e a decisão carimba. Confirmar não confere teto aqui: quem
+   *  confere é a tela, que já mostra o motivo de não caber antes de deixar clicar. */
+  responderVisita: (id: string, estado: "confirmada" | "recusada") => void;
 }
 
 export function useOrganizacao(
@@ -697,6 +753,58 @@ export function useOrganizacao(
     comPrograma(id, (p) => ({ ...p, edicoes: p.edicoes.filter((_, i) => i !== indice) }));
   }, []);
 
+  const escolherFormacao = useCallback((id: string) => {
+    if (estado === null) return;
+    gravar({ ...estado, atualFormacaoId: id });
+  }, []);
+
+  const alterarFormacao = useCallback(
+    (id: string, mudanca: Partial<Omit<CadastroDeFormacao, "formacaoId">>) => {
+      comFormacao(id, (c) => ({ ...c, ...mudanca }));
+    },
+    [],
+  );
+
+  const acrescentarMaterial = useCallback((id: string, material: MaterialDidatico) => {
+    comFormacao(id, (c) => ({ ...c, materiais: [...c.materiais, material] }));
+  }, []);
+
+  const removerMaterial = useCallback((id: string, indice: number) => {
+    comFormacao(id, (c) => ({ ...c, materiais: c.materiais.filter((_, i) => i !== indice) }));
+  }, []);
+
+  const solicitarVisita = useCallback(
+    (visita: Omit<VisitaEducativa, "id" | "estado" | "autor" | "quando">) => {
+      if (estado === null) return;
+      gravar({
+        ...estado,
+        visitas: [
+          ...estado.visitas,
+          {
+            ...visita,
+            id: `visita-${estado.visitas.length + 1}`,
+            estado: "solicitada",
+            autor: contexto.autor,
+            quando: contexto.dataDeReferencia,
+          },
+        ],
+      });
+    },
+    [],
+  );
+
+  const responderVisita = useCallback((id: string, novoEstado: "confirmada" | "recusada") => {
+    if (estado === null) return;
+    gravar({
+      ...estado,
+      visitas: estado.visitas.map((v) =>
+        v.id === id
+          ? { ...v, estado: novoEstado, autor: contexto.autor, quando: contexto.dataDeReferencia }
+          : v,
+      ),
+    });
+  }, []);
+
   const reiniciar = useCallback(() => {
     try {
       window.localStorage.removeItem(CHAVE_DA_ORGANIZACAO);
@@ -746,5 +854,14 @@ export function useOrganizacao(
     alternarEvento,
     acrescentarEdicao,
     removerEdicao,
+    formacoes: atualEstado?.formacoes ?? {},
+    atualFormacaoId: atualEstado?.atualFormacaoId ?? null,
+    visitas: atualEstado?.visitas ?? [],
+    escolherFormacao,
+    alterarFormacao,
+    acrescentarMaterial,
+    removerMaterial,
+    solicitarVisita,
+    responderVisita,
   };
 }

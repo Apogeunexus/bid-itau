@@ -433,7 +433,7 @@ export const TELAS_DA_ORGANIZACAO: readonly TelaDaOrganizacao[] = [
     rotulo: "Formação",
     rota: "/studio/formacao",
     objetivo: "Cursos, biblioteca e a agenda de visita educativa",
-    pronta: false,
+    pronta: true,
   },
   {
     id: "editais",
@@ -881,6 +881,125 @@ export function faltasDoPrograma(p: Programa | undefined): Falta[] {
     texto: "aprovação do programa antes de ir ao acervo público",
     bloqueia: false,
     dono: "Moderador (108)",
+  });
+  return saida;
+}
+
+// ---------------------------------------------------------------------------
+// A formação — O4. Curso, biblioteca e a visita educativa
+// ---------------------------------------------------------------------------
+
+/**
+ * O estado de uma visita educativa.
+ *
+ * A funcionalidade 145 é GESTÃO DE RESERVA, não publicação: uma escola pede, alguém
+ * confirma ou recusa, e o número de pessoas entra na conta das vagas. Uma tela que só
+ * publicasse «temos visitas educativas» seria um cartaz, e a diferença entre um cartaz e
+ * uma agenda é exatamente a turma que aparece na porta sem ter lugar.
+ */
+export type EstadoDaVisita = "solicitada" | "confirmada" | "recusada";
+
+export const ROTULO_DA_VISITA: Record<EstadoDaVisita, string> = {
+  solicitada: "solicitada",
+  confirmada: "confirmada",
+  recusada: "recusada",
+};
+
+export interface VisitaEducativa {
+  id: string;
+  formacaoId: string;
+  escola: string;
+  data: string;
+  horario: string;
+  /** Quantas pessoas a escola traz. Entra na conta das vagas — é o que faz a agenda ser
+   *  agenda. `null` é «não informou», e uma visita sem número não se confirma. */
+  pessoas: number | null;
+  estado: EstadoDaVisita;
+  observacao: string;
+  autor: string;
+  quando: string;
+}
+
+/** Um material da área do educador. */
+export interface MaterialDidatico {
+  titulo: string;
+  descricao: string;
+}
+
+export interface CadastroDeFormacao {
+  formacaoId: string;
+  inscricaoAberta: boolean;
+  /** Lotação da oferta. `null` enquanto ninguém declarou — e sem ela nenhuma visita se
+   *  confirma, porque confirmar contra um teto desconhecido é aceitar qualquer coisa. */
+  vagas: number | null;
+  materiais: MaterialDidatico[];
+  autor: string;
+  quando: string;
+}
+
+/**
+ * Uma visita pode ser confirmada?
+ *
+ * TRÊS CONDIÇÕES, E CADA UMA VIRA UMA FRASE NA TELA. Sem vagas declaradas não há teto
+ * contra o que conferir; sem número de pessoas não há o que somar; e a soma das visitas já
+ * confirmadas mais esta não pode passar do teto. Confirmar sem essa conta é o que produz
+ * a turma que chega e não cabe.
+ */
+export function porQueNaoConfirma(
+  visita: VisitaEducativa,
+  vagas: number | null,
+  jaConfirmadas: number,
+): string | null {
+  if (visita.estado === "confirmada") return null;
+  if (vagas === null) return "a oferta não declarou vagas — não há teto contra o que conferir";
+  if (visita.pessoas === null) return "a escola não informou quantas pessoas vêm";
+  if (jaConfirmadas + visita.pessoas > vagas) {
+    return `não cabe: ${jaConfirmadas} já confirmadas mais ${visita.pessoas} passa das ${vagas} vagas`;
+  }
+  return null;
+}
+
+export const EDUCADOR_FORA_DOS_OITO =
+  "O material didático é publicado aqui, mas o ACESSO do educador ficou fora dos oito " +
+  "níveis desta versão: professor com turma não é público comum, e criar um nono nível " +
+  "sem o resto do modelo pronto seria inventar governança. A tela declara a falta em vez " +
+  "de fingir que o material é público.";
+
+export const FORMACAO_E_O_MODELO =
+  "As formações são a única classe do acervo com 100% de ficha de acessibilidade, imagem e " +
+  "crédito. Elas são o modelo do que dado bem preenchido parece — e o argumento de que, " +
+  "quando a fonte preenche, o produto fica melhor sem mudar uma linha de código.";
+
+export function faltasDaFormacao(
+  cadastro: CadastroDeFormacao | undefined,
+  visitasPendentes: number,
+): Falta[] {
+  const saida: Falta[] = [];
+
+  if (!cadastro || cadastro.vagas === null) {
+    saida.push({
+      texto: "vagas — sem elas nenhuma visita se confirma, porque não há teto contra o que conferir",
+      bloqueia: true,
+      dono: null,
+    });
+  }
+  if (!cadastro?.inscricaoAberta) {
+    saida.push({ texto: "inscrição fechada — a oferta aparece e não recebe ninguém", bloqueia: false, dono: null });
+  }
+  if (!cadastro || cadastro.materiais.length === 0) {
+    saida.push({ texto: "nenhum material didático publicado", bloqueia: false, dono: null });
+  }
+  if (visitasPendentes > 0) {
+    saida.push({
+      texto: `${visitasPendentes} visita(s) esperando resposta — escola sem resposta remarca com outra instituição`,
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  saida.push({
+    texto: "acesso do educador como nível próprio — fora dos oito desta versão",
+    bloqueia: false,
+    dono: "Admin (87)",
   });
   return saida;
 }

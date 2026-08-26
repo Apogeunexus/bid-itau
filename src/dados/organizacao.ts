@@ -650,3 +650,117 @@ export function declaracoesDosProgramas(n: NumerosDosProgramas): DeclaracaoDaTel
     },
   ];
 }
+
+// ---------------------------------------------------------------------------
+// A formação e a biblioteca — O4
+// ---------------------------------------------------------------------------
+
+export interface OfertaDoAcervo {
+  id: string;
+  slug: string;
+  titulo: string;
+  resumo: string;
+  imagem: string | null;
+  creditoImagem: string | null;
+  imagemAlt: string | null;
+  publicadoEm: string | null;
+  linguagens: string[];
+  declaraAcessibilidade: boolean;
+  /** Quantas das 8 dimensões o registro marca. É o número que desmonta o «100%». */
+  dimensoesMarcadas: number;
+}
+
+export interface NumerosDasFormacoes {
+  formacoes: number;
+  comFicha: number;
+  comImagem: number;
+  comCredito: number;
+  comResumo: number;
+  comImagemAlt: number;
+  /** Marcações de dimensão somadas, e o total possível. 100% de ficha não é 100% de acesso. */
+  marcacoes: number;
+  marcacoesPossiveis: number;
+  publicacoes: number;
+  publicacoesComFicha: number;
+}
+
+function ofertaDe(e: Entidade): OfertaDoAcervo {
+  const dims = e.acessibilidade as unknown as Record<string, boolean>;
+  return {
+    id: e.id,
+    slug: e.slug,
+    titulo: e.titulo,
+    resumo: (e.resumo ?? "").trim(),
+    imagem: e.imagem ?? null,
+    creditoImagem: e.creditoImagem ?? null,
+    imagemAlt: texto(e, "imagemAlt") || null,
+    publicadoEm: texto(e, "publicadoEm") || null,
+    linguagens: e.linguagens.map((id) => ROTULO_DA_LINGUAGEM.get(id) ?? id),
+    declaraAcessibilidade: e.declaraAcessibilidade,
+    dimensoesMarcadas: DIMENSOES_MEDIDAS.filter((d) => dims[d.chave]).length,
+  };
+}
+
+export function formacoesDoAcervo(): OfertaDoAcervo[] {
+  const saida = entidadesDe("formacao").map(ofertaDe);
+  saida.sort((a, b) => a.titulo.localeCompare(b.titulo, "pt-BR"));
+  return saida;
+}
+
+/** A biblioteca — funcionalidade 43, hoje `falta`. São as 46 publicações do acervo. */
+export function publicacoesDoAcervo(): OfertaDoAcervo[] {
+  const saida = entidadesDe("publicacao").map(ofertaDe);
+  saida.sort((a, b) => a.titulo.localeCompare(b.titulo, "pt-BR"));
+  return saida;
+}
+
+export function numerosDasFormacoes(): NumerosDasFormacoes {
+  const f = entidadesDe("formacao");
+  const p = entidadesDe("publicacao");
+  let marcacoes = 0;
+  for (const e of f) {
+    const dims = e.acessibilidade as unknown as Record<string, boolean>;
+    marcacoes += DIMENSOES_MEDIDAS.filter((d) => dims[d.chave]).length;
+  }
+
+  return {
+    formacoes: f.length,
+    comFicha: f.filter((e) => e.declaraAcessibilidade).length,
+    comImagem: f.filter((e) => e.imagem).length,
+    comCredito: f.filter((e) => e.creditoImagem).length,
+    comResumo: f.filter((e) => (e.resumo ?? "").trim().length > 0).length,
+    comImagemAlt: f.filter((e) => texto(e, "imagemAlt").length > 0).length,
+    marcacoes,
+    marcacoesPossiveis: f.length * DIMENSOES_MEDIDAS.length,
+    publicacoes: p.length,
+    publicacoesComFicha: p.filter((e) => e.declaraAcessibilidade).length,
+  };
+}
+
+export function declaracoesDasFormacoes(n: NumerosDasFormacoes): DeclaracaoDaTela[] {
+  return [
+    {
+      titulo: "A única classe com 100% nas três",
+      texto:
+        `${n.comFicha} de ${n.formacoes} formações declaram a ficha, ${n.comImagem} têm imagem, ` +
+        `${n.comCredito} têm crédito e ${n.comImagemAlt} têm descrição alternativa. É a única ` +
+        `classe do acervo com 100% em todas — o modelo do que dado bem preenchido parece, e o ` +
+        `argumento de que, quando a fonte preenche, o produto melhora sem mudar código.`,
+    },
+    {
+      titulo: "E mesmo assim: 100% de ficha não é 100% de acesso",
+      texto:
+        `As ${n.formacoes} formações somam ${n.marcacoes} marcações de dimensão em ` +
+        `${n.marcacoesPossiveis} possíveis. A ficha foi preenchida em todas e o que ela diz, na ` +
+        `maioria das linhas, é «não oferece». Preencher é o começo — e é o que a plataforma ` +
+        `pode exigir; oferecer é o que ela pode medir.`,
+    },
+    {
+      titulo: "A biblioteca existe no acervo e não existe no produto",
+      texto:
+        `São ${n.publicacoes} publicações, ${n.publicacoesComFicha} delas com ficha declarada. ` +
+        `A consulta ao acervo bibliográfico está listada como faltando no catálogo de ` +
+        `funcionalidades — o dado está aqui, e a tela pública que o mostra é que não existe.`,
+    },
+  ];
+}
