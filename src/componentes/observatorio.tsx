@@ -4,11 +4,13 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
 import { CamadaDesertos, LeituraDesertos, type DadosDesertos } from "@/componentes/desertos";
+import { ObservatorioNavegacao } from "@/componentes/observatorio-navegacao";
 import type {
   DadosDoObservatorio,
   FatiaDeProcedencia,
   Indicador,
   LinhaDeIndicador,
+  TelaDaSuperficie,
 } from "@/dados/observatorio";
 
 /**
@@ -49,8 +51,24 @@ export interface TelaDoObservatorio {
   viewBox: string;
   contorno: string;
   rotuloContorno: string;
+  telas: readonly TelaDaSuperficie[];
   atalhos: readonly { href: string; rotulo: string }[];
 }
+
+/**
+ * A chave da escolha de público, no molde do resto do projeto
+ * (`agenda-cultural:<coisa>`, como `minha-lista.ts` e `sessao.tsx`).
+ *
+ * POR QUE ELA EXISTE. Quem avalia abre a superfície, escolhe o próprio público, navega
+ * para outra tela e volta — e uma escolha que não sobrevive a isso obriga a refazer o
+ * gesto toda vez, até a pessoa concluir que o seletor não faz nada.
+ *
+ * ELA NÃO É ESCRITA NA ONTOLOGIA, e a diferença é a definição deste nível de acesso: o
+ * Gestor não cria classe, não cria aresta e não carimba procedência. O que fica guardado
+ * aqui é preferência de quem OLHA, no navegador de quem olha, e não chega nem perto do
+ * grafo.
+ */
+const CHAVE_DO_PUBLICO = "agenda-cultural:observatorio-publico";
 
 /**
  * Separador de milhar escrito à mão, e não `toLocaleString`.
@@ -259,10 +277,59 @@ export function Observatorio({
   viewBox,
   contorno,
   rotuloContorno,
+  telas,
   atalhos,
 }: TelaDoObservatorio) {
   const { painel, indicadores, publicos, numeros } = dados;
   const [publicoId, definirPublico] = useState(dados.publicoInicial);
+
+  /**
+   * A escolha guardada é lida DEPOIS da hidratação, nunca no primeiro render.
+   *
+   * Sob `output: "export"` o HTML sai do build, onde `localStorage` não existe: ler no
+   * render faria o artefato e a página hidratada divergirem e o React derrubaria a rota.
+   * É o mesmo tratamento de `visao.tsx` e `sessao.tsx`.
+   *
+   * O valor vem de storage EDITÁVEL por quem avalia, então ele é RESOLVIDO contra a lista
+   * de públicos antes de valer: um id inventado à mão não vira tela em branco, é ignorado.
+   */
+  useEffect(() => {
+    let guardado: string | null = null;
+    try {
+      guardado = window.localStorage.getItem(CHAVE_DO_PUBLICO);
+    } catch {
+      // Storage bloqueado — modo privado, iframe. Não há escolha guardada, e o público
+      // inicial serve: a tela abre completa de qualquer jeito.
+      guardado = null;
+    }
+    if (guardado && publicos.some((p) => p.id === guardado)) definirPublico(guardado);
+  }, [publicos]);
+
+  function escolherPublico(id: string) {
+    definirPublico(id);
+    try {
+      window.localStorage.setItem(CHAVE_DO_PUBLICO, id);
+    } catch {
+      // Storage bloqueado: o recorte vale nesta sessão e não sobrevive ao recarregamento.
+      // Perder a preferência é melhor que não poder trocar de recorte.
+    }
+  }
+
+  /**
+   * Reinicia a demonstração: volta ao público inicial e esquece a escolha guardada.
+   *
+   * É o único estado de cliente desta superfície inteira, e por isso o botão é literalmente
+   * tudo o que há para reiniciar. Ele não pede confirmação de propósito — nada se perde que
+   * um clique no público anterior não desfaça.
+   */
+  function reiniciarDemonstracao() {
+    definirPublico(dados.publicoInicial);
+    try {
+      window.localStorage.removeItem(CHAVE_DO_PUBLICO);
+    } catch {
+      // Storage bloqueado: não havia o que esquecer, e o recorte já voltou ao inicial.
+    }
+  }
 
   /**
    * A CAMADA DE DESERTOS MONTA DEPOIS DA HIDRATAÇÃO, e isto é conserto de um defeito real
@@ -307,13 +374,7 @@ export function Observatorio({
           <p className="obs-superficie">Bastidor · Observatório</p>
           <h1 className="obs-titulo">Impacto cultural, medido no acervo</h1>
         </div>
-        <nav className="obs-atalhos" aria-label="outras superfícies de bastidor">
-          {atalhos.map((a) => (
-            <a key={a.href} href={a.href} className="obs-atalho">
-              {a.rotulo}
-            </a>
-          ))}
-        </nav>
+        <ObservatorioNavegacao telas={telas} ativa="visao-geral" />
       </header>
 
       {/* ---------------------------------------------------------------
@@ -378,24 +439,34 @@ export function Observatorio({
           <h2 id="obs-recorte-titulo" className="obs-secao-titulo">
             Indicadores de impacto cultural
           </h2>
-          <Segmento rotulo="público" className="obs-publicos">
-            {publicos.map((p) => (
-              <OpcaoDeSegmento
-                key={p.id}
-                data-publico={p.id}
-                selecionado={p.id === publico.id}
-                onClick={() => definirPublico(p.id)}
-              >
-                {p.rotulo}
-              </OpcaoDeSegmento>
-            ))}
-          </Segmento>
+          <div className="obs-recorte-controles">
+            <Segmento rotulo="público" className="obs-publicos">
+              {publicos.map((p) => (
+                <OpcaoDeSegmento
+                  key={p.id}
+                  data-publico={p.id}
+                  selecionado={p.id === publico.id}
+                  onClick={() => escolherPublico(p.id)}
+                >
+                  {p.rotulo}
+                </OpcaoDeSegmento>
+              ))}
+            </Segmento>
+            <button type="button" className="obs-reiniciar" onClick={reiniciarDemonstracao}>
+              Reiniciar a demonstração
+            </button>
+          </div>
         </div>
         <p className="obs-publico-nota">
           <strong>{publico.rotulo}</strong> — {publico.resumo}. A pergunta que ele faz é «
           {publico.pergunta}», e é ela que ordena os {indicadores.length} blocos abaixo. Os
           quatro públicos veem <strong>os mesmos {indicadores.length} indicadores</strong>:
           muda a ordem e a ênfase, não o conjunto.
+        </p>
+        <p className="obs-publico-declaracao">
+          Nenhum indicador some e nenhum é exclusivo de um público. O recorte é ênfase, não
+          filtro — e a escolha fica guardada neste navegador até você reiniciar a
+          demonstração.
         </p>
 
         <ul className="web-grade obs-indicadores" data-publico-ativo={publico.id}>
@@ -431,6 +502,17 @@ export function Observatorio({
           <LeituraDesertos dados={desertos} />
         </div>
       </section>
+
+      {/* Os atalhos para as outras superfícies de bastidor, no pé: eles continuam
+          necessários — quem demonstra não digita URL ao vivo — e aqui não custam pixel da
+          primeira vista, que D-88 reserva ao painel de procedência. */}
+      <nav className="obs-atalhos" aria-label="outras superfícies de bastidor">
+        {atalhos.map((a) => (
+          <a key={a.href} href={a.href} className="obs-atalho">
+            {a.rotulo}
+          </a>
+        ))}
+      </nav>
     </section>
   );
 }

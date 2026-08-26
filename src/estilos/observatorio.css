@@ -93,6 +93,47 @@
 }
 
 /* ---------------------------------------------------------------------------
+ * A navegação das oito telas.
+ *
+ * ELA MORA NO CABEÇALHO, no lugar onde estavam os três atalhos de bastidor, e
+ * cada medida daqui é escolhida pelo mesmo motivo: o portão de 05-08 afere que o
+ * painel de procedência está INTEIRO na primeira vista de 1440×960, topo e base,
+ * sem rolar. Uma faixa de navegação em linha própria empurraria o painel para
+ * baixo. Daí a pastilha em `--tipo-micro` com respiro curto: oito rótulos no
+ * espaço em que cabiam três, sem ganhar uma linha nova quando dá.
+ *
+ * A TELA ATIVA É MARCADA PELA BORDA E PELO PESO, não por cor de fundo cheia. O
+ * fundo cheio no laranja de AÇÃO diria «clique aqui», e a tela em que já se está
+ * é o único item da fileira que não leva a lugar nenhum novo.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-telas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+[data-view="web"] .obs-tela {
+  padding: 0.25rem 0.5rem;
+  border: var(--web-borda);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-micro);
+  font-weight: 600;
+  color: var(--cor-tinta-2);
+  transition: background-color var(--dur-1) var(--ease-padrao), color var(--dur-1) var(--ease-padrao);
+}
+
+[data-view="web"] .obs-tela:hover {
+  background: var(--cor-acao-lavada);
+  color: var(--cor-tinta);
+}
+
+[data-view="web"] .obs-tela[data-ativa="sim"] {
+  border-color: var(--cor-acao);
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
  * O painel de procedência (D-88) — o argumento, não a legenda.
  *
  * Ele não usa `.web-painel` porque `.web-painel` é a superfície NEUTRA, a mesma
@@ -352,12 +393,49 @@
   font-weight: 700;
 }
 
+[data-view="web"] .obs-recorte-controles {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* O botão que reinicia a demonstração. Ele desfaz a ÚNICA coisa que esta
+   superfície guarda — a escolha de público —, e por isso é discreto: um botão de
+   ação cheia ao lado do seletor prometeria desfazer muito mais do que existe. */
+[data-view="web"] .obs-reiniciar {
+  padding: 0.25rem 0.75rem;
+  border: var(--web-borda);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-legenda);
+  font-weight: 600;
+  color: var(--cor-tinta-2);
+  transition: background-color var(--dur-1) var(--ease-padrao), color var(--dur-1) var(--ease-padrao);
+}
+
+[data-view="web"] .obs-reiniciar:hover {
+  background: var(--cor-acao-lavada);
+  color: var(--cor-tinta);
+}
+
 [data-view="web"] .obs-publico-nota {
   margin: 0;
   max-width: 92ch;
   font-size: var(--tipo-legenda);
   line-height: 1.42;
   color: var(--cor-tinta-2);
+}
+
+/* A frase de D-89, e ela é PRODUTO. Um seletor de público sem esta frase é
+   indistinguível de um filtro, e a diferença entre as duas coisas é a afirmação
+   de governança que esta tela existe para fazer. */
+[data-view="web"] .obs-publico-declaracao {
+  margin: 0;
+  max-width: 92ch;
+  font-size: var(--tipo-legenda);
+  line-height: 1.42;
+  font-weight: 600;
+  color: var(--cor-tinta);
 }
 
 /* Duas colunas. Sete blocos de texto denso em três colunas dariam linha de 30

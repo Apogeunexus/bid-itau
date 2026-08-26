@@ -1,0 +1,125 @@
+/* ---------------------------------------------------------------------------
+ * admin.css — a superfície de Admin (funcionalidades 87 a 100, mais a 169).
+ *
+ * DE QUEM É: S1 · Admin, onda 2. Nasceu na tarefa 1, sozinha no commit, porque
+ * `globals.css` é o único arquivo que as seis sessões tocariam e a linha do
+ * `@import` precisa entrar antes de qualquer tela.
+ *
+ * O QUE ELA COBRE, E SÓ ISSO. O bloco de parâmetro: o valor à esquerda e a
+ * medição que o justifica à direita, sempre visível. É o inverso do painel de
+ * administração comum, onde o número aparece sozinho — e o inverso é o ponto da
+ * sessão. Um botão que muda um número sem dizer o que o número custa é o oposto
+ * do que esta proposta defende.
+ *
+ * O QUE ELA NÃO COBRE, DE PROPÓSITO. Superfície, cabeçalho, painel, tabela
+ * densa, pastilha de contagem, valor monoespaçado, botões e a caixa de
+ * declaração honesta já existem em `studio.css`, e as duas colunas, a coluna
+ * fixa e o denominador em `web.css`. As telas do Admin consomem aquelas classes
+ * em vez de ganharem cópias com outro prefixo — é o reuso da casa, o mesmo que
+ * `moderacao.css` declara no seu topo.
+ *
+ * A DECLARAÇÃO DE «NÃO MEDIDO» REUSA `.studio-nao-sustenta`. A caixa é a mesma
+ * família de honestidade: lá é o acervo que não sustenta um indicador, aqui é o
+ * custo de um parâmetro que ninguém mediu. O que muda é o rótulo, que vem do
+ * TSX, e não a caixa.
+ *
+ * SÓ NA VISÃO WEB. O layout de `(bastidor)` esconde o conteúdo na visão app e
+ * mostra o aviso de superfície (D-67); por isso não há aqui regra nenhuma sob
+ * `[data-view="mobile"]`.
+ *
+ * REGRAS DA CASA:
+ *  - NUNCA importe esta folha de um componente. O único `import` de CSS do
+ *    projeto é `src/app/layout.tsx → ./globals.css`.
+ *  - Nenhum hex: `var(--ic-*)`, token semântico e `color-mix` (D-06, D-08).
+ *  - Medida em múltiplo de 0.25rem; px só como detalhe físico de borda.
+ * ------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+ * O bloco de parâmetro — valor à esquerda, medição à direita.
+ *
+ * FLEX COM QUEBRA, E NÃO GRADE COM CONSULTA DE LARGURA. O valor é curto («0,65»,
+ * «60», «20», «1 por feed») e a justificativa é longa: duas colunas de `1fr`
+ * fariam o número crescer até o tamanho do argumento e a leitura perderia o
+ * ponto de entrada. A esquerda pede 14rem, a direita pede 24rem, e quando as
+ * duas não cabem a medição quebra para a própria linha — as duas passam a
+ * ocupar a largura inteira, na ordem do DOM, que já é a ordem da leitura.
+ *
+ * O container nomeado `canvas` de `web.css` NÃO alcança aqui: ele é declarado
+ * em `[data-view="web"] main`, e o `main` mora no layout de `(app)`. As rotas de
+ * `(bastidor)` não têm um. Uma `@container` neste arquivo nunca casaria, e a
+ * regra de dentro seria morta em silêncio — que é o pior tipo de regra.
+ * ------------------------------------------------------------------------- */
+
+.admin-parametro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+/* A esquerda: o nome do parâmetro, o valor, e o que ele decide. */
+.admin-parametro-valor {
+  display: flex;
+  flex: 0 1 14rem;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Tabular de propósito: os quatro parâmetros são lidos em coluna, um embaixo do
+ * outro, e algarismo de largura variável desalinha a comparação. */
+.admin-parametro-numero {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-1);
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-parametro-decide {
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+  color: var(--cor-tinta-2);
+}
+
+/* A direita: a medição. Nunca colapsa em «ver detalhes» — a justificativa que
+ * precisa de um clique para aparecer é, na prática, um número solto. */
+.admin-medicao {
+  display: flex;
+  flex: 1 1 24rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+/* A alternativa medida e recusada, com o que ela custaria e o que ganharia.
+ * Borda à esquerda e não caixa cheia: ela é o contraponto do valor atual, e uma
+ * segunda caixa da mesma força faria as duas parecerem opções empatadas. */
+.admin-alternativa {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  padding: 0.75rem 0 0.75rem 0.75rem;
+  border-left: 3px solid var(--cor-borda-forte);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+}
+
+.admin-alternativa-rotulo {
+  font-weight: 600;
+  color: var(--cor-tinta-2);
+  white-space: nowrap;
+}
+
+.admin-alternativa-valor {
+  overflow-wrap: anywhere;
+}
+
+/* O ganho zero é o achado do limiar: dobrar a fila e capturar nenhum clone a
+ * mais. Ele precisa ler como resultado, não como campo vazio. */
+.admin-alternativa-nulo {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

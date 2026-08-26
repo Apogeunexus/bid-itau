@@ -7,7 +7,7 @@ import {
   UNIDADES_FEDERATIVAS,
 } from "@/dados/contorno-brasil";
 import { caminhoDe, densidadePorUf, LIMITES, projetar } from "@/dados/geo";
-import { montarObservatorio } from "@/dados/observatorio";
+import { TELAS, aferirDto, montarObservatorio } from "@/dados/observatorio";
 
 /**
  * `/observatorio` — os indicadores de impacto cultural e o painel de procedência
@@ -79,13 +79,25 @@ const ATALHOS = [
 ] as const;
 
 export default function PaginaObservatorio() {
+  /**
+   * O que atravessa a fronteira RSC, aferido antes de atravessar.
+   *
+   * `numerosDoObservatorio()` já media o trio painel + indicadores + públicos. O que sai
+   * daqui é maior que ele — leva a camada de desertos e a lista das oito telas —, e é o
+   * tamanho do que SAI que importa. Medido em 24.585 bytes contra o teto de 61.440.
+   */
+  const dados = montarObservatorio();
+  const desertos = montarDesertos();
+  aferirDto("visao-geral", { dados, desertos, telas: TELAS });
+
   return (
     <Observatorio
-      dados={montarObservatorio()}
-      desertos={montarDesertos()}
+      dados={dados}
+      desertos={desertos}
       viewBox={LIMITES.viewBox}
       contorno={caminhoDe(CONTORNO_BRASIL)}
       rotuloContorno={ROTULO_CONTORNO}
+      telas={TELAS}
       atalhos={ATALHOS}
     />
   );
