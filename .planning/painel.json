@@ -1,12 +1,12 @@
 {
-  "varredura": "26/08, 01:30",
+  "varredura": "26/08, 01:39",
   "kpi": {
-    "concluidas": 35,
+    "concluidas": 36,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 13,
+    "sujos": 18,
     "folgaS6": 8,
     "pedidos": 10
   },
@@ -402,7 +402,7 @@
       "pasta": "src/app/(bastidor)/admin",
       "sessaoNome": "bid-ita-d4",
       "estado": "rodando",
-      "feitas": 8,
+      "feitas": 9,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -486,16 +486,16 @@
           "n": 9,
           "rot": "A8 titulares · A9 governança",
           "inicio": 9,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "f40e0dd",
+          "nota": "A8 separa **usuária** de **retratada** — 575 pessoas no grafo nunca se cadastraram e o direito delas não depende disso. Contestação de verbete é encaminhada à Enciclopédia, não resolvida aqui; escolher «Exclusão» abre o aviso do que ela leva junto **antes** de confirmar. A9 declara os quatro poderes e **não oferece controle para nenhum** (varredura confirma zero botões): um «Suspender» decorativo ensinaria que suspensão é cosmética. No meio disto o disco bateu em **76 MiB livres** e a sonda morreu em `write` — apaguei o `.next-s1`, 668 MB, e voltei",
+          "quando": "26.08 03:20"
         },
         {
           "n": 10,
           "rot": "A10 desempenho da moderação",
           "inicio": 10,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -896,6 +896,13 @@
       "rot": "A4 vocabulário · A5 limites da IA",
       "nota": "A4 é tela de servidor com **zero ações** (varredura de botões confirma). A5 dá dono à lista que já existia no módulo da Moderação, que a aplica. Duas ausências conferidas por sonda: **nenhum checkbox ou `role=switch`** na página — não existe interruptor de «IA publica direto» — e **nenhuma ação de remover** limite. A trilha ganhou o quarto tipo de evento e o quarto filtro na A7",
       "quando": "26.08 02:45"
+    },
+    {
+      "sessao": "S1",
+      "n": 9,
+      "rot": "A8 titulares · A9 governança",
+      "nota": "A8 separa **usuária** de **retratada** — 575 pessoas no grafo nunca se cadastraram e o direito delas não depende disso. Contestação de verbete é encaminhada à Enciclopédia, não resolvida aqui; escolher «Exclusão» abre o aviso do que ela leva junto **antes** de confirmar. A9 declara os quatro poderes e **não oferece controle para nenhum** (varredura confirma zero botões): um «Suspender» decorativo ensinaria que suspensão é cosmética. No meio disto o disco bateu em **76 MiB livres** e a sonda morreu em `write` — apaguei o `.next-s1`, 668 MB, e voltei",
+      "quando": "26.08 03:20"
     },
     {
       "sessao": "S5",
