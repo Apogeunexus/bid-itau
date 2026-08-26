@@ -758,3 +758,44 @@
 .redacao-feed-linha[data-especial="serendipidade"] {
   background: color-mix(in srgb, var(--cor-tinta-2) 8%, transparent);
 }
+
+/* ===========================================================================
+ * E4 — O TESAURO
+ * ======================================================================== */
+
+/* Vocabulário à esquerda, o que a mudança alcança à direita. O lado largo é o do
+ * alcance: é ele que impede a fusão às cegas, e uma coluna estreita empurraria o
+ * número para baixo da dobra — que é onde ninguém lê. */
+.redacao-colunas-tesauro {
+  grid-template-columns: 28rem minmax(0, 1fr);
+  --web-altura-lista: 44vh;
+}
+
+.redacao-cores {
+  flex-wrap: wrap;
+}
+
+/* A cor é DADO: o botão mostra o token na borda, e o nome dela por extenso ao
+ * lado. Só a borda colorida deixaria a escolha invisível para quem não distingue
+ * as sete — e é uma escolha obrigatória, não um enfeite. */
+.redacao-cor {
+  border-width: 2px;
+}
+
+.redacao-cor[data-ativo="sim"] {
+  font-weight: 600;
+  background: color-mix(in srgb, var(--cor-acao) 12%, transparent);
+}
+
+/* A fusão apaga um termo do vocabulário e move todos os vínculos dele. O botão
+ * muda de TEXTO e de peso ao pedir confirmação, e o texto carrega o número — cor
+ * sozinha não serve, e «confirmar?» sem o número não é confirmação informada. */
+.redacao-mudanca .studio-botao[data-confirmando="sim"] {
+  border-color: var(--cor-acao);
+  background: color-mix(in srgb, var(--cor-acao) 14%, transparent);
+  font-weight: 600;
+}
+
+.redacao-promovidas .redacao-classe {
+  border-width: 2px;
+}

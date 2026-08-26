@@ -43,6 +43,7 @@ export function comoSeLe(iso: string): string {
 export const CHAVE_DAS_PONTES = "agenda-cultural:pontes-autoradas-v1";
 export const CHAVE_DAS_TRILHAS = "agenda-cultural:trilhas-publicadas-v1";
 export const CHAVE_DO_DESTAQUE = "agenda-cultural:destaque-do-feed-v1";
+export const CHAVE_DO_TESAURO = "agenda-cultural:mudancas-de-tesauro-v1";
 
 /** Uma trilha publicada pelo editor, com autor e carimbo. */
 export interface TrilhaPublicada {
@@ -154,6 +155,49 @@ export function lerDestaques(): DestaqueAssinado[] {
 export function registrarDestaque(novo: DestaqueAssinado): boolean {
   const antes = lerDestaques().filter((d) => d.feedDe !== novo.feedDe);
   return gravar(CHAVE_DO_DESTAQUE, [novo, ...antes]);
+}
+
+/** As quatro operações da camada 0. Vocabulário fechado, como as relações. */
+export type TipoDeMudanca = "promocao" | "fusao" | "sinonimia" | "hierarquia";
+
+/**
+ * Uma mudança no vocabulário controlado, proposta pela Redação.
+ *
+ * `alcance` é o número de vínculos que a mudança toca, MEDIDO antes de ela ser proposta. Ele
+ * fica gravado junto: uma proposta que o Admin lê três dias depois precisa dizer quanto ela
+ * alcançava quando foi escrita, e não quanto alcança agora — senão a decisão dele é sobre
+ * outro número, e ninguém percebe.
+ *
+ * `aprovadaPor` é sempre `null` aqui, e é de propósito: quem aprova é o Admin, e esta tela
+ * não tem como escrever esse campo. Deixá-lo declarado e vazio é o que mostra que a
+ * separação existe — um campo ausente seria lido como «não precisa de aprovação».
+ */
+export interface MudancaDeTesauro {
+  tipo: TipoDeMudanca;
+  alvoId: string;
+  alvoRotulo: string;
+  /** O segundo termo, nas operações que têm dois lados. `null` na promoção. */
+  destinoId: string | null;
+  destinoRotulo: string | null;
+  /** Token de cor do manual. Obrigatório ao promover linguagem; `null` no resto. */
+  cor: string | null;
+  motivo: string;
+  alcance: number;
+  assinatura: string;
+  carimbo: string;
+  aprovadaPor: null;
+}
+
+export function lerMudancasDeTesauro(): MudancaDeTesauro[] {
+  return ler(CHAVE_DO_TESAURO).filter((v): v is MudancaDeTesauro => {
+    if (typeof v !== "object" || v === null) return false;
+    const m = v as Partial<MudancaDeTesauro>;
+    return ehTexto(m.tipo) && ehTexto(m.alvoId) && ehTexto(m.motivo) && ehTexto(m.assinatura);
+  });
+}
+
+export function registrarMudancaDeTesauro(nova: MudancaDeTesauro): boolean {
+  return gravar(CHAVE_DO_TESAURO, [nova, ...lerMudancasDeTesauro()]);
 }
 
 /**

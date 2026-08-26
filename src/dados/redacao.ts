@@ -25,6 +25,7 @@ import { contagens, ocorrenciasDe, porId, porSlug, slugsPorTipo, vizinhos } from
 import { motivoDaAresta } from "./motivo";
 import { DATA_DE_REFERENCIA } from "./alerta";
 import meta from "./gerado/meta.json";
+import vocabulario from "./gerado/vocabulario.json";
 import { trilhaCompletaPorSlug, trilhaEhPublicavel, trilhas } from "./trilha";
 import { CARIMBO_DA_DECISAO, LIMITES_DA_IA, TETO_DO_DTO, numerosDaModeracao } from "./moderacao";
 import type { NumerosDaModeracao } from "./moderacao";
@@ -578,6 +579,157 @@ export interface ArestaAutorada {
   motivo: string;
   assinatura: string;
   carimbo: string;
+}
+
+// ---------------------------------------------------------------------------
+// E4 — o tesauro: a camada 0 da ontologia, que hoje não tem dono
+// ---------------------------------------------------------------------------
+
+export interface ItemDoVocabulario {
+  id: string;
+  rotulo: string;
+  /** Quantas vezes o acervo usa este termo. É o denominador de qualquer fusão. */
+  ocorrencias: number;
+  /** Token de cor do manual, para `linguagem`. `null` nas classes que não têm cor. */
+  cor: string | null;
+  /** `true` nas quatro que vieram da Enciclopédia e não existem nas 29 do CMS. */
+  promovida: boolean;
+  /** Quantas entidades do grafo apontam para este termo. O alcance de uma fusão. */
+  alcance: number;
+}
+
+export interface Tesauro {
+  linguagens: ItemDoVocabulario[];
+  temas: ItemDoVocabulario[];
+  termos: ItemDoVocabulario[];
+  /** Os slugs que o gerador precisou desambiguar. Ausência declarada com denominador. */
+  slugsDesambiguados: number;
+  /** `de → para`: o que o gerador reescreveu para não duplicar linguagem. */
+  alias: Array<{ de: string; para: string }>;
+  /** As sete cores do manual. Promover linguagem exige escolher UMA delas. */
+  coresDoManual: string[];
+  /** Quantos termos a lista traz e quantos existem. A tela diz os dois. */
+  termosMostrados: number;
+  termosTotal: number;
+}
+
+/**
+ * AS QUATRO PROMOVIDAS, E POR QUE ELAS NÃO FORAM MAPEADAS.
+ *
+ * `Arte`, `Gestão cultural`, `Rádio` e `TV` vieram da Enciclopédia e não existem nas 29
+ * linguagens do CMS. A saída fácil teria sido mapear cada uma para a mais parecida —
+ * `Rádio → audiovisual`, `TV → audiovisual` — e o vocabulário fecharia em 29 redondos.
+ *
+ * Isso seria FABRICAR CLASSIFICAÇÃO: ninguém no Itaú Cultural disse que rádio é
+ * audiovisual, e a plataforma passaria a afirmar, sobre 33 linguagens, uma equivalência que
+ * nenhuma fonte sustenta. Promover as quatro deixa o número feio — 33, e não 29 — e deixa a
+ * afirmação verdadeira. É a mesma escolha que o catálogo faz ao dizer «N de 7.810» em vez
+ * de «o grafo completo».
+ */
+export const REGRA_DAS_PROMOVIDAS =
+  "Quatro linguagens — Arte, Gestão cultural, Rádio e TV — vieram da Enciclopédia e não " +
+  "existem nas 29 do CMS. Mapear cada uma para a mais parecida fecharia o vocabulário em " +
+  "29 redondos, e seria fabricar classificação: ninguém no Itaú Cultural disse que rádio é " +
+  "audiovisual. Promover as quatro deixa o número feio, 33 em vez de 29, e deixa a " +
+  "afirmação verdadeira.";
+
+/**
+ * A COR DA LINGUAGEM É DADO, NÃO ESTILO.
+ *
+ * A mesma cor aparece no cartão, no mapa e no indicador — ela identifica a linguagem, não
+ * decora a tela. Por isso promover uma linguagem sem atribuir cor deixaria três superfícies
+ * sem saber o que pintar, e por isso a escolha é entre as SETE do manual: uma cor nova
+ * inventada aqui não teria token, e D-06 proíbe hex fora de `var(--ic-*)`.
+ */
+export const REGRA_DA_COR =
+  "A cor da linguagem é dado, não estilo: a mesma cor aparece no cartão, no mapa e no " +
+  "indicador, e é por ela que quem lê reconhece a linguagem antes de ler o rótulo. " +
+  "Promover uma linguagem exige escolher uma das sete cores do manual — inventar uma aqui " +
+  "deixaria a linguagem sem token e as três superfícies sem saber o que pintar.";
+
+/**
+ * A SEPARAÇÃO QUE IMPEDE O ADMIN DE VIRAR CURADOR POR ACIDENTE.
+ *
+ * Quem promove é o Editor; quem aprova a promoção é o Admin (funcionalidade 100). Sem essa
+ * linha, o administrador — que existe para governar o sistema — passaria a decidir o que é
+ * uma linguagem da cultura brasileira, que é decisão editorial e não de governança. A tela
+ * registra a promoção como PROPOSTA, e diz para onde ela vai.
+ */
+export const SEPARACAO_DA_APROVACAO =
+  "Quem promove é a Redação; quem aprova é o Admin. A promoção sai daqui como proposta " +
+  "assinada e entra na fila de aprovação da governança — sem essa separação, o " +
+  "administrador viraria curador por acidente, decidindo o que é uma linguagem da cultura " +
+  "brasileira a partir de uma tela feita para governar o sistema.";
+
+/** Quantos termos viajam. O tesauro tem 481, e o DTO não leva todos por medida. */
+export const TETO_DE_TERMOS = 120;
+
+let tesauroMemo: Tesauro | null = null;
+
+/**
+ * O vocabulário controlado, com o ALCANCE de cada item medido no grafo.
+ *
+ * O alcance é o que uma fusão levaria junto, e ele é contado ANTES de a tela oferecer a
+ * fusão — «fundir A em B» sem dizer que A carrega 1.920 vínculos é convidar alguém a mexer
+ * às cegas na camada 0 da ontologia. O número vem de `vizinhos()`, a mesma adjacência que o
+ * motor de caminhada percorre.
+ */
+export function tesauro(): Tesauro {
+  if (tesauroMemo) return tesauroMemo;
+
+  const alcanceDe = (id: string) => vizinhos(id).length;
+
+  const linguagens: ItemDoVocabulario[] = vocabulario.linguagens.map((l) => ({
+    id: l.id,
+    rotulo: l.rotulo,
+    ocorrencias: l.ocorrencias,
+    cor: l.cor,
+    promovida: l.promovida === true,
+    alcance: alcanceDe(`linguagem:ic:${l.id}`) || l.ocorrencias,
+  }));
+
+  const temas: ItemDoVocabulario[] = vocabulario.temas.map((t) => ({
+    id: t.id,
+    rotulo: t.rotulo,
+    ocorrencias: t.ocorrencias,
+    cor: null,
+    promovida: false,
+    alcance: alcanceDe(`tema:ic:${t.id}`) || t.ocorrencias,
+  }));
+
+  const todosOsTermos: ItemDoVocabulario[] = [];
+  for (const slug of slugsPorTipo("termo")) {
+    const e = porSlug("termo", slug);
+    if (!e) continue;
+    todosOsTermos.push({
+      id: e.id,
+      rotulo: e.titulo,
+      ocorrencias: 0,
+      cor: null,
+      promovida: false,
+      alcance: alcanceDe(e.id),
+    });
+  }
+  // Os mais conectados primeiro: uma fusão errada num termo de alcance alto é a que mais
+  // machuca, e é sobre esses que o curador precisa poder decidir sem procurar.
+  todosOsTermos.sort((a, b) => b.alcance - a.alcance || porIdEstavel(a, b));
+
+  const cobertura = meta.cobertura as {
+    slugsDesambiguados?: number;
+    aliasDeLinguagem?: Record<string, string>;
+  };
+
+  tesauroMemo = {
+    linguagens,
+    temas,
+    termos: todosOsTermos.slice(0, TETO_DE_TERMOS),
+    slugsDesambiguados: cobertura.slugsDesambiguados ?? 0,
+    alias: Object.entries(cobertura.aliasDeLinguagem ?? {}).map(([de, para]) => ({ de, para })),
+    coresDoManual: [...new Set(vocabulario.linguagens.map((l) => l.cor))].sort(),
+    termosMostrados: Math.min(TETO_DE_TERMOS, todosOsTermos.length),
+    termosTotal: todosOsTermos.length,
+  };
+  return tesauroMemo;
 }
 
 // ---------------------------------------------------------------------------
