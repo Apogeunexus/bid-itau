@@ -890,3 +890,78 @@
 .moderacao .studio-cabecalho {
   position: static;
 }
+
+/* ===========================================================================
+ * M8 — escopo, escalonamento e delegação
+ * ======================================================================== */
+
+.moderacao-cobertura {
+  margin-top: 0.75rem;
+}
+
+.moderacao-ufs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Grade de três colunas com a sigla FIXA: sem largura fixa, cada linha vira uma
+ * grade própria e os números começam em x diferente a cada linha — a leitura de
+ * coluna, que é a única razão de a tabela existir, se perde. */
+.moderacao-uf {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+.moderacao-uf-sigla {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.moderacao-uf-itens,
+.moderacao-uf-registros {
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+}
+
+.moderacao-escalonamentos,
+.moderacao-delegacoes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.moderacao-escalonamento,
+.moderacao-delegacao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid var(--cor-borda-forte);
+}
+
+/* A delegação VIGENTE se distingue pela borda de ação; a encerrada continua na
+ * lista, lavada. Ela não some porque «quem respondia por isto naquela semana» é
+ * a pergunta que uma auditoria faz — e some seria não ter resposta. */
+.moderacao-delegacao[data-vigente="sim"] {
+  border-left-color: var(--cor-acao);
+}
+
+.moderacao-delegacao[data-vigente="nao"] {
+  opacity: 0.72;
+}
+
+.moderacao-delegacao-cabeca,
+.moderacao-delegacao-periodo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}

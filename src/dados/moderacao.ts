@@ -1320,6 +1320,194 @@ export const APROVAR_E_A_UNICA_PORTA =
   "perguntas sobre a ficha da própria entidade, exibidas marcadas uma a uma, para que quem " +
   "decide confira a conta em vez de confiar no número.";
 
+// ---------------------------------------------------------------------------
+// M8 — escopo, escalonamento e delegação (122 a 125)
+// ---------------------------------------------------------------------------
+
+/**
+ * Para onde vai o que cai FORA do escopo de quem está moderando (123).
+ *
+ * O escalonamento não é «avisar alguém»: é nomear o destinatário. Um item fora do escopo
+ * que só some da lista vira trabalho de ninguém — e a fila do país inteiro é feita de
+ * itens que estão fora do escopo de quase todo mundo.
+ */
+export interface Escalonamento {
+  id: string;
+  /** O que dispara o escalonamento, em texto de produto. */
+  quando: string;
+  /** Quem recebe. NUNCA «a equipe» — um nível de acesso nomeado. */
+  paraQuem: string;
+  /** Por que é esse e não outro. */
+  porque: string;
+}
+
+export const ESCALONAMENTOS: readonly Escalonamento[] = [
+  {
+    id: "fora-do-territorio",
+    quando: "o item está situado num território que não é o do moderador de plantão",
+    paraQuem: "moderação com escopo daquele território",
+    porque:
+      "Quem responde por uma praça conhece o calendário, os espaços e os coletivos dela. " +
+      "Decidir de longe sobre uma praça que não se conhece é o centralismo que a moderação " +
+      "por escopo existe para desfazer.",
+  },
+  {
+    id: "sem-territorio",
+    quando: "o acervo não situa o item em território nenhum",
+    paraQuem: "moderação nacional",
+    porque:
+      "Sem território não há escopo territorial que o alcance, e um item que nenhum escopo " +
+      "alcança fica parado para sempre. O escopo nacional é o que existe para não deixar " +
+      "buraco: ele é o padrão de quem responde pelo país, não um privilégio.",
+  },
+  {
+    id: "duplicata-cruzada",
+    quando: "o grupo de duplicatas cruza organizações distintas",
+    paraQuem: "moderação nacional",
+    porque:
+      "Um produtor pode decidir sobre duplicata entre os próprios registros. Entre " +
+      "organizações diferentes, nenhum dos dois lados pode decidir sem ser parte — e a " +
+      "decisão precisa de quem não é.",
+  },
+  {
+    id: "afirmacao-sobre-pessoa",
+    quando: "a decisão é sobre elenco declarado ou proposta de agente",
+    paraQuem: "moderação nacional, e nunca ao produtor",
+    porque:
+      "É afirmação factual sobre uma pessoa real. Devolver ao produtor a decisão sobre o " +
+      "que se afirma de terceiros é exatamente o que a plataforma se proibiu.",
+  },
+];
+
+/**
+ * A delegação temporária de escopo (125).
+ *
+ * Ela tem início e fim declarados, e não é «passar a senha». O que a torna auditável é o
+ * mesmo que torna a decisão auditável: quem, o quê, de quando a quando — e o registro
+ * permanece depois de ela terminar, porque a pergunta «quem respondia por isto naquela
+ * semana» é a que uma auditoria faz.
+ */
+export interface Delegacao {
+  id: string;
+  /** Quem delegou. Autorado, e a tela diz que é. */
+  de: string;
+  /** Quem assumiu. */
+  para: string;
+  escopo: IdDoEscopo;
+  /** "22.08.2026" — derivado de `DATA_DE_REFERENCIA`, nunca do relógio. */
+  inicio: string;
+  fim: string;
+  motivo: string;
+  /** `true` enquanto a data de referência estiver dentro do intervalo. */
+  vigente: boolean;
+}
+
+export const REGRA_DA_DELEGACAO =
+  "Uma delegação sem fim declarado é uma transferência de responsabilidade sem data de " +
+  "volta — e ninguém consegue dizer, depois, quem respondia por aquele escopo naquela " +
+  "semana. Por isso início e fim são obrigatórios, e o registro permanece depois de a " +
+  "delegação terminar: o histórico de quem respondeu pelo quê é o que uma auditoria " +
+  "procura, e ele não pode desaparecer quando a pessoa volta de férias.";
+
+/**
+ * As delegações encenadas.
+ *
+ * TODA ARITMÉTICA DE DATA AQUI É SOBRE `AAAAMMDD` — um inteiro que ordena. Duas armadilhas
+ * de uma vez: `new Date("2026-08-22")` é lido como meia-noite UTC e, em fuso brasileiro,
+ * devolve o dia anterior; e `"03.09.2026" < "22.08.2026"` é verdadeiro em comparação de
+ * texto, porque ela compara o dia primeiro. As datas só viram `DD.MM.AAAA` na saída, depois
+ * de toda comparação já ter acontecido.
+ */
+function comoNumero(ano: number, mes: number, dia: number): number {
+  return ano * 10000 + mes * 100 + dia;
+}
+
+const DIAS_NO_MES: readonly number[] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+/** Desloca N dias a partir da data de referência. Devolve as partes, não uma string. */
+function deslocarDias(n: number): { ano: number; mes: number; dia: number } {
+  const [ano0, mes0, dia0] = DATA_DE_REFERENCIA.slice(0, 10).split("-").map(Number);
+  let ano = ano0;
+  let mes = mes0;
+  let dia = dia0 + n;
+  // 2026 não é bissexto, e o acervo é de 2026: a tabela fixa basta e não introduz um
+  // cálculo de ano bissexto que ninguém consegue conferir a olho nesta tela.
+  for (;;) {
+    const noMes = DIAS_NO_MES[mes - 1] ?? 31;
+    if (dia > noMes) {
+      dia -= noMes;
+      mes += 1;
+      if (mes > 12) {
+        mes = 1;
+        ano += 1;
+      }
+      continue;
+    }
+    if (dia < 1) {
+      mes -= 1;
+      if (mes < 1) {
+        mes = 12;
+        ano -= 1;
+      }
+      dia += DIAS_NO_MES[mes - 1] ?? 31;
+      continue;
+    }
+    return { ano, mes, dia };
+  }
+}
+
+function comoDataCurta(p: { ano: number; mes: number; dia: number }): string {
+  return `${String(p.dia).padStart(2, "0")}.${String(p.mes).padStart(2, "0")}.${p.ano}`;
+}
+
+export function delegacoesDeExemplo(): Delegacao[] {
+  const hoje = deslocarDias(0);
+  const agora = comoNumero(hoje.ano, hoje.mes, hoje.dia);
+
+  const monta = (
+    id: string,
+    para: string,
+    escopo: IdDoEscopo,
+    deDias: number,
+    ateDias: number,
+    motivo: string,
+  ): Delegacao => {
+    const i = deslocarDias(deDias);
+    const f = deslocarDias(ateDias);
+    return {
+      id,
+      de: MODERADOR_AUTORADO,
+      para,
+      escopo,
+      inicio: comoDataCurta(i),
+      fim: comoDataCurta(f),
+      motivo,
+      // Comparação sobre o INTEIRO, nunca sobre o texto formatado.
+      vigente:
+        comoNumero(i.ano, i.mes, i.dia) <= agora && agora <= comoNumero(f.ano, f.mes, f.dia),
+    };
+  };
+
+  return [
+    monta(
+      "delegacao:para",
+      "Moderação · escopo do Pará (perfil autorado)",
+      "territorial",
+      -3,
+      9,
+      "Férias de quem responde pela praça; a fila do Pará não pode parar.",
+    ),
+    monta(
+      "delegacao:musica",
+      "Moderação · escopo de música (perfil autorado)",
+      "linguagem",
+      -40,
+      -26,
+      "Pico de submissões no período de festivais.",
+    ),
+  ];
+}
+
 export const O_HISTORICO_E_DO_MODERADOR =
   "Este histórico é o das decisões DESTE moderador, e serve para ele responder pelo que " +
   "decidiu. Ele NÃO compara moderadores, não mede tempo médio de fila e não pontua " +

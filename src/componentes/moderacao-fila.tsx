@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { OpcaoDeSegmento, Segmento } from "./base/segmento";
 import { useEffect, useMemo, useState } from "react";
 import { ROTULO_DA_ACAO, decisaoCompleta, situacaoApos } from "@/dados/tipos-acesso";
 import { CHAVE_DO_ARMAZEM, gravarArmazem, lerArmazem } from "./moderacao-armazem";
@@ -497,6 +498,9 @@ export function ModeracaoFila({
           <Link className="studio-botao" data-ir-para="ia" href="/moderacao/ia/">
             revisão da IA · {comSeparador(numeros.itensPorOrigem.ia)}
           </Link>
+          <Link className="studio-botao" data-ir-para="escopo" href="/moderacao/escopo/">
+            escopo e escalonamento
+          </Link>
           <Link className="studio-botao" data-ir-para="historico" href="/moderacao/historico/">
             meu histórico
           </Link>
@@ -504,22 +508,21 @@ export function ModeracaoFila({
 
         <div className="moderacao-escopos">
           <span className="studio-rotulo">escopo do moderador</span>
-          <div className="web-alternador" role="group" aria-label="escopo de curadoria">
+          <Segmento rotulo="escopo de curadoria">
             {escopos.map((e) => (
-              <button
+              <OpcaoDeSegmento
                 key={e.id}
-                type="button"
                 data-escopo-curador={e.id}
-                aria-pressed={escopo === e.id}
+                selecionado={escopo === e.id}
                 onClick={() => setEscopo(e.id)}
               >
                 {/* O alcance vem do MÓDULO e é medido sobre a fila que existe. Um número
                     digitado aqui passaria a mentir na primeira regeração do grafo — e o
                     escopo é justamente o que precisa dizer quanto NÃO está sendo visto. */}
                 {e.rotulo} · {comSeparador(e.alcance)}
-              </button>
+              </OpcaoDeSegmento>
             ))}
-          </div>
+          </Segmento>
           <span className="studio-pastilha">
             operando como <strong>{moderador}</strong>
           </span>
@@ -550,19 +553,18 @@ export function ModeracaoFila({
         {/* ---------------------------------------------------------------- */}
         <div className="moderacao-ordenacoes">
           <span className="studio-rotulo">ordem da fila</span>
-          <div className="web-alternador" role="group" aria-label="ordem da fila">
+          <Segmento rotulo="ordem da fila">
             {ordenacoes.map((o) => (
-              <button
+              <OpcaoDeSegmento
                 key={o.id}
-                type="button"
                 data-ordenacao-fila={o.id}
-                aria-pressed={ordenacao === o.id}
+                selecionado={ordenacao === o.id}
                 onClick={() => setOrdenacao(o.id)}
               >
                 {o.rotulo}
-              </button>
+              </OpcaoDeSegmento>
             ))}
-          </div>
+          </Segmento>
         </div>
         <p className="moderacao-ordenacao-porque">{ordenacaoAtiva.porque}</p>
 

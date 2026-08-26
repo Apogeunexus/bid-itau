@@ -982,6 +982,117 @@ async function principal() {
       "19 · aprovar · ia · true",
     );
 
+    // =======================================================================
+    titulo("── M8 · escopo impresso, escalonamento nomeado, delegação com fim ──");
+    // =======================================================================
+
+    await cdp.navegar(`${BASE}/moderacao/escopo/`);
+    await cdp.assentar();
+
+    const esc = await cdp.avaliar(
+      naPagina(`
+        const dentro = document.querySelector('[data-alcance="dentro"] .web-denominador-numero');
+        const fora = document.querySelector('[data-alcance="fora"] .web-denominador-numero');
+        const semUf = document.querySelector('[data-sem-uf]');
+        return {
+          escopos: todos('[data-escopo-curador]').length,
+          dentro: dentro ? Number((dentro.textContent || '0').replace(/\D/g, '')) : null,
+          fora: fora ? Number((fora.textContent || '0').replace(/\D/g, '')) : null,
+          ufs: todos('[data-uf-na-fila]').length,
+          semUf: semUf ? Number(semUf.getAttribute('data-sem-uf')) : null,
+          escalonamentos: todos('[data-escalonamento]').length,
+          destinatarios: todos('[data-destinatario]').map((el) => (el.textContent || '').trim()),
+          delegacoes: todos('[data-delegacao]').length,
+          vigentes: todos('[data-delegacao][data-vigente="sim"]').length,
+        };
+      `),
+    );
+
+    // 122 — as duas metades da mesma informação, com o mesmo peso. No nacional o «fora» é
+    // zero; a soma tem de fechar a fila em qualquer escopo.
+    exigir(
+      esc.dentro !== null && esc.fora !== null && esc.dentro + esc.fora === fila.itens,
+      "o escopo IMPRIME o que alcança e o que não alcança, e a soma fecha a fila",
+      `${esc.dentro} dentro + ${esc.fora} fora = ${(esc.dentro ?? 0) + (esc.fora ?? 0)} de ${fila.itens}`,
+      `soma === ${fila.itens}`,
+    );
+
+    // ---- trocar de escopo muda os dois números, e continua fechando ----
+    await cdp.clicar(`document.querySelector('[data-escopo-curador="territorial"]')`);
+    await cdp.assentar();
+    const territorial = await cdp.avaliar(
+      naPagina(`
+        const d = Number((document.querySelector('[data-alcance="dentro"] .web-denominador-numero').textContent || '0').replace(/\D/g, ''));
+        const f = Number((document.querySelector('[data-alcance="fora"] .web-denominador-numero').textContent || '0').replace(/\D/g, ''));
+        return { dentro: d, fora: f, url: location.pathname };
+      `),
+    );
+    exigir(
+      territorial.fora > 0 &&
+        territorial.dentro + territorial.fora === fila.itens &&
+        territorial.url.startsWith("/moderacao/escopo"),
+      "no territorial o «fora» deixa de ser zero, a soma fecha, e a URL não muda",
+      `${territorial.dentro} dentro + ${territorial.fora} fora · URL ${territorial.url}`,
+      `soma ${fila.itens} · mesma rota`,
+    );
+
+    // 123 — o destinatário é NOMEADO. «A equipe» é o mesmo que ninguém.
+    const semGenerico = esc.destinatarios.every(
+      (d) => d.length > 0 && !/^a equipe$/i.test(d) && !/^equipe$/i.test(d),
+    );
+    exigir(
+      esc.escalonamentos === 4 && semGenerico,
+      "cada escalonamento nomeia um destinatário — nunca «a equipe»",
+      `${esc.escalonamentos} caminhos · ${JSON.stringify(esc.destinatarios)}`,
+      "4 · todos nomeados",
+    );
+
+    // A linha que existe para os itens que NENHUM escopo territorial alcança. Sem ela,
+    // 53 itens ficariam parados sem ninguém responsável — e a fila nacional é feita
+    // justamente do que está fora do escopo de quase todo mundo.
+    exigir(
+      esc.semUf !== null && esc.semUf > 0 && esc.ufs > 0,
+      "os itens sem UF são contados, e a cobertura por UF é medida sobre a fila",
+      `${esc.ufs} UFs na fila · ${esc.semUf} itens sem UF`,
+      "ambos > 0",
+    );
+
+    // 125 — delegação com início E fim. Sem fim é transferência sem data de volta.
+    const deleg = await cdp.avaliar(
+      naPagina(`
+        return todos('[data-delegacao]').map((el) => {
+          // POR ATRIBUTO. Garimpar data no texto com padrão dentro de template literal já
+          // deu dois vermelhos sem causa nesta suíte: a barra invertida colapsa e o padrão
+          // deixa de casar. O atributo traz o valor exato e não depende de escape nenhum.
+          const p = el.querySelector('.moderacao-delegacao-periodo');
+          const inicio = p ? p.getAttribute('data-inicio') : null;
+          const fim = p ? p.getAttribute('data-fim') : null;
+          return {
+            id: el.getAttribute('data-delegacao'),
+            vigente: el.getAttribute('data-vigente'),
+            inicio,
+            fim,
+            datas: [inicio, fim].filter(Boolean).length,
+          };
+        });
+      `),
+    );
+    exigir(
+      deleg.length === 2 && deleg.every((d) => d.datas === 2),
+      "toda delegação declara início E fim",
+      deleg.map((d) => `${d.id}: ${d.inicio}→${d.fim}, vigente ${d.vigente}`).join(" · "),
+      "2 delegações, 2 datas cada",
+    );
+
+    // A encerrada CONTINUA listada: «quem respondia por isto naquela semana» é a pergunta
+    // que uma auditoria faz, e sumir seria não ter resposta.
+    exigir(
+      esc.vigentes === 1 && esc.delegacoes === 2,
+      "a delegação encerrada continua listada ao lado da vigente",
+      `${esc.delegacoes} delegações · ${esc.vigentes} vigente`,
+      "2 · 1",
+    );
+
     // -----------------------------------------------------------------------
     titulo("── zero erro de console na navegação inteira ──");
     // -----------------------------------------------------------------------

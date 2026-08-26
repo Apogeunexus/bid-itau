@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { OpcaoDeSegmento, Segmento } from "./base/segmento";
 import { useEffect, useMemo, useState } from "react";
 import { ROTULO_DA_ACAO } from "@/dados/tipos-acesso";
 import { CHAVE_DO_ARMAZEM, gravarArmazem, lerArmazem } from "./moderacao-armazem";
@@ -161,79 +162,73 @@ export function ModeracaoHistorico({
           <div className="moderacao-filtros">
             <div className="moderacao-filtro">
               <span className="studio-rotulo">ação</span>
-              <div className="web-alternador" role="group" aria-label="filtrar por ação">
-                <button
-                  type="button"
+              <Segmento rotulo="filtrar por ação">
+                <OpcaoDeSegmento
                   data-filtro-acao="todas"
-                  aria-pressed={filtroAcao === "todas"}
+                  selecionado={filtroAcao === "todas"}
                   onClick={() => setFiltroAcao("todas")}
                 >
                   todas · {comSeparador(decisoes.length)}
-                </button>
+                </OpcaoDeSegmento>
                 {acoes.map((a) => (
-                  <button
+                  <OpcaoDeSegmento
                     key={a.id}
-                    type="button"
                     data-filtro-acao={a.id}
-                    aria-pressed={filtroAcao === a.id}
+                    selecionado={filtroAcao === a.id}
                     onClick={() => setFiltroAcao(a.id)}
                   >
                     {/* A contagem vem do conjunto INTEIRO, não do filtrado: é o que
                         permite ver que existem três vetos antes de clicar em vetos. */}
                     {a.rotulo} · {comSeparador(contagemPorAcao[a.id] ?? 0)}
-                  </button>
+                  </OpcaoDeSegmento>
                 ))}
-              </div>
+              </Segmento>
             </div>
 
             <div className="moderacao-filtro">
               <span className="studio-rotulo">origem do item</span>
-              <div className="web-alternador" role="group" aria-label="filtrar por origem">
-                <button
-                  type="button"
+              <Segmento rotulo="filtrar por origem">
+                <OpcaoDeSegmento
                   data-filtro-origem="todas"
-                  aria-pressed={filtroOrigem === "todas"}
+                  selecionado={filtroOrigem === "todas"}
                   onClick={() => setFiltroOrigem("todas")}
                 >
                   todas
-                </button>
+                </OpcaoDeSegmento>
                 {origens.map((o) => (
-                  <button
+                  <OpcaoDeSegmento
                     key={o.id}
-                    type="button"
                     data-filtro-origem={o.id}
-                    aria-pressed={filtroOrigem === o.id}
+                    selecionado={filtroOrigem === o.id}
                     onClick={() => setFiltroOrigem(o.id)}
                   >
                     {o.rotulo}
-                  </button>
+                  </OpcaoDeSegmento>
                 ))}
-              </div>
+              </Segmento>
             </div>
 
             <div className="moderacao-filtro">
               <span className="studio-rotulo">escopo em que decidi</span>
-              <div className="web-alternador" role="group" aria-label="filtrar por escopo">
-                <button
-                  type="button"
+              <Segmento rotulo="filtrar por escopo">
+                <OpcaoDeSegmento
                   data-filtro-escopo="todos"
-                  aria-pressed={filtroEscopo === "todos"}
+                  selecionado={filtroEscopo === "todos"}
                   onClick={() => setFiltroEscopo("todos")}
                 >
                   todos
-                </button>
+                </OpcaoDeSegmento>
                 {escopos.map((e) => (
-                  <button
+                  <OpcaoDeSegmento
                     key={e.id}
-                    type="button"
                     data-filtro-escopo={e.id}
-                    aria-pressed={filtroEscopo === e.id}
+                    selecionado={filtroEscopo === e.id}
                     onClick={() => setFiltroEscopo(e.id)}
                   >
                     {e.rotulo}
-                  </button>
+                  </OpcaoDeSegmento>
                 ))}
-              </div>
+              </Segmento>
             </div>
           </div>
 
