@@ -1164,3 +1164,108 @@
    * bloco existe para o seletor existir, e o comentário é o conteúdo dele. */
   cursor: pointer;
 }
+
+/* ===========================================================================
+ * P6 · FICHA DE ACESSIBILIDADE — e a forma do ATO.
+ * ======================================================================== */
+
+/* Os três estados da ficha, nomeados. Não são dois: «declarou e oferece»,
+ * «declarou e não oferece» e «não declarou» são distintos, e é o terceiro que
+ * some quando uma interface só tem caixas de marcar. */
+.studio-estado-ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--cor-borda-forte);
+  border-radius: 0 var(--raio-m) var(--raio-m) 0;
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+}
+
+/* O silêncio é o único dos três que a plataforma se proibiu de interpretar, e
+ * por isso é o único que a tela marca com a cor de ação — ele pede resolução. */
+.studio-estado-ficha[data-estado="silencio"] {
+  border-left-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+.studio-dimensoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.studio-dimensao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.studio-dimensao[data-ligada="sim"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+.studio-dimensao-alvo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.studio-dimensao-rotulo {
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+}
+
+/* O nome do campo no contrato, ao lado do rótulo humano: é ele que a moderação
+ * e o Observatório leem, e mostrá-lo aqui é o que torna a ficha auditável. */
+.studio-dimensao-campo {
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * O ATO — «Declaro que não oferece nenhum destes recursos».
+ *
+ * ELE TEM PESO IGUAL AO DE SALVAR, e a folha é onde esse peso se realiza: caixa
+ * própria, contorno de ação, e um botão que ocupa a largura em vez de se
+ * esconder como link. Sem ele, oito caixas desmarcadas produzem silêncio — e
+ * silêncio é o que a plataforma se proibiu de interpretar.
+ * ------------------------------------------------------------------------- */
+
+.studio-ato {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: 2px solid var(--cor-acao);
+  border-radius: var(--raio-g);
+  background: var(--cor-acao-lavada);
+}
+
+/* Declarada, a caixa perde a urgência: ela vira registro, não pedido. */
+.studio-ato[data-declarou="sim"] {
+  border-width: 1px;
+  border-color: var(--cor-borda-forte);
+  background: var(--cor-superficie-2);
+}
+
+/* O botão do ato não usa raio de pílula: pílula é forma de controle curto, e
+ * esta é uma frase inteira. Raio grande e largura total, para ele ler como a
+ * afirmação que é. */
+.studio-botao-ato {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--raio-m);
+  text-align: start;
+  line-height: 1.4;
+}
