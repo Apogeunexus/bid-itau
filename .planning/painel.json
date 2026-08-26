@@ -1,12 +1,12 @@
 {
-  "varredura": "26/08, 01:45",
+  "varredura": "26/08, 01:51",
   "kpi": {
-    "concluidas": 41,
+    "concluidas": 42,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 16,
+    "sujos": 18,
     "folgaS6": 8,
     "pedidos": 10
   },
@@ -402,7 +402,7 @@
       "pasta": "src/app/(bastidor)/admin",
       "sessaoNome": "bid-ita-d4",
       "estado": "rodando",
-      "feitas": 10,
+      "feitas": 11,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -504,10 +504,10 @@
           "n": 11,
           "rot": "suíte e medidas",
           "inicio": 11,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "a569ef4",
+          "nota": "**8 gates**, nenhum dependente de build: as regras são sobre código e dado, e verificação que só roda com disco livre e fila vazia é verificação que não roda. **Cada gate testado com o defeito injetado** — e um estava mentindo: `onClick={() => apagarRegistros()}` com rótulo «Confirmar» passava verde, porque `\\b` no fim do padrão não casa «apagar» seguido de «R». Era exatamente a forma que o gate existe para pegar. Corrigido e reprovado",
+          "quando": "26.08 04:05"
         }
       ]
     },
@@ -938,6 +938,13 @@
       "rot": "A10 desempenho da moderação",
       "nota": "**Nenhuma das cinco medidas fecha**, e a tela declara em vez de exibir cinco zeros — «tempo médio de fila: 0» afirmaria fila instantânea quando o fato é que os 68 itens nunca foram decididos. A quinta é medível pela metade: a densidade existe, o tempo de fila não. O recorte contra vigilância está impresso: mede a fila, não a pessoa",
       "quando": "26.08 03:40"
+    },
+    {
+      "sessao": "S1",
+      "n": 11,
+      "rot": "suíte e medidas",
+      "nota": "**8 gates**, nenhum dependente de build: as regras são sobre código e dado, e verificação que só roda com disco livre e fila vazia é verificação que não roda. **Cada gate testado com o defeito injetado** — e um estava mentindo: `onClick={() => apagarRegistros()}` com rótulo «Confirmar» passava verde, porque `\\b` no fim do padrão não casa «apagar» seguido de «R». Era exatamente a forma que o gate existe para pegar. Corrigido e reprovado",
+      "quando": "26.08 04:05"
     },
     {
       "sessao": "S5",
