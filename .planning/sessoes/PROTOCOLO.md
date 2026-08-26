@@ -220,6 +220,12 @@ moderação**.
 - **`innerText.includes('rótulo (N)')` sobre string montada em JSX** dá falso negativo *e*
   falso positivo. React parte `Capítulos (` · `{n}` · `)` em nós vizinhos e `innerText` é
   baseado em layout, não em conteúdo. Meça por `textContent`, por atributo, ou por `Range`
+- **Regex sobre texto DENTRO de template literal perde a barra invertida.** `\d` colapsa
+  para `d`, o padrão não casa nada, e o gate fica vermelho sem causa — ou verde sem prova,
+  conforme o sentido do teste. Pegou a mesma sessão **duas vezes**, porque na primeira ela
+  corrigiu a ocorrência e não a classe. **A correção que resolve de vez é tirar o texto do
+  caminho:** o dado viaja como atributo — `data-inicio`, `data-fim`, `data-carimbo` — e a
+  suíte lê atributo, não texto
 - **`new Date("2026-08-22")`** é meia-noite UTC e volta como **dia 21** em fuso brasileiro.
   Para **aritmética**, `Date.parse` com `T00:00:00Z` nos dois lados; para **formatação**,
   quebre a string em partes. As duas defesas juntas
