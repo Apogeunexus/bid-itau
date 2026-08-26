@@ -1,12 +1,12 @@
 {
-  "varredura": "26/08, 03:48",
+  "varredura": "26/08, 03:57",
   "kpi": {
-    "concluidas": 52,
+    "concluidas": 53,
     "totalTarefas": 64,
     "ativas": 5,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 5,
+    "sujos": 13,
     "folgaS6": 7,
     "pedidos": 10
   },
@@ -518,7 +518,7 @@
       "pasta": "src/app/(bastidor)/redacao",
       "sessaoNome": "bid-ita-7d [b1187f]",
       "estado": "rodando",
-      "feitas": 5,
+      "feitas": 6,
       "total": 10,
       "commit": null,
       "frescor": null,
@@ -575,16 +575,16 @@
           "n": 6,
           "rot": "E4 tesauro",
           "inicio": 7,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "d9865b5",
+          "nota": "A tela mais perigosa da Redação: as outras escrevem afirmação nova, esta mexe no vocabulário que todas usam para classificar. **O alcance é contado ANTES de a fusão ser oferecida** — cada item chega com quantos vínculos toca, medidos por `vizinhos()`, e a confirmação carrega o número no texto do botão («fundir «acervo» e mover 10 vínculo(s)»). **`aprovadaPor: null` é declarado e vazio, nunca ausente** — ausente seria lido como «não precisa de aprovação», e sem isso o Admin viraria curador por acidente. O alcance fica **congelado** no registro: uma proposta lida três dias depois tem de dizer quanto alcançava quando foi escrita. As 4 promovidas nomeadas com o porquê de não terem sido mapeadas (33 feio e verdadeiro em vez de 29 redondo e fabricado). Cor obrigatória entre as 7 do manual, com token na borda **e** nome por extenso. 120 dos 481 termos, os de maior alcance primeiro, com os dois números ditos. Sonda: 12 verdes; DTO 26.618 de 61.440",
+          "quando": "26.08 03:56"
         },
         {
           "n": 7,
           "rot": "E5 redação editorial",
           "inicio": 8,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -1029,6 +1029,13 @@
       "rot": "E2 destaque",
       "nota": "A tela mostra **o cartão que saiu** para o destaque caber — sobrepor o algoritmo tem custo, e escondê-lo apresentaria o destaque como se fosse de graça. Descoberto sem reimplementar nada: `montarFeed` é determinística e aceita `limite`, então o mesmo feed montado com uma vaga a mais devolve o cartão que não coube. Medido: entra a trilha «Do rap ao teatro documentário», sai o espaço «Espaço Cultural Airton Queiroz». A serendipidade fica ao lado **para contraste** — também sobrepõe o rodízio e também tem posição fixa, mas é dosagem do motor com parâmetro do Admin, não escolha; sem essa distinção a tela ensinaria o operador a confundir as duas. O teto de UM vale no registro (o novo substitui), não só no texto. Junto: a data de agendamento saía crua em ISO em **três** telas, mesma classe do defeito da §9.3 — o formatador foi para `redacao-registro.ts` em vez de virar segunda cópia. Sonda: 13 verdes; E1, E3 e E9 reexecutadas sem regressão",
       "quando": "26.08 02:33"
+    },
+    {
+      "sessao": "S5",
+      "n": 6,
+      "rot": "E4 tesauro",
+      "nota": "A tela mais perigosa da Redação: as outras escrevem afirmação nova, esta mexe no vocabulário que todas usam para classificar. **O alcance é contado ANTES de a fusão ser oferecida** — cada item chega com quantos vínculos toca, medidos por `vizinhos()`, e a confirmação carrega o número no texto do botão («fundir «acervo» e mover 10 vínculo(s)»). **`aprovadaPor: null` é declarado e vazio, nunca ausente** — ausente seria lido como «não precisa de aprovação», e sem isso o Admin viraria curador por acidente. O alcance fica **congelado** no registro: uma proposta lida três dias depois tem de dizer quanto alcançava quando foi escrita. As 4 promovidas nomeadas com o porquê de não terem sido mapeadas (33 feio e verdadeiro em vez de 29 redondo e fabricado). Cor obrigatória entre as 7 do manual, com token na borda **e** nome por extenso. 120 dos 481 termos, os de maior alcance primeiro, com os dois números ditos. Sonda: 12 verdes; DTO 26.618 de 61.440",
+      "quando": "26.08 03:56"
     },
     {
       "sessao": "S6",
