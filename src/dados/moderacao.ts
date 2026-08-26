@@ -77,7 +77,8 @@ export const MODERADOR_E_AUTORADO =
   "Não há autenticação neste protótipo. O nome de quem decide é autorado e aparece " +
   "rotulado, em vez de simular um login: o que esta tela precisa provar é que toda decisão " +
   "fica registrada com autor e carimbo, e não que sabemos quem está do outro lado. O " +
-  `carimbo é derivado da data de referência do build (${DATA_DE_REFERENCIA}), nunca do ` +
+  `carimbo é derivado da data de referência do build (${dataCurta(DATA_DE_REFERENCIA)}), ` +
+  "nunca do " +
   "relógio de quem abre a página.";
 
 /** O carimbo que uma decisão tomada AGORA na Moderação recebe (D-84). */
@@ -515,8 +516,25 @@ function rotaDe(e: Entidade): string | null {
   return base ? `${base}/${e.slug}/` : null;
 }
 
+/**
+ * O território que SITUA esta entidade.
+ *
+ * A travessia é DIRIGIDA e filtrada por relação, como `geo.ts` faz — e não um `find()` sobre
+ * a adjacência inteira. `situado_em` aponta do contido para o continente: sem o filtro de
+ * direção, um território que aponta para esta entidade seria lido como se ela estivesse
+ * dentro dele, e a ordenação por vazio passaria a subir o item errado. Sem o filtro de
+ * relação, qualquer aresta que alcance um território serviria — inclusive `semelhante_a`,
+ * que é 71% do grafo e não afirma localização nenhuma.
+ *
+ * Medido hoje, nenhum dos 68 itens é afetado pela diferença: nenhum tem dois territórios,
+ * nenhum chega a um por outra relação. Está escrito assim mesmo assim, porque «certo por
+ * acidente do dado» deixa de ser certo na primeira vez que o acervo crescer — e o sintoma
+ * seria uma fila ordenada por um território que ninguém declarou.
+ */
 function territorioDe(e: Entidade): string | null {
-  const t = vizinhos(e.id).find((v) => v.entidade.classe === "territorio");
+  const t = vizinhos(e.id, "situado_em")
+    .filter((v) => v.aresta.de === e.id)
+    .find((v) => v.entidade.classe === "territorio");
   return t ? t.entidade.titulo : null;
 }
 
