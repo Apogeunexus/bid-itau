@@ -178,8 +178,8 @@ function FolhaDoItem({
                   do botão travado, e leva para onde as fichas são ganhas. */}
               {hidratado && faltam > 0 && !esgotada && (
                 <>
-                  <Link href="/desafios/" className="botao-discreto no-underline">
-                    Como ganhar fichas
+                  <Link href="/desafios/" className="botao-acao no-underline">
+                    Ganhar fichas
                   </Link>
                   <p className="tipo-legenda text-tinta-2">
                     Você tem {fichas.toLocaleString("pt-BR")}. Concluir um curso rende 25 fichas;
