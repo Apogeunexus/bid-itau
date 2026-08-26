@@ -187,14 +187,14 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "26/08, 01:39",
+  "varredura": "26/08, 01:44",
   "kpi": {
-    "concluidas": 36,
+    "concluidas": 40,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
-    "divergencias": 0,
-    "sujos": 18,
+    "divergencias": 1,
+    "sujos": 17,
     "folgaS6": 8,
     "pedidos": 10
   },
@@ -478,7 +478,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/observatorio",
       "sessaoNome": "bid-ita-53 [7ad229]",
       "estado": "rodando",
-      "feitas": 6,
+      "feitas": 10,
       "total": 10,
       "commit": null,
       "frescor": null,
@@ -549,37 +549,37 @@ const DADOS = {
           "n": 7,
           "rot": "G2 KPIs de produto",
           "inicio": 6,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "0ecd83b",
+          "nota": "3 medidos, 3 declarados sem lastro, nenhum inventado. **Maria × Carlos: 1 item em 12** — personalização MEDIDA, e os outros dois pares também dão 1 de 12. Alcance: Joana 5.876 de 7.810, Carlos 5.416, Maria 3.802. Aquisição, retenção e funil são `null` com o motivo de cada um: falta de OUTRA espécie que a gratuidade — lá o campo existe e está vazio, aqui não há acervo que pudesse ter o campo",
+          "quando": "26.08 01:55"
         },
         {
           "n": 8,
           "rot": "G7 exportação",
           "inicio": 7,
-          "estado": "aguardando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "516e617",
+          "nota": "3 recortes versionados por `observatorio-2026-08-22` — a data do grafo, nunca o relógio. `sustentado` viaja SEMPRE ao lado de `valor`, e o dicionário diz que vazio não é zero: é D-90 sobrevivendo à saída do dado. Sem botão de baixar, com a razão escrita — botão que não baixa é pior que nenhum",
+          "quando": "26.08 02:15"
         },
         {
           "n": 9,
           "rot": "G8 leitura da moderação",
           "inicio": 8,
-          "estado": "aguardando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "24a8002 · 2f6baa4",
+          "nota": "agregada e anonimizada; o DTO não tem campo para nome. **Eu errei e corrigi**: declarei o cruzamento fila × densidade como impossível, e `ItemDaFila.uf` já existia desde a M1, resolvido pela mesma travessia de `densidadePorUf()`. Agora mede: **8 UFs sobre 15 dos 68 itens** — os 53 sem território não são falha de resolução. Ficam 2 ausências, de espécies diferentes",
+          "quando": "26.08 02:40"
         },
         {
           "n": 10,
           "rot": "suíte e medidas",
           "inicio": 9,
-          "estado": "aguardando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "d8c7a09",
+          "nota": "**14 verdes · 0 falhas** com `BASE`; 5 verdes · 1 declarado não medido sem ele — suíte que fica verde por não ter rodado é pior que vermelha. Portão central varre 20 arquivos atrás de escrita; `localStorage.setItem` só passa na chave do público. Invariantes rodadas por `tsx`, não por regex. Teto do DTO medido nas 8 telas: maior é a raiz com 16.671 de 61.440",
+          "quando": "26.08 03:00"
         }
       ]
     },
@@ -1028,6 +1028,34 @@ const DADOS = {
       "rot": "G4 território",
       "nota": "**registro não é entidade**: 773 registros de `situado_em` contra 718 entidades distintas, com as duas contagens separadas na tela — 458 dos 773 em dois estados (59,2%). Nenhuma coordenada veio no dado: 592 município · 401 país inteiro · 345 espaço · 42 estado, de 1.380; e 439 fora do retângulo do Brasil, contadas em vez de omitidas. **48 de 158 eventos situados fora do Brasil bate exato com o PRD**; a distribuição por método (PRD dizia 214/118/113/27) é sobre outro recorte — afirmo o que medi, com denominador. `montarDesertos` subiu para o módulo: a raiz e a G4 usam a mesma",
       "quando": "26.08 01:35"
+    },
+    {
+      "sessao": "S2",
+      "n": 7,
+      "rot": "G2 KPIs de produto",
+      "nota": "3 medidos, 3 declarados sem lastro, nenhum inventado. **Maria × Carlos: 1 item em 12** — personalização MEDIDA, e os outros dois pares também dão 1 de 12. Alcance: Joana 5.876 de 7.810, Carlos 5.416, Maria 3.802. Aquisição, retenção e funil são `null` com o motivo de cada um: falta de OUTRA espécie que a gratuidade — lá o campo existe e está vazio, aqui não há acervo que pudesse ter o campo",
+      "quando": "26.08 01:55"
+    },
+    {
+      "sessao": "S2",
+      "n": 8,
+      "rot": "G7 exportação",
+      "nota": "3 recortes versionados por `observatorio-2026-08-22` — a data do grafo, nunca o relógio. `sustentado` viaja SEMPRE ao lado de `valor`, e o dicionário diz que vazio não é zero: é D-90 sobrevivendo à saída do dado. Sem botão de baixar, com a razão escrita — botão que não baixa é pior que nenhum",
+      "quando": "26.08 02:15"
+    },
+    {
+      "sessao": "S2",
+      "n": 9,
+      "rot": "G8 leitura da moderação",
+      "nota": "agregada e anonimizada; o DTO não tem campo para nome. **Eu errei e corrigi**: declarei o cruzamento fila × densidade como impossível, e `ItemDaFila.uf` já existia desde a M1, resolvido pela mesma travessia de `densidadePorUf()`. Agora mede: **8 UFs sobre 15 dos 68 itens** — os 53 sem território não são falha de resolução. Ficam 2 ausências, de espécies diferentes",
+      "quando": "26.08 02:40"
+    },
+    {
+      "sessao": "S2",
+      "n": 10,
+      "rot": "suíte e medidas",
+      "nota": "**14 verdes · 0 falhas** com `BASE`; 5 verdes · 1 declarado não medido sem ele — suíte que fica verde por não ter rodado é pior que vermelha. Portão central varre 20 arquivos atrás de escrita; `localStorage.setItem` só passa na chave do público. Invariantes rodadas por `tsx`, não por regex. Teto do DTO medido nas 8 telas: maior é a raiz com 16.671 de 61.440",
+      "quando": "26.08 03:00"
     },
     {
       "sessao": "S1",
