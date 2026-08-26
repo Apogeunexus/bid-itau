@@ -82,9 +82,20 @@ function lerEstado(id) {
     entregas.push({ n, tarefa: c[2], commit, quando: c[4], nota: c[5] || null });
   }
 
+  /**
+   * Uma seção vira uma lista de ITENS, não de linhas.
+   *
+   * As sessões escrevem pedido com cabeçalho `### PEDIDO-NN`, tabela e justificativa —
+   * dezenas de linhas para um pedido só. Contar linha dava 33 pedidos onde havia 5, e o
+   * painel passava a alarmar sobre um número que não existe. O item é o cabeçalho `###`
+   * quando há um; onde não há, cada marcador de lista vale um.
+   */
   const lista = (titulo) => {
     const s = bruto.split(new RegExp(`^##\\s+${titulo}\\s*$`, "m"))[1]?.split(/^##\s/m)[0] ?? "";
-    return s.split("\n").map((l) => l.replace(/^[-*]\s*(\[.\]\s*)?/, "").trim())
+    const cabecalhos = [...s.matchAll(/^###\s+(.+)$/gm)].map((m) => m[1].trim());
+    if (cabecalhos.length) return cabecalhos;
+    return s.split("\n").filter((l) => /^\s*[-*]\s/.test(l))
+            .map((l) => l.replace(/^\s*[-*]\s*(\[.\]\s*)?/, "").trim())
             .filter((l) => l && l !== "—");
   };
 
