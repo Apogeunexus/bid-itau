@@ -857,3 +857,81 @@
 [data-view="web"] .obs-barra-buraco {
   background: var(--cor-tinta-2);
 }
+
+/* ---------------------------------------------------------------------------
+ * G4 · a tabela por unidade federativa e os métodos de coordenada.
+ *
+ * A TABELA ROLA DENTRO DO PRÓPRIO CONTÊINER. São 27 linhas, e a tela precisa
+ * manter o mapa ao lado enquanto se percorre a lista — uma tabela que empurrasse
+ * a página faria o mapa sair da vista justamente quando alguém compara um estado
+ * com o desenho.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-tabela-uf {
+  max-height: 22rem;
+  overflow-y: auto;
+  border: var(--web-borda);
+  border-radius: var(--web-raio);
+}
+
+[data-view="web"] .obs-uf {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--tipo-legenda);
+}
+
+[data-view="web"] .obs-uf-legenda {
+  padding: 0.5rem 0.75rem;
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+  color: var(--cor-tinta-2);
+}
+
+[data-view="web"] .obs-uf th,
+[data-view="web"] .obs-uf td {
+  padding: 0.25rem 0.75rem;
+  border-top: var(--web-borda);
+}
+
+[data-view="web"] .obs-uf thead th {
+  position: sticky;
+  top: 0;
+  background: var(--cor-superficie);
+  font-size: var(--tipo-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
+
+[data-view="web"] .obs-uf tbody th {
+  font-weight: 600;
+}
+
+/* O estado que o acervo NÃO SABE QUE EXISTE é marcado, e não apagado: zero
+   registros com o estado no grafo é acervo magro; zero sem o estado no grafo é
+   ausência total, e as duas coisas não podem ler igual. */
+[data-view="web"] .obs-uf tbody tr[data-no-grafo="nao"] {
+  color: var(--cor-acao-tinta);
+  font-weight: 600;
+}
+
+[data-view="web"] .obs-metodos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-view="web"] .obs-metodo {
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--tipo-legenda);
+}
+
+[data-view="web"] .obs-metodo-rotulo {
+  line-height: 1.25;
+  color: var(--cor-tinta-2);
+}

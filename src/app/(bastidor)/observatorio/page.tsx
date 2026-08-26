@@ -1,13 +1,12 @@
 import { Observatorio } from "@/componentes/observatorio";
-import type { DadosDesertos } from "@/componentes/desertos";
+import { LIMITES } from "@/dados/geo";
 import {
-  CONTORNO_BRASIL,
-  ROTULO_CONTORNO,
-  ROTULO_UNIDADES_FEDERATIVAS,
-  UNIDADES_FEDERATIVAS,
-} from "@/dados/contorno-brasil";
-import { caminhoDe, densidadePorUf, LIMITES, projetar } from "@/dados/geo";
-import { TELAS, aferirDto, montarObservatorio } from "@/dados/observatorio";
+  CONTORNO_DO_BRASIL,
+  TELAS,
+  aferirDto,
+  montarDesertos,
+  montarObservatorio,
+} from "@/dados/observatorio";
 
 /**
  * `/observatorio` — os indicadores de impacto cultural e o painel de procedência
@@ -20,50 +19,15 @@ import { TELAS, aferirDto, montarObservatorio } from "@/dados/observatorio";
  * `@/dados/observatorio` APENAS POR TIPO — é essa fronteira, e só ela, que impede 23 MB de
  * grafo de chegar ao navegador (DP-F).
  *
- * A CAMADA DE DESERTOS É MONTADA AQUI, PELO MESMO MOLDE DE `(app)/mapa/page.tsx`, e o molde
- * é REPETIDO em vez de importado de propósito: `montarDesertos` é função interna daquela
- * página, e exportá-la de lá significaria editar um arquivo da fase 3 enquanto seis planos
- * correm em paralelo sobre a mesma fase. A duplicação é de vinte linhas e está declarada;
- * as duas pontas que importam — `densidadePorUf()` e `UNIDADES_FEDERATIVAS` — são as mesmas
- * funções, e é delas que sai todo número. `desertos.tsx` não foi tocado.
+ * A CAMADA DE DESERTOS SUBIU PARA `@/dados/observatorio`. Ela nasceu aqui como cópia
+ * declarada do molde de `(app)/mapa/page.tsx`; a G4 passou a precisar da mesma camada, e
+ * uma segunda cópia seria a terceira. As duas pontas que importam — `densidadePorUf()` e
+ * `UNIDADES_FEDERATIVAS` — continuam sendo as mesmas funções, e é delas que sai todo
+ * número. `desertos.tsx` não foi tocado.
  *
  * ESTA ROTA É DE BASTIDOR. O layout de `(bastidor)` já monta `<AvisoDesktop>` e esconde o
  * conteúdo na visão app; esta página não precisa saber disso, e não sabe.
  */
-
-/**
- * A camada de desertos, montada no build: a CONTAGEM vem da travessia do grafo e o POLÍGONO
- * vem da geografia autorada, e os dois se encontram aqui pelo título do estado.
- * `densidadePorUf` já falha alto se a tabela de centroides e os polígonos divergirem.
- */
-function montarDesertos(): DadosDesertos {
-  const d = densidadePorUf();
-  const poligonos = new Map(UNIDADES_FEDERATIVAS.map((u) => [u.sigla, u.contorno]));
-  return {
-    ufs: d.ufs.map((uf) => {
-      const centro = projetar(uf.coordenada);
-      return {
-        sigla: uf.sigla,
-        titulo: uf.titulo,
-        registros: uf.registros,
-        entidades: uf.entidades,
-        noGrafo: uf.noGrafo,
-        d: caminhoDe(poligonos.get(uf.sigla) ?? []),
-        cx: Number(centro.x.toFixed(1)),
-        cy: Number(centro.y.toFixed(1)),
-      };
-    }),
-    total: d.total,
-    doisMaiores: d.doisMaiores,
-    percentual: Math.round((d.doisMaiores / d.total) * 100),
-    maximo: d.maximo,
-    mediana: d.mediana,
-    entidadesDistintas: d.entidadesDistintas,
-    comUmRegistro: d.comUmRegistro.map((u) => u.titulo),
-    semRegistro: d.semRegistro.map((u) => u.titulo),
-    rotulo: ROTULO_UNIDADES_FEDERATIVAS,
-  };
-}
 
 /**
  * Os atalhos entre superfícies de bastidor.
@@ -95,8 +59,8 @@ export default function PaginaObservatorio() {
       dados={dados}
       desertos={desertos}
       viewBox={LIMITES.viewBox}
-      contorno={caminhoDe(CONTORNO_BRASIL)}
-      rotuloContorno={ROTULO_CONTORNO}
+      contorno={CONTORNO_DO_BRASIL.d}
+      rotuloContorno={CONTORNO_DO_BRASIL.rotulo}
       telas={TELAS}
       atalhos={ATALHOS}
     />

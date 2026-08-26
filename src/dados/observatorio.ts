@@ -39,7 +39,15 @@
  */
 
 import { contagens, ocorrenciasDe, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "./grafo";
-import { densidadePorUf } from "./geo";
+import {
+  METODOS_INDEXADOS,
+  caminhoDe,
+  densidadePorUf,
+  indiceDePinos,
+  projetar,
+} from "./geo";
+import { CONTORNO_BRASIL, ROTULO_CONTORNO, ROTULO_UNIDADES_FEDERATIVAS, UNIDADES_FEDERATIVAS } from "./contorno-brasil";
+import type { DadosDesertos } from "@/componentes/desertos";
 import { PERSONAS } from "./personas";
 import { COMPONENTES_DO_CRITERIO } from "./duplicatas";
 import { repertorioDe } from "./repertorio";
@@ -1716,4 +1724,160 @@ export function ausenciasDeclaradas(): AusenciaDeclarada[] {
 
   ausenciasMemorizadas = lista;
   return lista;
+}
+
+// ---------------------------------------------------------------------------
+// G4 · Território — o diagnóstico que justifica a plataforma existir
+// ---------------------------------------------------------------------------
+
+/**
+ * A camada de desertos, montada no build.
+ *
+ * ELA MORA AQUI DESDE A G4, e não mais dentro de `(bastidor)/observatorio/page.tsx`. Ela
+ * nasceu lá como cópia declarada do molde de `(app)/mapa/page.tsx` — `montarDesertos` era
+ * função interna daquela página e exportá-la significaria editar arquivo da fase 3 com seis
+ * planos correndo em paralelo. Agora DUAS telas desta superfície precisam da camada, e uma
+ * segunda cópia seria a terceira: o molde subiu para o módulo, que é território desta
+ * sessão, e as duas páginas passam a chamar a mesma função.
+ *
+ * O tipo vem de `@/componentes/desertos` por `import type`, que some na compilação: nenhum
+ * acoplamento em execução, e uma definição só do formato em vez de duas que divergem.
+ *
+ * A CONTAGEM vem da travessia do grafo e o POLÍGONO vem da geografia autorada; os dois se
+ * encontram pelo título do estado, e `densidadePorUf()` já falha alto se a tabela de
+ * centroides e os polígonos divergirem.
+ */
+export function montarDesertos(): DadosDesertos {
+  const d = densidadePorUf();
+  const poligonos = new Map(UNIDADES_FEDERATIVAS.map((u) => [u.sigla, u.contorno]));
+  return {
+    ufs: d.ufs.map((uf) => {
+      const centro = projetar(uf.coordenada);
+      return {
+        sigla: uf.sigla,
+        titulo: uf.titulo,
+        registros: uf.registros,
+        entidades: uf.entidades,
+        noGrafo: uf.noGrafo,
+        d: caminhoDe(poligonos.get(uf.sigla) ?? []),
+        cx: Number(centro.x.toFixed(1)),
+        cy: Number(centro.y.toFixed(1)),
+      };
+    }),
+    total: d.total,
+    doisMaiores: d.doisMaiores,
+    percentual: Math.round((d.doisMaiores / d.total) * 100),
+    maximo: d.maximo,
+    mediana: d.mediana,
+    entidadesDistintas: d.entidadesDistintas,
+    comUmRegistro: d.comUmRegistro.map((u) => u.titulo),
+    semRegistro: d.semRegistro.map((u) => u.titulo),
+    rotulo: ROTULO_UNIDADES_FEDERATIVAS,
+  };
+}
+
+export const CONTORNO_DO_BRASIL = { d: caminhoDe(CONTORNO_BRASIL), rotulo: ROTULO_CONTORNO };
+
+/** Como cada coordenada do acervo foi obtida. Nenhuma é do dado: todas são derivadas. */
+export interface MetodoDeCoordenada {
+  metodo: string;
+  rotulo: string;
+  n: number;
+  de: number;
+}
+
+export interface DadosDoTerritorio {
+  desertos: DadosDesertos;
+  /** Registros de `situado_em` — cada vínculo entre uma entidade e um território. */
+  registros: number;
+  /** Entidades distintas por trás dos registros. Uma entidade pode estar em mais de um. */
+  entidadesDistintas: number;
+  doisMaiores: number;
+  percentualDosDoisMaiores: number;
+  totalDeUfs: number;
+  ufsNoAcervo: number;
+  semRegistro: string[];
+  comUmRegistro: string[];
+  metodos: MetodoDeCoordenada[];
+  /** Entidades com coordenada resolvida, dentro e fora do retângulo do Brasil. */
+  posicionadas: number;
+  foraDoBrasil: number;
+  /** O mesmo recorte, só sobre evento — o que uma agenda cultural leva a sério. */
+  eventosSituados: number;
+  eventosForaDoBrasil: number;
+  concentracao: Indicador;
+  diversidade: Indicador;
+  instituicoesSemCoordenada: AusenciaDeclarada;
+}
+
+const ROTULO_DO_METODO: Record<string, string> = {
+  "centroide-pais": "centroide do país inteiro",
+  "centroide-municipio": "centroide do município",
+  "centroide-estado": "centroide do estado",
+  "deslocamento-por-espaco": "deslocamento a partir do espaço",
+};
+
+let territorioMemorizado: DadosDoTerritorio | null = null;
+
+export function montarTerritorio(): DadosDoTerritorio {
+  if (territorioMemorizado) return territorioMemorizado;
+
+  const d = densidadePorUf();
+  const pinos = indiceDePinos();
+
+  // O índice de pinos traz método e via como ÍNDICE em `METODOS_INDEXADOS`, e traz as
+  // coordenadas de FORA do Brasil de propósito: uma entidade ausente do índice seria
+  // indistinguível de uma sem coordenada nenhuma, e são duas situações diferentes.
+  const porMetodo = new Map<string, number>();
+  let foraDoBrasil = 0;
+  let eventosSituados = 0;
+  let eventosForaDoBrasil = 0;
+  for (const p of pinos) {
+    const metodo = METODOS_INDEXADOS[p[6]] ?? "desconhecido";
+    porMetodo.set(metodo, (porMetodo.get(metodo) ?? 0) + 1);
+    if (p[10] === 0) foraDoBrasil += 1;
+    if (p[3] === "evento") {
+      eventosSituados += 1;
+      if (p[10] === 0) eventosForaDoBrasil += 1;
+    }
+  }
+
+  const metodos: MetodoDeCoordenada[] = [...porMetodo.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([metodo, n]) => ({
+      metodo,
+      rotulo: ROTULO_DO_METODO[metodo] ?? metodo,
+      n,
+      de: pinos.length,
+    }));
+
+  const semCoordenadaDeInstituicao = ausenciasDeclaradas().find(
+    (a) => a.id === "coordenada-de-instituicao",
+  );
+  if (!semCoordenadaDeInstituicao) {
+    throw new Error(
+      "observatorio.ts: a tela de território pede a ausência «coordenada-de-instituicao» e ela não está em ausenciasDeclaradas().",
+    );
+  }
+
+  territorioMemorizado = {
+    desertos: montarDesertos(),
+    registros: d.total,
+    entidadesDistintas: d.entidadesDistintas,
+    doisMaiores: d.doisMaiores,
+    percentualDosDoisMaiores: porcento(d.doisMaiores, d.total),
+    totalDeUfs: d.ufs.length,
+    ufsNoAcervo: d.ufs.filter((uf) => uf.noGrafo).length,
+    semRegistro: d.semRegistro.map((uf) => uf.titulo),
+    comUmRegistro: d.comUmRegistro.map((uf) => uf.titulo),
+    metodos,
+    posicionadas: pinos.length - foraDoBrasil,
+    foraDoBrasil,
+    eventosSituados,
+    eventosForaDoBrasil,
+    concentracao: exigirIndicador("circulacao-territorial"),
+    diversidade: exigirIndicador("diversidade-de-linguagem-por-regiao"),
+    instituicoesSemCoordenada: semCoordenadaDeInstituicao,
+  };
+  return territorioMemorizado;
 }
