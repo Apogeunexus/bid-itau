@@ -556,6 +556,13 @@
   align-items: flex-start;
   gap: 0.25rem;
   width: 100%;
+  /* `.studio-botao` é uma pílula, e pílula é forma de controle CURTO. Esticada numa
+   * caixa de três linhas e largura de painel, ela vira uma cápsula deformada — o
+   * defeito não aparece em `tsc` nem no portão do design system, só com o olho na
+   * tela. Aqui a relação é um CARTÃO escolhível, e o raio é o de cartão. */
+  border-radius: var(--raio-m);
+  padding: 0.75rem;
+  text-align: start;
 }
 
 .redacao-relacao[data-escolhida="sim"] {

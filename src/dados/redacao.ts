@@ -44,6 +44,22 @@ export { CARIMBO_DA_DECISAO, LIMITES_DA_IA, TETO_DO_DTO };
 export const DATA_DE_REFERENCIA_DA_REDACAO = DATA_DE_REFERENCIA;
 
 /**
+ * A data de referência escrita como se lê em português.
+ *
+ * `DATA_DE_REFERENCIA` é ISO — formato de transporte, não de leitura. Interpolá-la crua num
+ * parágrafo entrega «2026-08-22» a quem lê, e a mesma tela mostra «22.08.2026» no carimbo
+ * duas linhas abaixo. A conversão é feita sobre as PARTES da string, e não por `new Date`:
+ * `new Date("2026-08-22")` é meia-noite UTC, e em fuso negativo — o do Brasil — ela volta
+ * como dia 21. Uma data que anda um dia para trás é pior que uma data em formato errado.
+ */
+function comoSeLe(iso: string): string {
+  const [ano, mes, dia] = iso.split("-");
+  return `${dia}.${mes}.${ano}`;
+}
+
+export const DATA_DE_REFERENCIA_LEGIVEL = comoSeLe(DATA_DE_REFERENCIA);
+
+/**
  * Quem assina a trilha. D-25: **não há autenticação neste protótipo**. O nome é autorado e
  * a tela diz que é — ele está aqui para mostrar que a curadoria FICA ASSINADA, não para
  * simular um login que o protótipo não tem. O perfil da Moderação é outro
@@ -56,7 +72,7 @@ export const CURADOR_E_AUTORADO =
   "Não há autenticação neste protótipo. O nome de quem assina é autorado e aparece " +
   "rotulado, em vez de simular um login: o que esta tela precisa provar é que toda " +
   "curadoria fica registrada com autor e carimbo, e não que sabemos quem está do outro " +
-  `lado. O carimbo é derivado da data de referência do build (${DATA_DE_REFERENCIA}), ` +
+  `lado. O carimbo é derivado da data de referência do build (${comoSeLe(DATA_DE_REFERENCIA)}), ` +
   "nunca do relógio de quem abre a página.";
 
 /**
@@ -744,7 +760,8 @@ export const DIFERENCA_PARA_A_MODERACAO =
  */
 export const AUSENCIA_DO_FILTRO_DE_PERIODO =
   `Não há filtro por período, e a razão é do protótipo: sem relógio (o carimbo deriva de ` +
-  `${DATA_DE_REFERENCIA}, a data de referência do build), toda afirmação assinada aqui ` +
+  `${comoSeLe(DATA_DE_REFERENCIA)}, a data de referência do build), toda afirmação ` +
+  "assinada aqui " +
   "carrega a mesma data. Um seletor de período sobre uma data só seria um controle que não " +
   "filtra nada. O filtro por tipo de afirmação, esse, filtra — e está acima.";
 

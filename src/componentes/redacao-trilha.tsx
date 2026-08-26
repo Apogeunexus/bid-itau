@@ -680,7 +680,7 @@ export function RedacaoTrilha({
                   id="resumo-trilha"
                   className="redacao-textarea"
                   data-resumo-trilha={resumo}
-                  rows={2}
+                  rows={4}
                   value={resumo}
                   placeholder="O acervo não traz resumo para esta trilha."
                   onChange={(e) => {
