@@ -75,9 +75,11 @@ function lerEstado(id) {
     const c = linha.split("|").map((x) => x.trim());
     if (c.length < 7) continue;
     const n = Number(c[1]);
-    // O hash chega cru ou entre crases, conforme a sessão. As duas formas valem: uma crase
-    // a mais não pode virar «entrega sem hash no git», que é o alarme mais sério do painel.
-    const commit = c[3].replace(/`/g, "");
+    // O hash chega cru, entre crases, ou em DUPLA quando a tarefa saiu em dois commits
+    // («24a8002 · 2f6baa4»). Nenhuma dessas formas pode virar «entrega sem hash no git»,
+    // que é o alarme mais sério do painel — falso alarme aqui é pior que alarme nenhum,
+    // porque ensina a ignorar o indicador. Fica o primeiro hash reconhecível.
+    const commit = (c[3].replace(/`/g, "").match(/[0-9a-f]{7,40}/) ?? [""])[0];
     if (!Number.isInteger(n) || !commit || /^-+$/.test(commit)) continue;
     entregas.push({ n, tarefa: c[2], commit, quando: c[4], nota: c[5] || null });
   }

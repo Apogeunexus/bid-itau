@@ -187,14 +187,14 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "26/08, 01:44",
+  "varredura": "26/08, 01:45",
   "kpi": {
-    "concluidas": 40,
+    "concluidas": 41,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
-    "divergencias": 1,
-    "sujos": 17,
+    "divergencias": 0,
+    "sujos": 16,
     "folgaS6": 8,
     "pedidos": 10
   },
@@ -568,7 +568,7 @@ const DADOS = {
           "rot": "G8 leitura da moderação",
           "inicio": 8,
           "estado": "entregue",
-          "commit": "24a8002 · 2f6baa4",
+          "commit": "24a8002",
           "nota": "agregada e anonimizada; o DTO não tem campo para nome. **Eu errei e corrigi**: declarei o cruzamento fila × densidade como impossível, e `ItemDaFila.uf` já existia desde a M1, resolvido pela mesma travessia de `densidadePorUf()`. Agora mede: **8 UFs sobre 15 dos 68 itens** — os 53 sem território não são falha de resolução. Ficam 2 ausências, de espécies diferentes",
           "quando": "26.08 02:40"
         },
@@ -590,7 +590,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/admin",
       "sessaoNome": "bid-ita-d4",
       "estado": "rodando",
-      "feitas": 9,
+      "feitas": 10,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -683,16 +683,16 @@ const DADOS = {
           "n": 10,
           "rot": "A10 desempenho da moderação",
           "inicio": 10,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "4da0156",
+          "nota": "**Nenhuma das cinco medidas fecha**, e a tela declara em vez de exibir cinco zeros — «tempo médio de fila: 0» afirmaria fila instantânea quando o fato é que os 68 itens nunca foram decididos. A quinta é medível pela metade: a densidade existe, o tempo de fila não. O recorte contra vigilância está impresso: mede a fila, não a pessoa",
+          "quando": "26.08 03:40"
         },
         {
           "n": 11,
           "rot": "suíte e medidas",
           "inicio": 11,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -1119,6 +1119,13 @@ const DADOS = {
       "rot": "A8 titulares · A9 governança",
       "nota": "A8 separa **usuária** de **retratada** — 575 pessoas no grafo nunca se cadastraram e o direito delas não depende disso. Contestação de verbete é encaminhada à Enciclopédia, não resolvida aqui; escolher «Exclusão» abre o aviso do que ela leva junto **antes** de confirmar. A9 declara os quatro poderes e **não oferece controle para nenhum** (varredura confirma zero botões): um «Suspender» decorativo ensinaria que suspensão é cosmética. No meio disto o disco bateu em **76 MiB livres** e a sonda morreu em `write` — apaguei o `.next-s1`, 668 MB, e voltei",
       "quando": "26.08 03:20"
+    },
+    {
+      "sessao": "S1",
+      "n": 10,
+      "rot": "A10 desempenho da moderação",
+      "nota": "**Nenhuma das cinco medidas fecha**, e a tela declara em vez de exibir cinco zeros — «tempo médio de fila: 0» afirmaria fila instantânea quando o fato é que os 68 itens nunca foram decididos. A quinta é medível pela metade: a densidade existe, o tempo de fila não. O recorte contra vigilância está impresso: mede a fila, não a pessoa",
+      "quando": "26.08 03:40"
     },
     {
       "sessao": "S5",
