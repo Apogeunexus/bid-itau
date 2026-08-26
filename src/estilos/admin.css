@@ -92,6 +92,11 @@
   flex-direction: column;
   gap: 0.75rem;
   min-width: 0;
+  /* A MEDIDA DE LEITURA, e não a largura disponível. A mesma 78ch de `.studio-nota`, e pelo
+   * mesmo motivo: num monitor largo a coluna chegava a 1.100px, o texto quebrava aos 610 e a
+   * régua da barra de ações atravessava um terço vazio — a caixa parecia ter esquecido uma
+   * restrição. O cartão continua ocupando a largura da superfície; o conteúdo dele, não. */
+  max-width: 78ch;
 }
 
 /* A alternativa medida e recusada, com o que ela custaria e o que ganharia.
@@ -122,4 +127,55 @@
 .admin-alternativa-nulo {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * O campo de escrita — o único lugar desta superfície onde se digita.
+ *
+ * Existe porque a primeira versão usou só `.studio-literal`, que dá fonte e nada
+ * mais: na tela, o campo preenchido ficava idêntico a um trecho de texto fixo, e
+ * quem fosse mudar um parâmetro não tinha como saber onde clicar. Um campo sem
+ * moldura não é um campo — é uma afirmação com cursor.
+ *
+ * Monoespaçado porque o que se digita aqui é valor de parâmetro e motivo curto, e
+ * o valor é comparado caractere a caractere com o que está na tela ao lado.
+ * ------------------------------------------------------------------------- */
+
+.admin-campo {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+}
+
+.admin-campo:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 1px;
+}
+
+/* ---------------------------------------------------------------------------
+ * A tabela de concentradores — a única que precisa de coluna de rótulo larga.
+ *
+ * `.studio-linha` fixa a primeira coluna em 11rem, que serve para «Título» ou
+ * «Espaço». Aqui o rótulo é um id — `linguagem:cms:artes-visuais` —, e a 11rem
+ * ele quebrava no meio da palavra: `linguagem:cms:teat` / `ro`. Um id partido em
+ * duas linhas derrota o motivo de ele ser monoespaçado, que é ser comparado
+ * caractere a caractere.
+ *
+ * LARGURA FIXA, E NÃO `max-content`. Com `max-content` cada linha é uma grade
+ * própria e dimensiona a coluna pelo seu próprio id: os ids param de quebrar, mas
+ * as contagens passam a começar em x diferente a cada linha, e uma tabela de
+ * comparação com a coluna de números serrilhada é pior do que a quebra que ela
+ * consertou. 19rem cabe o maior id do acervo de hoje; um id maior amanhã quebra em
+ * duas linhas, com a coluna ainda alinhada — que é a degradação certa.
+ *
+ * `studio.css` não é tocada: ela é da S7, e o ajuste é desta tela.
+ * ------------------------------------------------------------------------- */
+
+.admin-concentradores .studio-linha {
+  grid-template-columns: 19rem 1fr;
 }

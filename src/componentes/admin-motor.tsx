@@ -264,7 +264,7 @@ function FormularioDeMudanca({
       </label>
       <input
         id={idValor}
-        className="studio-literal"
+        className="admin-campo"
         value={para}
         onChange={(e) => setPara(e.target.value)}
         inputMode="decimal"
@@ -275,7 +275,7 @@ function FormularioDeMudanca({
       </label>
       <input
         id={idMotivo}
-        className="studio-literal"
+        className="admin-campo"
         value={motivo}
         onChange={(e) => setMotivo(e.target.value)}
       />
@@ -325,7 +325,7 @@ function PainelDeConcentradores({ dados }: { dados: Concentradores }) {
         limiar aumenta quantas entram nesta lista — e cada uma que entra é um caminho a menos
         entre duas obras. A tabela mostra as {dados.maiores.length} maiores das {dados.total}.
       </p>
-      <ul className="studio-tabela">
+      <ul className="studio-tabela admin-concentradores">
         {dados.maiores.map((c) => (
           <li className="studio-linha" key={c.id}>
             <span className="studio-celula studio-celula-rotulo studio-literal">{c.id}</span>
