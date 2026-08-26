@@ -469,6 +469,267 @@ async function principal() {
       "presente, com causa",
     );
 
+    // =======================================================================
+    titulo("── M2 · a ficha: conferir campo a campo, e a barreira explicada ──");
+    // =======================================================================
+
+    // Entra pela FILA, como quem opera entra: o link leva o item aberto no endereço.
+    await abrirFilaLimpa(cdp);
+    const alvo = await cdp.avaliar(
+      naPagina(`
+        // Um item COM imagem e SEM crédito — é o caso que a barreira de 114 existe para
+        // pegar, e medir a barreira num item que não a dispara não mede nada.
+        const link = document.querySelector('[data-abrir-ficha]');
+        return link ? link.getAttribute('href') : null;
+      `),
+    );
+    exigir(Boolean(alvo), "a fila leva à ficha, com o item no endereço", String(alvo), "um href");
+
+    await cdp.navegar(`${BASE}${alvo}`);
+    await cdp.assentar();
+
+    const ficha = await cdp.avaliar(
+      naPagina(`
+        const raiz = document.querySelector('[data-ficha-moderacao]');
+        return {
+          abriu: Boolean(raiz),
+          item: raiz ? raiz.getAttribute('data-item-aberto') : null,
+          campos: todos('[data-ficha-campos] .studio-linha').length,
+          chave: document.querySelector('[data-chave-identidade]')?.getAttribute('data-chave-identidade') ?? null,
+          componentes: todos('[data-chave-componente]').length,
+          conferencias: todos('[data-conferencia]').length,
+          acoes: todos('[data-acao-moderacao]').length,
+        };
+      `),
+    );
+
+    // O `?item=` precisa ABRIR NO ITEM PEDIDO. Sob export estático o HTML é o mesmo para
+    // todos, e quem escolhe é o cliente — se isto falhar, todo link copiado da fila cai
+    // sempre no mesmo registro e a ficha vira uma tela só.
+    exigir(
+      ficha.abriu && decodeURIComponent(String(alvo)).includes(String(ficha.item)),
+      "a ficha abre NO ITEM que o endereço pediu",
+      `href «${alvo}» · abriu em «${ficha.item}»`,
+      "o mesmo item",
+    );
+    exigir(
+      ficha.campos >= 10 && ficha.componentes === 3 && ficha.conferencias === 4,
+      "a ficha traz os campos, os três componentes da chave e as quatro conferências",
+      `${ficha.campos} campos · ${ficha.componentes} componentes · ${ficha.conferencias} conferências`,
+      "≥10 · 3 · 4",
+    );
+
+    // A chave é a de §6, e o acervo sustenta só o título na maioria dos itens. O gate mede
+    // que a marcação BATE com os bits — uma tela que marcasse os três sempre seria pior que
+    // não marcar nenhum, porque afirmaria uma identidade que o registro não tem.
+    const chaveConfere = await cdp.avaliar(
+      naPagina(`
+        const bits = document.querySelector('[data-chave-identidade]').getAttribute('data-chave-identidade');
+        const marcados = todos('[data-chave-componente]').map((el) => el.getAttribute('data-atende'));
+        const esperado = bits.split('').map((b) => (b === '1' ? 'sim' : 'nao'));
+        return { bits, marcados, bate: JSON.stringify(marcados) === JSON.stringify(esperado) };
+      `),
+    );
+    exigir(
+      chaveConfere.bate,
+      "os componentes marcados na tela batem com os bits da chave, um a um",
+      `bits «${chaveConfere.bits}» · marcados ${JSON.stringify(chaveConfere.marcados)}`,
+      "marcação idêntica aos bits",
+    );
+
+    // ---- 114 · a barreira: aprovar trava, o resto não ----
+    const barreira = await cdp.avaliar(
+      naPagina(`
+        const bloqueio = document.querySelector('[data-bloqueio-publicacao]');
+        const aprovar = document.querySelector('[data-acao-moderacao="aprovar"]');
+        const vetar = document.querySelector('[data-acao-moderacao="vetar"]');
+        const devolver = document.querySelector('[data-acao-moderacao="devolver"]');
+        return {
+          temBloqueio: Boolean(bloqueio),
+          explica: bloqueio ? (bloqueio.textContent || '').includes('não entra no acervo público') : false,
+          dizDeQuem: bloqueio ? (bloqueio.textContent || '').includes('Organização') : false,
+          aprovarBarrado: aprovar ? aprovar.disabled : null,
+          vetarLivre: vetar ? !vetar.disabled : null,
+          devolverLivre: devolver ? !devolver.disabled : null,
+        };
+      `),
+    );
+    if (barreira.temBloqueio) {
+      exigir(
+        barreira.explica && barreira.dizDeQuem,
+        "a barreira EXPLICA por que impede e de quem é a responsabilidade",
+        `explica: ${barreira.explica} · nomeia o responsável: ${barreira.dizDeQuem}`,
+        "as duas coisas",
+      );
+      // Uma tela que trava TUDO obriga quem modera a abandonar o item, e item abandonado
+      // fica na fila para sempre. Só aprovar trava.
+      exigir(
+        barreira.aprovarBarrado === true &&
+          barreira.vetarLivre === true &&
+          barreira.devolverLivre === true,
+        "com a barreira, SÓ aprovar trava — vetar e devolver seguem disponíveis",
+        `aprovar ${barreira.aprovarBarrado} · vetar livre ${barreira.vetarLivre} · devolver livre ${barreira.devolverLivre}`,
+        "true · true · true",
+      );
+    } else {
+      exigir(
+        barreira.aprovarBarrado === false,
+        "sem barreira, aprovar está disponível",
+        `aprovar barrado: ${barreira.aprovarBarrado}`,
+        "false",
+      );
+    }
+
+    // ---- 118 · o termo se ENCAMINHA, e o botão nunca oferece «criar» ----
+    const termo = await cdp.avaliar(
+      naPagina(`
+        const bloco = document.querySelector('[data-conferencia="termo"]');
+        const botao = document.querySelector('[data-encaminhar-termo]');
+        const t = bloco ? (bloco.textContent || '') : '';
+        return {
+          existe: Boolean(bloco),
+          diz: t.includes('ENCAMINHA ao Editor e não decide'),
+          ofereceCriar: t.toLowerCase().includes('criar termo'),
+          rotulo: botao ? (botao.textContent || '').trim() : null,
+        };
+      `),
+    );
+    exigir(
+      termo.existe && termo.diz && termo.rotulo === "encaminhar ao Editor",
+      "o termo se ENCAMINHA ao Editor — o botão não oferece criar",
+      `rótulo «${termo.rotulo}» · declara o limite: ${termo.diz}`,
+      "«encaminhar ao Editor»",
+    );
+
+    // ---- 119 · a classificação se CONFERE, não se arbitra ----
+    const classificacao = await cdp.avaliar(
+      naPagina(`
+        const bloco = document.querySelector('[data-conferencia="classificacao"]');
+        const t = bloco ? (bloco.textContent || '') : '';
+        return {
+          existe: Boolean(bloco),
+          confereNaoArbitra: t.includes('CONFERE O DECLARADO, não arbitra'),
+          dizDeQuem: t.includes('quem realiza o evento responde'),
+        };
+      `),
+    );
+    exigir(
+      classificacao.existe && classificacao.confereNaoArbitra && classificacao.dizDeQuem,
+      "a classificação indicativa é CONFERIDA, e a tela diz de quem é a responsabilidade",
+      `confere e não arbitra: ${classificacao.confereNaoArbitra} · nomeia o responsável: ${classificacao.dizDeQuem}`,
+      "as duas coisas",
+    );
+
+    // ---- o veto da ficha tem as mesmas três travas ----
+    await cdp.clicar(`document.querySelector('[data-acao-moderacao="vetar"]')`);
+    await cdp.assentar();
+    const vetoNaFicha = await cdp.avaliar(
+      naPagina(`
+        const botao = document.querySelector('[data-veto-bloqueado]');
+        botao.click();
+        const form = botao.closest('form');
+        if (form) form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        return {
+          bloqueado: botao.getAttribute('data-veto-bloqueado'),
+          desabilitado: botao.disabled,
+          decisoes: todos('[data-decisao-moderacao]').length,
+        };
+      `),
+    );
+    exigir(
+      vetoNaFicha.bloqueado === "sim" && vetoNaFicha.desabilitado && vetoNaFicha.decisoes === 0,
+      "o veto DA FICHA também não conclui com o campo vazio",
+      `bloqueado=${vetoNaFicha.bloqueado} · disabled=${vetoNaFicha.desabilitado} · ${vetoNaFicha.decisoes} decisões`,
+      "sim · true · 0",
+    );
+
+    // ---- devolver NÃO exige motivo: a assimetria, exercida ----
+    await cdp.avaliar(
+      naPagina(`
+        const cancelar = todos('.moderacao-veto button').find((b) => (b.textContent || '').includes('Cancelar'));
+        if (cancelar) cancelar.click();
+        return true;
+      `),
+    );
+    await cdp.assentar();
+    await cdp.clicar(`document.querySelector('[data-acao-moderacao="devolver"]')`);
+    await cdp.assentar();
+
+    const aposDevolver = await cdp.avaliar(
+      naPagina(`
+        const d = document.querySelector('[data-decisao-moderacao]');
+        const t = d ? (d.textContent || '') : '';
+        return {
+          registrou: Boolean(d),
+          acao: d ? d.getAttribute('data-acao-registrada') : null,
+          temSituacao: t.includes('devolvido'),
+          temAutor: t.includes('Moderação'),
+        };
+      `),
+    );
+    // A ASSIMETRIA, exercida e não descrita: devolver concluiu com o comentário VAZIO. Se
+    // este gate ficasse vermelho, a tela estaria cobrando explicação de quem devolve a
+    // palavra — e a distinção que a sessão inteira defende teria sumido do produto.
+    exigir(
+      aposDevolver.registrou &&
+        aposDevolver.acao === "devolver" &&
+        aposDevolver.temSituacao &&
+        aposDevolver.temAutor,
+      "DEVOLVER conclui com o comentário vazio — a assimetria exercida, não descrita",
+      `ação «${aposDevolver.acao}» · situação na tela: ${aposDevolver.temSituacao} · autor: ${aposDevolver.temAutor}`,
+      "devolver · registrado com situação e autor",
+    );
+
+    // ---- DEFEITOS DE FORMA, que gesto não pega ----
+    //
+    // Os dois vieram de olhar a tela, não de rodar a suíte: um controle desabilitado com
+    // desenho de ativo, e uma lista que dizia «68 pendentes» mostrando oito. Viraram gate
+    // para não voltarem na próxima tela.
+    const forma = await cdp.avaliar(
+      naPagina(`
+        const desabilitados = todos('.moderacao [disabled]');
+        const opacidades = desabilitados.map((el) => Number(getComputedStyle(el).opacity));
+        const truncada = document.querySelector('[data-lista-truncada]');
+        const t = truncada ? (truncada.textContent || '') : '';
+        return {
+          desabilitados: desabilitados.length,
+          // Um controle desabilitado tem de PARECER desabilitado. Sem isso quem opera
+          // clica, nada acontece, e só então lê o texto que explica o porquê.
+          todosApagados: opacidades.every((o) => o < 0.7),
+          declaraTruncagem: Boolean(truncada),
+          diseQuantosFaltam: /\d+/.test(t) && t.includes('esta lista não mostra'),
+        };
+      `),
+    );
+    exigir(
+      forma.desabilitados === 0 || forma.todosApagados,
+      "todo controle desabilitado PARECE desabilitado",
+      `${forma.desabilitados} desabilitado(s) · todos apagados: ${forma.todosApagados}`,
+      "nenhum com desenho de ativo",
+    );
+    exigir(
+      forma.declaraTruncagem && forma.diseQuantosFaltam,
+      "a lista de atalho DECLARA quantos pendentes ela não mostra",
+      `declara: ${forma.declaraTruncagem} · com número: ${forma.diseQuantosFaltam}`,
+      "lista truncada nunca em silêncio",
+    );
+
+    // ---- e a decisão tomada na ficha aparece na FILA: um armazém só ----
+    await cdp.navegar(ROTA_DA_FILA);
+    await cdp.assentar();
+    const naFila = await cdp.avaliar(
+      naPagina(`
+        const ds = todos('[data-decisao-moderacao]');
+        return { decisoes: ds.length, acao: ds[0] ? ds[0].getAttribute('data-acao-registrada') : null };
+      `),
+    );
+    exigir(
+      naFila.decisoes === 1 && naFila.acao === "devolver",
+      "a decisão tomada na FICHA aparece na FILA — as duas telas escrevem no mesmo armazém",
+      `${naFila.decisoes} decisão «${naFila.acao}» na fila`,
+      "1 · devolver",
+    );
+
     // -----------------------------------------------------------------------
     titulo("── zero erro de console na navegação inteira ──");
     // -----------------------------------------------------------------------

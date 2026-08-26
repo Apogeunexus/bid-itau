@@ -643,3 +643,162 @@
   font-size: var(--tipo-micro);
   white-space: nowrap;
 }
+
+/* ===========================================================================
+ * M2 — a ficha do item
+ *
+ * A ficha inverte a proporção da fila: aqui a coluna larga é a ESQUERDA, onde
+ * mora o registro campo a campo, e a decisão fica à direita. Na fila o item
+ * escolhido é o que interessa e a lista é o índice; na ficha é o contrário —
+ * quem abriu já escolheu, e o que ele precisa é ler.
+ * ======================================================================== */
+
+.moderacao-colunas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--web-gap);
+}
+
+[data-view="web"] .moderacao-colunas {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: start;
+}
+
+.moderacao-coluna-ficha,
+.moderacao-coluna-decisao {
+  min-width: 0;
+}
+
+.moderacao-coluna-decisao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--web-gap);
+}
+
+.moderacao-ficha-atalhos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * A cadeia de identidade
+ *
+ * Mesmo desenho dos componentes do score, e de propósito: as duas listas fazem
+ * a mesma promessa — «esta conta é conferível, um item de cada vez» — e dar
+ * formas diferentes a elas faria quem opera reaprender a leitura.
+ * ------------------------------------------------------------------------- */
+
+.moderacao-chave {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.moderacao-componentes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.moderacao-componente {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+/* O componente que NÃO se sustenta fica lavado, e não vermelho: a chave em 1 de
+ * 3 é o estado normal deste acervo, não um erro do registro que está aberto.
+ * Pintar 60 fichas de alarme ensinaria a ignorar o alarme. */
+.moderacao-componente[data-atende="nao"] {
+  opacity: 0.72;
+}
+
+.moderacao-componente-marca {
+  color: var(--cor-acao-tinta);
+  line-height: 1.4;
+}
+
+.moderacao-componente[data-atende="nao"] .moderacao-componente-marca {
+  color: var(--cor-tinta-3);
+}
+
+.moderacao-componente-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * A barreira de publicação
+ *
+ * É o único bloco desta folha que usa a cor de ação na borda, e o motivo é que
+ * ele é a única coisa da tela que MUDA O QUE PODE SER FEITO. Declaração de
+ * ausência informa; a barreira desabilita um botão, e quem opera precisa achar
+ * a explicação disso sem procurar.
+ * ------------------------------------------------------------------------- */
+
+.moderacao-bloqueio {
+  border-left: 2px solid var(--cor-acao);
+}
+
+.moderacao-conferencias {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.moderacao-conferencia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 1px solid var(--cor-borda-forte);
+}
+
+/* A conferência que impede a publicação se distingue pela borda, não por fundo
+ * novo: nenhum hex entra aqui. */
+.moderacao-conferencia[data-conferencia="credito"] {
+  border-left-color: var(--cor-acao);
+}
+
+/* ---------------------------------------------------------------------------
+ * A lista de outros itens, para trocar de ficha sem trocar de rota
+ * ------------------------------------------------------------------------- */
+
+.moderacao-atalho-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.moderacao-outros-itens .moderacao-lista {
+  margin-top: 0.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Controle desabilitado PARECE desabilitado
+ *
+ * Pego de olho, não por gate: «encaminhar ao Editor» num item sem termo estava
+ * `disabled` e continuava com o desenho de botão ativo. Quem opera clicaria,
+ * nada aconteceria, e o texto ao lado explicando o porquê só seria lido depois
+ * da tentativa frustrada. O estado precisa estar na FORMA, não só no atributo.
+ * ------------------------------------------------------------------------- */
+
+.moderacao [disabled],
+.moderacao .studio-botao[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

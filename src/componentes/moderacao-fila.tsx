@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ROTULO_DA_ACAO, decisaoCompleta, situacaoApos } from "@/dados/tipos-acesso";
+import { CHAVE_DO_ARMAZEM, gravarArmazem, lerArmazem } from "./moderacao-armazem";
 import type {
   AcaoDeclarada,
   AcaoDaModeracao,
@@ -71,54 +73,6 @@ const ROTULO_ORIGEM: Record<OrigemDoItem, string> = {
 // ---------------------------------------------------------------------------
 // O armazém — a decisão sobrevive ao recarregamento, e o reinício a apaga
 // ---------------------------------------------------------------------------
-
-/**
- * A chave versionada deste protótipo. `moderacao.v1`, no mesmo espaço de nomes que a S7
- * usa em `studio.v1` — cada nível tem o seu, e o número no fim é o que permite mudar a
- * forma do registro sem ler lixo da versão anterior no navegador de quem avalia.
- */
-const CHAVE_DO_ARMAZEM = "moderacao.v1";
-
-/**
- * LEITURA SÓ EM `useEffect`, NUNCA NO RENDER (T-03-10). Ler `localStorage` durante a
- * renderização faria o HTML exportado no build e a página hidratada no navegador
- * divergirem na primeira passada — o servidor não tem armazém nenhum, e o cliente pode ter
- * cinco decisões. O sintoma seria um aviso de hidratação e, pior, uma tela que mostra o
- * estado errado por um quadro.
- */
-function lerArmazem(): Decisao[] {
-  try {
-    const cru = window.localStorage.getItem(CHAVE_DO_ARMAZEM);
-    if (!cru) return [];
-    const lido: unknown = JSON.parse(cru);
-    if (!Array.isArray(lido)) return [];
-    // Confere campo a campo em vez de confiar no que estava no navegador. O armazém é
-    // entrada externa como qualquer outra: uma versão anterior da tela, ou uma extensão,
-    // pode ter deixado ali qualquer coisa, e uma decisão sem autor renderizaria uma linha
-    // de histórico assinada por `undefined`.
-    return lido.filter(
-      (d): d is Decisao =>
-        typeof d === "object" && d !== null &&
-        typeof (d as Decisao).itemId === "string" &&
-        typeof (d as Decisao).acao === "string" &&
-        typeof (d as Decisao).autor === "string" &&
-        typeof (d as Decisao).quando === "string",
-    );
-  } catch {
-    // Modo privado, cota estourada, JSON corrompido. A tela abre vazia e funciona; o que
-    // ela não pode é deixar de abrir porque o armazém do navegador recusou.
-    return [];
-  }
-}
-
-function gravarArmazem(decisoes: Decisao[]): void {
-  try {
-    window.localStorage.setItem(CHAVE_DO_ARMAZEM, JSON.stringify(decisoes));
-  } catch {
-    // Sem armazém a sessão continua: as decisões vivem em memória e somem ao recarregar.
-    // Falhar a gravação não pode derrubar a decisão que acabou de ser tomada.
-  }
-}
 
 function comSeparador(n: number): string {
   return n.toLocaleString("pt-BR");
@@ -317,8 +271,13 @@ export function ModeracaoFila({
   const [decisoes, setDecisoes] = useState<Decisao[]>([]);
   const [armazemLido, setArmazemLido] = useState(false);
 
+  /** O que o navegador respondeu, quando recusou. Declarado na tela, nunca engolido. */
+  const [falhaDoArmazem, setFalhaDoArmazem] = useState<string | null>(null);
+
   useEffect(() => {
-    setDecisoes(lerArmazem());
+    const lido = lerArmazem();
+    setDecisoes(lido.decisoes);
+    setFalhaDoArmazem(lido.falha);
     setArmazemLido(true);
   }, []);
 
@@ -326,7 +285,7 @@ export function ModeracaoFila({
     // Só grava DEPOIS de ter lido. Sem esta guarda, o primeiro efeito gravaria o array
     // vazio do estado inicial por cima do que estava no navegador — e o recarregamento
     // apagaria as decisões em vez de as preservar.
-    if (armazemLido) gravarArmazem(decisoes);
+    if (armazemLido) setFalhaDoArmazem(gravarArmazem(decisoes));
   }, [decisoes, armazemLido]);
 
   /** O veto é a única ação com passo de confirmação. A assimetria é o conteúdo (D-83). */
@@ -853,6 +812,23 @@ export function ModeracaoFila({
                 </div>
               ) : null}
 
+              {/* A PORTA PARA A FICHA. A fila resolve o que é evidente; quando não é, a
+                  conferência campo a campo é outra tela — e o link leva o item aberto no
+                  endereço, para quem copiar o link chegar no mesmo registro. */}
+              <div className="moderacao-ficha-atalhos">
+                <Link
+                  className="studio-botao"
+                  data-abrir-ficha={item.id}
+                  href={`/moderacao/item/?item=${encodeURIComponent(item.id)}`}
+                >
+                  conferir campo a campo →
+                </Link>
+                <span className="studio-rotulo">
+                  a ficha traz a chave de identidade, os direitos de imagem e o que impede a
+                  publicação
+                </span>
+              </div>
+
               {/* ---- D-83: as quatro ações ---- */}
               <div className="studio-acoes moderacao-acoes">
                 {acoes.map((a) => (
@@ -1015,6 +991,12 @@ export function ModeracaoFila({
             <div className="studio-nao-sustenta" data-nao-sustenta>
               <span className="studio-nao-sustenta-rotulo">sobre a autoria da decisão</span>
               <p>{moderadorEhAutorado}</p>
+              {/* O navegador pode recusar guardar — janela privada, cota, site bloqueado.
+                  Seguir aceitando decisões sem avisar faria quem opera descobrir só ao
+                  recarregar, com tudo já perdido. */}
+              {falhaDoArmazem ? (
+                <p data-falha-armazem>{falhaDoArmazem}</p>
+              ) : null}
               <p>
                 As decisões ficam no navegador de quem opera, sob a chave{" "}
                 <code className="studio-literal">{CHAVE_DO_ARMAZEM}</code>:{" "}
