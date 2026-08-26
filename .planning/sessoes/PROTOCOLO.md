@@ -215,6 +215,23 @@ moderação**.
 
 **Abra a tela antes de chamá-la de pronta.** Toda vez que alguém abriu, achou.
 
+### 9.3b · Coluna colada mais alta que a janela esconde o próprio pé
+
+`position: sticky` numa coluna de 3.240 px dentro de uma janela de 960 **gruda no topo e
+nunca rola para revelar o fim**. O que fica abaixo da dobra da coluna é inalcançável — não
+com rolagem difícil: **inalcançável**. Achado em duas telas da Organização, e o pedaço
+perdido era justamente o painel «o que falta», que é o motivo de o padrão de duas colunas
+existir.
+
+**Nenhum portão vê:** `tsc` compila, `verificar-ds` confere token, e a sonda de comportamento
+clica no que está visível. Só medir a altura da coluna contra a altura da janela pega.
+
+**A saída:** teto de altura na coluna e rolagem por dentro, no mesmo desenho que
+`.web-coluna-fixa` já usa no app público.
+
+**Quem tem coluna colada:** `studio-publicar.tsx`, `studio-elenco.tsx`, `studio-grade.tsx`,
+`organizacao.css`, `studio-duplicatas.css`. Meça a sua.
+
 ### 9.4 · Duas armadilhas de ferramenta, do mesmo tipo
 
 - **`innerText.includes('rótulo (N)')` sobre string montada em JSX** dá falso negativo *e*

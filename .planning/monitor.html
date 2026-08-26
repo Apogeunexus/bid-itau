@@ -187,15 +187,15 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "26/08, 02:02",
+  "varredura": "26/08, 02:17",
   "kpi": {
-    "concluidas": 43,
+    "concluidas": 45,
     "totalTarefas": 64,
-    "ativas": 6,
+    "ativas": 5,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 10,
-    "folgaS6": 8,
+    "sujos": 11,
+    "folgaS6": 7,
     "pedidos": 10
   },
   "dependencias": [
@@ -240,7 +240,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-63",
       "estado": "rodando",
-      "feitas": 3,
+      "feitas": 4,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -282,16 +282,16 @@ const DADOS = {
           "n": 4,
           "rot": "P3 obra e elenco",
           "inicio": 3,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "e1fb5e0",
+          "nota": "**Contei o número da tese errado e quase reportei.** 426 arestas `atua_em` apontam para `evento`, mas **zero para evento datado** — os que a Enciclopédia liga a artistas são históricos, sem sessão; os 129 com ocorrência têm zero artistas. «Evento» e «evento datado» são disjuntos neste acervo. Decidi **ler os papéis das próprias arestas** (3 distintos, «artista» em 312) em vez de escrever lista à mão, e **pôr o papel antes da busca** — escolher a pessoa primeiro convida a vincular sem papel, que é a aresta inválida que a tela impede. Consertei também a classe de combinação da busca, escrita com caracteres literais: NFC a apagaria sem rastro e o `tsc` seguiria verde.",
+          "quando": "26.08 01:10"
         },
         {
           "n": 5,
           "rot": "P4 espaço e temporada",
           "inicio": 4,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -812,8 +812,8 @@ const DADOS = {
       "onda": 2,
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-53 [913196]",
-      "estado": "rodando",
-      "feitas": 10,
+      "estado": "encerrada",
+      "feitas": 11,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -922,10 +922,10 @@ const DADOS = {
           "n": 11,
           "rot": "suíte e medidas",
           "inicio": 21,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "8e8303f",
+          "nota": "Dez portões estáticos e onze de navegador, mais o modo **`--provar-ausencias`** do §9.1: sete portões que afirmam que algo NÃO existe foram **vistos vermelhos com o defeito injetado** e os arquivos restaurados byte a byte. **A medida de pixel achou defeito real:** a coluna colada da tela de espaços media **3.240 px numa janela de 960** — sticky mais alto que a janela nunca revela o próprio pé, e o pé era o painel «o que falta». Ganhou teto e rolagem própria; as dez agora medem 920 px alcançáveis. **50 verdes · 0 falhas.**",
+          "quando": "26.08 06:00"
         }
       ]
     }
@@ -951,6 +951,13 @@ const DADOS = {
       "rot": "P5 grade de ocorrências",
       "nota": "A tela onde a sessão datada passa a existir. Decidi **teto de 200 sessões por aplicação, declarado na prévia** — uma temporada de 87 dias × 7 dias × 3 horários passa de mil linhas, e limitar a entrada vem antes de otimizar o que veio. Decidi também **aritmética em `Date.UTC` com leitores `getUTC*`**, nunca `new Date(string)`: em fuso brasileiro a grade sairia deslocada em um dia sem nenhum portão ver. Extraí o seletor de registro para `studio-seletor.tsx` — segundo caso de uso chegou. E `.studio-botao` ganhou estado desabilitado, que faltava para as seis sessões.",
       "quando": "26.08 00:05"
+    },
+    {
+      "sessao": "S7",
+      "n": 4,
+      "rot": "P3 obra e elenco",
+      "nota": "**Contei o número da tese errado e quase reportei.** 426 arestas `atua_em` apontam para `evento`, mas **zero para evento datado** — os que a Enciclopédia liga a artistas são históricos, sem sessão; os 129 com ocorrência têm zero artistas. «Evento» e «evento datado» são disjuntos neste acervo. Decidi **ler os papéis das próprias arestas** (3 distintos, «artista» em 312) em vez de escrever lista à mão, e **pôr o papel antes da busca** — escolher a pessoa primeiro convida a vincular sem papel, que é a aresta inválida que a tela impede. Consertei também a classe de combinação da busca, escrita com caracteres literais: NFC a apagaria sem rastro e o `tsc` seguiria verde.",
+      "quando": "26.08 01:10"
     },
     {
       "sessao": "S3",
@@ -1231,6 +1238,13 @@ const DADOS = {
       "rot": "O9 alcance · O10 conformidade",
       "nota": "Metade da O9 é a lista do que ela **se recusa a exibir** — cinco medidas, cada uma com o motivo, no mesmo tamanho do que ela conta. A O10 lê a fila do produtor **pelo contrato compartilhado**, e o smoke prova que o armazenamento dele sai **byte a byte igual** depois da visita. **E achei um defeito meu de modelagem:** `realiza` é de muitos para muitos — 527 arestas cobrem 41 dos 300 eventos, ~13 instituições por evento — e o meu DTO devolvia a **primeira** da adjacência. A instituição com que a demonstração abre via **zero** eventos no próprio painel. Virou lista.",
       "quando": "26.08 05:10"
+    },
+    {
+      "sessao": "S6",
+      "n": 11,
+      "rot": "suíte e medidas",
+      "nota": "Dez portões estáticos e onze de navegador, mais o modo **`--provar-ausencias`** do §9.1: sete portões que afirmam que algo NÃO existe foram **vistos vermelhos com o defeito injetado** e os arquivos restaurados byte a byte. **A medida de pixel achou defeito real:** a coluna colada da tela de espaços media **3.240 px numa janela de 960** — sticky mais alto que a janela nunca revela o próprio pé, e o pé era o painel «o que falta». Ganhou teto e rolagem própria; as dez agora medem 920 px alcançáveis. **50 verdes · 0 falhas.**",
+      "quando": "26.08 06:00"
     }
   ]
 };
