@@ -423,3 +423,144 @@ export function declaracoesDasInstituicoes(n: NumerosDasInstituicoes): Declaraca
     },
   ];
 }
+
+// ---------------------------------------------------------------------------
+// A mídia — O5
+// ---------------------------------------------------------------------------
+
+export interface MidiaDoAcervo {
+  id: string;
+  slug: string;
+  titulo: string;
+  resumo: string;
+  /** Onde o CMS publica o item — `podcasts`, `series`, `videos`… NÃO é o formato do
+   *  arquivo, e a tela não o trata como se fosse. */
+  categoria: string;
+  imagem: string | null;
+  creditoImagem: string | null;
+  /** A descrição alternativa da imagem, que o acervo às vezes traz e às vezes não. */
+  imagemAlt: string | null;
+  publicadoEm: string | null;
+  linguagens: string[];
+  /** As 8 dimensões como o acervo as publica, e o ato de declarar separado delas. */
+  acessibilidade: Record<string, boolean>;
+  declaraAcessibilidade: boolean;
+}
+
+export interface NumerosDasMidias {
+  total: number;
+  daFonte: number;
+  declaramAcessibilidade: number;
+  comImagem: number;
+  comCredito: number;
+  semCredito: number;
+  comImagemAlt: number;
+  /** Quantos itens por categoria do CMS, do maior para o menor. */
+  porCategoria: { categoria: string; quantos: number }[];
+  /** Quantos itens marcam cada uma das 8 dimensões. É a medida mais dura da tela. */
+  porDimensao: { chave: string; rotulo: string; quantos: number }[];
+}
+
+export function midiasDoAcervo(): MidiaDoAcervo[] {
+  const saida = entidadesDe("midia").map((e) => ({
+    id: e.id,
+    slug: e.slug,
+    titulo: e.titulo,
+    resumo: (e.resumo ?? "").trim(),
+    categoria: texto(e, "categoria"),
+    imagem: e.imagem ?? null,
+    creditoImagem: e.creditoImagem ?? null,
+    imagemAlt: texto(e, "imagemAlt") || null,
+    publicadoEm: texto(e, "publicadoEm") || null,
+    linguagens: e.linguagens.map((id) => ROTULO_DA_LINGUAGEM.get(id) ?? id),
+    acessibilidade: { ...e.acessibilidade } as unknown as Record<string, boolean>,
+    declaraAcessibilidade: e.declaraAcessibilidade,
+  }));
+
+  // Os SEM crédito primeiro, e não em ordem de título: eles são a fila de trabalho da tela,
+  // e uma fila que abre no meio da lista alfabética não é uma fila.
+  saida.sort((a, b) => {
+    const bloqueadoA = a.creditoImagem ? 1 : 0;
+    const bloqueadoB = b.creditoImagem ? 1 : 0;
+    if (bloqueadoA !== bloqueadoB) return bloqueadoA - bloqueadoB;
+    return a.titulo.localeCompare(b.titulo, "pt-BR");
+  });
+  return saida;
+}
+
+/** Os rótulos das 8, na ordem do contrato. Espelha `DIMENSOES_DE_ACESSIBILIDADE`, que mora
+ *  em `tipos-acesso.ts` — mas este módulo é de servidor e a contagem é feita aqui. */
+const DIMENSOES_MEDIDAS: readonly { chave: string; rotulo: string }[] = [
+  { chave: "audio_description", rotulo: "audiodescrição" },
+  { chave: "libras", rotulo: "Libras" },
+  { chave: "descriptive_subtitle", rotulo: "legenda descritiva" },
+  { chave: "closed_caption", rotulo: "closed caption" },
+  { chave: "open_caption", rotulo: "legenda aberta" },
+  { chave: "simultaneous_translation", rotulo: "tradução simultânea" },
+  { chave: "stenotypy", rotulo: "estenotipia" },
+  { chave: "subtitle", rotulo: "legenda" },
+];
+
+export function numerosDasMidias(): NumerosDasMidias {
+  const midias = entidadesDe("midia");
+  const categorias = new Map<string, number>();
+  for (const e of midias) {
+    const c = texto(e, "categoria") || "sem categoria";
+    categorias.set(c, (categorias.get(c) ?? 0) + 1);
+  }
+
+  return {
+    total: midias.length,
+    daFonte: midias.filter((e) => e.procedencia === "ic").length,
+    declaramAcessibilidade: midias.filter((e) => e.declaraAcessibilidade).length,
+    comImagem: midias.filter((e) => e.imagem).length,
+    comCredito: midias.filter((e) => e.creditoImagem).length,
+    semCredito: midias.filter((e) => !e.creditoImagem).length,
+    comImagemAlt: midias.filter((e) => texto(e, "imagemAlt").length > 0).length,
+    porCategoria: [...categorias.entries()]
+      .map(([categoria, quantos]) => ({ categoria, quantos }))
+      .sort((a, b) => b.quantos - a.quantos || a.categoria.localeCompare(b.categoria)),
+    porDimensao: DIMENSOES_MEDIDAS.map((d) => ({
+      ...d,
+      quantos: midias.filter((e) => (e.acessibilidade as unknown as Record<string, boolean>)[d.chave])
+        .length,
+    })),
+  };
+}
+
+export function declaracoesDasMidias(n: NumerosDasMidias): DeclaracaoDaTela[] {
+  const maior = n.porCategoria[0];
+  const zeradas = n.porDimensao.filter((d) => d.quantos === 0);
+
+  return [
+    {
+      titulo: `${n.semCredito} itens não publicam`,
+      texto:
+        `${n.comCredito} de ${n.total} mídias têm crédito. As ${n.semCredito} sem crédito não ` +
+        `publicam a imagem — crédito é bloqueante (165), e isso é trabalho concreto e nomeado: ` +
+        `esta tela abre por elas, e não em ordem alfabética.`,
+    },
+    {
+      titulo: "A ficha de acessibilidade existe, e está vazia",
+      texto:
+        `${n.declaramAcessibilidade} de ${n.total} mídias DECLARAM a ficha — ou seja, o ato foi ` +
+        `feito em 100% do acervo. E ainda assim ${zeradas.length} das 8 dimensões estão em ZERO ` +
+        `itens: ${zeradas.map((d) => d.rotulo).join(", ")}. Ficha preenchida não é ficha ` +
+        `atendida, e a diferença entre as duas coisas é esta tela.`,
+    },
+    {
+      titulo: "Categoria não é formato",
+      texto:
+        `A maior categoria é «${maior?.categoria ?? "—"}», com ${maior?.quantos ?? 0} de ` +
+        `${n.total} itens. Categoria é ONDE o CMS publica, não O QUE o arquivo é — «séries» tem ` +
+        `vídeo e tem texto. O formato é campo declarado, e enquanto ninguém declarar a tela diz ` +
+        `que ninguém declarou.`,
+    },
+    {
+      titulo: "A descrição alternativa também é ausência com denominador",
+      texto:
+        `${n.comImagemAlt} de ${n.total} itens trazem descrição alternativa da imagem. Os ` +
+        `${n.total - n.comImagemAlt} sem ela publicam uma imagem que leitor de tela não lê.`,
+    },
+  ];
+}

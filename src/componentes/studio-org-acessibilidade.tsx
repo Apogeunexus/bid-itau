@@ -35,10 +35,20 @@ export function EditorDeAcessibilidade({
   ficha,
   aoAlterar,
   aoDeclararAusencia,
+  mostrarFisicos = true,
 }: {
   ficha: AcessibilidadeDeEspaco | undefined;
   aoAlterar: (ficha: AcessibilidadeDeEspaco) => void;
   aoDeclararAusencia: () => void;
+  /**
+   * Mostrar os cinco recursos do LUGAR?
+   *
+   * `false` na tela de mídia, e a razão é a mesma que separou as duas metades da ficha:
+   * rampa e elevador são atributos de um lugar onde se entra, e um podcast não é um lugar.
+   * Exibi-los ali pediria uma declaração sobre algo que não existe — e uma caixa marcável
+   * que não se aplica é convite para alguém marcá-la.
+   */
+  mostrarFisicos?: boolean;
 }) {
   const atual = ficha ?? acessibilidadeDeEspacoVazia();
   const declarou = atual.declarada;
@@ -48,6 +58,7 @@ export function EditorDeAcessibilidade({
 
   return (
     <>
+      {mostrarFisicos ? (
       <div>
         <p className="studio-rotulo">Recursos do lugar</p>
         <ul className="org-caixas">
@@ -78,6 +89,7 @@ export function EditorDeAcessibilidade({
           forçar rampa dentro de «closed caption» seria fabricar classificação.
         </p>
       </div>
+      ) : null}
 
       <div>
         <p className="studio-rotulo">As 8 dimensões de mídia</p>

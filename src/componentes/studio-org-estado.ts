@@ -23,14 +23,21 @@
  */
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { acessibilidadeDeEspacoVazia } from "@/dados/tipos-organizacao";
+import {
+  acessibilidadeDeEspacoVazia,
+  direitoVazio,
+  fichaTecnicaVazia,
+} from "@/dados/tipos-organizacao";
 import type {
   AcessibilidadeDeEspaco,
   Alcada,
   CadastroDeEspaco,
   CadastroDeInstituicao,
+  CadastroDeMidia,
   Colaborador,
+  DireitoDeDistribuicao,
   EntradaDeEquipe,
+  FichaTecnicaDeMidia,
 } from "@/dados/tipos-organizacao";
 
 /**
@@ -68,6 +75,9 @@ interface EstadoPersistido {
   /** A equipe e o histórico dela — a O7. Também aditivo, também sem subir a versão. */
   equipe: Colaborador[];
   historicoDaEquipe: EntradaDeEquipe[];
+  /** O acervo de ativos — a O5. Aditivo, como os anteriores. */
+  midias: Record<string, CadastroDeMidia>;
+  atualMidiaId: string | null;
 }
 
 export interface ContextoDaOrganizacao {
@@ -92,11 +102,13 @@ export interface SementeDaOrganizacao {
   espacoId?: string | null;
   instituicaoId?: string | null;
   equipe?: Colaborador[];
+  midiaId?: string | null;
 }
 
 let primeiroId: string | null = null;
 let primeiraInstituicaoId: string | null = null;
 let equipeSemeada: Colaborador[] = [];
+let primeiraMidiaId: string | null = null;
 
 const ouvintes = new Set<() => void>();
 
@@ -159,6 +171,7 @@ function pareceEstado(v: unknown): v is EstadoPersistido {
     return false;
   }
   if (o.equipe !== undefined && !Array.isArray(o.equipe)) return false;
+  if (o.midias !== undefined && (typeof o.midias !== "object" || o.midias === null)) return false;
   if (o.historicoDaEquipe !== undefined && !Array.isArray(o.historicoDaEquipe)) return false;
   return Object.values(o.cadastros as Record<string, unknown>).every((c) => {
     if (typeof c !== "object" || c === null) return false;
@@ -184,6 +197,8 @@ function doZero(): EstadoPersistido {
     atualInstituicaoId: primeiraInstituicaoId,
     equipe: equipeSemeada.map((c) => ({ ...c })),
     historicoDaEquipe: [],
+    midias: {},
+    atualMidiaId: primeiraMidiaId,
   };
 }
 
@@ -209,6 +224,7 @@ function hidratar(contextoNovo: ContextoDaOrganizacao, semente: SementeDaOrganiz
   if (semente.espacoId != null) primeiroId = semente.espacoId;
   if (semente.instituicaoId != null) primeiraInstituicaoId = semente.instituicaoId;
   if (semente.equipe && semente.equipe.length > 0) equipeSemeada = semente.equipe;
+  if (semente.midiaId != null) primeiraMidiaId = semente.midiaId;
   if (estado !== null) return;
 
   let cru: string | null = null;
@@ -246,6 +262,8 @@ function hidratar(contextoNovo: ContextoDaOrganizacao, semente: SementeDaOrganiz
     atualInstituicaoId: lido.atualInstituicaoId ?? primeiraInstituicaoId,
     equipe: lido.equipe?.length ? lido.equipe : equipeSemeada.map((c) => ({ ...c })),
     historicoDaEquipe: lido.historicoDaEquipe ?? [],
+    midias: lido.midias ?? {},
+    atualMidiaId: lido.atualMidiaId ?? primeiraMidiaId,
   };
   avisar();
 }
@@ -343,6 +361,31 @@ function proximoIdDeColaborador(equipe: Colaborador[]): string {
   return `colab-${maior + 1}`;
 }
 
+/** O cadastro de mídia que ainda não existe. As três formas novas nascem VAZIAS e não
+ *  «permitindo»: um direito em branco não é permissão, é silêncio. */
+function midiaVazia(midiaId: string): CadastroDeMidia {
+  return {
+    midiaId,
+    creditoImagem: "",
+    fichaTecnica: fichaTecnicaVazia(),
+    direito: direitoVazio(),
+    acessibilidade: acessibilidadeDeEspacoVazia(),
+    autor: contexto.autor,
+    quando: contexto.dataDeReferencia,
+  };
+}
+
+function comMidia(midiaId: string, transformar: (c: CadastroDeMidia) => CadastroDeMidia) {
+  if (estado === null) return;
+  const atual = estado.midias[midiaId] ?? midiaVazia(midiaId);
+  const proximo = {
+    ...transformar(atual),
+    autor: contexto.autor,
+    quando: contexto.dataDeReferencia,
+  };
+  gravar({ ...estado, midias: { ...estado.midias, [midiaId]: proximo } });
+}
+
 // ---------------------------------------------------------------------------
 // O gancho
 // ---------------------------------------------------------------------------
@@ -391,6 +434,18 @@ export interface Organizacao {
   /** Sucessão de titularidade (140). Nunca por abandono: ela move o título de um para
    *  outro num passo só, e grava autor e carimbo. */
   transferirTitularidade: (paraId: string) => void;
+
+  // --- O5 · mídia ----------------------------------------------------------
+  midias: Record<string, CadastroDeMidia>;
+  atualMidiaId: string | null;
+  escolherMidia: (id: string) => void;
+  creditar: (id: string, credito: string) => void;
+  alterarFichaTecnica: (id: string, ficha: FichaTecnicaDeMidia) => void;
+  alterarDireito: (id: string, direito: DireitoDeDistribuicao) => void;
+  /** O ato do direito, irmão do ato da acessibilidade: declara que NÃO permite, em vez de
+   *  deixar dois booleanos em `false` significando duas coisas ao mesmo tempo. */
+  declararSemDireito: (id: string) => void;
+  alterarAcessibilidadeDaMidia: (id: string, ficha: AcessibilidadeDeEspaco) => void;
 }
 
 export function useOrganizacao(
@@ -528,6 +583,37 @@ export function useOrganizacao(
     );
   }, []);
 
+  const escolherMidia = useCallback((id: string) => {
+    if (estado === null) return;
+    gravar({ ...estado, atualMidiaId: id });
+  }, []);
+
+  const creditar = useCallback((id: string, credito: string) => {
+    comMidia(id, (c) => ({ ...c, creditoImagem: credito }));
+  }, []);
+
+  const alterarFichaTecnica = useCallback((id: string, fichaTecnica: FichaTecnicaDeMidia) => {
+    comMidia(id, (c) => ({ ...c, fichaTecnica }));
+  }, []);
+
+  const alterarDireito = useCallback((id: string, direito: DireitoDeDistribuicao) => {
+    comMidia(id, (c) => ({ ...c, direito: { ...direito, declarado: true } }));
+  }, []);
+
+  const declararSemDireito = useCallback((id: string) => {
+    comMidia(id, (c) => ({
+      ...c,
+      direito: { ...direitoVazio(), titular: c.direito.titular, declarado: true },
+    }));
+  }, []);
+
+  const alterarAcessibilidadeDaMidia = useCallback(
+    (id: string, acessibilidade: AcessibilidadeDeEspaco) => {
+      comMidia(id, (c) => ({ ...c, acessibilidade }));
+    },
+    [],
+  );
+
   const reiniciar = useCallback(() => {
     try {
       window.localStorage.removeItem(CHAVE_DA_ORGANIZACAO);
@@ -561,5 +647,13 @@ export function useOrganizacao(
     remover,
     alterarAlcadas,
     transferirTitularidade,
+    midias: atualEstado?.midias ?? {},
+    atualMidiaId: atualEstado?.atualMidiaId ?? null,
+    escolherMidia,
+    creditar,
+    alterarFichaTecnica,
+    alterarDireito,
+    declararSemDireito,
+    alterarAcessibilidadeDaMidia,
   };
 }

@@ -419,7 +419,7 @@ export const TELAS_DA_ORGANIZACAO: readonly TelaDaOrganizacao[] = [
     rotulo: "Mídia",
     rota: "/studio/midia",
     objetivo: "O acervo de ativos, com crédito bloqueante e direito declarado",
-    pronta: false,
+    pronta: true,
   },
   {
     id: "programa",
@@ -660,6 +660,151 @@ export function faltasDaEquipe(equipe: Colaborador[]): Falta[] {
     texto: "promover alguém a moderador ou editor — não é desta tela",
     bloqueia: false,
     dono: "Admin (87)",
+  });
+
+  return saida;
+}
+
+// ---------------------------------------------------------------------------
+// A mídia — O5. Ficha técnica e direito de distribuição, as duas formas novas
+// ---------------------------------------------------------------------------
+
+/**
+ * O formato do ativo. Vocabulário fechado, e ele NÃO é derivado da categoria do acervo.
+ *
+ * Seria fácil mapear «podcasts → áudio» e «videos → vídeo» e preencher os 529 de uma vez.
+ * Seria também uma inferência apresentada como declaração: `categoria` é onde o CMS
+ * publica o item, não o que o arquivo é — «séries» tem vídeo e tem texto. O formato é campo
+ * que a organização DECLARA, e enquanto ninguém declarou a tela diz que ninguém declarou.
+ */
+export const FORMATOS_DE_MIDIA = ["audio", "video", "texto", "imagem"] as const;
+export type FormatoDeMidia = (typeof FORMATOS_DE_MIDIA)[number];
+
+export const ROTULO_DO_FORMATO: Record<FormatoDeMidia, string> = {
+  audio: "áudio",
+  video: "vídeo",
+  texto: "texto",
+  imagem: "imagem",
+};
+
+/** Um capítulo do ativo. `inicio` é texto e não segundos porque quem preenche digita
+ *  «12:30», e converter na entrada esconderia o erro de digitação até a hora de tocar. */
+export interface CapituloDeMidia {
+  titulo: string;
+  inicio: string;
+}
+
+/**
+ * A ficha técnica — a lacuna que destrava «player com retomada» (26).
+ *
+ * Sem duração declarada não há barra de progresso honesta, e sem capítulo não há retomada
+ * que signifique alguma coisa: retomar aos 43% de um podcast de duas horas é retomar no
+ * meio de uma frase. É por isso que a funcionalidade 26 está «não sustentada» e não
+ * «faltando» — o que falta é dado, não tela.
+ */
+export interface FichaTecnicaDeMidia {
+  duracao: string;
+  formato: FormatoDeMidia | null;
+  capitulos: CapituloDeMidia[];
+}
+
+export function fichaTecnicaVazia(): FichaTecnicaDeMidia {
+  return { duracao: "", formato: null, capitulos: [] };
+}
+
+/**
+ * O direito de distribuição, item a item — a lacuna que destrava «download e offline» (30).
+ *
+ * `declarado` EXISTE PELO MESMO MOTIVO DE `declaraAcessibilidade`, e a repetição é
+ * deliberada: dois booleanos em `false` significam «não permite» e «ninguém declarou» ao
+ * mesmo tempo, e distribuir um ativo porque ninguém disse que não seria a leitura mais cara
+ * que este produto poderia fazer de um silêncio. Um item sem direito declarado não baixa.
+ */
+export interface DireitoDeDistribuicao {
+  permiteOffline: boolean;
+  permiteIncorporar: boolean;
+  /** Quem detém o direito. Texto, porque o titular pode não estar no grafo. */
+  titular: string;
+  declarado: boolean;
+}
+
+export function direitoVazio(): DireitoDeDistribuicao {
+  return { permiteOffline: false, permiteIncorporar: false, titular: "", declarado: false };
+}
+
+export const FRASE_DO_DIREITO =
+  "Enquanto o direito não for declarado, o item não baixa e não é incorporado — e a razão " +
+  "não é cautela jurídica genérica: é a mesma regra da acessibilidade. Dois booleanos em " +
+  "«false» significam «não permite» e «ninguém declarou» ao mesmo tempo, e tratar silêncio " +
+  "como permissão é a leitura mais cara que este produto poderia fazer.";
+
+export const POR_QUE_OFFLINE_IMPORTA =
+  "Offline é onde a falta mais dói, e o acervo diz por quê: a maior parte das mídias é " +
+  "podcast, e podcast é o formato que mais se ouve sem rede — no ônibus, no metrô, na rua.";
+
+/** O que a Organização escreve sobre um ativo do acervo. */
+export interface CadastroDeMidia {
+  midiaId: string;
+  /** O crédito que falta nos itens sem ele. Bloqueante (165). */
+  creditoImagem: string;
+  fichaTecnica: FichaTecnicaDeMidia;
+  direito: DireitoDeDistribuicao;
+  /** As 8 dimensões, com o mesmo ato — mídia é onde elas nasceram. */
+  acessibilidade: AcessibilidadeDeEspaco;
+  autor: string;
+  quando: string;
+}
+
+/** Um item publica? Crédito é a única condição bloqueante — as outras faltas diminuem o
+ *  que o item entrega, e não o direito de ele existir no acervo. */
+export function midiaPublica(
+  creditoNoAcervo: string | null,
+  cadastro: CadastroDeMidia | undefined,
+): boolean {
+  return Boolean(creditoNoAcervo) || (cadastro?.creditoImagem.trim().length ?? 0) > 0;
+}
+
+export function faltasDaMidia(
+  creditoNoAcervo: string | null,
+  cadastro: CadastroDeMidia | undefined,
+): Falta[] {
+  const saida: Falta[] = [];
+
+  if (!midiaPublica(creditoNoAcervo, cadastro)) {
+    saida.push({
+      texto: "crédito — nenhuma mídia publica sem crédito (165), e esta não publica",
+      bloqueia: true,
+      dono: null,
+    });
+  }
+  if (!cadastro || cadastro.fichaTecnica.duracao.trim().length === 0) {
+    saida.push({
+      texto: "duração — sem ela não há barra de progresso honesta, e «player com retomada» (26) segue não sustentada",
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  if (!cadastro || cadastro.fichaTecnica.formato === null) {
+    saida.push({ texto: "formato declarado — o acervo publica categoria, não formato", bloqueia: false, dono: null });
+  }
+  if (!cadastro || cadastro.fichaTecnica.capitulos.length === 0) {
+    saida.push({
+      texto: "capítulos — retomar aos 43% de um podcast de duas horas é retomar no meio de uma frase",
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  if (!cadastro?.direito.declarado) {
+    saida.push({
+      texto: "direito de distribuição — enquanto não for declarado, o item não baixa (30)",
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  saida.push({
+    texto: "conferência dos direitos de imagem — a decisão é da fila de moderação",
+    bloqueia: false,
+    dono: "Moderador (114, 115)",
   });
 
   return saida;
