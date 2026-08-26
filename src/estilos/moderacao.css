@@ -965,3 +965,66 @@
   align-items: baseline;
   gap: 0.5rem;
 }
+
+/* ===========================================================================
+ * M5 e M6 — elenco declarado e reconciliação
+ * ======================================================================== */
+
+/* O verbete embutido: ele é o objeto de conferência, e por isso tem superfície
+ * própria em vez de virar mais um parágrafo. Quem confere precisa distinguir «o
+ * que foi afirmado» de «o que a Enciclopédia diz» sem reler para descobrir qual
+ * é qual. */
+.moderacao-verbete {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+/* O aviso da Enciclopédia é PERMANENTE e fica acima da decisão, não num rodapé:
+ * ele é a regra que torna esta a única porta de escrita que não viola a
+ * autoridade do verbete. Rodapé é onde vai o que não muda a decisão. */
+.moderacao-aviso-permanente {
+  margin-bottom: var(--web-gap);
+  padding: 0.75rem 1rem;
+  border-left: 2px solid var(--cor-acao);
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+.moderacao-aviso-permanente p {
+  margin-top: 0.25rem;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  line-height: 1.55;
+}
+
+.moderacao-candidatos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.moderacao-candidato {
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.moderacao-candidato .studio-acoes {
+  margin-top: 0.5rem;
+}
+
+/* O vínculo cujo agente não tem verbete se distingue na lista: ele não se decide
+ * na tela do elenco, e mostrar isso antes do clique evita o caminho que termina
+ * num botão desabilitado sem explicação. */
+.moderacao-linha[data-proposto="sim"] {
+  border-left: 2px solid var(--cor-acao);
+}

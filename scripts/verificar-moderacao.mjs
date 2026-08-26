@@ -1093,6 +1093,166 @@ async function principal() {
       "2 · 1",
     );
 
+    // =======================================================================
+    titulo("── M5 · elenco: a afirmação sobre pessoa real, conferida ──");
+    // =======================================================================
+
+    await cdp.avaliar(`window.localStorage.removeItem("moderacao.v1")`);
+    await cdp.navegar(`${BASE}/moderacao/elenco/`);
+    await cdp.assentar();
+
+    const el = await cdp.avaliar(
+      naPagina(`
+        const linhas = todos('[data-vinculo-elenco]');
+        const propostos = linhas.filter((x) => x.getAttribute('data-proposto') === 'sim');
+        const conf = document.querySelector('[data-acao-elenco="confirmar"]');
+        const verbete = document.querySelector('[data-verbete]');
+        const decl = document.querySelector('[data-nao-autoramos]');
+        return {
+          vinculos: linhas.length,
+          propostos: propostos.length,
+          confirmarBarrado: conf ? conf.disabled : null,
+          temVerbete: Boolean(verbete && verbete.getAttribute('data-verbete')),
+          declaraNaoAutorar: decl ? (decl.textContent || '').includes('afirmação factual') : false,
+        };
+      `),
+    );
+    exigir(
+      el.vinculos === 10 && el.propostos === 3,
+      "os vínculos de elenco, com os propostos marcados na lista",
+      `${el.vinculos} vínculos · ${el.propostos} sem verbete`,
+      "10 · 3",
+    );
+    exigir(
+      el.declaraNaoAutorar,
+      "a tela declara por que nenhum elenco foi autorado neste protótipo",
+      `declara: ${el.declaraNaoAutorar}`,
+      "true",
+    );
+
+    // ---- confirmar NÃO existe para vínculo sem verbete ----
+    const semVerbete = await cdp.avaliar(
+      naPagina(`
+        const alvo = todos('[data-vinculo-elenco]').find((x) => x.getAttribute('data-proposto') === 'sim');
+        if (!alvo) return { achou: false };
+        alvo.querySelector('button').click();
+        return { achou: true };
+      `),
+    );
+    await cdp.assentar();
+    const travado = await cdp.avaliar(
+      naPagina(`
+        const conf = document.querySelector('[data-acao-elenco="confirmar"]');
+        // Trava também na função, não só no atributo: confirmar um vínculo cujo agente não
+        // tem verbete criaria a pessoa pela porta dos fundos.
+        if (conf) conf.click();
+        const verbete = document.querySelector('[data-verbete]');
+        return {
+          barrado: conf ? conf.getAttribute('data-acao-barrada') : null,
+          desabilitado: conf ? conf.disabled : null,
+          decisoes: todos('[data-decisao-moderacao]').length,
+          dizPorQue: verbete ? (verbete.textContent || '').includes('porta dos fundos') : false,
+        };
+      `),
+    );
+    exigir(
+      semVerbete.achou &&
+        travado.barrado === "sim" &&
+        travado.desabilitado === true &&
+        travado.decisoes === 0 &&
+        travado.dizPorQue,
+      "vínculo SEM verbete não se confirma, e a tela diz por quê",
+      `barrado=${travado.barrado} · disabled=${travado.desabilitado} · ${travado.decisoes} decisões · explica: ${travado.dizPorQue}`,
+      "sim · true · 0 · true",
+    );
+
+    // ---- recusar uma afirmação sobre pessoa real exige motivo ----
+    await cdp.clicar(`document.querySelector('[data-acao-elenco="recusar"]')`);
+    await cdp.assentar();
+    const recusa = await cdp.avaliar(
+      naPagina(`
+        const b = document.querySelector('[data-veto-bloqueado]');
+        b.click();
+        const f = b.closest('form');
+        if (f) f.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        return { bloqueado: b.getAttribute('data-veto-bloqueado'), decisoes: todos('[data-decisao-moderacao]').length };
+      `),
+    );
+    exigir(
+      recusa.bloqueado === "sim" && recusa.decisoes === 0,
+      "recusar uma afirmação sobre pessoa real EXIGE motivo escrito",
+      `bloqueado=${recusa.bloqueado} · ${recusa.decisoes} decisões`,
+      "sim · 0",
+    );
+
+    // =======================================================================
+    titulo("── M6 · reconciliação: a moderação liga, e nunca edita verbete ──");
+    // =======================================================================
+
+    await cdp.navegar(`${BASE}/moderacao/reconciliacao/`);
+    await cdp.assentar();
+
+    const rec = await cdp.avaliar(
+      naPagina(`
+        const aviso = document.querySelector('[data-aviso-enciclopedia]');
+        const t = aviso ? (aviso.textContent || '') : '';
+        const cands = todos('[data-candidato]');
+        const porque = cands[0] ? (cands[0].textContent || '') : '';
+        return {
+          propostas: todos('[data-proposta]').length,
+          temAviso: Boolean(aviso),
+          dizQueLiga: t.includes('LIGA a proposta') || t.includes('nunca edita'),
+          candidatos: cands.length,
+          // NUNCA «similaridade 0,87». Se aparecer número de parecença, a tela virou o
+          // recomendador opaco que a sessão recusa.
+          semPontuacao: !/similaridade\s*[:=]?\s*0[.,]\d/i.test(porque),
+          dizPorqueApareceu: porque.includes('normalizado'),
+          temEncaminhar: Boolean(document.querySelector('[data-encaminhar-criacao]')),
+          temReconciliar: Boolean(document.querySelector('[data-reconciliar]')),
+        };
+      `),
+    );
+    exigir(
+      rec.temAviso && rec.dizQueLiga,
+      "o aviso de que o verbete é autoridade da Enciclopédia é PERMANENTE, acima da decisão",
+      `presente: ${rec.temAviso} · diz que liga e não edita: ${rec.dizQueLiga}`,
+      "as duas coisas",
+    );
+    exigir(
+      rec.candidatos > 0 && rec.semPontuacao && rec.dizPorqueApareceu,
+      "o candidato diz POR QUE apareceu, e não traz pontuação de similaridade",
+      `${rec.candidatos} candidato(s) · sem pontuação: ${rec.semPontuacao} · explica: ${rec.dizPorqueApareceu}`,
+      "regra por extenso, nenhum número de parecença",
+    );
+    exigir(
+      rec.temReconciliar && rec.temEncaminhar,
+      "os dois caminhos existem: reconciliar com verbete, ou encaminhar a criação ao Editor",
+      `reconciliar: ${rec.temReconciliar} · encaminhar: ${rec.temEncaminhar}`,
+      "ambos",
+    );
+
+    // ---- reconciliar registra, e o registro diz com qual verbete ----
+    await cdp.clicar(`document.querySelector('[data-reconciliar]')`);
+    await cdp.assentar();
+    await cdp.navegar(`${BASE}/moderacao/historico/`);
+    await cdp.assentar();
+    const noHist = await cdp.avaliar(
+      naPagina(`
+        const d = document.querySelector('[data-decisao-moderacao]');
+        return {
+          registrou: Boolean(d),
+          titulo: d ? (d.querySelector('.moderacao-decisao-titulo')?.textContent || '') : '',
+          temCarimbo: Boolean(d && d.querySelector('[data-carimbo]')),
+        };
+      `),
+    );
+    exigir(
+      noHist.registrou && noHist.titulo.includes("reconciliado com") && noHist.temCarimbo,
+      "reconciliar deixa registro nomeando o verbete ligado",
+      `«${noHist.titulo.slice(0, 60)}» · carimbo ${noHist.temCarimbo}`,
+      "o nome do verbete no registro",
+    );
+
     // -----------------------------------------------------------------------
     titulo("── zero erro de console na navegação inteira ──");
     // -----------------------------------------------------------------------

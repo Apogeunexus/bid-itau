@@ -498,6 +498,9 @@ export function ModeracaoFila({
           <Link className="studio-botao" data-ir-para="ia" href="/moderacao/ia/">
             revisão da IA · {comSeparador(numeros.itensPorOrigem.ia)}
           </Link>
+          <Link className="studio-botao" data-ir-para="elenco" href="/moderacao/elenco/">
+            elenco declarado
+          </Link>
           <Link className="studio-botao" data-ir-para="escopo" href="/moderacao/escopo/">
             escopo e escalonamento
           </Link>

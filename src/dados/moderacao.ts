@@ -43,6 +43,7 @@ import { motivoDaAresta } from "./motivo";
 import { DATA_DE_REFERENCIA } from "./alerta";
 import type { OrigemMotivo } from "./cartao";
 import { ROTA_POR_CLASSE } from "./rotas";
+import { normalizar } from "./indice";
 import type { ClasseEntidade, Entidade, Procedencia, Relacao } from "./tipos";
 import type { AcaoDeModeracao, DecisaoDeModeracao, Situacao } from "./tipos-acesso";
 
@@ -1337,6 +1338,243 @@ export const APROVAR_E_A_UNICA_PORTA =
   "carimbo. O score ao lado de cada sugestão não decide nada — ele é a fração de cinco " +
   "perguntas sobre a ficha da própria entidade, exibidas marcadas uma a uma, para que quem " +
   "decide confira a conta em vez de confiar no número.";
+
+// ---------------------------------------------------------------------------
+// M5 — elenco declarado (116) · a barreira ética do sistema
+// ---------------------------------------------------------------------------
+
+/**
+ * Um vínculo de elenco esperando conferência: alguém afirmou que uma pessoa real se
+ * apresentou em algum lugar.
+ *
+ * POR QUE ESTA TELA EXISTE. A equipe **se recusou a autorar arestas de elenco** no
+ * protótipo, e a razão está registrada: autorar elenco seria uma afirmação factual falsa
+ * sobre pessoas reais. Quando o produtor passa a declarar elenco, alguém precisa conferir —
+ * senão a plataforma publica, em nome do Itaú Cultural, que uma pessoa real se apresentou
+ * onde não se apresentou. Nenhuma outra tela desta sessão decide sobre um terceiro que não
+ * está na conversa.
+ *
+ * OS VÍNCULOS SÃO REAIS. Eles saem das 508 arestas `atua_em` do acervo, com o papel que o
+ * acervo declara. O que é encenado — e a tela diz — é a SITUAÇÃO: tratá-los como se
+ * tivessem acabado de ser submetidos por um produtor, para haver o que conferir.
+ */
+export interface VinculoDeElenco {
+  id: string;
+  /** O agente afirmado. Quando `verbeteId` é `null`, é só um nome digitado. */
+  agenteNome: string;
+  /** O verbete da Enciclopédia, quando o nome casa com um. `null` vira proposta (M6). */
+  verbeteId: string | null;
+  verbeteResumo: string | null;
+  verbeteRota: string | null;
+  /** `artista`, `colunista` ou `participante` — o vocabulário que o acervo usa. */
+  papel: string;
+  eventoId: string;
+  eventoTitulo: string;
+  /**
+   * `true` quando o nome digitado NÃO casou com verbete nenhum. Estes não se decidem
+   * aqui: vão para a reconciliação (M6) antes, porque confirmar um vínculo com um agente
+   * que não existe criaria a pessoa pela porta dos fundos.
+   */
+  proposto: boolean;
+}
+
+export const FRASE_DO_ELENCO =
+  "O que se decide aqui é uma AFIRMAÇÃO SOBRE UMA PESSOA REAL: que ela se apresentou neste " +
+  "evento, neste papel. É a única tela da moderação em que a pessoa afetada não está na " +
+  "conversa e não pode se defender — quem submeteu afirma, quem modera confere, e a pessoa " +
+  "de quem se fala só descobre depois de publicado. Por isso a confirmação não é um " +
+  "carimbo: é uma conferência contra o verbete, e a recusa exige motivo como o veto exige.";
+
+export const POR_QUE_NAO_AUTORAMOS_ELENCO =
+  "Nenhuma aresta de elenco foi autorada por nós neste protótipo, e a recusa é deliberada: " +
+  "escrever que uma pessoa real participou de um evento é uma afirmação factual, e uma " +
+  "afirmação factual inventada sobre alguém não deixa de ser falsa por estar num protótipo. " +
+  "Os vínculos desta tela são os que o ACERVO já declara — 508 arestas `atua_em`, com os " +
+  "papéis que ele usa. O que encenamos é a situação de eles estarem esperando decisão.";
+
+// ---------------------------------------------------------------------------
+// M6 — reconciliação com a Enciclopédia (117) · o único caminho de escrita
+// ---------------------------------------------------------------------------
+
+/**
+ * Um candidato do acervo a ser o verbete de um nome proposto.
+ *
+ * A comparação é CAMPO A CAMPO, no padrão de `CampoComparado` das duplicatas: o que decide
+ * não é uma pontuação de parecença entre textos, é a ficha ao lado da ficha. Duas pessoas
+ * podem ter nomes quase idênticos e serem duas pessoas — e é exatamente esse o caso em que
+ * uma medida de similaridade erra com confiança alta.
+ */
+export interface CandidatoDeVerbete {
+  id: string;
+  titulo: string;
+  classe: ClasseEntidade;
+  resumo: string | null;
+  rota: string | null;
+  /** Quantas arestas o acervo já liga a este verbete. Alcance, não parecença. */
+  grau: number;
+  /** O que fez este candidato aparecer, por extenso. Nunca «similaridade 0,87». */
+  porqueApareceu: string;
+}
+
+export interface PropostaDeAgente {
+  id: string;
+  /** O nome como o produtor digitou. */
+  nomeDigitado: string;
+  /** De onde veio a proposta — o vínculo de elenco que a originou. */
+  vinculoId: string;
+  eventoTitulo: string;
+  papel: string;
+  candidatos: CandidatoDeVerbete[];
+}
+
+export const VERBETE_E_AUTORIDADE_DA_ENCICLOPEDIA =
+  "O verbete é autoridade da Enciclopédia Itaú Cultural. A moderação LIGA a proposta a um " +
+  "verbete existente, ou encaminha a criação ao Editor — ela **nunca edita o verbete**. São " +
+  "575 pessoas no protótipo e 43.614 na base completa: pessoas reais que nunca se " +
+  "cadastraram e cujo texto foi escrito por quem o escreveu. Um produtor editando o verbete " +
+  "de um artista real seria a violação exata que este projeto se proibiu, e reconciliar é o " +
+  "único caminho de escrita que não a comete.";
+
+/** Quantos vínculos a tela encena. Declarado, e citado na tela. */
+export const VINCULOS_NA_FILA = 10;
+
+/**
+ * A GRAFIA VARIANTE que vira proposta.
+ *
+ * Ela não inventa pessoa: é o MESMO nome do acervo, escrito sem acento e sem pontuação —
+ * «A. C. D'Ávila» digitado como «AC Davila». É o caso real da reconciliação, e o único
+ * jeito honesto de encenar «o produtor digitou um nome que o sistema não achou» sem
+ * fabricar uma pessoa que não existe. A tela declara que a grafia é encenada.
+ */
+function grafiaVariante(nome: string): string {
+  return nome
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[.'’]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+let elencoMemo: VinculoDeElenco[] | null = null;
+
+/**
+ * Os vínculos de elenco esperando conferência.
+ *
+ * Determinístico: os agentes são varridos na ordem de `slugsPorTipo`, e a cota é fechada
+ * com passo fixo. Duas gerações do acervo com o mesmo dado produzem a mesma lista.
+ *
+ * A cada terceiro vínculo, o nome entra como GRAFIA VARIANTE e o verbete some — é o que
+ * produz as propostas da M6. A proporção é declarada na tela: um terço não é medida do
+ * mundo, é encenação nossa para haver os dois casos à vista.
+ */
+export function elencoParaConferir(): VinculoDeElenco[] {
+  if (elencoMemo) return elencoMemo;
+
+  const brutos: { agente: Entidade; papel: string; evento: Entidade }[] = [];
+  for (const classe of ["pessoa", "coletivo"] as const) {
+    for (const slug of slugsPorTipo(classe)) {
+      const a = porSlug(classe, slug);
+      if (!a) continue;
+      for (const v of vizinhos(a.id, "atua_em")) {
+        // `atua_em` é dirigida: o agente aponta para o acontecimento. Sem o filtro, um
+        // evento apareceria como se atuasse numa pessoa.
+        if (v.aresta.de !== a.id) continue;
+        if (!v.aresta.papel) continue;
+        brutos.push({ agente: a, papel: v.aresta.papel, evento: v.entidade });
+      }
+    }
+  }
+  brutos.sort((x, y) =>
+    x.agente.id < y.agente.id ? -1 : x.agente.id > y.agente.id ? 1 : x.evento.id < y.evento.id ? -1 : 1,
+  );
+
+  elencoMemo = amostrar(brutos, VINCULOS_NA_FILA).map((b, i) => {
+    const proposto = i % 3 === 2;
+    return {
+      id: `elenco:${b.agente.id}:${b.evento.id}`,
+      agenteNome: proposto ? grafiaVariante(b.agente.titulo) : b.agente.titulo,
+      verbeteId: proposto ? null : b.agente.id,
+      verbeteResumo: proposto ? null : (b.agente.resumo ?? null),
+      verbeteRota: proposto ? null : rotaDe(b.agente),
+      papel: b.papel,
+      eventoId: b.evento.id,
+      eventoTitulo: b.evento.titulo,
+      proposto,
+    };
+  });
+  return elencoMemo;
+}
+
+/**
+ * As propostas de agente, com os candidatos do acervo.
+ *
+ * O casamento é por NOME NORMALIZADO — `normalizar` é a mesma função que o índice de busca
+ * usa, e não uma segunda normalização escrita aqui. Uma segunda normalização daria
+ * resultados diferentes da busca do produto no dia em que uma das duas mudasse, e o
+ * sintoma seria a moderação não achar o verbete que a busca acha.
+ */
+export function propostasDeAgente(): PropostaDeAgente[] {
+  const porNomeNormalizado = new Map<string, Entidade[]>();
+  for (const classe of ["pessoa", "coletivo"] as const) {
+    for (const slug of slugsPorTipo(classe)) {
+      const e = porSlug(classe, slug);
+      if (!e) continue;
+      const chave = normalizar(grafiaVariante(e.titulo));
+      const lista = porNomeNormalizado.get(chave);
+      if (lista) lista.push(e);
+      else porNomeNormalizado.set(chave, [e]);
+    }
+  }
+
+  return elencoParaConferir()
+    .filter((v) => v.proposto)
+    .map((v) => {
+      const chave = normalizar(grafiaVariante(v.agenteNome));
+      const achados = porNomeNormalizado.get(chave) ?? [];
+      return {
+        id: `proposta:${v.id}`,
+        nomeDigitado: v.agenteNome,
+        vinculoId: v.id,
+        eventoTitulo: v.eventoTitulo,
+        papel: v.papel,
+        candidatos: achados.slice(0, 4).map((e) => ({
+          id: e.id,
+          titulo: e.titulo,
+          classe: e.classe,
+          resumo: e.resumo ?? null,
+          rota: rotaDe(e),
+          grau: vizinhos(e.id).length,
+          porqueApareceu:
+            `O nome digitado, normalizado, é idêntico ao título deste verbete ` +
+            `normalizado. Nenhuma medida de parecença entrou na conta — ou casa, ou não ` +
+            `aparece.`,
+        })),
+      };
+    });
+}
+
+/**
+ * Quantas pessoas o acervo tem. **CONTADO, nunca digitado** — o número é o denominador do
+ * risco de uma reconciliação errada, e um valor escrito à mão passaria a mentir na primeira
+ * regeração do grafo.
+ */
+export const PESSOAS_NO_PROTOTIPO = slugsPorTipo("pessoa").length;
+
+/**
+ * O tamanho da Enciclopédia completa, fora deste protótipo.
+ *
+ * Este É digitado, e a diferença importa: ele não sai do grafo porque o grafo não o tem. É
+ * um número da base do Itaú Cultural, citado como referência de escala, e está aqui rotulado
+ * como tal em vez de aparecer na tela como se tivesse sido contado.
+ */
+export const PESSOAS_NA_BASE_COMPLETA = 43_614;
+
+export const REGRA_DA_RECONCILIACAO =
+  "Os candidatos aparecem por CASAMENTO DE NOME NORMALIZADO — acentuação, caixa e " +
+  "pontuação removidas —, e por mais nada. Não há pontuação de similaridade: um número " +
+  "alto entre dois nomes parecidos é exatamente o que faz duas pessoas diferentes virarem " +
+  "uma só, e o erro é irreversível do ponto de vista de quem foi apagado. A decisão é da " +
+  "ficha ao lado da ficha, e quando nenhuma serve o caminho é encaminhar ao Editor.";
 
 // ---------------------------------------------------------------------------
 // M8 — escopo, escalonamento e delegação (122 a 125)
