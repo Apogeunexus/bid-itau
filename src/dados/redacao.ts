@@ -582,6 +582,152 @@ export interface ArestaAutorada {
 }
 
 // ---------------------------------------------------------------------------
+// E5 — a redação editorial: as classes de conhecimento
+// ---------------------------------------------------------------------------
+
+/** Os cinco formatos que a Redação escreve. Vocabulário fechado, como as relações. */
+export type FormatoEditorial = "noticia" | "coluna" | "entrevista" | "publicacao" | "pesquisa";
+
+export interface FormatoDeclarado {
+  formato: FormatoEditorial;
+  rotulo: string;
+  /** A classe da ontologia em que este formato vira entidade. */
+  classe: Extract<ClasseEntidade, "conteudo" | "publicacao">;
+  /** O que ele é, para quem escolhe saber o que está criando. */
+  descricao: string;
+}
+
+export const FORMATOS_EDITORIAIS: readonly FormatoDeclarado[] = [
+  {
+    formato: "noticia",
+    rotulo: "notícia",
+    classe: "conteudo",
+    descricao: "relato de um acontecimento, com data e fonte",
+  },
+  {
+    formato: "coluna",
+    rotulo: "coluna",
+    classe: "conteudo",
+    descricao: "texto de opinião assinado, que afirma em nome de quem escreve",
+  },
+  {
+    formato: "entrevista",
+    rotulo: "entrevista",
+    classe: "conteudo",
+    descricao: "fala de outra pessoa, editada — o que ela disse, não o que se diz dela",
+  },
+  {
+    formato: "publicacao",
+    rotulo: "publicação",
+    classe: "publicacao",
+    descricao: "livro, catálogo ou caderno com existência própria fora do site",
+  },
+  {
+    formato: "pesquisa",
+    rotulo: "pesquisa",
+    classe: "publicacao",
+    descricao: "levantamento com método declarado, que pode ser conferido",
+  },
+];
+
+export interface RelacaoEditorial {
+  relacao: Relacao;
+  rotulo: string;
+  /** O que a aresta afirma, para o curador escolher sabendo o que assina. */
+  afirma: string;
+  instancias: number;
+}
+
+/**
+ * AS TRÊS RELAÇÕES EDITORIAIS, e por que elas são ARESTA e não etiqueta.
+ *
+ * A diferença não é de modelagem, é de produto: é ela que faz «Aprofunda isto» funcionar a
+ * PARTIR DE QUALQUER evento ou obra. Uma etiqueta «temas relacionados» no rodapé da matéria
+ * só é lida por quem já está na matéria; uma aresta é percorrível nos dois sentidos, e é
+ * assim que quem está olhando um evento chega ao texto que fala sobre ele.
+ *
+ * `aprofunda` tem 887 instâncias e é a mais usada das três — é o caminho conteúdo → entidade
+ * que o acervo já sustenta. `contextualiza` tem 4, e a tela mostra o número em vez de
+ * escondê-lo: uma relação declarada e quase vazia é informação sobre o acervo.
+ */
+export const RELACOES_EDITORIAIS: readonly RelacaoEditorial[] = [
+  {
+    relacao: "aprofunda",
+    rotulo: "aprofunda",
+    afirma: "este texto se debruça sobre a entidade — é o caminho de «Aprofunda isto»",
+    instancias: INSTANCIAS_POR_RELACAO.aprofunda ?? 0,
+  },
+  {
+    relacao: "fala_sobre",
+    rotulo: "fala sobre",
+    afirma: "a entidade é assunto do texto, sem que ele se dedique a ela",
+    instancias: INSTANCIAS_POR_RELACAO.fala_sobre ?? 0,
+  },
+  {
+    relacao: "contextualiza",
+    rotulo: "contextualiza",
+    afirma: "o texto dá o pano de fundo de que a entidade precisa para ser entendida",
+    instancias: INSTANCIAS_POR_RELACAO.contextualiza ?? 0,
+  },
+];
+
+/**
+ * A FRONTEIRA DA ENCICLOPÉDIA, que é a razão de esta tela não editar verbete.
+ *
+ * `pessoa`, `coletivo` e `obra` são autoridade a montante: 575 pessoas no protótipo e 43.614
+ * na base completa, pessoas reais que nunca se cadastraram. O que se escreve aqui é conteúdo
+ * editorial que FALA SOBRE o verbete — nunca o verbete. A distinção parece sutil e não é: o
+ * verbete afirma quem a pessoa é, e a matéria afirma o que a Redação diz sobre ela. Só a
+ * segunda é do Editor.
+ */
+export const FRONTEIRA_DA_ENCICLOPEDIA =
+  "Verbete de pessoa, coletivo e obra é autoridade a montante — são pessoas reais que nunca " +
+  "se cadastraram, e o verbete afirma quem elas são. O que se escreve aqui é conteúdo " +
+  "editorial que FALA SOBRE o verbete, e nunca o verbete: a matéria afirma o que a Redação " +
+  "diz sobre alguém, e essa é a única das duas afirmações que é do Editor. Para propor " +
+  "mudança no verbete existe a reconciliação, que passa pelo moderador.";
+
+/**
+ * MOVIMENTO NÃO É CLASSE, É `termo`.
+ *
+ * A tentação seria criar `movimento` para «Tropicália», «Cinema Novo», «Manguebeat» — e a
+ * ontologia tem 20 classes fechadas, nenhuma delas essa. Movimento é vocabulário: mora em
+ * `termo`, e a página de movimento é a página do termo com o conteúdo editorial que fala
+ * sobre ele. Criar a classe resolveria a página e quebraria o fechamento do modelo.
+ */
+export const MOVIMENTO_E_TERMO =
+  "Movimento não é classe da ontologia: é «termo». Tropicália, Cinema Novo e Manguebeat são " +
+  "vocabulário, e a página de movimento é a página do termo somada ao conteúdo editorial " +
+  "que fala sobre ele. Criar uma classe própria resolveria uma página e quebraria o " +
+  "fechamento de 20 classes que o modelo inteiro sustenta.";
+
+/**
+ * O CRÉDITO DA IMAGEM É OBRIGATÓRIO, e a razão é a mesma do motivo.
+ *
+ * Uma imagem sem crédito publicada é uma afirmação de autoria por omissão: quem lê assume
+ * que é da casa. O acervo já carrega `creditoImagem` em `Cartao` justamente porque a falta
+ * dele não pode ser suprida depois — a fonte se perde, e o que fica é uma imagem órfã com
+ * aparência de própria.
+ */
+export const REGRA_DO_CREDITO =
+  "Imagem sem crédito é afirmação de autoria por omissão: quem lê assume que é da casa. O " +
+  "crédito é obrigatório na mesma medida que o motivo — os dois são o que torna a peça " +
+  "contestável, e nenhum dos dois pode ser suprido depois, porque a fonte se perde.";
+
+export interface NumerosDoConhecimento {
+  conteudo: number;
+  publicacao: number;
+  /** As três relações editoriais somadas. É o que a Redação já escreveu no acervo. */
+  ligacoesEditoriais: number;
+}
+
+export const NUMEROS_DO_CONHECIMENTO: NumerosDoConhecimento = {
+  conteudo: meta.porClasse.conteudo ?? 0,
+  publicacao: meta.porClasse.publicacao ?? 0,
+  ligacoesEditoriais: RELACOES_EDITORIAIS.reduce((a, r) => a + r.instancias, 0),
+};
+
+// ---------------------------------------------------------------------------
 // E4 — o tesauro: a camada 0 da ontologia, que hoje não tem dono
 // ---------------------------------------------------------------------------
 

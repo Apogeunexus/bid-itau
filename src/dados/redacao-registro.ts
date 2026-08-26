@@ -44,6 +44,7 @@ export const CHAVE_DAS_PONTES = "agenda-cultural:pontes-autoradas-v1";
 export const CHAVE_DAS_TRILHAS = "agenda-cultural:trilhas-publicadas-v1";
 export const CHAVE_DO_DESTAQUE = "agenda-cultural:destaque-do-feed-v1";
 export const CHAVE_DO_TESAURO = "agenda-cultural:mudancas-de-tesauro-v1";
+export const CHAVE_DAS_MATERIAS = "agenda-cultural:materias-editoriais-v1";
 
 /** Uma trilha publicada pelo editor, com autor e carimbo. */
 export interface TrilhaPublicada {
@@ -155,6 +156,53 @@ export function lerDestaques(): DestaqueAssinado[] {
 export function registrarDestaque(novo: DestaqueAssinado): boolean {
   const antes = lerDestaques().filter((d) => d.feedDe !== novo.feedDe);
   return gravar(CHAVE_DO_DESTAQUE, [novo, ...antes]);
+}
+
+/** Uma ligação editorial: a aresta que sai da matéria para uma entidade do acervo. */
+export interface LigacaoEditorial {
+  relacao: string;
+  entidadeId: string;
+  entidadeTitulo: string;
+  entidadeClasse: string;
+  entidadeSlug: string | null;
+  motivo: string;
+}
+
+/**
+ * Uma matéria editorial, com as ligações que ela declara.
+ *
+ * `creditoImagem` é `string | null` e NUNCA opcional, pelo mesmo motivo de
+ * `declaraAcessibilidade`: campo ausente teria de ser lido como «não declarou», e ler
+ * ausência como declaração é o erro que a ontologia proíbe. `null` aqui significa «não há
+ * imagem»; com imagem, o crédito é exigido antes de a matéria existir.
+ */
+export interface MateriaEditorial {
+  formato: string;
+  titulo: string;
+  texto: string;
+  imagem: string | null;
+  creditoImagem: string | null;
+  ligacoes: LigacaoEditorial[];
+  assinatura: string;
+  carimbo: string;
+  agendadaPara: string;
+}
+
+export function lerMaterias(): MateriaEditorial[] {
+  return ler(CHAVE_DAS_MATERIAS).filter((v): v is MateriaEditorial => {
+    if (typeof v !== "object" || v === null) return false;
+    const m = v as Partial<MateriaEditorial>;
+    // Imagem sem crédito não entra, venha de onde vier: é a regra da tela conferida de novo
+    // na leitura, porque o storage é editável por quem abre o inspetor.
+    if (ehTexto(m.imagem) && !ehTexto(m.creditoImagem)) return false;
+    return (
+      ehTexto(m.formato) && ehTexto(m.titulo) && ehTexto(m.texto) && ehTexto(m.assinatura)
+    );
+  });
+}
+
+export function registrarMateria(nova: MateriaEditorial): boolean {
+  return gravar(CHAVE_DAS_MATERIAS, [nova, ...lerMaterias()]);
 }
 
 /** As quatro operações da camada 0. Vocabulário fechado, como as relações. */

@@ -25,6 +25,7 @@ export const ROTAS_DA_REDACAO: readonly RotaDaRedacao[] = [
   { href: "/redacao/pontes/", rotulo: "Arestas de sentido" },
   { href: "/redacao/destaque/", rotulo: "Destaque do feed" },
   { href: "/redacao/tesauro/", rotulo: "Tesauro" },
+  { href: "/redacao/materia/", rotulo: "Redação editorial" },
   { href: "/redacao/assinaturas/", rotulo: "O que eu assinei" },
 ];
 

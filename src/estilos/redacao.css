@@ -799,3 +799,28 @@
 .redacao-promovidas .redacao-classe {
   border-width: 2px;
 }
+
+/* ===========================================================================
+ * E5 — A REDAÇÃO EDITORIAL
+ * ======================================================================== */
+
+/* Texto à esquerda, ligações à direita. O lado largo é o do texto porque é ele
+ * que se escreve; as ligações são escolha em lista, e lista cabe em coluna
+ * estreita sem prejuízo de leitura. */
+.redacao-colunas-materia {
+  grid-template-columns: minmax(0, 1fr) 30rem;
+  --web-altura-lista: 26vh;
+}
+
+/* O crédito só aparece quando há imagem — e aí ele fica realçado, porque nasce
+ * obrigatório e o operador acabou de criar a obrigação sem pedir por ela. */
+.redacao-materia [data-credito-exigido] {
+  padding: 0.75rem;
+  border-left: 2px solid var(--cor-acao);
+  border-radius: var(--raio-m);
+  background: color-mix(in srgb, var(--cor-acao) 8%, transparent);
+}
+
+.redacao-ligacoes .redacao-ponte {
+  gap: 0.25rem;
+}
