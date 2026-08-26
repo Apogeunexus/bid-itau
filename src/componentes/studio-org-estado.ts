@@ -24,7 +24,11 @@
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { acessibilidadeDeEspacoVazia } from "@/dados/tipos-organizacao";
-import type { AcessibilidadeDeEspaco, CadastroDeEspaco } from "@/dados/tipos-organizacao";
+import type {
+  AcessibilidadeDeEspaco,
+  CadastroDeEspaco,
+  CadastroDeInstituicao,
+} from "@/dados/tipos-organizacao";
 
 /**
  * A chave versionada da Organização, irmã de `studio.v1` e separada dela de propósito.
@@ -46,6 +50,18 @@ interface EstadoPersistido {
    *  de espaço não é navegar: a lista inteira fica montada, e uma rota por espaço geraria
    *  113 páginas. */
   atualId: string | null;
+  /**
+   * As fichas institucionais, por id — a O1.
+   *
+   * ENTROU POR EXTENSÃO ADITIVA, e a versão NÃO subiu junto: quem já tinha estado gravado
+   * pela tela de espaços continua com o cadastro dele, e o campo novo nasce vazio. Subir a
+   * versão aqui apagaria o trabalho de quem estava no meio da demonstração para acrescentar
+   * um campo que ninguém tinha preenchido ainda — o custo seria real e o ganho, nenhum.
+   * A versão sobe quando a forma de um campo EXISTENTE mudar, que é quando ler o antigo com
+   * o código novo quebra de verdade.
+   */
+  instituicoes: Record<string, CadastroDeInstituicao>;
+  atualInstituicaoId: string | null;
 }
 
 export interface ContextoDaOrganizacao {
@@ -61,6 +77,7 @@ export interface ContextoDaOrganizacao {
 let estado: EstadoPersistido | null = null;
 let contexto: ContextoDaOrganizacao = { dataDeReferencia: "", autor: "", organizacao: "" };
 let primeiroId: string | null = null;
+let primeiraInstituicaoId: string | null = null;
 
 const ouvintes = new Set<() => void>();
 
@@ -117,6 +134,11 @@ function pareceEstado(v: unknown): v is EstadoPersistido {
   if (o.versao !== VERSAO) return false;
   if (o.atualId !== null && typeof o.atualId !== "string") return false;
   if (typeof o.cadastros !== "object" || o.cadastros === null) return false;
+  // `instituicoes` é o campo aditivo: ausente é legítimo — é o estado que a tela de espaços
+  // gravou antes de a O1 existir —, mas presente com forma errada não é.
+  if (o.instituicoes !== undefined && (typeof o.instituicoes !== "object" || o.instituicoes === null)) {
+    return false;
+  }
   return Object.values(o.cadastros as Record<string, unknown>).every((c) => {
     if (typeof c !== "object" || c === null) return false;
     const x = c as Record<string, unknown>;
@@ -133,7 +155,13 @@ function pareceEstado(v: unknown): v is EstadoPersistido {
 }
 
 function doZero(): EstadoPersistido {
-  return { versao: VERSAO, cadastros: {}, atualId: primeiroId };
+  return {
+    versao: VERSAO,
+    cadastros: {},
+    atualId: primeiroId,
+    instituicoes: {},
+    atualInstituicaoId: primeiraInstituicaoId,
+  };
 }
 
 function gravar(proximo: EstadoPersistido) {
@@ -153,9 +181,14 @@ function gravar(proximo: EstadoPersistido) {
  * Lê o armazenamento e liga a loja. Idempotente: chamar de novo não relê nem sobrescreve
  * — as dez telas montam o mesmo gancho, e a segunda não pode desfazer o que a primeira leu.
  */
-function hidratar(contextoNovo: ContextoDaOrganizacao, idInicial: string | null) {
+function hidratar(
+  contextoNovo: ContextoDaOrganizacao,
+  idInicial: string | null,
+  idDaInstituicao: string | null,
+) {
   contexto = contextoNovo;
-  primeiroId = idInicial;
+  if (idInicial !== null) primeiroId = idInicial;
+  if (idDaInstituicao !== null) primeiraInstituicaoId = idDaInstituicao;
   if (estado !== null) return;
 
   let cru: string | null = null;
@@ -185,7 +218,13 @@ function hidratar(contextoNovo: ContextoDaOrganizacao, idInicial: string | null)
     return;
   }
 
-  estado = lido;
+  // Normaliza o campo aditivo: estado gravado antes da O1 não tem `instituicoes`, e o resto
+  // do código não deve ter que perguntar se ele existe a cada leitura.
+  estado = {
+    ...lido,
+    instituicoes: lido.instituicoes ?? {},
+    atualInstituicaoId: lido.atualInstituicaoId ?? primeiraInstituicaoId,
+  };
   avisar();
 }
 
@@ -220,6 +259,35 @@ function comCadastro(
   gravar({ ...estado, cadastros: { ...estado.cadastros, [espacoId]: proximo } });
 }
 
+/** A ficha institucional que ainda não existe, já com autor, carimbo e o estado em que as
+ *  246 do acervo estão hoje: não verificada. */
+function fichaVazia(instituicaoId: string): CadastroDeInstituicao {
+  return {
+    instituicaoId,
+    contato: "",
+    endereco: "",
+    creditoImagem: "",
+    acessibilidade: acessibilidadeDeEspacoVazia(),
+    verificacao: "nao-verificada",
+    autor: contexto.autor,
+    quando: contexto.dataDeReferencia,
+  };
+}
+
+function comFicha(
+  instituicaoId: string,
+  transformar: (c: CadastroDeInstituicao) => CadastroDeInstituicao,
+) {
+  if (estado === null) return;
+  const atual = estado.instituicoes[instituicaoId] ?? fichaVazia(instituicaoId);
+  const proximo = {
+    ...transformar(atual),
+    autor: contexto.autor,
+    quando: contexto.dataDeReferencia,
+  };
+  gravar({ ...estado, instituicoes: { ...estado.instituicoes, [instituicaoId]: proximo } });
+}
+
 // ---------------------------------------------------------------------------
 // O gancho
 // ---------------------------------------------------------------------------
@@ -243,15 +311,30 @@ export interface Organizacao {
   alterarAcessibilidade: (espacoId: string, ficha: AcessibilidadeDeEspaco) => void;
   /** Devolve a demonstração ao estado inicial. Uma apresentação roda duas vezes. */
   reiniciar: () => void;
+
+  // --- O1 · a ficha institucional -----------------------------------------
+  instituicoes: Record<string, CadastroDeInstituicao>;
+  atualInstituicaoId: string | null;
+  escolherInstituicao: (id: string) => void;
+  alterarInstituicao: (
+    id: string,
+    mudanca: Partial<Omit<CadastroDeInstituicao, "instituicaoId">>,
+  ) => void;
+  declararInstituicaoSemRecursos: (id: string) => void;
+  alterarAcessibilidadeDaInstituicao: (id: string, ficha: AcessibilidadeDeEspaco) => void;
+  /** Encaminha a verificação ao Admin (92). A Organização NÃO se verifica — este método
+   *  não sabe escrever `"verificada"`, e essa impossibilidade é o ponto. */
+  solicitarVerificacao: (id: string) => void;
 }
 
 export function useOrganizacao(
   contextoDoServidor: ContextoDaOrganizacao,
   idInicial: string | null,
+  idDaInstituicao: string | null = null,
 ): Organizacao {
   useEffect(() => {
-    hidratar(contextoDoServidor, idInicial);
-  }, [contextoDoServidor, idInicial]);
+    hidratar(contextoDoServidor, idInicial, idDaInstituicao);
+  }, [contextoDoServidor, idInicial, idDaInstituicao]);
 
   const atualEstado = useSyncExternalStore(assinar, lerLoja, lerNoServidor);
 
@@ -281,6 +364,36 @@ export function useOrganizacao(
     [],
   );
 
+  const escolherInstituicao = useCallback((id: string) => {
+    if (estado === null) return;
+    gravar({ ...estado, atualInstituicaoId: id });
+  }, []);
+
+  const alterarInstituicao = useCallback(
+    (id: string, mudanca: Partial<Omit<CadastroDeInstituicao, "instituicaoId">>) => {
+      comFicha(id, (c) => ({ ...c, ...mudanca }));
+    },
+    [],
+  );
+
+  const declararInstituicaoSemRecursos = useCallback((id: string) => {
+    comFicha(id, (c) => ({
+      ...c,
+      acessibilidade: { ...acessibilidadeDeEspacoVazia(), declarada: true },
+    }));
+  }, []);
+
+  const alterarAcessibilidadeDaInstituicao = useCallback(
+    (id: string, ficha: AcessibilidadeDeEspaco) => {
+      comFicha(id, (c) => ({ ...c, acessibilidade: ficha }));
+    },
+    [],
+  );
+
+  const solicitarVerificacao = useCallback((id: string) => {
+    comFicha(id, (c) => ({ ...c, verificacao: "solicitada" }));
+  }, []);
+
   const reiniciar = useCallback(() => {
     try {
       window.localStorage.removeItem(CHAVE_DA_ORGANIZACAO);
@@ -300,5 +413,12 @@ export function useOrganizacao(
     declararSemRecursos,
     alterarAcessibilidade,
     reiniciar,
+    instituicoes: atualEstado?.instituicoes ?? {},
+    atualInstituicaoId: atualEstado?.atualInstituicaoId ?? null,
+    escolherInstituicao,
+    alterarInstituicao,
+    declararInstituicaoSemRecursos,
+    alterarAcessibilidadeDaInstituicao,
+    solicitarVerificacao,
   };
 }

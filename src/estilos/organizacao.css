@@ -240,3 +240,42 @@
   border-style: dashed;
   color: var(--cor-tinta-3);
 }
+
+/* ---------------------------------------------------------------------------
+ * 5 · A navegação das dez telas, no cabeçalho da própria superfície.
+ *
+ * Ela não está na raiz do Studio porque a raiz é da S7 · Produtor, que divide a
+ * pasta com esta sessão. Fica em linha, dentro do cabeçalho que já existe, pelo
+ * mesmo motivo que o Observatório: uma faixa em linha própria empurraria o
+ * conteúdo para baixo e custaria pixel de primeira vista.
+ * ------------------------------------------------------------------------- */
+
+.org-telas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+}
+
+.org-tela {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.org-tela[data-ativa="sim"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+}
+
+/* A tela que ainda não existe: nomeada, visível e inerte. Tracejado pela mesma
+ * razão de todo tracejado desta folha — é o que ainda não foi dito. */
+.org-tela[data-pronta="nao"] {
+  border-style: dashed;
+  color: var(--cor-tinta-3);
+  cursor: default;
+}

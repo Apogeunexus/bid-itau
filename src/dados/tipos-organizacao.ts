@@ -102,10 +102,16 @@ export function algumRecursoMarcado(f: RecursosFisicos): boolean {
   return RECURSOS_FISICOS.some((r) => f[r]);
 }
 
-/** O ato, escrito uma vez. A tela cita esta constante em vez de repetir a frase — duas
- *  telas com duas redações do mesmo ato fariam parecer que são dois atos diferentes. */
-export const FRASE_DO_ATO_DO_ESPACO =
-  "Declaro que este espaço não oferece nenhum destes recursos.";
+/**
+ * O ato, escrito uma vez.
+ *
+ * SEM SUJEITO NA FRASE, e é decisão: o mesmo ato serve o espaço e a instituição, e «este
+ * espaço» no botão da tela de instituição afirmaria a coisa errada. O sujeito vem do título
+ * do painel, que já diz de quem é a ficha. É a redação de §10 da ontologia, palavra por
+ * palavra — duas telas com duas redações do mesmo ato fariam parecer que são dois atos.
+ */
+export const FRASE_DO_ATO =
+  "Declaro que não oferece nenhum destes recursos.";
 
 /** Por que o ato tem peso igual ao de salvar, dito para quem opera a tela. */
 export const POR_QUE_O_ATO =
@@ -259,3 +265,202 @@ export function faltasDoEspaco(
 
   return saida;
 }
+
+// ---------------------------------------------------------------------------
+// A instituição — O1, e ela HERDA o padrão do espaço
+// ---------------------------------------------------------------------------
+
+/**
+ * O estado da verificação da instituição (funcionalidade 141).
+ *
+ * TRÊS VALORES, E O TERCEIRO É O PONTO. `nao-verificada` é onde estão as 246 hoje;
+ * `solicitada` é o que ESTA tela produz; `verificada` é o que só o Admin (92) escreve. A
+ * Organização **não se verifica** — se verificasse, a verificação não valeria nada, porque
+ * quem responde pelo dado estaria atestando o próprio dado. A tela encaminha e mostra o
+ * estado; ela não decide.
+ */
+export type EstadoDaVerificacao = "nao-verificada" | "solicitada" | "verificada";
+
+export const ROTULO_DA_VERIFICACAO: Record<EstadoDaVerificacao, string> = {
+  "nao-verificada": "não verificada",
+  solicitada: "verificação solicitada",
+  verificada: "verificada",
+};
+
+export const QUEM_VERIFICA =
+  "Quem verifica é o Admin (92), e não a própria organização: uma instituição que " +
+  "atestasse a si mesma produziria um selo que não afirma nada. Esta tela encaminha o " +
+  "pedido, mostra o que falta para ele ser aceito, e para aí.";
+
+/**
+ * O que a Organização escreve na própria ficha institucional.
+ *
+ * A ACESSIBILIDADE É A MESMA ESTRUTURA DO ESPAÇO, e isso é reuso e não preguiça: uma
+ * instituição também é um lugar onde se entra, e rampa, elevador e banheiro adaptado
+ * significam ali exatamente o que significam no espaço. Um segundo tipo com os mesmos treze
+ * campos faria a mesma pergunta ter duas respostas possíveis no mesmo produto.
+ *
+ * Note o que NÃO está aqui, de novo: `titulo`, `resumo`, `linguagens` e `fonte` continuam
+ * vindo da Enciclopédia. As 246 instituições são 100% `ic` — elas já existem, com verbete
+ * escrito. A O1 não reescreve o verbete: ela declara o que o verbete não tem.
+ */
+export interface CadastroDeInstituicao {
+  instituicaoId: string;
+  /** Como falar com quem responde. Um campo e não três: e-mail, telefone e site cabem no
+   *  mesmo texto, e três campos vazios pesam mais na tela do que um. */
+  contato: string;
+  endereco: string;
+  /** O crédito que falta nas imagens sem ele. Crédito é bloqueante (165). */
+  creditoImagem: string;
+  acessibilidade: AcessibilidadeDeEspaco;
+  verificacao: EstadoDaVerificacao;
+  autor: string;
+  quando: string;
+}
+
+/** O que a instituição precisa ter para o pedido de verificação fazer sentido. Não é
+ *  validação de formulário: é a lista que o Admin vai olhar, mostrada ANTES de pedir. */
+export function faltasDaInstituicao(
+  c: CadastroDeInstituicao | undefined,
+  temImagem: boolean,
+  temCreditoNoAcervo: boolean,
+  declaraNoAcervo: boolean,
+): Falta[] {
+  const saida: Falta[] = [];
+
+  if (!c || c.endereco.trim().length === 0) {
+    saida.push({
+      texto: "endereço — nenhuma das 246 instituições tem coordenada, e sem lugar ela não aparece no mapa",
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  if (!c || c.contato.trim().length === 0) {
+    saida.push({ texto: "contato de quem responde pela instituição", bloqueia: false, dono: null });
+  }
+  if (temImagem && !temCreditoNoAcervo && (!c || c.creditoImagem.trim().length === 0)) {
+    saida.push({
+      texto: "crédito da imagem — a imagem existe e o crédito não, e crédito é bloqueante (165)",
+      bloqueia: true,
+      dono: null,
+    });
+  }
+  if (!c?.acessibilidade.declarada && !declaraNoAcervo) {
+    saida.push({
+      texto: "ficha de acessibilidade — nem os recursos, nem o ato de declarar que não oferece",
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  saida.push({
+    texto:
+      c?.verificacao === "solicitada"
+        ? "a verificação está com o Admin — a organização não se verifica"
+        : "verificação ainda não solicitada",
+    bloqueia: false,
+    dono: "Admin (92)",
+  });
+
+  return saida;
+}
+
+// ---------------------------------------------------------------------------
+// As dez telas — a navegação da superfície
+// ---------------------------------------------------------------------------
+
+/**
+ * As dez telas do nível 6, na ordem em que fazem sentido para quem opera.
+ *
+ * POR QUE A NAVEGAÇÃO MORA AQUI e não na raiz do Studio. `/studio/page.tsx` é da S7 ·
+ * Produtor, que divide esta pasta com a Organização e está rodando em paralelo. Editar a
+ * raiz dela seria invadir território; então cada tela desta sessão carrega a navegação no
+ * próprio cabeçalho, como a Redação faz. O acréscimo na raiz está registrado como
+ * PEDIDO-S6-03 e é commit da S7.
+ *
+ * `pronta` NÃO É DECORAÇÃO. Uma tela que ainda não existe vira link para 404 — e um 404 no
+ * meio de uma demonstração ao vivo é pior do que um item apagado, porque quem clicou já
+ * perdeu o lugar. Enquanto `pronta` for `false`, o item aparece nomeado e desabilitado: a
+ * pessoa vê que a superfície tem dez telas e vê quais já respondem. A bandeira vira `true`
+ * no MESMO commit que cria a rota.
+ */
+export interface TelaDaOrganizacao {
+  id: string;
+  rotulo: string;
+  rota: string;
+  /** O que a tela resolve, em uma linha. Vira `title` — quem passa o cursor descobre. */
+  objetivo: string;
+  pronta: boolean;
+}
+
+export const TELAS_DA_ORGANIZACAO: readonly TelaDaOrganizacao[] = [
+  {
+    id: "instituicao",
+    rotulo: "Instituição",
+    rota: "/studio/instituicao",
+    objetivo: "A identidade que responde pelo que a organização publica",
+    pronta: true,
+  },
+  {
+    id: "espacos",
+    rotulo: "Espaços",
+    rota: "/studio/espacos",
+    objetivo: "Onde o espaço deixa de ser inferência e passa a ser cadastro",
+    pronta: true,
+  },
+  {
+    id: "equipe",
+    rotulo: "Equipe",
+    rota: "/studio/equipe",
+    objetivo: "Quem publica em nome da organização, e com qual alçada",
+    pronta: false,
+  },
+  {
+    id: "midia",
+    rotulo: "Mídia",
+    rota: "/studio/midia",
+    objetivo: "O acervo de ativos, com crédito bloqueante e direito declarado",
+    pronta: false,
+  },
+  {
+    id: "programa",
+    rotulo: "Programa",
+    rota: "/studio/programa",
+    objetivo: "A camada acima do evento — a única classe com zero instâncias",
+    pronta: false,
+  },
+  {
+    id: "formacao",
+    rotulo: "Formação",
+    rota: "/studio/formacao",
+    objetivo: "Cursos, biblioteca e a agenda de visita educativa",
+    pronta: false,
+  },
+  {
+    id: "editais",
+    rotulo: "Editais",
+    rota: "/studio/editais",
+    objetivo: "A funcionalidade que não tinha classe nem módulo",
+    pronta: false,
+  },
+  {
+    id: "integracao",
+    rotulo: "Integração",
+    rota: "/studio/integracao",
+    objetivo: "Importar em lote sem digitar duas vezes",
+    pronta: false,
+  },
+  {
+    id: "alcance",
+    rotulo: "Alcance",
+    rota: "/studio/alcance",
+    objetivo: "O retorno para quem publica — sem número que o acervo não sustenta",
+    pronta: false,
+  },
+  {
+    id: "conformidade",
+    rotulo: "Conformidade",
+    rota: "/studio/conformidade",
+    objetivo: "A fila dos próprios produtores, que a organização não via",
+    pronta: false,
+  },
+];

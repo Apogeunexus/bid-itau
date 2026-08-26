@@ -3,19 +3,15 @@
 import { useMemo, useState } from "react";
 import { Segmento, OpcaoDeSegmento } from "./base/segmento";
 import { FichaDeAcessibilidade } from "./ficha-acessibilidade";
+import { EditorDeAcessibilidade } from "./studio-org-acessibilidade";
+import { StudioOrgNavegacao } from "./studio-org-navegacao";
 import { useOrganizacao } from "./studio-org-estado";
-import { DIMENSOES_DE_ACESSIBILIDADE } from "@/dados/tipos-acesso";
 import {
   FRASE_DA_CONVERSAO,
   FRASE_DA_COORDENADA,
-  FRASE_DO_ATO_DO_ESPACO,
   METODO_APOS_ENDERECO,
-  POR_QUE_O_ATO,
   PROCEDENCIA_DA_ORGANIZACAO,
-  RECURSOS_FISICOS,
-  ROTULO_DO_RECURSO,
   acessibilidadeDeEspacoVazia,
-  algumRecursoMarcado,
   cadastrado,
   faltasDoEspaco,
 } from "@/dados/tipos-organizacao";
@@ -53,10 +49,11 @@ import type { Acessibilidade } from "@/dados/tipos";
  * SÓ NA VISÃO WEB (D-67). O layout de bastidor esconde o conteúdo inteiro sob `app:hidden`
  * e mostra o aviso de superfície; por isso não há aqui ramo de visão nem media query.
  *
- * REUSO E NÃO CÓPIA. A ficha das 8 dimensões em leitura é `FichaDeAcessibilidade`, a mesma
- * do app público, com os três estados de D-43 — «declarado», «declarado ausente» e «não
- * declarado». Uma segunda ficha dentro do mesmo Studio seria o defeito mais visível
- * possível numa banca. Superfície, painel, campo e botão vêm de `studio.css`, que é da S7.
+ * REUSO E NÃO CÓPIA, em três camadas. A ficha das 8 dimensões em LEITURA é
+ * `FichaDeAcessibilidade`, a mesma do app público, com os três estados de D-43. O EDITOR da
+ * ficha é `EditorDeAcessibilidade`, escrito uma vez e compartilhado com a O1 — a instituição
+ * coleta exatamente os mesmos treze campos, e duas cópias divergiriam na primeira correção.
+ * Superfície, painel, campo e botão vêm de `studio.css`, que é da S7.
  */
 
 interface Props {
@@ -140,6 +137,7 @@ export function StudioOrgEspacos({
           {autor} · medido em {dataDeReferencia}.
         </p>
         <p className="studio-nota">{gestorEAutorado}</p>
+        <StudioOrgNavegacao ativa="espacos" />
       </header>
 
       {/* Os denominadores, primeiro. Quem abre a tela precisa saber por que ela existe
@@ -389,103 +387,11 @@ export function StudioOrgEspacos({
                   sessão que acontecer neste lugar, sem o produtor redigitar.
                 </p>
 
-                <div>
-                  <p className="studio-rotulo">Recursos do lugar</p>
-                  <ul className="org-fisico">
-                    {RECURSOS_FISICOS.map((r) => {
-                      const marcado = ficha?.fisicos[r] ?? false;
-                      const estadoDoItem = marcado
-                        ? "oferece"
-                        : declarou
-                          ? "declarado-ausente"
-                          : "nao-declarado";
-                      return (
-                        <li key={r} className="org-fisico-item" data-estado={estadoDoItem}>
-                          <label className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              checked={marcado}
-                              onChange={(e) =>
-                                org.alterarAcessibilidade(atual.id, {
-                                  ...(ficha ?? acessibilidadeDeEspacoVazia()),
-                                  fisicos: {
-                                    ...(ficha ?? acessibilidadeDeEspacoVazia()).fisicos,
-                                    [r]: e.target.checked,
-                                  },
-                                  // Marcar é declarar: quem marca preencheu a ficha.
-                                  declarada: true,
-                                })
-                              }
-                            />
-                            {ROTULO_DO_RECURSO[r]}
-                          </label>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <p className="studio-campo-nota">
-                    Rampa, elevador, banheiro adaptado, piso tátil e vaga reservada não cabem
-                    nas 8 dimensões de `Acessibilidade`, que são de mídia. Eles estão em
-                    estrutura própria, registrada como pedido de contrato — forçar rampa
-                    dentro de «closed caption» seria fabricar classificação.
-                  </p>
-                </div>
-
-                <div>
-                  <p className="studio-rotulo">As 8 dimensões de mídia</p>
-                  <ul className="org-fisico">
-                    {DIMENSOES_DE_ACESSIBILIDADE.map((d) => (
-                      <li
-                        key={d.chave}
-                        className="org-fisico-item"
-                        data-estado={
-                          ficha?.dimensoes[d.chave]
-                            ? "oferece"
-                            : declarou
-                              ? "declarado-ausente"
-                              : "nao-declarado"
-                        }
-                      >
-                        <label className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            checked={ficha?.dimensoes[d.chave] ?? false}
-                            onChange={(e) =>
-                              org.alterarAcessibilidade(atual.id, {
-                                ...(ficha ?? acessibilidadeDeEspacoVazia()),
-                                dimensoes: {
-                                  ...(ficha ?? acessibilidadeDeEspacoVazia()).dimensoes,
-                                  [d.chave]: e.target.checked,
-                                },
-                                declarada: true,
-                              })
-                            }
-                          />
-                          {d.rotulo}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* O ATO. Peso igual ao de salvar, e por isso contêiner próprio: um
-                    checkbox no meio dos treze seria lido como a décima quarta caixa. */}
-                <div className="org-ato" data-declarado={declarou ? "sim" : "nao"}>
-                  <span className="org-ato-texto">
-                    {declarou
-                      ? algumRecursoMarcado(ficha?.fisicos ?? acessibilidadeDeEspacoVazia().fisicos)
-                        ? "Ficha declarada, com recursos marcados."
-                        : "Declarado: este espaço não oferece nenhum destes recursos."
-                      : POR_QUE_O_ATO}
-                  </span>
-                  <button
-                    type="button"
-                    className="studio-botao studio-botao-primario"
-                    onClick={() => org.declararSemRecursos(atual.id)}
-                  >
-                    {FRASE_DO_ATO_DO_ESPACO}
-                  </button>
-                </div>
+                <EditorDeAcessibilidade
+                  ficha={ficha}
+                  aoAlterar={(nova) => org.alterarAcessibilidade(atual.id, nova)}
+                  aoDeclararAusencia={() => org.declararSemRecursos(atual.id)}
+                />
               </section>
 
               {/* O que falta — permanente, e é o inverso do cadastro comum. */}

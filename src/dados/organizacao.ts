@@ -16,9 +16,12 @@
  * SEM RELÓGIO E SEM SORTEIO. A data é `DATA_DE_REFERENCIA`, fixada em `alerta.ts`.
  */
 
+import vocabularioJson from "./gerado/vocabulario.json";
 import { DATA_DE_REFERENCIA } from "./alerta";
 import { ocorrenciasDe, porSlug, slugsPorTipo, vizinhos } from "./grafo";
-import type { Entidade, MetodoCoordenada, Procedencia } from "./tipos";
+import type { Entidade, MetodoCoordenada, Procedencia, Vocabulario } from "./tipos";
+
+const vocabulario = vocabularioJson as Vocabulario;
 
 /** Quem opera a superfície na demonstração. Autorado, e a tela diz que é — no mesmo
  *  padrão de `OPERADOR_DO_STUDIO` e de `PRODUTOR_DA_DEMONSTRACAO`. */
@@ -232,3 +235,191 @@ export function declaracoesDosEspacos(n: NumerosDosEspacos): DeclaracaoDaTela[] 
 /** A data contra a qual tudo isto foi medido. Reexportada para a página carimbar a tela
  *  sem importar dois módulos — e para deixar explícito que a medida tem data. */
 export const DATA_DA_MEDIDA = DATA_DE_REFERENCIA;
+
+// ---------------------------------------------------------------------------
+// A instituição — O1
+// ---------------------------------------------------------------------------
+
+export interface LocalDaInstituicao {
+  cidade: string;
+  estado: string;
+  pais: string;
+}
+
+export interface InstituicaoDoAcervo {
+  id: string;
+  slug: string;
+  titulo: string;
+  resumo: string;
+  /** A URL do verbete na Enciclopédia. Obrigatória quando `procedencia === "ic"`, e as 246
+   *  são `ic` — é ela que deixa quem confere abrir a fonte em vez de acreditar na tela. */
+  fonte: string | null;
+  imagem: string | null;
+  creditoImagem: string | null;
+  /** Rótulos do vocabulário controlado, já resolvidos: o cliente não tem o índice. */
+  linguagens: string[];
+  territorio: string | null;
+  locais: LocalDaInstituicao[];
+  /** Quantos eventos ela `realiza`. É a relação organizacional de verdade — `pertence_a` é
+   *  classificação, não hierarquia — e é o segundo terço da chave de identidade do evento. */
+  eventosRealizados: number;
+  temCoordenada: boolean;
+  declaraAcessibilidade: boolean;
+}
+
+function locaisDe(e: Entidade): LocalDaInstituicao[] {
+  const bruto = e.extra?.locais;
+  if (!Array.isArray(bruto)) return [];
+  const saida: LocalDaInstituicao[] = [];
+  for (const l of bruto) {
+    if (typeof l !== "object" || l === null) continue;
+    const o = l as Record<string, unknown>;
+    saida.push({
+      cidade: typeof o.cidade === "string" ? o.cidade : "",
+      estado: typeof o.estado === "string" ? o.estado : "",
+      pais: typeof o.pais === "string" ? o.pais : "",
+    });
+  }
+  return saida;
+}
+
+const ROTULO_DA_LINGUAGEM = new Map(vocabulario.linguagens.map((l) => [l.id, l.rotulo]));
+
+/**
+ * As 246 instituições, em ordem de título.
+ *
+ * A LISTA INTEIRA VAI JUNTO pelo mesmo motivo dos 113 espaços: a O1 deixa escolher por qual
+ * instituição a organização responde, e trocar de instituição não pode ser navegar. São
+ * treze campos de primitivo por registro.
+ */
+export function instituicoesDoAcervo(): InstituicaoDoAcervo[] {
+  const saida = entidadesDe("instituicao").map((e) => {
+    const territorio =
+      vizinhos(e.id, "situado_em")
+        .map((v) => v.entidade)
+        .find((x) => x.classe === "territorio")?.titulo ?? null;
+
+    return {
+      id: e.id,
+      slug: e.slug,
+      titulo: e.titulo,
+      resumo: (e.resumo ?? "").trim(),
+      fonte: e.fonte ?? null,
+      imagem: e.imagem ?? null,
+      creditoImagem: e.creditoImagem ?? null,
+      linguagens: e.linguagens.map((id) => ROTULO_DA_LINGUAGEM.get(id) ?? id),
+      territorio,
+      locais: locaisDe(e),
+      eventosRealizados: vizinhos(e.id, "realiza").length,
+      temCoordenada: e.coordenada !== undefined,
+      declaraAcessibilidade: e.declaraAcessibilidade,
+    };
+  });
+
+  saida.sort((a, b) => a.titulo.localeCompare(b.titulo, "pt-BR"));
+  return saida;
+}
+
+/**
+ * Por qual instituição a demonstração começa respondendo.
+ *
+ * REGRA, E NÃO CURADORIA: a primeira em ordem de título entre as que `realiza` pelo menos um
+ * evento. Uma escolha manual aqui seria mais um lugar onde a demonstração dependeria de
+ * alguém lembrar de atualizar depois de uma regeração do grafo — a mesma disciplina de
+ * `GRUPO_DO_TRACADOR` em `duplicatas.ts`.
+ *
+ * Por que «entre as que realizam»: a ficha que importa é a de quem publica. Das 246, só 127
+ * realizam evento; abrir numa das 119 que não realizam mostraria a tela no caso menos
+ * interessante que ela tem.
+ */
+export function instituicaoInicial(lista: InstituicaoDoAcervo[]): string | null {
+  return lista.find((i) => i.eventosRealizados > 0)?.id ?? lista[0]?.id ?? null;
+}
+
+export interface NumerosDasInstituicoes {
+  total: number;
+  daFonte: number;
+  comCoordenada: number;
+  declaramAcessibilidade: number;
+  comImagem: number;
+  comCredito: number;
+  /** As que têm imagem e NÃO têm crédito. Trabalho concreto, não aviso genérico. */
+  comImagemSemCredito: number;
+  comResumo: number;
+  /** Arestas `instituicao → linguagem`, e quantas instituições realizam evento. */
+  arestasDeLinguagem: number;
+  queRealizam: number;
+  eventosRealizados: number;
+}
+
+export function numerosDasInstituicoes(): NumerosDasInstituicoes {
+  const ins = entidadesDe("instituicao");
+  let arestasDeLinguagem = 0;
+  let queRealizam = 0;
+  let eventosRealizados = 0;
+
+  for (const e of ins) {
+    arestasDeLinguagem += e.linguagens.length;
+    const realiza = vizinhos(e.id, "realiza").length;
+    eventosRealizados += realiza;
+    if (realiza > 0) queRealizam += 1;
+  }
+
+  return {
+    total: ins.length,
+    daFonte: ins.filter((e) => e.procedencia === "ic").length,
+    comCoordenada: ins.filter((e) => e.coordenada).length,
+    declaramAcessibilidade: ins.filter((e) => e.declaraAcessibilidade).length,
+    comImagem: ins.filter((e) => e.imagem).length,
+    comCredito: ins.filter((e) => e.creditoImagem).length,
+    comImagemSemCredito: ins.filter((e) => e.imagem && !e.creditoImagem).length,
+    comResumo: ins.filter((e) => (e.resumo ?? "").trim().length > 0).length,
+    arestasDeLinguagem,
+    queRealizam,
+    eventosRealizados,
+  };
+}
+
+export function declaracoesDasInstituicoes(n: NumerosDasInstituicoes): DeclaracaoDaTela[] {
+  return [
+    {
+      titulo: "Nenhuma instituição tem lugar",
+      texto:
+        `${n.comCoordenada} de ${n.total} instituições têm coordenada. Uma instituição sem lugar ` +
+        `não aparece no mapa, e o mapa é a lente de todo o produto. Esta tela cadastra o ` +
+        `endereço — e a coordenada continua derivada, pelo mesmo motivo da tela de espaços.`,
+    },
+    {
+      titulo: "Nenhuma instituição declara acessibilidade",
+      texto:
+        `${n.declaramAcessibilidade} de ${n.total} declaram a ficha. O padrão do ato explícito ` +
+        `foi fixado na tela de espaços e é o MESMO aqui: treze caixas desmarcadas seriam lidas ` +
+        `como «não declarou», e a plataforma se proibiu de interpretar silêncio.`,
+    },
+    {
+      titulo: "A imagem existe antes do crédito",
+      texto:
+        `${n.comImagem} de ${n.total} instituições têm imagem e ${n.comCredito} têm crédito — ` +
+        `${n.comImagemSemCredito} têm imagem SEM crédito. Crédito é bloqueante, então essas ` +
+        `${n.comImagemSemCredito} não publicam a imagem até alguém resolver. É trabalho ` +
+        `nomeado, e não aviso genérico.`,
+    },
+    {
+      titulo: "«realiza» é a relação organizacional de verdade",
+      texto:
+        `${n.queRealizam} de ${n.total} instituições realizam evento, somando ` +
+        `${n.eventosRealizados} arestas. É esta relação — e não «pertence_a», que é ` +
+        `classificação — que faz a chave de identidade do evento fechar: título normalizado ` +
+        `+ AGENTE REALIZADOR + obra. Sem organização cadastrada, o produtor não consegue ` +
+        `preencher o segundo terço da chave.`,
+    },
+    {
+      titulo: "O verbete é da Enciclopédia, e esta tela não o reescreve",
+      texto:
+        `As ${n.daFonte} de ${n.total} instituições são todas da fonte, com ${n.comResumo} ` +
+        `trazendo resumo e ${n.arestasDeLinguagem} arestas de linguagem. Nome, resumo e ` +
+        `linguagem continuam vindo de lá: o Studio referencia e propõe, nunca edita o verbete ` +
+        `de um agente real.`,
+    },
+  ];
+}
