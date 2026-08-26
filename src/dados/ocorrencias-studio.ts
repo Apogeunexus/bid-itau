@@ -65,7 +65,10 @@ export const OPERADOR_E_AUTORADO =
   "Não há autenticação neste protótipo. O nome de quem alterou é autorado e aparece " +
   "rotulado, em vez de simular um login: o que a tela precisa provar é que a alteração fica " +
   "registrada com autor e carimbo, e não que sabemos quem está do outro lado. O carimbo é " +
-  `derivado da data de referência do build (${DATA_DE_REFERENCIA}), nunca do relógio de quem ` +
+  // `dataCurta` e não a ISO crua: esta frase é lida em português, no meio de um parágrafo,
+  // enquanto a mesma tela mostra carimbos em «DD.MM.AAAA». Duas grafias da mesma data na
+  // mesma superfície fazem quem lê parar para decidir se são a mesma coisa.
+  `derivado da data de referência do build (${dataCurta(DATA_DE_REFERENCIA)}), nunca do relógio de quem ` +
   "abre a página.";
 
 /** O prefixo comum dos ids de ocorrência, para o DTO não repetir 20 caracteres 2.425 vezes. */

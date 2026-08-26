@@ -13,6 +13,7 @@ import {
 import type { RascunhoDoProdutor } from "@/dados/tipos-acesso";
 import { useStudio } from "@/componentes/studio-estado";
 import { Literal } from "@/componentes/studio-literal";
+import { comSeparador } from "@/componentes/studio-datas";
 import type {
   CatalogoDeIdentidade,
   ImagemDoCatalogo,
@@ -74,17 +75,6 @@ interface Props {
  * mesmo lugar: cortes diferentes fariam parecer que uma lista está completa e a outra não.
  */
 const LIMITE_DE_PILULAS = 24;
-
-/** Quantos eventos do acervo o aviso de duplicata compara. Vem do dado, não digitado. */
-function comSeparador(n: number): string {
-  const s = String(Math.trunc(Math.abs(n)));
-  let saida = "";
-  for (let i = 0; i < s.length; i += 1) {
-    if (i > 0 && (s.length - i) % 3 === 0) saida += ".";
-    saida += s[i];
-  }
-  return (n < 0 ? "-" : "") + saida;
-}
 
 export function FormularioPublicar({
   catalogo,

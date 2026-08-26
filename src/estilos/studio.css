@@ -1113,3 +1113,33 @@
   border-style: dashed;
   border-color: var(--cor-borda-forte);
 }
+
+/* ---------------------------------------------------------------------------
+ * A COLUNA COLADA ROLA POR DENTRO, e sem isto o pé dela é INALCANÇÁVEL.
+ *
+ * `position: sticky` numa coluna mais alta que a janela gruda no topo e nunca
+ * rola para revelar o próprio fim. Medido em 26.08 na tela de identidade:
+ *
+ *     coluna 1.279px · janela 960px  →  319px que ninguém alcança
+ *
+ * E o que ficava lá embaixo era a validação ao vivo e o denominador do acervo —
+ * ou seja, o motivo de a coluna existir. As telas de elenco e grade mediam 703 e
+ * 702px e cabiam, mas as duas crescem com o conteúdo: a do elenco com o número
+ * de vínculos, a da grade com as colisões de chave.
+ *
+ * A regra é a MESMA de `.web-coluna-fixa` em `web.css`, e é reuso e não cópia de
+ * ideia: teto de altura descontando o respiro do topo duas vezes, rolagem por
+ * dentro, e `overscroll-behavior: contain` para a rolagem da coluna não vazar
+ * para o documento quando ela chega ao fim.
+ *
+ * Nenhum portão estático vê isto. `tsc` compila, `verificar-ds` confere token, e
+ * sonda de comportamento clica no que está visível. Só medir a altura da coluna
+ * contra a da janela pega.
+ * ------------------------------------------------------------------------- */
+
+.studio-vivo {
+  max-height: calc(100vh - (2 * var(--web-topo-colado)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 0.25rem;
+}

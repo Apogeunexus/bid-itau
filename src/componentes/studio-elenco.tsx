@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useStudio } from "@/componentes/studio-estado";
 import { Literal } from "@/componentes/studio-literal";
 import { SeletorDeRegistro } from "@/componentes/studio-seletor";
+import { comSeparador } from "@/componentes/studio-datas";
 import {
   EXPLICACAO_DA_SITUACAO,
   PORTAS,
@@ -49,16 +50,6 @@ interface Props {
 
 /** Quantos resultados a busca mostra por vez. Declarado na tela, nunca em silêncio. */
 const RESULTADOS_POR_BUSCA = 8;
-
-function comSeparador(n: number): string {
-  const s = String(Math.trunc(Math.abs(n)));
-  let saida = "";
-  for (let i = 0; i < s.length; i += 1) {
-    if (i > 0 && (s.length - i) % 3 === 0) saida += ".";
-    saida += s[i];
-  }
-  return (n < 0 ? "-" : "") + saida;
-}
 
 /**
  * Tira acento e caixa, para a busca casar «Jose» com «José».

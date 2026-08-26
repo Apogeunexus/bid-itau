@@ -1,5 +1,6 @@
 import { Grafismo } from "@/componentes/grafismo";
 import { StudioGrade } from "@/componentes/studio-grade";
+import { comSeparador } from "@/componentes/studio-datas";
 import { SITUACAO_E_AUTORADA, catalogoDaGrade, rascunhosSemeados } from "@/dados/mock/seed";
 import {
   FRASE_DE_D73,
@@ -36,8 +37,12 @@ export default function StudioGradePagina() {
           <h1 className="studio-titulo">Grade de ocorrências</h1>
         </div>
         <p className="studio-objetivo">
-          A sessão datada é o registro que o acervo não tem: as {n.ocorrencias} ocorrências
-          dele são todas derivadas por regra, porque nenhuma existe em sistema nenhum do IC.
+          {/* `comSeparador` e não o número cru: o painel da direita já escreve «2.425», e
+              duas grafias do mesmo número na mesma tela fazem quem lê parar para decidir se
+              são o mesmo — aqui, na primeira frase da tela. */}
+          A sessão datada é o registro que o acervo não tem: as{" "}
+          {comSeparador(n.ocorrencias)} ocorrências dele são todas derivadas por regra,
+          porque nenhuma existe em sistema nenhum do IC.
           Cada linha declarada aqui passa a existir, com procedência «produtor» e chave de
           três partes.
         </p>

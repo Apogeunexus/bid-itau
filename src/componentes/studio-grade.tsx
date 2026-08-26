@@ -7,6 +7,7 @@ import { SeletorDeRegistro } from "@/componentes/studio-seletor";
 import {
   DIAS_DA_SEMANA,
   TETO_DE_SESSOES_GERADAS,
+  comSeparador,
   dataCurta,
   dataDe,
   diaDaSemana,
@@ -62,16 +63,6 @@ interface Props {
 
 /** Os horários que o gerador oferece de partida. Editáveis: é a grade real que manda. */
 const HORARIOS_INICIAIS = ["20:00"];
-
-function comSeparador(n: number): string {
-  const s = String(Math.trunc(Math.abs(n)));
-  let saida = "";
-  for (let i = 0; i < s.length; i += 1) {
-    if (i > 0 && (s.length - i) % 3 === 0) saida += ".";
-    saida += s[i];
-  }
-  return (n < 0 ? "-" : "") + saida;
-}
 
 export function StudioGrade({
   catalogo,

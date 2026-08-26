@@ -166,3 +166,25 @@ export function gerarSessoes(
     cortadas: Math.max(0, todas.length - TETO_DE_SESSOES_GERADAS),
   };
 }
+
+/**
+ * `1304` → `"1.304"`.
+ *
+ * Sem `toLocaleString`: o separador não pode depender do locale da máquina que roda o build,
+ * senão o número da tela muda de forma entre um build e outro. Mesma regra de
+ * `ocorrencias-studio.ts` e `duplicatas.ts` — e é por ela existir aqui, num módulo que o
+ * cliente pode importar por valor, que as telas da jornada param de reescrevê-la uma a uma.
+ *
+ * TODA CONTAGEM DA TELA PASSA POR AQUI. Duas grafias do mesmo número na mesma superfície
+ * fazem quem lê gastar um segundo decidindo se são o mesmo, e num cabeçalho é o primeiro
+ * segundo da tela.
+ */
+export function comSeparador(n: number): string {
+  const s = String(Math.trunc(Math.abs(n)));
+  let saida = "";
+  for (let i = 0; i < s.length; i += 1) {
+    if (i > 0 && (s.length - i) % 3 === 0) saida += ".";
+    saida += s[i];
+  }
+  return (n < 0 ? "-" : "") + saida;
+}
