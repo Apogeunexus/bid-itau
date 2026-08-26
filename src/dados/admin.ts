@@ -97,6 +97,88 @@ const comDuasCasas = (n: number): string => n.toFixed(2).replace(".", ",");
 const comSeparador = (n: number): string => n.toLocaleString("pt-BR");
 
 // ---------------------------------------------------------------------------
+// Quem escreve, e com que carimbo
+// ---------------------------------------------------------------------------
+
+/**
+ * "2026-08-22" → "22.08.2026".
+ *
+ * A terceira cópia desta função no projeto — `alerta.ts` e `moderacao.ts` têm as outras
+ * duas, e a de lá diz por quê. Repetir três linhas custa menos do que amarrar a superfície
+ * de governança a um módulo que outra sessão está reescrevendo agora.
+ */
+function dataCurta(iso: string): string {
+  const [ano, mes, dia] = iso.slice(0, 10).split("-");
+  return ano && mes && dia ? `${dia}.${mes}.${ano}` : iso;
+}
+
+/** A hora do carimbo desta superfície. Fixa, e não lida do relógio: sob export estático o
+ *  relógio de quem avalia faria a página hidratada divergir do HTML do build. */
+const HORA_DO_CARIMBO = "23h40";
+
+/**
+ * Quem administra. Não há autenticação neste protótipo (D-25): o nome é autorado e a tela
+ * diz que é. Ele existe para provar que **a escrita do administrador também fica
+ * registrada** — que é a regra que esta sessão não pode quebrar —, não para simular um
+ * login que o sistema não tem.
+ */
+export const ADMIN_AUTORADO = "Admin · governança da plataforma (perfil autorado)";
+
+export const ADMIN_E_AUTORADO =
+  "Não há autenticação neste protótipo. O nome de quem administra é autorado e aparece " +
+  "rotulado. O que esta superfície precisa provar é que o administrador NÃO é exceção de " +
+  "procedência: toda escrita dele grava autor e carimbo, como a de qualquer outro nível. O " +
+  `carimbo vem da data de referência do build (${DATA_DE_REFERENCIA}), nunca do relógio de ` +
+  "quem abre a página.";
+
+/** O carimbo que uma escrita do Admin recebe. */
+export const CARIMBO_DO_ADMIN = `${dataCurta(DATA_DE_REFERENCIA)}, ${HORA_DO_CARIMBO}`;
+
+/**
+ * A chave do armazenamento local desta superfície, versionada.
+ *
+ * Versionada porque o formato do registro vai mudar entre telas desta sessão, e um registro
+ * velho lido com o formato novo apareceria na trilha como decisão malformada — numa tela
+ * cuja tese é que a trilha não mente.
+ */
+export const CHAVE_DE_ARMAZENAMENTO = "admin.v1";
+
+/**
+ * Uma mudança de parâmetro, registrada.
+ *
+ * NÃO EXISTE MUDANÇA SEM MOTIVO E SEM AUTOR. É a mesma regra do veto na moderação, e aqui
+ * ela é mais dura: quem muda um limiar muda o que 66 mil arestas produzem para todo mundo,
+ * e é o único papel capaz de fazer isso sem que ninguém veja.
+ */
+export interface MudancaDeParametro {
+  parametroId: string;
+  /** O valor que estava lá, como a tela o exibia. */
+  de: string;
+  /** O valor proposto, como a pessoa o digitou. */
+  para: string;
+  motivo: string;
+  autor: string;
+  carimbo: string;
+}
+
+/**
+ * O registro é válido? Devolve a lista do que falta, em português, para a tela dizer o que
+ * falta em vez de apenas recusar o botão.
+ */
+export function oQueFaltaNaMudanca(m: {
+  para: string;
+  de: string;
+  motivo: string;
+}): string[] {
+  const falta: string[] = [];
+  const valor = m.para.trim();
+  if (!valor) falta.push("um valor novo");
+  else if (valor === m.de.trim()) falta.push("um valor diferente do atual");
+  if (m.motivo.trim().length < 8) falta.push("um motivo com pelo menos 8 caracteres");
+  return falta;
+}
+
+// ---------------------------------------------------------------------------
 // O parâmetro do motor — e o tipo que proíbe número solto
 // ---------------------------------------------------------------------------
 
