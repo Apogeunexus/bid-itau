@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { normalizar } from "@/dados/indice";
 import {
   EXPLICACAO_DA_SITUACAO,
@@ -12,6 +12,7 @@ import {
 } from "@/dados/tipos-acesso";
 import type { RascunhoDoProdutor } from "@/dados/tipos-acesso";
 import { useStudio } from "@/componentes/studio-estado";
+import { Literal } from "@/componentes/studio-literal";
 import type {
   CatalogoDeIdentidade,
   ImagemDoCatalogo,
@@ -64,6 +65,15 @@ interface Props {
   /** A frase que declara que a situação dos registros semeados é autorada. */
   situacaoEAutorada: string;
 }
+
+/**
+ * Quantas pílulas de vocabulário aparecem antes de «mostrar os outros».
+ *
+ * 24 é o que cabe em três linhas na coluna do formulário sem virar parede. O número está
+ * aqui e não espalhado porque as duas listas — 33 linguagens e 94 temas — precisam cortar no
+ * mesmo lugar: cortes diferentes fariam parecer que uma lista está completa e a outra não.
+ */
+const LIMITE_DE_PILULAS = 24;
 
 /** Quantos eventos do acervo o aviso de duplicata compara. Vem do dado, não digitado. */
 function comSeparador(n: number): string {
@@ -192,8 +202,7 @@ export function FormularioPublicar({
             {/* A normalização VISÍVEL ao lado: é ela, e não o que se digita, que entra na
                 chave. Esconder a transformação faria a colisão parecer arbitrária. */}
             <span className="studio-campo-nota">
-              normalizado:{" "}
-              <span className="studio-literal">{normalizar(atual.titulo) || "—"}</span>
+              normalizado: <Literal valor={normalizar(atual.titulo) || "—"} />
             </span>
           </label>
 
@@ -253,7 +262,9 @@ export function FormularioPublicar({
             <h2 className="web-painel-titulo">Carimbo do sistema</h2>
             <dl className="studio-carimbo-lista">
               <dt>procedência</dt>
-              <dd className="studio-literal">{atual.procedencia}</dd>
+              <dd>
+                <Literal valor={atual.procedencia} />
+              </dd>
               <dt>agente realizador</dt>
               <dd>{atual.fonte}</dd>
               <dt>autor</dt>
@@ -287,7 +298,7 @@ export function FormularioPublicar({
                     </span>
                     <span className="studio-componente-corpo">
                       <span className="studio-componente-rotulo">{c.rotulo}</span>
-                      <span className="studio-literal">{c.valor || "não preenchido"}</span>
+                      <Literal valor={c.valor || "não preenchido"} />
                       {noAcervo && !noAcervo.sustentado ? (
                         <span className="studio-campo-nota">
                           o acervo não sustenta este componente em nenhum dos 300 eventos
@@ -299,7 +310,7 @@ export function FormularioPublicar({
               })}
             </ul>
             <p className="studio-campo-nota">
-              chave: <span className="studio-literal">{atual.chaveIdentidade}</span>
+              chave: <Literal valor={atual.chaveIdentidade} />
             </p>
           </section>
 
@@ -459,6 +470,8 @@ function EscolhaDeTermos({
   aoAlternar: (id: string) => void;
   aoPropor: (texto: string) => void;
 }) {
+  const [todos, definirTodos] = useState(false);
+
   // Os escolhidos primeiro, e o resto em ordem do vocabulário: com 94 temas, uma lista que
   // não trouxesse o que já está marcado para cima faria o produtor perder a própria escolha.
   const ordenados = useMemo(() => {
@@ -467,11 +480,17 @@ function EscolhaDeTermos({
     return [...marcados, ...resto];
   }, [termos, escolhidos]);
 
+  // A LISTA CURTA DIZ QUE É CURTA. 94 temas numa parede de pílulas não se lê, mas cortar em
+  // silêncio é pior: quem procura um termo que existe e não aparece conclui que ele não
+  // existe, e propõe um duplicado pela porta do Editor.
+  const visiveis = todos ? ordenados : ordenados.slice(0, LIMITE_DE_PILULAS);
+  const ocultos = ordenados.length - visiveis.length;
+
   return (
     <fieldset className="studio-campo" disabled={!editavel}>
       <legend className="studio-campo-rotulo">{titulo}</legend>
       <div className="studio-pilulas">
-        {ordenados.slice(0, 24).map((t) => (
+        {visiveis.map((t) => (
           <button
             key={t.id}
             type="button"
@@ -485,6 +504,20 @@ function EscolhaDeTermos({
           </button>
         ))}
       </div>
+      {ocultos > 0 || todos ? (
+        <p className="studio-campo-nota">
+          {ocultos > 0
+            ? `Mostrando ${visiveis.length} de ${ordenados.length}.`
+            : `Mostrando os ${ordenados.length}.`}{" "}
+          <button
+            type="button"
+            className="studio-vinculo studio-vinculo-botao"
+            onClick={() => definirTodos((x) => !x)}
+          >
+            {todos ? "mostrar menos" : `mostrar os outros ${ocultos}`}
+          </button>
+        </p>
+      ) : null}
       <label className="studio-campo-nota">
         Não está na lista?{" "}
         <input

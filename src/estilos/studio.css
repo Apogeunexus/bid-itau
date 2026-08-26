@@ -728,3 +728,16 @@
   text-transform: uppercase;
   color: var(--cor-tinta-3);
 }
+
+/* Um botão que se lê como link, dentro de texto corrido. É `<button>` e não `<a>` porque
+ * não navega: quem usa teclado precisa que a tecla que dispara seja a do controle certo. */
+.studio-vinculo-botao {
+  cursor: pointer;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  color: var(--cor-acao-tinta);
+  text-decoration: underline;
+}
