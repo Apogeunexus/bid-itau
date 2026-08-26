@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { CHAVE_DAS_PONTES, gravarPontes, lerPontes } from "@/dados/redacao-registro";
 import type {
   ArestaAutorada,
   CandidatoDoCatalogo,
@@ -33,50 +34,9 @@ import type {
  * página de servidor, com teto medido.
  */
 
-/** Chave do próprio espaço, versionada, e DECLARADA na tela. */
-export const CHAVE_DAS_PONTES = "agenda-cultural:pontes-autoradas-v1";
-
-function lerPontes(): ArestaAutorada[] {
-  try {
-    const bruto = window.localStorage.getItem(CHAVE_DAS_PONTES);
-    if (!bruto) return [];
-    const valor: unknown = JSON.parse(bruto);
-    if (!Array.isArray(valor)) return [];
-    // T-05-17: o valor é editável pelo avaliador. Uma ponte sem motivo ou sem assinatura
-    // não entra — seria exatamente a linha que esta tela existe para impedir, chegando
-    // pela porta dos fundos.
-    return valor.filter(
-      (v): v is ArestaAutorada =>
-        typeof v === "object" &&
-        v !== null &&
-        typeof (v as ArestaAutorada).deId === "string" &&
-        typeof (v as ArestaAutorada).paraId === "string" &&
-        typeof (v as ArestaAutorada).relacao === "string" &&
-        typeof (v as ArestaAutorada).motivo === "string" &&
-        (v as ArestaAutorada).motivo.trim().length > 0 &&
-        typeof (v as ArestaAutorada).assinatura === "string" &&
-        (v as ArestaAutorada).assinatura.trim().length > 0,
-    );
-  } catch {
-    return [];
-  }
-}
-
-/**
- * Grava, e DIZ se conseguiu.
- *
- * O storage recusa em modo privado e em iframe, e engolir isso deixaria o curador achando
- * que a ponte ficou registrada quando ela vive só na memória da aba. A tela prefere avisar:
- * o trabalho continua na tela, e quem está operando sabe que fechar a aba o perde.
- */
-function gravarPontes(pontes: ArestaAutorada[]): boolean {
-  try {
-    window.localStorage.setItem(CHAVE_DAS_PONTES, JSON.stringify(pontes));
-    return true;
-  } catch {
-    return false;
-  }
-}
+// A leitura, a gravação e a chave moram em `redacao-registro.ts`, com as outras telas da
+// Redação: a E9 audita os três registros e precisa conhecer UM formato, não três. A
+// validação na leitura continua lá, e vale para quem editar o storage à mão.
 
 /** Uma coluna de escolha de ponta: filtro + lista, com a CLASSE sempre à vista. */
 function EscolhaDePonta({
@@ -192,6 +152,8 @@ export function RedacaoPontes({
   const [assinatura, setAssinatura] = useState(curador);
   const [pontes, setPontes] = useState<ArestaAutorada[]>([]);
   const [persistiu, setPersistiu] = useState(true);
+  /** Qual ponte está com a retirada pendente de confirmação. Ver `remover`. */
+  const [aRetirar, setARetirar] = useState<string | null>(null);
 
   useEffect(() => {
     const guardadas = lerPontes();
@@ -228,9 +190,11 @@ export function RedacaoPontes({
       deId: de.id,
       deTitulo: de.titulo,
       deClasse: de.classe,
+      deSlug: de.slug,
       paraId: para.id,
       paraTitulo: para.titulo,
       paraClasse: para.classe,
+      paraSlug: para.slug,
       relacao,
       motivo: motivo.trim(),
       assinatura: assinatura.trim(),
@@ -246,10 +210,21 @@ export function RedacaoPontes({
     setMotivo("");
   };
 
-  const remover = (indice: number) => {
+  /**
+   * Retirar do registro é IRREVERSÍVEL: o texto que a curadoria escreveu some, e não há
+   * desfazer. Por isso o primeiro clique só arma a confirmação, e o segundo executa — a
+   * confirmação é da própria tela, e não um `window.confirm`, que o protótipo não usa em
+   * lugar nenhum.
+   */
+  const remover = (chave: string, indice: number) => {
+    if (aRetirar !== chave) {
+      setARetirar(chave);
+      return;
+    }
     const proximo = pontes.filter((_, i) => i !== indice);
     setPontes(proximo);
     setPersistiu(gravarPontes(proximo));
+    setARetirar(null);
   };
 
   const autoradasAgora = peso.arestasAutoradas + pontes.length;
@@ -500,14 +475,31 @@ export function RedacaoPontes({
                 <p className="studio-nota redacao-decisao-assinatura">
                   relação «{p.relacao}» · procedência autorado · {p.assinatura} · {p.carimbo}
                 </p>
-                <button
-                  type="button"
-                  className="studio-botao redacao-desfazer"
-                  data-remover-ponte={p.paraId}
-                  onClick={() => remover(i)}
-                >
-                  retirar do registro
-                </button>
+                <div className="studio-acoes">
+                  <button
+                    type="button"
+                    className="studio-botao redacao-desfazer"
+                    data-remover-ponte={p.paraId}
+                    data-confirmando={
+                      aRetirar === `${p.deId}->${p.relacao}->${p.paraId}` ? "sim" : "nao"
+                    }
+                    onClick={() => remover(`${p.deId}->${p.relacao}->${p.paraId}`, i)}
+                  >
+                    {aRetirar === `${p.deId}->${p.relacao}->${p.paraId}`
+                      ? "confirmar: retirar e apagar o motivo"
+                      : "retirar do registro"}
+                  </button>
+                  {aRetirar === `${p.deId}->${p.relacao}->${p.paraId}` ? (
+                    <button
+                      type="button"
+                      className="studio-botao"
+                      data-cancelar-retirada={p.paraId}
+                      onClick={() => setARetirar(null)}
+                    >
+                      cancelar
+                    </button>
+                  ) : null}
+                </div>
               </li>
             ))}
           </ul>

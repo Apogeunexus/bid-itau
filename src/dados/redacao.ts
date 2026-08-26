@@ -29,6 +29,7 @@ import { trilhaCompletaPorSlug, trilhaEhPublicavel, trilhas } from "./trilha";
 import { CARIMBO_DA_DECISAO, LIMITES_DA_IA, TETO_DO_DTO, numerosDaModeracao } from "./moderacao";
 import type { NumerosDaModeracao } from "./moderacao";
 import type { OrigemMotivo } from "./cartao";
+import { rotaDaEntidade } from "./rotas";
 import type { ClasseEntidade, Entidade, Procedencia, Relacao } from "./tipos";
 
 /**
@@ -266,6 +267,8 @@ export interface SugestaoDeProximoPasso {
   classe: ClasseEntidade;
   /** Ver `PassoDoEditor.paraSessoesDatadas`: aceitar a sugestão a põe no fim da cadeia. */
   sessoesDatadas: number | null;
+  /** Ver `CandidatoDoCatalogo.slug`: a sugestão vira candidato quando o curador aceita. */
+  slug: string;
   relacao: Relacao;
   /** A frase DA ARESTA, por `motivoDaAresta`. Não é texto de modelo. */
   motivo: string;
@@ -307,6 +310,7 @@ export function sugestaoDeProximoPasso(slug: string): SugestaoDeProximoPasso | n
       titulo: v.entidade.titulo,
       classe: v.entidade.classe,
       sessoesDatadas: sessoesDatadasDe(v.entidade.id, v.entidade.classe),
+      slug: v.entidade.slug,
       relacao: v.aresta.relacao,
       motivo: m.texto,
       origemMotivo: m.origemMotivo,
@@ -327,6 +331,12 @@ export interface CandidatoDoCatalogo {
   id: string;
   titulo: string;
   classe: ClasseEntidade;
+  /**
+   * O slug, e ele viaja por um motivo só: sem ele a E9 não consegue montar o endereço
+   * público da entidade, e o «onde esta afirmação aparece ao público» que ela promete
+   * viraria uma frase sem link. `rotaDaEntidade` precisa de classe E slug.
+   */
+  slug: string;
   /** Ver `PassoDoEditor.paraSessoesDatadas`: qualquer candidato pode virar o último passo. */
   sessoesDatadas: number | null;
 }
@@ -414,6 +424,7 @@ export function catalogoParaArrastar(): CatalogoDeArrasto {
       id: e.id,
       titulo: e.titulo,
       classe: e.classe,
+      slug: e.slug,
       sessoesDatadas: sessoesDatadasDe(e.id, e.classe),
     })),
     total: TOTAL_DE_ENTIDADES,
@@ -542,14 +553,200 @@ export interface ArestaAutorada {
   deId: string;
   deTitulo: string;
   deClasse: ClasseEntidade;
+  /** `null` em registro gravado antes de o slug viajar — a E9 diz «sem rota» e não mente. */
+  deSlug: string | null;
   paraId: string;
   paraTitulo: string;
   paraClasse: ClasseEntidade;
+  paraSlug: string | null;
   relacao: Relacao;
   motivo: string;
   assinatura: string;
   carimbo: string;
 }
+
+// ---------------------------------------------------------------------------
+// E9 — a fatia autorada do grafo, VARRIDA e conferida contra `meta.json`
+// ---------------------------------------------------------------------------
+
+/**
+ * As 20 classes, como `Record` de propósito.
+ *
+ * Uma lista solta aqui envelheceria em silêncio: acrescentar classe em `tipos.ts` sem
+ * incluí-la nesta varredura faria a contagem de nós autorados ficar MENOR que a real, e uma
+ * tela que se propõe a auditar autoria contando a menos é pior que nenhuma tela. Com
+ * `Record<ClasseEntidade, true>` o compilador recusa a omissão.
+ */
+const TODAS_AS_CLASSES: Record<ClasseEntidade, true> = {
+  pessoa: true,
+  coletivo: true,
+  instituicao: true,
+  espaco: true,
+  obra: true,
+  termo: true,
+  programa: true,
+  evento: true,
+  temporada: true,
+  ocorrencia: true,
+  conteudo: true,
+  midia: true,
+  publicacao: true,
+  formacao: true,
+  linguagem: true,
+  tema: true,
+  territorio: true,
+  "pessoa-usuaria": true,
+  repertorio: true,
+  trilha: true,
+};
+
+/**
+ * O que um nó autorado É, decidido pela ESTRUTURA e não pelo nome.
+ *
+ * `procedencia: "autorado"` quer dizer «não veio de fonte externa» — e isso engloba coisas
+ * de naturezas muito diferentes: a trilha que a curadoria montou, as duplicatas semeadas
+ * para a fila de moderação ter o que julgar, e as personas do protótipo com os repertórios
+ * delas. Apresentar as três como «afirmação assinada» inflaria a curadoria por um fator de
+ * quarenta e sete, numa tela cujo assunto é exatamente auditar isso.
+ *
+ * A classificação é lida do grafo: quem participa de `duplicata_suspeita` é semeadura da
+ * fila; `pessoa-usuaria` e `repertorio` são a persona e os salvos dela. O que sobra é
+ * curadoria. Fosse por marca no slug, a conta quebraria na primeira mudança de convenção.
+ */
+export type NaturezaDaAutoria = "curadoria" | "duplicata-semeada" | "persona-do-prototipo";
+
+export interface AfirmacaoDoAcervo {
+  id: string;
+  titulo: string;
+  classe: ClasseEntidade;
+  natureza: NaturezaDaAutoria;
+  /** Onde esta afirmação aparece ao público. `null` quando a classe não tem página. */
+  rotaDoOutroLado: string | null;
+  /** Por que não há outro lado, quando não há. Nunca fica em branco junto com a rota. */
+  semRotaPorque: string | null;
+  /** Quantas ligações autoradas tocam este nó, contadas na varredura. */
+  ligacoesAutoradas: number;
+}
+
+export interface FatiaAutorada {
+  /** Os nós autorados, nomeados um a um. */
+  nos: AfirmacaoDoAcervo[];
+  /** Quantos a varredura achou. Comparado com `meta.json` na própria tela. */
+  nosVarridos: number;
+  nosDeclarados: number;
+  nosTotal: number;
+  /** Ligações autoradas ALCANÇADAS a partir dos nós autorados — não são as 81. */
+  arestasAlcancadas: number;
+  arestasDeclaradas: number;
+  arestasTotal: number;
+  /** Quantos dos nós autorados são de fato curadoria. É o número que a tela abre. */
+  nosDeCuradoria: number;
+}
+
+let fatiaMemo: FatiaAutorada | null = null;
+
+/**
+ * A fatia autorada do grafo, varrida por `grafo.ts` e conferida contra `meta.json`.
+ *
+ * D-47: a leitura passa por `grafo.ts`, nunca por `entidades.json` ou `arestas.json` — é por
+ * isso que os nós são varridos classe a classe em vez de filtrados no JSON bruto, que seria
+ * mais curto e proibido.
+ *
+ * AS LIGAÇÕES SÃO AS ALCANÇÁVEIS, E NÃO AS 81. `grafo.ts` não exporta iteração sobre todas
+ * as arestas, então o que esta varredura consegue ver são as ligações autoradas que TOCAM um
+ * nó autorado. Uma ponte autorada entre dois nós do acervo — os dois de procedência `ic` —
+ * não aparece nesta contagem, e é por isso que a tela mostra os DOIS números lado a lado em
+ * vez de apresentar o alcançado como se fosse o total. Declarar o recorte é o que separa
+ * este painel de uma contagem que mente por omissão.
+ */
+export function fatiaAutorada(): FatiaAutorada {
+  if (fatiaMemo) return fatiaMemo;
+
+  const nos: AfirmacaoDoAcervo[] = [];
+  const arestasVistas = new Set<string>();
+
+  for (const classe of Object.keys(TODAS_AS_CLASSES) as ClasseEntidade[]) {
+    for (const slug of slugsPorTipo(classe)) {
+      const e = porSlug(classe, slug);
+      if (!e || e.procedencia !== "autorado") continue;
+
+      let ligacoes = 0;
+      let ehDuplicataSemeada = false;
+      for (const v of vizinhos(e.id)) {
+        if (v.aresta.relacao === "duplicata_suspeita") ehDuplicataSemeada = true;
+        if (v.aresta.procedencia !== "autorado") continue;
+        ligacoes += 1;
+        // A mesma aresta aparece dos dois lados quando as duas pontas são autoradas.
+        // A chave ordenada impede que ela conte duas vezes no total.
+        const par = [v.aresta.de, v.aresta.para].sort();
+        arestasVistas.add(`${par[0]}|${v.aresta.relacao}|${par[1]}`);
+      }
+
+      const rota = rotaDaEntidade(e.classe, e.slug);
+      const natureza: NaturezaDaAutoria = ehDuplicataSemeada
+        ? "duplicata-semeada"
+        : e.classe === "pessoa-usuaria" || e.classe === "repertorio"
+          ? "persona-do-prototipo"
+          : "curadoria";
+      nos.push({
+        id: e.id,
+        titulo: e.titulo,
+        classe: e.classe,
+        natureza,
+        rotaDoOutroLado: rota,
+        semRotaPorque: rota
+          ? null
+          : `A classe «${e.classe}» não tem página própria no app: ela aparece dentro de ` +
+            "outras telas, e não há endereço para onde apontar. Linkar para o vazio seria " +
+            "prometer um outro lado que não existe.",
+        ligacoesAutoradas: ligacoes,
+      });
+    }
+  }
+
+  nos.sort(porIdEstavel);
+
+  fatiaMemo = {
+    nos,
+    nosVarridos: nos.length,
+    nosDeclarados: meta.porProcedencia.autorado,
+    nosTotal: meta.totais.entidades,
+    arestasAlcancadas: arestasVistas.size,
+    arestasDeclaradas: meta.porProcedenciaDeAresta.autorado,
+    arestasTotal: meta.totais.arestas,
+    nosDeCuradoria: nos.filter((n) => n.natureza === "curadoria").length,
+  };
+  return fatiaMemo;
+}
+
+/**
+ * A diferença entre esta tela e a M9 da Moderação, que é a razão de as duas existirem.
+ *
+ * O moderador registra DECISÕES SOBRE O TRABALHO DE OUTROS — o que ele aprovou, vetou,
+ * devolveu. O editor registra AFIRMAÇÕES PRÓPRIAS: coisas que ninguém disse antes dele. Uma
+ * auditoria procura coisas diferentes em cada uma: na M9, se o critério foi aplicado igual
+ * para todos; aqui, se quem afirmou está disposto a defender o que afirmou.
+ */
+export const DIFERENCA_PARA_A_MODERACAO =
+  "A Moderação registra decisões sobre o trabalho de outras pessoas — aprovar, vetar, " +
+  "devolver. Esta tela registra afirmações próprias: pontes de sentido, trilhas e termos " +
+  "que ninguém tinha dito antes. São registros diferentes porque respondem a perguntas " +
+  "diferentes: lá se audita se o critério valeu igual para todos; aqui, se quem afirmou " +
+  "assina o que afirmou.";
+
+/**
+ * Por que NÃO há filtro por período, dito em vez de simulado.
+ *
+ * T-03-10 proíbe o relógio: o carimbo de toda afirmação deriva de `DATA_DE_REFERENCIA`, o
+ * que significa que tudo o que esta sessão assina carrega a MESMA data. Um seletor de
+ * período sobre uma data só seria um controle que não filtra nada — teatro de interface, e
+ * numa tela cujo assunto é auditoria isso é pior do que a ausência.
+ */
+export const AUSENCIA_DO_FILTRO_DE_PERIODO =
+  `Não há filtro por período, e a razão é do protótipo: sem relógio (o carimbo deriva de ` +
+  `${DATA_DE_REFERENCIA}, a data de referência do build), toda afirmação assinada aqui ` +
+  "carrega a mesma data. Um seletor de período sobre uma data só seria um controle que não " +
+  "filtra nada. O filtro por tipo de afirmação, esse, filtra — e está acima.";
 
 // ---------------------------------------------------------------------------
 // Os números — o que a tela cita e o que 05-08 mede contra ela

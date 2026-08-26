@@ -607,3 +607,66 @@
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
 }
+
+/* ===========================================================================
+ * E9 — O QUE EU ASSINEI
+ * ======================================================================== */
+
+/* As afirmações à esquerda, a fatia autorada do acervo à direita: o que a
+ * sessão fez fica no lado largo, e o denominador que dá peso a isso, ao lado. */
+.redacao-colunas-assinaturas {
+  grid-template-columns: minmax(0, 1fr) 30rem;
+}
+
+.redacao-coluna-fatia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--web-gap);
+  min-width: 0;
+}
+
+.redacao-filtros {
+  flex-wrap: wrap;
+}
+
+.redacao-filtros .studio-botao[data-ativo="sim"] {
+  border-color: var(--cor-acao);
+  font-weight: 600;
+}
+
+.redacao-lista-afirmacoes,
+.redacao-lista-fatia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redacao-afirmacao,
+.redacao-item-fatia {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+}
+
+.redacao-afirmacao-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* A confirmação de retirada: o botão muda de cor E de texto. Cor sozinha não
+ * serve — quem não distingue as duas continua precisando ler o que vai
+ * acontecer antes do segundo clique. */
+.redacao-desfazer[data-confirmando="sim"] {
+  border-color: var(--cor-acao);
+  background: color-mix(in srgb, var(--cor-acao) 12%, transparent);
+  font-weight: 600;
+}

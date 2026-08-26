@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { registrarTrilhaPublicada } from "@/dados/redacao-registro";
 import type {
   CandidatoDoCatalogo,
   CatalogoDeArrasto,
@@ -232,6 +233,7 @@ export function RedacaoTrilha({
     passos: number;
   } | null>(null);
   const [arrastando, setArrastando] = useState<string | null>(null);
+  const [persistiu, setPersistiu] = useState(true);
 
   useEffect(() => {
     const rascunho = lerRascunho();
@@ -395,12 +397,21 @@ export function RedacaoTrilha({
    */
   const publicar = () => {
     if (!publicavel) return;
-    setPublicacao({
-      quem: assinatura.trim() || curador,
-      quando: carimbo,
-      agendadaPara: agendamento,
-      passos: passos.length,
-    });
+    const quem = assinatura.trim() || curador;
+    setPublicacao({ quem, quando: carimbo, agendadaPara: agendamento, passos: passos.length });
+    // A publicação vira REGISTRO, e não só um aviso na tela. Sem isto «O que eu assinei»
+    // abriria vazia depois de o curador publicar uma trilha — uma tela de auditoria que não
+    // vê o ato que acabou de acontecer não audita nada.
+    setPersistiu(
+      registrarTrilhaPublicada({
+        slug: trilha.slug,
+        titulo: titulo || trilha.titulo,
+        assinatura: quem,
+        carimbo,
+        agendadaPara: agendamento,
+        passos: passos.length,
+      }),
+    );
   };
 
   const mudar = (proximo: DestinoDoEditor[]) => {
@@ -707,6 +718,14 @@ export function RedacaoTrilha({
               </div>
             </div>
 
+            {persistiu ? null : (
+              <p className="studio-nota" data-nao-sustenta>
+                O navegador recusou gravar o registro local — acontece em janela privada e
+                dentro de iframe. A publicação vale nesta tela, mas não aparecerá em «O que
+                eu assinei» depois de fechar a aba.
+              </p>
+            )}
+
             {publicacao ? (
               <div className="redacao-decisao" data-decisao-redacao={trilha.slug}>
                 <span className="redacao-decisao-cabeca">
@@ -931,6 +950,7 @@ export function RedacaoTrilha({
                       id: sugestao.entidadeId,
                       titulo: sugestao.titulo,
                       classe: sugestao.classe,
+                      slug: sugestao.slug,
                       sessoesDatadas: sugestao.sessoesDatadas,
                     })
                   }

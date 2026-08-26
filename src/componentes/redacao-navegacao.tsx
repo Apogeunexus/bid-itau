@@ -23,6 +23,7 @@ export interface RotaDaRedacao {
 export const ROTAS_DA_REDACAO: readonly RotaDaRedacao[] = [
   { href: "/redacao/trilha/", rotulo: "Trilha curada" },
   { href: "/redacao/pontes/", rotulo: "Arestas de sentido" },
+  { href: "/redacao/assinaturas/", rotulo: "O que eu assinei" },
 ];
 
 export function RedacaoNavegacao({ atual }: { atual: string }) {
