@@ -48,6 +48,8 @@ import {
 } from "./geo";
 import { CONTORNO_BRASIL, ROTULO_CONTORNO, ROTULO_UNIDADES_FEDERATIVAS, UNIDADES_FEDERATIVAS } from "./contorno-brasil";
 import type { DadosDesertos } from "@/componentes/desertos";
+import { alcancadosDaPersona } from "./caminhada";
+import { LIMITE_FEED, PRECOMPUTO } from "./feeds";
 import { PERSONAS } from "./personas";
 import { COMPONENTES_DO_CRITERIO } from "./duplicatas";
 import { repertorioDe } from "./repertorio";
@@ -1880,4 +1882,216 @@ export function montarTerritorio(): DadosDoTerritorio {
     instituicoesSemCoordenada: semCoordenadaDeInstituicao,
   };
   return territorioMemorizado;
+}
+
+// ---------------------------------------------------------------------------
+// G2 · KPIs de produto — o que mede de verdade, e o que é null com declaração
+// ---------------------------------------------------------------------------
+
+export interface DadosDoProduto {
+  /** Os que o acervo sustenta: personalização, alcance, travessia. */
+  medidos: Indicador[];
+  /** Os que não têm lastro nenhum — e não é atraso, é ausência de sinal de comportamento. */
+  semLastro: Indicador[];
+}
+
+/**
+ * A distância entre os feeds de duas personas, medida.
+ *
+ * É O ÚNICO NÚMERO DE PERSONALIZAÇÃO QUE ESTE PROTÓTIPO PODE AFIRMAR, e ele é forte
+ * justamente porque não depende de comportamento: o feed sai da travessia do grafo a partir
+ * do repertório, e dois repertórios diferentes produzem listas diferentes. Sobreposição
+ * baixa é personalização MEDIDA; num produto com analytics, este mesmo número costuma ser
+ * afirmado e nunca contado.
+ *
+ * A combinação usada é a de MÁSCARA ZERO — nenhuma disposição marcada —, que é o feed que
+ * cada persona vê ao abrir. Comparar combinações diferentes entre duas personas mediria a
+ * diferença entre os filtros, e não entre as pessoas.
+ */
+function distanciaEntreFeeds(): Indicador {
+  const listaBase = (personaId: string): string[] => {
+    const combinacoes = PRECOMPUTO.porPersona[personaId];
+    const base = combinacoes?.[0];
+    if (!base) return [];
+    return (PRECOMPUTO.listas[base.lista] ?? []).map((c) => c.id);
+  };
+
+  const linhas: LinhaDeIndicador[] = [];
+  let paresComparados = 0;
+  let somaDeComuns = 0;
+  let maiorSobreposicao = 0;
+
+  for (let i = 0; i < PERSONAS.length; i += 1) {
+    for (let j = i + 1; j < PERSONAS.length; j += 1) {
+      const a = PERSONAS[i];
+      const b = PERSONAS[j];
+      const listaA = listaBase(a.id);
+      const listaB = new Set(listaBase(b.id));
+      const comuns = listaA.filter((id) => listaB.has(id)).length;
+      const de = Math.max(listaA.length, listaB.size);
+      paresComparados += 1;
+      somaDeComuns += comuns;
+      if (comuns > maiorSobreposicao) maiorSobreposicao = comuns;
+      linhas.push({
+        rotulo: `${a.nome} × ${b.nome}`,
+        valor: comuns,
+        de,
+        nota: `${comuns} item em comum entre os dois feeds de abertura, de ${de}`,
+      });
+    }
+  }
+
+  return {
+    id: "distancia-entre-feeds",
+    rotulo: "Distância entre feeds",
+    valor: somaDeComuns,
+    unidade: `itens em comum somados entre os ${paresComparados} pares de personas`,
+    denominador: {
+      n: LIMITE_FEED,
+      do_que: "itens no feed de abertura de cada persona — é sobre este conjunto que a sobreposição é contada",
+    },
+    denominadorSecundario: {
+      n: PERSONAS.length,
+      do_que: "personas autoradas, formando os pares comparados",
+    },
+    sustentado: true,
+    procedenciaDoNumero:
+      "src/dados/feeds.ts · PRECOMPUTO.porPersona[persona][0] — a combinação de máscara zero, o feed que cada uma vê ao abrir",
+    declaracao: null,
+    leitura:
+      `Os feeds de abertura das personas compartilham ${somaDeComuns} itens somados entre os ${paresComparados} pares, ` +
+      `com no máximo ${maiorSobreposicao} em comum num par. É personalização MEDIDA, e não afirmada: ` +
+      `o feed sai da travessia do grafo a partir do repertório de cada uma, e repertórios diferentes ` +
+      `produzem listas diferentes sem que ninguém tenha registrado um clique.`,
+    detalhe: linhas,
+  };
+}
+
+/** O alcance da caminhada: quanto do acervo cada repertório encosta. */
+function alcanceDaCaminhada(): Indicador {
+  const total = META.totais.entidades;
+  const linhas: LinhaDeIndicador[] = [];
+  let somaDeAlcance = 0;
+
+  for (const persona of PERSONAS) {
+    const alcancados = alcancadosDaPersona(persona.id).size;
+    somaDeAlcance += alcancados;
+    linhas.push({
+      rotulo: persona.nome,
+      valor: alcancados,
+      de: total,
+      nota: `${pt(porcento(alcancados, total))}% do acervo é alcançável a partir do repertório dela`,
+    });
+  }
+
+  linhas.sort((a, b) => (b.valor ?? 0) - (a.valor ?? 0) || a.rotulo.localeCompare(b.rotulo));
+  const maior = linhas[0];
+
+  return {
+    id: "alcance-da-caminhada",
+    rotulo: "Alcance da caminhada",
+    valor: maior?.valor ?? 0,
+    unidade: "entidades alcançáveis a partir do maior repertório",
+    denominador: {
+      n: total,
+      do_que: "entidades no acervo — o denominador é o acervo inteiro, e não a parte que o motor visitou",
+    },
+    denominadorSecundario: {
+      n: PERSONAS.length,
+      do_que: "personas autoradas, cada uma com o próprio alcance na lista abaixo",
+    },
+    sustentado: true,
+    procedenciaDoNumero: "src/dados/caminhada.ts · alcancadosDaPersona() sobre as personas de personas.json",
+    declaracao: null,
+    leitura:
+      `O maior repertório alcança ${maior?.valor ?? 0} entidades — ${pt(porcento(maior?.valor ?? 0, total))}% do acervo. ` +
+      `É o tamanho do mundo que a plataforma consegue abrir a partir do que uma pessoa já guardou, ` +
+      `e é medido no grafo, não estimado.`,
+    detalhe: linhas,
+  };
+}
+
+/**
+ * Os três KPIs de produto que o protótipo NÃO PODE MEDIR, e é preciso dizer por quê.
+ *
+ * NÃO INVENTE ENGAJAMENTO. Um KPI de produto sem usuário real é `null` com declaração, e
+ * nunca um número plausível — e a tentação aqui é enorme, porque aquisição, retenção e funil
+ * são exatamente os três números que uma banca espera ver num painel de produto. Escrevê-los
+ * a partir das 3 personas autoradas seria afirmar comportamento de gente que não existe.
+ *
+ * E é uma ausência de OUTRA espécie que a da gratuidade: lá o campo existe no acervo e está
+ * vazio; aqui não há acervo nenhum que pudesse ter o campo, porque o artefato é estático e
+ * não registra visita. As duas ficam declaradas, cada uma com o seu motivo.
+ */
+function semSinalDeComportamento(): Indicador[] {
+  const total = META.totais.entidades;
+  const base = {
+    unidade: "—",
+    valor: null,
+    sustentado: false,
+    detalhe: [] as LinhaDeIndicador[],
+    denominadorSecundario: {
+      n: PERSONAS.length,
+      do_que: "personas autoradas — as únicas pessoas que este protótipo conhece, e nós as inventamos",
+    },
+  };
+
+  return [
+    {
+      ...base,
+      id: "aquisicao",
+      rotulo: "Aquisição",
+      denominador: { n: 0, do_que: "visitas registradas — o artefato é estático e não registra nenhuma" },
+      procedenciaDoNumero:
+        "não há origem: export estático (D-24), zero requisição em execução, nenhum registro de sessão em lugar nenhum",
+      declaracao:
+        "Aquisição não tem lastro aqui, e a falta é de outra espécie que a da gratuidade: lá o campo existe no acervo e está vazio; aqui não há acervo que pudesse ter o campo. O artefato é um export estático sem back-end, sem cookie e sem registro de visita — não há primeira visita a contar, então não há aquisição. Escrever um número plausível a partir das 3 personas autoradas seria afirmar comportamento de gente que não existe.",
+      leitura:
+        "O corte existe no produto e está desligado aqui. Num sistema em produção este indicador acende com a primeira pessoa real que entra — o que falta é gente, não software.",
+    },
+    {
+      ...base,
+      id: "retencao",
+      rotulo: "Retenção e retorno",
+      denominador: { n: 0, do_que: "segundas visitas — não há a primeira registrada, então não há a segunda" },
+      procedenciaDoNumero:
+        "não há origem: `localStorage` guarda a escolha de quem olha e nunca sai do navegador dele; nada é agregado em lugar nenhum",
+      declaracao:
+        "Retorno exige saber que alguém voltou, e saber isso exige ter registrado que alguém veio. O que este protótipo guarda — persona, salvos, visão — mora no `localStorage` de quem está olhando e nunca é agregado: é preferência de uma pessoa no navegador dela, não um dado do produto. Uma taxa de retorno calculada sobre isso mediria a sessão de quem avalia.",
+      leitura:
+        "É o indicador que mais depende de gente e menos depende de código: ele acende sozinho quando houver segunda visita para contar.",
+    },
+    {
+      ...base,
+      id: "funil-de-descoberta",
+      rotulo: "Funil de descoberta",
+      denominador: { n: 0, do_que: "conversões registradas — salvar um evento é gesto local e não vira registro" },
+      denominadorSecundario: {
+        n: total,
+        do_que: "entidades que o funil poderia percorrer, se houvesse funil",
+      },
+      procedenciaDoNumero:
+        "não há origem: salvar grava id de ocorrência em `localStorage` (D-42) e não atravessa para lugar nenhum",
+      declaracao:
+        "Funil exige etapas registradas — viu, abriu, salvou, foi. Aqui o gesto de salvar grava um id no navegador de quem salvou e não atravessa para lugar nenhum, então não existe a segunda ponta que faria a etapa virar taxa. O que a tela pode afirmar sobre descoberta está na tela de impacto, medido no grafo: quantas linguagens novas estão a um salto de cada repertório.",
+      leitura:
+        "A descoberta que este protótipo mede é estrutural e não comportamental: o que está encostado no que a pessoa já atravessou. É menos do que um funil, e é verdade.",
+    },
+  ];
+}
+
+let produtoMemorizado: DadosDoProduto | null = null;
+
+export function montarProduto(): DadosDoProduto {
+  if (produtoMemorizado) return produtoMemorizado;
+
+  const medidos = [
+    distanciaEntreFeeds(),
+    alcanceDaCaminhada(),
+    exigirIndicador("ampliacao-de-repertorio"),
+  ].map(conferirIndicador);
+  const semLastro = semSinalDeComportamento().map(conferirIndicador);
+
+  produtoMemorizado = { medidos, semLastro };
+  return produtoMemorizado;
 }
