@@ -202,3 +202,49 @@
 .admin-procedencia .studio-linha {
   grid-template-columns: 12rem 1fr 1fr;
 }
+
+/* As tabelas de três e de quatro colunas desta superfície.
+ *
+ * `.studio-linha` conhece duas — rótulo e valor. A matriz de autoria precisa de quatro
+ * (elemento, escreve, aprova, contagem) e as tabelas de nível e procedência de três: o
+ * contraste entre as colunas É o conteúdo, e empilhá-las em duas o desfaz. */
+
+.admin-niveis .studio-linha {
+  grid-template-columns: 14rem 1fr 12rem;
+}
+
+.admin-matriz .studio-linha {
+  grid-template-columns: 20rem 12rem 10rem 1fr;
+}
+
+/* A aresta impressa — `pessoa —[modera, escopo=PA]→ plataforma`. Ela é a forma do modelo,
+ * não um exemplo de código: merece o tamanho de um valor, não o de uma legenda. */
+
+.admin-aresta {
+  font-size: var(--tipo-corpo);
+  line-height: 1.4;
+}
+
+/* O formulário de concessão.
+ *
+ * LARGURA MÁXIMA, e não a da superfície. Um campo de texto de 1.350px é desenho ruim por
+ * dois motivos: o olho perde a linha de base entre o rótulo e o começo do que foi digitado,
+ * e a largura promete um parágrafo onde cabe um nome. 46rem é o mesmo teto de leitura do
+ * resto da tela, aplicado ao ato de escrever.
+ *
+ * `align-items: flex-start` para o botão de enviar não esticar junto com os campos: botão
+ * do tamanho da coluna lê como faixa, não como ação. */
+
+.admin-formulario {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: 46rem;
+}
+
+/* O rótulo de um grupo de campos precisa de ar acima dele: sem isso, «Escopo — os três
+ * eixos» cola no campo anterior e parece legenda dele, não título do que vem depois. */
+.admin-formulario .studio-rotulo {
+  margin-top: 0.75rem;
+}

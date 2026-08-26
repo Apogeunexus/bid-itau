@@ -56,6 +56,8 @@ interface MetaDoAdmin {
   fanoutSemelhante: number;
   fanoutEfetivo: number;
   totais: { entidades: number; arestas: number };
+  porClasse: Record<string, number>;
+  porRelacao: Record<string, number>;
   porProcedencia: Record<string, number>;
   porProcedenciaDeAresta: Record<string, number>;
   fichaDeAcessibilidade: { declaram: number; naoDeclaram: number };
@@ -186,7 +188,7 @@ export interface MunicipioAcrescentado extends EscritaDoAdmin {
  * pode perder um pedaço sem que ninguém note. O `tipo` é o que permite renderizar cada
  * escrita com a frase certa sem perder a ordem entre elas.
  */
-export type EventoDeAuditoria = MudancaDeParametro | MunicipioAcrescentado;
+export type EventoDeAuditoria = MudancaDeParametro | MunicipioAcrescentado | PapelConcedido;
 
 /** Só o que veio do nosso próprio formato entra de volta. O armazenamento é editável por
  *  quem avalia, e registro malformado numa trilha de auditoria é pior que registro nenhum. */
@@ -205,6 +207,16 @@ export function eventosValidos(bruto: unknown): EventoDeAuditoria[] {
     }
     if (m.tipo === "municipio") {
       return typeof m.municipio === "string" && typeof m.entidadesMovidas === "number";
+    }
+    if (m.tipo === "papel") {
+      return (
+        typeof m.pessoa === "string" &&
+        typeof m.papel === "string" &&
+        typeof m.territorio === "string" &&
+        typeof m.classe === "string" &&
+        typeof m.fila === "string" &&
+        typeof m.procedenciaAutorizada === "string"
+      );
     }
     return false;
   });
@@ -429,6 +441,236 @@ export function concentradores(): Concentradores {
       grauEscrito: comSeparador(c.grau),
     })),
   };
+}
+
+
+// ---------------------------------------------------------------------------
+// A1 — papéis, escopos e o vocabulário de procedência
+// ---------------------------------------------------------------------------
+
+/**
+ * A DESCOBERTA QUE ESTA TELA EXISTE PARA MOSTRAR. Os níveis de acesso não são uma camada de
+ * segurança sobre a ontologia: eles SÃO o vocabulário de procedência. Cada papel humano é um
+ * valor de carimbo, e conceder um papel é autorizar alguém a produzir aquele valor.
+ *
+ * Daí a forma da concessão: papel é ARESTA COM ESCOPO, não coluna numa tabela de usuários. A
+ * mesma pessoa é produtora do próprio teatro e curadora regional do Pará, sem conta
+ * duplicada — e uma coluna `papel` na linha da pessoa não consegue dizer isso.
+ */
+export const PAPEL_E_ARESTA =
+  "pessoa —[modera, escopo=PA]→ plataforma";
+
+export const POR_QUE_ARESTA =
+  "Papel não é coluna na linha da pessoa. É aresta, com escopo na própria aresta: a mesma " +
+  "pessoa é produtora do próprio teatro e curadora regional do Pará ao mesmo tempo, sem " +
+  "conta duplicada. Uma coluna «papel» obrigaria a segunda conta, e a segunda conta é como " +
+  "uma plataforma perde o rastro de quem é quem.";
+
+/** A segregação que a tela imprime, e que a própria superfície respeita. */
+export const QUEM_CONCEDE_NAO_DECIDE =
+  "Quem concede papel de moderador não decide na fila. Esta tela concede; a fila é da " +
+  "Moderação. Sem essa separação, um administrador poderia moderar em nome de qualquer " +
+  "território sem que ninguém visse — e a trilha registraria uma decisão de moderação onde " +
+  "houve, na verdade, um ato de administração.";
+
+export interface NivelDeAcesso {
+  numero: number;
+  nome: string;
+  superficie: string;
+  /** O que ele escreve na ontologia. «nada» é resposta válida e importante. */
+  escreve: string;
+  /** O valor de procedência que as escritas dele carimbam, quando há um. */
+  procedencia: string;
+}
+
+export const NIVEIS_DE_ACESSO: readonly NivelDeAcesso[] = [
+  { numero: 1, nome: "Admin", superficie: "Admin", escreve: "governança, vocabulário de sistema, papéis", procedencia: "—" },
+  { numero: 2, nome: "Gestor", superficie: "Observatório", escreve: "nada — só lê, e é de propósito", procedencia: "—" },
+  { numero: 3, nome: "Moderador", superficie: "Moderação", escreve: "decisões, com autor e motivo", procedencia: "curador" },
+  { numero: 4, nome: "Moderador com escopo", superficie: "Moderação", escreve: "o mesmo, recortado por território, classe ou fila", procedencia: "curador" },
+  { numero: 5, nome: "Editor / Curador", superficie: "Redação", escreve: "sentido: verbete, trilha, vocabulário", procedencia: "curador" },
+  { numero: 6, nome: "Organização", superficie: "Studio", escreve: "identidade estável: instituição, espaço, mídia", procedencia: "parceiro" },
+  { numero: 7, nome: "Produtor cultural", superficie: "Studio", escreve: "o acontecimento: evento, temporada, ocorrência", procedencia: "produtor" },
+  { numero: 8, nome: "Público autenticado", superficie: "App", escreve: "repertório, salvos, sinais", procedencia: "—" },
+];
+
+export interface EixoDeEscopo {
+  eixo: string;
+  exemplo: string;
+  porQue: string;
+}
+
+export const EIXOS_DO_ESCOPO: readonly EixoDeEscopo[] = [
+  {
+    eixo: "Território",
+    exemplo: "agenda do Pará",
+    porQue:
+      "dois estados não existem no acervo e dois concentram a maior parte dele. Fila " +
+      "centralizada em São Paulo reproduziria na governança o deserto que o mapa denuncia.",
+  },
+  {
+    eixo: "Tipo de conteúdo",
+    exemplo: "só mídia · só agenda · só editorial · só agentes",
+    porQue:
+      "quem sabe reconhecer direito de imagem numa fotografia não é necessariamente quem " +
+      "sabe avaliar a ficha de um espaço.",
+  },
+  {
+    eixo: "Fila",
+    exemplo: "só duplicatas · só revisão de IA · só direitos de imagem",
+    porQue:
+      "as filas exigem critérios diferentes, e um moderador com escopo de fila decide onde " +
+      "o julgamento dele vale.",
+  },
+];
+
+export interface FatiaDeProcedenciaDoPapel {
+  valor: string;
+  quemProduz: string;
+  /** Contagem viva quando o acervo já tem, e a declaração quando não tem. */
+  nos: string;
+  arestas: string;
+  existeHoje: boolean;
+}
+
+/**
+ * As seis procedências que a produção prevê, contra as três que o acervo tem.
+ *
+ * As três de hoje trazem contagem viva do `meta.json`. As outras três não trazem ZERO —
+ * trazem a declaração de que a produção as abre. Zero e «ainda não existe» são coisas
+ * diferentes, e um zero aqui faria a tela afirmar uma medição que ninguém fez.
+ */
+export function procedenciasDoModelo(): FatiaDeProcedenciaDoPapel[] {
+  const viva = (p: string, quem: string): FatiaDeProcedenciaDoPapel => ({
+    valor: p,
+    quemProduz: quem,
+    nos: comSeparador(META.porProcedencia[p] ?? 0),
+    arestas: comSeparador(META.porProcedenciaDeAresta[p] ?? 0),
+    existeHoje: true,
+  });
+  const futura = (p: string, quem: string): FatiaDeProcedenciaDoPapel => ({
+    valor: p,
+    quemProduz: quem,
+    nos: "a produção abre",
+    arestas: "a produção abre",
+    existeHoje: false,
+  });
+  return [
+    viva("ic", "ingestão do acervo do Itaú Cultural"),
+    viva("derivado", "regra do sistema — nenhuma pessoa"),
+    viva("autorado", "nós, na montagem do protótipo, e a tela diz onde"),
+    futura("produtor", "nível 7 · Produtor cultural, no Studio"),
+    futura("parceiro", "nível 6 · Organização, no Studio"),
+    futura("curador", "níveis 3, 4 e 5 · Moderação e Redação"),
+    futura("ia", "extração automática, sempre com score e sempre revisada"),
+  ];
+}
+
+export interface LinhaDaMatriz {
+  elemento: string;
+  escreve: string;
+  aprova: string;
+  /** Quantas instâncias o acervo tem hoje, já em português. */
+  quantas: string;
+}
+
+/**
+ * A matriz de autoria, VIVA: cada linha traz a contagem que o acervo tem hoje.
+ *
+ * A regra que ela existe para provar é a §3 da ontologia — nenhum elemento pode existir sem
+ * exatamente um papel autorizado a autorá-lo. Uma linha sem autor é um buraco que nenhuma
+ * tela conserta, e a matriz é onde o buraco apareceria.
+ */
+export function matrizDeAutoria(): LinhaDaMatriz[] {
+  const classe = (c: string) => comSeparador(META.porClasse[c] ?? 0);
+  const relacao = (r: string) => comSeparador(META.porRelacao[r] ?? 0);
+  return [
+    { elemento: "linguagem · tema · termo", escreve: "Editor", aprova: "Admin", quantas: `${classe("linguagem")} · ${classe("tema")} · ${classe("termo")}` },
+    { elemento: "territorio + centroide", escreve: "Admin", aprova: "—", quantas: classe("territorio") },
+    { elemento: "pessoa · coletivo", escreve: "Editor", aprova: "Moderador", quantas: `${classe("pessoa")} · ${classe("coletivo")}` },
+    { elemento: "instituicao", escreve: "Organização", aprova: "Moderador", quantas: classe("instituicao") },
+    { elemento: "espaco + ficha de acessibilidade", escreve: "Organização", aprova: "Moderador", quantas: classe("espaco") },
+    { elemento: "obra", escreve: "Editor", aprova: "Moderador", quantas: classe("obra") },
+    { elemento: "programa", escreve: "Organização", aprova: "Moderador", quantas: `${classe("programa")} — a classe existe e nada a popula` },
+    { elemento: "evento", escreve: "Produtor", aprova: "Moderador", quantas: classe("evento") },
+    { elemento: "temporada", escreve: "Produtor", aprova: "Moderador", quantas: classe("temporada") },
+    { elemento: "ocorrencia", escreve: "Produtor", aprova: "—", quantas: classe("ocorrencia") },
+    { elemento: "conteudo · publicacao", escreve: "Editor", aprova: "Moderador", quantas: `${classe("conteudo")} · ${classe("publicacao")}` },
+    { elemento: "midia + crédito", escreve: "Organização", aprova: "Moderador", quantas: classe("midia") },
+    { elemento: "formacao", escreve: "Organização", aprova: "Moderador", quantas: classe("formacao") },
+    { elemento: "atua_em (papel)", escreve: "Produtor", aprova: "Moderador", quantas: relacao("atua_em") },
+    { elemento: "realiza · ocorre_em · situado_em", escreve: "Produtor", aprova: "Moderador", quantas: `${relacao("realiza")} · ${relacao("ocorre_em")} · ${relacao("situado_em")}` },
+    { elemento: "pertence_a — classificação", escreve: "quem cria a entidade", aprova: "Moderador", quantas: relacao("pertence_a") },
+    { elemento: "influenciou · deriva_de · curou", escreve: "Editor", aprova: "—", quantas: "0 — declaradas no tipo, e ninguém as escreve" },
+    { elemento: "semelhante_a + motivo", escreve: "máquina", aprova: "Moderador, por regra", quantas: relacao("semelhante_a") },
+    { elemento: "procedencia · chaveIdentidade · coordenada", escreve: "sistema — nunca digitável", aprova: "—", quantas: "carimbo, não campo" },
+  ];
+}
+
+export interface Verificacao {
+  tipo: string;
+  exige: readonly string[];
+  porQue: string;
+}
+
+/**
+ * A verificação (funcionalidade 92), e por que ela é DIFERENTE para os dois casos.
+ *
+ * Exigir CNPJ de um artista independente excluiria exatamente quem a plataforma existe para
+ * incluir. Exigir só autodeclaração de uma instituição deixaria qualquer um publicar em nome
+ * de um museu. As duas portas são diferentes porque os riscos são diferentes.
+ */
+export const VERIFICACOES: readonly Verificacao[] = [
+  {
+    tipo: "Organização",
+    exige: [
+      "CNPJ ativo, conferido na base pública",
+      "vínculo declarado de quem pede com a organização",
+      "aprovação de um moderador, com autor e carimbo",
+    ],
+    porQue:
+      "publicar em nome de uma instituição é falar pela reputação dela. A conferência é " +
+      "documental porque o dano de um impostor é institucional.",
+  },
+  {
+    tipo: "Agente independente",
+    exige: [
+      "CPF, sem exigência de CNPJ",
+      "um vínculo verificável com um evento, espaço ou coletivo já no acervo",
+      "aprovação de um moderador, com autor e carimbo",
+    ],
+    porQue:
+      "exigir CNPJ de um artista independente excluiria exatamente quem a plataforma existe " +
+      "para incluir. O vínculo com o acervo substitui o documento de empresa.",
+  },
+];
+
+/** Papel concedido — a terceira forma de escrita da superfície (A1). */
+export interface PapelConcedido extends EscritaDoAdmin {
+  tipo: "papel";
+  /** Quem recebe. Autorado: não há autenticação neste protótipo. */
+  pessoa: string;
+  papel: string;
+  /** O escopo nos três eixos. Vazio quando o papel não é recortado. */
+  territorio: string;
+  classe: string;
+  fila: string;
+  /** O valor de procedência que esta concessão autoriza a pessoa a produzir. */
+  procedenciaAutorizada: string;
+}
+
+/** O escopo em uma linha, para a trilha e para a lista. */
+export function escopoEscrito(p: {
+  territorio: string;
+  classe: string;
+  fila: string;
+}): string {
+  const partes = [
+    p.territorio && `território ${p.territorio}`,
+    p.classe && `classe ${p.classe}`,
+    p.fila && `fila ${p.fila}`,
+  ].filter(Boolean);
+  return partes.length ? partes.join(" · ") : "sem recorte — vale para a plataforma inteira";
 }
 
 // ---------------------------------------------------------------------------
