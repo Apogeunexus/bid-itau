@@ -248,3 +248,11 @@
 .admin-formulario .studio-rotulo {
   margin-top: 0.75rem;
 }
+
+/* A trilha: ação, alvo, motivo, autor. Quatro colunas porque as quatro perguntas de uma
+ * auditoria são «o quê», «em quê», «por quê» e «quem» — juntar duas delas numa coluna
+ * obrigaria quem lê a separá-las de novo, linha a linha. */
+
+.admin-trilha .studio-linha {
+  grid-template-columns: 14rem 1fr 16rem 16rem;
+}

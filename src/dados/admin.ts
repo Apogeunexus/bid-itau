@@ -929,6 +929,85 @@ export function territoriosDoAdmin(): TerritoriosDoAdmin {
   };
 }
 
+
+// ---------------------------------------------------------------------------
+// A7 — a trilha de auditoria, e a única tela do Admin sem escrita
+// ---------------------------------------------------------------------------
+
+/**
+ * A FRASE QUE A TELA IMPRIME, e que é o motivo de ela existir.
+ *
+ * Num sistema cuja tese é procedência honesta, o administrador é o único papel capaz de
+ * destruí-la em silêncio. A trilha imutável é o que impede isso — e é por isso que ela é a
+ * única tela desta superfície sem uma única ação de escrita.
+ */
+export const POR_QUE_A_TRILHA_NAO_TEM_BOTAO =
+  "O administrador é o único papel com poder de mudar tudo sem que ninguém veja. A trilha " +
+  "é o que impede isso, e uma trilha que o administrador pudesse editar não impediria nada. " +
+  "Por isso esta é a única tela do painel sem nenhuma ação de escrita: ela lê o registro e " +
+  "não o apaga.";
+
+export const NAO_EXISTE_APAGAR =
+  "Não existe apagar em lugar nenhum desta plataforma. Existe suspender, com rastro. Apagar " +
+  "destrói procedência; suspender a preserva, e a diferença entre as duas é o que separa uma " +
+  "plataforma auditável de uma que só afirma ser.";
+
+/** Por qual eixo a trilha é filtrada. Vocabulário fechado — três filtros, nem um a mais. */
+export type FiltroDaTrilha = "tudo" | "parametro" | "municipio" | "papel";
+
+export interface DescricaoDoFiltro {
+  filtro: FiltroDaTrilha;
+  rotulo: string;
+  /** O que este tipo de escrita muda no sistema, para a lista não virar log opaco. */
+  oQueMuda: string;
+}
+
+export const FILTROS_DA_TRILHA: readonly DescricaoDoFiltro[] = [
+  {
+    filtro: "tudo",
+    rotulo: "Tudo",
+    oQueMuda: "toda escrita desta superfície, na ordem em que entrou.",
+  },
+  {
+    filtro: "parametro",
+    rotulo: "Parâmetro do motor",
+    oQueMuda:
+      "muda o que a caminhada produz para todo mundo — é a escrita de maior alcance do " +
+      "sistema, feita por uma pessoa só.",
+  },
+  {
+    filtro: "municipio",
+    rotulo: "Tabela de centroides",
+    oQueMuda: "move entidades de um centroide de país para o do município, no mapa público.",
+  },
+  {
+    filtro: "papel",
+    rotulo: "Concessão de papel",
+    oQueMuda: "autoriza uma pessoa a produzir um valor de procedência que ela não produzia.",
+  },
+];
+
+/** O rótulo de uma escrita, para a linha da trilha dizer o que aconteceu em português. */
+export function descreverEvento(e: EventoDeAuditoria): { acao: string; alvo: string } {
+  switch (e.tipo) {
+    case "parametro":
+      return {
+        acao: "mudou parâmetro do motor",
+        alvo: `${e.parametroId}: ${e.de} → ${e.para}`,
+      };
+    case "municipio":
+      return {
+        acao: "acrescentou município à tabela",
+        alvo: `${e.municipio} — move ${e.entidadesMovidas} entidade(s) de centroide de país`,
+      };
+    case "papel":
+      return {
+        acao: "concedeu papel",
+        alvo: `${e.pessoa} — ${e.papel} · ${escopoEscrito(e)} · autoriza carimbo ${e.procedenciaAutorizada}`,
+      };
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Observabilidade (A6) — frescor, cobertura e a conferência de três pontas
 // ---------------------------------------------------------------------------
