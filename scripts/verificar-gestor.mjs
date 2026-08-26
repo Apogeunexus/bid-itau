@@ -173,7 +173,20 @@ for (const [fonte, onde] of [
   [paginaG8, "moderacao/page.tsx"],
 ]) {
   const limpo = semComentarios(fonte);
-  for (const padrao of [/MODERADOR_AUTORADO/, /MODERADOR_E_AUTORADO/, /\bquem\s*:/, /\bautor\b\s*[:.]/]) {
+  // O `\b` FINAL É O DEFEITO QUE ESTE COMENTÁRIO EXISTE PARA NÃO DEIXAR VOLTAR. Num teste de
+  // AUSÊNCIA, `\b` no fim do padrão faz o gate ficar verde sobre o vazamento: em
+  // `/\bautor\b/`, depois de «autor» vem «D» de `autorDaDecisao`, que é caractere de palavra,
+  // a fronteira não casa e o padrão não dispara. Medido antes do conserto: `autor:` pegava,
+  // `autorDaDecisao:` e `autorId:` passavam. Num gate de FORMA isso custa um defeito visual;
+  // num gate de PRIVACIDADE custa o nome de um moderador numa tela que existe para não
+  // expor nome de moderador. O sufixo aberto `[A-Za-z]*` é o que fecha a porta.
+  for (const padrao of [
+    /MODERADOR_AUTORADO/,
+    /MODERADOR_E_AUTORADO/,
+    /\bquem[A-Za-z]*\s*:/,
+    /\bautor[A-Za-z]*\s*[:.]/,
+    /\bmoderador[A-Za-z]*\s*[:.]/,
+  ]) {
     if (padrao.test(limpo)) vazamentos.push(`${onde}: ${padrao}`);
   }
 }
@@ -239,7 +252,9 @@ if (semDono.length) problemas.push(\`ausências sem dono ou sem projeção: \${s
 
 const moderacao = montarLeituraDaModeracao();
 const serializada = JSON.stringify(moderacao);
-if (/"(quem|autor|moderador)"\\s*:/.test(serializada)) problemas.push("o DTO da G8 carrega identidade de moderador");
+// Mesmo defeito, mesma correção: sem o sufixo aberto, uma chave \`quemDecidiu\` serializa
+// como "quemDecidiu": e escapa de /"quem"\\s*:/ sem que o gate note.
+if (/"(quem|autor|moderador)[A-Za-z]*"\\s*:/.test(serializada)) problemas.push("o DTO da G8 carrega identidade de moderador");
 
 console.log(JSON.stringify({
   problemas,
