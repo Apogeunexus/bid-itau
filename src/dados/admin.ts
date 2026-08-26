@@ -32,6 +32,7 @@ import {
 } from "./duplicatas";
 import { coordenadaDe, densidadePorUf } from "./geo";
 import { contagens, porSlug, slugsPorTipo, vizinhos } from "./grafo";
+import { COMPONENTES_DO_SCORE, LIMITES_DA_IA, REGRA_DO_SCORE } from "./moderacao";
 import { ROTULO_DA_PROCEDENCIA, aferirDto } from "./observatorio";
 import metaJson from "./gerado/meta.json";
 import type { ClasseEntidade, MetodoCoordenada, Procedencia } from "./tipos";
@@ -77,6 +78,9 @@ interface MetaDoAdmin {
       aproximados: readonly string[];
     };
     semCoordenada: { total: number };
+    slugsDesambiguados: number;
+    linguagensPromovidas: readonly string[];
+    aliasDeLinguagem: Record<string, string>;
   };
   concentradores: {
     limiar: number;
@@ -188,7 +192,11 @@ export interface MunicipioAcrescentado extends EscritaDoAdmin {
  * pode perder um pedaço sem que ninguém note. O `tipo` é o que permite renderizar cada
  * escrita com a frase certa sem perder a ordem entre elas.
  */
-export type EventoDeAuditoria = MudancaDeParametro | MunicipioAcrescentado | PapelConcedido;
+export type EventoDeAuditoria =
+  | MudancaDeParametro
+  | MunicipioAcrescentado
+  | PapelConcedido
+  | LimiteDaIaMudado;
 
 /** Só o que veio do nosso próprio formato entra de volta. O armazenamento é editável por
  *  quem avalia, e registro malformado numa trilha de auditoria é pior que registro nenhum. */
@@ -207,6 +215,9 @@ export function eventosValidos(bruto: unknown): EventoDeAuditoria[] {
     }
     if (m.tipo === "municipio") {
       return typeof m.municipio === "string" && typeof m.entidadesMovidas === "number";
+    }
+    if (m.tipo === "limite-ia") {
+      return typeof m.texto === "string";
     }
     if (m.tipo === "papel") {
       return (
@@ -930,6 +941,100 @@ export function territoriosDoAdmin(): TerritoriosDoAdmin {
 }
 
 
+
+// ---------------------------------------------------------------------------
+// A4 — vocabulário: o Admin aprova a promoção e não promove
+// ---------------------------------------------------------------------------
+
+export const O_ADMIN_NAO_CURA =
+  "O Admin aprova a promoção de um termo a linguagem e monitora a saúde do tesauro. Quem " +
+  "promove, funde e declara sinonímia é o Editor. Sem essa separação o administrador vira " +
+  "curador por acidente — e a curadoria deixa de ter assinatura, que é o que a torna " +
+  "discutível.";
+
+export interface VocabularioDoAdmin {
+  linguagens: number;
+  temas: number;
+  termos: number;
+  /** As linguagens que vieram da Enciclopédia e não existem no vocabulário do CMS. */
+  promovidas: readonly string[];
+  /** O apelido que aponta para a linguagem canônica: «tecnologia» → «arte-e-tecnologia». */
+  alias: Array<{ de: string; para: string }>;
+  slugsDesambiguados: number;
+  porQueAPromocaoFoiFiel: string;
+}
+
+/** O que a A4 exibe: o tesauro, mais as procedências que a A1 já sabe montar. */
+export interface DadosDoVocabulario extends VocabularioDoAdmin {
+  procedencias: FatiaDeProcedenciaDoPapel[];
+}
+
+export function vocabularioDoAdmin(): VocabularioDoAdmin {
+  const c = META.cobertura;
+  return {
+    linguagens: META.porClasse.linguagem ?? 0,
+    temas: META.porClasse.tema ?? 0,
+    termos: META.porClasse.termo ?? 0,
+    promovidas: c.linguagensPromovidas,
+    alias: Object.entries(c.aliasDeLinguagem).map(([de, para]) => ({ de, para })),
+    slugsDesambiguados: c.slugsDesambiguados,
+    porQueAPromocaoFoiFiel:
+      `As ${c.linguagensPromovidas.length} vieram da Enciclopédia e não existem no ` +
+      "vocabulário do CMS. Promover foi fiel ao que a fonte diz; encaixá-las à força numa das " +
+      "linguagens existentes seria fabricar uma classificação que ninguém fez — e é " +
+      "exatamente o tipo de arrumação que faz um acervo parecer mais organizado do que é.",
+  };
+}
+
+// ---------------------------------------------------------------------------
+// A5 — os limites da IA, e o que a ausência de um controle significa
+// ---------------------------------------------------------------------------
+
+export { COMPONENTES_DO_SCORE, LIMITES_DA_IA, REGRA_DO_SCORE };
+
+/**
+ * O CONTROLE QUE NÃO EXISTE, e a ausência dele é o produto.
+ *
+ * Não há interruptor de «IA publica direto» nesta tela — nem desligado, nem escondido atrás
+ * de uma confirmação. Um interruptor desligado é uma promessa de que um dia ele pode ser
+ * ligado; a ausência é a afirmação de que o sistema não sabe fazer isso.
+ */
+export const O_INTERRUPTOR_QUE_NAO_EXISTE =
+  "Não existe controle de «IA publica direto» nesta tela, e a ausência dele é o produto. Um " +
+  "interruptor desligado é a promessa de que um dia alguém o liga. A ausência é a afirmação " +
+  "de que publicar sem humano não é uma opção que o sistema oferece.";
+
+export interface OQueAIaPode {
+  pode: string;
+  comQueLimite: string;
+}
+
+export const O_QUE_A_IA_PODE: readonly OQueAIaPode[] = [
+  {
+    pode: "Propor um item à fila de moderação",
+    comQueLimite: "sempre com score à vista e com as cinco perguntas marcadas ou não.",
+  },
+  {
+    pode: "Sugerir o próximo passo de uma trilha",
+    comQueLimite:
+      "como sugestão ao editor, que aceita ou recusa — e a trilha publicada leva a " +
+      "assinatura dele, não a da sugestão.",
+  },
+  {
+    pode: "Extrair campo na ingestão",
+    comQueLimite:
+      "com o score do item e a fonte declarada. O que ela extrai entra como proposta, " +
+      "nunca como dado publicado.",
+  },
+];
+
+/** Mudança na lista de limites da IA — evento de auditoria de primeira ordem (A5). */
+export interface LimiteDaIaMudado extends EscritaDoAdmin {
+  tipo: "limite-ia";
+  /** O texto do limite acrescentado, por extenso. */
+  texto: string;
+}
+
 // ---------------------------------------------------------------------------
 // A7 — a trilha de auditoria, e a única tela do Admin sem escrita
 // ---------------------------------------------------------------------------
@@ -953,7 +1058,7 @@ export const NAO_EXISTE_APAGAR =
   "plataforma auditável de uma que só afirma ser.";
 
 /** Por qual eixo a trilha é filtrada. Vocabulário fechado — três filtros, nem um a mais. */
-export type FiltroDaTrilha = "tudo" | "parametro" | "municipio" | "papel";
+export type FiltroDaTrilha = "tudo" | "parametro" | "municipio" | "papel" | "limite-ia";
 
 export interface DescricaoDoFiltro {
   filtro: FiltroDaTrilha;
@@ -985,6 +1090,13 @@ export const FILTROS_DA_TRILHA: readonly DescricaoDoFiltro[] = [
     rotulo: "Concessão de papel",
     oQueMuda: "autoriza uma pessoa a produzir um valor de procedência que ela não produzia.",
   },
+  {
+    filtro: "limite-ia",
+    rotulo: "Limite da IA",
+    oQueMuda:
+      "muda a resposta do produto à pergunta mais difícil do edital — o que a máquina pode " +
+      "e o que ela não pode, mesmo alcançando.",
+  },
 ];
 
 /** O rótulo de uma escrita, para a linha da trilha dizer o que aconteceu em português. */
@@ -1000,6 +1112,8 @@ export function descreverEvento(e: EventoDeAuditoria): { acao: string; alvo: str
         acao: "acrescentou município à tabela",
         alvo: `${e.municipio} — move ${e.entidadesMovidas} entidade(s) de centroide de país`,
       };
+    case "limite-ia":
+      return { acao: "acrescentou limite à IA", alvo: e.texto };
     case "papel":
       return {
         acao: "concedeu papel",
