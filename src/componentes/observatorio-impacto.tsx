@@ -25,6 +25,12 @@ import type { DadosDoImpacto, PersonaNoImpacto, TelaDaSuperficie } from "@/dados
  * DP-F: importa `@/dados/observatorio` APENAS POR TIPO.
  */
 
+/**
+ * Quantos selos de linguagem cabem numa coluna sem empurrar o resto da tela para fora.
+ * Doze é o teto medido; o que importa é que ele é DECLARADO quando morde.
+ */
+const TETO_DE_SELOS = 12;
+
 function LinhaDaPersona({ persona }: { persona: PersonaNoImpacto }) {
   return (
     <li className="web-painel obs-persona" data-persona-do-impacto={persona.id}>
@@ -56,14 +62,24 @@ function LinhaDaPersona({ persona }: { persona: PersonaNoImpacto }) {
       </ul>
 
       {/* A diversidade que o RFP pede, medida: linguagem presente no adjacente e ausente do
-          atravessado. É a lista do que ela ainda não viu e está encostado no que ela viu. */}
+          atravessado. É a lista do que ela ainda não viu e está encostado no que ela viu.
+
+          A LISTA DIZ QUANDO NÃO CABE INTEIRA. Uma lista cortada que não declara o corte é a
+          versão de interface do zero silencioso que esta superfície inteira combate no dado:
+          a tela SABE que são quinze e mostra doze, e quem lê sai com doze. O teto existe
+          porque uma persona com quarenta linguagens novas empurraria o resto da tela para
+          fora; o que não pode é o teto ser secreto. */}
       <div className="obs-novas">
         <p className="obs-etiqueta">
-          {persona.novas.length > 0
-            ? `${milhar(persona.novas.length)} linguagens novas no adjacente`
-            : "nenhuma linguagem nova no adjacente — o que está encostado já é do repertório dela"}
+          {persona.novas.length === 0
+            ? "nenhuma linguagem nova no adjacente — o que está encostado já é do repertório dela"
+            : persona.novas.length > TETO_DE_SELOS
+              ? `${milhar(TETO_DE_SELOS)} das ${milhar(persona.novas.length)} linguagens novas no adjacente — a lista não cabe inteira e o resto não está aqui`
+              : `${milhar(persona.novas.length)} linguagens novas no adjacente`}
         </p>
-        {persona.novas.length > 0 ? <SelosDeLinguagem ids={persona.novas} limite={12} /> : null}
+        {persona.novas.length > 0 ? (
+          <SelosDeLinguagem ids={persona.novas} limite={TETO_DE_SELOS} />
+        ) : null}
       </div>
     </li>
   );
