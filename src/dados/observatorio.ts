@@ -969,6 +969,39 @@ function faixaEtaria(): Indicador {
   };
 }
 
+/**
+ * A invariante de D-90, conferida em vez de confiada.
+ *
+ * `valor: null` e `sustentado: false` são a MESMA afirmação e nunca podem se separar; um
+ * indicador não sustentado sem frase é um zero silencioso com outro nome. Isto era um laço
+ * dentro de `indicadores()` e virou função porque as telas da superfície montam indicador
+ * FORA daquela lista — o recorte por persona da tela de impacto, por exemplo. Um indicador
+ * que escapasse da conferência por ter nascido em outro lugar seria a primeira porta por
+ * onde o zero silencioso volta.
+ */
+export function conferirIndicador(i: Indicador): Indicador {
+  if ((i.valor === null) !== (i.sustentado === false)) {
+    throw new Error(
+      `observatorio.ts: «${i.id}» tem valor ${JSON.stringify(i.valor)} com sustentado=${i.sustentado}. ` +
+        `valor null e sustentado false são a mesma afirmação e andam juntos; zero com sustentado true é uma MEDIDA. ` +
+        `Confundir as duas é exatamente o que D-90 existe para impedir.`,
+    );
+  }
+  if (!i.sustentado && !i.declaracao) {
+    throw new Error(
+      `observatorio.ts: «${i.id}» não é sustentado pelo acervo e não traz declaração. ` +
+        `Um indicador sem lastro e sem frase é um zero silencioso.`,
+    );
+  }
+  if (!i.denominador?.do_que || typeof i.denominador.n !== "number") {
+    throw new Error(`observatorio.ts: «${i.id}» sem denominador nomeado.`);
+  }
+  if (!i.procedenciaDoNumero) {
+    throw new Error(`observatorio.ts: «${i.id}» sem a origem do número.`);
+  }
+  return i;
+}
+
 let indicadoresMemorizados: Indicador[] | null = null;
 
 export function indicadores(): Indicador[] {
@@ -984,30 +1017,7 @@ export function indicadores(): Indicador[] {
     faixaEtaria(),
   ];
 
-  // A invariante de D-90, conferida em vez de confiada: `valor: null` e `sustentado: false`
-  // são a MESMA afirmação e nunca podem se separar, e um indicador não sustentado sem frase
-  // é um zero silencioso com outro nome.
-  for (const i of lista) {
-    if ((i.valor === null) !== (i.sustentado === false)) {
-      throw new Error(
-        `observatorio.ts: «${i.id}» tem valor ${JSON.stringify(i.valor)} com sustentado=${i.sustentado}. ` +
-          `valor null e sustentado false são a mesma afirmação e andam juntos; zero com sustentado true é uma MEDIDA. ` +
-          `Confundir as duas é exatamente o que D-90 existe para impedir.`,
-      );
-    }
-    if (!i.sustentado && !i.declaracao) {
-      throw new Error(
-        `observatorio.ts: «${i.id}» não é sustentado pelo acervo e não traz declaração. ` +
-          `Um indicador sem lastro e sem frase é um zero silencioso.`,
-      );
-    }
-    if (!i.denominador?.do_que || typeof i.denominador.n !== "number") {
-      throw new Error(`observatorio.ts: «${i.id}» sem denominador nomeado.`);
-    }
-    if (!i.procedenciaDoNumero) {
-      throw new Error(`observatorio.ts: «${i.id}» sem a origem do número.`);
-    }
-  }
+  for (const i of lista) conferirIndicador(i);
 
   indicadoresMemorizados = lista;
   return lista;
@@ -1200,3 +1210,148 @@ export function montarObservatorio(): DadosDoObservatorio {
 
 /** `soma` fica exportada porque o gate de 05-08 confere as fatias com ela. */
 export const somarFatias = (fs: FatiaDeProcedencia[]): number => soma(fs.map((f) => f.n));
+
+// ---------------------------------------------------------------------------
+// G3 · Impacto cultural — o recorte da tela, e o par de D-90 que ela fixa
+// ---------------------------------------------------------------------------
+
+/**
+ * Uma persona, no que a tela de impacto mede dela.
+ *
+ * O DENOMINADOR DESTA TELA INTEIRA SÃO TRÊS PESSOAS, e três pessoas autoradas por nós. É
+ * pouco a ponto de a tela ter de dizer, e ela diz: um indicador de impacto sobre 3 pessoas
+ * é demonstração, não medição. O cálculo é o mesmo que roda sobre gente real; o que muda é
+ * o n, e o n está na tela.
+ */
+export interface PersonaNoImpacto {
+  id: string;
+  nome: string;
+  /** Linguagens que o repertório DECLARA. */
+  declaradas: number;
+  /** A união medida: as declaradas mais as que as entidades atravessadas carregam. */
+  atravessadas: number;
+  /** Ids de linguagem presentes no adjacente e ausentes do atravessado. */
+  novas: string[];
+  entidadesNoRepertorio: number;
+  /** Entidades a UM salto do que ela já atravessou. */
+  adjacentes: number;
+  /** Pessoas e coletivos a um salto, fora do repertório. Zero aqui é MEDIDA. */
+  artistasNovos: number;
+}
+
+export interface DadosDoImpacto {
+  personas: PersonaNoImpacto[];
+  ampliacao: Indicador;
+  descoberta: Indicador;
+  /**
+   * O caso didático de D-90, recortado por REGRA: a persona cuja descoberta de artista novo
+   * deu zero, sobre um adjacente real. `null` quando nenhuma deu zero — e aí a tela declara
+   * que o par não existe hoje, em vez de escolher outra persona para caber na explicação.
+   */
+  zeroMedido: Indicador | null;
+  /** O outro lado do par: o indicador que o acervo NÃO sustenta. */
+  semLastro: Indicador;
+  denominador: Denominador;
+}
+
+const exigirIndicador = (id: string): Indicador => {
+  const i = indicadores().find((x) => x.id === id);
+  if (!i) {
+    throw new Error(
+      `observatorio.ts: a tela de impacto pede o indicador «${id}» e ele não está em indicadores(). ` +
+        `Ou o id mudou de nome, ou o indicador saiu da lista — e nos dois casos a tela afirmaria ` +
+        `sobre um número que não existe mais.`,
+    );
+  }
+  return i;
+};
+
+let impactoMemorizado: DadosDoImpacto | null = null;
+
+export function montarImpacto(): DadosDoImpacto {
+  if (impactoMemorizado) return impactoMemorizado;
+
+  const ampliacao = exigirIndicador("ampliacao-de-repertorio");
+  const descoberta = exigirIndicador("descoberta-de-artista-novo");
+  const semLastro = exigirIndicador("gratuito-x-pago");
+
+  const personas: PersonaNoImpacto[] = PERSONAS.map((persona) => {
+    const r = repertorioDe(persona.id);
+    const noRepertorio = new Set<string>();
+    for (const grupo of r.atravessado) for (const item of grupo.entidades) noRepertorio.add(item.id);
+    const artistas = r.adjacente.filter(
+      (c) => (c.classe === "pessoa" || c.classe === "coletivo") && !noRepertorio.has(c.id),
+    );
+    return {
+      id: persona.id,
+      nome: r.nome,
+      declaradas: r.linguagensDeclaradas.length,
+      atravessadas: r.linguagensAtravessadas.length,
+      novas: r.linguagensNovas,
+      entidadesNoRepertorio: r.diagnostico.entidadesNoRepertorio,
+      adjacentes: r.adjacente.length,
+      artistasNovos: artistas.length,
+    };
+  });
+
+  // A conferência de sempre, e ela vale a pena: este recorte por persona é uma SEGUNDA
+  // contagem da mesma coisa que `descobertaDeArtistaNovo()` já conta. Duas contagens da
+  // mesma coisa sem conferência entre elas é como a tela passa a dizer dois números
+  // diferentes para o mesmo fato, e a divergência aparece na regeração do grafo, meses
+  // depois, sem ninguém saber qual das duas envelheceu.
+  const somaDeArtistas = soma(personas.map((p) => p.artistasNovos));
+  const somaDeAdjacentes = soma(personas.map((p) => p.adjacentes));
+  if (somaDeArtistas !== descoberta.valor || somaDeAdjacentes !== descoberta.denominador.n) {
+    throw new Error(
+      `observatorio.ts: o recorte por persona da tela de impacto não bate com o indicador. ` +
+        `Artistas novos: ${somaDeArtistas} somados por persona contra ${descoberta.valor} do indicador. ` +
+        `Adjacentes: ${somaDeAdjacentes} contra ${descoberta.denominador.n}. ` +
+        `São duas contagens da mesma coisa e elas têm de concordar.`,
+    );
+  }
+
+  // A REGRA, e não a escolha: a persona que deu zero. Escolher a Joana pelo nome faria a
+  // tela contar uma história que o dado pode deixar de sustentar na próxima geração do
+  // grafo — e o texto continuaria lá, afirmando.
+  const zerada = personas.filter((p) => p.artistasNovos === 0).sort((a, b) => a.id.localeCompare(b.id))[0];
+
+  const zeroMedido: Indicador | null = zerada
+    ? conferirIndicador({
+        id: `descoberta-de-artista-novo-${zerada.id}`,
+        rotulo: `Descoberta de artista novo · ${zerada.nome}`,
+        valor: zerada.artistasNovos,
+        unidade: "pessoas e coletivos a um salto, fora do repertório",
+        denominador: {
+          n: zerada.adjacentes,
+          do_que: `entidades REAIS no adjacente a um salto do repertório de ${zerada.nome} — o corte recortou, e deu zero`,
+        },
+        denominadorSecundario: {
+          n: zerada.entidadesNoRepertorio,
+          do_que: "entidades no repertório dela, de onde a travessia partiu",
+        },
+        sustentado: true,
+        procedenciaDoNumero: `src/dados/repertorio.ts · repertorioDe("${zerada.id}").adjacente filtrado por classe pessoa|coletivo, menos o que já está no repertório`,
+        declaracao: null,
+        leitura:
+          `Zero, e é uma MEDIDA. O adjacente de ${zerada.nome} tem ${zerada.adjacentes} entidades reais e nenhuma delas ` +
+          `é pessoa ou coletivo fora do repertório: o que está encostado no que ela atravessou são obras e conteúdos. ` +
+          `Este zero e o «não sustenta» ao lado parecem a mesma coisa numa tela mal feita, e não são: ` +
+          `aqui o corte funcionou e o resultado foi zero; lá o corte não recorta nada.`,
+        detalhe: [],
+      })
+    : null;
+
+  impactoMemorizado = {
+    personas,
+    ampliacao,
+    descoberta,
+    zeroMedido,
+    semLastro,
+    denominador: {
+      n: PERSONAS.length,
+      do_que:
+        "personas autoradas por nós — um indicador de impacto sobre 3 pessoas é demonstração, não medição",
+    },
+  };
+  return impactoMemorizado;
+}

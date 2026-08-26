@@ -650,3 +650,78 @@
   font-size: var(--tipo-destaque);
 }
 
+
+/* ---------------------------------------------------------------------------
+ * As telas novas da superfície (G2 a G8), a partir da G3.
+ *
+ * Elas consomem o vocabulário que já existe — `.web-painel`, `.web-grade`,
+ * `.web-denominador`, `.obs-indicador` — e acrescentam só o que nenhuma folha
+ * anterior desenha. Recriar cartão, painel ou denominador aqui daria à
+ * superfície dois vocabulários para a mesma coisa, e o segundo diverge do
+ * primeiro na primeira edição.
+ * ------------------------------------------------------------------------ */
+
+/* A pergunta que a tela responde, sob o título. Ela é o que impede a fileira de
+   oito rótulos de virar gaveta: o rótulo diz que a tela existe, a pergunta diz
+   por que alguém a abriria. */
+[data-view="web"] .obs-pergunta {
+  margin: 0.25rem 0 0;
+  max-width: 72ch;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.4;
+  color: var(--cor-tinta-2);
+}
+
+/* ---------------------------------------------------------------------------
+ * O par de D-90 — as duas formas de não ter número, lado a lado.
+ *
+ * O CONTRASTE É DE COR DE BORDA, e não de fundo: os dois cartões precisam ter o
+ * MESMO peso visual, porque a tela não está dizendo que um vale mais que o
+ * outro — está dizendo que são coisas diferentes. Um fundo mais forte num deles
+ * seria hierarquia onde há distinção.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-par {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+[data-view="web"] .obs-par .obs-indicador[data-sustentado="sim"] {
+  border-left: 4px solid var(--cor-acao);
+}
+
+[data-view="web"] .obs-par .obs-indicador[data-sustentado="nao"] {
+  border-left: 4px solid var(--cor-borda-forte);
+}
+
+/* A etiqueta do zero MEDIDO. Ela existe porque um «0» sozinho, ao lado de um
+   «o dado não sustenta» na mesma tela, é lido como a mesma coisa por quem passa
+   o olho — e as duas afirmações são opostas. */
+[data-view="web"] .obs-selo-medida {
+  margin: 0.25rem 0 0;
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--cor-acao-tinta);
+}
+
+/* ---------------------------------------------------------------------------
+ * As personas da G3.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-personas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+[data-view="web"] .obs-persona {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+[data-view="web"] .obs-novas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
