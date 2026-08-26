@@ -196,7 +196,8 @@ export type EventoDeAuditoria =
   | MudancaDeParametro
   | MunicipioAcrescentado
   | PapelConcedido
-  | LimiteDaIaMudado;
+  | LimiteDaIaMudado
+  | PedidoRespondido;
 
 /** Só o que veio do nosso próprio formato entra de volta. O armazenamento é editável por
  *  quem avalia, e registro malformado numa trilha de auditoria é pior que registro nenhum. */
@@ -215,6 +216,13 @@ export function eventosValidos(bruto: unknown): EventoDeAuditoria[] {
     }
     if (m.tipo === "municipio") {
       return typeof m.municipio === "string" && typeof m.entidadesMovidas === "number";
+    }
+    if (m.tipo === "titular") {
+      return (
+        typeof m.pedido === "string" &&
+        typeof m.titular === "string" &&
+        typeof m.desfecho === "string"
+      );
     }
     if (m.tipo === "limite-ia") {
       return typeof m.texto === "string";
@@ -1035,6 +1043,136 @@ export interface LimiteDaIaMudado extends EscritaDoAdmin {
   texto: string;
 }
 
+
+// ---------------------------------------------------------------------------
+// A8 — titulares de dado, e a distinção que organiza a tela
+// ---------------------------------------------------------------------------
+
+/**
+ * O GRAFO TEM PESSOAS QUE NUNCA SE CADASTRARAM, e é isso que torna esta tela diferente de um
+ * painel de LGPD comum. São 575 no protótipo e 43.614 na base completa: artistas, curadores,
+ * educadores documentados pelo acervo. Elas são titulares de dado sem nunca terem aceitado
+ * um termo de uso, e o direito delas não depende de cadastro.
+ */
+export interface TipoDeTitular {
+  tipo: string;
+  quem: string;
+  podePedir: readonly string[];
+  quantos: string;
+}
+
+export function tiposDeTitular(): TipoDeTitular[] {
+  return [
+    {
+      tipo: "Usuária",
+      quem: "se cadastrou na plataforma",
+      podePedir: [
+        "consentimento — o que aceitou, quando, e a revogação",
+        "exportação dos próprios dados",
+        "exclusão da conta, e do que vem junto com ela",
+      ],
+      quantos: `${comSeparador(META.porClasse["pessoa-usuaria"] ?? 0)} no acervo do protótipo`,
+    },
+    {
+      tipo: "Retratada",
+      quem: "está no grafo e nunca se cadastrou",
+      podePedir: [
+        "correção sobre si",
+        "contestação de um verbete — que é encaminhada à Enciclopédia, não resolvida aqui",
+      ],
+      quantos: `${comSeparador(META.porClasse.pessoa ?? 0)} no protótipo · 43.614 na base completa`,
+    },
+  ];
+}
+
+export const A_CONTESTACAO_NAO_SE_RESOLVE_AQUI =
+  "Contestação sobre verbete é encaminhada à Enciclopédia. O verbete é autoridade a " +
+  "montante: resolvê-lo neste painel significaria o administrador da plataforma reescrevendo " +
+  "o que uma enciclopédia afirma, sem ser a enciclopédia. O pedido segue com prazo, autor e " +
+  "carimbo, e o estado dele fica visível para quem pediu.";
+
+export const O_QUE_A_EXCLUSAO_LEVA =
+  "Excluir uma conta leva junto repertório, salvos e sinais de uso — e a tela diz isso ANTES " +
+  "de confirmar, porque quem pede exclusão da conta nem sempre sabe que está pedindo " +
+  "exclusão da coleção que montou.";
+
+export interface TipoDePedido {
+  id: string;
+  rotulo: string;
+  prazo: string;
+  deQuem: string;
+}
+
+/** Os quatro pedidos que a lei prevê, com o prazo declarado em cada um. */
+export const TIPOS_DE_PEDIDO: readonly TipoDePedido[] = [
+  { id: "acesso", rotulo: "Acesso", prazo: "15 dias", deQuem: "usuária ou retratada" },
+  { id: "correcao", rotulo: "Correção", prazo: "15 dias", deQuem: "usuária ou retratada" },
+  { id: "exportacao", rotulo: "Exportação", prazo: "15 dias", deQuem: "só usuária" },
+  { id: "exclusao", rotulo: "Exclusão", prazo: "15 dias", deQuem: "só usuária" },
+];
+
+/** Resposta a um pedido de titular — a quinta forma de escrita da superfície (A8). */
+export interface PedidoRespondido extends EscritaDoAdmin {
+  tipo: "titular";
+  pedido: string;
+  titular: string;
+  /** Encaminhado à Enciclopédia, atendido, ou recusado com motivo. */
+  desfecho: string;
+}
+
+// ---------------------------------------------------------------------------
+// A9 — os quatro poderes operacionais
+// ---------------------------------------------------------------------------
+
+export const SUSPENDER_NAO_E_APAGAR =
+  "Apagar destrói procedência: o registro some e ninguém consegue mais dizer de onde ele " +
+  "veio nem quem o publicou. Suspender preserva tudo isso e tira do ar. É por isso que esta " +
+  "plataforma não tem apagar em lugar nenhum — não é cautela, é a condição para o resto do " +
+  "argumento se sustentar.";
+
+export interface PoderOperacional {
+  id: string;
+  titulo: string;
+  oQueE: string;
+  /** O que o torna irreversível ou perigoso, e o que a tela faz a respeito. */
+  cuidado: string;
+}
+
+export const PODERES_OPERACIONAIS: readonly PoderOperacional[] = [
+  {
+    id: "suspensao",
+    titulo: "Suspender sem apagar",
+    oQueE: "tirar do ar uma entidade ou uma organização, mantendo o registro e a procedência.",
+    cuidado:
+      "reversível por construção. A suspensão é um estado, não uma exclusão, e o histórico " +
+      "continua legível — inclusive o de quem suspendeu.",
+  },
+  {
+    id: "chaves",
+    titulo: "Chaves de integração",
+    oQueE: "acesso programático por organização, com escopo e limite de taxa.",
+    cuidado:
+      "a chave é mostrada uma vez e não volta a aparecer. Revogar é imediato e fica na " +
+      "trilha; o que a chave já leu não volta atrás, e a tela não finge que volta.",
+  },
+  {
+    id: "envio",
+    titulo: "Envio em massa",
+    oQueE: "quem pode disparar comunicação para a base.",
+    cuidado:
+      "ATO IRREVERSÍVEL. Mensagem enviada não se recolhe. A autorização é nominal, tem " +
+      "limite declarado e registro — e é o único poder desta tela que a suspensão não desfaz.",
+  },
+  {
+    id: "superficies",
+    titulo: "Publicar e desligar superfícies",
+    oQueE: "ligar ou desligar um módulo inteiro do produto.",
+    cuidado:
+      "desligar uma superfície tira do ar o trabalho de quem escreve nela. O estado de cada " +
+      "uma fica visível aqui para que o desligamento seja uma decisão, e não um efeito.",
+  },
+];
+
 // ---------------------------------------------------------------------------
 // A7 — a trilha de auditoria, e a única tela do Admin sem escrita
 // ---------------------------------------------------------------------------
@@ -1058,7 +1196,13 @@ export const NAO_EXISTE_APAGAR =
   "plataforma auditável de uma que só afirma ser.";
 
 /** Por qual eixo a trilha é filtrada. Vocabulário fechado — três filtros, nem um a mais. */
-export type FiltroDaTrilha = "tudo" | "parametro" | "municipio" | "papel" | "limite-ia";
+export type FiltroDaTrilha =
+  | "tudo"
+  | "parametro"
+  | "municipio"
+  | "papel"
+  | "limite-ia"
+  | "titular";
 
 export interface DescricaoDoFiltro {
   filtro: FiltroDaTrilha;
@@ -1091,6 +1235,13 @@ export const FILTROS_DA_TRILHA: readonly DescricaoDoFiltro[] = [
     oQueMuda: "autoriza uma pessoa a produzir um valor de procedência que ela não produzia.",
   },
   {
+    filtro: "titular",
+    rotulo: "Pedido de titular",
+    oQueMuda:
+      "responde a alguém que exerceu um direito sobre os próprios dados — e o prazo dessa " +
+      "resposta é contado por lei, não por conveniência.",
+  },
+  {
     filtro: "limite-ia",
     rotulo: "Limite da IA",
     oQueMuda:
@@ -1114,6 +1265,11 @@ export function descreverEvento(e: EventoDeAuditoria): { acao: string; alvo: str
       };
     case "limite-ia":
       return { acao: "acrescentou limite à IA", alvo: e.texto };
+    case "titular":
+      return {
+        acao: "respondeu pedido de titular",
+        alvo: `${e.pedido} · ${e.titular} — ${e.desfecho}`,
+      };
     case "papel":
       return {
         acao: "concedeu papel",
@@ -1293,7 +1449,8 @@ export function observabilidadeDoAdmin(): ObservabilidadeDoAdmin {
     totalDeArestasEscrito: comSeparador(totalDeArestas),
     conferencia: conferirTresPontas(),
     reprocessamentoEhMockado:
-      "O protótipo é export estático, sem back-end: a passada do gerador acontece fora, pela " +
+      "O protótipo é exportado como arquivo estático e não tem servidor próprio: a passada do " +
+      "gerador acontece fora, pela " +
       "linha de comando, e o botão desta tela registraria o pedido sem executá-lo. Ele não " +
       "existe — um botão que não faz o que diz é pior que a ausência dele.",
   };
