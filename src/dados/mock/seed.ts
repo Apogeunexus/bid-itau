@@ -457,3 +457,31 @@ export function catalogoDeIdentidade(): CatalogoDeIdentidade {
     dataDeReferencia: DATA_DE_REFERENCIA,
   };
 }
+
+/**
+ * O que a P5 (grade de ocorrências) precisa: os 113 espaços, e nada de vocabulário.
+ *
+ * A grade escolhe espaço por sessão e não toca em linguagem, tema nem imagem. 113 registros
+ * de cinco campos são 12 KB — contra os 65 KB da identidade e os 200 KB do catálogo inteiro.
+ */
+export interface CatalogoDaGrade {
+  espacos: EspacoDoCatalogo[];
+  organizacao: string;
+  produtor: string;
+  dataDeReferencia: string;
+}
+
+export function catalogoDaGrade(): CatalogoDaGrade {
+  return {
+    espacos: entidadesDe("espaco").map((e) => ({
+      id: e.id,
+      titulo: e.titulo,
+      cidade: textoDoExtra(e, "cidade"),
+      estado: textoDoExtra(e, "estado"),
+      declaraAcessibilidade: e.declaraAcessibilidade,
+    })),
+    organizacao: ORGANIZACAO_DO_PRODUTOR,
+    produtor: PRODUTOR_DA_DEMONSTRACAO,
+    dataDeReferencia: DATA_DE_REFERENCIA,
+  };
+}
