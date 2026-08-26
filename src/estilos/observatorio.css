@@ -491,9 +491,15 @@
 
 /* «o dado não sustenta» tem o peso do número que ele substitui, e não o de uma
    nota de rodapé: a ausência declarada é uma afirmação da tela, não um vazio. */
+/* «O dado não sustenta» É O VALOR DO CARTÃO, e por isso tem peso de valor.
+   Medido em navegador: em `--tipo-corpo` ela ficava com 16 px contra os 20 px
+   do denominador logo abaixo, e o olho lia «300 eventos» como o valor do
+   indicador — a inversão exata que esta superfície existe para não cometer.
+   Agora ela é maior que o denominador e menor que o número, porque é frase e
+   não algarismo. */
 [data-view="web"] .obs-sem-lastro {
   font-family: var(--fonte-display);
-  font-size: var(--tipo-corpo);
+  font-size: var(--tipo-titulo-1);
   font-weight: 700;
   line-height: 1.1;
   color: var(--cor-tinta-2);
@@ -558,10 +564,14 @@
   font-size: var(--tipo-micro);
 }
 
+/* O rótulo QUEBRA em vez de ser cortado. Medido em navegador: «eventos sem o
+   campo de in…» e «ocorrências marcadas grat…» chegavam truncados na tela, e
+   um denominador que não se lê inteiro não é um denominador. A coluna continua
+   FIXA em 9rem — deixá-la `max-content` consertaria a quebra e estragaria o
+   alinhamento, porque cada linha viraria grade própria e os números passariam a
+   começar em x diferente a cada linha. */
 [data-view="web"] .obs-detalhe-rotulo {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.25;
   color: var(--cor-tinta-2);
 }
 
@@ -691,7 +701,16 @@
 }
 
 [data-view="web"] .obs-par .obs-indicador[data-sustentado="nao"] {
-  border-left: 4px solid var(--cor-borda-forte);
+  border-left: 4px solid var(--cor-tinta-2);
+}
+
+/* OS DOIS CARTÕES DO PAR TÊM A MESMA ALTURA, e isto é a afirmação da tela virando
+   medida. `.web-grade` alinha por `start`, e medido em navegador os dois saíam
+   com 417 px e 539 px — um visivelmente menor que o outro, o que lê como
+   hierarquia. A tela não está dizendo que um vale mais; está dizendo que são
+   coisas diferentes. */
+[data-view="web"] .obs-par .obs-indicadores {
+  align-items: stretch;
 }
 
 /* A etiqueta do zero MEDIDO. Ela existe porque um «0» sozinho, ao lado de um
