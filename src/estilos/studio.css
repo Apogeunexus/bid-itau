@@ -1018,3 +1018,98 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+/* ===========================================================================
+ * P3 · OBRA E ELENCO — busca, verbete embutido e a fronteira da Enciclopédia.
+ * ======================================================================== */
+
+/* O aviso de fronteira é permanente e fica ACIMA das duas colunas: ele não é
+ * nota de rodapé de um campo, é a regra que define a tela. Um produtor editando
+ * o verbete de um artista real seria a violação exata que o projeto se proibiu. */
+.studio-fronteira {
+  max-width: 78ch;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+}
+
+.studio-resultados {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.studio-resultado {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.studio-resultado-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+}
+
+.studio-resultado-nome {
+  flex: 1 1 12rem;
+  min-width: 0;
+  font-family: var(--fonte-display);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.studio-resultado-classe {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
+
+/* O verbete embutido, para conferência. Em itálico e em tinta secundária porque
+ * ele é CITAÇÃO de outra autoridade: o produtor lê e decide, nunca corrige. */
+.studio-verbete {
+  max-width: 68ch;
+  font-size: var(--tipo-legenda);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--cor-tinta-2);
+}
+
+.studio-escolhido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-m);
+  background: var(--cor-acao-lavada);
+}
+
+.studio-escolhido-nome {
+  font-family: var(--fonte-display);
+  font-weight: 700;
+}
+
+/* Vínculo proposto: contorno tracejado, porque ele existe e ainda não é fato.
+ * O selo escrito carrega o significado; o traço só o reforça. */
+.studio-sessao[data-proposto="sim"] {
+  border-style: dashed;
+  border-color: var(--cor-borda-forte);
+}

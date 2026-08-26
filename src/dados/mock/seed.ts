@@ -18,7 +18,7 @@
  */
 
 import { DATA_DE_REFERENCIA } from "@/dados/alerta";
-import { ocorrenciasDe, porId, porSlug, slugsPorTipo, temporadasDe } from "@/dados/grafo";
+import { ocorrenciasDe, porId, porSlug, slugsPorTipo, temporadasDe, vizinhos } from "@/dados/grafo";
 import { normalizar } from "@/dados/indice";
 import vocabularioJson from "@/dados/gerado/vocabulario.json";
 import { PROCEDENCIA_DO_PRODUTOR, acessibilidadeVazia, comChavesRecalculadas } from "@/dados/tipos-acesso";
@@ -483,5 +483,133 @@ export function catalogoDaGrade(): CatalogoDaGrade {
     organizacao: ORGANIZACAO_DO_PRODUTOR,
     produtor: PRODUTOR_DA_DEMONSTRACAO,
     dataDeReferencia: DATA_DE_REFERENCIA,
+  };
+}
+
+/**
+ * O que a P3 (obra e elenco) precisa: os agentes e as obras reais do acervo.
+ *
+ * É O CATÁLOGO MAIS PESADO das telas da jornada — 792 agentes e 239 obras, com o verbete
+ * cortado para conferência — e vai inteiro de propósito: a busca precisa responder sem
+ * navegar, e uma rota por agente geraria mais de mil páginas no build. O que atravessa são
+ * quatro campos por registro, nunca uma `Entidade`.
+ */
+export interface CatalogoDoElenco {
+  agentes: AgenteDoCatalogo[];
+  obras: AgenteDoCatalogo[];
+  organizacao: string;
+  produtor: string;
+  dataDeReferencia: string;
+  /** Quantos agentes a Enciclopédia completa tem, contra os do protótipo. */
+  pessoasNoProtótipo: number;
+}
+
+export function catalogoDoElenco(): CatalogoDoElenco {
+  const inteiro = catalogoDoStudio();
+  return {
+    agentes: inteiro.agentes,
+    obras: inteiro.obras,
+    organizacao: ORGANIZACAO_DO_PRODUTOR,
+    produtor: PRODUTOR_DA_DEMONSTRACAO,
+    dataDeReferencia: DATA_DE_REFERENCIA,
+    pessoasNoProtótipo: entidadesDe("pessoa").length,
+  };
+}
+
+/**
+ * Os papéis que a tela oferece de partida, LIDOS DO GRAFO e não digitados.
+ *
+ * As 508 arestas `atua_em` existentes trazem `papel` obrigatório, e são elas que dizem que
+ * vocabulário o acervo de fato usa. Uma lista escrita à mão aqui inventaria papéis que
+ * nenhuma aresta sustenta — e o produtor escolheria entre categorias que a plataforma não
+ * reconhece. Ordenados por frequência, com desempate por rótulo para o resultado não mudar
+ * entre duas gerações.
+ */
+export function papeisDoAcervo(): Array<{ papel: string; arestas: number }> {
+  const conta = new Map<string, number>();
+  for (const slug of slugsPorTipo("pessoa")) {
+    const p = porSlug("pessoa", slug);
+    if (!p) continue;
+    for (const v of vizinhos(p.id, "atua_em")) {
+      const papel = v.aresta.papel?.trim();
+      if (papel) conta.set(papel, (conta.get(papel) ?? 0) + 1);
+    }
+  }
+  return [...conta.entries()]
+    .map(([papel, arestas]) => ({ papel, arestas }))
+    .sort((a, b) => (b.arestas - a.arestas) || (a.papel < b.papel ? -1 : 1));
+}
+
+/**
+ * Os números que justificam a P3 existir. **Medidos, e a distinção importa.**
+ *
+ * Há 508 arestas `atua_em` no grafo e 426 delas apontam para `evento`. Contar só isso
+ * levaria à conclusão errada de que a agenda já tem elenco. O acervo mede outra coisa:
+ * dessas 426, **nenhuma aponta para um evento DATADO** — os eventos que a Enciclopédia
+ * liga a artistas são históricos, sem sessão nenhuma, e os 129 que têm ocorrência não têm
+ * artista vinculado.
+ *
+ * «Evento» e «evento datado» são conjuntos disjuntos neste acervo, e confundi-los é o erro
+ * que faz a tela afirmar que o problema não existe.
+ *
+ * O produtor é o único ator com legitimidade para dizer que fulano se apresenta sábado — e
+ * é por isso que a equipe se recusou a autorar essas arestas no protótipo.
+ */
+export interface NumerosDoElenco {
+  /** Todas as `atua_em` que saem de pessoa ou coletivo. */
+  atuaEm: number;
+  /** Quantas apontam para um `evento`, datado ou não. */
+  paraEvento: number;
+  /** Quantas apontam para um evento COM ocorrência. É zero, e é o argumento. */
+  paraEventoDatado: number;
+  /** Quantos eventos têm ao menos uma ocorrência. */
+  eventosDatados: number;
+  /** Quantos desses têm ao menos um artista vinculado. Também zero. */
+  datadosComArtista: number;
+  pessoas: number;
+  coletivos: number;
+  obras: number;
+}
+
+export function numerosDoElenco(): NumerosDoElenco {
+  const datados = new Set<string>();
+  for (const slug of slugsPorTipo("evento")) {
+    const e = porSlug("evento", slug);
+    if (e && ocorrenciasDe(e.id).length > 0) datados.add(e.id);
+  }
+
+  let atuaEm = 0;
+  let paraEvento = 0;
+  let paraEventoDatado = 0;
+  for (const classe of ["pessoa", "coletivo"] as const) {
+    for (const slug of slugsPorTipo(classe)) {
+      const p = porSlug(classe, slug);
+      if (!p) continue;
+      for (const v of vizinhos(p.id, "atua_em")) {
+        atuaEm += 1;
+        if (v.entidade.classe !== "evento") continue;
+        paraEvento += 1;
+        if (datados.has(v.entidade.id)) paraEventoDatado += 1;
+      }
+    }
+  }
+
+  let datadosComArtista = 0;
+  for (const id of datados) {
+    const temArtista = vizinhos(id, "atua_em").some(
+      (v) => v.entidade.classe === "pessoa" || v.entidade.classe === "coletivo",
+    );
+    if (temArtista) datadosComArtista += 1;
+  }
+
+  return {
+    atuaEm,
+    paraEvento,
+    paraEventoDatado,
+    eventosDatados: datados.size,
+    datadosComArtista,
+    pessoas: entidadesDe("pessoa").length,
+    coletivos: entidadesDe("coletivo").length,
+    obras: entidadesDe("obra").length,
   };
 }
