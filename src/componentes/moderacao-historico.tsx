@@ -133,6 +133,9 @@ export function ModeracaoHistorico({
           <Link className="studio-botao" href="/moderacao/fila/">
             ← voltar à fila
           </Link>
+          <Link className="studio-botao" data-ir-para="ia" href="/moderacao/ia/">
+            revisão da IA
+          </Link>
           <span className="studio-pastilha">
             operando como <strong>{moderador}</strong>
           </span>

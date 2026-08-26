@@ -860,6 +860,128 @@ async function principal() {
       `0 · ${fila.itens}`,
     );
 
+    // =======================================================================
+    titulo("── M3 · a IA: o score conferível, e aprovar como única porta ──");
+    // =======================================================================
+
+    await cdp.avaliar(`window.localStorage.removeItem("moderacao.v1")`);
+    await cdp.navegar(`${BASE}/moderacao/ia/`);
+    await cdp.assentar();
+
+    const ia = await cdp.avaliar(
+      naPagina(`
+        const comp = todos('[data-componente-score]');
+        const marcados = comp.filter((el) => el.getAttribute('data-atende') === 'sim');
+        const bloco = document.querySelector('[data-score-do-item]');
+        const conta = document.querySelector('[data-conta-conferida]');
+        return {
+          sugestoes: todos('[data-sugestao-ia]').length,
+          componentes: comp.length,
+          marcados: marcados.length,
+          scoreExibido: bloco ? Number(bloco.getAttribute('data-score-do-item')) : null,
+          contaConferida: conta ? Number(conta.getAttribute('data-conta-conferida')) : null,
+          contaBate: conta ? (conta.textContent || '').includes('As duas contas batem') : false,
+          faixas: todos('[data-faixa-score]').length,
+          limites: todos('[data-limites-ia] li').length,
+          declaraOrdem: Boolean(document.querySelector('[data-ordem-declarada]')),
+        };
+      `),
+    );
+
+    exigir(
+      ia.sugestoes === 20 && ia.componentes === 5,
+      "a tela recebe as 20 sugestões de IA e mostra os cinco componentes do score",
+      `${ia.sugestoes} sugestões · ${ia.componentes} componentes`,
+      "20 · 5",
+    );
+
+    // O PORTÃO CENTRAL DA SESSÃO INTEIRA: o score exibido é a soma dos componentes
+    // marcados. Se um dia deixar de ser, o número volta a ser opaco — e um score opaco é
+    // exatamente o recomendador que esta proposta recusa. A conta é refeita na tela e a
+    // suíte confere que as duas batem, em vez de acreditar na frase que diz que batem.
+    exigir(
+      ia.contaConferida !== null &&
+        ia.scoreExibido !== null &&
+        Math.abs(ia.contaConferida - ia.scoreExibido) < 0.005 &&
+        Math.abs(ia.marcados * 0.2 - ia.scoreExibido) < 0.005 &&
+        ia.contaBate,
+      "o score exibido É a soma dos componentes marcados — conferido, não afirmado",
+      `${ia.marcados} de 5 marcados × 0,2 = ${(ia.marcados * 0.2).toFixed(2)} · conta na tela ${ia.contaConferida} · score ${ia.scoreExibido}`,
+      "os três números iguais",
+    );
+
+    exigir(
+      ia.faixas > 0 && ia.limites === 3 && ia.declaraOrdem,
+      "a distribuição por faixa, os três limites da IA e a ordem declarada",
+      `${ia.faixas} faixas · ${ia.limites} limites · ordem declarada: ${ia.declaraOrdem}`,
+      "faixas > 0 · 3 · true",
+    );
+
+    // ---- descartar é vetar: exige motivo, com as mesmas travas ----
+    await cdp.clicar(`document.querySelector('[data-acao-ia="descartar"]')`);
+    await cdp.assentar();
+    const descarte = await cdp.avaliar(
+      naPagina(`
+        const botao = document.querySelector('[data-veto-bloqueado]');
+        botao.click();
+        const form = botao.closest('form');
+        if (form) form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        return {
+          bloqueado: botao.getAttribute('data-veto-bloqueado'),
+          desabilitado: botao.disabled,
+          sugestoes: todos('[data-sugestao-ia]').length,
+        };
+      `),
+    );
+    exigir(
+      descarte.bloqueado === "sim" && descarte.desabilitado && descarte.sugestoes === 20,
+      "descartar uma sugestão EXIGE motivo — sem ele nada sai da lista",
+      `bloqueado=${descarte.bloqueado} · disabled=${descarte.desabilitado} · ${descarte.sugestoes} sugestões intactas`,
+      "sim · true · 20",
+    );
+
+    // ---- aprovar é a única porta, e ela deixa registro ----
+    await cdp.avaliar(
+      naPagina(`
+        const cancelar = todos('.moderacao-veto button').find((b) => (b.textContent || '').includes('Cancelar'));
+        if (cancelar) cancelar.click();
+        return true;
+      `),
+    );
+    await cdp.assentar();
+    await cdp.clicar(`document.querySelector('[data-acao-ia="aprovar"]')`);
+    await cdp.assentar();
+
+    const aposAprovar = await cdp.avaliar(
+      naPagina(`return { sugestoes: todos('[data-sugestao-ia]').length };`),
+    );
+    await cdp.navegar(`${BASE}/moderacao/historico/`);
+    await cdp.assentar();
+    const noHistorico = await cdp.avaliar(
+      naPagina(`
+        const d = document.querySelector('[data-decisao-moderacao]');
+        return {
+          registrou: Boolean(d),
+          acao: d ? d.getAttribute('data-acao-registrada') : null,
+          temCarimbo: Boolean(d && d.querySelector('[data-carimbo]')),
+          origem: d ? (d.querySelector('[data-origem]')?.getAttribute('data-origem') ?? null) : null,
+        };
+      `),
+    );
+    // Aprovar é a ÚNICA porta pela qual uma sugestão vira dado público — e ela deixa rastro
+    // no histórico, com autor e carimbo. Uma porta sem registro seria uma porta sem
+    // responsável.
+    exigir(
+      aposAprovar.sugestoes === 19 &&
+        noHistorico.registrou &&
+        noHistorico.acao === "aprovar" &&
+        noHistorico.temCarimbo &&
+        noHistorico.origem === "ia",
+      "aprovar tira da lista e deixa registro no histórico, com origem «ia» e carimbo",
+      `${aposAprovar.sugestoes} pendentes · «${noHistorico.acao}» de origem «${noHistorico.origem}» · carimbo ${noHistorico.temCarimbo}`,
+      "19 · aprovar · ia · true",
+    );
+
     // -----------------------------------------------------------------------
     titulo("── zero erro de console na navegação inteira ──");
     // -----------------------------------------------------------------------

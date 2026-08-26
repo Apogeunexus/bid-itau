@@ -993,6 +993,17 @@ export function filaDaModeracao(): ItemDaFila[] {
   return fila;
 }
 
+/**
+ * Só os itens de origem `ia`.
+ *
+ * O RECORTE É FEITO NO SERVIDOR e não no cliente: mandar os 68 e filtrar lá pagaria 53 KB
+ * de DTO para exibir 20 itens. É o mesmo raciocínio que fez o Observatório recortar por
+ * tela em vez de mandar tudo para todas.
+ */
+export function sugestoesDaIa(): ItemDaFila[] {
+  return filaDaModeracao().filter((i) => i.origem === "ia");
+}
+
 export function itemDaFilaPorId(id: string): ItemDaFila | undefined {
   return filaDaModeracao().find((i) => i.id === id);
 }
@@ -1297,6 +1308,17 @@ export const DESTINOS_DA_ACAO: readonly DestinoDaAcao[] = [
     porqueSemRota: null,
   },
 ];
+
+/**
+ * A frase que a M3 existe para imprimir. É a resposta ao RFP, e é produto — não nota.
+ */
+export const APROVAR_E_A_UNICA_PORTA =
+  "Aprovar é a ÚNICA porta pela qual uma sugestão de IA vira dado público. Nenhuma delas " +
+  "entra no acervo por decurso de prazo, por score alto, por volume ou por qualquer regra " +
+  "automática: é preciso um humano apertar um botão, e o botão fica registrado com nome e " +
+  "carimbo. O score ao lado de cada sugestão não decide nada — ele é a fração de cinco " +
+  "perguntas sobre a ficha da própria entidade, exibidas marcadas uma a uma, para que quem " +
+  "decide confira a conta em vez de confiar no número.";
 
 export const O_HISTORICO_E_DO_MODERADOR =
   "Este histórico é o das decisões DESTE moderador, e serve para ele responder pelo que " +

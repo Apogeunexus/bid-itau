@@ -490,6 +490,18 @@ export function ModeracaoFila({
           decidir, e toda decisão fica com nome e carimbo.
         </p>
 
+        {/* AS OUTRAS TRÊS TELAS DA MODERAÇÃO. Sem estes links elas existem no artefato
+            e não são alcançáveis por ninguém — tela sem entrada é tela que não existe
+            para quem está na frente do produto. */}
+        <nav className="moderacao-ficha-atalhos" aria-label="telas da moderação">
+          <Link className="studio-botao" data-ir-para="ia" href="/moderacao/ia/">
+            revisão da IA · {comSeparador(numeros.itensPorOrigem.ia)}
+          </Link>
+          <Link className="studio-botao" data-ir-para="historico" href="/moderacao/historico/">
+            meu histórico
+          </Link>
+        </nav>
+
         <div className="moderacao-escopos">
           <span className="studio-rotulo">escopo do moderador</span>
           <div className="web-alternador" role="group" aria-label="escopo de curadoria">

@@ -847,3 +847,46 @@
   font-size: var(--tipo-detalhe);
   line-height: 1.5;
 }
+
+/* ===========================================================================
+ * M3 — a revisão da IA
+ * ======================================================================== */
+
+/* A conta somada na tela, ao lado do score. Ela é o argumento da tela inteira —
+ * a diferença entre «confie neste número» e «confira este número» — e por isso
+ * tem peso de texto lido, não de nota de rodapé. */
+.moderacao-conta-do-score {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid var(--cor-acao);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-legenda);
+  line-height: 1.55;
+}
+
+/* O score na linha da lista: alinhado à esquerda do título, porque quem varre a
+ * lista lê o número antes do nome — é ele que diz quanto do resto merece leitura. */
+.moderacao-atalho-item .moderacao-score {
+  align-self: flex-start;
+}
+
+/* ---------------------------------------------------------------------------
+ * O CABEÇALHO DA MODERAÇÃO NÃO GRUDA — e a exceção é medida, não estética.
+ *
+ * `.studio-cabecalho` é `position: sticky` em `studio.css`, e faz sentido nas
+ * telas de lá, onde ele tem duas linhas. O da Moderação tem sete blocos: título,
+ * objetivo, as três telas, o escopo, o que ficou fora do escopo, a ordem e a
+ * justificativa dela. Grudado, ele passa de 300 px e cobre a área de trabalho.
+ *
+ * Pego pela própria suíte, e o sintoma foi literal: «clique falhou: ponto
+ * central coberto por HEADER.studio-cabecalho». O que derruba um clique
+ * automatizado derruba o de uma pessoa — ela rola até o botão e ele está
+ * embaixo do cabeçalho.
+ *
+ * A sobrescrita mora AQUI, dentro de `.moderacao`, e não em `studio.css`: a
+ * folha da fase 4 tem gates herdados e é território de outra sessão.
+ * ------------------------------------------------------------------------- */
+
+.moderacao .studio-cabecalho {
+  position: static;
+}
