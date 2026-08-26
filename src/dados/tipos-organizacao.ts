@@ -440,7 +440,7 @@ export const TELAS_DA_ORGANIZACAO: readonly TelaDaOrganizacao[] = [
     rotulo: "Editais",
     rota: "/studio/editais",
     objetivo: "A funcionalidade que não tinha classe nem módulo",
-    pronta: false,
+    pronta: true,
   },
   {
     id: "integracao",
@@ -1001,5 +1001,151 @@ export function faltasDaFormacao(
     bloqueia: false,
     dono: "Admin (87)",
   });
+  return saida;
+}
+
+// ---------------------------------------------------------------------------
+// O edital — O6. Forma NOVA: a classe não existe em `ClasseEntidade`
+// ---------------------------------------------------------------------------
+
+/**
+ * O estado do edital.
+ *
+ * QUATRO VALORES, E O TERCEIRO É O QUE FALTA NA MAIORIA DOS SISTEMAS. «Em julgamento» é o
+ * intervalo entre encerrar a inscrição e sair o resultado — o período em que quem se
+ * inscreveu mais quer saber onde está. Um edital que pula de «encerrado» para «resultado»
+ * deixa esse intervalo sem nome, e quem esperou não sabe se foi esquecido.
+ */
+export const ESTADOS_DO_EDITAL = ["aberto", "encerrado", "em-julgamento", "resultado"] as const;
+export type EstadoDoEdital = (typeof ESTADOS_DO_EDITAL)[number];
+
+export const ROTULO_DO_EDITAL: Record<EstadoDoEdital, string> = {
+  aberto: "aberto",
+  encerrado: "encerrado",
+  "em-julgamento": "em julgamento",
+  resultado: "resultado publicado",
+};
+
+export const EXPLICACAO_DO_EDITAL: Record<EstadoDoEdital, string> = {
+  aberto: "Recebendo inscrição. É o único estado em que a lista de inscritos cresce.",
+  encerrado: "O prazo passou e ninguém mais se inscreve. Ainda não há julgamento.",
+  "em-julgamento":
+    "Encerrado e sendo avaliado. É o intervalo em que quem se inscreveu mais quer saber onde " +
+    "está — e é justamente ele que costuma não ter nome nos sistemas.",
+  resultado: "O resultado saiu e está publicado.",
+};
+
+export const EDITAL_E_FORMA_NOVA =
+  "«edital» não existe em `ClasseEntidade`: um grep por edital em `src/dados/` não retorna " +
+  "nada, e três funcionalidades do catálogo o pressupõem no grafo. A forma foi criada aqui, " +
+  "por extensão aditiva, sem tocar `tipos.ts` e sem ser forçada dentro de «formacao» nem de " +
+  "«programa» — nenhuma das duas carrega prazo, critério estruturado nem estado de " +
+  "julgamento, e enfiar edital numa delas seria fabricar classificação.";
+
+/**
+ * Uma inscrição — e o funil da funcionalidade 49.
+ *
+ * `viraAgente` é o ponto: quem se inscreve num edital **entra no grafo como agente**, e é
+ * assim que a plataforma ganha produtor sem campanha de cadastro. O edital é a porta de
+ * entrada que a proposta descreve, e ela só existe porque alguém publica o edital — e
+ * ninguém publicava.
+ */
+export interface InscricaoNoEdital {
+  id: string;
+  proponente: string;
+  /** Unidade federativa do proponente. Estruturada, para casar com o critério. */
+  territorio: string;
+  /** Id de linguagem do vocabulário controlado, não rótulo livre. */
+  linguagem: string;
+  viraAgente: boolean;
+  autor: string;
+  quando: string;
+}
+
+/**
+ * O edital.
+ *
+ * OS CRITÉRIOS SÃO DADO ESTRUTURADO, e não texto livre. É essa escolha, e só ela, que
+ * permite o casamento com o perfil do produtor (48): «edital para dança no Pará» só encontra
+ * quem faz dança no Pará se «dança» e «Pará» forem valores de vocabulário dos dois lados. Um
+ * campo de texto com «voltado a companhias de dança da região Norte» é legível para uma
+ * pessoa e mudo para o sistema — e a funcionalidade 166, que alerta o produtor sobre edital
+ * compatível, depende inteiramente disso.
+ */
+export interface Edital {
+  id: string;
+  titulo: string;
+  resumo: string;
+  prazo: string;
+  estado: EstadoDoEdital;
+  linguagens: string[];
+  territorios: string[];
+  publicoAlvo: string;
+  inscricoes: InscricaoNoEdital[];
+  autor: string;
+  quando: string;
+}
+
+/** O perfil contra o qual o edital casa. É o recorte mínimo do produtor que a 48 usa. */
+export interface PerfilDoProponente {
+  territorio: string;
+  linguagem: string;
+}
+
+export interface Casamento {
+  territorioCasa: boolean;
+  linguagemCasa: boolean;
+  /** `true` quando o edital não recorta aquela dimensão — sem critério, tudo passa. */
+  territorioAberto: boolean;
+  linguagemAberto: boolean;
+}
+
+/**
+ * O edital casa com este perfil?
+ *
+ * CRITÉRIO VAZIO É «SERVE PARA TODOS», e não «não serve para ninguém». A distinção parece
+ * óbvia e é onde o casamento erra: um edital sem recorte de território é nacional, e tratá-lo
+ * como sem correspondência esconderia dele exatamente os produtores que ele quer alcançar.
+ */
+export function casaComPerfil(e: Edital, p: PerfilDoProponente): Casamento {
+  const territorioAberto = e.territorios.length === 0;
+  const linguagemAberto = e.linguagens.length === 0;
+  return {
+    territorioAberto,
+    linguagemAberto,
+    territorioCasa: territorioAberto || e.territorios.includes(p.territorio),
+    linguagemCasa: linguagemAberto || e.linguagens.includes(p.linguagem),
+  };
+}
+
+export function faltasDoEdital(e: Edital | undefined): Falta[] {
+  const saida: Falta[] = [];
+  if (!e) return saida;
+
+  if (e.prazo.trim().length === 0) {
+    saida.push({ texto: "prazo — um edital sem data de fechamento não fecha", bloqueia: true, dono: null });
+  }
+  if (e.linguagens.length === 0 && e.territorios.length === 0) {
+    saida.push({
+      texto:
+        "nenhum critério estruturado — sem eles o alerta de edital compatível (166) não tem o que comparar",
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  if (e.publicoAlvo.trim().length === 0) {
+    saida.push({ texto: "público-alvo", bloqueia: false, dono: null });
+  }
+  if (e.estado === "aberto" && e.inscricoes.length === 0) {
+    saida.push({ texto: "nenhuma inscrição recebida", bloqueia: false, dono: null });
+  }
+  const propostos = e.inscricoes.filter((i) => i.viraAgente).length;
+  if (propostos > 0) {
+    saida.push({
+      texto: `${propostos} proponente(s) entram no grafo como agente e passam por reconciliação`,
+      bloqueia: false,
+      dono: "Moderador (117)",
+    });
+  }
   return saida;
 }

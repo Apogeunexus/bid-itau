@@ -39,6 +39,9 @@ import type {
   EntradaDeEquipe,
   CadastroDeFormacao,
   EdicaoDePrograma,
+  Edital,
+  EstadoDoEdital,
+  InscricaoNoEdital,
   FichaTecnicaDeMidia,
   MaterialDidatico,
   Programa,
@@ -91,6 +94,10 @@ interface EstadoPersistido {
   formacoes: Record<string, CadastroDeFormacao>;
   atualFormacaoId: string | null;
   visitas: VisitaEducativa[];
+  /** Os editais — a O6. Lista, como os programas: eles NASCEM aqui, porque a classe não
+   *  existe no acervo. */
+  editais: Edital[];
+  atualEditalId: string | null;
 }
 
 export interface ContextoDaOrganizacao {
@@ -190,6 +197,7 @@ function pareceEstado(v: unknown): v is EstadoPersistido {
   if (o.programas !== undefined && !Array.isArray(o.programas)) return false;
   if (o.formacoes !== undefined && (typeof o.formacoes !== "object" || o.formacoes === null)) return false;
   if (o.visitas !== undefined && !Array.isArray(o.visitas)) return false;
+  if (o.editais !== undefined && !Array.isArray(o.editais)) return false;
   if (o.historicoDaEquipe !== undefined && !Array.isArray(o.historicoDaEquipe)) return false;
   return Object.values(o.cadastros as Record<string, unknown>).every((c) => {
     if (typeof c !== "object" || c === null) return false;
@@ -222,6 +230,8 @@ function doZero(): EstadoPersistido {
     formacoes: {},
     atualFormacaoId: primeiraFormacaoId,
     visitas: [],
+    editais: [],
+    atualEditalId: null,
   };
 }
 
@@ -293,6 +303,8 @@ function hidratar(contextoNovo: ContextoDaOrganizacao, semente: SementeDaOrganiz
     formacoes: lido.formacoes ?? {},
     atualFormacaoId: lido.atualFormacaoId ?? primeiraFormacaoId,
     visitas: lido.visitas ?? [],
+    editais: lido.editais ?? [],
+    atualEditalId: lido.atualEditalId ?? null,
   };
   avisar();
 }
@@ -452,6 +464,18 @@ function comFormacao(
   gravar({ ...estado, formacoes: { ...estado.formacoes, [formacaoId]: proximo } });
 }
 
+function comEdital(id: string, transformar: (e: Edital) => Edital) {
+  if (estado === null) return;
+  gravar({
+    ...estado,
+    editais: estado.editais.map((e) =>
+      e.id === id
+        ? { ...transformar(e), autor: contexto.autor, quando: contexto.dataDeReferencia }
+        : e,
+    ),
+  });
+}
+
 // ---------------------------------------------------------------------------
 // O gancho
 // ---------------------------------------------------------------------------
@@ -536,6 +560,17 @@ export interface Organizacao {
   /** Responder é DECIDIR, e a decisão carimba. Confirmar não confere teto aqui: quem
    *  confere é a tela, que já mostra o motivo de não caber antes de deixar clicar. */
   responderVisita: (id: string, estado: "confirmada" | "recusada") => void;
+
+  // --- O6 · editais --------------------------------------------------------
+  editais: Edital[];
+  atualEditalId: string | null;
+  escolherEdital: (id: string) => void;
+  criarEdital: (titulo: string) => void;
+  alterarEdital: (id: string, mudanca: Partial<Omit<Edital, "id" | "inscricoes">>) => void;
+  alternarCriterio: (id: string, eixo: "linguagens" | "territorios", valor: string) => void;
+  /** A inscrição do funil da 49: quem se inscreve entra no grafo como agente proposto. */
+  inscrever: (id: string, inscricao: Omit<InscricaoNoEdital, "id" | "autor" | "quando">) => void;
+  mudarEstadoDoEdital: (id: string, estado: EstadoDoEdital) => void;
 }
 
 export function useOrganizacao(
@@ -805,6 +840,77 @@ export function useOrganizacao(
     });
   }, []);
 
+  const escolherEdital = useCallback((id: string) => {
+    if (estado === null) return;
+    gravar({ ...estado, atualEditalId: id });
+  }, []);
+
+  const criarEdital = useCallback((titulo: string) => {
+    if (estado === null) return;
+    const id = `edital:autorado:${estado.editais.length + 1}`;
+    gravar({
+      ...estado,
+      editais: [
+        ...estado.editais,
+        {
+          id,
+          titulo,
+          resumo: "",
+          prazo: "",
+          estado: "aberto",
+          linguagens: [],
+          territorios: [],
+          publicoAlvo: "",
+          inscricoes: [],
+          autor: contexto.autor,
+          quando: contexto.dataDeReferencia,
+        },
+      ],
+      atualEditalId: id,
+    });
+  }, []);
+
+  const alterarEdital = useCallback(
+    (id: string, mudanca: Partial<Omit<Edital, "id" | "inscricoes">>) => {
+      comEdital(id, (e) => ({ ...e, ...mudanca }));
+    },
+    [],
+  );
+
+  const alternarCriterio = useCallback(
+    (id: string, eixo: "linguagens" | "territorios", valor: string) => {
+      comEdital(id, (e) => ({
+        ...e,
+        [eixo]: e[eixo].includes(valor)
+          ? e[eixo].filter((x) => x !== valor)
+          : [...e[eixo], valor],
+      }));
+    },
+    [],
+  );
+
+  const inscrever = useCallback(
+    (id: string, inscricao: Omit<InscricaoNoEdital, "id" | "autor" | "quando">) => {
+      comEdital(id, (e) => ({
+        ...e,
+        inscricoes: [
+          ...e.inscricoes,
+          {
+            ...inscricao,
+            id: `${e.id}-inscricao-${e.inscricoes.length + 1}`,
+            autor: contexto.autor,
+            quando: contexto.dataDeReferencia,
+          },
+        ],
+      }));
+    },
+    [],
+  );
+
+  const mudarEstadoDoEdital = useCallback((id: string, novoEstado: EstadoDoEdital) => {
+    comEdital(id, (e) => ({ ...e, estado: novoEstado }));
+  }, []);
+
   const reiniciar = useCallback(() => {
     try {
       window.localStorage.removeItem(CHAVE_DA_ORGANIZACAO);
@@ -863,5 +969,13 @@ export function useOrganizacao(
     removerMaterial,
     solicitarVisita,
     responderVisita,
+    editais: atualEstado?.editais ?? [],
+    atualEditalId: atualEstado?.atualEditalId ?? null,
+    escolherEdital,
+    criarEdital,
+    alterarEdital,
+    alternarCriterio,
+    inscrever,
+    mudarEstadoDoEdital,
   };
 }

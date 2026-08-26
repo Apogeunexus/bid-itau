@@ -764,3 +764,75 @@ export function declaracoesDasFormacoes(n: NumerosDasFormacoes): DeclaracaoDaTel
     },
   ];
 }
+
+// ---------------------------------------------------------------------------
+// O vocabulário dos critérios de edital — O6
+// ---------------------------------------------------------------------------
+
+/**
+ * As 27 unidades da federação. Constante do país, não do acervo.
+ *
+ * Ela está aqui, e não derivada do grafo, DE PROPÓSITO: derivá-la faria o campo de critério
+ * do edital oferecer só os 25 estados que o acervo já tem — e um edital que não pode mirar
+ * Sergipe e Tocantins é exatamente o mecanismo pelo qual o deserto se perpetua. A tela
+ * compara as duas listas e mostra a diferença.
+ */
+export const UNIDADES_DA_FEDERACAO: readonly string[] = [
+  "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal",
+  "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul",
+  "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí",
+  "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia",
+  "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins",
+];
+
+export interface VocabularioDoEdital {
+  linguagens: { id: string; rotulo: string }[];
+  /** As 27, com a marca de quais o acervo já cobre. */
+  territorios: { nome: string; noAcervo: boolean }[];
+  /** As que faltam, nomeadas. Hoje: Sergipe e Tocantins. */
+  ufsAusentes: string[];
+}
+
+export function vocabularioDoEdital(): VocabularioDoEdital {
+  const noAcervo = new Set(
+    entidadesDe("territorio")
+      .filter((e) => texto(e, "nivel") === "estado" && texto(e, "pais") === "Brasil")
+      .map((e) => e.titulo),
+  );
+
+  return {
+    linguagens: vocabulario.linguagens.map((l) => ({ id: l.id, rotulo: l.rotulo })),
+    territorios: UNIDADES_DA_FEDERACAO.map((nome) => ({ nome, noAcervo: noAcervo.has(nome) })),
+    ufsAusentes: UNIDADES_DA_FEDERACAO.filter((nome) => !noAcervo.has(nome)),
+  };
+}
+
+export function declaracoesDosEditais(v: VocabularioDoEdital): DeclaracaoDaTela[] {
+  const cobertas = v.territorios.filter((t) => t.noAcervo).length;
+  return [
+    {
+      titulo: "A classe não existe, e três funcionalidades a pressupõem",
+      texto:
+        `Um grep por edital em «src/dados/» não retorna nada. O produtor RECEBE alerta de ` +
+        `edital compatível no catálogo de funcionalidades; nunca existiu quem publica. Esta ` +
+        `tela cria a forma antes de criar a tela, e a forma é aditiva — «tipos.ts» não foi ` +
+        `tocado.`,
+    },
+    {
+      titulo: "Os critérios são dado, e é por isso que o casamento existe",
+      texto:
+        `As ${v.linguagens.length} linguagens do vocabulário controlado e as 27 unidades da ` +
+        `federação são os valores que o edital recorta. Texto livre seria legível para uma ` +
+        `pessoa e mudo para o sistema — e o alerta de edital compatível depende inteiramente ` +
+        `de os dois lados falarem o mesmo vocabulário.`,
+    },
+    {
+      titulo: "O edital pode mirar onde o acervo não chega",
+      texto:
+        `O acervo cobre ${cobertas} das 27 unidades da federação; faltam ` +
+        `${v.ufsAusentes.join(" e ")}. A lista de critérios oferece as 27, e não as ` +
+        `${cobertas} — um edital que não pode mirar onde não há acervo é o mecanismo exato ` +
+        `pelo qual o deserto se perpetua.`,
+    },
+  ];
+}
