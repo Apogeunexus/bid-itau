@@ -19,9 +19,30 @@
  */
 import type { ArestaAutorada } from "./redacao";
 
+/**
+ * Uma data ISO escrita como se lê em português.
+ *
+ * MORA AQUI, e não em `redacao.ts`, porque as três telas precisam dela NO CLIENTE — o
+ * campo `<input type="date">` fala ISO por obrigação do HTML, e o que o curador lê embaixo
+ * dele não pode falar. Uma segunda cópia no módulo de servidor divergiria da primeira no
+ * dia em que alguém trocasse o separador.
+ *
+ * A conversão é sobre as PARTES da string, e não por `new Date`: `new Date("2026-08-22")` é
+ * meia-noite UTC e volta como dia 21 em fuso brasileiro. Uma data que anda um dia para trás
+ * é pior que uma data em formato errado. Entrada fora do formato volta intacta — inventar
+ * uma data para um valor que não é data seria pior que mostrar o valor cru.
+ */
+export function comoSeLe(iso: string): string {
+  const partes = iso.split("-");
+  if (partes.length !== 3) return iso;
+  const [ano, mes, dia] = partes;
+  return `${dia}.${mes}.${ano}`;
+}
+
 /** Chaves versionadas, do espaço `agenda-cultural:`, e DECLARADAS nas telas. */
 export const CHAVE_DAS_PONTES = "agenda-cultural:pontes-autoradas-v1";
 export const CHAVE_DAS_TRILHAS = "agenda-cultural:trilhas-publicadas-v1";
+export const CHAVE_DO_DESTAQUE = "agenda-cultural:destaque-do-feed-v1";
 
 /** Uma trilha publicada pelo editor, com autor e carimbo. */
 export interface TrilhaPublicada {
@@ -93,6 +114,46 @@ export function lerTrilhasPublicadas(): TrilhaPublicada[] {
     const t = v as Partial<TrilhaPublicada>;
     return ehTexto(t.slug) && ehTexto(t.titulo) && ehTexto(t.assinatura) && ehTexto(t.carimbo);
   });
+}
+
+/**
+ * O destaque que a Redação assinou para um feed.
+ *
+ * `feedDe` é a persona cujo feed ele sobrepõe: o teto de UM é por feed, e sem essa chave a
+ * regra viraria «um destaque no mundo», que é outra coisa e mais frouxa.
+ */
+export interface DestaqueAssinado {
+  feedDe: string;
+  entidadeId: string;
+  titulo: string;
+  classe: string;
+  motivo: string;
+  assinatura: string;
+  carimbo: string;
+  agendadoPara: string;
+  /** O que a caminhada teria entregue e que este destaque empurrou para fora. */
+  substituiu: string | null;
+}
+
+export function lerDestaques(): DestaqueAssinado[] {
+  return ler(CHAVE_DO_DESTAQUE).filter((v): v is DestaqueAssinado => {
+    if (typeof v !== "object" || v === null) return false;
+    const d = v as Partial<DestaqueAssinado>;
+    return (
+      ehTexto(d.feedDe) && ehTexto(d.entidadeId) && ehTexto(d.motivo) && ehTexto(d.assinatura)
+    );
+  });
+}
+
+/**
+ * Grava o destaque de um feed. **Um por feed, e o novo SUBSTITUI o antigo** — é a regra do
+ * produto virando código: empilhar dois destaques para a mesma persona faria a tela mostrar
+ * um teto que o registro não sustenta, e o segundo apareceria como se o primeiro não
+ * existisse.
+ */
+export function registrarDestaque(novo: DestaqueAssinado): boolean {
+  const antes = lerDestaques().filter((d) => d.feedDe !== novo.feedDe);
+  return gravar(CHAVE_DO_DESTAQUE, [novo, ...antes]);
 }
 
 /**

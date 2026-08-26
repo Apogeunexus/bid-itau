@@ -6,6 +6,7 @@ import { rotaDaEntidade } from "@/dados/rotas";
 import {
   CHAVE_DAS_PONTES,
   CHAVE_DAS_TRILHAS,
+  comoSeLe,
   lerPontes,
   lerTrilhasPublicadas,
 } from "@/dados/redacao-registro";
@@ -60,7 +61,7 @@ function daTrilha(t: TrilhaPublicada): Afirmacao {
     chave: `trilha:${t.slug}`,
     tipo: "trilha",
     titulo: t.titulo,
-    motivo: `Trilha de ${t.passos} passo(s), agendada para ${t.agendadaPara}.`,
+    motivo: `Trilha de ${t.passos} passo(s), agendada para ${comoSeLe(t.agendadaPara)}.`,
     assinatura: t.assinatura,
     carimbo: t.carimbo,
     detalhe: "trilha curada",

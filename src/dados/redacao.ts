@@ -29,6 +29,9 @@ import { trilhaCompletaPorSlug, trilhaEhPublicavel, trilhas } from "./trilha";
 import { CARIMBO_DA_DECISAO, LIMITES_DA_IA, TETO_DO_DTO, numerosDaModeracao } from "./moderacao";
 import type { NumerosDaModeracao } from "./moderacao";
 import type { OrigemMotivo } from "./cartao";
+import { POSICAO_CURADO, POSICAO_SERENDIPIDADE, montarFeed } from "./caminhada";
+import { PERSONAS } from "./personas";
+import { comoSeLe } from "./redacao-registro";
 import { rotaDaEntidade } from "./rotas";
 import type { ClasseEntidade, Entidade, Procedencia, Relacao } from "./tipos";
 
@@ -42,20 +45,6 @@ export { CARIMBO_DA_DECISAO, LIMITES_DA_IA, TETO_DO_DTO };
 
 /** A data de referência do build. NUNCA o relógio do runtime (T-03-10). */
 export const DATA_DE_REFERENCIA_DA_REDACAO = DATA_DE_REFERENCIA;
-
-/**
- * A data de referência escrita como se lê em português.
- *
- * `DATA_DE_REFERENCIA` é ISO — formato de transporte, não de leitura. Interpolá-la crua num
- * parágrafo entrega «2026-08-22» a quem lê, e a mesma tela mostra «22.08.2026» no carimbo
- * duas linhas abaixo. A conversão é feita sobre as PARTES da string, e não por `new Date`:
- * `new Date("2026-08-22")` é meia-noite UTC, e em fuso negativo — o do Brasil — ela volta
- * como dia 21. Uma data que anda um dia para trás é pior que uma data em formato errado.
- */
-function comoSeLe(iso: string): string {
-  const [ano, mes, dia] = iso.split("-");
-  return `${dia}.${mes}.${ano}`;
-}
 
 export const DATA_DE_REFERENCIA_LEGIVEL = comoSeLe(DATA_DE_REFERENCIA);
 
@@ -579,6 +568,143 @@ export interface ArestaAutorada {
   motivo: string;
   assinatura: string;
   carimbo: string;
+}
+
+// ---------------------------------------------------------------------------
+// E2 — o destaque do feed: a curadoria com poder de sobrepor o algoritmo
+// ---------------------------------------------------------------------------
+
+/** Um cartão do feed, achatado para a tela. Só primitivo atravessa (DP-F). */
+export interface CartaoDoDestaque {
+  id: string;
+  titulo: string;
+  classe: ClasseEntidade;
+  /** A frase que o público lê no selo daquele cartão. */
+  motivo: string;
+  procedencia: Procedencia;
+  posicao: number;
+  rotaPublica: string | null;
+}
+
+export interface DestaqueDoFeed {
+  personaId: string;
+  personaNome: string;
+  /** O cartão `curado` — o único do feed que uma pessoa escolheu. `null` se não houver. */
+  destaque: CartaoDoDestaque | null;
+  /** O cartão que a caminhada teria entregue e que o destaque empurrou para fora. */
+  substituido: CartaoDoDestaque | null;
+  /** A serendipidade, ao lado e para contraste. Ela NÃO é curada. */
+  serendipidade: CartaoDoDestaque | null;
+  /** O feed inteiro, na ordem em que o público o recebe. É o «depois» da tela. */
+  cartoes: CartaoDoDestaque[];
+  totalDeCartoes: number;
+  posicaoDoCurado: number;
+  posicaoDaSerendipidade: number;
+}
+
+/**
+ * O TETO DE UM, e por que ele é o produto e não uma limitação técnica.
+ *
+ * `TipoCartaoEspecial` tem dois valores e o feed reserva uma posição fixa para cada um.
+ * Um destaque por feed é curadoria: a pessoa que assina responde por aquela escolha, e
+ * quem lê consegue apontá-la. Dez destaques seriam editorial disfarçado de algoritmo —
+ * o leitor deixaria de distinguir o que a máquina achou do que a Redação escolheu, que
+ * é exatamente a distinção que esta plataforma existe para tornar visível.
+ */
+export const REGRA_DO_DESTAQUE_UNICO =
+  `Exatamente UM destaque por feed, na posição fixa ${POSICAO_CURADO}. O teto não é ` +
+  "limitação técnica, é o produto: um destaque é curadoria — assinada, apontável, " +
+  "contestável. Dez seriam editorial disfarçado de algoritmo, e o leitor perderia a " +
+  "única coisa que esta tela existe para deixar visível: o que a máquina achou e o que " +
+  "uma pessoa escolheu são coisas diferentes.";
+
+/**
+ * A SERENDIPIDADE NÃO É CURADA, e a tela precisa dizer isso ao lado do destaque.
+ *
+ * Ela também sobrepõe o rodízio e também ocupa posição fixa, o que a faz PARECER a mesma
+ * coisa. Não é: ela é escolhida pelo motor, fora do conjunto de ids que a caminhada tocou,
+ * e a dose dela é parâmetro do Admin — ninguém da Redação assina aquele cartão. Apresentar
+ * as duas sem essa distinção ensinaria o operador a confundir escolha com dosagem.
+ */
+export const SERENDIPIDADE_NAO_E_CURADORIA =
+  `A serendipidade ocupa a posição fixa ${POSICAO_SERENDIPIDADE} e também sobrepõe o ` +
+  "rodízio, o que a faz parecer o mesmo tipo de coisa. Não é. Ela é escolhida pelo motor " +
+  "FORA do conjunto de ids que a caminhada alcançou, a dose é parâmetro do Admin " +
+  "(«dose de serendipidade», 1 cartão por feed), e ninguém da Redação assina aquele " +
+  "cartão. Uma é escolha; a outra é dosagem.";
+
+/**
+ * COMO O CARTÃO SUBSTITUÍDO É DESCOBERTO, e por que não é adivinhação.
+ *
+ * O destaque ocupa uma das vagas do feed, então o rodízio preenche uma a menos: existe um
+ * cartão que a caminhada teria entregue e que ficou de fora. `montarFeed` é determinística
+ * e não aceita «monte sem o destaque», e reimplementar a montagem aqui seria a segunda
+ * travessia que este módulo recusa em toda parte. O que ela aceita é `limite`: montar o
+ * mesmo feed com uma vaga a mais devolve exatamente o cartão que não coube — o próximo do
+ * rodízio, com todo o resto idêntico. É diferença medida entre duas execuções da MESMA
+ * função, não uma segunda montagem escrita aqui.
+ */
+export const COMO_SE_SABE_O_SUBSTITUIDO =
+  "O destaque ocupa uma das vagas do feed, e o rodízio preenche uma a menos — existe um " +
+  "cartão que a caminhada teria entregue e ficou de fora. Para saber qual, o mesmo feed é " +
+  "montado com uma vaga a mais pela MESMA função determinística: o cartão que aparece a " +
+  "mais é o que o destaque empurrou. Não é uma segunda montagem escrita na Redação, é a " +
+  "diferença entre duas execuções da montagem oficial.";
+
+function achatarCartao(
+  c: { id: string; titulo: string; classe: ClasseEntidade; slug: string; procedencia: Procedencia; motivo: { texto: string } },
+  posicao: number,
+): CartaoDoDestaque {
+  return {
+    id: c.id,
+    titulo: c.titulo,
+    classe: c.classe,
+    motivo: c.motivo.texto,
+    procedencia: c.procedencia,
+    posicao,
+    rotaPublica: rotaDaEntidade(c.classe, c.slug),
+  };
+}
+
+let destaqueMemo: DestaqueDoFeed | null = null;
+
+export function destaqueDoFeed(): DestaqueDoFeed {
+  if (destaqueMemo) return destaqueMemo;
+
+  const persona = PERSONAS[0];
+  if (!persona) {
+    throw new Error(
+      "redacao.ts: o acervo não tem persona nenhuma. A tela do destaque mostra o feed de " +
+        "uma pessoa concreta, e sem persona não há feed sobre o que a curadoria sobreponha.",
+    );
+  }
+
+  const LIMITE = 12;
+  const feed = montarFeed({ personaId: persona.id, limite: LIMITE });
+  const comFolga = montarFeed({ personaId: persona.id, limite: LIMITE + 1 });
+
+  const curado = feed.cartoes.find((c) => c.especial === "curado") ?? null;
+  const serendipidade = feed.cartoes.find((c) => c.especial === "serendipidade") ?? null;
+
+  const jaNoFeed = new Set(feed.cartoes.map((c) => c.id));
+  const extra = comFolga.cartoes.find((c) => !jaNoFeed.has(c.id)) ?? null;
+
+  destaqueMemo = {
+    personaId: persona.id,
+    personaNome: persona.nome,
+    destaque: curado ? achatarCartao(curado, POSICAO_CURADO) : null,
+    substituido: extra
+      ? achatarCartao(extra, comFolga.cartoes.findIndex((c) => c.id === extra.id))
+      : null,
+    serendipidade: serendipidade
+      ? achatarCartao(serendipidade, POSICAO_SERENDIPIDADE)
+      : null,
+    cartoes: feed.cartoes.map((c, i) => achatarCartao(c, i)),
+    totalDeCartoes: feed.cartoes.length,
+    posicaoDoCurado: POSICAO_CURADO,
+    posicaoDaSerendipidade: POSICAO_SERENDIPIDADE,
+  };
+  return destaqueMemo;
 }
 
 // ---------------------------------------------------------------------------

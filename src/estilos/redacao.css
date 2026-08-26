@@ -677,3 +677,84 @@
   background: color-mix(in srgb, var(--cor-acao) 12%, transparent);
   font-weight: 600;
 }
+
+/* ===========================================================================
+ * E2 — O DESTAQUE DO FEED
+ * ======================================================================== */
+
+/* O que já está no ar à esquerda, o ato de escolher à direita. O lado largo é o
+ * do «antes e depois» — destaque, o que saiu e a serendipidade —, porque é ele
+ * que carrega o argumento da tela; o formulário cabe numa coluna estreita. */
+.redacao-colunas-destaque {
+  grid-template-columns: minmax(0, 1fr) 28rem;
+  --web-altura-lista: 30vh;
+}
+
+.redacao-coluna-escolha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--web-gap);
+  min-width: 0;
+}
+
+.redacao-cartao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+}
+
+/* O papel do cartão é dito no rótulo E marcado na borda. Cor sozinha não serve —
+ * quem não distingue as duas continua precisando ler o que aquele cartão é. */
+.redacao-cartao[data-cartao-feed="curado"] {
+  border-color: var(--cor-acao);
+}
+
+.redacao-cartao[data-cartao-feed="substituido"] {
+  border-style: dashed;
+}
+
+.redacao-cartao-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.redacao-cartao-titulo {
+  line-height: 1.3;
+}
+
+.redacao-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 40vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redacao-feed-linha {
+  display: grid;
+  /* Coluna fixa para a posição e para a classe, e não `max-content`: com
+   * `max-content` cada linha vira grade própria e os títulos passam a começar em
+   * x diferente a cada linha. Coluna fixa alinha a lista inteira. */
+  grid-template-columns: 2rem 7rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  border-radius: var(--raio-p);
+}
+
+.redacao-feed-linha[data-especial="curado"] {
+  background: color-mix(in srgb, var(--cor-acao) 12%, transparent);
+}
+
+.redacao-feed-linha[data-especial="serendipidade"] {
+  background: color-mix(in srgb, var(--cor-tinta-2) 8%, transparent);
+}

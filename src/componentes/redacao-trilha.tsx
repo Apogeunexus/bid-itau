@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { registrarTrilhaPublicada } from "@/dados/redacao-registro";
+import { comoSeLe, registrarTrilhaPublicada } from "@/dados/redacao-registro";
 import type {
   CandidatoDoCatalogo,
   CatalogoDeArrasto,
@@ -734,7 +734,7 @@ export function RedacaoTrilha({
                 </span>
                 <span className="redacao-decisao-assinatura">
                   {publicacao.quem} · {publicacao.quando} · agendada para{" "}
-                  {publicacao.agendadaPara}
+                  {comoSeLe(publicacao.agendadaPara)}
                 </span>
               </div>
             ) : null}
