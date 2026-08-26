@@ -193,9 +193,14 @@
  * ficha das oito: duas grades iguais fariam quem confere achar que são a mesma
  * ficha com treze linhas, e é justamente a separação que o pedido de contrato
  * `AcessibilidadeDeEspaco` existe para registrar.
+ *
+ * O NOME É GENÉRICO — `.org-caixas`, e não `.org-fisico` — porque a mesma grade
+ * de três estados serve as alçadas da equipe: marcada, negada por decisão, e
+ * ainda não decidida. Um nome preso ao primeiro uso obrigaria a segunda tela a
+ * copiar o bloco inteiro só para trocar a palavra.
  * ------------------------------------------------------------------------- */
 
-.org-fisico {
+.org-caixas {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
   gap: 0.5rem;
@@ -204,7 +209,7 @@
   list-style: none;
 }
 
-.org-fisico-item {
+.org-caixa {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -216,7 +221,7 @@
   line-height: 1.4;
 }
 
-.org-fisico-item[data-estado="oferece"] {
+.org-caixa[data-estado="oferece"] {
   border-color: var(--cor-acao);
   background: var(--cor-acao-lavada);
   font-weight: 700;
@@ -227,7 +232,7 @@
  * para o segundo dos três estados de D-43: duas telas que pintassem o mesmo
  * estado de formas diferentes fariam quem confere achar que são estados
  * diferentes. */
-.org-fisico-item[data-estado="declarado-ausente"] {
+.org-caixa[data-estado="declarado-ausente"] {
   border-color: var(--cor-tinta-2);
   color: var(--cor-tinta-2);
 }
@@ -236,7 +241,7 @@
  * «não». Um espaço que não fala de rampa não afirma que não tem rampa, e a
  * plataforma não afirma isso em nome de ninguém. É o terceiro estado de D-43, e
  * é o que 113 de 113 espaços exibem hoje. */
-.org-fisico-item[data-estado="nao-declarado"] {
+.org-caixa[data-estado="nao-declarado"] {
   border-style: dashed;
   color: var(--cor-tinta-3);
 }

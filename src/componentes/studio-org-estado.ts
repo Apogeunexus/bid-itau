@@ -26,8 +26,11 @@ import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { acessibilidadeDeEspacoVazia } from "@/dados/tipos-organizacao";
 import type {
   AcessibilidadeDeEspaco,
+  Alcada,
   CadastroDeEspaco,
   CadastroDeInstituicao,
+  Colaborador,
+  EntradaDeEquipe,
 } from "@/dados/tipos-organizacao";
 
 /**
@@ -62,6 +65,9 @@ interface EstadoPersistido {
    */
   instituicoes: Record<string, CadastroDeInstituicao>;
   atualInstituicaoId: string | null;
+  /** A equipe e o histórico dela — a O7. Também aditivo, também sem subir a versão. */
+  equipe: Colaborador[];
+  historicoDaEquipe: EntradaDeEquipe[];
 }
 
 export interface ContextoDaOrganizacao {
@@ -76,8 +82,21 @@ export interface ContextoDaOrganizacao {
 
 let estado: EstadoPersistido | null = null;
 let contexto: ContextoDaOrganizacao = { dataDeReferencia: "", autor: "", organizacao: "" };
+/**
+ * O que o servidor semeia, e que a loja não sabe produzir sozinha.
+ *
+ * Chega por PARÂMETRO e não por import porque este é módulo de cliente: a data de
+ * referência, o autor e a equipe autorada são lidos no build (DP-F).
+ */
+export interface SementeDaOrganizacao {
+  espacoId?: string | null;
+  instituicaoId?: string | null;
+  equipe?: Colaborador[];
+}
+
 let primeiroId: string | null = null;
 let primeiraInstituicaoId: string | null = null;
+let equipeSemeada: Colaborador[] = [];
 
 const ouvintes = new Set<() => void>();
 
@@ -139,6 +158,8 @@ function pareceEstado(v: unknown): v is EstadoPersistido {
   if (o.instituicoes !== undefined && (typeof o.instituicoes !== "object" || o.instituicoes === null)) {
     return false;
   }
+  if (o.equipe !== undefined && !Array.isArray(o.equipe)) return false;
+  if (o.historicoDaEquipe !== undefined && !Array.isArray(o.historicoDaEquipe)) return false;
   return Object.values(o.cadastros as Record<string, unknown>).every((c) => {
     if (typeof c !== "object" || c === null) return false;
     const x = c as Record<string, unknown>;
@@ -161,6 +182,8 @@ function doZero(): EstadoPersistido {
     atualId: primeiroId,
     instituicoes: {},
     atualInstituicaoId: primeiraInstituicaoId,
+    equipe: equipeSemeada.map((c) => ({ ...c })),
+    historicoDaEquipe: [],
   };
 }
 
@@ -181,14 +204,11 @@ function gravar(proximo: EstadoPersistido) {
  * Lê o armazenamento e liga a loja. Idempotente: chamar de novo não relê nem sobrescreve
  * — as dez telas montam o mesmo gancho, e a segunda não pode desfazer o que a primeira leu.
  */
-function hidratar(
-  contextoNovo: ContextoDaOrganizacao,
-  idInicial: string | null,
-  idDaInstituicao: string | null,
-) {
+function hidratar(contextoNovo: ContextoDaOrganizacao, semente: SementeDaOrganizacao) {
   contexto = contextoNovo;
-  if (idInicial !== null) primeiroId = idInicial;
-  if (idDaInstituicao !== null) primeiraInstituicaoId = idDaInstituicao;
+  if (semente.espacoId != null) primeiroId = semente.espacoId;
+  if (semente.instituicaoId != null) primeiraInstituicaoId = semente.instituicaoId;
+  if (semente.equipe && semente.equipe.length > 0) equipeSemeada = semente.equipe;
   if (estado !== null) return;
 
   let cru: string | null = null;
@@ -224,6 +244,8 @@ function hidratar(
     ...lido,
     instituicoes: lido.instituicoes ?? {},
     atualInstituicaoId: lido.atualInstituicaoId ?? primeiraInstituicaoId,
+    equipe: lido.equipe?.length ? lido.equipe : equipeSemeada.map((c) => ({ ...c })),
+    historicoDaEquipe: lido.historicoDaEquipe ?? [],
   };
   avisar();
 }
@@ -288,6 +310,39 @@ function comFicha(
   gravar({ ...estado, instituicoes: { ...estado.instituicoes, [instituicaoId]: proximo } });
 }
 
+/**
+ * Aplica uma mudança na equipe E registra a linha de histórico no MESMO passo.
+ *
+ * As duas coisas juntas, e não em dois métodos, porque separá-las tornaria possível mudar
+ * alçada sem deixar rastro — e §3 da ontologia proíbe escrita sem autor. Uma concessão que
+ * não aparece no histórico não é registro, é rumor.
+ */
+function comEquipe(
+  transformar: (equipe: Colaborador[]) => Colaborador[],
+  texto: string,
+) {
+  if (estado === null) return;
+  gravar({
+    ...estado,
+    equipe: transformar(estado.equipe),
+    historicoDaEquipe: [
+      { quando: contexto.dataDeReferencia, autor: contexto.autor, texto },
+      ...estado.historicoDaEquipe,
+    ],
+  });
+}
+
+/** O próximo id, determinístico: o maior sufixo numérico usado, mais um. Nada de sorteio —
+ *  dois navegadores rodando a mesma demonstração produzem a mesma sequência. */
+function proximoIdDeColaborador(equipe: Colaborador[]): string {
+  let maior = 0;
+  for (const c of equipe) {
+    const n = Number(c.id.replace(/^colab-/, ""));
+    if (Number.isFinite(n) && n > maior) maior = n;
+  }
+  return `colab-${maior + 1}`;
+}
+
 // ---------------------------------------------------------------------------
 // O gancho
 // ---------------------------------------------------------------------------
@@ -325,16 +380,26 @@ export interface Organizacao {
   /** Encaminha a verificação ao Admin (92). A Organização NÃO se verifica — este método
    *  não sabe escrever `"verificada"`, e essa impossibilidade é o ponto. */
   solicitarVerificacao: (id: string) => void;
+
+  // --- O7 · equipe e alçadas ----------------------------------------------
+  equipe: Colaborador[];
+  historicoDaEquipe: EntradaDeEquipe[];
+  convidar: (nome: string, email: string, alcadas: Alcada[]) => void;
+  aceitarConvite: (id: string) => void;
+  remover: (id: string) => void;
+  alterarAlcadas: (id: string, alcadas: Alcada[]) => void;
+  /** Sucessão de titularidade (140). Nunca por abandono: ela move o título de um para
+   *  outro num passo só, e grava autor e carimbo. */
+  transferirTitularidade: (paraId: string) => void;
 }
 
 export function useOrganizacao(
   contextoDoServidor: ContextoDaOrganizacao,
-  idInicial: string | null,
-  idDaInstituicao: string | null = null,
+  semente: SementeDaOrganizacao,
 ): Organizacao {
   useEffect(() => {
-    hidratar(contextoDoServidor, idInicial, idDaInstituicao);
-  }, [contextoDoServidor, idInicial, idDaInstituicao]);
+    hidratar(contextoDoServidor, semente);
+  }, [contextoDoServidor, semente]);
 
   const atualEstado = useSyncExternalStore(assinar, lerLoja, lerNoServidor);
 
@@ -394,6 +459,75 @@ export function useOrganizacao(
     comFicha(id, (c) => ({ ...c, verificacao: "solicitada" }));
   }, []);
 
+  const convidar = useCallback((nome: string, email: string, alcadas: Alcada[]) => {
+    if (estado === null) return;
+    const id = proximoIdDeColaborador(estado.equipe);
+    comEquipe(
+      (equipe) => [
+        ...equipe,
+        {
+          id,
+          nome,
+          email,
+          alcadas,
+          estado: "convidado",
+          titular: false,
+          autor: contexto.autor,
+          quando: contexto.dataDeReferencia,
+        },
+      ],
+      `convidou ${nome} (${email}) com ${alcadas.length} alçada(s)`,
+    );
+  }, []);
+
+  const aceitarConvite = useCallback((id: string) => {
+    if (estado === null) return;
+    const alvo = estado.equipe.find((c) => c.id === id);
+    comEquipe(
+      (equipe) => equipe.map((c) => (c.id === id ? { ...c, estado: "ativo" as const } : c)),
+      `${alvo?.nome ?? id} aceitou o convite`,
+    );
+  }, []);
+
+  const remover = useCallback((id: string) => {
+    if (estado === null) return;
+    const alvo = estado.equipe.find((c) => c.id === id);
+    // O titular não sai por aqui, e a checagem é no MÉTODO e não só no botão: um botão
+    // desabilitado é sugestão; um método que recusa é regra.
+    if (!alvo || alvo.titular) return;
+    comEquipe(
+      (equipe) => equipe.map((c) => (c.id === id ? { ...c, estado: "removido" as const, alcadas: [] } : c)),
+      `removeu ${alvo.nome}; o que ela publicou continua publicado`,
+    );
+  }, []);
+
+  const alterarAlcadas = useCallback((id: string, alcadas: Alcada[]) => {
+    if (estado === null) return;
+    const alvo = estado.equipe.find((c) => c.id === id);
+    comEquipe(
+      (equipe) => equipe.map((c) => (c.id === id ? { ...c, alcadas } : c)),
+      `mudou as alçadas de ${alvo?.nome ?? id} para ${alcadas.length === 0 ? "nenhuma" : alcadas.join(", ")}`,
+    );
+  }, []);
+
+  const transferirTitularidade = useCallback((paraId: string) => {
+    if (estado === null) return;
+    const de = estado.equipe.find((c) => c.titular);
+    const para = estado.equipe.find((c) => c.id === paraId);
+    if (!para || para.estado !== "ativo" || para.titular) return;
+    comEquipe(
+      (equipe) =>
+        equipe.map((c) =>
+          c.id === paraId
+            ? // Quem recebe o título recebe junto a alçada de gerir a equipe: titular sem
+              // ela seria dono que não pode conceder nada, e a organização travaria.
+              { ...c, titular: true, alcadas: [...new Set([...c.alcadas, "gerir_equipe" as const])] }
+            : { ...c, titular: false },
+        ),
+      `transferiu a titularidade de ${de?.nome ?? "—"} para ${para.nome}`,
+    );
+  }, []);
+
   const reiniciar = useCallback(() => {
     try {
       window.localStorage.removeItem(CHAVE_DA_ORGANIZACAO);
@@ -420,5 +554,12 @@ export function useOrganizacao(
     declararInstituicaoSemRecursos,
     alterarAcessibilidadeDaInstituicao,
     solicitarVerificacao,
+    equipe: atualEstado?.equipe ?? [],
+    historicoDaEquipe: atualEstado?.historicoDaEquipe ?? [],
+    convidar,
+    aceitarConvite,
+    remover,
+    alterarAlcadas,
+    transferirTitularidade,
   };
 }

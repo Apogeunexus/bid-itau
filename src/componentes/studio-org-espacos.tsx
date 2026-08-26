@@ -94,7 +94,8 @@ export function StudioOrgEspacos({
     [dataDeReferencia, autor, organizacao],
   );
 
-  const org = useOrganizacao(contexto, espacos[0]?.id ?? null);
+  const semente = useMemo(() => ({ espacoId: espacos[0]?.id ?? null }), [espacos]);
+  const org = useOrganizacao(contexto, semente);
 
   const [busca, setBusca] = useState("");
   const [recorte, setRecorte] = useState<Recorte>("todos");

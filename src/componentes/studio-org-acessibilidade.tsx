@@ -50,9 +50,9 @@ export function EditorDeAcessibilidade({
     <>
       <div>
         <p className="studio-rotulo">Recursos do lugar</p>
-        <ul className="org-fisico">
+        <ul className="org-caixas">
           {RECURSOS_FISICOS.map((r) => (
-            <li key={r} className="org-fisico-item" data-estado={estadoDe(atual.fisicos[r])}>
+            <li key={r} className="org-caixa" data-estado={estadoDe(atual.fisicos[r])}>
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -81,11 +81,11 @@ export function EditorDeAcessibilidade({
 
       <div>
         <p className="studio-rotulo">As 8 dimensões de mídia</p>
-        <ul className="org-fisico">
+        <ul className="org-caixas">
           {DIMENSOES_DE_ACESSIBILIDADE.map((d) => (
             <li
               key={d.chave}
-              className="org-fisico-item"
+              className="org-caixa"
               data-estado={estadoDe(atual.dimensoes[d.chave])}
             >
               <label className="flex items-center gap-2">

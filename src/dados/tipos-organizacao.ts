@@ -412,7 +412,7 @@ export const TELAS_DA_ORGANIZACAO: readonly TelaDaOrganizacao[] = [
     rotulo: "Equipe",
     rota: "/studio/equipe",
     objetivo: "Quem publica em nome da organização, e com qual alçada",
-    pronta: false,
+    pronta: true,
   },
   {
     id: "midia",
@@ -464,3 +464,203 @@ export const TELAS_DA_ORGANIZACAO: readonly TelaDaOrganizacao[] = [
     pronta: false,
   },
 ];
+
+// ---------------------------------------------------------------------------
+// A equipe e as alçadas — O7, e a forma é NOVA
+// ---------------------------------------------------------------------------
+
+/**
+ * O que um colaborador pode fazer DENTRO da organização.
+ *
+ * VOCABULÁRIO FECHADO, e o que ele não tem é tão importante quanto o que tem: **nenhuma
+ * alçada desta lista promove ninguém a moderador, editor ou admin.** A Organização concede
+ * dentro dela; conceder entre níveis é do Admin, e a diferença é o que impede uma
+ * instituição de se dar poderes de governança da plataforma. Um campo de texto livre aqui
+ * produziria «publicar», «pode publicar» e «publicação» como três alçadas diferentes.
+ */
+export const ALCADAS = [
+  "rascunhar",
+  "publicar",
+  "gerir_espacos",
+  "subir_midia",
+  "gerir_equipe",
+] as const;
+
+export type Alcada = (typeof ALCADAS)[number];
+
+export const ROTULO_DA_ALCADA: Record<Alcada, string> = {
+  rascunhar: "rascunhar",
+  publicar: "publicar direto",
+  gerir_espacos: "gerir espaços",
+  subir_midia: "subir mídia",
+  gerir_equipe: "gerir a equipe",
+};
+
+/** O que cada alçada permite, para quem está concedendo. Um rótulo sozinho faz quem
+ *  concede adivinhar — e quem adivinha concede demais. */
+export const EXPLICACAO_DA_ALCADA: Record<Alcada, string> = {
+  rascunhar: "Cria e edita registros, e para aí. Nada que ela escreve sai do Studio sozinho.",
+  publicar: "Envia o registro à moderação em nome da organização. É a alçada que assina.",
+  gerir_espacos: "Cadastra e edita os espaços da organização — a ficha que a ocorrência herda.",
+  subir_midia: "Acrescenta mídia ao acervo da organização, com o crédito obrigatório junto.",
+  gerir_equipe: "Convida, remove e concede alçada. Só o titular a tem, e ela não se concede.",
+};
+
+export const LIMITE_DA_ALCADA =
+  "Nenhuma destas cinco promove ninguém a moderador, editor ou admin. A Organização concede " +
+  "DENTRO dela; conceder entre níveis é do Admin (87), e é essa fronteira que impede uma " +
+  "instituição de se dar poderes de governança da plataforma.";
+
+/** Onde o vínculo está. `removido` não some da lista: quem saiu continua no histórico, e o
+ *  que ele publicou continua publicado — é exatamente o que a tela existe para provar. */
+export type EstadoDoVinculo = "convidado" | "ativo" | "removido";
+
+export const ROTULO_DO_VINCULO: Record<EstadoDoVinculo, string> = {
+  convidado: "convite enviado",
+  ativo: "ativo",
+  removido: "removido",
+};
+
+export interface Colaborador {
+  id: string;
+  /** Papel na organização, não nome de pessoa. Ver `COLABORADORES_AUTORADOS`. */
+  nome: string;
+  email: string;
+  alcadas: Alcada[];
+  estado: EstadoDoVinculo;
+  /** Quem responde pela organização. Exatamente um por vez, e a troca é explícita. */
+  titular: boolean;
+  autor: string;
+  quando: string;
+}
+
+/** Uma linha do histórico da equipe. Toda concessão, remoção e sucessão gera uma — sem
+ *  autor e sem carimbo, «a alçada mudou» não é registro, é rumor. */
+export interface EntradaDeEquipe {
+  quando: string;
+  autor: string;
+  texto: string;
+}
+
+export const EQUIPE_E_AUTORADA =
+  "Os vínculos desta tela são autorados para a demonstração: não há autenticação real no " +
+  "protótipo, e o acervo do Itaú Cultural não publica quadro de pessoal. Os perfis são " +
+  "PAPÉIS e não pessoas — usar as 575 pessoas reais da Enciclopédia como colaboradoras " +
+  "fabricaria um vínculo de emprego que ninguém declarou.";
+
+/**
+ * A equipe com que a demonstração abre.
+ *
+ * PAPÉIS, NUNCA NOMES. O acervo tem 575 pessoas reais, e vincular qualquer uma delas a uma
+ * instituição como «colaboradora» seria afirmar um fato sobre uma pessoa real que a fonte
+ * não afirma. Nomes inventados teriam o problema oposto e igualmente ruim: pareceriam dado.
+ * A saída é a mesma que a casa já usa em `OPERADOR_DO_STUDIO` — o papel é o nome.
+ *
+ * Os quatro cobrem as combinações que a tela precisa mostrar: o titular, um que publica, um
+ * que só rascunha, e um convite ainda não aceito.
+ */
+export function equipeAutorada(autor: string, quando: string): Colaborador[] {
+  return [
+    {
+      id: "colab-1",
+      nome: autor,
+      email: "gestao@exemplo.org",
+      alcadas: ["rascunhar", "publicar", "gerir_espacos", "subir_midia", "gerir_equipe"],
+      estado: "ativo",
+      titular: true,
+      autor,
+      quando,
+    },
+    {
+      id: "colab-2",
+      nome: "Produção de programação (perfil autorado)",
+      email: "producao@exemplo.org",
+      alcadas: ["rascunhar", "publicar", "subir_midia"],
+      estado: "ativo",
+      titular: false,
+      autor,
+      quando,
+    },
+    {
+      id: "colab-3",
+      nome: "Educativo (perfil autorado)",
+      email: "educativo@exemplo.org",
+      alcadas: ["rascunhar"],
+      estado: "ativo",
+      titular: false,
+      autor,
+      quando,
+    },
+    {
+      id: "colab-4",
+      nome: "Comunicação (perfil autorado)",
+      email: "comunicacao@exemplo.org",
+      alcadas: ["rascunhar", "subir_midia"],
+      estado: "convidado",
+      titular: false,
+      autor,
+      quando,
+    },
+  ];
+}
+
+/**
+ * O titular pode ser removido?
+ *
+ * NÃO, E É A REGRA INTEIRA DA TELA. A funcionalidade 140 existe porque a pessoa sai e a
+ * instituição fica: se remover o titular fosse possível, a organização perderia o dono por
+ * ABANDONO — ninguém responderia por ela, e o perfil ficaria órfão exatamente como o
+ * estagiário que leva o cadastro embora. A sucessão é o único caminho, e ela é explícita,
+ * com autor e carimbo.
+ */
+export function podeRemover(c: Colaborador): boolean {
+  return !c.titular && c.estado !== "removido";
+}
+
+export const POR_QUE_A_SUCESSAO =
+  "A titularidade se transfere; ela não se abandona. Remover o titular deixaria a " +
+  "organização sem quem responde por ela, e o perfil ficaria órfão — que é exatamente o " +
+  "problema que esta tela existe para impedir. Por isso o botão de remover não existe para " +
+  "o titular: primeiro se transfere, depois se remove.";
+
+export function faltasDaEquipe(equipe: Colaborador[]): Falta[] {
+  const saida: Falta[] = [];
+  const ativos = equipe.filter((c) => c.estado === "ativo");
+  const convidados = equipe.filter((c) => c.estado === "convidado");
+
+  if (!equipe.some((c) => c.titular && c.estado === "ativo")) {
+    saida.push({
+      texto: "a organização está sem titular ativo — ninguém responde por ela",
+      bloqueia: true,
+      dono: null,
+    });
+  }
+  if (!ativos.some((c) => c.alcadas.includes("publicar"))) {
+    saida.push({
+      texto: "ninguém com alçada de publicar — a organização não consegue enviar à moderação",
+      bloqueia: true,
+      dono: null,
+    });
+  }
+  if (!ativos.some((c) => c.alcadas.includes("gerir_espacos"))) {
+    saida.push({
+      texto: "ninguém com alçada de gerir espaços — a porta que o produtor usa fica sem dono",
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  if (convidados.length > 0) {
+    saida.push({
+      texto: `${convidados.length === 1 ? "1 convite ainda não aceito" : `${convidados.length} convites ainda não aceitos`}`,
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  saida.push({
+    texto: "promover alguém a moderador ou editor — não é desta tela",
+    bloqueia: false,
+    dono: "Admin (87)",
+  });
+
+  return saida;
+}

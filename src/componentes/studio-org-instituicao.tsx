@@ -73,7 +73,8 @@ export function StudioOrgInstituicao({
     [dataDeReferencia, autor, organizacao],
   );
 
-  const org = useOrganizacao(contexto, null, inicial);
+  const semente = useMemo(() => ({ instituicaoId: inicial }), [inicial]);
+  const org = useOrganizacao(contexto, semente);
   const [busca, setBusca] = useState("");
 
   const atual =
