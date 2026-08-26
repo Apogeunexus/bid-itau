@@ -1,14 +1,14 @@
 {
-  "varredura": "25/08, 20:17",
+  "varredura": "25/08, 21:16",
   "kpi": {
-    "concluidas": 0,
+    "concluidas": 2,
     "totalTarefas": 64,
     "ativas": 2,
     "bloqueadas": 4,
-    "divergencias": 0,
-    "sujos": 51,
-    "folgaS6": 11,
-    "pedidos": 0
+    "divergencias": 1,
+    "sujos": 11,
+    "folgaS6": 10,
+    "pedidos": 33
   },
   "dependencias": [
     {
@@ -50,30 +50,47 @@
       "nome": "Studio · Produtor",
       "onda": 1,
       "pasta": "src/app/(bastidor)/studio",
-      "sessaoNome": null,
+      "sessaoNome": "bid-ita-63",
       "estado": "rodando",
-      "feitas": 0,
+      "feitas": 1,
       "total": 11,
       "commit": null,
       "frescor": null,
       "idadeMin": null,
       "bloqueios": [],
-      "pedidos": [],
+      "pedidos": [
+        "### PEDIDO-01 · consolidar as adições de §12 em `src/dados/tipos.ts`",
+        "`tipos.ts` é contrato de outra sessão e **não foi editado**. As cinco adições que §12 da",
+        "ontologia pede entraram por extensão aditiva em `tipos-acesso.ts`:",
+        "| §12 pede | O que existe hoje, commitado em `73976b8` |",
+        "|---|---|",
+        "| `Situacao` | `Situacao` — tipo novo, sem conflito |",
+        "| `faixaEtaria` em `Entidade` | `EntidadeClassificada = Entidade & { faixaEtaria?: FaixaEtaria \\| null }` |",
+        "| `canalIngresso` em `Ocorrencia` | `OcorrenciaDeclarada = Ocorrencia & CamposDeIngresso` |",
+        "| `inscricao` em `Ocorrencia` | idem |",
+        "| `\"produtor\"` em `Procedencia` | `ProcedenciaDePapel = Procedencia \\| \"produtor\" \\| \"parceiro\" \\| \"curador\" \\| \"ia\"` |",
+        "Nada quebra enquanto as duas formas convivem. **A consolidação é higiene, não desbloqueio**",
+        "— a S1 pode ser liberada com o que já está commitado.",
+        "### PEDIDO-02 · `scripts/medidas.mjs` não mede as telas da S7",
+        "O portão 4 do PRD pede medida de pixel nas telas novas. `medidas.mjs` é arquivo",
+        "compartilhado e não foi tocado. As dez telas da S7 ficam fora da medição até alguém as",
+        "acrescentar lá."
+      ],
       "tarefas": [
         {
           "n": 1,
           "rot": "contrato e seed",
           "inicio": 0,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "`73976b8`",
+          "nota": "`Situacao` com 5 estados é o tipo que faltava — sem ele o Studio é formulário. As 4 adições de §12 entraram por **extensão**, sem editar `tipos.ts`: ver PEDIDO-01. Semente determinística de 5 registros a partir de eventos reais; o que é autorado é a situação, não o título. Chave de identidade medida em 2/3 nos rascunhos e 3/3 no devolvido e nos publicados — é essa conversão que a jornada existe para fazer.",
+          "quando": "25.08 20:20"
         },
         {
           "n": 2,
           "rot": "P2 identidade",
           "inicio": 1,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -166,30 +183,57 @@
       "nome": "Moderação",
       "onda": 1,
       "pasta": "src/app/(bastidor)/moderacao",
-      "sessaoNome": null,
+      "sessaoNome": "bid-ita-68",
       "estado": "rodando",
-      "feitas": 0,
+      "feitas": 1,
       "total": 11,
       "commit": null,
       "frescor": null,
       "idadeMin": null,
-      "bloqueios": [],
-      "pedidos": [],
+      "bloqueios": [
+        "*Tarefa 5 (integração com o armazém da S7) — bloqueada.** §4 do PRD manda não começar antes",
+        "de `tipos-acesso.ts` estar commitado. Ele continua **untracked**:",
+        "```",
+        "?? src/dados/tipos-acesso.ts",
+        "?? src/dados/mock/",
+        "?? src/componentes/studio-estado.ts",
+        "```",
+        "Até lá construo contra a fila do build, que é independente. Destrava: a S7 commitar."
+      ],
+      "pedidos": [
+        "### PEDIDO-03 · quatro tipos de moderação, para `tipos-acesso.ts`",
+        "*Para:** S7, que tem a guarda do arquivo.",
+        "§10 do PRD da S3 manda escrevê-los **em `tipos-acesso.ts`, não em `moderacao.ts`**, porque a",
+        "S7 também os consome — ela precisa exibir a devolução com o motivo que a moderação escreveu.",
+        "O arquivo é dela e está sem commit, então **não o toquei**: sigo com definição local em",
+        "`moderacao.ts` e migro quando for atendido.",
+        "| Tipo | Campos | Quem lê do outro lado |",
+        "|---|---|---|",
+        "| `DecisaoDeModeracao` | ação, motivo, autor, carimbo, item, escopo | S7 — a devolução com motivo, na tela do produtor |",
+        "| `Delegacao` | quem, qual escopo, início, fim | ninguém fora da S3 (M8) |",
+        "| `FamiliaDeSimilaridade` | padrão de motivo, tamanho, método da amostra | ninguém fora da S3 (M4) |",
+        "| `OrigemDoItem += \"denuncia\"` | a quarta origem (funcionalidade 120) | ninguém fora da S3 |",
+        "Só o primeiro é de fato compartilhado. Os outros três podem ficar em `moderacao.ts` de vez,",
+        "se a S7 preferir manter `tipos-acesso.ts` enxuto — **digam qual das duas.**",
+        "### PEDIDO-04 · `scripts/medidas.mjs` não mede as telas da S3",
+        "Portão 5 do PRD pede medida de pixel nas telas novas. `medidas.mjs` é compartilhado e, por",
+        "§6, não é meu. As 9 telas da S3 não entram na medição até alguém as acrescentar lá."
+      ],
       "tarefas": [
         {
           "n": 1,
           "rot": "separação de território",
           "inicio": 1,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "e7ed486",
+          "nota": "`moderacao.ts` + `moderacao.css` nascem, a tela 34 vira `/moderacao/fila/`, uma linha em `globals.css`. **Libera a S5**: `redacao.ts` e `redacao.css` ficaram só com o editor de trilha e **nenhuma classe CSS é compartilhada** — a fila usa `moderacao-*`. Tocou 9 arquivos fora da pasta, com autorização explícita do dono do projeto e **antes de o PROTOCOLO §6 existir** — ver INVASÃO abaixo.",
+          "quando": "25.08 20:47"
         },
         {
           "n": 2,
           "rot": "M1 fila",
           "inicio": 2,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -282,7 +326,7 @@
       "nome": "Gestor · Observatório",
       "onda": 2,
       "pasta": "src/app/(bastidor)/observatorio",
-      "sessaoNome": null,
+      "sessaoNome": "bid-ita-53 [7ad229]",
       "estado": "aguardando",
       "feitas": 0,
       "total": 10,
@@ -389,7 +433,7 @@
       "nome": "Admin",
       "onda": 2,
       "pasta": "src/app/(bastidor)/admin",
-      "sessaoNome": null,
+      "sessaoNome": "bid-ita-d4",
       "estado": "aguardando",
       "feitas": 0,
       "total": 11,
@@ -505,7 +549,7 @@
       "nome": "Editor · Curador",
       "onda": 2,
       "pasta": "src/app/(bastidor)/redacao",
-      "sessaoNome": null,
+      "sessaoNome": "bid-ita-7d [b1187f]",
       "estado": "aguardando",
       "feitas": 0,
       "total": 10,
@@ -612,7 +656,7 @@
       "nome": "Organização",
       "onda": 2,
       "pasta": "src/app/(bastidor)/studio",
-      "sessaoNome": null,
+      "sessaoNome": "bid-ita-53 [913196]",
       "estado": "aguardando",
       "feitas": 0,
       "total": 11,
@@ -724,5 +768,20 @@
       ]
     }
   ],
-  "notas": []
+  "notas": [
+    {
+      "sessao": "S7",
+      "n": 1,
+      "rot": "contrato e seed",
+      "nota": "`Situacao` com 5 estados é o tipo que faltava — sem ele o Studio é formulário. As 4 adições de §12 entraram por **extensão**, sem editar `tipos.ts`: ver PEDIDO-01. Semente determinística de 5 registros a partir de eventos reais; o que é autorado é a situação, não o título. Chave de identidade medida em 2/3 nos rascunhos e 3/3 no devolvido e nos publicados — é essa conversão que a jornada existe para fazer.",
+      "quando": "25.08 20:20"
+    },
+    {
+      "sessao": "S3",
+      "n": 1,
+      "rot": "separação de território",
+      "nota": "`moderacao.ts` + `moderacao.css` nascem, a tela 34 vira `/moderacao/fila/`, uma linha em `globals.css`. **Libera a S5**: `redacao.ts` e `redacao.css` ficaram só com o editor de trilha e **nenhuma classe CSS é compartilhada** — a fila usa `moderacao-*`. Tocou 9 arquivos fora da pasta, com autorização explícita do dono do projeto e **antes de o PROTOCOLO §6 existir** — ver INVASÃO abaixo.",
+      "quando": "25.08 20:47"
+    }
+  ]
 }
