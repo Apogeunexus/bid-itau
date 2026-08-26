@@ -187,14 +187,14 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "26/08, 01:02",
+  "varredura": "26/08, 01:19",
   "kpi": {
-    "concluidas": 33,
+    "concluidas": 35,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 12,
+    "sujos": 14,
     "folgaS6": 8,
     "pedidos": 10
   },
@@ -590,7 +590,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/admin",
       "sessaoNome": "bid-ita-d4",
       "estado": "rodando",
-      "feitas": 7,
+      "feitas": 8,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -665,16 +665,16 @@ const DADOS = {
           "n": 8,
           "rot": "A4 vocabulário · A5 limites da IA",
           "inicio": 8,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "da62552",
+          "nota": "A4 é tela de servidor com **zero ações** (varredura de botões confirma). A5 dá dono à lista que já existia no módulo da Moderação, que a aplica. Duas ausências conferidas por sonda: **nenhum checkbox ou `role=switch`** na página — não existe interruptor de «IA publica direto» — e **nenhuma ação de remover** limite. A trilha ganhou o quarto tipo de evento e o quarto filtro na A7",
+          "quando": "26.08 02:45"
         },
         {
           "n": 9,
           "rot": "A8 titulares · A9 governança",
           "inicio": 9,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -813,7 +813,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-53 [913196]",
       "estado": "rodando",
-      "feitas": 8,
+      "feitas": 9,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -904,16 +904,16 @@ const DADOS = {
           "n": 9,
           "rot": "O8 integração",
           "inicio": 19,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "33ee0ef",
+          "nota": "**Achei e consertei uma duplicação minha antes de commitar:** eu tinha escrito uma normalização de título «equivalente» à do índice — trocava pontuação por espaço, o índice só colapsa espaço. Duas regras fariam o lote gravar chave diferente da do acervo, e o sintoma seria **a duplicata que a máquina não acha**. Agora as duas pontas usam `normalizar` do índice. Guardar e aplicar são **dois atos**; linha sem título não grava; a chave vem pronta do Admin (97) e **não existe função de emitir** em módulo nenhum meu.",
+          "quando": "26.08 04:20"
         },
         {
           "n": 10,
           "rot": "O9 alcance · O10 conformidade",
           "inicio": 20,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -1079,6 +1079,13 @@ const DADOS = {
       "quando": "26.08 02:20"
     },
     {
+      "sessao": "S1",
+      "n": 8,
+      "rot": "A4 vocabulário · A5 limites da IA",
+      "nota": "A4 é tela de servidor com **zero ações** (varredura de botões confirma). A5 dá dono à lista que já existia no módulo da Moderação, que a aplica. Duas ausências conferidas por sonda: **nenhum checkbox ou `role=switch`** na página — não existe interruptor de «IA publica direto» — e **nenhuma ação de remover** limite. A trilha ganhou o quarto tipo de evento e o quarto filtro na A7",
+      "quando": "26.08 02:45"
+    },
+    {
       "sessao": "S5",
       "n": 1,
       "rot": "reancorar redacao.ts",
@@ -1161,6 +1168,13 @@ const DADOS = {
       "rot": "O6 editais",
       "nota": "`edital` aprovado como **classe própria** e criado por extensão aditiva, sem tocar `tipos.ts`. Os critérios são **dado estruturado** — 33 linguagens + 27 UFs — e a tela roda o **casamento ao vivo** contra um perfil, porque «isto casa com o perfil do produtor» precisa ser demonstrável e não afirmada. **Critério vazio é «serve para todos»**, não o contrário. A lista traz as **27 UFs, não as 25** do acervo: Sergipe e Tocantins aparecem marcadas como «sem acervo», porque um edital que não pode mirar onde não há acervo perpetua o deserto.",
       "quando": "26.08 03:40"
+    },
+    {
+      "sessao": "S6",
+      "n": 9,
+      "rot": "O8 integração",
+      "nota": "**Achei e consertei uma duplicação minha antes de commitar:** eu tinha escrito uma normalização de título «equivalente» à do índice — trocava pontuação por espaço, o índice só colapsa espaço. Duas regras fariam o lote gravar chave diferente da do acervo, e o sintoma seria **a duplicata que a máquina não acha**. Agora as duas pontas usam `normalizar` do índice. Guardar e aplicar são **dois atos**; linha sem título não grava; a chave vem pronta do Admin (97) e **não existe função de emitir** em módulo nenhum meu.",
+      "quando": "26.08 04:20"
     }
   ]
 };
