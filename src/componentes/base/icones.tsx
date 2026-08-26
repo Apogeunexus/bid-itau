@@ -331,6 +331,60 @@ export const ICONE_FALA = (
   </Icone>
 );
 
+/** Troféu — os desafios. */
+export const ICONE_TROFEU = (
+  <Icone>
+    <path d="M7.5 4h9v5.2a4.5 4.5 0 0 1-9 0V4Z" {...traco} />
+    <path d="M7.5 5.6H5a2 2 0 0 0 0 4h2.6" {...traco} />
+    <path d="M16.5 5.6H19a2 2 0 0 1 0 4h-2.6" {...traco} />
+    <path d="M12 13.7V17" {...traco} />
+    <path d="M8.5 20h7" {...traco} />
+    <path d="M9.8 17h4.4l.6 3H9.2l.6-3Z" {...traco} />
+  </Icone>
+);
+
+/** Coração — reagir. `data-cheio` no <svg> pinta o miolo. */
+export const ICONE_CORACAO = (
+  <Icone>
+    <path
+      d="M12 20.2s-7.5-4.6-7.5-9.5a4.2 4.2 0 0 1 7.5-2.6 4.2 4.2 0 0 1 7.5 2.6c0 4.9-7.5 9.5-7.5 9.5Z"
+      {...traco}
+    />
+  </Icone>
+);
+
+export const ICONE_CORACAO_CHEIO = (
+  <Icone>
+    <path
+      d="M12 20.2s-7.5-4.6-7.5-9.5a4.2 4.2 0 0 1 7.5-2.6 4.2 4.2 0 0 1 7.5 2.6c0 4.9-7.5 9.5-7.5 9.5Z"
+      fill="currentColor"
+      stroke="currentColor"
+      strokeWidth={1.7}
+      strokeLinejoin="round"
+    />
+  </Icone>
+);
+
+/** Duas pessoas — a comunidade. */
+export const ICONE_COMUNIDADE = (
+  <Icone>
+    <circle cx="9" cy="8.5" r="3.1" {...traco} />
+    <path d="M3.6 19.4a5.6 5.6 0 0 1 10.8 0" {...traco} />
+    <path d="M15.6 6.1a3.1 3.1 0 0 1 0 5.9" {...traco} />
+    <path d="M17.2 14.5a5.6 5.6 0 0 1 3.2 4.9" {...traco} />
+  </Icone>
+);
+
+/** Loja com toldo — a lojinha de resgate. */
+export const ICONE_LOJA = (
+  <Icone>
+    <path d="M4 10.2V19a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8.8" {...traco} />
+    <path d="M3 10.2 4.8 5.2A1 1 0 0 1 5.7 4.5h12.6a1 1 0 0 1 .9.7l1.8 5" {...traco} />
+    <path d="M3 10.2a2.6 2.6 0 0 0 4.5 0 2.6 2.6 0 0 0 4.5 0 2.6 2.6 0 0 0 4.5 0 2.6 2.6 0 0 0 4.5 0" {...traco} />
+    <path d="M9 20v-4.6h6V20" {...traco} />
+  </Icone>
+);
+
 /** Casa/porta — espaço cultural. */
 export const ICONE_CASA = (
   <Icone>

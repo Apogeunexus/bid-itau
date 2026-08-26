@@ -128,6 +128,9 @@
  * que é da S7 · Produtor, com quem esta sessão divide a pasta. */
 @import "../estilos/organizacao.css";
 
+/* Carteira, loja e comunidade. */
+@import "../estilos/pontos.css";
+
 /* ---------------------------------------------------------------------------
  * A base visual (camada base tipográfica, moldura D-03, cartão)
  * vem DEPOIS das folhas de tela, na mesma posição do cascade que essas regras

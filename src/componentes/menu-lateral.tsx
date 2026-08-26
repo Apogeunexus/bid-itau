@@ -6,9 +6,11 @@ import {
   ICONE_ACONTECE,
   ICONE_BUSCAR,
   ICONE_CAST,
+  ICONE_COMUNIDADE,
   ICONE_CURSOS,
   ICONE_DESCOBRIR,
   ICONE_IA,
+  ICONE_LOJA,
   ICONE_MAPA,
   ICONE_MUSEU,
   ICONE_NOTICIAS,
@@ -16,6 +18,7 @@ import {
   ICONE_PERFIL,
   ICONE_PLAY,
   ICONE_SALVOS,
+  ICONE_TROFEU,
 } from "@/componentes/base/icones";
 import { IconeVivo } from "@/componentes/icone-vivo";
 import { AssinaturaIc, Chancela } from "@/componentes/marca";
@@ -77,6 +80,17 @@ const PRINCIPAIS: Item[] = [
   },
   { href: "/ia", rotulo: "IA", icone: ICONE_IA },
   { href: "/cursos", rotulo: "Cursos", icone: ICONE_CURSOS },
+  {
+    href: "/comunidade",
+    rotulo: "Comunidade",
+    icone: ICONE_COMUNIDADE,
+    filhos: [
+      { href: "/comunidade/marketplace", rotulo: "Comunidades", icone: ICONE_COMUNIDADE },
+      { href: "/comunidade/guardadas", rotulo: "Guardadas", icone: ICONE_SALVOS },
+    ],
+  },
+  { href: "/loja", rotulo: "Loja", icone: ICONE_LOJA },
+  { href: "/desafios", rotulo: "Desafios", icone: ICONE_TROFEU },
 ];
 
 const PLANEJAR: Item[] = [

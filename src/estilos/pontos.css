@@ -1,0 +1,932 @@
+/* ---------------------------------------------------------------------------
+ * pontos.css — carteira, loja e comunidade.
+ *
+ * As três dividem uma folha porque dividem o mesmo vocabulário: o saldo em
+ * ficha, o cartaz de item e o cartão de publicação aparecem nas três.
+ * ------------------------------------------------------------------------- */
+
+/* --- Saldo e moeda ------------------------------------------------------ */
+
+.ficha-moeda {
+  display: inline-block;
+  flex: none;
+  width: 0.875em;
+  height: 0.875em;
+  border-radius: 999px;
+  background: var(--ic-amarelo);
+  box-shadow: inset 0 0 0 0.15em color-mix(in srgb, var(--ic-laranja) 70%, transparent);
+  vertical-align: -0.05em;
+}
+
+.saldo-linha {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.saldo-painel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-cartao);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie-2);
+}
+
+.saldo-numero {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-family: var(--fonte-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.saldo-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espaco-pilha);
+}
+
+.saldo-celula {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.saldo-celula-valor {
+  font-family: var(--fonte-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* --- Nível -------------------------------------------------------------- */
+
+.nivel-barra {
+  position: relative;
+  height: 0.5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--cor-borda);
+}
+
+.nivel-preenchimento {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  background: var(--cor-acao);
+  transition: width var(--dur-2, 240ms) ease;
+}
+
+/* --- Sequência ---------------------------------------------------------- */
+
+.sequencia-semana {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.sequencia-dia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+.sequencia-marca {
+  width: 100%;
+  height: 2rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie);
+}
+
+.sequencia-marca[data-marcada="sim"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao);
+}
+
+.sequencia-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+.sequencia-estado[data-fase="segura"] {
+  background: color-mix(in srgb, var(--ic-verde) 22%, transparent);
+  color: var(--cor-tinta);
+}
+
+.sequencia-estado[data-fase="em-risco"],
+.sequencia-estado[data-fase="carencia"] {
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+}
+
+.sequencia-estado[data-fase="congelada"] {
+  background: color-mix(in srgb, var(--ic-azul) 25%, transparent);
+  color: var(--cor-tinta);
+}
+
+.sequencia-estado[data-fase="quebrada"] {
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta-2);
+}
+
+/* --- Extrato ------------------------------------------------------------ */
+
+.extrato-lista {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.extrato-linha {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.extrato-linha:last-child {
+  border-bottom: 0;
+}
+
+.extrato-valor {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.extrato-valor[data-sentido="credito"] {
+  color: var(--cor-acao-tinta);
+}
+
+.extrato-valor[data-sentido="debito"] {
+  color: var(--cor-tinta-2);
+}
+
+/* --- Esteira de entrega ------------------------------------------------- */
+
+.esteira {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.esteira-etapa {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+  text-align: center;
+}
+
+.esteira-trilho {
+  height: 0.3rem;
+  border-radius: 999px;
+  background: var(--cor-borda);
+}
+
+.esteira-etapa[data-alcancada="sim"] .esteira-trilho {
+  background: var(--cor-acao);
+}
+
+.esteira-etapa[data-alcancada="sim"] {
+  color: var(--cor-tinta);
+  font-weight: 700;
+}
+
+/* --- Loja --------------------------------------------------------------- */
+
+.loja-trilho {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 10.5rem;
+  gap: var(--espaco-pilha);
+  overflow-x: auto;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+  padding-bottom: 0.25rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.loja-trilho::-webkit-scrollbar {
+  display: none;
+}
+
+.loja-cartaz {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  scroll-snap-align: start;
+  color: inherit;
+  text-decoration: none;
+}
+
+.loja-cartaz[data-alcancavel="nao"] {
+  opacity: 0.72;
+}
+
+.loja-preco {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.loja-falta {
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+}
+
+.loja-grade {
+  display: grid;
+  gap: var(--espaco-pilha);
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+}
+
+/* --- Botões ------------------------------------------------------------- */
+
+.botao-acao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-weight: 700;
+  font-size: var(--tipo-detalhe);
+  cursor: pointer;
+}
+
+.botao-acao:disabled {
+  border-color: var(--cor-borda);
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta-3);
+  cursor: not-allowed;
+}
+
+.botao-discreto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: transparent;
+  color: inherit;
+  font-weight: 700;
+  font-size: var(--tipo-detalhe);
+  cursor: pointer;
+}
+
+.botao-discreto[data-ativo="sim"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+}
+
+/* --- Comunidade ---------------------------------------------------------- */
+
+.publicacao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+.publicacao-topo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.monograma {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  border-radius: 999px;
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.monograma[data-porte="pequeno"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.5625rem;
+}
+
+/* O corpo do cartão inteiro é o alvo do toque que abre a publicação. Botão e
+ * não link porque ele embrulha imagem e título; um <a> em volta de bloco vira
+ * uma área de arraste enorme e atrapalha o gesto de rolar. */
+.publicacao-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.publicacao-imagem {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+}
+
+.publicacao-imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* O trecho corta em duas linhas e o «ler mais» fica logo abaixo, na cor de
+ * ação: é ele que diz que existe mais texto do outro lado do toque. Sem o
+ * rótulo, o corte parece só uma frase que terminou mal. */
+.publicacao-chamada {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.publicacao-trecho {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.4;
+  color: var(--cor-tinta-2);
+}
+
+.publicacao-ler-mais {
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  color: var(--cor-acao-tinta);
+}
+
+.publicacao-rodape {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pastilha {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pastilha svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.pastilha[data-ativa="sim"] {
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+}
+
+/* --- Publicação aberta --------------------------------------------------- */
+
+/* A foto sangra até a borda da moldura: as margens da tela são desfeitas com
+ * margem negativa em vez de o contêiner mudar de padding, para o resto da
+ * página continuar alinhado com as outras telas. */
+.aberta-foto {
+  position: relative;
+  margin: calc(var(--espaco-tela) * -1) calc(var(--espaco-tela) * -1) 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--cor-superficie-2);
+}
+
+.aberta-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.aberta-veu {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 8rem;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.55), transparent);
+}
+
+.aberta-autor {
+  position: absolute;
+  top: 0.65rem;
+  right: var(--espaco-tela);
+  left: var(--espaco-tela);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ic-branco);
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.5);
+}
+
+.aberta-voltar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.35);
+  backdrop-filter: blur(0.6rem);
+  color: var(--ic-branco);
+  cursor: pointer;
+}
+
+.aberta-voltar svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.aberta-autor .monograma {
+  border-color: rgb(255 255 255 / 0.5);
+  background: rgb(0 0 0 / 0.35);
+  color: var(--ic-branco);
+  backdrop-filter: blur(0.6rem);
+}
+
+/* --- Thread -------------------------------------------------------------- */
+
+.thread {
+  display: flex;
+  gap: 0.6rem;
+  padding-bottom: 0.65rem;
+}
+
+/* A coluna do avatar carrega o trilho vertical que liga a resposta ao seu pai —
+ * é ele que faz a conversa se ler como conversa em vez de lista plana. */
+.thread-coluna {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.thread-trilho {
+  width: 1.5px;
+  flex: 1;
+  margin-top: 0.3rem;
+  border-radius: 1px;
+  background: var(--cor-borda-forte);
+}
+
+.thread-corpo {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.thread-acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.1rem;
+}
+
+.thread-acao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-tinta-3);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.thread-acao svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.thread-acao[data-ativa="sim"] {
+  color: var(--cor-acao-tinta);
+}
+
+.thread-respostas {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Compositor de resposta ---------------------------------------------- */
+
+.responder {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.responder input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: 999px;
+  background: var(--cor-superficie);
+  color: inherit;
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+}
+
+.responder input:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 1px;
+}
+
+.responder button {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  cursor: pointer;
+}
+
+.responder button:disabled {
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta-3);
+  cursor: not-allowed;
+}
+
+.responder button svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* --- Marketplace -------------------------------------------------------- */
+
+.comunidade-cartao {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  text-decoration: none;
+}
+
+.uf-selo {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--raio-p);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+/* --- Emblemas ----------------------------------------------------------- */
+
+.emblema {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.emblema[data-ganho="sim"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+/* --- Aviso -------------------------------------------------------------- */
+
+.aviso {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-detalhe);
+  color: var(--cor-tinta-2);
+}
+
+.aviso[data-tom="acao"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+}
+
+/* --- Cartaz com foto e a folha do item ---------------------------------- */
+
+.loja-foto {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+.loja-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.loja-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.loja-cartao > .loja-corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.7rem;
+}
+
+.loja-cartao[data-alcancavel="nao"] .loja-foto img {
+  filter: grayscale(0.55);
+}
+
+/* A folha do item posiciona ABSOLUTE CONTRA A MOLDURA, nunca `fixed` e nunca
+ * `<dialog>` com `showModal()`: os dois sobem para a camada de topo do
+ * navegador e se ancoram na JANELA, o que joga a folha para fora do telefone
+ * desenhado na tela. É a mesma regra que a barra de abas e a gaveta do menu já
+ * seguem (D-03/D-04). Quem entrega a folha dentro da moldura é um portal. */
+.folha-fundo {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  backdrop-filter: blur(0.2rem);
+}
+
+/* Sem moldura (visão web ou janela estreita) o ancoradouro é a janela mesmo. */
+.folha-fundo[data-solta="sim"] {
+  position: fixed;
+}
+
+.folha-item {
+  display: flex;
+  width: 100%;
+  max-width: 26rem;
+  max-height: 100%;
+  flex-direction: column;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  box-shadow: var(--sombra-3);
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+}
+
+.folha-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: var(--espaco-cartao);
+}
+
+.folha-foto {
+  position: relative;
+  flex: none;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--cor-superficie-2);
+}
+
+.folha-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.folha-fechar {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+  color: var(--ic-branco);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.credito-foto {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+.loja-resumo {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--tipo-legenda);
+  line-height: 1.35;
+  color: var(--cor-tinta-2);
+}
+
+.guardada-capa {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 4.5rem;
+  height: 3.5rem;
+  overflow: hidden;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+.guardada-capa img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Desafios ------------------------------------------------------------ */
+
+.desafios-topo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* O selo do nível usa o amarelo e o laranja da ficha, não a cor de ação: ele é
+ * um objeto que a pessoa ganhou, não um botão. O laranja aqui é o mesmo do
+ * miolo da moeda, o que amarra nível e economia visualmente. */
+.selo-nivel {
+  width: 7.5rem;
+  height: 7.5rem;
+}
+
+.desafios-barra {
+  width: min(12rem, 100%);
+}
+
+.missao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.missao[data-concluida="sim"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+.missao-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.missao-etiqueta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+.missao-premio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+.missao-rodape {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+}
+
+.missao-rodape .nivel-barra {
+  flex: 1;
+}
+
+.missao-contagem {
+  flex: none;
+  font-size: var(--tipo-legenda);
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-tinta-3);
+}
+
+.missao-fazer {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.missao-feita {
+  flex: none;
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  color: var(--cor-acao-tinta);
+}

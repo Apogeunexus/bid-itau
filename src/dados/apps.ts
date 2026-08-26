@@ -324,6 +324,12 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
 
 /** Sua conta: o que você guardou e quem você é. Sem capa, de propósito. */
 export const ATALHOS_CONTA: readonly Atalho[] = [
+  { href: "/comunidade", rotulo: "Comunidade", descricao: "O feed do Itaú Cultural" },
+  { href: "/comunidade/marketplace", rotulo: "Comunidades", descricao: "Produtores e organizações, por estado" },
+  { href: "/comunidade/guardadas", rotulo: "Guardadas", descricao: "As publicações que você guardou" },
+  { href: "/loja", rotulo: "Loja", descricao: "O que suas fichas abrem" },
+  { href: "/desafios", rotulo: "Desafios", descricao: "As missões da semana e o seu nível" },
+  { href: "/meu/carteira", rotulo: "Carteira", descricao: "Saldo, extrato e entregas" },
   { href: "/salvos", rotulo: "Salvos", descricao: "O que você guardou e os alertas" },
   { href: "/meu/repertorio", rotulo: "Meu repertório", descricao: "As linguagens que você atravessou" },
   { href: "/meu", rotulo: "Perfil", descricao: "Persona, disposições e preferências" },

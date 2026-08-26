@@ -5,15 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
-  ICONE_ACONTECE,
   ICONE_APPS,
-  ICONE_BUSCAR,
   ICONE_DESCOBRIR,
   ICONE_PERFIL,
+  ICONE_COMUNIDADE,
   ICONE_SALVOS,
+  ICONE_LOJA,
 } from "@/componentes/base/icones";
 import { IconeVivo, pulsarGradeApps } from "@/componentes/icone-vivo";
 import { AssinaturaIc } from "@/componentes/marca";
+import { ContadorDeFichas } from "@/componentes/contador-fichas";
 import { SeletorDeTema } from "@/componentes/seletor-tema";
 import { useSessao } from "@/contexto/sessao";
 import { ATALHOS_CONTA } from "@/dados/apps";
@@ -56,8 +57,8 @@ interface Aba {
 
 const ABAS: Aba[] = [
   { href: "/descobrir", rotulo: "Descobrir", icone: ICONE_DESCOBRIR },
-  { href: "/buscar", rotulo: "Buscar", icone: ICONE_BUSCAR },
-  { href: "/acontece", rotulo: "Acontece", icone: ICONE_ACONTECE },
+  { href: "/comunidade", rotulo: "Comunidade", icone: ICONE_COMUNIDADE },
+  { href: "/loja", rotulo: "Loja", icone: ICONE_LOJA },
   { href: "/salvos", rotulo: "Salvos", icone: ICONE_SALVOS },
 ];
 
@@ -86,6 +87,8 @@ export function NavegacaoBarra() {
     <>
       <header className="barra-topo">
         <AssinaturaIc prioridade />
+
+        <ContadorDeFichas />
 
         {/* A CONTA VIRA ÍCONE, e o que era a seção «Sua conta» no fim de /apps
             mora aqui dentro (pedido de 23/08). O nome da persona saiu do

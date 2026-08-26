@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Casca } from "@/componentes/casca";
+import { PontosProvider } from "@/contexto/pontos";
 import { SessaoProvider } from "@/contexto/sessao";
 import { ViewProvider } from "@/contexto/visao";
 import { HEROIS } from "@/dados/heroi";
@@ -58,7 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script src="/antes-da-pintura.js" />
         <ViewProvider>
           <SessaoProvider>
-            <Casca>{children}</Casca>
+            <PontosProvider>
+              <Casca>{children}</Casca>
+            </PontosProvider>
           </SessaoProvider>
         </ViewProvider>
       </body>
