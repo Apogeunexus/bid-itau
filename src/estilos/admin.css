@@ -193,3 +193,12 @@
   margin-left: 0.5rem;
   padding: 0.25rem 0.75rem;
 }
+
+/* A tabela de procedência tem TRÊS colunas — rótulo, nós, ligações —, e `.studio-linha` só
+ * conhece duas. As duas contagens precisam ficar lado a lado para a comparação que a tabela
+ * existe para permitir: 61,8% dos nós e 22,4% das ligações vindos da mesma fonte é o
+ * contraste que conta a história do acervo. */
+
+.admin-procedencia .studio-linha {
+  grid-template-columns: 12rem 1fr 1fr;
+}

@@ -32,7 +32,7 @@ import {
 } from "./duplicatas";
 import { coordenadaDe, densidadePorUf } from "./geo";
 import { contagens, porSlug, slugsPorTipo, vizinhos } from "./grafo";
-import { aferirDto } from "./observatorio";
+import { ROTULO_DA_PROCEDENCIA, aferirDto } from "./observatorio";
 import metaJson from "./gerado/meta.json";
 import type { ClasseEntidade, MetodoCoordenada, Procedencia } from "./tipos";
 
@@ -694,19 +694,25 @@ export function territoriosDoAdmin(): TerritoriosDoAdmin {
 export interface CoberturaDeclarada {
   id: string;
   rotulo: string;
-  /** Quantos SIM. */
-  com: number;
+  /** Quantos SIM, já com separador de milhar. */
+  com: string;
   /** O denominador: quantos ao todo. Nunca omitido. */
-  de: number;
+  de: string;
   nota: string;
 }
 
 export interface FatiaDeProcedenciaDoAdmin {
   procedencia: Procedencia;
+  /** «Itaú Cultural», «derivado por nós» — o rótulo de produto, reusado do Observatório
+   *  para as duas superfícies não chamarem a mesma fatia por nomes diferentes. */
+  rotulo: string;
   nos: number;
+  nosEscrito: string;
   arestas: number;
-  percentualDeNos: number;
-  percentualDeArestas: number;
+  arestasEscrito: string;
+  /** Já em português: «61,8%», nunca «61.8%». */
+  percentualDeNos: string;
+  percentualDeArestas: string;
 }
 
 export interface ConferenciaDeTresPontas {
@@ -718,13 +724,20 @@ export interface ConferenciaDeTresPontas {
 
 export interface ObservabilidadeDoAdmin {
   geradoEm: string;
+  /** «22.08.2026» — a data como se escreve em português. */
+  geradoEmEscrito: string;
   dataDeReferencia: string;
+  dataDeReferenciaEscrita: string;
   /** Dias entre o build do grafo e a data de referência. Nunca o relógio de quem avalia. */
   diasDesdeAGeracao: number;
+  /** «no mesmo dia», «1 dia», «12 dias» — o número já virado frase. */
+  diasEscritos: string;
   coberturas: CoberturaDeclarada[];
   procedencia: FatiaDeProcedenciaDoAdmin[];
   totalDeNos: number;
+  totalDeNosEscrito: string;
   totalDeArestas: number;
+  totalDeArestasEscrito: string;
   conferencia: ConferenciaDeTresPontas;
   /** O reprocessamento é mockado no protótipo, e a tela diz que é. */
   reprocessamentoEhMockado: string;
@@ -785,16 +798,21 @@ export function observabilidadeDoAdmin(): ObservabilidadeDoAdmin {
   const totalDeArestas = META.totais.arestas;
   const procedencias = Object.keys(META.porProcedencia).sort() as Procedencia[];
 
+  const dias = diasEntre(META.geradoEm, DATA_DE_REFERENCIA);
+
   return {
     geradoEm: META.geradoEm,
+    geradoEmEscrito: dataCurta(META.geradoEm),
     dataDeReferencia: DATA_DE_REFERENCIA,
-    diasDesdeAGeracao: diasEntre(META.geradoEm, DATA_DE_REFERENCIA),
+    dataDeReferenciaEscrita: dataCurta(DATA_DE_REFERENCIA),
+    diasDesdeAGeracao: dias,
+    diasEscritos: dias === 0 ? "no mesmo dia" : dias === 1 ? "1 dia" : `${dias} dias`,
     coberturas: [
       {
         id: "imagens",
         rotulo: "Imagens presentes no disco",
-        com: img.presentes,
-        de: img.arquivos,
+        com: comSeparador(img.presentes),
+        de: comSeparador(img.arquivos),
         nota:
           `${img.chavesRejeitadas} chave rejeitada · ${img.donosDesconhecidos} dono desconhecido · ` +
           `${comSeparador(META.cobertura.entidadesComImagemLocal)} entidades com imagem local`,
@@ -802,8 +820,10 @@ export function observabilidadeDoAdmin(): ObservabilidadeDoAdmin {
       {
         id: "coordenadas",
         rotulo: "Entidades com coordenada",
-        com: META.cobertura.coordenadas.comCoordenada,
-        de: META.cobertura.coordenadas.comCoordenada + META.cobertura.semCoordenada.total,
+        com: comSeparador(META.cobertura.coordenadas.comCoordenada),
+        de: comSeparador(
+          META.cobertura.coordenadas.comCoordenada + META.cobertura.semCoordenada.total,
+        ),
         nota:
           META.cobertura.semCoordenada.total === 0
             ? "nenhuma entidade situável ficou sem coordenada — o que não quer dizer coordenada precisa. " +
@@ -813,8 +833,10 @@ export function observabilidadeDoAdmin(): ObservabilidadeDoAdmin {
       {
         id: "ficha-de-acessibilidade",
         rotulo: "Declaram a ficha de acessibilidade",
-        com: META.fichaDeAcessibilidade.declaram,
-        de: META.fichaDeAcessibilidade.declaram + META.fichaDeAcessibilidade.naoDeclaram,
+        com: comSeparador(META.fichaDeAcessibilidade.declaram),
+        de: comSeparador(
+          META.fichaDeAcessibilidade.declaram + META.fichaDeAcessibilidade.naoDeclaram,
+        ),
         nota:
           `${comSeparador(META.fichaDeAcessibilidade.naoDeclaram)} não declaram. Não declarar é ` +
           `diferente de não oferecer, e o sistema não lê uma coisa como a outra.`,
@@ -822,18 +844,22 @@ export function observabilidadeDoAdmin(): ObservabilidadeDoAdmin {
     ],
     procedencia: procedencias.map((p) => ({
       procedencia: p,
+      rotulo: ROTULO_DA_PROCEDENCIA[p],
       nos: META.porProcedencia[p] ?? 0,
+      nosEscrito: comSeparador(META.porProcedencia[p] ?? 0),
       arestas: META.porProcedenciaDeAresta[p] ?? 0,
-      percentualDeNos: Number((((META.porProcedencia[p] ?? 0) / totalDeNos) * 100).toFixed(1)),
-      percentualDeArestas: Number(
-        (((META.porProcedenciaDeAresta[p] ?? 0) / totalDeArestas) * 100).toFixed(1),
-      ),
+      arestasEscrito: comSeparador(META.porProcedenciaDeAresta[p] ?? 0),
+      percentualDeNos: emPorcento((META.porProcedencia[p] ?? 0) / totalDeNos),
+      percentualDeArestas: emPorcento((META.porProcedenciaDeAresta[p] ?? 0) / totalDeArestas),
     })),
     totalDeNos,
+    totalDeNosEscrito: comSeparador(totalDeNos),
     totalDeArestas,
+    totalDeArestasEscrito: comSeparador(totalDeArestas),
     conferencia: conferirTresPontas(),
     reprocessamentoEhMockado:
-      "Reprocessar o grafo não roda aqui. O protótipo é export estático, sem back-end: a passada do " +
-      "gerador acontece fora, por «npm run gerar-grafo», e esta tela só registra o pedido.",
+      "O protótipo é export estático, sem back-end: a passada do gerador acontece fora, pela " +
+      "linha de comando, e o botão desta tela registraria o pedido sem executá-lo. Ele não " +
+      "existe — um botão que não faz o que diz é pior que a ausência dele.",
   };
 }
