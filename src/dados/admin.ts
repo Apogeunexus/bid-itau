@@ -1,0 +1,568 @@
+/**
+ * admin.ts — o que a superfície de governança exibe (funcionalidades 87 a 100, e a 169).
+ *
+ * O QUE ESTE MÓDULO EXISTE PARA IMPEDIR. Um painel de administração exibe números e
+ * oferece botões que os mudam. O que ele quase nunca diz é o que cada número CUSTA — e um
+ * botão que muda um valor sem dizer o que o valor custa é o oposto do que esta proposta
+ * defende. Por isso o tipo `ParametroDoMotor` não tem um campo de custo opcional: ele tem
+ * uma união em que uma das pontas é a DECLARAÇÃO de que o custo não foi medido. Não existe
+ * forma de compilar um parâmetro sem uma das duas.
+ *
+ * NENHUM NÚMERO AQUI É LITERAL DIGITADO. Cada um sai de `meta.json`, de `duplicatas.ts`,
+ * de `geo.ts` ou de `caminhada.ts`. Os literais que aparecem no arquivo são CONFERÊNCIAS —
+ * valores esperados contra os quais o módulo se compara e QUEBRA ALTO se divergir. É a
+ * mesma disciplina de `observatorio.ts`, e pelo mesmo motivo: um número copiado à mão mente
+ * em silêncio na primeira regeração do grafo.
+ *
+ * DP-F: roda NO BUILD. Alcança `grafo.ts` por `geo.ts` e por `duplicatas.ts`, e nenhum
+ * arquivo `"use client"` pode importar este módulo por valor — só `import type`. O que
+ * atravessa a fronteira RSC são os DTOs abaixo, que são só primitivo, e cada página de
+ * servidor do Admin afere o seu com `aferirDto`.
+ *
+ * SEM RELÓGIO. O frescor exibido é `geradoEm` do `meta.json`, comparado com
+ * `DATA_DE_REFERENCIA`, e nunca com o relógio de quem avalia (D-24, restrição 3).
+ */
+
+import { DATA_DE_REFERENCIA } from "./alerta";
+import { POSICAO_SERENDIPIDADE } from "./caminhada";
+import {
+  LIMIAR_ALTERNATIVO_MEDIDO,
+  LIMIAR_PROBABILISTICO,
+  numerosDaDeduplicacao,
+} from "./duplicatas";
+import { densidadePorUf } from "./geo";
+import { contagens } from "./grafo";
+import { aferirDto } from "./observatorio";
+import metaJson from "./gerado/meta.json";
+import type { MetodoCoordenada, Procedencia } from "./tipos";
+
+export { aferirDto };
+
+// ---------------------------------------------------------------------------
+// meta.json — a testemunha independente
+// ---------------------------------------------------------------------------
+
+/**
+ * O recorte de `meta.json` que o Admin governa.
+ *
+ * Só os campos que alguma tela desta sessão exibe: declarar o arquivo inteiro convidaria a
+ * próxima tela a ler daqui um campo que ninguém conferiu. A interface é ANOTAÇÃO, e não
+ * conversão — `const META: MetaDoAdmin = metaJson` faz o compilador conferir que o arquivo
+ * no disco tem mesmo esta forma, e é justamente essa conferência que um cast apagaria.
+ */
+interface MetaDoAdmin {
+  geradoEm: string;
+  grauHub: number;
+  fanoutSemelhante: number;
+  fanoutEfetivo: number;
+  totais: { entidades: number; arestas: number };
+  porProcedencia: Record<string, number>;
+  porProcedenciaDeAresta: Record<string, number>;
+  fichaDeAcessibilidade: { declaram: number; naoDeclaram: number };
+  cobertura: {
+    imagens: {
+      arquivos: number;
+      presentes: number;
+      chavesRejeitadas: number;
+      donosDesconhecidos: number;
+    };
+    entidadesComImagemLocal: number;
+    coordenadas: {
+      comCoordenada: number;
+      porMetodo: Record<string, number>;
+      municipiosNaTabela: number;
+      paisesNaTabela: number;
+      aproximados: readonly string[];
+    };
+    semCoordenada: { total: number };
+  };
+  concentradores: {
+    limiar: number;
+    total: number;
+    maiores: ReadonlyArray<{ id: string; grau: number }>;
+  };
+}
+
+const META: MetaDoAdmin = metaJson;
+
+/** O mesmo número em português, para entrar nas frases. `0.65` e `0,65` na mesma tela são
+ *  duas grafias do mesmo valor, e quem lê gasta um segundo decidindo se são o mesmo. */
+const pt = (n: number): string => String(n).replace(".", ",");
+
+/** Limiar com duas casas: «0,60» e «0,65» são comparados um sob o outro, e «0,6» ao lado de
+ *  «0,65» faz o olho medir a largura em vez do valor. */
+const comDuasCasas = (n: number): string => n.toFixed(2).replace(".", ",");
+
+/** Separador de milhar, para as contagens grandes ficarem legíveis na tela densa. */
+const comSeparador = (n: number): string => n.toLocaleString("pt-BR");
+
+// ---------------------------------------------------------------------------
+// O parâmetro do motor — e o tipo que proíbe número solto
+// ---------------------------------------------------------------------------
+
+/**
+ * O custo de mudar um parâmetro.
+ *
+ * União discriminada, e não campo opcional. Com `custo?: Custo` a tela compilaria exibindo
+ * um número sem nenhuma justificativa, que é exatamente o defeito que esta sessão existe
+ * para não cometer. Aqui, ou o custo foi medido e vem inteiro, ou a ausência da medição é
+ * ela própria um conteúdo que a tela imprime.
+ */
+export type CustoDoParametro =
+  | {
+      medido: true;
+      /** O valor alternativo que foi medido e recusado, já em português. */
+      alternativo: string;
+      oQueCustaria: string;
+      oQueGanharia: string;
+    }
+  | { medido: false; porQueNaoFoiMedido: string };
+
+export interface ParametroDoMotor {
+  id: string;
+  nome: string;
+  /** O valor atual, já formatado em português. */
+  valor: string;
+  /** A unidade, quando ela não é evidente no valor. */
+  unidade: string;
+  /** O que este número decide, em uma linha. */
+  decide: string;
+  /** A justificativa por extenso: o método que produziu o valor, não a opinião. */
+  justificativa: string;
+  custo: CustoDoParametro;
+  /** Onde o valor mora no código, para quem for conferir. */
+  fonte: string;
+}
+
+/**
+ * A conferência dos parâmetros, que roda ANTES de qualquer cartão ser montado.
+ *
+ * As três fontes precisam concordar: a constante em `duplicatas.ts`, a contagem que
+ * `numerosDaDeduplicacao()` faz sobre o grafo, e `meta.json`, escrito por um processo
+ * separado. Uma divergência aqui significa que uma das três envelheceu, e o módulo não tem
+ * como saber qual — então ele não compila, em vez de exibir.
+ */
+function conferirParametros(): void {
+  const n = numerosDaDeduplicacao();
+  const problemas: string[] = [];
+
+  if (n.limiar !== LIMIAR_PROBABILISTICO) {
+    problemas.push(
+      `o limiar da fila é ${n.limiar} e a constante LIMIAR_PROBABILISTICO é ${LIMIAR_PROBABILISTICO}`,
+    );
+  }
+  if (n.limiarAlternativo.limiar !== LIMIAR_ALTERNATIVO_MEDIDO.limiar) {
+    problemas.push(
+      `o alternativo medido é ${n.limiarAlternativo.limiar} e a constante diz ${LIMIAR_ALTERNATIVO_MEDIDO.limiar}`,
+    );
+  }
+  if (META.grauHub !== META.concentradores.limiar) {
+    problemas.push(
+      `meta.json diz grauHub ${META.grauHub} no topo e ${META.concentradores.limiar} em concentradores.limiar`,
+    );
+  }
+  if (n.scoreMinimoEncenado <= LIMIAR_PROBABILISTICO) {
+    problemas.push(
+      `o menor score encenado é ${n.scoreMinimoEncenado} e o limiar é ${LIMIAR_PROBABILISTICO}: ` +
+        `o limiar precisa ficar ABAIXO do menor score, senão a fila perde clones`,
+    );
+  }
+  if (META.concentradores.maiores.length === 0) {
+    problemas.push("meta.json não lista nenhum concentrador, e a tela cita o maior deles");
+  }
+
+  if (problemas.length) {
+    throw new Error(
+      `admin.ts: os parâmetros do motor não fecham entre as fontes — ${problemas.join(" · ")}. ` +
+        `A tela do Admin não pode exibir parâmetro que nem o próprio sistema confirma.`,
+    );
+  }
+}
+
+/**
+ * Os quatro números que decidem o que o acervo inteiro produz na tela.
+ *
+ * TRÊS DOS QUATRO DECLARAM QUE O CUSTO NÃO FOI MEDIDO, e isso não é lacuna desta tela: é o
+ * estado real do projeto. Só o limiar de duplicatas teve o seu alternativo medido e
+ * exportado como dado. Fabricar um custo plausível para os outros três seria produzir
+ * exatamente o número solto disfarçado de justificativa que a sessão recusa.
+ */
+export function parametrosDoMotor(): ParametroDoMotor[] {
+  conferirParametros();
+  const n = numerosDaDeduplicacao();
+  const alt = n.limiarAlternativo;
+  const maior = META.concentradores.maiores[0];
+
+  return [
+    {
+      id: "limiar-probabilistico",
+      nome: "Limiar do segundo estágio",
+      valor: comDuasCasas(LIMIAR_PROBABILISTICO),
+      unidade: "de similaridade de Jaccard",
+      decide: "o que entra na fila de duplicatas de uma pessoa",
+      justificativa:
+        `Dos ${n.arestasEncenadas} clones encenados, ${n.gruposPorChaveEncenados} têm chave idêntica ` +
+        `à do original e o primeiro estágio os pega. Os ${n.paresProbabilisticosEncenados} restantes só ` +
+        `o segundo alcança, e o MENOR score entre eles é ${pt(n.scoreMinimoEncenado)} — o limiar precisa ` +
+        `ficar abaixo disso para não perder nenhum. A ${comDuasCasas(LIMIAR_PROBABILISTICO)} a fila tem ` +
+        `${n.paresProbabilisticos} pares.`,
+      custo: {
+        medido: true,
+        alternativo: comDuasCasas(alt.limiar),
+        oQueCustaria: `${alt.pares} pares na fila em vez de ${n.paresProbabilisticos} — o dobro do trabalho humano.`,
+        oQueGanharia:
+          alt.clonesAMais === 0
+            ? "Nenhum clone a mais. Zero, contado."
+            : `${alt.clonesAMais} clone(s) a mais.`,
+      },
+      fonte: "duplicatas.ts · LIMIAR_PROBABILISTICO e LIMIAR_ALTERNATIVO_MEDIDO",
+    },
+    {
+      id: "grau-hub",
+      nome: "Grau de concentrador",
+      valor: comSeparador(META.grauHub),
+      unidade: "arestas",
+      decide: "quantas entidades a caminhada trata como concentrador e evita atravessar",
+      justificativa:
+        `${META.concentradores.total} entidades estão acima do limiar. A maior é «${maior?.id}», com ` +
+        `grau ${comSeparador(maior?.grau ?? 0)}. Baixar o limiar aumenta quantos nós a caminhada evita, ` +
+        `e com isso quantos caminhos deixam de existir.`,
+      custo: {
+        medido: false,
+        porQueNaoFoiMedido:
+          "ninguém rodou a caminhada com um segundo limiar para contar quantos caminhos mudam. " +
+          "Sem essa contagem, qualquer número aqui seria estimativa apresentada como medida.",
+      },
+      fonte: "meta.json · grauHub e concentradores",
+    },
+    {
+      id: "fanout-semelhante",
+      nome: "Vizinhos por nó na caminhada",
+      valor: comSeparador(META.fanoutSemelhante),
+      unidade: "vizinhos",
+      decide: "quantas arestas «semelhante_a» a caminhada segue a partir de cada nó",
+      justificativa:
+        `O teto é ${META.fanoutSemelhante} e o efetivo MEDIDO neste acervo é ${META.fanoutEfetivo}. O ` +
+        `efetivo pode cair abaixo do teto quando a fonte é grande — o tipo MetaGrafo registra o campo ` +
+        `justamente para isso —, e neste build ele não caiu: os dois valem ${META.fanoutEfetivo}. A tela ` +
+        `declara a igualdade em vez de repetir um mecanismo que este acervo não exibe.`,
+      custo: {
+        medido: false,
+        porQueNaoFoiMedido:
+          "medir exigiria regerar o grafo com outro teto e recontar as arestas de «semelhante_a», " +
+          "que é uma passada inteira do gerador. Não foi feito.",
+      },
+      fonte: "meta.json · fanoutSemelhante e fanoutEfetivo",
+    },
+    {
+      id: "dose-de-serendipidade",
+      nome: "Dose de serendipidade",
+      valor: "1",
+      unidade: "cartão por feed",
+      decide: "quantos cartões fora do alcance da caminhada entram em cada feed",
+      justificativa:
+        `Um só, na posição fixa ${POSICAO_SERENDIPIDADE}, escolhido FORA do conjunto de ids que a ` +
+        `caminhada tocou. Posição fixa e não sorteada: sob export estático, sorteio no cliente faria o ` +
+        `HTML exportado divergir da página hidratada.`,
+      custo: {
+        medido: false,
+        porQueNaoFoiMedido:
+          "a dose nunca foi variada. Não existe medida de quanto uma segunda dose mudaria a " +
+          "descoberta, porque nenhuma persona foi percorrida com duas.",
+      },
+      fonte: "caminhada.ts · POSICAO_SERENDIPIDADE",
+    },
+  ];
+}
+
+/** Os concentradores, achatados para a tabela da A2. */
+export interface Concentrador {
+  id: string;
+  grau: number;
+  grauEscrito: string;
+}
+
+export interface Concentradores {
+  limiar: number;
+  total: number;
+  maiores: Concentrador[];
+}
+
+export function concentradores(): Concentradores {
+  return {
+    limiar: META.concentradores.limiar,
+    total: META.concentradores.total,
+    maiores: META.concentradores.maiores.map((c) => ({
+      id: c.id,
+      grau: c.grau,
+      grauEscrito: comSeparador(c.grau),
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Territórios e centroides (A3) — a alavanca mais barata do sistema
+// ---------------------------------------------------------------------------
+
+const ROTULO_DO_METODO: Record<MetodoCoordenada, string> = {
+  "centroide-municipio": "Centroide de município",
+  "centroide-estado": "Centroide de estado",
+  "centroide-pais": "Centroide de país",
+  "deslocamento-por-espaco": "Deslocamento por espaço",
+};
+
+const SIGNIFICADO_DO_METODO: Record<MetodoCoordenada, string> = {
+  "centroide-municipio":
+    "o centro do município declarado. É a maior precisão que a tabela sustenta hoje.",
+  "centroide-estado":
+    "o centro da unidade federativa inteira — o município não estava na tabela.",
+  "centroide-pais":
+    "o centro de um país inteiro. É a coordenada menos precisa que o sistema emite.",
+  "deslocamento-por-espaco":
+    "o centroide, deslocado por uma função do id do espaço, para dois espaços da mesma cidade não " +
+    "empilharem no mesmo pino.",
+};
+
+export interface FatiaDeMetodo {
+  metodo: MetodoCoordenada;
+  rotulo: string;
+  entidades: number;
+  percentual: number;
+  significa: string;
+}
+
+export interface MunicipioAproximado {
+  municipio: string;
+  estado: string;
+}
+
+export interface TerritoriosDoAdmin {
+  comCoordenada: number;
+  semCoordenada: number;
+  porMetodo: FatiaDeMetodo[];
+  municipiosNaTabela: number;
+  paisesNaTabela: number;
+  aproximados: MunicipioAproximado[];
+  /** As unidades federativas da tabela de centroides, e quantas o acervo conhece. */
+  ufsNaTabela: number;
+  ufsNoAcervo: number;
+  ufsAusentes: string[];
+  registros: number;
+  entidadesDistintas: number;
+  registrosNosDoisMaiores: number;
+  percentualNosDoisMaiores: number;
+  regraDaProcedencia: string;
+}
+
+/**
+ * A regra que a A3 não pode contradizer, escrita uma vez e exibida por extenso.
+ *
+ * `Coordenada.procedencia` é o literal `"derivado"` no tipo — não é convenção, é o tipo que
+ * recusa outro valor. O que a tela edita é a TABELA DE REFERÊNCIA de municípios e países;
+ * a coordenada da entidade continua saindo dela por regra.
+ */
+export const REGRA_DA_COORDENADA =
+  "Não existe coordenada digitada. A procedência de toda coordenada é sempre «derivado», e o " +
+  "tipo recusa qualquer outro valor. Esta tela edita a tabela de referência — municípios e " +
+  "países —, nunca a coordenada de uma entidade.";
+
+export function territoriosDoAdmin(): TerritoriosDoAdmin {
+  const c = META.cobertura.coordenadas;
+  const d = densidadePorUf();
+
+  const soma = Object.values(c.porMetodo).reduce((a, b) => a + b, 0);
+  if (soma !== c.comCoordenada) {
+    throw new Error(
+      `admin.ts: os métodos de coordenada somam ${soma} e meta.json declara ${c.comCoordenada} ` +
+        `entidades com coordenada. Uma das duas contagens envelheceu.`,
+    );
+  }
+
+  const porMetodo: FatiaDeMetodo[] = (Object.keys(ROTULO_DO_METODO) as MetodoCoordenada[])
+    .map((m) => ({
+      metodo: m,
+      rotulo: ROTULO_DO_METODO[m],
+      entidades: c.porMetodo[m] ?? 0,
+      percentual: Number((((c.porMetodo[m] ?? 0) / c.comCoordenada) * 100).toFixed(1)),
+      significa: SIGNIFICADO_DO_METODO[m],
+    }))
+    .sort((a, b) => b.entidades - a.entidades);
+
+  const aproximados = c.aproximados.map((linha) => {
+    const [municipio, estado] = linha.split("|");
+    if (!municipio || !estado) {
+      throw new Error(
+        `admin.ts: «${linha}» não está no formato «município|estado» que meta.json declara.`,
+      );
+    }
+    return { municipio, estado };
+  });
+
+  return {
+    comCoordenada: c.comCoordenada,
+    semCoordenada: META.cobertura.semCoordenada.total,
+    porMetodo,
+    municipiosNaTabela: c.municipiosNaTabela,
+    paisesNaTabela: c.paisesNaTabela,
+    aproximados,
+    ufsNaTabela: d.ufs.length,
+    ufsNoAcervo: d.ufs.filter((u) => u.noGrafo).length,
+    ufsAusentes: d.semRegistro.map((u) => u.titulo),
+    registros: d.total,
+    entidadesDistintas: d.entidadesDistintas,
+    registrosNosDoisMaiores: d.doisMaiores,
+    percentualNosDoisMaiores: Number(((d.doisMaiores / d.total) * 100).toFixed(1)),
+    regraDaProcedencia: REGRA_DA_COORDENADA,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Observabilidade (A6) — frescor, cobertura e a conferência de três pontas
+// ---------------------------------------------------------------------------
+
+export interface CoberturaDeclarada {
+  id: string;
+  rotulo: string;
+  /** Quantos SIM. */
+  com: number;
+  /** O denominador: quantos ao todo. Nunca omitido. */
+  de: number;
+  nota: string;
+}
+
+export interface FatiaDeProcedenciaDoAdmin {
+  procedencia: Procedencia;
+  nos: number;
+  arestas: number;
+  percentualDeNos: number;
+  percentualDeArestas: number;
+}
+
+export interface ConferenciaDeTresPontas {
+  fecha: boolean;
+  /** O que foi comparado, em português, para a tela dizer o que ela conferiu. */
+  oQueFoiConferido: string;
+  divergencias: string[];
+}
+
+export interface ObservabilidadeDoAdmin {
+  geradoEm: string;
+  dataDeReferencia: string;
+  /** Dias entre o build do grafo e a data de referência. Nunca o relógio de quem avalia. */
+  diasDesdeAGeracao: number;
+  coberturas: CoberturaDeclarada[];
+  procedencia: FatiaDeProcedenciaDoAdmin[];
+  totalDeNos: number;
+  totalDeArestas: number;
+  conferencia: ConferenciaDeTresPontas;
+  /** O reprocessamento é mockado no protótipo, e a tela diz que é. */
+  reprocessamentoEhMockado: string;
+}
+
+/** Dias entre duas datas ISO. As duas vêm de dado — nenhuma vem do relógio. */
+function diasEntre(de: string, ate: string): number {
+  const ms = Date.parse(`${ate}T00:00:00Z`) - Date.parse(`${de}T00:00:00Z`);
+  return Math.round(ms / 86_400_000);
+}
+
+/**
+ * A conferência de três pontas, do lado de quem opera.
+ *
+ * O Observatório já a faz e DERRUBA O BUILD quando uma fatia não fecha. A tela do Admin é
+ * onde ela deveria aparecer antes de derrubar — por isso aqui ela devolve o resultado em
+ * vez de lançar: quem opera precisa ver a divergência, e não só descobrir que o build caiu.
+ * A que lança continua existindo em `observatorio.ts`, e é ela que protege o artefato.
+ */
+function conferirTresPontas(): ConferenciaDeTresPontas {
+  const doGrafo = contagens().porProcedencia;
+  const divergencias: string[] = [];
+
+  let somaDeNos = 0;
+  for (const [p, deMeta] of Object.entries(META.porProcedencia)) {
+    const deGrafo = doGrafo[p] ?? 0;
+    somaDeNos += deMeta;
+    if (deMeta !== deGrafo) {
+      divergencias.push(`nós «${p}»: meta.json ${deMeta}, contagens() do grafo ${deGrafo}`);
+    }
+  }
+  if (somaDeNos !== META.totais.entidades) {
+    divergencias.push(
+      `as fatias de nó somam ${somaDeNos} e meta.json declara ${META.totais.entidades} entidades`,
+    );
+  }
+
+  const somaDeArestas = Object.values(META.porProcedenciaDeAresta).reduce((a, b) => a + b, 0);
+  if (somaDeArestas !== META.totais.arestas) {
+    divergencias.push(
+      `as fatias de aresta somam ${somaDeArestas} e meta.json declara ${META.totais.arestas} arestas`,
+    );
+  }
+
+  return {
+    fecha: divergencias.length === 0,
+    oQueFoiConferido:
+      "as fatias de procedência contadas na travessia do grafo, contra as que o «meta.json» " +
+      "declara — arquivo que um processo separado escreveu — e a soma das duas contra os totais " +
+      "do mesmo arquivo.",
+    divergencias,
+  };
+}
+
+export function observabilidadeDoAdmin(): ObservabilidadeDoAdmin {
+  const img = META.cobertura.imagens;
+  const totalDeNos = META.totais.entidades;
+  const totalDeArestas = META.totais.arestas;
+  const procedencias = Object.keys(META.porProcedencia).sort() as Procedencia[];
+
+  return {
+    geradoEm: META.geradoEm,
+    dataDeReferencia: DATA_DE_REFERENCIA,
+    diasDesdeAGeracao: diasEntre(META.geradoEm, DATA_DE_REFERENCIA),
+    coberturas: [
+      {
+        id: "imagens",
+        rotulo: "Imagens presentes no disco",
+        com: img.presentes,
+        de: img.arquivos,
+        nota:
+          `${img.chavesRejeitadas} chave rejeitada · ${img.donosDesconhecidos} dono desconhecido · ` +
+          `${comSeparador(META.cobertura.entidadesComImagemLocal)} entidades com imagem local`,
+      },
+      {
+        id: "coordenadas",
+        rotulo: "Entidades com coordenada",
+        com: META.cobertura.coordenadas.comCoordenada,
+        de: META.cobertura.coordenadas.comCoordenada + META.cobertura.semCoordenada.total,
+        nota:
+          META.cobertura.semCoordenada.total === 0
+            ? "nenhuma entidade situável ficou sem coordenada — o que não quer dizer coordenada precisa. " +
+              "A precisão está na distribuição por método, na tela de territórios."
+            : `${META.cobertura.semCoordenada.total} sem coordenada`,
+      },
+      {
+        id: "ficha-de-acessibilidade",
+        rotulo: "Declaram a ficha de acessibilidade",
+        com: META.fichaDeAcessibilidade.declaram,
+        de: META.fichaDeAcessibilidade.declaram + META.fichaDeAcessibilidade.naoDeclaram,
+        nota:
+          `${comSeparador(META.fichaDeAcessibilidade.naoDeclaram)} não declaram. Não declarar é ` +
+          `diferente de não oferecer, e o sistema não lê uma coisa como a outra.`,
+      },
+    ],
+    procedencia: procedencias.map((p) => ({
+      procedencia: p,
+      nos: META.porProcedencia[p] ?? 0,
+      arestas: META.porProcedenciaDeAresta[p] ?? 0,
+      percentualDeNos: Number((((META.porProcedencia[p] ?? 0) / totalDeNos) * 100).toFixed(1)),
+      percentualDeArestas: Number(
+        (((META.porProcedenciaDeAresta[p] ?? 0) / totalDeArestas) * 100).toFixed(1),
+      ),
+    })),
+    totalDeNos,
+    totalDeArestas,
+    conferencia: conferirTresPontas(),
+    reprocessamentoEhMockado:
+      "Reprocessar o grafo não roda aqui. O protótipo é export estático, sem back-end: a passada do " +
+      "gerador acontece fora, por «npm run gerar-grafo», e esta tela só registra o pedido.",
+  };
+}
