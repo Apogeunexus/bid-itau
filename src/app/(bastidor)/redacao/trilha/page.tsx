@@ -1,3 +1,4 @@
+import { RedacaoNavegacao } from "@/componentes/redacao-navegacao";
 import { RedacaoTrilha } from "@/componentes/redacao-trilha";
 import {
   CARIMBO_DA_DECISAO,
@@ -36,17 +37,20 @@ export default function PaginaRedacaoTrilha() {
   const slug = slugDaTrilhaDoEditor();
 
   return (
-    <RedacaoTrilha
-      trilha={trilhaParaEditor(slug)}
-      catalogo={catalogoParaArrastar()}
-      sugestao={sugestaoDeProximoPasso(slug)}
-      limites={LIMITES_DA_IA}
-      curador={CURADOR_AUTORADO}
-      carimbo={CARIMBO_DA_DECISAO}
-      dataDeReferencia={DATA_DE_REFERENCIA_DA_REDACAO}
-      regraDoMotivoObrigatorio={REGRA_DO_MOTIVO_OBRIGATORIO}
-      regraDaSugestao={REGRA_DA_SUGESTAO}
-      regraDoDestino={REGRA_DO_DESTINO}
-    />
+    <>
+      <RedacaoNavegacao atual="/redacao/trilha/" />
+      <RedacaoTrilha
+        trilha={trilhaParaEditor(slug)}
+        catalogo={catalogoParaArrastar()}
+        sugestao={sugestaoDeProximoPasso(slug)}
+        limites={LIMITES_DA_IA}
+        curador={CURADOR_AUTORADO}
+        carimbo={CARIMBO_DA_DECISAO}
+        dataDeReferencia={DATA_DE_REFERENCIA_DA_REDACAO}
+        regraDoMotivoObrigatorio={REGRA_DO_MOTIVO_OBRIGATORIO}
+        regraDaSugestao={REGRA_DA_SUGESTAO}
+        regraDoDestino={REGRA_DO_DESTINO}
+      />
+    </>
   );
 }

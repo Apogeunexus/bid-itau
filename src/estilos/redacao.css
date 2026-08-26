@@ -482,3 +482,128 @@
   border-left-style: dashed;
   font-style: italic;
 }
+
+/* ===========================================================================
+ * E3 — AS ARESTAS DE SENTIDO, e a navegação da superfície
+ * ======================================================================== */
+
+/* A BARRA DE ROTAS DA REDAÇÃO. Ela existe porque `menu-lateral.tsx` não lista
+ * `/redacao/*` e não é território desta sessão: sem ela, cada tela daqui só se
+ * alcança digitando a URL, que é um beco por omissão. Ver o cabeçalho de
+ * `redacao-navegacao.tsx`. */
+.redacao-navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* A rota atual não é destino: o realce diz isso a quem enxerga, e `aria-current`
+ * a quem navega por leitor de tela. */
+.redacao-navegacao-item[data-atual="sim"] {
+  border-color: var(--cor-acao);
+  font-weight: 600;
+}
+
+/* Duas colunas: as pontas à esquerda, a afirmação e o peso à direita. As pontas
+ * são duas listas empilhadas e não duas colunas próprias — lado a lado elas
+ * ficariam com metade da largura de um título, e escolher a ponta errada por não
+ * ler o título inteiro é o defeito que esta tela menos pode ter. */
+.redacao-colunas-pontes {
+  --web-altura-lista: 26vh;
+  grid-template-columns: 26rem minmax(0, 1fr);
+}
+
+.redacao-coluna-pontas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--web-gap);
+  min-width: 0;
+}
+
+.redacao-ponta-escolhida {
+  padding: 0.5rem;
+  border-radius: var(--raio-m);
+  background: color-mix(in srgb, var(--cor-acao) 8%, transparent);
+}
+
+.redacao-candidato[data-escolhido="sim"] {
+  border-color: var(--cor-acao);
+}
+
+/* A FRONTEIRA fica no topo e larga, atravessando as duas colunas: ela não é uma
+ * nota de rodapé da tela, é a condição sob a qual tudo abaixo dela é escrito. */
+.redacao-fronteira {
+  border-color: var(--cor-acao);
+}
+
+.redacao-relacoes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Cada relação é um botão de três linhas: o nome, o que ela AFIRMA e quantas
+ * existem hoje. O curador escolhe sabendo o que está assinando — um seletor com
+ * cinco palavras soltas obrigaria a decorar o vocabulário. */
+.redacao-relacao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.redacao-relacao[data-escolhida="sim"] {
+  border-color: var(--cor-acao);
+  background: color-mix(in srgb, var(--cor-acao) 10%, transparent);
+}
+
+.redacao-relacao-nome {
+  font-weight: 600;
+}
+
+.redacao-relacao-afirma {
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  line-height: 1.35;
+}
+
+.redacao-autoria[data-pode-autorar="nao"] .studio-botao[disabled] {
+  opacity: 0.5;
+}
+
+.redacao-previa-selo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border-radius: var(--raio-m);
+  background: var(--cor-fundo-2);
+}
+
+.redacao-peso {
+  border-color: var(--cor-borda);
+}
+
+.redacao-lista-pontes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redacao-ponte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+}

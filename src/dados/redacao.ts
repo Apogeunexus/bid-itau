@@ -24,6 +24,7 @@
 import { contagens, ocorrenciasDe, porId, porSlug, slugsPorTipo, vizinhos } from "./grafo";
 import { motivoDaAresta } from "./motivo";
 import { DATA_DE_REFERENCIA } from "./alerta";
+import meta from "./gerado/meta.json";
 import { trilhaCompletaPorSlug, trilhaEhPublicavel, trilhas } from "./trilha";
 import { CARIMBO_DA_DECISAO, LIMITES_DA_IA, TETO_DO_DTO, numerosDaModeracao } from "./moderacao";
 import type { NumerosDaModeracao } from "./moderacao";
@@ -420,6 +421,134 @@ export function catalogoParaArrastar(): CatalogoDeArrasto {
     regra: REGRA_DO_CATALOGO,
   };
   return catalogoMemo;
+}
+
+// ---------------------------------------------------------------------------
+// E3 — as arestas de sentido, que é onde o Editor AFIRMA
+// ---------------------------------------------------------------------------
+
+/**
+ * A FRONTEIRA, e ela é a razão de ser desta tela.
+ *
+ * Os outros níveis escrevem fato, decisão ou regra. O Editor escreve AFIRMAÇÃO — «o rap
+ * dialoga com o slam» não está em fonte nenhuma, e nenhuma fonte pode confirmá-la. É por
+ * isso que ela sai assinada, e é por isso que a linha existe: autorar uma ponte de sentido
+ * entre duas entidades é afirmação editorial, rotulada e defensável; autorar fato sobre
+ * pessoa real — elenco, data, presença — seria afirmação factual falsa, de outra ordem. A
+ * equipe recusou a segunda desde o plano 02-01 e manteve a primeira. Esta tela opera
+ * exatamente essa fronteira, e a imprime em vez de confiar que quem usa já sabe.
+ */
+export const FRONTEIRA_DA_AFIRMACAO =
+  "Autorar uma ponte de sentido entre duas entidades é afirmação editorial: ela é rotulada " +
+  "como autorada, sai assinada e pode ser defendida ou contestada por quem a lê. Autorar " +
+  "fato sobre pessoa real — quem atuou, quando, onde — seria outra coisa, e esta tela não " +
+  "faz isso: nenhuma relação daqui declara acontecimento, e as que declarariam não estão " +
+  "nesta lista.";
+
+/**
+ * O motivo obrigatório em TODAS, e por que o tipo base não basta.
+ *
+ * `tipos.ts` obriga `motivo` só em `semelhante_a` — porque ali são 47.259 arestas de
+ * máquina e a frase é o único jeito de o leitor saber por que aquilo apareceu. Nas quatro
+ * do Editor o tipo não obriga, e é justamente onde a obrigação importa mais: são as únicas
+ * arestas do grafo que uma pessoa afirmou. Esta sessão obriga em todas, e a regra mais dura
+ * é a que vale.
+ */
+export const REGRA_DO_MOTIVO_DA_PONTE =
+  "Toda ponte escrita aqui carrega motivo em português legível e assinatura, sem exceção. " +
+  "O tipo base obriga o motivo só em `semelhante_a`; esta tela obriga nas cinco, porque uma " +
+  "afirmação sem justificativa não é curadoria — é uma linha no banco que ninguém consegue " +
+  "contestar. O texto que o curador escreve aqui é o MESMO que aparece ao público no selo " +
+  "da ligação, como na trilha.";
+
+export interface RelacaoDeSentido {
+  relacao: Relacao;
+  rotulo: string;
+  /** O que a aresta AFIRMA, em português, para o curador escolher sabendo o que assina. */
+  afirma: string;
+  /** Quantas existem no acervo hoje. `0` é o número mais importante desta tela. */
+  instancias: number;
+}
+
+/**
+ * As cinco relações que o Editor autora, com a contagem MEDIDA de `meta.json`.
+ *
+ * Três delas — `influenciou`, `deriva_de` e `curou` — estão no vocabulário fechado, o motor
+ * de caminhada as percorre, e o acervo tem ZERO. Não é lacuna do protótipo: é a descrição
+ * exata do buraco que o nível 5 existe para fechar. O número vem da contagem e não da mão:
+ * uma relação que saia do zero muda a tela sem ninguém tocar em código, que é o ponto.
+ */
+const INSTANCIAS_POR_RELACAO = meta.porRelacao as Partial<Record<Relacao, number>>;
+
+export const RELACOES_DE_SENTIDO: readonly RelacaoDeSentido[] = [
+  {
+    relacao: "influenciou",
+    rotulo: "influenciou",
+    afirma: "o primeiro deixou marca no segundo — é afirmação de linhagem, não de contato",
+    instancias: INSTANCIAS_POR_RELACAO.influenciou ?? 0,
+  },
+  {
+    relacao: "dialoga_com",
+    rotulo: "dialoga com",
+    afirma: "os dois se respondem, sem que um venha do outro — é a ponte simétrica",
+    instancias: INSTANCIAS_POR_RELACAO.dialoga_com ?? 0,
+  },
+  {
+    relacao: "deriva_de",
+    rotulo: "deriva de",
+    afirma: "o primeiro nasce do segundo — é filiação declarada, mais forte que influência",
+    instancias: INSTANCIAS_POR_RELACAO.deriva_de ?? 0,
+  },
+  {
+    relacao: "curou",
+    rotulo: "curou",
+    afirma: "o primeiro assinou a seleção do segundo — é atribuição de curadoria",
+    instancias: INSTANCIAS_POR_RELACAO.curou ?? 0,
+  },
+  {
+    relacao: "semelhante_a",
+    rotulo: "semelhante a",
+    afirma:
+      "os dois se parecem, e aqui a semelhança é AFIRMADA por pessoa — as 47 mil do acervo " +
+      "são de máquina e nenhuma foi revisada",
+    instancias: INSTANCIAS_POR_RELACAO.semelhante_a ?? 0,
+  },
+];
+
+/** O peso da autoria no grafo, medido. É o denominador honesto da frase da tela. */
+export interface PesoDaAutoria {
+  arestasAutoradas: number;
+  arestasTotal: number;
+  nosAutorados: number;
+  nosTotal: number;
+}
+
+export const PESO_DA_AUTORIA: PesoDaAutoria = {
+  arestasAutoradas: meta.porProcedenciaDeAresta.autorado,
+  arestasTotal: meta.totais.arestas,
+  nosAutorados: meta.porProcedencia.autorado,
+  nosTotal: meta.totais.entidades,
+};
+
+/**
+ * Uma ponte autorada, pronta para a tela e para o registro.
+ *
+ * `motivo` é obrigatório no TIPO, e não só na validação: um campo opcional aqui deixaria o
+ * compilador aceitar a ponte sem justificativa, e a regra passaria a depender de quem
+ * escreve a próxima tela lembrar dela. `assinatura` e `carimbo` pelo mesmo motivo — uma
+ * afirmação sem autor não é contestável, e o que não é contestável não é curadoria.
+ */
+export interface ArestaAutorada {
+  deId: string;
+  deTitulo: string;
+  deClasse: ClasseEntidade;
+  paraId: string;
+  paraTitulo: string;
+  paraClasse: ClasseEntidade;
+  relacao: Relacao;
+  motivo: string;
+  assinatura: string;
+  carimbo: string;
 }
 
 // ---------------------------------------------------------------------------
