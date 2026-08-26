@@ -344,7 +344,7 @@ export function StudioOrgInstituicao({
           </div>
 
           {/* ------- Verificação e cobertura, à direita e coladas ------- */}
-          <aside className="web-colada studio-forma">
+          <aside className="org-colada studio-forma">
             <section className="studio-painel">
               <div className="studio-painel-cabeca">
                 <h2 className="studio-painel-nome">Verificação</h2>

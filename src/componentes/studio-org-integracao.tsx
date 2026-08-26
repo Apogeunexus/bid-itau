@@ -261,7 +261,7 @@ export function StudioOrgIntegracao({
           </div>
 
           {/* -------- O que ficou vazio, chave e histórico -------- */}
-          <aside className="web-colada studio-forma">
+          <aside className="org-colada studio-forma">
             <section className="studio-painel">
               <h2 className="studio-painel-nome">O que ficou vazio</h2>
               {vaziosPorCampo.length === 0 ? (

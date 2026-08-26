@@ -248,7 +248,7 @@ export function StudioOrgEquipe({
           </div>
 
           {/* -------- Alçadas, sucessão e histórico, à direita -------- */}
-          <aside className="web-colada studio-forma">
+          <aside className="org-colada studio-forma">
             {selecionado ? (
               <section className="studio-painel">
                 <div className="studio-painel-cabeca">

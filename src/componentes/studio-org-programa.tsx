@@ -300,7 +300,7 @@ export function StudioOrgPrograma({
           </div>
 
           {/* -------- Eventos reunidos, à direita -------- */}
-          <aside className="web-colada studio-forma">
+          <aside className="org-colada studio-forma">
             {atual === null ? (
               <section className="studio-painel">
                 <p className="studio-nota">

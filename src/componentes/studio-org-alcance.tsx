@@ -215,7 +215,7 @@ export function StudioOrgAlcance({
           </div>
 
           {/* -------- O que NÃO se conta, à direita e do mesmo tamanho -------- */}
-          <aside className="web-colada studio-forma">
+          <aside className="org-colada studio-forma">
             <section className="studio-painel">
               <div className="studio-painel-cabeca">
                 <h2 className="studio-painel-nome">O que este painel não exibe</h2>

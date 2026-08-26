@@ -299,3 +299,35 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+/* ---------------------------------------------------------------------------
+ * 7 · A coluna colada que CABE — o conserto de um defeito medido.
+ *
+ * O padrão desta sessão é «o que falta fica à direita, sempre visível», e
+ * `.web-colada` o entrega com `position: sticky`. Só que sticky sozinho promete
+ * o que não cumpre quando a coluna é mais alta que a janela: ela gruda no topo,
+ * o pé fica fora da tela e NUNCA rola para revelar o próprio fim. Medido a
+ * 1440×960: a coluna da tela de espaços tem 3.240 px e a de mídia 3.071 px —
+ * três vezes a janela. O painel «o que falta», que é o motivo do padrão existir,
+ * era o pedaço inalcançável.
+ *
+ * A saída é a que a casa já usa na coluna de facetas (`.web-coluna-fixa`):
+ * teto de altura mais rolagem por dentro. `overscroll-behavior: contain` para a
+ * rolagem da coluna não vazar para o documento quando ela chega ao fim, que é o
+ * mesmo cuidado da moldura de celular.
+ *
+ * Ela substitui `.web-colada` nas telas desta sessão — não a redefine, para não
+ * mudar o comportamento das telas de outras sessões que a usam.
+ * ------------------------------------------------------------------------- */
+
+.org-colada {
+  position: sticky;
+  top: var(--web-topo-colado, 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-height: calc(100vh - (2 * var(--web-topo-colado, 1rem)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 0.25rem;
+}

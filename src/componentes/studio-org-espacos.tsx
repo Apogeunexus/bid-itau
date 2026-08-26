@@ -248,7 +248,7 @@ export function StudioOrgEspacos({
         {/* ---------------------------------------------------------------
             Coluna da direita: a ficha e, sempre visível, o que falta.
             ------------------------------------------------------------ */}
-        <aside className="web-colada studio-forma">
+        <aside className="org-colada studio-forma">
           {!org.pronto ? (
             <section className="studio-painel">
               <p className="studio-nota">Lendo o cadastro guardado neste navegador…</p>
