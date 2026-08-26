@@ -1,12 +1,12 @@
 {
-  "varredura": "26/08, 02:55",
+  "varredura": "26/08, 02:59",
   "kpi": {
-    "concluidas": 49,
+    "concluidas": 50,
     "totalTarefas": 64,
     "ativas": 5,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 5,
+    "sujos": 6,
     "folgaS6": 7,
     "pedidos": 10
   },
@@ -171,7 +171,7 @@
       "pasta": "src/app/(bastidor)/moderacao",
       "sessaoNome": "bid-ita-68",
       "estado": "rodando",
-      "feitas": 8,
+      "feitas": 9,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -258,16 +258,16 @@
           "n": 9,
           "rot": "M4 similaridade",
           "inicio": 9,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "89957ce",
+          "nota": "**47.259 arestas, 71% do grafo, medido por caminho independente e batendo com a ontologia.** Governa a REGRA, não a aresta: 12 famílias por padrão de justificativa, com amostra e método declarados. O contador de **quantas seguem sem revisão fica no topo**, e a cauda (529 famílias, 28.352 arestas) entra nele em vez de sumir. Reprovar milhares de uma vez exige motivo. **63 verdes.** Surpreendeu: `replace(/\\D/g)` dentro de template literal colapsa a barra — **três vermelhos falsos**, e passava por acidente com números < 1.000. **Nove ocorrências corrigidas: todo número e data agora viajam como atributo.** E o gate da denúncia ganhou piso por fonte (achado da S1), provado com o atributo renomeado: ficou vermelho.",
+          "quando": "26.08 02:5x"
         },
         {
           "n": 10,
           "rot": "M7 duplicatas",
           "inicio": 10,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -826,6 +826,13 @@
       "rot": "M5 elenco · M6 reconciliação",
       "nota": "A barreira ética: a única tela em que a pessoa afetada não está na conversa. Vínculo sem verbete **não se confirma** — criaria a pessoa pela porta dos fundos —, com trava no botão e na função. Reconciliação **liga e nunca edita**, aviso permanente acima da decisão, candidatos por nome normalizado e **zero pontuação de similaridade**. **58 verdes.** Surpreendeu: a grafia variante casa sempre no dado encenado, então o caminho «nenhum destes» existe mas não é exercitado — declarado na tela.",
       "quando": "26.08 02:1x"
+    },
+    {
+      "sessao": "S3",
+      "n": 9,
+      "rot": "M4 similaridade",
+      "nota": "**47.259 arestas, 71% do grafo, medido por caminho independente e batendo com a ontologia.** Governa a REGRA, não a aresta: 12 famílias por padrão de justificativa, com amostra e método declarados. O contador de **quantas seguem sem revisão fica no topo**, e a cauda (529 famílias, 28.352 arestas) entra nele em vez de sumir. Reprovar milhares de uma vez exige motivo. **63 verdes.** Surpreendeu: `replace(/\\D/g)` dentro de template literal colapsa a barra — **três vermelhos falsos**, e passava por acidente com números < 1.000. **Nove ocorrências corrigidas: todo número e data agora viajam como atributo.** E o gate da denúncia ganhou piso por fonte (achado da S1), provado com o atributo renomeado: ficou vermelho.",
+      "quando": "26.08 02:5x"
     },
     {
       "sessao": "S2",
