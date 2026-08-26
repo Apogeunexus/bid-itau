@@ -36,17 +36,6 @@
  * A SUPERFÍCIE
  *
  * Tudo aqui vive dentro de `.studio`, que é o contêiner de página das telas de
- * bastidor da fase 4. Reuso por CLASSE, sem tocar `studio.css`.
- *
- * Nenhuma regra sob `[data-view="mobile"]`: o layout de `(bastidor)` já esconde o
- * conteúdo na visão app e monta o `<AvisoDesktop>`. Redação existe só na web, que
- * é a única exceção que D-05 autoriza.
- * ------------------------------------------------------------------------- */
-
-/* ---------------------------------------------------------------------------
- * A SUPERFÍCIE
- *
- * Tudo aqui vive dentro de `.studio`, que é o contêiner de página das telas de
  * bastidor da fase 4. Reuso por CLASSE, sem tocar `studio.css`: as três
  * superfícies de bastidor — Studio, Redação e Observatório — têm de parecer a
  * mesma família, e a folha da fase 4 tem gates herdados sobre ela.
@@ -57,17 +46,18 @@
  * ------------------------------------------------------------------------- */
 
 .redacao {
-  /* A fila é longa. A lista rola POR DENTRO para o painel do item escolhido
-   * continuar na primeira tela — sem isto a página inteira ganharia a altura de
-   * 60 linhas e o painel só apareceria depois de rolar, que é o gate verde sobre
-   * tela cortada que esta fase já pagou três vezes. */
+  /* A altura PADRÃO das listas da superfície, e cada tela a reaperta se precisar
+   * (o editor de trilha usa 46vh). A lista rola POR DENTRO para o painel ao lado
+   * continuar na primeira tela — sem isto a página inteira ganharia a altura da
+   * lista e o painel só apareceria depois de rolar, que é o gate verde sobre tela
+   * cortada que esta fase já pagou três vezes. */
   --web-altura-lista: 52vh;
 }
 
 /* Duas colunas com a LISTA à esquerda. `.web-duas-colunas` põe o lateral à
- * direita com 22rem, e 22rem não comporta uma ficha com tabela, cinco
- * componentes de score e quatro ações — o painel é o lado largo aqui. Por isso a
- * grade é própria: o vocabulário de `web.css` é reusado nas PEÇAS
+ * direita com 22rem, e 22rem não comporta o painel de trabalho desta superfície —
+ * a cadeia de passos, o campo de motivo de cada um e a publicabilidade. O painel
+ * é o lado largo aqui. Por isso a grade é própria: o vocabulário de `web.css` é reusado nas PEÇAS
  * (`.web-painel`, `.web-lista-densa`, `.web-linha`, `.web-alternador`), e só a
  * proporção das colunas é desta tela.
  *
@@ -94,7 +84,7 @@
 }
 
 /* ---------------------------------------------------------------------------
- * O ESCOPO DO CURADOR — D-84 / D-89
+ * AS PASTILHAS DO CABEÇALHO e os campos de texto do editor
  * ------------------------------------------------------------------------- */
 
 .redacao-escopos {
@@ -222,10 +212,10 @@
  * O EDITOR DE TRILHA — D-85 e D-86
  * ======================================================================== */
 
-/* O catálogo é a coluna estreita; os passos e a publicabilidade, a larga. Mesma
- * proporção da fila, e de propósito: as duas telas de Redação são a mesma
- * superfície com conteúdos diferentes, e trocar a proporção entre elas faria o
- * operador reaprender o layout a cada rota. */
+/* O catálogo é a coluna estreita; os passos e a publicabilidade, a larga. É a
+ * proporção que as telas de bastidor herdaram da fase 4 e que a Moderação também
+ * usa: trocá-la de rota em rota faria o operador reaprender o layout a cada tela,
+ * e as superfícies têm de parecer a mesma família. */
 .redacao-colunas-editor {
   --web-altura-lista: 46vh;
 }
