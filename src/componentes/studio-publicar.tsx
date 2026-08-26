@@ -1,19 +1,44 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { normalizar } from "@/dados/indice";
+import {
+  EXPLICACAO_DA_SITUACAO,
+  FRASE_DA_PROCEDENCIA,
+  PORTAS,
+  ROTULO_DA_SITUACAO,
+  chaveDoEvento,
+  scoreDoRascunho,
+} from "@/dados/tipos-acesso";
+import type { RascunhoDoProdutor } from "@/dados/tipos-acesso";
+import { useStudio } from "@/componentes/studio-estado";
+import type {
+  CatalogoDeIdentidade,
+  ImagemDoCatalogo,
+  TermoDoCatalogo,
+} from "@/dados/mock/seed";
 
 /**
- * studio-publicar.tsx — o formulário da tela 33 (Parte 6 do feedback): cadastro
- * de evento com validação ao vivo, score de qualidade e aviso de possível
- * duplicata ANTES de salvar.
+ * studio-publicar.tsx — P2 · identidade do evento (funcionalidades 153 e 165).
  *
- * SEM PERSISTÊNCIA, E DECLARADO: o protótipo é estático — «publicar» mostra o
- * registro que o Studio enviaria ao acervo, com a procedência que ele teria.
- * A checagem de duplicata roda sobre os títulos normalizados dos eventos REAIS
- * do grafo, que chegam por props do componente de servidor (DP-F) — a mesma
- * normalização do índice de busca, e o critério de identidade citado é o de
- * `duplicatas.ts`, não uma frase nova.
+ * A TELA QUE ESTABELECE A CHAVE, e por isso a primeira da jornada. `evento = título
+ * normalizado + agente realizador + obra`: as outras sete telas dependem desta ter rodado,
+ * porque temporada se ancora no evento e sessão se ancora na temporada. Um formulário que
+ * deixasse pular esta ordem gravaria registro sem chave, e a fila de duplicatas passaria a
+ * acusar o próprio Studio (`duplicatas.ts`).
+ *
+ * O QUE MUDOU DA VERSÃO ANTERIOR. Ela validava e não gravava — «publicar» mostrava o
+ * registro que seria enviado e declarava que nada tinha sido salvo. Agora escreve no
+ * `RascunhoDoProdutor`, que é o mesmo registro que as outras sete telas continuam e que
+ * sobrevive ao recarregamento. O aviso de duplicata contra os 300 eventos reais e a
+ * normalização vinda de `indice.ts` são os mesmos — foram estendidos, não reescritos.
+ *
+ * MÓDULO DE CLIENTE: `@/dados/mock/seed` entra **apenas por tipo**; os valores chegam por
+ * prop, do componente de servidor que os leu no build (DP-F). `tipos-acesso` entra por
+ * valor porque não importa dado nenhum — é a exceção declarada no contrato.
+ *
+ * D-67: esta superfície só existe na visão web. Na visão app o layout de bastidor mostra o
+ * aviso de superfície, e por isso não há aqui nenhuma divergência por `data-view`.
  */
 
 export interface EventoExistente {
@@ -22,261 +47,521 @@ export interface EventoExistente {
   normalizado: string;
 }
 
-interface Props {
-  eventos: EventoExistente[];
-  criterioDeIdentidade: string;
+export interface ComponenteDoCriterioDTO {
+  campo: string;
+  rotulo: string;
+  sustentado: boolean;
 }
 
-const DIMENSOES = [
-  "audiodescrição",
-  "Libras",
-  "legenda descritiva",
-  "closed caption",
-  "legenda aberta",
-  "tradução simultânea",
-  "estenotipia",
-  "legenda",
-] as const;
+interface Props {
+  catalogo: CatalogoDeIdentidade;
+  semente: RascunhoDoProdutor[];
+  criterioDeIdentidade: string;
+  /** Os três componentes como o acervo os sustenta HOJE — o ponto de partida da conversão. */
+  componentesNoAcervo: readonly ComponenteDoCriterioDTO[];
+  /** A frase que declara que o perfil do produtor é autorado, no padrão do operador. */
+  produtorEAutorado: string;
+  /** A frase que declara que a situação dos registros semeados é autorada. */
+  situacaoEAutorada: string;
+}
 
-/** Campos que contam no score, com o rótulo do que falta. */
-const CAMPOS_DO_SCORE: readonly { chave: string; rotulo: string; obrigatorio: boolean }[] = [
-  { chave: "titulo", rotulo: "título", obrigatorio: true },
-  { chave: "espaco", rotulo: "espaço", obrigatorio: false },
-  { chave: "inicio", rotulo: "data de início", obrigatorio: true },
-  { chave: "fim", rotulo: "data de fim", obrigatorio: false },
-  { chave: "descricao", rotulo: "descrição", obrigatorio: false },
-  { chave: "imagemAlt", rotulo: "descrição alternativa da imagem", obrigatorio: true },
-  { chave: "acessibilidade", rotulo: "ficha de acessibilidade", obrigatorio: false },
-];
+/** Quantos eventos do acervo o aviso de duplicata compara. Vem do dado, não digitado. */
+function comSeparador(n: number): string {
+  const s = String(Math.trunc(Math.abs(n)));
+  let saida = "";
+  for (let i = 0; i < s.length; i += 1) {
+    if (i > 0 && (s.length - i) % 3 === 0) saida += ".";
+    saida += s[i];
+  }
+  return (n < 0 ? "-" : "") + saida;
+}
 
-export function FormularioPublicar({ eventos, criterioDeIdentidade }: Props) {
-  const [titulo, setTitulo] = useState("");
-  const [espaco, setEspaco] = useState("");
-  const [inicio, setInicio] = useState("");
-  const [fim, setFim] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [imagemAlt, setImagemAlt] = useState("");
-  const [dimensoes, setDimensoes] = useState<string[]>([]);
-  const [publicado, setPublicado] = useState(false);
+export function FormularioPublicar({
+  catalogo,
+  semente,
+  criterioDeIdentidade,
+  componentesNoAcervo,
+  produtorEAutorado,
+  situacaoEAutorada,
+}: Props) {
+  const studio = useStudio(semente, {
+    dataDeReferencia: catalogo.dataDeReferencia,
+    autor: catalogo.produtor,
+    organizacao: catalogo.organizacao,
+  });
 
-  // Chaves de CÓDIGO (espelham CAMPOS_DO_SCORE), não texto de interface.
-  const valores: Record<string, boolean> = {
-    titulo: titulo.trim().length >= 3, // smaug-ignore ui-strings: chave de objeto, não string de UI
-    espaco: espaco.trim().length > 0,
-    inicio: /^\d{4}-\d{2}-\d{2}$/.test(inicio), // smaug-ignore ui-strings: chave de objeto, não string de UI
-    fim: fim === "" || (/^\d{4}-\d{2}-\d{2}$/.test(fim) && fim >= inicio),
-    descricao: descricao.trim().length >= 20,
-    imagemAlt: imagemAlt.trim().length >= 10,
-    acessibilidade: dimensoes.length > 0,
+  const { pronto, rascunhos, atual, editavelAgora } = studio;
+
+  // A duplicata ANTES de salvar: título normalizado contra os 300 eventos reais. A mesma
+  // `normalizar` do índice de busca — uma regra própria aqui faria o Studio gravar chave
+  // que a fila de duplicatas não reconhece.
+  const duplicatas = useMemo(() => {
+    const n = normalizar(atual?.titulo ?? "");
+    if (n.length < 4) return [];
+    return catalogo.eventos
+      .filter((e) => e.normalizado === n || e.normalizado.startsWith(n))
+      .slice(0, 3);
+  }, [atual?.titulo, catalogo.eventos]);
+
+  if (!pronto || atual === null) {
+    return (
+      <p className="studio-nota" data-carregando>
+        Lendo o que você já tinha escrito…
+      </p>
+    );
+  }
+
+  const { componentes } = chaveDoEvento(atual.titulo, atual.fonte, atual.obraTitulo);
+  const sustentados = componentes.filter((c) => c.sustentado).length;
+  const score = scoreDoRascunho(atual);
+  const temImagem = atual.imagem !== null;
+  const semCredito = temImagem && (atual.creditoImagem ?? "").trim() === "";
+
+  // As três validações que a funcionalidade 153 pede, TODAS antes de salvar e não depois.
+  const problemas: string[] = [];
+  if (atual.titulo.trim() === "") {
+    problemas.push("o título é o primeiro componente da chave — sem ele o registro não tem identidade");
+  } else if (atual.titulo.trim().length < 3) {
+    problemas.push("o título precisa de ao menos 3 caracteres para ser normalizado");
+  }
+  if (semCredito) {
+    problemas.push("a imagem está escolhida e o crédito não — imagem sem crédito não entra no acervo");
+  }
+  if (duplicatas.length > 0) {
+    problemas.push(
+      `a chave colide com ${duplicatas.length === 1 ? "1 evento existente" : `${duplicatas.length} eventos existentes`} — confira antes de seguir`,
+    );
+  }
+
+  const alternarTermo = (campo: "linguagens" | "temas", id: string) => {
+    const atualLista = atual[campo];
+    studio.alterar({
+      [campo]: atualLista.includes(id)
+        ? atualLista.filter((x) => x !== id)
+        : [...atualLista, id],
+    });
   };
 
-  const problemas: string[] = [];
-  if (titulo.trim() !== "" && !valores.titulo) problemas.push("o título precisa de ao menos 3 caracteres"); // smaug-ignore ui-strings: valores.titulo é acesso a chave de código
-  if (inicio !== "" && !valores.inicio) problemas.push("a data de início precisa ser uma data completa"); // smaug-ignore ui-strings: valores.inicio é acesso a chave de código
-  if (fim !== "" && !valores.fim) problemas.push("a data de fim precisa ser igual ou posterior ao início");
-  if (imagemAlt.trim() !== "" && !valores.imagemAlt)
-    problemas.push("a descrição alternativa precisa dizer o que há na imagem (10+ caracteres)");
+  const proporTermo = (texto: string) => {
+    const t = texto.trim();
+    if (t === "" || atual.termosPropostos.includes(t)) return;
+    studio.alterar({ termosPropostos: [...atual.termosPropostos, t] });
+  };
 
-  const obrigatoriosOk = CAMPOS_DO_SCORE.filter((c) => c.obrigatorio).every((c) => valores[c.chave]);
-  const preenchidos = CAMPOS_DO_SCORE.filter((c) => valores[c.chave]);
-  const score = Math.round((preenchidos.length / CAMPOS_DO_SCORE.length) * 100);
-  const faltando = CAMPOS_DO_SCORE.filter((c) => !valores[c.chave]).map((c) => c.rotulo);
-
-  // A duplicata, ANTES de salvar: título normalizado contra os eventos reais.
-  const duplicatas = useMemo(() => {
-    const n = normalizar(titulo);
-    if (n.length < 4) return [];
-    return eventos.filter((e) => e.normalizado === n || e.normalizado.startsWith(n)).slice(0, 3);
-  }, [titulo, eventos]);
-
-  const alternarDimensao = (d: string) =>
-    setDimensoes((atual) => (atual.includes(d) ? atual.filter((x) => x !== d) : [...atual, d]));
-
-  const campo =
-    "rounded-m border border-borda-forte bg-superficie px-3 py-2 text-sm focus:border-acao focus:outline-none"; // smaug-ignore ui-strings: «acao» é nome de classe CSS, não texto de interface
+  const escolherImagem = (img: ImagemDoCatalogo | null) => {
+    studio.alterar({
+      imagem: img?.caminho ?? null,
+      creditoImagem: img?.credito ?? null,
+    });
+  };
 
   return (
-    <form
-      className="flex max-w-2xl flex-col gap-4"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (obrigatoriosOk) setPublicado(true);
-      }}
-    >
-      {/* -------- score de qualidade, apontando o que falta -------- */}
-      <section
-        className="flex flex-col gap-1.5 rounded-g border border-borda bg-superficie-2 p-3"
-        data-score={score}
-      >
-        <div className="flex items-baseline gap-2">
-          <span className="tipo-detalhe font-bold">Qualidade do registro</span>
-          <span className="tipo-destaque font-bold text-acao-tinta">{score}%</span>
-        </div>
-        <div className="h-2 overflow-hidden rounded-pilula bg-borda" aria-hidden>
-          <div className="h-full rounded-pilula bg-acao transition-all" style={{ width: `${score}%` }} />
-        </div>
-        <p className="tipo-legenda text-tinta-2">
-          {faltando.length === 0
-            ? "Registro completo — os sete campos que o score mede estão preenchidos."
-            : `Falta: ${faltando.join(", ")}.`}
-        </p>
-      </section>
+    <div className="studio-jornada">
+      {/* ---- qual registro estou editando ---- */}
+      <SeletorDeRegistro
+        rascunhos={rascunhos}
+        atual={atual}
+        aoEscolher={studio.escolher}
+        aoCriar={() => studio.criar()}
+        aoReiniciar={studio.reiniciar}
+        situacaoEAutorada={situacaoEAutorada}
+      />
 
-      {/* -------- os campos -------- */}
-      <label className="flex flex-col gap-1">
-        <span className="tipo-detalhe font-bold">
-          Título do evento <span className="text-acao-tinta">*</span>
-        </span>
-        <input
-          type="text"
-          value={titulo}
-          onChange={(e) => {
-            setTitulo(e.target.value);
-            setPublicado(false);
-          }}
-          className={campo}
-          placeholder="Ocupação Fulana de Tal"
-        />
-      </label>
+      <div className="web-duas-colunas">
+        {/* =============== coluna da esquerda: o formulário =============== */}
+        <form className="studio-forma" onSubmit={(e) => e.preventDefault()}>
+          {!editavelAgora ? (
+            <p className="studio-travado" data-situacao={atual.situacao}>
+              <strong>{ROTULO_DA_SITUACAO[atual.situacao]}.</strong>{" "}
+              {EXPLICACAO_DA_SITUACAO[atual.situacao]}
+            </p>
+          ) : null}
 
-      {/* -------- aviso de duplicata ANTES de salvar -------- */}
-      {duplicatas.length > 0 ? (
-        <section
-          className="flex flex-col gap-1.5 rounded-m border-2 border-acao bg-superficie-2 p-3"
-          data-aviso-duplicata={duplicatas.length}
-        >
-          <p className="tipo-detalhe font-bold text-acao-tinta">
-            Possível duplicata — {duplicatas.length === 1 ? "1 evento existente casa" : `${duplicatas.length} eventos existentes casam`}{" "}
-            com este título:
-          </p>
-          <ul className="flex list-disc flex-col gap-0.5 pl-5">
-            {duplicatas.map((d) => (
-              <li key={d.slug} className="tipo-legenda">
-                <a href={`/evento/${d.slug}/`} target="_blank" rel="noreferrer" className="font-semibold text-acao-tinta">
-                  {d.titulo} ↗
-                </a>
+          <label className="studio-campo">
+            <span className="studio-campo-rotulo">
+              Título do evento <em className="studio-campo-exigido">obrigatório</em>
+            </span>
+            <input
+              type="text"
+              value={atual.titulo}
+              disabled={!editavelAgora}
+              onChange={(e) => studio.alterar({ titulo: e.target.value })}
+              className="studio-campo-entrada"
+              placeholder="Ocupação Fulana de Tal"
+            />
+            {/* A normalização VISÍVEL ao lado: é ela, e não o que se digita, que entra na
+                chave. Esconder a transformação faria a colisão parecer arbitrária. */}
+            <span className="studio-campo-nota">
+              normalizado:{" "}
+              <span className="studio-literal">{normalizar(atual.titulo) || "—"}</span>
+            </span>
+          </label>
+
+          <label className="studio-campo">
+            <span className="studio-campo-rotulo">Resumo</span>
+            <textarea
+              value={atual.resumo}
+              disabled={!editavelAgora}
+              rows={3}
+              onChange={(e) => studio.alterar({ resumo: e.target.value })}
+              className="studio-campo-entrada"
+              placeholder="O que acontece, para quem, por quê."
+            />
+            <span className="studio-campo-nota">
+              Texto puro. Nenhuma marcação atravessa a fronteira do gerador.
+            </span>
+          </label>
+
+          <EscolhaDeTermos
+            titulo="Linguagens"
+            termos={catalogo.linguagens}
+            escolhidos={atual.linguagens}
+            editavel={editavelAgora}
+            aoAlternar={(id) => alternarTermo("linguagens", id)}
+            aoPropor={proporTermo}
+          />
+
+          <EscolhaDeTermos
+            titulo="Temas"
+            termos={catalogo.temas}
+            escolhidos={atual.temas}
+            editavel={editavelAgora}
+            aoAlternar={(id) => alternarTermo("temas", id)}
+            aoPropor={proporTermo}
+          />
+
+          {atual.termosPropostos.length > 0 ? (
+            <p className="studio-porta" data-porta="editor">
+              <span className="studio-porta-estado">{PORTAS.editor.estado}</span>
+              <span>
+                {atual.termosPropostos.join(", ")} — vai para {PORTAS.editor.nivel}.{" "}
+                {PORTAS.editor.saida}.
+              </span>
+            </p>
+          ) : null}
+
+          <EscolhaDeImagem
+            imagens={catalogo.imagens}
+            escolhida={atual.imagem}
+            credito={atual.creditoImagem}
+            editavel={editavelAgora}
+            aoEscolher={escolherImagem}
+          />
+
+          {/* ---- o carimbo: exibido, nunca editável ---- */}
+          <section className="studio-carimbo" aria-label="Carimbo do sistema">
+            <h2 className="web-painel-titulo">Carimbo do sistema</h2>
+            <dl className="studio-carimbo-lista">
+              <dt>procedência</dt>
+              <dd className="studio-literal">{atual.procedencia}</dd>
+              <dt>agente realizador</dt>
+              <dd>{atual.fonte}</dd>
+              <dt>autor</dt>
+              <dd>{atual.autor}</dd>
+            </dl>
+            <p className="studio-campo-nota">{FRASE_DA_PROCEDENCIA}</p>
+            <p className="studio-campo-nota">{produtorEAutorado}</p>
+          </section>
+        </form>
+
+        {/* =============== coluna da direita: o que está vivo =============== */}
+        <aside className="web-colada studio-vivo">
+          {/* ---- a chave de identidade, ao vivo ---- */}
+          <section className="web-painel">
+            <h2 className="web-painel-titulo">Chave de identidade</h2>
+            <p className="studio-chave-conta">
+              <strong className="studio-chave-numero">{sustentados} de 3</strong> componentes
+              sustentados
+            </p>
+            <ul className="web-lista-densa">
+              {componentes.map((c) => {
+                const noAcervo = componentesNoAcervo.find((x) => x.campo === c.campo);
+                return (
+                  <li
+                    key={c.campo}
+                    className="studio-componente"
+                    data-sustentado={c.sustentado ? "sim" : "nao"}
+                  >
+                    <span className="studio-componente-marca" aria-hidden>
+                      {c.sustentado ? "•" : "○"}
+                    </span>
+                    <span className="studio-componente-corpo">
+                      <span className="studio-componente-rotulo">{c.rotulo}</span>
+                      <span className="studio-literal">{c.valor || "não preenchido"}</span>
+                      {noAcervo && !noAcervo.sustentado ? (
+                        <span className="studio-campo-nota">
+                          o acervo não sustenta este componente em nenhum dos 300 eventos
+                        </span>
+                      ) : null}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="studio-campo-nota">
+              chave: <span className="studio-literal">{atual.chaveIdentidade}</span>
+            </p>
+          </section>
+
+          {/* ---- o aviso de duplicata, ANTES de salvar ---- */}
+          {duplicatas.length > 0 ? (
+            <section className="web-painel studio-alerta" data-aviso-duplicata={duplicatas.length}>
+              <h2 className="web-painel-titulo">
+                Possível duplicata —{" "}
+                {duplicatas.length === 1 ? "1 evento casa" : `${duplicatas.length} eventos casam`}
+              </h2>
+              <ul className="web-lista-densa">
+                {duplicatas.map((d) => (
+                  <li key={d.slug}>
+                    <a
+                      href={`/evento/${d.slug}/`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="studio-vinculo"
+                    >
+                      {d.titulo} ↗
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p className="studio-campo-nota">{criterioDeIdentidade}</p>
+            </section>
+          ) : null}
+
+          {/* ---- score, com o que falta NOMEADO ---- */}
+          <section className="web-painel" data-score={score.score}>
+            <h2 className="web-painel-titulo">Qualidade do registro</h2>
+            <p className="studio-chave-conta">
+              <strong className="studio-chave-numero">{score.score}%</strong>
+            </p>
+            <div className="studio-barra" aria-hidden>
+              <div className="studio-barra-cheia" style={{ inlineSize: `${score.score}%` }} />
+            </div>
+            {score.faltando.length === 0 ? (
+              <p className="studio-campo-nota">
+                Os doze campos que o score mede estão preenchidos.
+              </p>
+            ) : (
+              <ul className="web-lista-densa">
+                {score.itens
+                  .filter((i) => !i.ok)
+                  .map((i) => (
+                    <li key={i.chave} className="studio-falta" data-obrigatorio={i.obrigatorio}>
+                      <span className="studio-falta-rotulo">{i.rotulo}</span>
+                      {i.obrigatorio ? (
+                        <span className="studio-falta-marca">impede o envio</span>
+                      ) : null}
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </section>
+
+          {/* ---- validação ao vivo ---- */}
+          {problemas.length > 0 ? (
+            <section className="studio-nao-sustenta" data-problemas={problemas.length}>
+              <span className="studio-nao-sustenta-rotulo">Antes de seguir</span>
+              <ul className="web-lista-densa">
+                {problemas.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          {/* ---- o denominador que explica por que esta tela existe ---- */}
+          <section className="studio-nao-sustenta">
+            <span className="studio-nao-sustenta-rotulo">O que o acervo mede hoje</span>
+            <ul className="web-denominadores">
+              <li className="web-denominador">
+                <span className="web-denominador-numero">1 de 3</span>
+                <span className="web-denominador-rotulo">componentes da chave</span>
               </li>
-            ))}
-          </ul>
-          <p className="tipo-legenda leading-snug text-tinta-2">{criterioDeIdentidade}</p>
-        </section>
-      ) : null}
-
-      <label className="flex flex-col gap-1">
-        <span className="tipo-detalhe font-bold">Espaço</span>
-        <input type="text" value={espaco} onChange={(e) => setEspaco(e.target.value)} className={campo} placeholder="Auditório Itaú Cultural" />
-      </label>
-
-      <div className="grid grid-cols-2 gap-3">
-        <label className="flex flex-col gap-1">
-          <span className="tipo-detalhe font-bold">
-            Início <span className="text-acao-tinta">*</span>
-          </span>
-          <input type="date" value={inicio} onChange={(e) => setInicio(e.target.value)} className={campo} />
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="tipo-detalhe font-bold">Fim</span>
-          <input type="date" value={fim} onChange={(e) => setFim(e.target.value)} className={campo} />
-        </label>
+              <li className="web-denominador">
+                <span className="web-denominador-numero">
+                  {comSeparador(catalogo.eventos.length)}
+                </span>
+                <span className="web-denominador-rotulo">eventos comparados ao vivo</span>
+              </li>
+            </ul>
+            <p>
+              Agente realizador e obra estão vazios em {comSeparador(catalogo.eventos.length)} de{" "}
+              {comSeparador(catalogo.eventos.length)} eventos. É o produtor quem preenche os
+              outros dois terços, e é isso que tira a deduplicação da parecença de texto.
+            </p>
+          </section>
+        </aside>
       </div>
+    </div>
+  );
+}
 
-      <label className="flex flex-col gap-1">
-        <span className="tipo-detalhe font-bold">Descrição</span>
-        <textarea value={descricao} onChange={(e) => setDescricao(e.target.value)} rows={3} className={campo} placeholder="O que acontece, para quem, por quê — 20 caracteres ou mais contam no score." />
+// ---------------------------------------------------------------------------
+// Peças
+// ---------------------------------------------------------------------------
+
+function SeletorDeRegistro({
+  rascunhos,
+  atual,
+  aoEscolher,
+  aoCriar,
+  aoReiniciar,
+  situacaoEAutorada,
+}: {
+  rascunhos: RascunhoDoProdutor[];
+  atual: RascunhoDoProdutor;
+  aoEscolher: (id: string) => void;
+  aoCriar: () => void;
+  aoReiniciar: () => void;
+  situacaoEAutorada: string;
+}) {
+  return (
+    <section className="studio-seletor">
+      <label className="studio-seletor-campo">
+        <span className="studio-rotulo">Registro em edição</span>
+        <select
+          value={atual.id}
+          onChange={(e) => aoEscolher(e.target.value)}
+          className="studio-campo-entrada"
+        >
+          {rascunhos.map((r) => (
+            <option key={r.id} value={r.id}>
+              {r.titulo.trim() === "" ? "(sem título)" : r.titulo} · {ROTULO_DA_SITUACAO[r.situacao]}
+            </option>
+          ))}
+        </select>
       </label>
+      <div className="studio-acoes">
+        <button type="button" className="studio-botao studio-botao-primario" onClick={aoCriar}>
+          Novo evento
+        </button>
+        <button type="button" className="studio-botao" onClick={aoReiniciar}>
+          Reiniciar demonstração
+        </button>
+      </div>
+      <p className="studio-campo-nota">{situacaoEAutorada}</p>
+    </section>
+  );
+}
 
-      <label className="flex flex-col gap-1">
-        <span className="tipo-detalhe font-bold">
-          Descrição alternativa da imagem <span className="text-acao-tinta">*</span>
-        </span>
+function EscolhaDeTermos({
+  titulo,
+  termos,
+  escolhidos,
+  editavel,
+  aoAlternar,
+  aoPropor,
+}: {
+  titulo: string;
+  termos: TermoDoCatalogo[];
+  escolhidos: string[];
+  editavel: boolean;
+  aoAlternar: (id: string) => void;
+  aoPropor: (texto: string) => void;
+}) {
+  // Os escolhidos primeiro, e o resto em ordem do vocabulário: com 94 temas, uma lista que
+  // não trouxesse o que já está marcado para cima faria o produtor perder a própria escolha.
+  const ordenados = useMemo(() => {
+    const marcados = termos.filter((t) => escolhidos.includes(t.id));
+    const resto = termos.filter((t) => !escolhidos.includes(t.id));
+    return [...marcados, ...resto];
+  }, [termos, escolhidos]);
+
+  return (
+    <fieldset className="studio-campo" disabled={!editavel}>
+      <legend className="studio-campo-rotulo">{titulo}</legend>
+      <div className="studio-pilulas">
+        {ordenados.slice(0, 24).map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            aria-pressed={escolhidos.includes(t.id)}
+            onClick={() => aoAlternar(t.id)}
+            className="studio-pilula"
+            /* A cor da linguagem vem DO DADO — `cor` guarda o nome do token, nunca o hex. */
+            style={t.cor ? ({ "--pilula-cor": `var(${t.cor})` } as React.CSSProperties) : undefined}
+          >
+            {t.rotulo}
+          </button>
+        ))}
+      </div>
+      <label className="studio-campo-nota">
+        Não está na lista?{" "}
         <input
           type="text"
-          value={imagemAlt}
-          onChange={(e) => setImagemAlt(e.target.value)}
-          className={campo}
-          placeholder="O que uma pessoa que não vê a imagem precisa saber dela"
-        />
-        <span className="tipo-legenda text-tinta-3">
-          Obrigatória: imagem sem descrição alternativa não entra no acervo.
-        </span>
+          className="studio-campo-entrada studio-campo-entrada-curta"
+          placeholder="propor termo"
+          onKeyDown={(e) => {
+            if (e.key !== "Enter") return;
+            e.preventDefault();
+            aoPropor(e.currentTarget.value);
+            e.currentTarget.value = "";
+          }}
+        />{" "}
+        Termo fora do vocabulário vira proposta ao Editor e não bloqueia nada.
       </label>
+    </fieldset>
+  );
+}
 
-      <fieldset className="flex flex-col gap-1.5">
-        <legend className="tipo-detalhe font-bold">Ficha de acessibilidade</legend>
-        <div className="flex flex-wrap gap-1.5">
-          {DIMENSOES.map((d) => (
-            <button
-              key={d}
-              type="button"
-              aria-pressed={dimensoes.includes(d)}
-              onClick={() => alternarDimensao(d)}
-              className={
-                dimensoes.includes(d)
-                  ? "rounded-pilula bg-tinta px-2.5 py-1 text-xs font-bold text-fundo"
-                  : "rounded-pilula border border-borda-forte px-2.5 py-1 text-xs font-semibold text-tinta-2"
-              }
-            >
-              {d}
-            </button>
-          ))}
-        </div>
-        <p className="tipo-legenda text-tinta-3">
-          O que não for marcado entra como «não declarado» — nunca como «não tem».
+function EscolhaDeImagem({
+  imagens,
+  escolhida,
+  credito,
+  editavel,
+  aoEscolher,
+}: {
+  imagens: ImagemDoCatalogo[];
+  escolhida: string | null;
+  credito: string | null;
+  editavel: boolean;
+  aoEscolher: (img: ImagemDoCatalogo | null) => void;
+}) {
+  const atual = imagens.find((i) => i.caminho === escolhida) ?? null;
+
+  return (
+    <fieldset className="studio-campo" disabled={!editavel}>
+      <legend className="studio-campo-rotulo">Imagem</legend>
+      {/* NÃO HÁ UPLOAD, e a tela diz isso em vez de simular um. As imagens vêm do acervo e
+          trazem o crédito que o acervo publica — é o que torna a obrigatoriedade do crédito
+          demonstrável sem inventar um autor. */}
+      <p className="studio-campo-nota">
+        Não há envio de arquivo nesta demonstração. As {imagens.length} imagens abaixo vêm do
+        acervo, cada uma com o crédito que o acervo publica.
+      </p>
+      <div className="studio-imagens">
+        <button
+          type="button"
+          aria-pressed={escolhida === null}
+          onClick={() => aoEscolher(null)}
+          className="studio-imagem studio-imagem-vazia"
+        >
+          sem imagem
+        </button>
+        {imagens.map((img) => (
+          <button
+            key={img.caminho}
+            type="button"
+            aria-pressed={escolhida === img.caminho}
+            onClick={() => aoEscolher(img)}
+            className="studio-imagem"
+            title={img.de}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={img.caminho} alt="" className="studio-imagem-figura" />
+          </button>
+        ))}
+      </div>
+      {atual !== null ? (
+        <p className="studio-campo-nota">
+          <strong>crédito:</strong> {credito ?? "—"} · <strong>de:</strong> {atual.de}
         </p>
-      </fieldset>
-
-      {problemas.length > 0 ? (
-        <ul className="flex list-disc flex-col gap-0.5 pl-5" data-problemas={problemas.length}>
-          {problemas.map((p) => (
-            <li key={p} className="tipo-legenda text-acao-tinta">
-              {p}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-
-      <button
-        type="submit"
-        disabled={!obrigatoriosOk}
-        className="w-fit rounded-pilula bg-acao px-5 py-2.5 text-sm font-bold text-sobre-acao transition-opacity disabled:opacity-40"
-      >
-        Publicar no acervo
-      </button>
-      {!obrigatoriosOk ? (
-        <p className="tipo-legenda text-tinta-3">
-          O botão libera com título, data de início e descrição alternativa da imagem
-          válidos.
+      ) : (
+        <p className="studio-campo-nota">
+          Nenhuma imagem escolhida. Imagem sem crédito não entra no acervo, então o crédito
+          vem junto com a escolha.
         </p>
-      ) : null}
-
-      {/* -------- o registro que SERIA publicado, declarado -------- */}
-      {publicado ? (
-        <section className="flex flex-col gap-1.5 rounded-g border border-borda bg-superficie-2 p-4" data-registro-simulado>
-          {/* O AVISO FICA — quem apertou «publicar» precisa saber que nada foi
-              gravado, senão o botão mente. O que mudou é de onde ele fala: antes
-              era «este protótipo é estático e não persiste nada», que explica o
-              MECANISMO; agora diz a consequência, que é o que muda a decisão de
-              quem está na tela. */}
-          <p className="tipo-detalhe font-bold">✓ Registro pronto — mas nada foi gravado</p>
-          <p className="tipo-legenda leading-snug text-tinta-2">
-            Nesta demonstração o envio não é salvo. Abaixo está exatamente o que iria para o
-            acervo, com procedência «produtor» e score {score}%.
-          </p>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 tipo-legenda">
-            <dt className="font-bold">título</dt>
-            <dd>{titulo}</dd>
-            <dt className="font-bold">espaço</dt>
-            <dd>{espaco || "— não informado"}</dd>
-            <dt className="font-bold">período</dt>
-            <dd>
-              {inicio}
-              {fim ? ` → ${fim}` : ""}
-            </dd>
-            <dt className="font-bold">acessibilidade</dt>
-            <dd>{dimensoes.length ? dimensoes.join(", ") : "nenhuma dimensão declarada"}</dd>
-          </dl>
-        </section>
-      ) : null}
-    </form>
+      )}
+    </fieldset>
   );
 }

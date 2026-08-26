@@ -417,3 +417,43 @@ function obraDoIndice(i: number): Entidade | null {
 export function idExiste(id: string): boolean {
   return porId(id) !== undefined;
 }
+
+// ---------------------------------------------------------------------------
+// Catálogos estreitos — um por tela, e não o inteiro em todas
+// ---------------------------------------------------------------------------
+
+/**
+ * O que a P2 (identidade) precisa, e nada além.
+ *
+ * `catalogoDoStudio()` inteiro tem 200 KB porque carrega 792 agentes e 239 obras para a
+ * busca de elenco. Mandar isso para a tela de identidade seria pagar cinco vezes o peso
+ * por dado que ela não lê — e o peso do DTO é o custo real de DP-F, não uma métrica de
+ * vaidade. Cada tela leva o seu recorte.
+ */
+export interface CatalogoDeIdentidade {
+  linguagens: TermoDoCatalogo[];
+  temas: TermoDoCatalogo[];
+  /** Os 300 eventos reais, contra os quais o aviso de duplicata dispara antes de salvar. */
+  eventos: EventoDoAcervo[];
+  imagens: ImagemDoCatalogo[];
+  organizacao: string;
+  produtor: string;
+  dataDeReferencia: string;
+}
+
+export function catalogoDeIdentidade(): CatalogoDeIdentidade {
+  const eventos = entidadesDe("evento");
+  return {
+    linguagens: vocabulario.linguagens.map((l) => ({ id: l.id, rotulo: l.rotulo, cor: l.cor })),
+    temas: vocabulario.temas.map((t) => ({ id: t.id, rotulo: t.rotulo, cor: null })),
+    eventos: eventos.map((e) => ({
+      slug: e.slug,
+      titulo: e.titulo,
+      normalizado: normalizar(e.titulo),
+    })),
+    imagens: imagensDoCatalogo(eventos),
+    organizacao: ORGANIZACAO_DO_PRODUTOR,
+    produtor: PRODUTOR_DA_DEMONSTRACAO,
+    dataDeReferencia: DATA_DE_REFERENCIA,
+  };
+}

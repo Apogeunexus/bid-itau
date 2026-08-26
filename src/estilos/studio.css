@@ -302,3 +302,429 @@
   text-transform: uppercase;
   color: var(--cor-acao-tinta);
 }
+
+/* ===========================================================================
+ * P2 · IDENTIDADE DO EVENTO — e o vocabulário de formulário da jornada.
+ *
+ * Escrito pela S7 na onda 1. As classes abaixo servem as dez telas do produtor,
+ * não só a P2: campo, pílula de vocabulário, carimbo, porta, componente da chave
+ * e barra de score reaparecem da P3 à P8. Regra que só serve a UMA tela mora
+ * junto do bloco daquela tela, marcado no comentário.
+ *
+ * A S6 · Organização reusa `studio-painel`, `studio-tabela`, `studio-lados`,
+ * `studio-nao-sustenta`, `studio-botao` e `studio-pastilha`. Essas seis são
+ * INTERFACE PÚBLICA a partir de agora: só se acrescenta, nunca se renomeia sem
+ * avisar a sessão de controle — renomear quebraria a tela dela sem erro de
+ * compilação, que é o pior tipo de quebra.
+ *
+ * Nada aqui usa `fixed` nem media query: D-67 mantém o Studio só na visão web,
+ * e o layout de bastidor já esconde o conteúdo na visão app.
+ * ======================================================================== */
+
+.studio-jornada {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.studio-cabecalho-titulo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.studio-cabecalho-marca {
+  flex-shrink: 0;
+  height: 1.25rem;
+  width: auto;
+  color: var(--cor-acao-tinta);
+}
+
+/* ---------------------------------------------------------------------------
+ * O seletor de registro — qual dos cinco a jornada está editando.
+ *
+ * Ele fica no topo, acima das duas colunas, porque troca o assunto da tela
+ * inteira. Enterrá-lo numa das colunas faria parecer um filtro daquela coluna.
+ * ------------------------------------------------------------------------- */
+
+.studio-seletor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie-2);
+}
+
+.studio-seletor-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1 1 20rem;
+}
+
+/* A barra de ações do seletor não herda a borda superior de `.studio-acoes`:
+ * ali ela separa ação de conteúdo; aqui as ações são pares do próprio seletor. */
+.studio-seletor .studio-acoes {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.studio-seletor .studio-campo-nota {
+  flex: 1 1 100%;
+}
+
+/* ---------------------------------------------------------------------------
+ * Campo de formulário — o átomo das oito telas de escrita.
+ * ------------------------------------------------------------------------- */
+
+.studio-forma {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.studio-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.studio-campo-rotulo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+/* «obrigatório» por extenso, e não um asterisco. O asterisco exige uma legenda
+ * em outro lugar da tela para ser decifrado, e quem preenche formulário longo
+ * não volta para procurá-la. */
+.studio-campo-exigido {
+  font-size: var(--tipo-micro);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-acao-tinta);
+}
+
+.studio-campo-entrada {
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+}
+
+.studio-campo-entrada:focus {
+  border-color: var(--cor-acao);
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 1px;
+}
+
+.studio-campo-entrada:disabled {
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta-3);
+  cursor: not-allowed;
+}
+
+.studio-campo-entrada-curta {
+  display: inline-block;
+  width: 12rem;
+}
+
+.studio-campo-nota {
+  max-width: 68ch;
+  font-size: var(--tipo-legenda);
+  line-height: 1.5;
+  color: var(--cor-tinta-2);
+}
+
+/* O aviso de que o registro saiu das mãos do produtor. Ele explica QUEM decide
+ * agora — um campo desabilitado sem essa frase parece defeito, não estado. */
+.studio-travado {
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0 var(--raio-p) var(--raio-p) 0;
+  background: var(--cor-acao-lavada);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
+ * Pílulas de vocabulário — linguagem e tema.
+ *
+ * `--pilula-cor` chega por atributo `style` a partir do NOME DO TOKEN guardado no
+ * dado (`"--ic-lilas"`), nunca de um hex: a cor da linguagem é dado, não estilo
+ * (D-08). Quem não tem cor cai no contorno neutro, e é o caso dos 94 temas.
+ * ------------------------------------------------------------------------- */
+
+.studio-pilulas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.studio-pilula {
+  cursor: pointer;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  font-size: var(--tipo-legenda);
+  font-weight: 600;
+  color: var(--cor-tinta-2);
+  transition:
+    background-color var(--dur-1) var(--ease-padrao),
+    border-color var(--dur-1) var(--ease-padrao),
+    color var(--dur-1) var(--ease-padrao);
+}
+
+.studio-pilula[style*="--pilula-cor"] {
+  border-color: color-mix(in srgb, var(--pilula-cor) 45%, transparent);
+}
+
+.studio-pilula[aria-pressed="true"] {
+  border-color: var(--cor-tinta);
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
+}
+
+.studio-pilula[aria-pressed="true"][style*="--pilula-cor"] {
+  border-color: var(--pilula-cor);
+  background: color-mix(in srgb, var(--pilula-cor) 22%, transparent);
+  color: var(--cor-tinta);
+}
+
+.studio-pilula:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ---------------------------------------------------------------------------
+ * Escolha de imagem — do acervo, com crédito. Não há envio de arquivo.
+ * ------------------------------------------------------------------------- */
+
+.studio-imagens {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  gap: 0.5rem;
+}
+
+.studio-imagem {
+  cursor: pointer;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  padding: 0;
+  border: 2px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+  transition: border-color var(--dur-1) var(--ease-padrao);
+}
+
+.studio-imagem[aria-pressed="true"] {
+  border-color: var(--cor-acao);
+}
+
+.studio-imagem-figura {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.studio-imagem-vazia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  font-size: var(--tipo-legenda);
+  font-weight: 600;
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * O carimbo do sistema — exibido, nunca digitável.
+ *
+ * Ele é uma LISTA DE DEFINIÇÃO e não campos desabilitados, e a diferença é de
+ * significado: campo desabilitado promete que algum dia se habilita. Procedência
+ * nunca se habilita — ela registra quem escreveu, e um valor escolhível deixaria
+ * de registrar isso.
+ * ------------------------------------------------------------------------- */
+
+.studio-carimbo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie-2);
+}
+
+.studio-carimbo-lista {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  font-size: var(--tipo-detalhe);
+}
+
+.studio-carimbo-lista dt {
+  font-weight: 700;
+  color: var(--cor-tinta-2);
+}
+
+.studio-carimbo-lista dd {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * A coluna viva — chave, duplicata, score e validação, sempre à vista.
+ * ------------------------------------------------------------------------- */
+
+.studio-vivo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.studio-chave-conta {
+  font-size: var(--tipo-detalhe);
+  color: var(--cor-tinta-2);
+}
+
+.studio-chave-numero {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
+  font-weight: 700;
+  color: var(--cor-acao-tinta);
+}
+
+/* Um componente da chave. O ponto cheio/vazio carrega a informação junto com o
+ * contraste do texto: cor sozinha não distingue sustentado de não sustentado
+ * para quem não a enxerga. */
+.studio-componente {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.studio-componente-marca {
+  flex-shrink: 0;
+  font-size: var(--tipo-corpo);
+  line-height: 1.3;
+  color: var(--cor-tinta-3);
+}
+
+.studio-componente[data-sustentado="sim"] .studio-componente-marca {
+  color: var(--cor-acao);
+}
+
+.studio-componente-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.studio-componente-rotulo {
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+}
+
+.studio-componente[data-sustentado="nao"] .studio-literal {
+  color: var(--cor-tinta-3);
+}
+
+.studio-alerta {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+.studio-vinculo {
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  color: var(--cor-acao-tinta);
+}
+
+.studio-barra {
+  overflow: hidden;
+  height: 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-borda);
+}
+
+.studio-barra-cheia {
+  height: 100%;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  transition: inline-size var(--dur-2) var(--ease-padrao);
+}
+
+/* O que falta, nomeado. O que IMPEDE o envio ganha selo próprio: um score que
+ * mistura «falta a faixa etária» com «falta o título» não diz o que fazer. */
+.studio-falta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: var(--tipo-detalhe);
+}
+
+.studio-falta-rotulo {
+  color: var(--cor-tinta-2);
+}
+
+.studio-falta-marca {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao-lavada);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-acao-tinta);
+}
+
+/* ---------------------------------------------------------------------------
+ * As três portas para fora do Studio.
+ *
+ * Nenhuma bloqueia o envio, e por isso nenhuma é vermelha de erro: elas são
+ * ESTADO, com o nível responsável nomeado e o caminho de volta escrito. Uma
+ * porta pintada de erro faria o produtor parar para resolver o que não é dele.
+ * ------------------------------------------------------------------------- */
+
+.studio-porta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+}
+
+.studio-porta-estado {
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
