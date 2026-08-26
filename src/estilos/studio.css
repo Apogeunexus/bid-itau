@@ -1143,3 +1143,24 @@
   overscroll-behavior: contain;
   padding-right: 0.25rem;
 }
+
+/* Temporada de longa duração: contorno próprio, porque ela não tem grade de
+ * sessões e a leitura da linha muda por causa disso. O selo escrito carrega o
+ * significado — o traço só o reforça, como no vínculo proposto. */
+.studio-sessao[data-longa="sim"] {
+  border-left: 3px solid var(--cor-acao);
+}
+
+/* O GATILHO DA CONFIRMAÇÃO NÃO É O BOTÃO QUE EXECUTA, e a distinção não é
+ * cosmética: os dois tinham as mesmas classes, e qualquer coisa que procure «o
+ * botão de perigo» — sonda de verificação, leitor de tela, quem revisa o DOM —
+ * achava o `<summary>` e concluía que a ação tinha rodado quando ela só tinha
+ * aberto a gaveta. Aconteceu comigo numa verificação desta sessão.
+ *
+ * A classe própria não muda o desenho: ela dá nome ao papel. Quem executa é o
+ * `<button>` dentro de `.studio-confirma-corpo`. */
+.studio-confirma-gatilho {
+  /* Nenhuma propriedade nova: o desenho vem de `.studio-botao-perigo`. Este
+   * bloco existe para o seletor existir, e o comentário é o conteúdo dele. */
+  cursor: pointer;
+}

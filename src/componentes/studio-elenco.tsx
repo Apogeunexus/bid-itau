@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useStudio } from "@/componentes/studio-estado";
 import { Literal } from "@/componentes/studio-literal";
 import { SeletorDeRegistro } from "@/componentes/studio-seletor";
-import { comSeparador } from "@/componentes/studio-datas";
+import { comSeparador, simplificar } from "@/componentes/studio-datas";
 import {
   EXPLICACAO_DA_SITUACAO,
   PORTAS,
@@ -50,27 +50,6 @@ interface Props {
 
 /** Quantos resultados a busca mostra por vez. Declarado na tela, nunca em silêncio. */
 const RESULTADOS_POR_BUSCA = 8;
-
-/**
- * Tira acento e caixa, para a busca casar «Jose» com «José».
- *
- * A CLASSE DE COMBINAÇÃO VAI EM ESCAPE (`\u0300-\u036f`) e não como caractere literal: o
- * literal é invisível no código, e qualquer ferramenta que normalize o arquivo em NFC o
- * apagaria sem deixar rastro — a busca passaria a não achar nome nenhum com acento, e o
- * `tsc` continuaria verde. É a mesma escrita de `indice.ts`.
- *
- * Ela não reusa `normalizar` de `indice.ts` por escolha de fronteira: aquele módulo é de
- * dado, e importá-lo por valor num componente de cliente é a porta por onde o grafo começa
- * a atravessar. A P2 o importa porque precisa da MESMA normalização da chave; aqui a busca
- * é só conveniência de digitação, e não tem de coincidir com nada.
- */
-function simplificar(t: string): string {
-  return t
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim();
-}
 
 export function StudioElenco({
   catalogo,

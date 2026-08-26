@@ -678,7 +678,7 @@ function EdicaoDaSessao({
         {/* Remover uma sessão é destrutivo e não tem desfazer: a confirmação é da tela, e
             não `window.confirm`, para ser a mesma em todo o Studio. */}
         <details className="studio-confirma">
-          <summary className="studio-botao studio-botao-perigo">Remover sessão</summary>
+          <summary className="studio-botao studio-botao-perigo studio-confirma-gatilho">Remover sessão</summary>
           <div className="studio-confirma-corpo">
             <p className="studio-campo-nota">
               A sessão de {quandoPorExtenso(sessao.inicio)} some da grade. Para cancelar uma

@@ -78,7 +78,7 @@ export function SeletorDeRegistro({
 function BotaoDeReinicio({ aoReiniciar }: { aoReiniciar: () => void }) {
   return (
     <details className="studio-confirma">
-      <summary className="studio-botao studio-botao-perigo">Reiniciar demonstração</summary>
+      <summary className="studio-botao studio-botao-perigo studio-confirma-gatilho">Reiniciar demonstração</summary>
       <div className="studio-confirma-corpo">
         <p className="studio-campo-nota">
           Isto apaga tudo o que foi escrito nesta sessão e devolve os cinco registros

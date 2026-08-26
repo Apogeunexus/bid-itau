@@ -1,5 +1,10 @@
 /**
- * studio-datas.ts — a aritmética de datas da jornada do produtor.
+ * studio-datas.ts — os ajudantes puros da jornada do produtor.
+ *
+ * Nasceu só com a aritmética de datas e cresceu para o que ela puxou junto: a contagem com
+ * separador e a simplificação de texto da busca. O que reúne os três não é o assunto, é a
+ * FRONTEIRA — são as funções que o cliente pode importar por valor sem arrastar dado, e é
+ * por elas morarem aqui que as telas da jornada param de reescrevê-las uma a uma.
  *
  * NENHUM `new Date(string)` AQUI, E É O PONTO DO ARQUIVO. `new Date("2026-08-22")` é lido
  * como meia-noite UTC; qualquer leitor local (`getDate`, `getDay`) devolve, em fuso
@@ -187,4 +192,21 @@ export function comSeparador(n: number): string {
     saida += s[i];
   }
   return (n < 0 ? "-" : "") + saida;
+}
+
+/**
+ * Tira acento e caixa, para a busca casar «Jose» com «José» e «Sao» com «São».
+ *
+ * A CLASSE DE COMBINAÇÃO VAI EM ESCAPE (`\u0300-\u036f`) e nunca como caractere literal. O
+ * literal é invisível no código, e qualquer ferramenta que normalize o arquivo em NFC o
+ * apagaria sem deixar rastro: a busca passaria a não achar nome nenhum com acento e o `tsc`
+ * continuaria verde. Escrevi o literal duas vezes nesta sessão antes de a regra pegar — é a
+ * razão de a função morar num lugar só.
+ */
+export function simplificar(t: string): string {
+  return t
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
 }

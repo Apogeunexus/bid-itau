@@ -300,28 +300,44 @@ function elencoDaSemente(indice: number, quantos: number): VinculoDeElenco[] {
   return saida;
 }
 
+/**
+ * As temporadas do evento, TODAS elas — e não a primeira.
+ *
+ * Medido em 26.08: **0 de 300 eventos do acervo têm mais de uma temporada**, e o máximo é
+ * 1. Ler `temporadasDe(...)[0]` daria o mesmo resultado hoje — e estaria certo por acidente
+ * do dado, não por decisão. No dia em que o acervo trouxer um evento com duas, o `[0]`
+ * descartaria a segunda em silêncio, sem sintoma nenhum antes: nem `tsc`, nem
+ * `verificar-ds`, nem sonda de comportamento veriam.
+ *
+ * É a mesma classe do `find()` sobre adjacência que custou à S6 um painel mostrando zero
+ * para a organização protagonista. Aqui o mapa é sobre a lista inteira, e o `?? [uma]` só
+ * cobre o evento que o grafo não datou.
+ */
 function temporadasDaSemente(evento: Entidade, indice: number): TemporadaDoRascunho[] {
   const espaco = espacoDoIndice(indice);
-  const doGrafo = temporadasDe(evento.id);
-  const primeira = doGrafo[0];
-  const inicio = (primeira?.extra?.inicio as string | undefined) ?? DATA_DE_REFERENCIA;
-  const fim = (primeira?.extra?.fim as string | undefined) ?? inicio;
 
   // O terceiro registro (o devolvido) fica SEM espaço de propósito: é a pendência de
   // porta 2 que o motivo da devolução cita, e sem ela a devolução seria uma frase solta.
   const semEspaco = indice === 2;
 
-  return [
-    {
-      id: `temporada:produtor:${indice}-1`,
-      espacoId: semEspaco ? null : (espaco?.id ?? null),
-      espacoTitulo: semEspaco ? null : (espaco?.titulo ?? null),
-      inicio,
-      fim,
-      longaDuracao: false,
-      espacoPedido: semEspaco,
-    },
-  ];
+  const doGrafo = temporadasDe(evento.id);
+  const intervalos =
+    doGrafo.length > 0
+      ? doGrafo.map((t) => ({
+          inicio: (t.extra?.inicio as string | undefined) ?? DATA_DE_REFERENCIA,
+          fim: (t.extra?.fim as string | undefined) ?? DATA_DE_REFERENCIA,
+        }))
+      : [{ inicio: DATA_DE_REFERENCIA, fim: DATA_DE_REFERENCIA }];
+
+  return intervalos.map((intervalo, k) => ({
+    id: `temporada:produtor:${indice}-${k + 1}`,
+    espacoId: semEspaco ? null : (espaco?.id ?? null),
+    espacoTitulo: semEspaco ? null : (espaco?.titulo ?? null),
+    inicio: intervalo.inicio,
+    fim: intervalo.fim < intervalo.inicio ? intervalo.inicio : intervalo.fim,
+    longaDuracao: false,
+    espacoPedido: semEspaco,
+  }));
 }
 
 function ocorrenciasDaSemente(
@@ -459,19 +475,20 @@ export function catalogoDeIdentidade(): CatalogoDeIdentidade {
 }
 
 /**
- * O que a P5 (grade de ocorrências) precisa: os 113 espaços, e nada de vocabulário.
+ * O que a P4 (espaço e temporada) e a P5 (grade) precisam: os 113 espaços, e nada mais.
  *
- * A grade escolhe espaço por sessão e não toca em linguagem, tema nem imagem. 113 registros
- * de cinco campos são 12 KB — contra os 65 KB da identidade e os 200 KB do catálogo inteiro.
+ * As duas escolhem espaço e não tocam em linguagem, tema nem imagem. 113 registros de cinco
+ * campos são 12 KB — contra os 65 KB da identidade e os 200 KB do catálogo inteiro. Um
+ * catálogo por tela quando a necessidade é a mesma seria duplicação com nome de recorte.
  */
-export interface CatalogoDaGrade {
+export interface CatalogoDeEspacos {
   espacos: EspacoDoCatalogo[];
   organizacao: string;
   produtor: string;
   dataDeReferencia: string;
 }
 
-export function catalogoDaGrade(): CatalogoDaGrade {
+export function catalogoDeEspacos(): CatalogoDeEspacos {
   return {
     espacos: entidadesDe("espaco").map((e) => ({
       id: e.id,
@@ -613,3 +630,7 @@ export function numerosDoElenco(): NumerosDoElenco {
     obras: entidadesDe("obra").length,
   };
 }
+
+/** Nome antigo, mantido enquanto a P5 não é reescrita. Mesma função, sem cópia. */
+export const catalogoDaGrade = catalogoDeEspacos;
+export type CatalogoDaGrade = CatalogoDeEspacos;
