@@ -1,12 +1,12 @@
 {
-  "varredura": "25/08, 23:23",
+  "varredura": "25/08, 23:27",
   "kpi": {
-    "concluidas": 11,
+    "concluidas": 13,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 16,
+    "sujos": 20,
     "folgaS6": 9,
     "pedidos": 10
   },
@@ -290,7 +290,7 @@
       "pasta": "src/app/(bastidor)/observatorio",
       "sessaoNome": "bid-ita-53 [7ad229]",
       "estado": "rodando",
-      "feitas": 2,
+      "feitas": 3,
       "total": 10,
       "commit": null,
       "frescor": null,
@@ -325,16 +325,16 @@
           "n": 3,
           "rot": "G3 impacto cultural",
           "inicio": 2,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "02d306f",
+          "nota": "o par de D-90 lado a lado: Joana **0 de 68** adjacentes reais (`sustentado: true`) contra gratuidade **null** (0 de 300 eventos declaram preço). Par escolhido por REGRA — a persona que deu zero —, `null` quando nenhuma der. Cartão de indicador extraído para arquivo próprio: 7 telas exibem indicador, e cartão copiado seriam 7 lugares para achatar D-90. DTO da tela: 7.144 de 61.440 bytes",
+          "quando": "25.08 23:35"
         },
         {
           "n": 4,
           "rot": "G5 procedência",
           "inicio": 3,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -402,7 +402,7 @@
       "pasta": "src/app/(bastidor)/admin",
       "sessaoNome": "bid-ita-d4",
       "estado": "rodando",
-      "feitas": 1,
+      "feitas": 2,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -423,16 +423,16 @@
           "n": 2,
           "rot": "dados admin.ts",
           "inicio": 2,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "1bf249a",
+          "nota": "`CustoDoParametro` é união discriminada: não existe parâmetro sem custo medido **ou** declaração de que não foi. Três dos quatro declaram não-medido. DTO de 6.554 bytes, conferência de três pontas fechando com zero divergências. Achado: a concentração é 59,2% de 773 **registros**, com 718 entidades distintas por trás — o PRD funde os dois",
+          "quando": "25.08 23:48"
         },
         {
           "n": 3,
           "rot": "A2 motor",
           "inicio": 3,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -786,11 +786,25 @@
       "quando": "25.08 23:05"
     },
     {
+      "sessao": "S2",
+      "n": 3,
+      "rot": "G3 impacto cultural",
+      "nota": "o par de D-90 lado a lado: Joana **0 de 68** adjacentes reais (`sustentado: true`) contra gratuidade **null** (0 de 300 eventos declaram preço). Par escolhido por REGRA — a persona que deu zero —, `null` quando nenhuma der. Cartão de indicador extraído para arquivo próprio: 7 telas exibem indicador, e cartão copiado seriam 7 lugares para achatar D-90. DTO da tela: 7.144 de 61.440 bytes",
+      "quando": "25.08 23:35"
+    },
+    {
       "sessao": "S1",
       "n": 1,
       "rot": "folha admin.css",
       "nota": "125 linhas, não 400: superfície, painel, tabela, pastilha e a caixa de declaração honesta vêm de `studio.css`; a folha traz só o bloco de parâmetro. **O hash não é meu** — a S6 varreu `admin.css` para o commit dela; ver Divergências",
       "quando": "25.08 23:00"
+    },
+    {
+      "sessao": "S1",
+      "n": 2,
+      "rot": "dados admin.ts",
+      "nota": "`CustoDoParametro` é união discriminada: não existe parâmetro sem custo medido **ou** declaração de que não foi. Três dos quatro declaram não-medido. DTO de 6.554 bytes, conferência de três pontas fechando com zero divergências. Achado: a concentração é 59,2% de 773 **registros**, com 718 entidades distintas por trás — o PRD funde os dois",
+      "quando": "25.08 23:48"
     },
     {
       "sessao": "S5",
