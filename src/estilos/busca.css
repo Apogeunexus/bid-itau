@@ -198,6 +198,16 @@ svg.busca-glifo {
   margin-block: 1.25rem;
 }
 
+/* O PRIMEIRO BLOCO NÃO PAGA O RESPIRO DE CIMA. `margin-block` em `.busca-bloco`
+   é o espaço ENTRE blocos; no primeiro ele soma ao `gap` da coluna e vira um
+   degrau entre o campo e a exploração — 36px onde o título e o campo se falam
+   por 16px. Zerado aqui, a distância do campo até «Explore por seção» passa a
+   ser o mesmo `gap` que separa o título do campo, e o acervo sobe para dentro
+   da primeira tela em vez de pedir rolagem. */
+.busca-antes > .busca-bloco:first-child {
+  margin-block-start: 0;
+}
+
 .busca-bloco-titulo {
   margin: 0 0 0.5rem;
   font-size: var(--tipo-micro);

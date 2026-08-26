@@ -77,7 +77,14 @@ export type Glifo = "entrar" | "tocar" | "ouvir" | "agenda" | "mapa" | "ia";
  *   · **faixa**  — cada cartaz ocupa a largura toda.
  *   · **lado**   — o primeiro fica em pé à esquerda, os outros empilham à direita.
  */
-export type Ritmo = "par" | "faixa" | "lado";
+/**
+ * O ritmo do grupo, de onde sai o porte de cada cartaz (`hub-apps.tsx`).
+ *
+ * `duo` e `abertura` entraram em 2026-08-25, a pedido: o hub deixou de ser quatro
+ * prateleiras do mesmo tipo e passou a INTERCALAR dois pesos — uma fileira de dois
+ * cartazes, uma faixa da largura da abertura, e assim por diante até o fim da página.
+ */
+export type Ritmo = "par" | "faixa" | "lado" | "duo" | "trio" | "abertura";
 
 export interface App {
   readonly id: string;
@@ -103,7 +110,14 @@ export interface App {
 
 export interface GrupoApps {
   readonly id: string;
-  readonly rotulo: string;
+  /**
+   * O título da prateleira, quando ela precisa de um. AUSENTE nos blocos de um cartaz só:
+   * a faixa já traz o nome do app em corpo de título dentro dela, e um «Museu» escrito
+   * acima de um cartaz que diz «Museu virtual» é a mesma palavra duas vezes em dois
+   * tamanhos. Prateleira com dois cartazes mantém o título, porque aí ele nomeia o par e
+   * não repete nenhum dos dois.
+   */
+  readonly rotulo?: string;
   readonly ritmo: Ritmo;
   readonly apps: readonly App[];
 }
@@ -118,7 +132,7 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
   {
     id: "assistir",
     rotulo: "Assistir e ouvir",
-    ritmo: "par",
+    ritmo: "duo",
     apps: [
       {
         id: "play",
@@ -158,9 +172,28 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
     ],
   },
   {
+    id: "museu",
+    ritmo: "abertura",
+    apps: [
+      {
+        id: "museu",
+        rotulo: "Museu virtual",
+        descricao: "Exposições que continuam abertas",
+        href: "/museu",
+        capa: {
+          arquivo: "9d6aae06dc62e35c.jpeg",
+          alt: "Trata-se de um painel com quadrados e retângulos de tons diversos de azul e cinza.",
+          credito: "Everton Ballardin",
+          origem: "Recortes sobre Sandra Cinto",
+        },
+        selo: "entrar",
+      },
+    ],
+  },
+  {
     id: "ir",
     rotulo: "Ir e ver",
-    ritmo: "par",
+    ritmo: "duo",
     apps: [
       {
         id: "acontece",
@@ -188,25 +221,11 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
         },
         selo: "mapa",
       },
-      {
-        id: "museu",
-        rotulo: "Museu virtual",
-        descricao: "Exposições que continuam abertas",
-        href: "/museu",
-        capa: {
-          arquivo: "9d6aae06dc62e35c.jpeg",
-          alt: "Trata-se de um painel com quadrados e retângulos de tons diversos de azul e cinza.",
-          credito: "Everton Ballardin",
-          origem: "Recortes sobre Sandra Cinto",
-        },
-        selo: "entrar",
-      },
     ],
   },
   {
     id: "ler",
-    rotulo: "Ler",
-    ritmo: "faixa",
+    ritmo: "abertura",
     apps: [
       {
         id: "noticias",
@@ -221,25 +240,12 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
         },
         selo: "entrar",
       },
-      {
-        id: "cursos",
-        rotulo: "Cursos",
-        descricao: "Formação aberta, on-line e presencial",
-        href: "/cursos",
-        capa: {
-          arquivo: "30539015f18e9533.jpeg",
-          alt: "A imagem traz Edinho Santos fazendo um sinal em libras. Ele é negro, tem barba e bigode.",
-          credito: "Leonardo Rogério",
-          origem: "Curso de extensão propõe reflexões sobre as culturas surdas",
-        },
-        selo: "entrar",
-      },
     ],
   },
   {
     id: "descobrir",
-    rotulo: "Descobrir e perguntar",
-    ritmo: "lado",
+    rotulo: "Descobrir, buscar e perguntar",
+    ritmo: "trio",
     apps: [
       {
         id: "descobrir",
@@ -272,16 +278,45 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
         rotulo: "Roteiros com IA",
         descricao: "Descreva o programa e receba um roteiro",
         href: "/ia",
-        // SEM CAPA, E ISSO NÃO É LACUNA. Os outros nove cartazes mostram uma
-        // amostra do acervo daquele app; este não tem acervo — ele RECEBE uma
-        // descrição e devolve um roteiro. A capa que estava aqui era o degradê da
-        // exposição Game+, emprestado por parecer bonito, e ela trazia o letreiro
-        // «GAME+» gravado na imagem: o cartaz ficava com dois títulos e anunciava
-        // uma exposição que não é o destino do link. O gradiente é desenhado em
-        // CSS a partir das seis cores de apoio da marca — que no manual
-        // significam pluralidade —, não é arquivo e não reivindica procedência.
+        // CAPA TROCADA EM 2026-08-25, a pedido. Até aqui este era o único cartaz sem
+        // capa: os outros nove mostram uma amostra do acervo do app, e este não tem
+        // acervo — ele RECEBE uma descrição e devolve um roteiro —, então o fundo era um
+        // degradê desenhado em CSS com as seis cores de apoio da marca.
+        //
+        // A ilustração que entrou no lugar NÃO É DO ACERVO, e por isso mora em `/hub/` e
+        // não em `/acervo/`: `origem` diz o que ela é em vez de inventar uma procedência
+        // de coleção, que é a regra que vale para todas as outras nove.
+        //
+        // `marca` saiu junto: o glifo de IA já está DESENHADO na ilustração, no alto à
+        // esquerda, e o componente o repetiria por cima — dois glifos iguais no mesmo
+        // canto. O da imagem é preto sobre a parte clara; o do componente também é preto,
+        // e cairia sobre a mesma região.
+        capa: {
+          arquivo: "/hub/roteiros-ia.jpg",
+          alt: "Ilustração em tons de laranja: uma mulher negra de perfil, olhos fechados e cabelo crespo volumoso, ao lado de um sol grande. Ao fundo, um prédio de museu com uma pessoa na entrada, e um caminho sinuoso pontilhado de luzes atravessa a cena.",
+          credito: "Ilustração gerada para o protótipo",
+          origem: "Peça de interface, fora do acervo do Itaú Cultural",
+        },
         selo: "entrar",
-        marca: "ia",
+      },
+    ],
+  },
+  {
+    id: "cursos",
+    ritmo: "abertura",
+    apps: [
+      {
+        id: "cursos",
+        rotulo: "Cursos",
+        descricao: "Formação aberta, on-line e presencial",
+        href: "/cursos",
+        capa: {
+          arquivo: "30539015f18e9533.jpeg",
+          alt: "A imagem traz Edinho Santos fazendo um sinal em libras. Ele é negro, tem barba e bigode.",
+          credito: "Leonardo Rogério",
+          origem: "Curso de extensão propõe reflexões sobre as culturas surdas",
+        },
+        selo: "entrar",
       },
     ],
   },

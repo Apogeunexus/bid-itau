@@ -77,6 +77,13 @@ export interface Cartao {
   slug: string;
   imagem?: string;
   creditoImagem?: string;
+  /**
+   * A descrição do acervo, texto puro, quando o registro de origem tem uma. AUSENTE
+   * QUANDO A FONTE NÃO ESCREVEU — nunca preenchida com frase montada por nós, que é a
+   * mesma regra que impede o motivo de passar por texto do Itaú Cultural. O cartão sem
+   * este campo mostra título e tags, e mais nada.
+   */
+  resumo?: string;
   /** Ids do vocabulário controlado, não rótulos livres. A cor sai daqui (D-08). */
   linguagens: string[];
   procedencia: Procedencia;
@@ -87,8 +94,6 @@ export interface Cartao {
   viaConcentrador: boolean;
   caminho: PassoCartao[];
   especial?: TipoCartaoEspecial;
-  /** Só no cartão curado: quem assina a curadoria, a partir da procedência (D-29). */
-  assinatura?: string;
 }
 
 // ---------------------------------------------------------------------------

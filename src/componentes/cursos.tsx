@@ -221,11 +221,7 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
         </p>
         <h1 className="cursos-titulo tipo-titulo-1">Cursos</h1>
         <p className="cursos-olho tipo-detalhe">
-          As{" "}
-          <strong data-denominador="formacoes" className="tipo-destaque">
-            {milhar(catalogo.total)} formações
-          </strong>{" "}
-          do acervo — cursos, oficinas e pós-graduação.
+          As formações do acervo — cursos, oficinas e pós-graduação.
         </p>
 
         <form role="search" className="cursos-busca" onSubmit={semNavegar}>
@@ -286,7 +282,6 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
                   {ICONE_DO_FORMATO[f.valor as FormatoCurso]}
                   <span className="cursos-categoria-nome">
                     <span className="cursos-categoria-rotulo tipo-detalhe">{f.rotulo}</span>
-                    <span className="cursos-categoria-n tipo-legenda">{milhar(f.n)}</span>
                   </span>
                 </span>
               </button>
@@ -301,7 +296,6 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
             variante="explorar"
             selecionado={linguagem === SEM_RECORTE}
             onClick={() => setLinguagem(SEM_RECORTE)}
-            contagem={catalogo.total}
           >
             Todas
           </Chip>
@@ -313,7 +307,6 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
               data-linguagem={l.valor}
               selecionado={linguagem === l.valor}
               onClick={() => setLinguagem(linguagem === l.valor ? SEM_RECORTE : l.valor)}
-              contagem={l.n}
             >
               {l.rotulo}
             </Chip>
@@ -329,8 +322,6 @@ export function Cursos({ catalogo }: { catalogo: CatalogoDeCursos }) {
               {...(a.n === 0 ? { "data-nao-sustenta": "sim" } : {})}
               selecionado={recurso === a.campo}
               onClick={() => setRecurso(recurso === a.campo ? SEM_RECORTE : a.campo)}
-              contagem={`${a.n} de ${catalogo.total}`}
-              chaveDaContagem={a.campo}
             >
               {a.rotulo}
             </Chip>

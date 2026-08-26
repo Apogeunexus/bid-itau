@@ -4,7 +4,6 @@ import {
   catalogoNoFioStreaming,
   destaqueDoStreaming,
   dimensoesDoStreaming,
-  PROCEDENCIA_DAS_MIDIAS,
 } from "@/dados/play";
 
 export const metadata: Metadata = { title: "Play — Itaú Cultural" };
@@ -31,7 +30,6 @@ export default function PaginaPlay() {
       catalogo={catalogoNoFioStreaming()}
       destaque={destaqueDoStreaming()}
       dimensoes={dimensoesDoStreaming()}
-      procedencia={PROCEDENCIA_DAS_MIDIAS}
     />
   );
 }

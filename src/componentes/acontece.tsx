@@ -422,9 +422,10 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
   return (
     <div className="flex flex-col gap-5 p-5 desk:p-8">
       {/* ================================================================== */}
-      {/* 1 — ENQUADRAMENTO. Texto de PRODUTO: diz o que esta agenda é e o    */}
-      {/*     que ela deliberadamente não contém — procedência é o argumento  */}
-      {/*     da proposta, não a nota de rodapé sobre ele.                    */}
+      {/* 1 — ENQUADRAMENTO. Só o nome da tela e a porta dos filtros: a       */}
+      {/*     contagem do acervo e a data de referência saíram do cabeçalho,  */}
+      {/*     e quem quiser o denominador o encontra nos recortes da visão    */}
+      {/*     web, onde ele é argumento e não nota de rodapé.                 */}
       {/* ================================================================== */}
       <header className="flex flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
@@ -434,15 +435,6 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
             Filtros
           </Link>
         </div>
-
-        <p className="tipo-detalhe text-tinta-2">
-          {`${milhar(diagnostico.eventosComSessao)} eventos culturais disponíveis por todo o Brasil.`}
-        </p>
-
-        <p className="acontece-referencia">
-          {ICONE_ACONTECE}
-          {`Data de referência: ${dataPorExtenso(agenda.hoje)}`}
-        </p>
       </header>
 
       {/* ================================================================== */}
@@ -663,9 +655,6 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {dia ? (
         <section className="flex flex-col gap-4">
           <div className="acontece-dia-barra">
-            <p>
-              {`${plural(dia.totalEventos, "evento", "eventos")} · ${plural(dia.totalSessoes, "sessão", "sessões")}`}
-            </p>
             {/* `<a>` e não `<Link>`: `trailingSlash: true` faz o Link reescrever
                 `/mapa#…` como `/mapa/#…`, e a gramática do hash é contrato de fase. */}
             <a href={lente} className="acontece-mapa">

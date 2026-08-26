@@ -430,14 +430,171 @@
   gap: var(--web-gap);
 }
 
+/* O TETO DE ALTURA ESTAVA GOVERNANDO A LARGURA (corrigido em 2026-08-25).
+ *
+ * `aspect-ratio: 21/9` com `max-block-size: 22rem` e largura automática dava ao cartaz
+ * 352 × 21/9 = 821,33px — e era esse o número medido no navegador, em TODAS as janelas:
+ * 1280, 1440, 1680, 1920. A abertura não crescia com a tela, e a sobra à direita ia de
+ * 155px num notebook a 795px num monitor grande. Era essa a «sobra de espaço».
+ *
+ * `inline-size: 100%` devolve a decisão de largura ao contêiner. A razão continua
+ * valendo como ALTURA desejada e o teto continua cortando: a 1616px de coluna a altura
+ * pedida seria 692px e o teto a segura em 352, então a faixa fica larga e baixa, com a
+ * foto cortada por `object-fit: cover` — que é o que ela já fazia.
+ *
+ * O espaçador de 16/9 é desligado aqui de propósito. Ele existe para dar PISO de altura
+ * na moldura do telefone, onde a abertura não tem razão própria. Na web, com a largura
+ * agora cheia, ele pediria 909px de linha dentro de uma caixa de 352 — e o texto, que é
+ * centrado na célula, iria parar fora da parte visível. */
 [data-view="web"] .hub-abertura {
+  inline-size: 100%;
   aspect-ratio: 21 / 9;
   max-block-size: 22rem;
+}
+
+[data-view="web"] .hub-abertura::before {
+  aspect-ratio: auto;
 }
 
 [data-view="web"] .hub-cartaz--faixa {
   aspect-ratio: 3 / 1;
   max-block-size: 14rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * DUO — dois cartazes dividindo a fileira em partes iguais (2026-08-25)
+ * ---------------------------------------------------------------------------
+ *
+ * Duas colunas FIXAS, e não `auto-fill`: o pedido é «a tela dividida exatamente por
+ * dois», e auto-fill decide o número de colunas pela largura — daria três num notebook e
+ * quatro num monitor grande, e com dois cartazes o resto da fileira ficaria vazio. Aqui o
+ * número é o contrato, e é por isso que não sobra espaço em nenhuma largura.
+ *
+ * A RAZÃO MUDA COM A VISÃO, e não por gosto. No telefone cada cartaz tem ~170px e o
+ * retrato 5/6 é o que dá altura para o rótulo respirar. Na web o mesmo cartaz tem 796px
+ * num monitor grande, e 5/6 ali seriam 955px de altura — um cartaz tomando a tela toda.
+ * 16/9 é a razão que mantém dois lado a lado dentro de uma dobra. */
+[data-view="web"] .hub-grade[data-ritmo="duo"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.hub-cartaz--meio .hub-cartaz-link::before {
+  aspect-ratio: 5 / 6;
+}
+
+[data-view="web"] .hub-cartaz--meio .hub-cartaz-link::before {
+  aspect-ratio: 16 / 9;
+}
+
+/* TRIO — três dividindo a fileira. Mesmo contrato do duo, outro divisor.
+ *
+ * A razão é 5/4 e não 16/9: com três colunas o cartaz é bem mais estreito (539px contra
+ * 796px no mesmo monitor), e 16/9 ali daria uma tira de 303px de altura, baixa demais
+ * para a foto dizer alguma coisa. 5/4 devolve altura sem chegar perto do retrato.
+ *
+ * NA MOLDURA DO TELEFONE a grade é de dois, e três cartazes deixariam meia fileira vazia
+ * no fim. O último atravessa a linha inteira — é a mesma solução que o ritmo «par» já
+ * usava para contagem ímpar, e o motivo é o mesmo. */
+[data-view="web"] .hub-grade[data-ritmo="trio"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.hub-cartaz--terco .hub-cartaz-link::before {
+  aspect-ratio: 5 / 6;
+}
+
+.hub-grade[data-ritmo="trio"] .hub-cartaz--terco:last-child {
+  grid-column: 1 / -1;
+}
+
+.hub-grade[data-ritmo="trio"] .hub-cartaz--terco:last-child .hub-cartaz-link::before {
+  aspect-ratio: 15 / 7;
+}
+
+[data-view="web"] .hub-cartaz--terco .hub-cartaz-link::before,
+[data-view="web"] .hub-grade[data-ritmo="trio"] .hub-cartaz--terco:last-child .hub-cartaz-link::before {
+  aspect-ratio: 5 / 4;
+}
+
+[data-view="web"] .hub-grade[data-ritmo="trio"] .hub-cartaz--terco:last-child {
+  grid-column: auto;
+}
+
+/* ---------------------------------------------------------------------------
+ * ABERTURA — a forma do «Tudo num lugar só», agora também em cartaz
+ * ---------------------------------------------------------------------------
+ *
+ * Mesmas medidas da abertura do hub, e de propósito: razão 21/9 com teto de 22rem, foto
+ * ocupando 60% à direita, véu correndo da esquerda para a direita e o texto centrado na
+ * metade escura. O risco laranja sai de `::after` porque o cartaz não tem o elemento que
+ * a abertura tem — a forma é a mesma, a marcação não precisa ser.
+ *
+ * O cartaz atravessa a fileira inteira: é faixa, não coluna. */
+.hub-cartaz--abertura {
+  grid-column: 1 / -1;
+}
+
+.hub-cartaz--abertura .hub-cartaz-link::before {
+  aspect-ratio: 16 / 9;
+}
+
+/* `inline-size: 100%` pela mesma razão da abertura logo acima: sem ele, o teto de altura
+ * governa a largura pela razão e o cartaz trava em 352 × 21/9 = 821px em qualquer tela.
+ * Caí nisso duas vezes no mesmo arquivo — a segunda está anotada para não haver terceira. */
+[data-view="web"] .hub-cartaz--abertura {
+  inline-size: 100%;
+  aspect-ratio: 21 / 9;
+  max-block-size: 22rem;
+}
+
+/* Mesmo motivo do espaçador da abertura: com a largura cheia, 16/9 pediria uma linha
+ * muito mais alta que o teto e o texto centrado sairia da parte visível. */
+[data-view="web"] .hub-cartaz--abertura .hub-cartaz-link::before {
+  aspect-ratio: auto;
+}
+
+.hub-cartaz--abertura .hub-cartaz-foto {
+  inset-inline: auto 0;
+  inline-size: 60%;
+}
+
+.hub-cartaz--abertura .hub-cartaz-veu {
+  background: linear-gradient(
+    to right,
+    var(--ic-preto) 0%,
+    color-mix(in srgb, var(--ic-preto) 86%, transparent) 42%,
+    color-mix(in srgb, var(--ic-preto) 26%, transparent) 60%,
+    transparent 78%
+  );
+}
+
+.hub-cartaz--abertura .hub-cartaz-texto {
+  grid-row: 1 / -1;
+  align-self: center;
+  gap: 0.75rem;
+  max-inline-size: max(62%, 12rem);
+  padding-block: 1rem;
+  padding-inline: 1.25rem;
+}
+
+.hub-cartaz--abertura .hub-cartaz-rotulo {
+  font-size: clamp(var(--tipo-titulo-2), 5vw, var(--tipo-titulo-1));
+  line-height: 1.15;
+}
+
+.hub-cartaz--abertura .hub-cartaz-descricao {
+  padding-inline-end: 0;
+  font-size: var(--tipo-corpo);
+}
+
+.hub-cartaz--abertura .hub-cartaz-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  inline-size: 28%;
+  block-size: 0.25rem;
+  background: var(--cor-acao);
 }
 
 [data-view="web"] .hub-atalhos {

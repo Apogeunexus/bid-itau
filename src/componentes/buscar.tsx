@@ -507,10 +507,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="tipo-titulo-1 font-bold">Buscar</h1>
         </div>
-
-        <p className="tipo-detalhe text-tinta-2">
-          Encontre eventos, artistas, lugares, obras e histórias.
-        </p>
       </header>
 
       {/* ------------------------------------------------------------------ */}
@@ -651,11 +647,11 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           {/* 2. Antes de digitar — o estado que a banca vê primeiro              */}
           {/* ------------------------------------------------------------------ */}
           {!ativa ? (
-            <div className="flex flex-col gap-3">
+            <div className="busca-antes flex flex-col gap-3">
               {/* AS SEÇÕES DO ACERVO — o pedido do cliente na reformulação de 2026-08: a
-                  busca abre como um índice de blog, com as seções selecionáveis e a
-                  contagem REAL de cada uma. Marcar uma seção é marcar o critério de
-                  classe: o mesmo mecanismo de faceta de sempre, só que na porta. */}
+                  busca abre como um índice de blog, com as seções selecionáveis.
+                  Marcar uma seção é marcar o critério de classe: o mesmo mecanismo
+                  de faceta de sempre, só que na porta. */}
               <Estante
                 className="busca-bloco"
                 titulo="Explore por seção"
@@ -664,11 +660,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                 {/* Sem «Ver todas»: as 15 classes já estão no trilho. A seta é
                     o recado de que há mais — um link que não leva a uma página
                     de seções mentiria o destino. */}
-                {/* A contagem FICA aqui, e sai dos filtros abaixo. A diferença não é
-                    de gosto: numa lista de seções o número é o conteúdo — «quantas
-                    exposições existem» é a pergunta que a seção responde. Num chip
-                    de filtro ele é o mesmo dado repetido dez vezes ao lado de algo
-                    que o usuário já vai medir no resultado. */}
                 {/* O RÓTULO PASSA POR `rotuloDaClasse`, e isso é conserto e não gosto:
                     `opcao.rotulo` é o valor cru da ontologia, e a fileira dizia
                     «conteudo», «midia», «territorio» — sem acento, e com os nomes
@@ -681,7 +672,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     variante="explorar"
                     data-faceta={chaveCriterio(opcao)}
                     onClick={() => alternarCriterio(opcao)}
-                    contagem={milhar(opcao.n)}
                   >
                     {iconeDaClasse(opcao.valor)}
                     {rotuloDaClasse(opcao.valor as ClasseEntidade)}

@@ -34,8 +34,14 @@ import { leituras } from "@/dados/leituras";
  *
  * AS VITRINES DO REDESENHO (2026-08) SÃO MEDIDAS AQUI, no mesmo escopo de build, e descem
  * como recortes mínimos: a agenda inteira tem 192 KB e as vitrines levam só o dia em foco;
- * o índice de busca empresta as facetas de linguagem, com contagem e cor que o vocabulário
- * gerou (D-08). Nenhum número de vitrine é escrito à mão.
+ * o índice de busca empresta as facetas de linguagem, com a cor que o vocabulário gerou
+ * (D-08).
+ *
+ * A MEDIÇÃO SOBREVIVEU À RETIRADA DAS CONTAGENS (pedido de 2026-08-25). As vitrines não
+ * exibem mais número, e por isso o recorte que desce até elas encolheu — `n`, `total` e
+ * `totalSessoes` deixaram de atravessar a fronteira RSC. Medir continua acontecendo aqui:
+ * é `n` que ordena as linguagens por tamanho antes do teto cortar, e é o total que decide
+ * se o chip «Todas» existe. O que nenhuma vitrine faz é escrever número à mão.
  */
 
 const HOJE = DATA_DE_REFERENCIA;
@@ -60,7 +66,6 @@ const PROGRAMACAO: ProgramacaoDaVitrine | null = diaEmFoco
   ? {
       data: diaEmFoco.data,
       eHoje: diaEmFoco.data === agenda.hoje,
-      totalSessoes: diaEmFoco.totalSessoes,
       sessoes: diaEmFoco.eventos.slice(0, TETO_DE_SESSOES).map((indice, i) => {
         const evento = agenda.eventos[indice];
         return {
@@ -76,18 +81,16 @@ const PROGRAMACAO: ProgramacaoDaVitrine | null = diaEmFoco
     }
   : null;
 
-const SESSOES_DE_HOJE = diaEmFoco?.data === agenda.hoje ? diaEmFoco.totalSessoes : 0;
-
 const facetasDeLinguagem = [...montarIndice({ slugsPorTipo, porSlug, vizinhos }).facetas.linguagem]
   .sort((a, b) => b.n - a.n || (a.valor < b.valor ? -1 : 1));
 
 const LINGUAGENS = facetasDeLinguagem
   .slice(0, TETO_DE_LINGUAGENS)
-  .map(({ valor, rotulo, n, cor }) => ({ valor, rotulo, n, cor }));
+  .map(({ valor, rotulo, cor }) => ({ valor, rotulo, cor }));
 
 const TOTAL_DE_LINGUAGENS = facetasDeLinguagem.length;
 
-const CIDADES = cidadesComAcervo().map(({ slug, titulo, total }) => ({ slug, titulo, total }));
+const CIDADES = cidadesComAcervo().map(({ slug, titulo }) => ({ slug, titulo }));
 
 const INSPIRAR = leituras().slice(0, TETO_DE_LEITURAS);
 
@@ -108,7 +111,7 @@ export default function Descobrir() {
           <h1 className="tipo-titulo-1 font-bold">Descobrir</h1>
         </header>
 
-        <BuscaDeDescobrir sessoesDeHoje={SESSOES_DE_HOJE} />
+        <BuscaDeDescobrir />
 
         {/* O destaque curado abre o feed como seção própria e o restante segue sob
             «Para você» — a partição acontece em `feed.tsx`, sobre a MESMA combinação. */}

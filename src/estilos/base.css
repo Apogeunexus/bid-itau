@@ -255,6 +255,54 @@ body {
   -webkit-line-clamp: 2;
 }
 
+/* A DESCRIÇÃO DO CARTÃO — a frase do acervo, sob a manchete (2026-08-25).
+ *
+ * Duas linhas e corta. O acervo escreve resumos de tamanho livre, de uma linha a um
+ * parágrafo, e sem teto o cartão de descrição longa empurraria as tags para fora do
+ * alcance no trilho do feed. O corte é visual: o texto inteiro continua no DOM, e a
+ * página da entidade o mostra por completo. */
+.cartao-descricao {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* A TAG DO CARTÃO — um só vocabulário de pastilha para classe e motivo (2026-08-25).
+ *
+ * «Uma tag igual à trilha/evento» só é verdade se as duas saírem da MESMA regra. Enquanto
+ * a classe vinha de utilitários no TSX e o motivo de uma regra daqui, «igual» dependia de
+ * alguém manter dois lugares em sincronia — que é como este projeto acabou com oito
+ * vocabulários de pílula antes de `base/chip.tsx` existir. Uma classe, duas chamadas.
+ *
+ * Medidas em token e na grade de 0.25rem: o portão do design system reprova literal fora
+ * da grade, e reprovou este bloco na primeira tentativa (0.125rem/0.625rem/999px).
+ *
+ * A lista de seletores parece redundante e não é. `.selo-motivo` traz `display:flex` e
+ * padding zero, e a visão Web ainda o engorda para bloco em dois lugares
+ * (`web-descobrir.css`) — regras mais específicas que uma classe sozinha. Sem repeti-las
+ * aqui com `.cartao-tag` junto, a pastilha do motivo voltaria a inchar assim que o
+ * alternador fosse para Web. A classe `.selo-motivo` fica no elemento porque é por ela
+ * que os portões acham o motivo no HTML exportado. */
+.cartao-tag,
+.selo-motivo.cartao-tag,
+[data-view="web"] .selo-motivo.cartao-tag,
+[data-view="web"] [data-grade-web] > [data-destaque-curado] .selo-motivo.cartao-tag,
+[data-view="web"] .descobrir-destaque .selo-motivo.cartao-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem var(--espaco-cartao);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
 .capa-sem-imagem {
   isolation: isolate;
 }

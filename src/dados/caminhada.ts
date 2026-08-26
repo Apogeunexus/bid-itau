@@ -535,20 +535,16 @@ function escolherSerendipidade(
   return null;
 }
 
-/**
- * D-29 / D-35: o destaque é HUMANO e ASSINADO, e a assinatura sai da procedência da
- * trilha — não de um campo de autor que o grafo não tem.
+/*
+ * D-29 / D-35 · A NOTA DE CURADORIA SAIU DAQUI EM 2026-08-25, e saiu do dado, não só da
+ * tela. A frase que declarava a procedência da trilha curada («Curadoria humana, escrita
+ * pela curadoria…») é informação de bastidor: quem a produz e quem a lê é a Redação, que
+ * assina a trilha e declara a procedência passo a passo (`redacao-trilha.tsx`). Deixá-la
+ * no DTO faria o texto descer no payload de todo feed do app sem ninguém para renderizá-lo
+ * — dado morto atravessando a fronteira RSC, que é justamente o que DP-F existe para
+ * impedir. O que continua provando a procedência do cartão é o selo de motivo, com
+ * `data-origem-motivo`, esse sim medido a cada aresta.
  */
-function assinaturaDaCuradoria(trilha: Entidade): string {
-  switch (trilha.procedencia) {
-    case "autorado":
-      return "Curadoria humana, escrita pela curadoria: escrita à mão, não calculada, e não faz parte do acervo do Itaú Cultural.";
-    case "ic":
-      return "Curadoria publicada pelo Itaú Cultural.";
-    case "derivado":
-      return "Trilha montada por regra determinística sobre o acervo — sem curadoria humana assinada.";
-  }
-}
 
 // ---------------------------------------------------------------------------
 // Rodízio (DP-B, D-27)
@@ -673,11 +669,7 @@ export function montarFeed({
 
   const escolhidos = slots.filter((s): s is Candidato => Boolean(s));
   const cartoes = escolhidos.map((c) =>
-    paraCartao(
-      c,
-      c === curado ? "curado" : c === serendipidade ? "serendipidade" : undefined,
-      c === curado ? assinaturaDaCuradoria(c.entidade) : undefined,
-    ),
+    paraCartao(c, c === curado ? "curado" : c === serendipidade ? "serendipidade" : undefined),
   );
 
   return {
@@ -747,11 +739,7 @@ function imagemDoCandidato(candidato: Candidato): {
 }
 
 /** Candidato → DTO. É aqui que a `Entidade` para e o serializável começa (DP-F). */
-export function paraCartao(
-  candidato: Candidato,
-  especial?: Cartao["especial"],
-  assinatura?: string,
-): Cartao {
+export function paraCartao(candidato: Candidato, especial?: Cartao["especial"]): Cartao {
   const { entidade } = candidato;
   const foto = imagemDoCandidato(candidato);
   const cartao: Cartao = {
@@ -766,10 +754,11 @@ export function paraCartao(
     viaConcentrador: candidato.viaConcentrador,
     caminho: candidato.caminho,
   };
+  const resumo = entidade.resumo?.trim();
+  if (resumo) cartao.resumo = resumo;
   if (foto.imagem) cartao.imagem = foto.imagem;
   if (foto.creditoImagem) cartao.creditoImagem = foto.creditoImagem;
   if (especial) cartao.especial = especial;
-  if (assinatura) cartao.assinatura = assinatura;
   return cartao;
 }
 
