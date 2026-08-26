@@ -1,12 +1,12 @@
 {
-  "varredura": "25/08, 21:16",
+  "varredura": "25/08, 21:21",
   "kpi": {
     "concluidas": 2,
     "totalTarefas": 64,
     "ativas": 2,
     "bloqueadas": 4,
-    "divergencias": 1,
-    "sujos": 11,
+    "divergencias": 0,
+    "sujos": 5,
     "folgaS6": 10,
     "pedidos": 33
   },
@@ -82,7 +82,7 @@
           "rot": "contrato e seed",
           "inicio": 0,
           "estado": "entregue",
-          "commit": "`73976b8`",
+          "commit": "73976b8",
           "nota": "`Situacao` com 5 estados é o tipo que faltava — sem ele o Studio é formulário. As 4 adições de §12 entraram por **extensão**, sem editar `tipos.ts`: ver PEDIDO-01. Semente determinística de 5 registros a partir de eventos reais; o que é autorado é a situação, não o título. Chave de identidade medida em 2/3 nos rascunhos e 3/3 no devolvido e nos publicados — é essa conversão que a jornada existe para fazer.",
           "quando": "25.08 20:20"
         },

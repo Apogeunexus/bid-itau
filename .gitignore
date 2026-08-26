@@ -11,6 +11,8 @@ out/
 
 # next
 /.next/
+# um diretório de build por sessão: NEXT_SESSAO=s7 → .next-s7/
+/.next-*/
 /out/
 /node_modules/
 next-env.d.ts

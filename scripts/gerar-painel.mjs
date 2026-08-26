@@ -75,8 +75,11 @@ function lerEstado(id) {
     const c = linha.split("|").map((x) => x.trim());
     if (c.length < 7) continue;
     const n = Number(c[1]);
-    if (!Number.isInteger(n) || !c[3] || /^-+$/.test(c[3])) continue;
-    entregas.push({ n, tarefa: c[2], commit: c[3], quando: c[4], nota: c[5] || null });
+    // O hash chega cru ou entre crases, conforme a sessão. As duas formas valem: uma crase
+    // a mais não pode virar «entrega sem hash no git», que é o alarme mais sério do painel.
+    const commit = c[3].replace(/`/g, "");
+    if (!Number.isInteger(n) || !commit || /^-+$/.test(commit)) continue;
+    entregas.push({ n, tarefa: c[2], commit, quando: c[4], nota: c[5] || null });
   }
 
   const lista = (titulo) => {
