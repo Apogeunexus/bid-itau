@@ -113,6 +113,21 @@
  * Depois do Museu porque as duas aberturas são papel quente com ilustração. */
 @import "../estilos/ia.css";
 
+/* A folha do Admin (onda 2, S1): o painel de governança — parâmetros do motor,
+ * territórios e centroides, trilha de auditoria. Ela traz UMA coisa só, o bloco
+ * de parâmetro com a medição ao lado do valor; superfície, painel, tabela densa
+ * e a caixa de declaração honesta vêm de `studio.css`, que entra antes. */
+@import "../estilos/admin.css";
+
+/* A folha da Organização (onda 2, S6): o nível institucional dentro do Studio —
+ * espaços, ficha da instituição, mídia com crédito, equipe e alçadas. Ela traz
+ * o que nenhuma folha anterior desenha: a CONVERSÃO de procedência à vista, o
+ * ato de declarar ausência, a coluna do que falta e os atributos físicos do
+ * lugar. Superfície, painel, pastilha e tabela densa vêm de `studio.css`, e as
+ * duas colunas de `web.css` — as duas entram antes. Ela NÃO toca `studio.css`,
+ * que é da S7 · Produtor, com quem esta sessão divide a pasta. */
+@import "../estilos/organizacao.css";
+
 /* ---------------------------------------------------------------------------
  * A base visual (camada base tipográfica, moldura D-03, cartão)
  * vem DEPOIS das folhas de tela, na mesma posição do cascade que essas regras

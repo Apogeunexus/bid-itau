@@ -1,0 +1,231 @@
+/* ---------------------------------------------------------------------------
+ * organizacao.css — o vocabulário visual das dez telas da Organização (S6),
+ * o nível 6 dentro da superfície Studio.
+ *
+ * DE QUEM É ESTE ARQUIVO. Só a S6 escreve nele. O Studio é dividido com a S7 ·
+ * Produtor, que escreve `studio.css` — e as duas folhas não se tocam. Regra que
+ * as duas sessões usariam já existe em `studio.css` e é consumida daqui pela
+ * classe, nunca recopiada: `.studio`, `.studio-cabecalho`, `.studio-painel`,
+ * `.studio-pastilha`, `.studio-rotulo`, `.studio-nota` e `.studio-literal`
+ * continuam valendo nas telas desta sessão. O mesmo vale para `web.css`, que já
+ * traz `.web-duas-colunas`, `.web-colada`, `.web-painel`, `.web-declaracao` e
+ * os denominadores. Recriar qualquer uma delas aqui faria o Studio ter dois
+ * vocabulários para a mesma coisa — o defeito mais visível numa banca.
+ *
+ * SÓ EXISTE NA VISÃO WEB (D-67). O layout de bastidor esconde o conteúdo inteiro
+ * sob `app:hidden` — `src/app/(bastidor)/layout.tsx:16` — e mostra o aviso de
+ * superfície no lugar. Por isso não há aqui nenhuma regra sob
+ * `[data-view="mobile"]`: as seções «App.» do PRD desta sessão descrevem uma
+ * visão que o código decidiu não ter.
+ *
+ * NENHUM HEX (D-06) E NENHUMA MEDIDA FORA DA GRADE DE 0,25rem. As cores saem de
+ * `var(--cor-*)` e de `color-mix`; a única fonte de verdade dos hex do manual é
+ * o bloco `:root` de `globals.css`.
+ *
+ * O QUE ESTA FOLHA ACRESCENTA, E POR QUE SÃO ESTAS QUATRO COISAS. As dez telas
+ * desta sessão existem para uma operação só: CONVERTER AUSÊNCIA EM DECLARAÇÃO.
+ * Nenhum vocabulário anterior desenha essa operação, porque nenhuma tela
+ * anterior a fazia — o app público exibe o que o acervo tem, e o Produtor
+ * declara o que acontece. Daí os quatro blocos abaixo, e nada além deles.
+ * ------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+ * 1 · A conversão de procedência — `derivado` vira cadastro, à vista.
+ *
+ * É o argumento inteiro da sessão em um elemento: 113 espaços do acervo são
+ * 100% `derivado`, e a tela mostra o registro SAINDO desse estado. O par
+ * «antes → depois» é uma grade de três colunas com a seta no meio, e não dois
+ * selos soltos: soltos, eles seriam lidos como dois fatos independentes, e o
+ * que precisa ser lido é a passagem de um para o outro.
+ *
+ * A seta não é texto do componente. Ela mora aqui, em `::before` do lado
+ * direito, porque é ligação visual e não conteúdo — um leitor de tela que a
+ * lesse anunciaria «seta para a direita» entre duas palavras que já se
+ * explicam.
+ * ------------------------------------------------------------------------- */
+
+.org-conversao {
+  display: inline-grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.org-conversao-de,
+.org-conversao-para {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* O estado de origem é o que a plataforma quer DEIXAR de ser: tinta apagada e
+ * borda tracejada, a mesma gramática que a ficha de acessibilidade já usa para
+ * «não declarado». */
+.org-conversao-de {
+  border-style: dashed;
+  color: var(--cor-tinta-3);
+}
+
+/* O estado de destino carrega o laranja de ação — é o que a organização acabou
+ * de escrever, e é o único lado do par que a tela comemora. */
+.org-conversao-para {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+}
+
+.org-conversao-seta {
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * 2 · O ato de declarar ausência — §10 da ontologia.
+ *
+ * `declaraAcessibilidade` registra O ATO DE PREENCHER a ficha, não o conteúdo
+ * dela. Oito caixas desmarcadas significam «não oferece» e «não declarou» ao
+ * mesmo tempo, e a plataforma se proibiu de interpretar silêncio. A consequência
+ * de interface é dura e é esta: em toda tela que coleta acessibilidade precisa
+ * existir um ato explícito COM PESO IGUAL AO DE SALVAR.
+ *
+ * «Peso igual» é o que este bloco desenha, e é por isso que ele não é um
+ * `<label>` com uma caixa: um checkbox no meio de oito outros checkboxes seria
+ * lido como a nona dimensão. O ato tem contêiner próprio, borda própria e o
+ * botão com o mesmo tamanho do de salvar — quem preenche a ficha precisa
+ * escolher entre dois botões, não esquecer um.
+ * ------------------------------------------------------------------------- */
+
+.org-ato {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+}
+
+.org-ato-texto {
+  max-width: 60ch;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+  color: var(--cor-tinta-2);
+}
+
+/* Declarado: a borda para de ser tracejada porque o silêncio acabou. É a mesma
+ * leitura do tracejado da conversão — pontilhado é o que ainda não foi dito. */
+.org-ato[data-declarado="sim"] {
+  border-style: solid;
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+/* ---------------------------------------------------------------------------
+ * 3 · O que falta — a coluna da direita, sempre visível.
+ *
+ * O padrão desta sessão é o INVERSO do cadastro comum. Num formulário comum o
+ * campo vazio não diz nada: fica lá, branco, e quem preenche descobre o que
+ * faltava quando o sistema recusa. Aqui a falta é conteúdo — ela ocupa a coluna
+ * da direita, permanente, com o nome do que falta e de quem depende.
+ *
+ * `.web-duas-colunas` e `.web-colada` já fazem o layout. O que falta aqui é a
+ * LISTA: item com marca à esquerda, nome do que falta e, quando a falta depende
+ * de outro nível, o responsável nomeado — porque uma pendência sem dono é um
+ * beco sem saída, e §8 da ontologia proíbe os três becos por nome.
+ * ------------------------------------------------------------------------- */
+
+.org-falta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.org-falta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--cor-borda-forte);
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+}
+
+/* A falta que trava a publicação é laranja; a que só diminui a qualidade do
+ * registro continua neutra. A distinção é do produto e não do gosto: crédito de
+ * imagem BLOQUEIA (165), e ficha de acessibilidade incompleta não. */
+.org-falta-item[data-bloqueia="sim"] {
+  border-left-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+/* Quem resolve, com o número da funcionalidade — o avaliador confere no
+ * catálogo em vez de acreditar na tela. */
+.org-falta-dono {
+  font-size: var(--tipo-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * 4 · Os atributos físicos do lugar — a lacuna de contrato desta sessão.
+ *
+ * Rampa, elevador, banheiro adaptado, piso tátil e vaga reservada NÃO cabem nas
+ * oito dimensões de `Acessibilidade`, que são de mídia: audiodescrição, Libras,
+ * legenda, tradução simultânea, estenotipia. Forçar rampa dentro de
+ * `closed_caption` seria fabricar classificação — o erro exato que o projeto
+ * recusou quando promoveu quatro linguagens em vez de mapear «Rádio →
+ * audiovisual».
+ *
+ * Por isso os atributos do lugar têm grade PRÓPRIA e visualmente distinta da
+ * ficha das oito: duas grades iguais fariam quem confere achar que são a mesma
+ * ficha com treze linhas, e é justamente a separação que o pedido de contrato
+ * `AcessibilidadeDeEspaco` existe para registrar.
+ * ------------------------------------------------------------------------- */
+
+.org-fisico {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.org-fisico-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie);
+  font-size: var(--tipo-detalhe);
+  line-height: 1.4;
+}
+
+.org-fisico-item[data-estado="oferece"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+  font-weight: 700;
+}
+
+/* «Não declarado» é tracejado, e é um estado próprio — nunca uma variação do
+ * «não». Um espaço que não fala de rampa não afirma que não tem rampa, e a
+ * plataforma não afirma isso em nome de ninguém. */
+.org-fisico-item[data-estado="nao-declarado"] {
+  border-style: dashed;
+  color: var(--cor-tinta-3);
+}
