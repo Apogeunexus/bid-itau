@@ -143,8 +143,8 @@ export const ADMIN_E_AUTORADO =
   "Não há autenticação neste protótipo. O nome de quem administra é autorado e aparece " +
   "rotulado. O que esta superfície precisa provar é que o administrador NÃO é exceção de " +
   "procedência: toda escrita dele grava autor e carimbo, como a de qualquer outro nível. O " +
-  `carimbo vem da data de referência do build (${DATA_DE_REFERENCIA}), nunca do relógio de ` +
-  "quem abre a página.";
+  `carimbo vem da data de referência do build (${dataCurta(DATA_DE_REFERENCIA)}), nunca do ` +
+  "relógio de quem abre a página.";
 
 /** O carimbo que uma escrita do Admin recebe. */
 export const CARIMBO_DO_ADMIN = `${dataCurta(DATA_DE_REFERENCIA)}, ${HORA_DO_CARIMBO}`;
