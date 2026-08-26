@@ -187,15 +187,15 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "26/08, 03:57",
+  "varredura": "26/08, 07:29",
   "kpi": {
-    "concluidas": 53,
+    "concluidas": 56,
     "totalTarefas": 64,
     "ativas": 5,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 13,
-    "folgaS6": 7,
+    "sujos": 5,
+    "folgaS6": 5,
     "pedidos": 10
   },
   "dependencias": [
@@ -240,7 +240,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-63",
       "estado": "rodando",
-      "feitas": 4,
+      "feitas": 6,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -291,25 +291,25 @@ const DADOS = {
           "n": 5,
           "rot": "P4 espaço e temporada",
           "inicio": 4,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "cd54d88",
+          "nota": "Decidi **o espaço antes do intervalo**, na ordem em que a chave se monta — pedir a data primeiro convida a criar temporada sem lugar. Decidi que **remover temporada leva as sessões junto, declarando quantas**: sessão órfã é registro sem chave. Resolvi o `temporadasDe(...)[0]` pendente (0 de 300 têm mais de uma; estava certo por acidente). **Escrevi a classe de combinação com caracteres literais pela segunda vez no mesmo dia** — `simplificar` foi para um lugar só. E separei `<summary>` do botão que executa: os dois tinham as mesmas classes, e minha sonda clicou no gatilho concluindo que a remoção não funcionava, quando o código estava certo.",
+          "quando": "26.08 03:57"
         },
         {
           "n": 6,
           "rot": "P6 ficha de acessibilidade",
           "inicio": 5,
-          "estado": "aguardando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "07b4817",
+          "nota": "A tela dos **três estados**, e não dois: «declarou e oferece», «declarou e não oferece» e «não declarou». O terceiro é o que some quando uma interface só tem caixas de marcar, e é o único que a plataforma se proibiu de interpretar. Decidi que **marcar qualquer dimensão também declara a ficha** — quem aponta um recurso preencheu —, e que **desmarcar a última NÃO devolve ao silêncio**: a declaração já foi feita, e desfazê-la exige ato próprio, com confirmação. O botão do ato leva a frase inteira e largura total, sem raio de pílula: pílula é forma de controle curto, e esta é uma afirmação. Ficha do espaço em leitura, com 0 campos editáveis medidos.",
+          "quando": "26.08 07:20"
         },
         {
           "n": 7,
           "rot": "P7 comercial e classificação",
           "inicio": 6,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -706,7 +706,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/redacao",
       "sessaoNome": "bid-ita-7d [b1187f]",
       "estado": "rodando",
-      "feitas": 6,
+      "feitas": 7,
       "total": 10,
       "commit": null,
       "frescor": null,
@@ -772,16 +772,16 @@ const DADOS = {
           "n": 7,
           "rot": "E5 redação editorial",
           "inicio": 8,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "78fd525",
+          "nota": "**A ligação é aresta, não etiqueta** — é isso que faz «Aprofunda isto» funcionar a partir de qualquer evento: etiqueta no rodapé só é lida por quem já está na matéria, aresta é percorrível nos dois sentidos. Por isso a ligação escolhe entidade real do catálogo e **exige motivo**. **O crédito da imagem é obrigação que NASCE com a imagem**: sem imagem o campo não existe; ao acrescentar uma, a matéria que estava publicável para de ser, e a tela diz que é o crédito que falta. `creditoImagem` é `string \\",
+          "quando": "26.08 07:23"
         },
         {
           "n": 8,
           "rot": "E7 motor editorial",
           "inicio": 9,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -958,6 +958,20 @@ const DADOS = {
       "rot": "P3 obra e elenco",
       "nota": "**Contei o número da tese errado e quase reportei.** 426 arestas `atua_em` apontam para `evento`, mas **zero para evento datado** — os que a Enciclopédia liga a artistas são históricos, sem sessão; os 129 com ocorrência têm zero artistas. «Evento» e «evento datado» são disjuntos neste acervo. Decidi **ler os papéis das próprias arestas** (3 distintos, «artista» em 312) em vez de escrever lista à mão, e **pôr o papel antes da busca** — escolher a pessoa primeiro convida a vincular sem papel, que é a aresta inválida que a tela impede. Consertei também a classe de combinação da busca, escrita com caracteres literais: NFC a apagaria sem rastro e o `tsc` seguiria verde.",
       "quando": "26.08 01:10"
+    },
+    {
+      "sessao": "S7",
+      "n": 5,
+      "rot": "P4 espaço e temporada",
+      "nota": "Decidi **o espaço antes do intervalo**, na ordem em que a chave se monta — pedir a data primeiro convida a criar temporada sem lugar. Decidi que **remover temporada leva as sessões junto, declarando quantas**: sessão órfã é registro sem chave. Resolvi o `temporadasDe(...)[0]` pendente (0 de 300 têm mais de uma; estava certo por acidente). **Escrevi a classe de combinação com caracteres literais pela segunda vez no mesmo dia** — `simplificar` foi para um lugar só. E separei `<summary>` do botão que executa: os dois tinham as mesmas classes, e minha sonda clicou no gatilho concluindo que a remoção não funcionava, quando o código estava certo.",
+      "quando": "26.08 03:57"
+    },
+    {
+      "sessao": "S7",
+      "n": 6,
+      "rot": "P6 ficha de acessibilidade",
+      "nota": "A tela dos **três estados**, e não dois: «declarou e oferece», «declarou e não oferece» e «não declarou». O terceiro é o que some quando uma interface só tem caixas de marcar, e é o único que a plataforma se proibiu de interpretar. Decidi que **marcar qualquer dimensão também declara a ficha** — quem aponta um recurso preencheu —, e que **desmarcar a última NÃO devolve ao silêncio**: a declaração já foi feita, e desfazê-la exige ato próprio, com confirmação. O botão do ato leva a frase inteira e largura total, sem raio de pílula: pílula é forma de controle curto, e esta é uma afirmação. Ficha do espaço em leitura, com 0 campos editáveis medidos.",
+      "quando": "26.08 07:20"
     },
     {
       "sessao": "S3",
@@ -1224,6 +1238,13 @@ const DADOS = {
       "rot": "E4 tesauro",
       "nota": "A tela mais perigosa da Redação: as outras escrevem afirmação nova, esta mexe no vocabulário que todas usam para classificar. **O alcance é contado ANTES de a fusão ser oferecida** — cada item chega com quantos vínculos toca, medidos por `vizinhos()`, e a confirmação carrega o número no texto do botão («fundir «acervo» e mover 10 vínculo(s)»). **`aprovadaPor: null` é declarado e vazio, nunca ausente** — ausente seria lido como «não precisa de aprovação», e sem isso o Admin viraria curador por acidente. O alcance fica **congelado** no registro: uma proposta lida três dias depois tem de dizer quanto alcançava quando foi escrita. As 4 promovidas nomeadas com o porquê de não terem sido mapeadas (33 feio e verdadeiro em vez de 29 redondo e fabricado). Cor obrigatória entre as 7 do manual, com token na borda **e** nome por extenso. 120 dos 481 termos, os de maior alcance primeiro, com os dois números ditos. Sonda: 12 verdes; DTO 26.618 de 61.440",
       "quando": "26.08 03:56"
+    },
+    {
+      "sessao": "S5",
+      "n": 7,
+      "rot": "E5 redação editorial",
+      "nota": "**A ligação é aresta, não etiqueta** — é isso que faz «Aprofunda isto» funcionar a partir de qualquer evento: etiqueta no rodapé só é lida por quem já está na matéria, aresta é percorrível nos dois sentidos. Por isso a ligação escolhe entidade real do catálogo e **exige motivo**. **O crédito da imagem é obrigação que NASCE com a imagem**: sem imagem o campo não existe; ao acrescentar uma, a matéria que estava publicável para de ser, e a tela diz que é o crédito que falta. `creditoImagem` é `string \\",
+      "quando": "26.08 07:23"
     },
     {
       "sessao": "S6",
