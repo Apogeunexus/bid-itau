@@ -1,12 +1,12 @@
 {
-  "varredura": "26/08, 00:49",
+  "varredura": "26/08, 00:59",
   "kpi": {
-    "concluidas": 30,
+    "concluidas": 32,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 12,
+    "sujos": 13,
     "folgaS6": 8,
     "pedidos": 10
   },
@@ -171,7 +171,7 @@
       "pasta": "src/app/(bastidor)/moderacao",
       "sessaoNome": "bid-ita-68",
       "estado": "rodando",
-      "feitas": 4,
+      "feitas": 5,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -222,16 +222,16 @@
           "n": 5,
           "rot": "integração com a S7",
           "inicio": 5,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "799d5c0",
+          "nota": "**O portão central da sessão, provado:** o score exibido É a soma dos cinco componentes marcados — 1×0,2 = conta na tela = score, os três medidos juntos. A lista **não** ordena por confiança, e a tela diz por quê: ordenar por score ensinaria a varrer aprovando. Descartar é vetar e exige motivo. Aprovar deixa registro com origem «ia». **44 verdes.** Ligei as três telas entre si — IA e histórico existiam no artefato e não tinham link nenhum. Surpreendeu: o cabeçalho sticky da fase 4 passou a COBRIR os botões (7 blocos, +300 px); a própria suíte pegou com «ponto central coberto por HEADER.studio-cabecalho», e o que derruba clique automatizado derruba o de uma pessoa.",
+          "quando": "26.08 00:5x"
         },
         {
           "n": 6,
           "rot": "M3 revisão da IA",
           "inicio": 6,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -402,7 +402,7 @@
       "pasta": "src/app/(bastidor)/admin",
       "sessaoNome": "bid-ita-d4",
       "estado": "rodando",
-      "feitas": 5,
+      "feitas": 6,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -459,16 +459,16 @@
           "n": 6,
           "rot": "A1 papéis e escopos",
           "inicio": 6,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "ab6acb6",
+          "nota": "O formulário **não tem campo de procedência**: escolhe-se o papel e a tela diz qual carimbo ele autoriza. Eixos de escopo aparecem só para moderação; para os outros a tela explica por que não aparecem. Matriz de autoria **viva**, conferida contra `meta.json` a cada build — `programa` aparece com zero e a frase. As quatro procedências futuras trazem «a produção abre», não zero. Defeito de forma visto no navegador: campos esticando a 1.350px",
+          "quando": "26.08 01:55"
         },
         {
           "n": 7,
           "rot": "A7 auditoria",
           "inicio": 7,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -793,6 +793,13 @@
       "quando": "26.08 00:2x"
     },
     {
+      "sessao": "S3",
+      "n": 5,
+      "rot": "integração com a S7",
+      "nota": "**O portão central da sessão, provado:** o score exibido É a soma dos cinco componentes marcados — 1×0,2 = conta na tela = score, os três medidos juntos. A lista **não** ordena por confiança, e a tela diz por quê: ordenar por score ensinaria a varrer aprovando. Descartar é vetar e exige motivo. Aprovar deixa registro com origem «ia». **44 verdes.** Ligei as três telas entre si — IA e histórico existiam no artefato e não tinham link nenhum. Surpreendeu: o cabeçalho sticky da fase 4 passou a COBRIR os botões (7 blocos, +300 px); a própria suíte pegou com «ponto central coberto por HEADER.studio-cabecalho», e o que derruba clique automatizado derruba o de uma pessoa.",
+      "quando": "26.08 00:5x"
+    },
+    {
       "sessao": "S2",
       "n": 1,
       "rot": "recorte do DTO",
@@ -868,6 +875,13 @@
       "rot": "A6 observabilidade",
       "nota": "Primeira tela do Admin **inteiramente de servidor**: sem estado, sem armazenamento, zero JS no navegador. A conferência de três pontas passa a aparecer **antes** de derrubar o build, com o nome da fatia. Frescor sem relógio. Três defeitos vistos só no navegador: crase de código vazando para a frase, procedência saindo como enum cru (`ic`), caixa repetindo o próprio rótulo. Reusei `ROTULO_DA_PROCEDENCIA` do Observatório para as duas superfícies não batizarem a mesma fatia diferente",
       "quando": "26.08 01:30"
+    },
+    {
+      "sessao": "S1",
+      "n": 6,
+      "rot": "A1 papéis e escopos",
+      "nota": "O formulário **não tem campo de procedência**: escolhe-se o papel e a tela diz qual carimbo ele autoriza. Eixos de escopo aparecem só para moderação; para os outros a tela explica por que não aparecem. Matriz de autoria **viva**, conferida contra `meta.json` a cada build — `programa` aparece com zero e a frase. As quatro procedências futuras trazem «a produção abre», não zero. Defeito de forma visto no navegador: campos esticando a 1.350px",
+      "quando": "26.08 01:55"
     },
     {
       "sessao": "S5",
