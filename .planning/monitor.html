@@ -187,14 +187,14 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "25/08, 23:50",
+  "varredura": "25/08, 23:54",
   "kpi": {
-    "concluidas": 20,
+    "concluidas": 21,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 20,
+    "sujos": 15,
     "folgaS6": 9,
     "pedidos": 10
   },
@@ -359,14 +359,14 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/moderacao",
       "sessaoNome": "bid-ita-68",
       "estado": "rodando",
-      "feitas": 2,
+      "feitas": 3,
       "total": 11,
       "commit": null,
       "frescor": null,
       "idadeMin": null,
       "bloqueios": [],
       "pedidos": [
-        "PEDIDO-03 · quatro tipos de moderação, para `tipos-acesso.ts`",
+        "PEDIDO-03 · ATENDIDO em `305193a` (S7) · migrado em `db8610c`",
         "PEDIDO-04 · `scripts/medidas.mjs` não mede as telas da S3"
       ],
       "tarefas": [
@@ -392,16 +392,16 @@ const DADOS = {
           "n": 3,
           "rot": "M2 ficha do item",
           "inicio": 3,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "7435e09",
+          "nota": "Ficha campo a campo na ordem da ontologia, chave de identidade componente a componente, barreira de crédito de imagem explicada com dono da correção (114), as duas recusas escritas na tela — classificação se confere e não se arbitra (119), termo se encaminha e não se cria (118). Armazém virou módulo (`moderacao-armazem.ts`) e a falha do navegador virou frase na tela. Migrado para o contrato `305193a`: `DecisaoRegistrada extends DecisaoDeModeracao`, e o veto ganhou a **terceira trava**, `decisaoCompleta()` do contrato. **33 verdes.** Surpreendeu: dois defeitos só apareceram ao OLHAR a tela — botão desabilitado com desenho de ativo e lista dizendo «68 pendentes» mostrando oito. Viraram gate.",
+          "quando": "25.08 23:4x"
         },
         {
           "n": 4,
           "rot": "M9 histórico",
           "inicio": 4,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -958,6 +958,13 @@ const DADOS = {
       "rot": "M1 fila",
       "nota": "Quarta origem (denúncia, 120), ordem por vazio (124) com o registro da UF na linha para a ordem ser conferível a olho, escopo impresso com o que fica de fora (122), persistência em `moderacao.v1` e reinício com confirmação. **Suíte nova `verificar-moderacao.mjs`, minha, 21 verdes por gesto em navegador — não toca nenhuma `verificar-fase*.mjs`.** DTO 47.894/61.440. Ficou de fora: os registros vivos da S7, declarados em zero com a causa escrita, porque a tarefa 5 está bloqueada. Surpreendeu: pedir a visão «web» é obrigatório em teste de bastidor — sem isso todo clique falha por retângulo zerado.",
       "quando": "25.08 21:52"
+    },
+    {
+      "sessao": "S3",
+      "n": 3,
+      "rot": "M2 ficha do item",
+      "nota": "Ficha campo a campo na ordem da ontologia, chave de identidade componente a componente, barreira de crédito de imagem explicada com dono da correção (114), as duas recusas escritas na tela — classificação se confere e não se arbitra (119), termo se encaminha e não se cria (118). Armazém virou módulo (`moderacao-armazem.ts`) e a falha do navegador virou frase na tela. Migrado para o contrato `305193a`: `DecisaoRegistrada extends DecisaoDeModeracao`, e o veto ganhou a **terceira trava**, `decisaoCompleta()` do contrato. **33 verdes.** Surpreendeu: dois defeitos só apareceram ao OLHAR a tela — botão desabilitado com desenho de ativo e lista dizendo «68 pendentes» mostrando oito. Viraram gate.",
+      "quando": "25.08 23:4x"
     },
     {
       "sessao": "S2",
