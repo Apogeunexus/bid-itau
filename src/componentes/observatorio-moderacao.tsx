@@ -18,12 +18,15 @@ import type { DadosDaModeracao, TelaDaSuperficie } from "@/dados/observatorio";
  *    própria Moderação declara isso por escrito
  *  - volume decidido e taxa de veto: o dado EXISTE, e está do outro lado do DP-F. As decisões
  *    são gravadas no navegador de quem decidiu, e esta página roda no build
- *  - fila cruzada com a densidade: as duas pontas existem e não CASAM. A fila carrega título
- *    de município, a densidade conta unidade federativa, e casar as duas pelo nome seria a
- *    falsa equivalência que esta superfície inteira existe para não cometer
+ * Achatar as duas num «não temos» só apagaria a informação de que uma depende do acervo
+ * mudar e a outra é uma tela em outro lugar.
  *
- * Achatar as três num «não temos» só apagaria a informação de que uma tem solução de
- * contrato, outra depende do acervo mudar e a terceira é uma tela em outro lugar.
+ * O CRUZAMENTO ENTRE FILA E DENSIDADE FECHA, e é por SIGLA e não por título. A fila também
+ * carrega o título do território que alcança o item, e esses títulos são municípios e
+ * cidades estrangeiras — casá-los com a densidade pelo nome faria «São Paulo» da fila
+ * encontrar os registros do ESTADO. `ItemDaFila.uf` resolve a unidade federativa descendo a
+ * hierarquia territorial pela mesma travessia que `densidadePorUf()` usa, e por isso o
+ * número vale. O denominador é a parte RESOLVIDA da fila, nunca a fila inteira.
  *
  * DP-F: importa `@/dados/observatorio` APENAS POR TIPO.
  */
@@ -94,9 +97,11 @@ export function ObservatorioModeracao({
         </div>
         <p className="obs-publico-nota">
           São <strong>{milhar(d.fila)}</strong> itens na fila, e{" "}
-          <strong>{milhar(d.semTerritorio)}</strong> deles não têm território nenhum — o que já é
-          um diagnóstico: fila de moderação sem território não pode ser recortada por região, e um
-          escopo territorial sobre ela alcança menos do que parece.
+          <strong>{milhar(d.semUf)}</strong> deles o acervo não situa em unidade federativa
+          nenhuma — o que já é um diagnóstico: fila de moderação sem território não pode ser
+          recortada por região, e um escopo territorial sobre ela alcança menos do que parece.
+          Destes, <strong>{milhar(d.comTerritorioSemUf)}</strong> até trazem um título de
+          território, só que um que não é do Brasil.
         </p>
 
         <ul className="obs-metodos" data-escopos={d.porEscopo.length}>
@@ -117,29 +122,48 @@ export function ObservatorioModeracao({
           ))}
         </ul>
 
-        <div className="obs-tabela-uf" data-territorios-da-fila={d.porTerritorio.length}>
+      </section>
+
+      {/* ---------------------------------------------------------------
+          O CRUZAMENTO — a leitura que só existe nesta tela.
+          --------------------------------------------------------------- */}
+      <section className="obs-recorte" aria-labelledby="obs-cruzamento">
+        <div className="obs-recorte-cabeca">
+          <h2 id="obs-cruzamento" className="obs-secao-titulo">
+            Fila parada onde o acervo é magro
+          </h2>
+        </div>
+        <p className="obs-publico-nota">
+          É a única leitura desta superfície que <strong>não existe em nenhuma outra tela do
+          projeto</strong>: a Moderação vê a própria fila e não vê a densidade do acervo; o Admin
+          vê a máquina e não vê o acervo. Só aqui os dois números convivem — e é o cruzamento
+          deles que separa <strong>abandono</strong> de <strong>calmaria</strong>. A tabela está
+          ordenada pelo acervo, do mais magro ao mais cheio.
+        </p>
+        <ul className="web-grade obs-indicadores">
+          <CartaoDeIndicador indicador={d.cruzamento} destacado primeiro />
+        </ul>
+
+        <div className="obs-tabela-uf" data-ufs-da-fila={d.porUf.length}>
           <table className="obs-uf">
             <caption className="obs-uf-legenda">
-              Os {milhar(d.porTerritorio.length)} territórios que aparecem na fila, e a marca de
-              quais sequer coincidem com o nome de uma unidade federativa. Coincidir não é ser.
+              As {milhar(d.porUf.length)} unidades federativas com item na fila, resolvidas pela
+              descida da hierarquia territorial — a mesma travessia que mede a densidade, e não
+              comparação de nome.
             </caption>
             <thead>
               <tr>
-                <th scope="col">território</th>
+                <th scope="col">UF</th>
                 <th scope="col">itens na fila</th>
-                <th scope="col">coincide com UF?</th>
+                <th scope="col">registros no acervo</th>
               </tr>
             </thead>
             <tbody>
-              {d.porTerritorio.map((t) => (
-                <tr
-                  key={t.titulo}
-                  data-territorio-da-fila={t.titulo}
-                  data-no-grafo={t.coincideComUf ? "sim" : "nao"}
-                >
-                  <th scope="row">{t.titulo}</th>
-                  <td>{milhar(t.naFila)}</td>
-                  <td>{t.coincideComUf ? "o nome coincide" : "não é unidade federativa"}</td>
+              {d.porUf.map((u) => (
+                <tr key={u.sigla} data-uf-da-fila={u.sigla}>
+                  <th scope="row">{u.sigla}</th>
+                  <td>{milhar(u.naFila)}</td>
+                  <td>{milhar(u.registrosNoAcervo)}</td>
                 </tr>
               ))}
             </tbody>
@@ -148,20 +172,20 @@ export function ObservatorioModeracao({
       </section>
 
       {/* ---------------------------------------------------------------
-          O QUE ELA NÃO MEDE, e as três razões DIFERENTES.
+          O QUE ELA NÃO MEDE, e as duas razões DIFERENTES.
           --------------------------------------------------------------- */}
       <section className="obs-recorte obs-par" aria-labelledby="obs-moderacao-sem-lastro">
         <div className="obs-recorte-cabeca">
           <h2 id="obs-moderacao-sem-lastro" className="obs-secao-titulo">
-            O que ela não mede, e as três razões são diferentes
+            O que ela não mede, e as duas razões são diferentes
           </h2>
         </div>
         <p className="obs-publico-nota">
-          Uma falta porque <strong>o acervo não tem o campo</strong>; outra porque{" "}
-          <strong>o dado existe do outro lado da fronteira</strong>, no navegador de quem decidiu;
-          a terceira porque <strong>as duas pontas existem e não casam</strong>. Achatar as três
-          num «não temos» apagaria a informação de que uma tem solução de contrato, outra depende
-          do acervo mudar e a terceira é uma tela em outro lugar.
+          Uma falta porque <strong>o acervo não tem o campo</strong> — nenhum registro carrega
+          data de submissão, e a própria Moderação declara isso por escrito. A outra porque{" "}
+          <strong>o dado existe do outro lado da fronteira</strong>, no navegador de quem decidiu,
+          e esta página roda no build. Achatar as duas num «não temos» apagaria a informação de
+          que uma depende do acervo mudar e a outra é uma tela em outro lugar.
         </p>
         <ul className="web-grade obs-indicadores" data-sem-lastro={d.semLastro.length}>
           {d.semLastro.map((i) => (

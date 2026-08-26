@@ -2355,34 +2355,38 @@ export function montarDadosAbertos(): DadosAbertos {
 // ---------------------------------------------------------------------------
 
 /**
- * Um território na fila de moderação.
+ * Uma unidade federativa na fila de moderação, cruzada com a densidade do acervo.
  *
- * O CRUZAMENTO COM A DENSIDADE NÃO FECHA, E A TELA DIZ ISSO EM VEZ DE FORÇÁ-LO. A ideia era
- * boa e é a razão de esta tela existir do lado de quem observa: um território com pouco
- * acervo e fila parada é ABANDONO e não calmaria, e só aqui os dois números convivem. Só que
- * a fila carrega o título do território que ALCANÇA o item — e medido, esses títulos são
- * municípios e cidades estrangeiras (Belém, Berlin, Brno, Cidade do México), enquanto
- * `densidadePorUf()` conta por unidade federativa. Casar os dois pelo nome faria «São Paulo»
- * da fila encontrar os 274 registros do ESTADO de São Paulo sem que ninguém tenha decidido
- * que são a mesma coisa — a falsa equivalência exata que esta superfície existe para não
- * cometer. O que fica na tela é a composição da fila e a marca de quais títulos sequer são
- * unidade federativa.
+ * É A LEITURA QUE SÓ FAZ SENTIDO NO OBSERVATÓRIO, porque só aqui os dois números convivem:
+ * um território com pouco acervo e fila parada é ABANDONO, não calmaria. A Moderação vê a
+ * própria fila e não vê a densidade; o Admin vê a máquina e não vê o acervo.
+ *
+ * O CRUZAMENTO É POR SIGLA E NÃO POR TÍTULO, e a diferença é a tela inteira. A fila também
+ * carrega o título do território que alcança o item, e medido esses títulos são municípios e
+ * cidades estrangeiras — Belém, Berlin, Brno, Istambul. Casá-los com a densidade pelo nome
+ * faria «São Paulo» da fila encontrar os registros do ESTADO de São Paulo sem que ninguém
+ * tivesse decidido que são a mesma coisa. `ItemDaFila.uf` resolve a unidade federativa
+ * DESCENDO A HIERARQUIA por `porTerritorio()` — a mesma travessia que `densidadePorUf()`
+ * usa —, e é por isso que o cruzamento fecha.
  */
-export interface TerritorioNaFila {
-  titulo: string;
+export interface UfNaFila {
+  sigla: string;
   naFila: number;
-  /** O título coincide com o de uma das 27 unidades federativas? Coincidir não é ser. */
-  coincideComUf: boolean;
+  registrosNoAcervo: number;
 }
 
 export interface DadosDaModeracao {
   /** Os indicadores que a página de servidor NÃO pode medir, cada um com o seu motivo. */
   semLastro: Indicador[];
-  /** O que ela mede: a composição da fila, cruzada com o acervo. */
+  /** O cruzamento que justifica esta tela existir do lado de quem observa. */
+  cruzamento: Indicador;
   fila: number;
   porEscopo: LinhaDeIndicador[];
-  porTerritorio: TerritorioNaFila[];
-  semTerritorio: number;
+  porUf: UfNaFila[];
+  /** Itens sem unidade federativa — o acervo não os situa em território nenhum. */
+  semUf: number;
+  /** Destes, quantos até têm título de território, mas um que não resolve para UF. */
+  comTerritorioSemUf: number;
   /** A distinção entre M9, A10 e esta tela, escrita — confundi-las vira vigilância. */
   asTresTelas: { tela: string; deQuem: string; oQueMede: string }[];
   /** A declaração da própria Moderação sobre a antiguidade, citada como procedência. */
@@ -2395,28 +2399,26 @@ export function montarLeituraDaModeracao(): DadosDaModeracao {
   if (moderacaoMemorizada) return moderacaoMemorizada;
 
   const fila = filaDaModeracao();
-  const densidade = densidadePorUf();
-  const registrosPorTitulo = new Map(densidade.ufs.map((uf) => [uf.titulo, uf.registros]));
 
-  const naFilaPorTerritorio = new Map<string, number>();
-  let semTerritorio = 0;
+  const naFilaPorUf = new Map<string, { naFila: number; registros: number }>();
+  let semUf = 0;
+  let comTerritorioSemUf = 0;
   for (const item of fila) {
-    if (!item.territorio) {
-      semTerritorio += 1;
+    if (!item.uf) {
+      semUf += 1;
+      if (item.territorio) comTerritorioSemUf += 1;
       continue;
     }
-    naFilaPorTerritorio.set(item.territorio, (naFilaPorTerritorio.get(item.territorio) ?? 0) + 1);
+    const atual = naFilaPorUf.get(item.uf) ?? { naFila: 0, registros: item.registrosNaUf ?? 0 };
+    atual.naFila += 1;
+    naFilaPorUf.set(item.uf, atual);
   }
 
-  const porTerritorio: TerritorioNaFila[] = [...naFilaPorTerritorio.entries()]
-    .map(([titulo, naFila]) => ({
-      titulo,
-      naFila,
-      coincideComUf: registrosPorTitulo.has(titulo),
-    }))
-    .sort((a, b) => b.naFila - a.naFila || a.titulo.localeCompare(b.titulo));
+  const porUf: UfNaFila[] = [...naFilaPorUf.entries()]
+    .map(([sigla, x]) => ({ sigla, naFila: x.naFila, registrosNoAcervo: x.registros }))
+    .sort((a, b) => a.registrosNoAcervo - b.registrosNoAcervo || a.sigla.localeCompare(b.sigla));
 
-  const coincidentes = porTerritorio.filter((x) => x.coincideComUf).length;
+  const comUf = fila.length - semUf;
 
   const porEscopo: LinhaDeIndicador[] = ESCOPOS_DE_CURADORIA.map((e) => ({
     rotulo: e.rotulo,
@@ -2489,44 +2491,46 @@ export function montarLeituraDaModeracao(): DadosDaModeracao {
     }),
   ];
 
-  semLastro.push(
-    conferirIndicador({
+  const cruzamento = conferirIndicador({
       id: "fila-cruzada-com-densidade",
-      rotulo: "Fila parada por território, cruzada com o acervo",
-      valor: null,
-      unidade: "—",
+      rotulo: "Fila por território, cruzada com o acervo",
+      valor: porUf.length,
+      unidade: "unidades federativas com item na fila",
       denominador: {
-        n: coincidentes,
-        do_que: `dos ${porTerritorio.length} títulos de território da fila coincidem com uma das ${densidade.ufs.length} unidades federativas — e coincidir não é ser`,
+        n: comUf,
+        do_que: `itens da fila com unidade federativa resolvida — os outros ${semUf} não são falha de resolução: o acervo não os situa em território nenhum`,
       },
       denominadorSecundario: {
         n: fila.length,
-        do_que: `itens na fila, dos quais ${semTerritorio} não têm território nenhum`,
+        do_que: "itens na fila. O cruzamento vale sobre a parte resolvida, e não sobre a fila inteira",
       },
-      sustentado: false,
+      sustentado: true,
       procedenciaDoNumero:
-        "src/dados/moderacao.ts · ItemDaFila.territorio (título) contra src/dados/geo.ts · densidadePorUf() (unidade federativa) — duas granularidades que não casam",
-      declaracao:
-        `Esta é a leitura que só faria sentido aqui — um território com pouco acervo e fila parada é abandono, não calmaria —, e ela NÃO FECHA neste acervo. A fila carrega o título do território que alcança o item, e medido, esses títulos são municípios e cidades estrangeiras; a densidade conta por unidade federativa. Casar os dois pelo nome faria «São Paulo» da fila encontrar os registros do ESTADO de São Paulo sem que ninguém tenha decidido que são a mesma coisa. Só ${coincidentes} dos ${porTerritorio.length} títulos sequer coincidem com o nome de uma unidade federativa, e coincidência de nome não é identidade — é o mesmo critério que a ontologia aplica a duplicata: o que faz duas linhas serem a mesma coisa no mundo, não a parecença entre textos.`,
+        "src/dados/moderacao.ts · ItemDaFila.uf e ItemDaFila.registrosNaUf — a unidade federativa vem da descida da hierarquia territorial por porTerritorio(), a MESMA travessia de densidadePorUf(), e não de comparação de título",
+      declaracao: null,
       leitura:
-        "O cruzamento acende sozinho quando o item da fila carregar o ID do território em vez do título: aí a resolução até a unidade federativa é travessia de grafo, e não comparação de string. É pedido de contrato, não falta de tela.",
-      detalhe: porTerritorio.slice(0, 8).map((x) => ({
-        rotulo: x.titulo,
-        valor: x.naFila,
-        de: fila.length,
-        nota: x.coincideComUf
-          ? "o nome coincide com o de uma unidade federativa — e coincidir não é ser"
-          : "não é unidade federativa: não há densidade com que cruzar",
+        `${porUf.length} unidades federativas têm item nesta fila, sobre os ${comUf} itens que o acervo situa — ` +
+        `os outros ${semUf} não têm território nenhum, e isso não é falha de resolução: é o acervo não sabendo onde a coisa fica. ` +
+        `A lista abaixo está ordenada pelo ACERVO, do mais magro ao mais cheio, porque é essa ordem que revela o que só ` +
+        `esta tela pode ver: fila parada num estado com pouco acervo é abandono, não calmaria. ` +
+        `Cruzar por título em vez de por sigla faria «São Paulo» da fila — que é município — encontrar os registros do ESTADO, ` +
+        `e é por não fazer isso que este número vale.`,
+      detalhe: porUf.map((u) => ({
+        rotulo: u.sigla,
+        valor: u.naFila,
+        de: comUf,
+        nota: `${u.registrosNoAcervo} registros de lugar no acervo inteiro desta unidade federativa`,
       })),
-    }),
-  );
+    });
 
   moderacaoMemorizada = {
     semLastro,
+    cruzamento,
     fila: fila.length,
     porEscopo,
-    porTerritorio,
-    semTerritorio,
+    porUf,
+    semUf,
+    comTerritorioSemUf,
     asTresTelas: [
       {
         tela: "M9 · meu histórico",
