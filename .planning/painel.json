@@ -1,12 +1,12 @@
 {
-  "varredura": "25/08, 21:21",
+  "varredura": "25/08, 21:23",
   "kpi": {
     "concluidas": 2,
     "totalTarefas": 64,
     "ativas": 2,
     "bloqueadas": 4,
     "divergencias": 0,
-    "sujos": 5,
+    "sujos": 4,
     "folgaS6": 10,
     "pedidos": 33
   },

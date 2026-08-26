@@ -73,13 +73,17 @@ A condição é **sempre um commit**, nunca um arquivo no disco.
 
 | Sessão | Libera quando | Estado da condição |
 |---|---|---|
-| **S2** Gestor | imediato — sem dependência | ✅ fechada — **aguarda ordem do humano** |
-| **S5** Editor | split de `redacao.ts` commitado pela S3 | ✅ fechada em `e7ed486` — **aguarda ordem do humano** |
-| **S1** Admin | `tipos-acesso.ts` commitado pela S7 | ✅ **fechou agora, em `73976b8`** — aguarda ordem do humano |
+| **S2** Gestor | imediato — sem dependência | 🟢 **LIBERADA 25.08 21:35** |
+| **S5** Editor | split de `redacao.ts` commitado pela S3 | 🟢 **LIBERADA 25.08 21:35** — `e7ed486` |
+| **S1** Admin | `tipos-acesso.ts` commitado pela S7 | 🟢 **LIBERADA 25.08 21:35** — `73976b8` |
 | **S6** Organização | S7 com `estado: encerrada` | ⏳ S7 na tarefa 2 de 11 |
 
-**Três sessões prontas para partir e nenhuma liberada.** A liberação depende de ordem
-explícita do humano. **S6 e S7 dividem `(bastidor)/studio/`** — nunca simultâneas.
+**Cinco das seis em curso.** A S6 é a única parada, e continua parada por desenho: ela divide
+`(bastidor)/studio/` com a S7 e as duas **nunca** trabalham ao mesmo tempo.
+
+Cada liberação levou o `PROMPT-S<n>.md` inteiro mais o que mudou desde que o prompt foi
+escrito — a S1 soube que `tipos.ts` não foi editado, a S5 soube o que herdou do split, a S2
+soube do `EXIT=0` mentiroso do build.
 
 ---
 
@@ -185,4 +189,5 @@ Append, nunca reescrita.
 |---|---|
 | 25.08 19:20 | painel reestruturado; `estado/` e `TAREFAS.md` criados |
 | 25.08 21:05 | *(perdida — sobrescrita pelo `git checkout` da S7; reconstituída na linha abaixo)* |
+| 25.08 21:35 | S1, S5 e S2 liberadas por ordem do humano, com o prompt e os avisos de contexto; falso positivo do KPI de divergência corrigido em `3adea12` — era crase no hash da S7, não cabeçalho de tabela; `.next-*/` entrou no `.gitignore` |
 | 25.08 21:30 | legenda das seis confirmada por elas mesmas, empate `bid-ita-53` desfeito; as seis notificadas do §6; S7 commitou `73976b8` e **destravou a S1**; três sessões com condição fechada e nenhuma liberada; invasão commitada da S3 (`e7ed486`) subida ao humano; invasões pré-protocolo da S7 registradas; árvore reavaliada — 3 arquivos sujos fora de território, todos do humano/infra |
