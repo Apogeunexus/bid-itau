@@ -1,12 +1,12 @@
 {
-  "varredura": "25/08, 23:32",
+  "varredura": "25/08, 23:34",
   "kpi": {
-    "concluidas": 15,
+    "concluidas": 16,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 5,
+    "sujos": 12,
     "folgaS6": 9,
     "pedidos": 10
   },
@@ -402,7 +402,7 @@
       "pasta": "src/app/(bastidor)/admin",
       "sessaoNome": "bid-ita-d4",
       "estado": "rodando",
-      "feitas": 2,
+      "feitas": 3,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -432,16 +432,16 @@
           "n": 3,
           "rot": "A2 motor",
           "inicio": 3,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "7d0490d",
+          "nota": "Fixa o padrão da sessão: valor à esquerda, medição à direita, sempre visível. Ganhou escrita — mudar parâmetro exige valor novo **e** motivo, botão desabilitado até valer, registro com autor e carimbo, sem apagar. Armazenamento bloqueado virou frase na tela em vez de `catch` vazio. `studio.css` cobriu formulário, tabela e painéis: a folha do Admin não cresceu. **Ainda não aberta em navegador** — dev parado por ordem da coordenação",
+          "quando": "25.08 23:58"
         },
         {
           "n": 4,
           "rot": "A3 territórios",
           "inicio": 4,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -550,7 +550,7 @@
           "inicio": 4,
           "estado": "entregue",
           "commit": "e65c876",
-          "nota": "As cinco relações com contagem medida de `meta.json` — `influenciou`, `deriva_de` e `curou` marcam **0 de 66.563**, e é isso que a tela existe para mudar. Motivo obrigatório nas cinco (o tipo base só obriga em `semelhante_a`), travado em três lugares: tipo, `disabled` e a própria função. Fronteira ética impressa na tela. Peso com denominador: 81 arestas autoradas em 66.563. **`gravarPontes` devolve `boolean` em vez de engolir a falha** — storage recusado em janela privada deixaria o curador achando que registrou. Entrou junto a barra de rotas da Redação, que fecha o beco do PEDIDO 1 sem tocar em `menu-lateral.tsx`. **Falta a sonda em navegador: `next dev` está sob embargo pela vez de build da S3**",
+          "nota": "As cinco relações com contagem medida de `meta.json` — `influenciou`, `deriva_de` e `curou` marcam **0 de 66.563**, e é isso que a tela existe para mudar. Motivo obrigatório nas cinco (o tipo base só obriga em `semelhante_a`), travado em três lugares: tipo, `disabled` e a própria função. Fronteira ética impressa na tela. Peso com denominador: 81 arestas autoradas em 66.563. **`gravarPontes` devolve `boolean` em vez de engolir a falha** — storage recusado em janela privada deixaria o curador achando que registrou. Entrou junto a barra de rotas da Redação, que fecha o beco do PEDIDO 1 sem tocar em `menu-lateral.tsx`. Sonda em navegador: **16 verdes**, incluindo forçar clique e submit sem motivo (nada é autorado) e ponte sem motivo plantada no storage sendo recusada na leitura",
           "quando": "25.08 23:30"
         },
         {
@@ -807,6 +807,13 @@
       "quando": "25.08 23:48"
     },
     {
+      "sessao": "S1",
+      "n": 3,
+      "rot": "A2 motor",
+      "nota": "Fixa o padrão da sessão: valor à esquerda, medição à direita, sempre visível. Ganhou escrita — mudar parâmetro exige valor novo **e** motivo, botão desabilitado até valer, registro com autor e carimbo, sem apagar. Armazenamento bloqueado virou frase na tela em vez de `catch` vazio. `studio.css` cobriu formulário, tabela e painéis: a folha do Admin não cresceu. **Ainda não aberta em navegador** — dev parado por ordem da coordenação",
+      "quando": "25.08 23:58"
+    },
+    {
       "sessao": "S5",
       "n": 1,
       "rot": "reancorar redacao.ts",
@@ -824,7 +831,7 @@
       "sessao": "S5",
       "n": 3,
       "rot": "E3 arestas de sentido",
-      "nota": "As cinco relações com contagem medida de `meta.json` — `influenciou`, `deriva_de` e `curou` marcam **0 de 66.563**, e é isso que a tela existe para mudar. Motivo obrigatório nas cinco (o tipo base só obriga em `semelhante_a`), travado em três lugares: tipo, `disabled` e a própria função. Fronteira ética impressa na tela. Peso com denominador: 81 arestas autoradas em 66.563. **`gravarPontes` devolve `boolean` em vez de engolir a falha** — storage recusado em janela privada deixaria o curador achando que registrou. Entrou junto a barra de rotas da Redação, que fecha o beco do PEDIDO 1 sem tocar em `menu-lateral.tsx`. **Falta a sonda em navegador: `next dev` está sob embargo pela vez de build da S3**",
+      "nota": "As cinco relações com contagem medida de `meta.json` — `influenciou`, `deriva_de` e `curou` marcam **0 de 66.563**, e é isso que a tela existe para mudar. Motivo obrigatório nas cinco (o tipo base só obriga em `semelhante_a`), travado em três lugares: tipo, `disabled` e a própria função. Fronteira ética impressa na tela. Peso com denominador: 81 arestas autoradas em 66.563. **`gravarPontes` devolve `boolean` em vez de engolir a falha** — storage recusado em janela privada deixaria o curador achando que registrou. Entrou junto a barra de rotas da Redação, que fecha o beco do PEDIDO 1 sem tocar em `menu-lateral.tsx`. Sonda em navegador: **16 verdes**, incluindo forçar clique e submit sem motivo (nada é autorado) e ponte sem motivo plantada no storage sendo recusada na leitura",
       "quando": "25.08 23:30"
     },
     {
