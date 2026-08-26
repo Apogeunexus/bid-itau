@@ -184,8 +184,26 @@ Escreva o defeito, confirme que o gate acusa, restaure o arquivo, confira o `git
 Sem isso, «não contém», «não expõe» e «não importa» são promessas sem prova.
 
 **A regra 2, e ela pega o que a primeira não pega: toda asserção de ausência precisa de um
-PISO.** Prove que o conjunto que você mede **não está vazio** antes de afirmar que ele não
-contém o defeito. `nenhum X entre N` é verificação; **`nenhum X` sozinho é uma frase que fica
+PISO POR FONTE.** Prove que **cada** conjunto que você varre não está vazio antes de afirmar
+que ele não contém o defeito — **nunca sobre a união deles**.
+
+A metade «por fonte» não é preciosismo, e quem a descobriu foi a mesma sessão que propôs a
+regra, aplicando-a em si mesma. Ela pôs o piso sobre a **união** de componentes `admin-*` e
+páginas de `(bastidor)/admin`, injetou a reforma que renomeia o prefixo para `painel-*`, e:
+
+```
+FALHA  a trilha de auditoria não tem ação de escrita
+FALHA  coordenada.procedencia … nenhuma tela do Admin a escreve
+FALHA  nenhum componente de cliente chama travessia (DP-F)
+ok     nenhuma tela do Admin oferece apagar        ← VERDE, com ZERO componentes varridos
+```
+
+**As dez páginas sustentavam o piso da união sozinhas**, e aquele gate seguia afirmando sobre
+um conjunto que tinha deixado de ser varrido. **Um conjunto vazio escondido dentro de uma
+soma não vazia é exatamente o buraco que o piso existia para fechar.**
+
+Seletor descendente é a mesma soma escrita em CSS: `[data-a] [data-b]` esconde o
+desaparecimento de `[data-a]` dentro do resultado de `[data-b]`. `nenhum X entre N` é verificação; **`nenhum X` sozinho é uma frase que fica
 verde no dia em que o N virar zero** — e o N vira zero sem ninguém perceber, porque um
 seletor renomeado não quebra o gate: ele o faz parar de medir.
 
