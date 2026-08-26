@@ -2095,3 +2095,224 @@ export function montarProduto(): DadosDoProduto {
   produtoMemorizado = { medidos, semLastro };
   return produtoMemorizado;
 }
+
+// ---------------------------------------------------------------------------
+// G7 · Dados abertos — o recorte exportável e o dicionário que o acompanha
+// ---------------------------------------------------------------------------
+
+/**
+ * Um campo do recorte exportável, com significado e procedência.
+ *
+ * EXPORTAR NÚMERO SEM DICIONÁRIO É EXPORTAR MAL-ENTENDIDO. Uma coluna chamada `registros`
+ * numa planilha, três meses depois, na mão de outra pessoa, vira «entidades» sem que
+ * ninguém tenha decidido isso — é exatamente o erro que a tela de território existe para
+ * não cometer, e ele se comete sozinho quando o dado sai daqui sem o dicionário junto.
+ */
+export interface CampoDoDicionario {
+  campo: string;
+  significado: string;
+  unidade: string;
+  procedencia: string;
+}
+
+export interface RecorteExportavel {
+  id: string;
+  rotulo: string;
+  resumo: string;
+  colunas: string[];
+  linhas: (string | number | null)[][];
+  dicionario: CampoDoDicionario[];
+}
+
+export interface DadosAbertos {
+  /** A data do grafo, e nunca o relógio de quem avalia. É ela que versiona o recorte. */
+  geradoEm: string;
+  versao: string;
+  licenca: string;
+  anonimizacao: string;
+  sobreAApi: string;
+  recortes: RecorteExportavel[];
+}
+
+const CAMPOS_COMUNS: CampoDoDicionario[] = [
+  {
+    campo: "id",
+    significado: "Identificador estável do indicador dentro do módulo — é por ele que duas exportações de datas diferentes se comparam.",
+    unidade: "texto",
+    procedencia: "src/dados/observatorio.ts · Indicador.id",
+  },
+  {
+    campo: "valor",
+    significado:
+      "O número medido. VAZIO quando o acervo não sustenta o indicador — e vazio aqui NÃO É ZERO: zero é uma medida que deu zero, vazio é a ausência do lastro. Confundir os dois é o erro que este recorte mais provavelmente vai sofrer na mão de quem o receber.",
+    unidade: "número ou vazio",
+    procedencia: "src/dados/observatorio.ts · Indicador.valor, com Indicador.sustentado ao lado",
+  },
+  {
+    campo: "sustentado",
+    significado:
+      "«sim» quando o acervo sustenta o indicador. É a coluna que desfaz a ambiguidade do vazio, e por isso ela viaja SEMPRE junto do valor.",
+    unidade: "sim | nao",
+    procedencia: "src/dados/observatorio.ts · Indicador.sustentado",
+  },
+  {
+    campo: "denominador",
+    significado: "Sobre quantos o número foi medido. Um valor sem ele não afirma nada.",
+    unidade: "número",
+    procedencia: "src/dados/observatorio.ts · Indicador.denominador.n",
+  },
+  {
+    campo: "denominador_do_que",
+    significado: "O que está sendo contado no denominador, em português — registros, entidades, pessoas, eventos.",
+    unidade: "texto",
+    procedencia: "src/dados/observatorio.ts · Indicador.denominador.do_que",
+  },
+  {
+    campo: "origem_do_numero",
+    significado: "O módulo e a função que produziram o valor. É a procedência do número, e não a do dado.",
+    unidade: "texto",
+    procedencia: "src/dados/observatorio.ts · Indicador.procedenciaDoNumero",
+  },
+];
+
+let dadosAbertosMemorizados: DadosAbertos | null = null;
+
+export function montarDadosAbertos(): DadosAbertos {
+  if (dadosAbertosMemorizados) return dadosAbertosMemorizados;
+
+  const ind = indicadores();
+  const painel = painelDeProcedencia();
+  const ausencias = ausenciasDeclaradas();
+  const geradoEm = META.geradoEm;
+
+  const recortes: RecorteExportavel[] = [
+    {
+      id: "indicadores",
+      rotulo: "Indicadores de impacto cultural",
+      resumo: `Os ${ind.length} indicadores da superfície, com denominador, lastro e origem do número.`,
+      colunas: ["id", "rotulo", "valor", "unidade", "sustentado", "denominador", "denominador_do_que", "origem_do_numero"],
+      linhas: ind.map((i) => [
+        i.id,
+        i.rotulo,
+        i.valor,
+        i.unidade,
+        i.sustentado ? "sim" : "nao",
+        i.denominador.n,
+        i.denominador.do_que,
+        i.procedenciaDoNumero,
+      ]),
+      dicionario: [
+        ...CAMPOS_COMUNS.slice(0, 1),
+        {
+          campo: "rotulo",
+          significado: "O nome do indicador como ele aparece na tela.",
+          unidade: "texto",
+          procedencia: "src/dados/observatorio.ts · Indicador.rotulo",
+        },
+        ...CAMPOS_COMUNS.slice(1, 2),
+        {
+          campo: "unidade",
+          significado: "O que o número conta — linguagens, entidades, por cento. Traço quando não há valor.",
+          unidade: "texto",
+          procedencia: "src/dados/observatorio.ts · Indicador.unidade",
+        },
+        ...CAMPOS_COMUNS.slice(2),
+      ],
+    },
+    {
+      id: "procedencia",
+      rotulo: "Procedência do acervo",
+      resumo: `As ${painel.entidades.length + painel.arestas.length} fatias contadas — entidades e ligações —, com fração e composição.`,
+      colunas: ["leitura", "procedencia", "n", "percentual", "total", "significado"],
+      linhas: [
+        ...painel.entidades.map((f) => [
+          "entidades",
+          f.procedencia,
+          f.n,
+          f.percentual,
+          painel.totalDeEntidades,
+          f.significado,
+        ]),
+        ...painel.arestas.map((f) => [
+          "ligacoes",
+          f.procedencia,
+          f.n,
+          f.percentual,
+          painel.totalDeArestas,
+          f.significado,
+        ]),
+      ],
+      dicionario: [
+        {
+          campo: "leitura",
+          significado:
+            "«entidades» conta as coisas do acervo; «ligacoes» conta as ligações entre elas. As duas leituras contam histórias diferentes e não devem ser somadas.",
+          unidade: "entidades | ligacoes",
+          procedencia: "src/dados/observatorio.ts · painelDeProcedencia()",
+        },
+        {
+          campo: "procedencia",
+          significado:
+            "De onde veio: «ic» é o acervo do Itaú Cultural carregado como está, «derivado» é leitura nossa por regra escrita, «autorado» é o que nós inventamos para o protótipo.",
+          unidade: "ic | derivado | autorado",
+          procedencia: "src/dados/tipos.ts · Procedencia",
+        },
+        { campo: "n", significado: "Quantas, contadas na varredura.", unidade: "número", procedencia: "varredura própria de observatorio.ts, conferida contra contagens() e meta.json" },
+        { campo: "percentual", significado: "A fração contra o total daquela leitura, com uma casa decimal.", unidade: "por cento", procedencia: "src/dados/observatorio.ts · calculado, nunca digitado" },
+        { campo: "total", significado: "O total da leitura — é o denominador do percentual.", unidade: "número", procedencia: "src/dados/gerado/meta.json · totais" },
+        { campo: "significado", significado: "O que aquela procedência quer dizer, em texto de produto.", unidade: "texto", procedencia: "src/dados/observatorio.ts · SIGNIFICADO_DA_PROCEDENCIA" },
+      ],
+    },
+    {
+      id: "ausencias",
+      rotulo: "Ausências declaradas",
+      resumo: `Os ${ausencias.length} buracos medidos do acervo, com denominador, quem preencheria e a projeção.`,
+      colunas: ["id", "rotulo", "quantos", "de", "do_que", "nivel_que_preenche", "projecao", "origem_do_numero"],
+      linhas: ausencias.map((a) => [
+        a.id,
+        a.rotulo,
+        a.quantos,
+        a.de,
+        a.do_que,
+        a.nivelQuePreenche,
+        a.projecao,
+        a.procedenciaDoNumero,
+      ]),
+      dicionario: [
+        ...CAMPOS_COMUNS.slice(0, 1),
+        { campo: "rotulo", significado: "O nome da ausência como ela aparece na tela.", unidade: "texto", procedencia: "src/dados/observatorio.ts · AusenciaDeclarada.rotulo" },
+        {
+          campo: "quantos",
+          significado:
+            "O que EXISTE, contado. Zero aqui é sempre medida: o campo existe, foi varrido, e ninguém o preencheu. Nunca é ausência de leitura.",
+          unidade: "número",
+          procedencia: "src/dados/observatorio.ts · ausenciasDeclaradas()",
+        },
+        { campo: "de", significado: "O total sobre o qual a contagem foi feita.", unidade: "número", procedencia: "src/dados/observatorio.ts · AusenciaDeclarada.de" },
+        { campo: "do_que", significado: "O que está sendo contado, em português.", unidade: "texto", procedencia: "src/dados/observatorio.ts · AusenciaDeclarada.do_que" },
+        {
+          campo: "nivel_que_preenche",
+          significado:
+            "O nível de acesso que passa a escrever este dado quando o bastidor entrar no ar. É o campo que transforma a lista de buracos em plano de trabalho.",
+          unidade: "texto",
+          procedencia: "src/dados/observatorio.ts · AusenciaDeclarada.nivelQuePreenche",
+        },
+        { campo: "projecao", significado: "O que este número vira quando aquele nível entrar no ar.", unidade: "texto", procedencia: "src/dados/observatorio.ts · AusenciaDeclarada.projecao" },
+        ...CAMPOS_COMUNS.slice(5),
+      ],
+    },
+  ];
+
+  dadosAbertosMemorizados = {
+    geradoEm,
+    versao: `observatorio-${geradoEm}`,
+    licenca:
+      "O acervo é do Itaú Cultural e as condições dele valem. O que este recorte acrescenta — as contagens, os denominadores e o dicionário — é descrição do acervo e não obra derivada dele: pode ser citado, conferido e refeito por quem tiver o mesmo grafo.",
+    anonimizacao:
+      "Este recorte é AGREGADO por construção. Nenhuma linha aqui descreve uma pessoa: as três personas do protótipo são autoradas por nós e aparecem só como denominador — «3 pessoas» —, nunca como registro. O Observatório inteiro lê o público em agregado e não tem, em tela nenhuma, um caminho até o indivíduo.",
+    sobreAApi:
+      "A API pública com chave e limite de uso é do Admin (funcionalidade 97), e não desta superfície. O que existe aqui é o recorte legível e o dicionário que o acompanha — quem for construir em cima começa por eles, e pede a chave lá.",
+    recortes,
+  };
+  return dadosAbertosMemorizados;
+}

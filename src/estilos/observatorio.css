@@ -935,3 +935,25 @@
   line-height: 1.25;
   color: var(--cor-tinta-2);
 }
+
+/* ---------------------------------------------------------------------------
+ * G7 · a prévia do recorte exportável.
+ *
+ * ELA ROLA NOS DOIS EIXOS DENTRO DO PRÓPRIO CONTÊINER. Linha de CSV é longa por
+ * natureza e quebrá-la mudaria o que a pessoa lê: quem confere um recorte
+ * precisa ver a linha como ela sai, não como ela coube. `tabindex` no bloco é o
+ * que torna a rolagem alcançável por teclado.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-previa {
+  max-height: 26rem;
+  overflow: auto;
+  padding: 0.75rem;
+  border: var(--web-borda);
+  border-radius: var(--web-raio);
+  background: var(--cor-superficie-2);
+  font-family: var(--fonte-mono, monospace);
+  font-size: var(--tipo-legenda);
+  line-height: 1.5;
+  white-space: pre;
+  tab-size: 2;
+}
