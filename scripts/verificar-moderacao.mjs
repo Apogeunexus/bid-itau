@@ -1396,6 +1396,68 @@ async function principal() {
       "as duas coisas",
     );
 
+    // =======================================================================
+    titulo("── M7 · duplicatas: a competência, e a ausência declarada ──");
+    // =======================================================================
+
+    await cdp.navegar(`${BASE}/moderacao/duplicatas/`);
+    await cdp.assentar();
+
+    const dup = await cdp.avaliar(
+      naPagina(`
+        const mod = document.querySelector('[data-lado="moderacao"]');
+        const prod = document.querySelector('[data-lado="produtor"]');
+        const aviso = document.querySelector('[data-sem-caso-cruzado]');
+        const grupos = todos('[data-grupo-duplicata]');
+        const semAcao = document.querySelector('[data-sem-acao]');
+        const comparacao = document.querySelector('[data-comparacao]');
+        return {
+          // Piso por fonte: cada conjunto é provado antes de ser medido.
+          temDenominadores: Boolean(mod && prod),
+          daModeracao: mod ? Number(mod.getAttribute('data-valor')) : null,
+          doProdutor: prod ? Number(prod.getAttribute('data-valor')) : null,
+          declaraAusencia: Boolean(aviso),
+          grupos: grupos.length,
+          temComparacao: Boolean(comparacao),
+          campos: comparacao ? comparacao.querySelectorAll('[data-campo]').length : -1,
+          // A ausência de botão é o conteúdo: oferecer decisão sobre grupo de competência
+          // alheia desfaria, na interface, a regra que a tela existe para afirmar.
+          semBotaoDeDecisao: Boolean(semAcao),
+          botoesDeDecisao: document.querySelectorAll('[data-veredito-familia], [data-acao-moderacao]').length,
+        };
+      `),
+    );
+
+    exigir(
+      dup.temDenominadores && dup.daModeracao === 0 && dup.doProdutor === 84,
+      "a competência é declarada com os dois números: 0 desta mesa, 84 do produtor",
+      `moderação ${dup.daModeracao} · produtor ${dup.doProdutor}`,
+      "0 · 84",
+    );
+
+    // A tela NÃO abre vazia mesmo sem caso: tela vazia não distingue «não há caso» de «a
+    // busca não rodou», e a diferença é tudo o que ela tem para dizer hoje.
+    exigir(
+      dup.declaraAusencia && dup.grupos > 0,
+      "sem caso cruzado, a tela DECLARA a ausência e mostra os grupos que existem",
+      `declara: ${dup.declaraAusencia} · ${dup.grupos} grupos listados`,
+      "declara, e não abre vazia",
+    );
+
+    exigir(
+      dup.temComparacao && dup.campos > 0,
+      "a comparação campo a campo continua, herdada da fase 4",
+      `${dup.campos} campos comparados`,
+      "> 0",
+    );
+
+    exigir(
+      dup.semBotaoDeDecisao && dup.botoesDeDecisao === 0,
+      "não há botão de decisão sobre grupo de competência do produtor",
+      `declara por quê: ${dup.semBotaoDeDecisao} · ${dup.botoesDeDecisao} botões de decisão`,
+      "true · 0",
+    );
+
     // -----------------------------------------------------------------------
     titulo("── zero erro de console na navegação inteira ──");
     // -----------------------------------------------------------------------

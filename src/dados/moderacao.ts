@@ -44,6 +44,7 @@ import { DATA_DE_REFERENCIA } from "./alerta";
 import type { OrigemMotivo } from "./cartao";
 import { ROTA_POR_CLASSE } from "./rotas";
 import { normalizar } from "./indice";
+import { filaDeDuplicatas } from "./duplicatas";
 import type { ClasseEntidade, Entidade, Procedencia, Relacao } from "./tipos";
 import type { AcaoDeModeracao, DecisaoDeModeracao, Situacao } from "./tipos-acesso";
 import metaJson from "./gerado/meta.json";
@@ -1349,6 +1350,147 @@ export const APROVAR_E_A_UNICA_PORTA =
   "carimbo. O score ao lado de cada sugestão não decide nada — ele é a fração de cinco " +
   "perguntas sobre a ficha da própria entidade, exibidas marcadas uma a uma, para que quem " +
   "decide confira a conta em vez de confiar no número.";
+
+// ---------------------------------------------------------------------------
+// M7 — duplicatas entre organizações (113) · o que o produtor não decide
+// ---------------------------------------------------------------------------
+
+/**
+ * Um grupo de duplicatas que a MODERAÇÃO decide, e não o produtor.
+ *
+ * A REGRA DE COMPETÊNCIA (163 contra 113): um produtor pode decidir sobre duplicata entre
+ * os PRÓPRIOS registros — são dele, ele sabe qual é qual. Entre registros de fontes
+ * diferentes nenhum dos dois lados pode decidir sem ser parte, e a decisão precisa de quem
+ * não é. É a mesma razão pela qual ninguém julga a própria causa.
+ *
+ * O PROXY DE «ORGANIZAÇÃO», E ELE É DECLARADO. O acervo do Itaú Cultural **não publica a
+ * organização** de nenhum registro: não existe esse campo. O que ele publica é a FONTE —
+ * `evento:cms:*` veio do CMS da agenda, `evento:enc:*` veio do lote da Enciclopédia — e é
+ * ela que esta tela usa para separar «mesma origem» de «origens diferentes». Chamar fonte
+ * de organização sem dizer seria inventar um campo; usá-la dizendo é o recorte mais
+ * próximo que o dado sustenta.
+ */
+export interface GrupoParaModeracao {
+  id: string;
+  estagio: string;
+  estagioRotulo: string;
+  score: number | null;
+  /** `encenado`, `acervo` ou `cruzado` — a distinção que a fase 4 já fazia. */
+  origem: string;
+  /** As fontes distintas presentes no grupo. Duas ou mais é o que traz o grupo para cá. */
+  fontes: string[];
+  registros: { id: string; titulo: string; fonte: string; procedencia: string; rota: string }[];
+  campos: { campo: string; rotulo: string; valores: string[]; divergente: boolean }[];
+}
+
+export const REGRA_DA_COMPETENCIA =
+  "Um produtor decide duplicata entre os próprios registros — são dele, e ele sabe qual é " +
+  "qual (funcionalidade 163). Quando o grupo junta registros de FONTES DIFERENTES, nenhum " +
+  "dos dois lados pode decidir sem ser parte, e é aqui que a decisão vem parar. É a mesma " +
+  "razão pela qual ninguém julga a própria causa, e é o que separa a 113 da 163.";
+
+export const O_ACERVO_NAO_PUBLICA_ORGANIZACAO =
+  "O acervo do Itaú Cultural NÃO publica a organização de nenhum registro — esse campo não " +
+  "existe em entidade nenhuma. O que ele publica é a FONTE: `evento:cms:*` entrou pelo CMS " +
+  "da agenda e `evento:enc:*` veio do lote da Enciclopédia. Esta tela usa a fonte como o " +
+  "recorte mais próximo que o dado sustenta, e diz que está usando — chamar fonte de " +
+  "organização sem avisar seria inventar um campo e exibi-lo com o crachá do IC.";
+
+/** A fonte de um id do acervo: `cms`, `enc`, ou o que o id declarar. */
+function fonteDoId(id: string): string {
+  const partes = id.split(":");
+  return partes.length >= 3 ? partes[1] : "desconhecida";
+}
+
+export interface PanoramaDasDuplicatas {
+  /** Todos os grupos que a deduplicação encontrou. */
+  totalDeGrupos: number;
+  /** Os que ficam com o PRODUTOR — mesma fonte, decisão dele (163). */
+  deUmaFonteSo: number;
+  /** Quantos de fato juntam fontes diferentes. **Zero neste acervo**, e a tela diz. */
+  cruzamFontes: number;
+  /** Os grupos que a tela mostra. */
+  grupos: GrupoParaModeracao[];
+  /** Quantos dos que vieram são duplicata real do acervo, e não clone encenado. */
+  doAcervoReal: number;
+}
+
+let duplicatasMemo: PanoramaDasDuplicatas | null = null;
+
+/**
+ * Os grupos que a moderação decide.
+ *
+ * O recorte é por FONTES DISTINTAS, e o denominador do que ficou de fora vai junto: uma
+ * tela que mostrasse só os que vieram faria parecer que a deduplicação achou 44 grupos,
+ * quando ela achou 84 e 40 são de competência do produtor.
+ */
+export function duplicatasParaModeracao(): PanoramaDasDuplicatas {
+  if (duplicatasMemo) return duplicatasMemo;
+
+  const todos = filaDeDuplicatas();
+  const comFontes = todos.map((g) => ({
+    g,
+    // `autorado` NÃO é fonte: é a procedência dos 40 clones que a fase 4 plantou. Contá-lo
+    // faria todo grupo encenado parecer «duas organizações» — o clone e o original que ele
+    // viola são o MESMO registro em duas cópias, e não dois lados de uma disputa.
+    fontes: [...new Set(
+      g.registros.map((r) => fonteDoId(r.id)).filter((f) => f !== "autorado"),
+    )].sort(),
+  }));
+  const cruzam = comFontes.filter((x) => x.fontes.length > 1);
+
+  // O QUE FICA NA TELA QUANDO NÃO HÁ CASO CRUZADO. Nenhum dos 84 grupos junta registros de
+  // fontes diferentes — todo achado deste acervo é de competência do PRODUTOR (163), não da
+  // moderação (113). A tela mostra os grupos que existem, marcados como dele, em vez de
+  // abrir vazia: uma tela vazia não distingue «não há caso» de «a busca não rodou», e a
+  // diferença entre as duas é a única coisa que ela tem para dizer hoje.
+  const paraMostrar = cruzam.length ? cruzam : comFontes;
+
+  duplicatasMemo = {
+    totalDeGrupos: todos.length,
+    deUmaFonteSo: todos.length - cruzam.length,
+    cruzamFontes: cruzam.length,
+    doAcervoReal: todos.filter((g) => g.origem === "acervo").length,
+    grupos: paraMostrar.slice(0, 8).map(({ g, fontes }) => ({
+      id: g.id,
+      estagio: g.estagio,
+      estagioRotulo: g.estagioRotulo,
+      score: g.score,
+      origem: g.origem,
+      fontes,
+      registros: g.registros.map((r) => ({
+        id: r.id,
+        titulo: r.titulo,
+        fonte: fonteDoId(r.id),
+        procedencia: r.procedencia,
+        rota: r.rota,
+      })),
+      campos: g.campos.map((c) => ({
+        campo: c.campo,
+        rotulo: c.rotulo,
+        valores: c.valores,
+        divergente: c.divergente,
+      })),
+    })),
+  };
+  return duplicatasMemo;
+}
+
+export const NAO_HA_CASO_CRUZADO =
+  "**Nenhum dos 84 grupos que a deduplicação encontrou junta registros de fontes " +
+  "diferentes.** Todo achado deste acervo é de competência do produtor, e não da " +
+  "moderação — e isso não é defeito da busca: é o que o acervo tem. A tela existe assim " +
+  "mesmo, com os grupos que há e a competência marcada em cada um, porque o dia em que uma " +
+  "segunda organização publicar no mesmo acervo é o dia em que o primeiro caso aparece, e " +
+  "aí não pode ser preciso construir a tela às pressas. Uma tela vazia diria a mesma coisa " +
+  "que uma busca que não rodou.";
+
+export const DUPLICATA_DO_ACERVO_E_REAL =
+  "Os grupos de origem `acervo` são DUPLICATA REAL ENCONTRADA EM ACERVO REAL: ninguém os " +
+  "plantou. Os de origem `encenado` são os 40 clones que a fase 4 criou de propósito, para " +
+  "provar que o motor os encontra. A distinção fica na tela porque um protótipo que " +
+  "mistura os dois faz o achado real parecer parte da encenação — e o achado real é a " +
+  "prova de que a deduplicação tem trabalho para fazer no dia em que for ligada.";
 
 // ---------------------------------------------------------------------------
 // M4 — revisão de similaridade (112) · governar 47.259 arestas sem fingir

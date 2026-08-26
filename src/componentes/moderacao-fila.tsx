@@ -498,6 +498,9 @@ export function ModeracaoFila({
           <Link className="studio-botao" data-ir-para="ia" href="/moderacao/ia/">
             revisão da IA · {comSeparador(numeros.itensPorOrigem.ia)}
           </Link>
+          <Link className="studio-botao" data-ir-para="duplicatas" href="/moderacao/duplicatas/">
+            duplicatas
+          </Link>
           <Link className="studio-botao" data-ir-para="similaridade" href="/moderacao/similaridade/">
             similaridade
           </Link>
