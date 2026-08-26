@@ -55,6 +55,23 @@ const VERBOS_DESTRUTIVOS = /\b(apagar|apague|excluir|exclua|deletar|delete|remov
 let verdes = 0;
 const falhas = [];
 
+/**
+ * O PISO de uma asserção de ausência.
+ *
+ * «Nenhum X» fica verde quando o conjunto varrido vira vazio — um prefixo renomeado, uma
+ * pasta movida, um seletor que deixou de casar. O gate não quebra: ele para de medir e
+ * continua reportando verde, que é o pior estado possível para uma verificação.
+ *
+ * Por isso toda ausência aqui declara sobre QUANTOS ela foi medida, e falha se o
+ * denominador for zero. `nenhum X entre N` é verificação; `nenhum X` sozinho é uma frase.
+ *
+ * Esta função nasceu de uma auditoria das suítes das outras sessões — e a primeira coisa
+ * que ela achou foi que três gates DESTE arquivo tinham o mesmo buraco.
+ */
+function piso(quantos, oQue) {
+  return quantos > 0 ? null : `o conjunto varrido está VAZIO (${oQue}) — a ausência não foi medida`;
+}
+
 function exigir(condicao, nome, medida, esperado) {
   if (condicao) {
     verdes += 1;
@@ -148,18 +165,27 @@ console.log("\nverificar-admin — as regras da superfície de governança");
 
 // ---- 2. Nenhuma tela do Admin oferece apagar ----
 {
-  const arquivos = [...(await componentesDoAdmin()), ...(await paginasDoAdmin())];
+  const componentes = await componentesDoAdmin();
+  const paginas = await paginasDoAdmin();
+  const arquivos = [...componentes, ...paginas];
   const hits = [];
   for (const { nome, fonte } of arquivos) {
     for (const botao of botoesDe(fonte)) {
       if (VERBOS_DESTRUTIVOS.test(botao)) hits.push(`${nome}: «${rotuloDe(botao)}»`);
     }
   }
+  // O PISO É POR FONTE, e não sobre a união — medido com o defeito injetado. Renomeando só
+  // o prefixo dos componentes, o conjunto de componentes ia a zero e as dez páginas
+  // sustentavam o piso da união sozinhas: o gate seguia verde afirmando sobre um conjunto
+  // que tinha deixado de ser varrido. Duas fontes, dois pisos.
+  const vazio =
+    piso(componentes.length, "componentes admin-*") ??
+    piso(paginas.length, "páginas de (bastidor)/admin");
   exigir(
-    hits.length === 0,
+    !vazio && hits.length === 0,
     "nenhuma tela do Admin oferece apagar (existe suspender, com rastro)",
-    hits.length === 0 ? `0 verbos destrutivos em ${arquivos.length} arquivos` : hits.join(" | "),
-    "0",
+    vazio ?? (hits.length === 0 ? `0 verbos destrutivos em ${arquivos.length} arquivos` : hits.join(" | ")),
+    "0 verbos, sobre pelo menos 1 arquivo",
   );
 }
 
@@ -230,15 +256,17 @@ console.log("\nverificar-admin — as regras da superfície de governança");
     .filter(({ fonte }) => /coordenada[\s\S]{0,60}procedencia\s*[:=]/.test(fonte))
     .map((a) => a.nome);
 
+  const vazio = piso(arquivos.length, "componentes admin-*");
   exigir(
-    declaracao && escrevem.length === 0,
+    declaracao && !vazio && escrevem.length === 0,
     "coordenada.procedencia é o literal «derivado» no tipo, e nenhuma tela do Admin a escreve",
-    declaracao
-      ? escrevem.length === 0
-        ? "o tipo recusa outro valor; a A3 edita a tabela de referência, não a coordenada"
-        : `escrita em ${escrevem.join(", ")}`
-      : "o literal saiu de tipos.ts",
-    "o literal no tipo e 0 escritas",
+    !declaracao
+      ? "o literal saiu de tipos.ts"
+      : (vazio ??
+        (escrevem.length === 0
+          ? `o tipo recusa outro valor; ${arquivos.length} telas varridas, nenhuma escreve coordenada`
+          : `escrita em ${escrevem.join(", ")}`)),
+    "o literal no tipo e 0 escritas, sobre pelo menos 1 tela",
   );
 }
 
@@ -257,6 +285,8 @@ console.log("\nverificar-admin — as regras da superfície de governança");
       "}));",
   );
   const ok =
+    obs.nos > 0 &&
+    obs.arestas > 0 &&
     obs.fecha &&
     obs.divergencias.length === 0 &&
     obs.nos === obs.metaNos &&
@@ -291,17 +321,20 @@ console.log("\nverificar-admin — as regras da superfície de governança");
     "tiposDeTitular",
   ];
   const hits = [];
+  let clientes = 0;
   for (const { nome, fonte } of await componentesDoAdmin()) {
     if (!/^"use client";/m.test(fonte)) continue;
+    clientes += 1;
     for (const f of travessia) {
       if (new RegExp(`\\b${f}\\s*\\(`).test(fonte)) hits.push(`${nome}: ${f}()`);
     }
   }
+  const vazio = piso(clientes, "componentes admin-* marcados «use client»");
   exigir(
-    hits.length === 0,
+    !vazio && hits.length === 0,
     "nenhum componente de cliente chama função que atravessa o grafo (DP-F)",
-    hits.length === 0 ? "0 chamadas de travessia em componente de cliente" : hits.join(" | "),
-    "0",
+    vazio ?? (hits.length === 0 ? `0 chamadas de travessia em ${clientes} componentes de cliente` : hits.join(" | ")),
+    "0 chamadas, sobre pelo menos 1 componente de cliente",
   );
 }
 
