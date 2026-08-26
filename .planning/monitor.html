@@ -187,14 +187,14 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "25/08, 23:44",
+  "varredura": "25/08, 23:50",
   "kpi": {
-    "concluidas": 18,
+    "concluidas": 20,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 26,
+    "sujos": 20,
     "folgaS6": 9,
     "pedidos": 10
   },
@@ -706,7 +706,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/redacao",
       "sessaoNome": "bid-ita-7d [b1187f]",
       "estado": "rodando",
-      "feitas": 3,
+      "feitas": 4,
       "total": 10,
       "commit": null,
       "frescor": null,
@@ -745,16 +745,16 @@ const DADOS = {
           "n": 4,
           "rot": "E9 assinaturas",
           "inicio": 5,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "c8f09b0",
+          "nota": "**A fatia autorada tem 47 nós e exatamente UM é curadoria.** Varri o acervo por `grafo.ts` (D-47) e bate com `meta.json`: 47 de 47 — mas 40 são duplicatas semeadas para a fila da moderação e 6 são personas do protótipo. Mostrar 47 como «afirmação assinada» inflaria a curadoria por 47×, numa tela que existe para auditar isso; a classificação é lida da estrutura (quem tem `duplicata_suspeita`), não de marca no slug. A varredura vê 78 das 81 ligações e diz que vê — só alcança as que tocam nó autorado. **A E1 não registrava a publicação**, então a E9 abriria vazia logo após publicar: virou registro em `redacao-registro.ts`, módulo que o cliente pode importar porque não alcança o grafo. Sem filtro por período, e a tela diz por quê (sem relógio, tudo carrega a mesma data). **Retirar ponte passou a confirmar** — era irreversível a um clique. Sondas: E9 12 verdes, E1 e E3 reexecutadas sem regressão",
+          "quando": "25.08 23:45"
         },
         {
           "n": 5,
           "rot": "E2 destaque",
           "inicio": 6,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -813,7 +813,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-53 [913196]",
       "estado": "rodando",
-      "feitas": 4,
+      "feitas": 5,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -868,16 +868,16 @@ const DADOS = {
           "n": 5,
           "rot": "O5 mídia",
           "inicio": 15,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "0a570e3",
+          "nota": "529 mídias · 520 com crédito · **9 sem**, e a tela abre POR ELAS, ordenadas na frente pelo módulo de servidor — fila é dado, não filtro de componente. O número mais duro da sessão foi para o topo: as 529 **declaram** a ficha e mesmo assim **7 das 8 dimensões estão em ZERO itens** (só Libras, em 3). Ficha preenchida não é ficha atendida. O direito de distribuição repete `declarado` de propósito — silêncio não é permissão. **Categoria não é formato**: mapear «podcasts → áudio» preencheria 336 itens de uma vez e seria inferência vendida como declaração.",
+          "quando": "26.08 01:45"
         },
         {
           "n": 6,
           "rot": "O3 programa",
           "inicio": 16,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -1030,6 +1030,13 @@ const DADOS = {
       "quando": "25.08 23:30"
     },
     {
+      "sessao": "S5",
+      "n": 4,
+      "rot": "E9 assinaturas",
+      "nota": "**A fatia autorada tem 47 nós e exatamente UM é curadoria.** Varri o acervo por `grafo.ts` (D-47) e bate com `meta.json`: 47 de 47 — mas 40 são duplicatas semeadas para a fila da moderação e 6 são personas do protótipo. Mostrar 47 como «afirmação assinada» inflaria a curadoria por 47×, numa tela que existe para auditar isso; a classificação é lida da estrutura (quem tem `duplicata_suspeita`), não de marca no slug. A varredura vê 78 das 81 ligações e diz que vê — só alcança as que tocam nó autorado. **A E1 não registrava a publicação**, então a E9 abriria vazia logo após publicar: virou registro em `redacao-registro.ts`, módulo que o cliente pode importar porque não alcança o grafo. Sem filtro por período, e a tela diz por quê (sem relógio, tudo carrega a mesma data). **Retirar ponte passou a confirmar** — era irreversível a um clique. Sondas: E9 12 verdes, E1 e E3 reexecutadas sem regressão",
+      "quando": "25.08 23:45"
+    },
+    {
       "sessao": "S6",
       "n": 1,
       "rot": "ler o que a S7 deixou",
@@ -1056,6 +1063,13 @@ const DADOS = {
       "rot": "O7 equipe e alçadas",
       "nota": "As duas regras duras moram no **método**, não no botão: `remover()` recusa o titular, e nenhuma das cinco alçadas promove a moderador, editor ou admin. A sucessão move o título num passo e leva junto «gerir a equipe» — titular sem ela seria dono que não pode conceder nada. Toda decisão grava histórico com autor e carimbo **no mesmo método**: separar tornaria possível mudar alçada sem rastro. Os perfis são **papéis, não pessoas** — usar uma das 575 pessoas reais como colaboradora afirmaria um vínculo de emprego que ninguém declarou.",
       "quando": "26.08 01:05"
+    },
+    {
+      "sessao": "S6",
+      "n": 5,
+      "rot": "O5 mídia",
+      "nota": "529 mídias · 520 com crédito · **9 sem**, e a tela abre POR ELAS, ordenadas na frente pelo módulo de servidor — fila é dado, não filtro de componente. O número mais duro da sessão foi para o topo: as 529 **declaram** a ficha e mesmo assim **7 das 8 dimensões estão em ZERO itens** (só Libras, em 3). Ficha preenchida não é ficha atendida. O direito de distribuição repete `declarado` de propósito — silêncio não é permissão. **Categoria não é formato**: mapear «podcasts → áudio» preencheria 336 itens de uma vez e seria inferência vendida como declaração.",
+      "quando": "26.08 01:45"
     }
   ]
 };
