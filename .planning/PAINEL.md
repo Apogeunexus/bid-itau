@@ -76,9 +76,37 @@ A condição é **sempre um commit**, nunca um arquivo no disco.
 | **S2** Gestor | imediato — sem dependência | 🟢 **LIBERADA 25.08 21:35** |
 | **S5** Editor | split de `redacao.ts` commitado pela S3 | 🟢 **LIBERADA 25.08 21:35** — `e7ed486` |
 | **S1** Admin | `tipos-acesso.ts` commitado pela S7 | 🟢 **LIBERADA 25.08 21:35** — `73976b8` |
-| **S6** Organização | S7 com `estado: encerrada` | ⏳ S7 na tarefa 2 de 11 |
+| **S6** Organização | ~~S7 com `estado: encerrada`~~ — **condição revogada pelo humano em 25.08 22:55** | 🟢 **LIBERADA em paralelo com a S7**, com fronteira de território escrita (ver 5d) |
 
-**Cinco das seis em curso.** A S6 é a única parada, e continua parada por desenho: ela divide
+**As seis em curso.** O §9 foi suspenso pelo dono do projeto em 25.08 22:55: as sessões
+decidem e seguem, sem confirmação tela a tela. **Duas exceções continuam de pé** — mudança de
+ontologia e território proibido pelo §6 sobem para o humano e param a sessão.
+
+---
+
+### 5d · Fronteira S6 ↔ S7 dentro de `(bastidor)/studio/`
+
+Escrita por mim em 25.08 22:55, quando o humano mandou paralelizar as duas. As dezenove
+rotas não colidem; o que colidia era a raiz e a folha.
+
+| | S7 · Produtor | S6 · Organização |
+|---|---|---|
+| **Rotas** | `/studio/` (raiz), `publicar`, `grade`, `ocorrencias`, `elenco`, `temporada`, `acessibilidade`, `comercial`, `revisar`, `duplicatas` | `instituicao`, `espacos`, `equipe`, `midia`, `programa`, `formacao`, `editais`, `integracao`, `alcance`, `conformidade` |
+| **Componentes** | `componentes/studio-*` | `componentes/studio-org-*` |
+| **Folha** | `src/estilos/studio.css` | `src/estilos/organizacao.css` (nova, com `@import` próprio) |
+
+`/studio/page.tsx` é da S7. A S6 usa navegação no cabeçalho da própria superfície e registra
+PEDIDO para a S7 acrescentar as dez rotas na raiz. A S6 **reusa** os componentes da S7 —
+ficha de acessibilidade, carimbo de autoria, selo de procedência, aviso de duplicata — em vez
+de duplicar.
+
+**O risco que o humano assumiu, dito por escrito:** duas sessões na mesma pasta não dão erro
+de compilação quando colidem — dão conflito silencioso. A fronteira acima é o que substitui a
+serialização.
+
+---
+
+**~~Cinco~~ das seis em curso.** A S6 é a única parada, e continua parada por desenho: ela divide
 `(bastidor)/studio/` com a S7 e as duas **nunca** trabalham ao mesmo tempo.
 
 Cada liberação levou o `PROMPT-S<n>.md` inteiro mais o que mudou desde que o prompt foi
@@ -189,5 +217,6 @@ Append, nunca reescrita.
 |---|---|
 | 25.08 19:20 | painel reestruturado; `estado/` e `TAREFAS.md` criados |
 | 25.08 21:05 | *(perdida — sobrescrita pelo `git checkout` da S7; reconstituída na linha abaixo)* |
+| 25.08 22:55 | o humano mandou não parar: §9 suspenso para as cinco em curso, e a S6 liberada em paralelo com a S7 com fronteira de território escrita; o painel passa a republicar a cada varredura, mude ou não, para o carimbo não congelar |
 | 25.08 21:35 | S1, S5 e S2 liberadas por ordem do humano, com o prompt e os avisos de contexto; falso positivo do KPI de divergência corrigido em `3adea12` — era crase no hash da S7, não cabeçalho de tabela; `.next-*/` entrou no `.gitignore` |
 | 25.08 21:30 | legenda das seis confirmada por elas mesmas, empate `bid-ita-53` desfeito; as seis notificadas do §6; S7 commitou `73976b8` e **destravou a S1**; três sessões com condição fechada e nenhuma liberada; invasão commitada da S3 (`e7ed486`) subida ao humano; invasões pré-protocolo da S7 registradas; árvore reavaliada — 3 arquivos sujos fora de território, todos do humano/infra |
