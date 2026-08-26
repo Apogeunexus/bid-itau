@@ -21,7 +21,7 @@
  * exatamente o defeito.
  */
 
-import { contagens, porId, porSlug, slugsPorTipo, vizinhos } from "./grafo";
+import { contagens, ocorrenciasDe, porId, porSlug, slugsPorTipo, vizinhos } from "./grafo";
 import { motivoDaAresta } from "./motivo";
 import { DATA_DE_REFERENCIA } from "./alerta";
 import { trilhaCompletaPorSlug, trilhaEhPublicavel, trilhas } from "./trilha";
@@ -56,6 +56,16 @@ export const CURADOR_E_AUTORADO =
   "curadoria fica registrada com autor e carimbo, e não que sabemos quem está do outro " +
   `lado. O carimbo é derivado da data de referência do build (${DATA_DE_REFERENCIA}), ` +
   "nunca do relógio de quem abre a página.";
+
+/**
+ * As sessões datadas de um nó, para as regras 2 e 3 da publicabilidade viajarem como FATO.
+ *
+ * `null` quando o nó não é evento: a pergunta não se aplica, e um `0` ali seria lido como
+ * «é evento e não tem sessão», que é outra coisa. Ver `REGRA_DO_DESTINO`.
+ */
+function sessoesDatadasDe(id: string, classe: ClasseEntidade): number | null {
+  return classe === "evento" ? ocorrenciasDe(id).length : null;
+}
 
 /** Comparação por ponto de código, estável entre plataformas — nunca `localeCompare`. */
 function porIdEstavel(a: { id: string }, b: { id: string }): number {
@@ -96,6 +106,17 @@ export interface PassoDoEditor {
   procedenciaAresta: Procedencia | null;
   /** `true` nos passos que vieram do acervo; o editor acrescenta passos com `false`. */
   doAcervo: boolean;
+  /**
+   * Quantas sessões datadas o acervo publica para o nó de destino. `null` quando ele não
+   * é `evento` — e `null` é «a pergunta não se aplica», nunca «não tem»: ler ausência
+   * como declaração é o erro exato que a seção 10 da ontologia proíbe.
+   *
+   * Ele existe porque o editor REORDENA, e reordenar troca qual nó é o último da cadeia —
+   * que é a única coisa de que as regras 2 e 3 da publicabilidade dependem. O número vem
+   * de `ocorrenciasDe`, a MESMA função que `destinoFinal` chama dentro de `trilha.ts`:
+   * não é uma segunda contagem, é a mesma leitura atravessando o DTO.
+   */
+  paraSessoesDatadas: number | null;
 }
 
 export interface TrilhaDoEditor {
@@ -155,6 +176,7 @@ export function passosParaEditor(slug: string): PassoDoEditor[] {
       origemMotivo: p.origemMotivo,
       procedenciaAresta: p.procedenciaAresta,
       doAcervo: true,
+      paraSessoesDatadas: sessoesDatadasDe(p.para.id, p.para.classe),
     };
   });
 }
@@ -203,6 +225,36 @@ export const REGRA_DO_MOTIVO_OBRIGATORIO =
   "regras de publicabilidade — cadeia vazia, cadeia que não termina em evento, evento sem " +
   "sessão datada — vêm de `trilhaEhPublicavel`, da fase 2, e não são reescritas aqui.";
 
+/**
+ * A REGRA DO DESTINO — e por que ela viaja como texto em vez de como código.
+ *
+ * Duas das três regras da fase 2 dependem SÓ do último nó da cadeia: ele tem de ser
+ * `evento`, e o acervo tem de publicar sessão datada para ele. O editor reordena passos, e
+ * reordenar troca qual nó é o último — então o veredito que `trilhaEhPublicavel` calculou
+ * no build, para a ordem original, deixa de responder pela cadeia que está na tela.
+ *
+ * O cliente NÃO pode chamar `trilhaEhPublicavel`: ela alcança 23 MB de grafo, e DP-F proíbe
+ * um arquivo `"use client"` de importar este módulo por valor. A saída é mandar o FATO que
+ * a regra lê — `paraClasse` e `paraSessoesDatadas`, os dois medidos pelas mesmas funções de
+ * `grafo.ts` que `trilha.ts` usa — e deixar o cliente aplicar o mesmo teste sobre ele.
+ *
+ * O QUE ISSO NÃO É: uma segunda definição da regra. A regra continua uma só, em
+ * `trilhaEhPublicavel`, e é ela que decide a trilha do acervo — o campo
+ * `motivoNaoPublicavelNoAcervo` chega daqui VERBATIM e é o que a tela mostra enquanto a
+ * cadeia não muda. O que o cliente avalia é a cadeia REORDENADA, que não existe no acervo e
+ * sobre a qual `trilhaEhPublicavel` não tem o que dizer. A frase abaixo é a explicação
+ * dessa avaliação, escrita uma vez e citada na tela — e não uma cópia da prosa de
+ * `trilha.ts`, que ficaria divergindo dela na primeira edição.
+ */
+export const REGRA_DO_DESTINO =
+  "Uma trilha de primeira vez termina em algo a que se possa IR, com data — é a regra da " +
+  "fase 2, e ela vive em `trilhaEhPublicavel`. Enquanto a cadeia está na ordem do acervo, " +
+  "quem responde por ela é o veredito do acervo, com a frase que veio de lá. Ao reordenar " +
+  "ou acrescentar passos, o curador monta uma cadeia que o acervo não conhece: aí a tela " +
+  "aplica a MESMA regra sobre os fatos que vieram medidos do grafo — a classe do último nó " +
+  "e quantas sessões datadas o acervo publica para ele. A regra não é reescrita; o que " +
+  "muda é a cadeia sobre a qual ela é lida.";
+
 // ---------------------------------------------------------------------------
 // D-86 — a sugestão de próximo passo, e o que ela NÃO é
 // ---------------------------------------------------------------------------
@@ -211,6 +263,8 @@ export interface SugestaoDeProximoPasso {
   entidadeId: string;
   titulo: string;
   classe: ClasseEntidade;
+  /** Ver `PassoDoEditor.paraSessoesDatadas`: aceitar a sugestão a põe no fim da cadeia. */
+  sessoesDatadas: number | null;
   relacao: Relacao;
   /** A frase DA ARESTA, por `motivoDaAresta`. Não é texto de modelo. */
   motivo: string;
@@ -251,6 +305,7 @@ export function sugestaoDeProximoPasso(slug: string): SugestaoDeProximoPasso | n
       entidadeId: v.entidade.id,
       titulo: v.entidade.titulo,
       classe: v.entidade.classe,
+      sessoesDatadas: sessoesDatadasDe(v.entidade.id, v.entidade.classe),
       relacao: v.aresta.relacao,
       motivo: m.texto,
       origemMotivo: m.origemMotivo,
@@ -271,6 +326,8 @@ export interface CandidatoDoCatalogo {
   id: string;
   titulo: string;
   classe: ClasseEntidade;
+  /** Ver `PassoDoEditor.paraSessoesDatadas`: qualquer candidato pode virar o último passo. */
+  sessoesDatadas: number | null;
 }
 
 export interface CatalogoDeArrasto {
@@ -356,6 +413,7 @@ export function catalogoParaArrastar(): CatalogoDeArrasto {
       id: e.id,
       titulo: e.titulo,
       classe: e.classe,
+      sessoesDatadas: sessoesDatadasDe(e.id, e.classe),
     })),
     total: TOTAL_DE_ENTIDADES,
     elegiveis: elegiveis.length,

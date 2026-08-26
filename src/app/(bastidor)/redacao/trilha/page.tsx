@@ -5,6 +5,7 @@ import {
   DATA_DE_REFERENCIA_DA_REDACAO,
   LIMITES_DA_IA,
   REGRA_DA_SUGESTAO,
+  REGRA_DO_DESTINO,
   REGRA_DO_MOTIVO_OBRIGATORIO,
   catalogoParaArrastar,
   slugDaTrilhaDoEditor,
@@ -45,6 +46,7 @@ export default function PaginaRedacaoTrilha() {
       dataDeReferencia={DATA_DE_REFERENCIA_DA_REDACAO}
       regraDoMotivoObrigatorio={REGRA_DO_MOTIVO_OBRIGATORIO}
       regraDaSugestao={REGRA_DA_SUGESTAO}
+      regraDoDestino={REGRA_DO_DESTINO}
     />
   );
 }

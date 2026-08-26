@@ -212,12 +212,84 @@
  * O EDITOR DE TRILHA — D-85 e D-86
  * ======================================================================== */
 
-/* O catálogo é a coluna estreita; os passos e a publicabilidade, a larga. É a
- * proporção que as telas de bastidor herdaram da fase 4 e que a Moderação também
- * usa: trocá-la de rota em rota faria o operador reaprender o layout a cada tela,
- * e as superfícies têm de parecer a mesma família. */
+/* TRÊS COLUNAS, e esta é a única tela do projeto que tem três: catálogo, cadeia e
+ * a prévia do selo na moldura do app. Não é ornamento — é o argumento da tela. O
+ * curador escreve o motivo OLHANDO o que o leitor vai ler, e as duas coisas
+ * precisam caber no mesmo campo de visão para que a igualdade entre elas seja
+ * observada em vez de prometida.
+ *
+ * A do meio é `minmax(0, 1fr)` pelo motivo de sempre: o mínimo automático de um
+ * item de grade é o tamanho do conteúdo, e um título longo sem espaço empurraria
+ * a coluna para fora da grade. As duas laterais são fixas porque o que mora nelas
+ * tem largura natural — uma lista densa e uma tela de telefone. */
 .redacao-colunas-editor {
   --web-altura-lista: 46vh;
+  grid-template-columns: 24rem minmax(0, 1fr) 27rem;
+}
+
+.redacao-coluna-previa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--web-gap);
+  min-width: 0;
+}
+
+/* A MOLDURA DA PRÉVIA. É uma citação do telefone, não o telefone: `.moldura` de
+ * `base.css` vive sob `[data-view="mobile"]` e não alcança esta tela, que é web.
+ * Reproduzir o bezel aqui seria maquiagem; o que esta caixa precisa provar é a
+ * LARGURA — o selo quebrando linha como quebra no app —, e por isso ela tem a
+ * medida do aparelho e para por aí. 24.5rem = 392px, a largura lógica de um
+ * iPhone 14/15 arredondada para a grade de 0.25rem do design system. */
+.redacao-moldura-previa {
+  width: 24.5rem;
+  max-width: 100%;
+  overflow: hidden;
+  border: 0.5rem solid var(--ic-preto);
+  outline: 1px solid var(--cor-borda);
+  border-radius: 2rem;
+  background: var(--cor-fundo);
+  box-shadow: var(--sombra-3);
+}
+
+/* Quem rola é o filho, nunca a moldura — o mesmo arranjo de `.moldura-rolagem`. */
+.redacao-previa-tela {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 60vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem;
+}
+
+/* O passo que perdeu a ligação para a qual o motivo foi escrito. O realce é de
+ * ATENÇÃO e não de erro: o texto não está errado, está órfão da ligação. */
+.redacao-passo[data-revisar-motivo="sim"] {
+  border-color: var(--cor-acao);
+}
+
+.redacao-revisao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: var(--raio-m);
+  background: color-mix(in srgb, var(--cor-acao) 8%, transparent);
+}
+
+.redacao-passo-acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.redacao-mover[disabled] {
+  opacity: 0.4;
+}
+
+.redacao-destino[data-destino-ok="nao"] {
+  border-color: var(--cor-acao);
 }
 
 .redacao-catalogo {
