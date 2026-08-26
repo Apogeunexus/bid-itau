@@ -930,3 +930,165 @@
   font-weight: 700;
   color: var(--cor-acao-tinta);
 }
+
+/* --- Seletor de comunidade ----------------------------------------------- */
+
+/* O menu é DESENHADO, não é `<select>`. O nativo é pintado pelo sistema
+ * operacional: fundo, tipografia, marca de seleção e cantos vêm do macOS ou do
+ * Android, e nenhum deles conhece a paleta do Itaú Cultural. Numa tela em que
+ * cada cartão foi desenhado, ele aparece como corpo estranho. */
+
+.seletor-comunidade {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-pilha);
+}
+
+.seletor-campo {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex: 1 1 9rem;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.seletor-rotulo {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+.seletor-gatilho {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.seletor-gatilho[aria-expanded="true"] {
+  border-color: var(--cor-acao);
+}
+
+.seletor-gatilho:disabled {
+  border-color: var(--cor-borda);
+  color: var(--cor-tinta-3);
+  cursor: not-allowed;
+}
+
+.seletor-gatilho > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seletor-seta {
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-right: 1.8px solid currentColor;
+  border-bottom: 1.8px solid currentColor;
+  transform: rotate(45deg) translate(-0.12rem, -0.12rem);
+  opacity: 0.65;
+}
+
+/* O painel posiciona contra o campo, e o campo é `relative` — a mesma regra da
+ * gaveta do menu: nada de `fixed`, que se ancoraria na janela e escaparia da
+ * moldura do telefone. */
+.seletor-painel {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  left: 0;
+  z-index: 40;
+  max-height: 16rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 0;
+  padding: 0.3rem;
+  list-style: none;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-3);
+}
+
+.seletor-opcao {
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border: 0;
+  border-radius: var(--raio-p);
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+  text-align: left;
+  cursor: pointer;
+}
+
+.seletor-opcao:hover,
+.seletor-opcao:focus-visible {
+  background: var(--cor-superficie-2);
+}
+
+.seletor-opcao[aria-selected="true"] {
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+}
+
+.seletor-opcao-uf {
+  flex: none;
+  margin-left: auto;
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+.seletor-opcao[aria-selected="true"] .seletor-opcao-uf {
+  color: inherit;
+}
+
+.seletor-vazio {
+  padding: 0.5rem 0.6rem;
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+/* Assinatura da curadoria — a comunidade leva o nome de alguém, mas quem escreve
+ * é o Itaú Cultural, e a tela precisa dizer isso sem rodeio. */
+.selo-curadoria {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+/* A faixa de visita: a pessoa entrou numa comunidade que ainda não segue, e a
+ * tela diz isso em vez de deixá-la descobrir ao voltar e não achar. */
+.faixa-visita {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-m);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-detalhe);
+}

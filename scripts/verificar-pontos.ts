@@ -340,6 +340,38 @@ titulo("11. O estado nasce inteiro");
   );
 }
 
+/* ── 12. Nenhuma publicação repete id ────────────────────────────────────── */
+
+titulo("12. Ids de publicação são únicos");
+{
+  // O portão que faltava quando o gerador do feed passou a produzir `pub-ic-1`,
+  // que já era o id de uma publicação escrita à mão. Chave repetida quebra a
+  // reconciliação do React: trocar de comunidade deixava as publicações antigas
+  // na tela, e nenhuma linha do código parecia errada.
+  const m = novoMotor();
+  const ids = m.atual.publicacoes.map((p) => p.id);
+  const vistos = new Set<string>();
+  const duplicados = ids.filter((id) => (vistos.has(id) ? true : (vistos.add(id), false)));
+
+  conferir(
+    `${ids.length} publicações, ${vistos.size} ids distintos`,
+    duplicados.length === 0,
+    duplicados.join(", "),
+  );
+
+  // Toda publicação aponta para uma comunidade que existe — sem isso ela some da
+  // tela sem erro nenhum, que é pior que quebrar.
+  const comunidades = new Set(m.catalogo.comunidades.map((c) => c.id));
+  const orfas = m.atual.publicacoes.filter((p) => !comunidades.has(p.comunidadeId));
+  conferir("nenhuma publicação órfã", orfas.length === 0, orfas.map((p) => p.id).join(", "));
+
+  // Cada comunidade tem pelo menos cinco: menos que isso e a tela parece morta.
+  const magras = m.catalogo.comunidades.filter(
+    (c) => m.atual.publicacoes.filter((p) => p.comunidadeId === c.id).length < 5,
+  );
+  conferir("toda comunidade tem 5 ou mais publicações", magras.length === 0, magras.map((c) => c.id).join(", "));
+}
+
 /* ── Fecho ───────────────────────────────────────────────────────────────── */
 
 console.log(`\n${portoes - falhas}/${portoes} portões passaram.`);

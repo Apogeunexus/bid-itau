@@ -7,6 +7,7 @@
  */
 
 import { COMUNIDADES, PESSOAS, PUBLICACOES } from "./comunidade";
+import { PUBLICACOES_DO_ACERVO } from "./comunidade-feed";
 import { RECOMPENSAS } from "./loja";
 import { CONFIG, EMBLEMAS, MISSOES, REGRAS } from "./pontos";
 import type { DadosDoPrograma } from "@/lib/pontos/tipos";
@@ -18,6 +19,11 @@ export const PROGRAMA: DadosDoPrograma = {
   emblemas: EMBLEMAS,
   recompensas: RECOMPENSAS,
   comunidades: COMUNIDADES,
-  publicacoes: PUBLICACOES,
+  /**
+   * As escritas à mão vêm PRIMEIRO — são as que abrem cada comunidade e contam
+   * o que ela é. As geradas do acervo vêm em seguida e dão volume: sem elas,
+   * uma comunidade com uma publicação só parece abandonada.
+   */
+  publicacoes: [...PUBLICACOES, ...PUBLICACOES_DO_ACERVO],
   pessoas: PESSOAS,
 };

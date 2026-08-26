@@ -150,7 +150,17 @@ export function PublicacaoAberta({ id }: { id: string }) {
       <div className="flex flex-col gap-2">
         <h2 className="tipo-destaque font-bold">{publicacao.titulo}</h2>
         {publicacao.corpo && <p className="tipo-detalhe">{publicacao.corpo}</p>}
-        <span className="credito-foto">Foto: {publicacao.imagemCredito}</span>
+        <span className="credito-foto">
+          Foto: {publicacao.imagemCredito}
+          {publicacao.fonte && (
+            <>
+              {" · "}
+              <a href={publicacao.fonte} target="_blank" rel="noopener noreferrer">
+                ver no site do Itaú Cultural
+              </a>
+            </>
+          )}
+        </span>
 
         <div className="publicacao-rodape">
           <button

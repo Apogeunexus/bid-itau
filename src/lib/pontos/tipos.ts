@@ -215,7 +215,17 @@ export interface ComunidadeDefinida {
   nome: string;
   descricao: string;
   /** `oficial` é a do Itaú Cultural; as outras são do marketplace. */
-  natureza: "oficial" | "instituicao" | "coletivo" | "produtor";
+  natureza: "oficial" | "instituicao" | "coletivo" | "produtor" | "pessoa";
+  /** URL do verbete na Enciclopédia. É a prova de que a entidade existe. */
+  fonte?: string;
+  /**
+   * A comunidade é CURADA pelo Itaú Cultural, não escrita pela pessoa que dá
+   * nome a ela. Existe para a tela poder dizer isso: dar a uma artista viva uma
+   * comunidade onde ela «publica» sem ter publicado seria pôr palavra na boca de
+   * pessoa real — a mesma linha que o projeto se recusou a cruzar ao não autorar
+   * elenco. Aqui a curadoria assina, e a tela declara a assinatura.
+   */
+  curada?: boolean;
   /** UF de origem — o marketplace ordena por território, não por tamanho. */
   uf?: string;
   linguagens: string[];
@@ -241,6 +251,8 @@ export interface PublicacaoDefinida {
   imagem: string;
   imagemAlt: string;
   imagemCredito: string;
+  /** URL da matéria no site do Itaú Cultural, quando a publicação vem do acervo. */
+  fonte?: string;
   reacoes: number;
   comentarios: ComentarioDefinido[];
   diasAtras: number;

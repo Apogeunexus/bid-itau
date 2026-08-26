@@ -375,13 +375,14 @@ export const ICONE_COMUNIDADE = (
   </Icone>
 );
 
-/** Loja com toldo — a lojinha de resgate. */
+/** Presente — a lojinha de resgate. */
 export const ICONE_LOJA = (
   <Icone>
-    <path d="M4 10.2V19a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8.8" {...traco} />
-    <path d="M3 10.2 4.8 5.2A1 1 0 0 1 5.7 4.5h12.6a1 1 0 0 1 .9.7l1.8 5" {...traco} />
-    <path d="M3 10.2a2.6 2.6 0 0 0 4.5 0 2.6 2.6 0 0 0 4.5 0 2.6 2.6 0 0 0 4.5 0 2.6 2.6 0 0 0 4.5 0" {...traco} />
-    <path d="M9 20v-4.6h6V20" {...traco} />
+    <path d="M4 11h16v8.2a.8.8 0 0 1-.8.8H4.8a.8.8 0 0 1-.8-.8V11Z" {...traco} />
+    <path d="M3.4 7.6h17.2v3.4H3.4V7.6Z" {...traco} />
+    <path d="M12 7.6V20" {...traco} />
+    <path d="M12 7.6S10.9 4 8.9 4a2 2 0 0 0 0 3.6H12Z" {...traco} />
+    <path d="M12 7.6S13.1 4 15.1 4a2 2 0 0 1 0 3.6H12Z" {...traco} />
   </Icone>
 );
 

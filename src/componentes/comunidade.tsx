@@ -8,9 +8,15 @@ import {
   ICONE_FALA,
   ICONE_SALVOS,
 } from "@/componentes/base/icones";
+import { MenuDeEscolha } from "@/componentes/menu-escolha";
 import { Painel, Vazio } from "@/componentes/pontos-base";
 import { usePontos } from "@/contexto/pontos";
-import { comunidadePorId, pessoaPorId } from "@/dados/comunidade";
+import {
+  COMUNIDADE_OFICIAL,
+  COMUNIDADES,
+  comunidadePorId,
+  pessoaPorId,
+} from "@/dados/comunidade";
 import type { PublicacaoDefinida } from "@/lib/pontos/tipos";
 
 export function Monograma({ autorId, pequeno }: { autorId: string; pequeno?: boolean }) {
@@ -143,43 +149,112 @@ function Cartao({ publicacao }: { publicacao: PublicacaoDefinida }) {
   );
 }
 
+/**
+ * O seletor: dois menus e um botão.
+ *
+ * O PRIMEIRO menu lista as que a pessoa segue, com a do Itaú Cultural sempre no
+ * topo — é a casa e não se deixa de seguir. O SEGUNDO lista as que ela ainda não
+ * segue, e escolher uma ali é uma VISITA: o feed troca na hora e a faixa abaixo
+ * diz que ela está de passagem, com o botão de seguir à mão.
+ *
+ * Dois menus e não um só porque as duas listas respondem a perguntas diferentes:
+ * «para onde eu volto» e «o que existe além». Misturadas, a segunda enterra a
+ * primeira assim que o marketplace crescer.
+ */
+function Seletor({ atual, aoTrocar }: { atual: string; aoTrocar: (id: string) => void }) {
+  const { motor, hidratado } = usePontos();
+
+  const seguidas = hidratado ? motor.atual.assinadas : [COMUNIDADE_OFICIAL];
+  const sigoAAtual = seguidas.includes(atual);
+
+  const paraOpcao = (c: (typeof COMUNIDADES)[number]) => ({
+    id: c.id,
+    rotulo: c.nome,
+    nota: c.uf,
+  });
+
+  const minhas = COMUNIDADES.filter((c) => seguidas.includes(c.id)).map(paraOpcao);
+  const outras = COMUNIDADES.filter(
+    (c) => c.natureza !== "oficial" && !seguidas.includes(c.id),
+  ).map(paraOpcao);
+
+  return (
+    <div className="seletor-comunidade">
+      <MenuDeEscolha
+        rotulo="Minhas comunidades"
+        opcoes={minhas}
+        valor={sigoAAtual ? atual : null}
+        aoEscolher={aoTrocar}
+        textoVazio="nenhuma ainda"
+        placeholder="visitando outra"
+      />
+      <MenuDeEscolha
+        rotulo="Visitar outras"
+        opcoes={outras}
+        valor={sigoAAtual ? null : atual}
+        aoEscolher={aoTrocar}
+        textoVazio="você já segue todas"
+        placeholder={`${outras.length} para conhecer`}
+      />
+    </div>
+  );
+}
+
 export function Comunidade({ comunidadeId }: { comunidadeId: string }) {
   const { motor, hidratado } = usePontos();
-  const comunidade = comunidadePorId(comunidadeId);
+  const [atual, setAtual] = useState(comunidadeId);
 
+  const comunidade = comunidadePorId(atual);
   if (!comunidade) return <Vazio>Esta comunidade não existe.</Vazio>;
 
-  const publicacoes = motor.atual.publicacoes.filter((p) => p.comunidadeId === comunidadeId);
-  const assinada = hidratado && motor.atual.assinadas.includes(comunidadeId);
+  const publicacoes = motor.atual.publicacoes.filter((p) => p.comunidadeId === atual);
+  const assinada = hidratado && motor.atual.assinadas.includes(atual);
+  const oficial = comunidade.natureza === "oficial";
 
-  function assinar() {
-    motor.emitir("comunidade.assinada", { tipo: "comunidade", id: comunidadeId });
+  function seguir() {
+    motor.emitir("comunidade.assinada", { tipo: "comunidade", id: atual });
   }
 
   return (
     <div className="flex flex-col gap-4">
-      {comunidade.natureza !== "oficial" && (
-        <div className="saldo-painel">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex min-w-0 flex-col gap-1">
-              <span className="tipo-detalhe font-bold">{comunidade.nome}</span>
-              <span className="tipo-legenda text-tinta-2">{comunidade.descricao}</span>
-              <span className="tipo-legenda text-tinta-3">
-                {comunidade.assinantes.toLocaleString("pt-BR")} pessoas
-                {comunidade.uf ? ` · ${comunidade.uf}` : ""}
-              </span>
-            </div>
+      <Seletor atual={atual} aoTrocar={setAtual} />
+
+      {/* A ficha e a faixa só aparecem fora da casa: na comunidade do Itaú a
+          pessoa já está dentro, e não há o que decidir. */}
+      {!oficial && (
+        <>
+          <div className="faixa-visita">
+            <span>
+              {assinada ? (
+                <>Você segue <strong>{comunidade.nome}</strong>.</>
+              ) : (
+                <>Você está visitando <strong>{comunidade.nome}</strong>.</>
+              )}
+            </span>
             <button
               type="button"
-              className="botao-discreto"
-              data-ativo={assinada ? "sim" : "nao"}
-              onClick={assinar}
+              className={assinada ? "botao-discreto" : "botao-acao"}
+              data-ativo={assinada ? "sim" : undefined}
+              onClick={seguir}
               disabled={assinada || !hidratado}
             >
-              {assinada ? "Assinando" : "Assinar"}
+              {assinada ? "Seguindo" : "Seguir"}
             </button>
           </div>
-        </div>
+
+          <div className="cartao">
+            {comunidade.curada && (
+              <span className="selo-curadoria">
+                Curadoria do Itaú Cultural — {comunidade.nome} não publica aqui
+              </span>
+            )}
+            <span className="tipo-legenda text-tinta-2">{comunidade.descricao}</span>
+            <span className="tipo-legenda text-tinta-3">
+              {comunidade.assinantes.toLocaleString("pt-BR")} pessoas
+              {comunidade.uf ? ` · ${comunidade.uf}` : ""}
+            </span>
+          </div>
+        </>
       )}
 
       {publicacoes.length === 0 ? (

@@ -213,6 +213,76 @@ export const COMUNIDADES: ComunidadeDefinida[] = [
     linguagens: ["teatro"],
     assinantes: 720,
   },
+
+  /* ── Cinco artistas do acervo, com comunidade CURADA ───────────────────────
+   *
+   * O nome puxa público; o conteúdo é da curadoria. Nenhuma publicação aqui é
+   * escrita em primeira pessoa por quem dá nome à comunidade — inventar fala de
+   * pessoa real é a linha que este projeto não cruza, e é por isso que cada uma
+   * carrega `curada: true` e a tela diz «curadoria do Itaú Cultural» embaixo do
+   * nome. O `entidadeId` e a `fonte` apontam para o verbete na Enciclopédia.
+   * ---------------------------------------------------------------------- */
+
+  {
+    id: "c-ailton-krenak",
+    entidadeId: "pessoa:enc:65144",
+    nome: "Ailton Krenak",
+    descricao: "Pensamento indígena, escrita e as ideias que adiam o fim do mundo.",
+    natureza: "pessoa",
+    uf: "MG",
+    linguagens: ["literatura"],
+    assinantes: 27400,
+    fonte: "https://enciclopedia.itaucultural.org.br/pessoas/65144-ailton-krenak",
+    curada: true,
+  },
+  {
+    id: "c-alceu-valenca",
+    entidadeId: "pessoa:enc:14718",
+    nome: "Alceu Valença",
+    descricao: "Do frevo ao rock: a música do Nordeste que virou repertório do país.",
+    natureza: "pessoa",
+    uf: "PE",
+    linguagens: ["musica"],
+    assinantes: 41300,
+    fonte: "https://enciclopedia.itaucultural.org.br/pessoas/14718-alceu-valenca",
+    curada: true,
+  },
+  {
+    id: "c-adriana-varejao",
+    entidadeId: "pessoa:enc:5282",
+    nome: "Adriana Varejão",
+    descricao: "Azulejo, carne e história colonial na pintura brasileira contemporânea.",
+    natureza: "pessoa",
+    uf: "RJ",
+    linguagens: ["artes-visuais"],
+    assinantes: 18900,
+    fonte: "https://enciclopedia.itaucultural.org.br/pessoas/5282-adriana-varejao",
+    curada: true,
+  },
+  {
+    id: "c-abdias-nascimento",
+    entidadeId: "pessoa:enc:22552",
+    nome: "Abdias Nascimento",
+    descricao: "O Teatro Experimental do Negro, a pintura sagrada e a luta que os fundou.",
+    natureza: "pessoa",
+    uf: "SP",
+    linguagens: ["teatro", "artes-visuais", "literatura"],
+    assinantes: 22600,
+    fonte: "https://enciclopedia.itaucultural.org.br/pessoas/22552-abdias-nascimento",
+    curada: true,
+  },
+  {
+    id: "c-adelia-sampaio",
+    entidadeId: "pessoa:enc:65321",
+    nome: "Adélia Sampaio",
+    descricao: "A primeira mulher negra a dirigir um longa no Brasil, e o cinema que veio depois.",
+    natureza: "pessoa",
+    uf: "MG",
+    linguagens: ["cinema"],
+    assinantes: 12800,
+    fonte: "https://enciclopedia.itaucultural.org.br/pessoas/65321-adelia-sampaio",
+    curada: true,
+  },
 ];
 
 const POR_ID = new Map(COMUNIDADES.map((c) => [c.id, c]));
@@ -377,6 +447,132 @@ export const PUBLICACOES: PublicacaoDefinida[] = [
     imagemCredito: "Thelma Vidales",
     reacoes: 74,
     comentarios: [],
+    diasAtras: 1,
+  },
+
+  /* ── As comunidades curadas ──────────────────────────────────────────────
+   * Quem assina é `p-ic` — a curadoria do Itaú Cultural. Nenhuma linha abaixo é
+   * atribuída à pessoa que dá nome à comunidade.
+   * --------------------------------------------------------------------- */
+
+  {
+    id: "pub-krenak-1",
+    comunidadeId: "c-ailton-krenak",
+    autorId: "p-ic",
+    titulo: "«A natureza não é recurso, é a gente»",
+    corpo:
+      "O verbete de Ailton Krenak na Enciclopédia reúne a trajetória de um pensador que atravessou a Constituinte, o cinema e a literatura sem mudar de posição. Reunimos aqui as obras do acervo que dialogam com o que ele escreve.",
+    etiqueta: "Curadoria",
+    imagem: "/acervo/6580fd97357d32ea.jpeg",
+    imagemAlt:
+      "Fotografia colorida de um homem indígena sentado sobre um painel verde. No painel há grafismos indígenas pintados em preto. Ele usa uma calça verde caqui, uma camiseta preta e um boné bege. Ele olha para a câmera sorridente.",
+    imagemCredito: "Anna Carolina Bueno / Itaú Cultural",
+    reacoes: 1840,
+    comentarios: [
+      {
+        autorId: "p-joana",
+        corpo: "Li «Ideias para adiar o fim do mundo» depois de uma exposição em Belém. Mudou como eu olho para o rio.",
+        reacoes: 96,
+        quandoRotulo: "1d",
+        respostas: [
+          {
+            autorId: "p-rita",
+            corpo: "O trecho sobre a montanha que tem nome próprio é o que mais volta na minha cabeça.",
+            reacoes: 41,
+            quandoRotulo: "18h",
+          },
+        ],
+      },
+    ],
+    diasAtras: 2,
+  },
+  {
+    id: "pub-alceu-1",
+    comunidadeId: "c-alceu-valenca",
+    autorId: "p-ic",
+    titulo: "O frevo que virou rock, e o rock que virou frevo",
+    corpo:
+      "São Bento do Una, 1946. A trajetória de Alceu Valença atravessa a MPB, o cinema e o carnaval de rua sem pedir licença a nenhum deles. Seis obras do acervo para entender a costura.",
+    etiqueta: "Curadoria",
+    imagem: "/acervo/254e5a855ae33cc4.jpg",
+    imagemAlt: "O cantor está com roupas brancas diante de uma casa. À sua esquerda está uma janela.",
+    imagemCredito: "Daryan Dornelles",
+    reacoes: 2610,
+    comentarios: [
+      {
+        autorId: "p-tiago",
+        corpo: "Cresci ouvindo em Porto Alegre achando que era música gaúcha de tão nossa que parecia.",
+        reacoes: 132,
+        quandoRotulo: "3d",
+      },
+    ],
+    diasAtras: 4,
+  },
+  {
+    id: "pub-varejao-1",
+    comunidadeId: "c-adriana-varejao",
+    autorId: "p-ic",
+    titulo: "Azulejo rachado é história rachada",
+    corpo:
+      "A pintura de Adriana Varejão usa o azulejo português para falar do que ele cobriu. Selecionamos as obras do acervo que conversam com essa leitura da herança colonial.",
+    etiqueta: "Curadoria",
+    imagem: "/acervo/13132bceecb05dfc.jpeg",
+    imagemAlt:
+      "Em primeiro plano, vemos duas esculturas. Elas são composições de formas geométricas; à esquerda, uma azul; à direita, uma amarela. No fundo, vemos vários quadros dispostos nas paredes.",
+    imagemCredito: "Anna Carolina Bueno",
+    reacoes: 1120,
+    comentarios: [],
+    diasAtras: 5,
+  },
+  {
+    id: "pub-abdias-1",
+    comunidadeId: "c-abdias-nascimento",
+    autorId: "p-ic",
+    titulo: "Antes de ser pintor, ele fundou um teatro",
+    corpo:
+      "O Teatro Experimental do Negro nasceu em 1944 porque não havia palco para atores negros no Brasil. Abdias Nascimento construiu um. A pintura veio depois, e carrega os mesmos símbolos.",
+    etiqueta: "Curadoria",
+    imagem: "/acervo/9f0459009305fe0a.jpeg",
+    imagemAlt:
+      "A pintura possui ao centro duas serpentes de cor laranja com o corpo cheio de pontos pretos com borda vermelha. As duas serpentes formam o mesmo desenho de cada lado. O fundo da tela possui várias cores demarcadas por recortes geométricos. Em primeiro plano há vários traços grossos pretos que terminam em diferentes formatos de tridente, símbolos de uma entidade sagrada africana chamada Exu.",
+    imagemCredito: "Ipeafro",
+    reacoes: 3420,
+    comentarios: [
+      {
+        autorId: "p-carlos",
+        corpo: "Descobri a pintura dele depois do teatro. São a mesma obra em dois suportes.",
+        reacoes: 210,
+        quandoRotulo: "2d",
+      },
+      {
+        autorId: "p-maria",
+        corpo: "Fui na Ocupação e saí com uma lista de coisas para ler. Ainda estou nela.",
+        reacoes: 88,
+        quandoRotulo: "1d",
+      },
+    ],
+    diasAtras: 3,
+  },
+  {
+    id: "pub-adelia-1",
+    comunidadeId: "c-adelia-sampaio",
+    autorId: "p-ic",
+    titulo: "«Amor Maldito», 1984 — e o silêncio dos 40 anos seguintes",
+    corpo:
+      "Adélia Sampaio foi a primeira mulher negra a dirigir um longa-metragem no Brasil. O filme circulou pouco e demorou décadas para ser reconhecido. O que veio depois dela, e o que ainda não veio.",
+    etiqueta: "Curadoria",
+    imagem: "/acervo/85daa432b2571672.jpeg",
+    imagemAlt: "Sala de cinema vazia. Podemos ver as cadeiras pretas e o fundo da sala.",
+    imagemCredito: "Fernanda Castello Branco",
+    reacoes: 1980,
+    comentarios: [
+      {
+        autorId: "p-rita",
+        corpo: "Passou numa mostra em Salvador ano passado e a sala encheu. Quarenta anos depois.",
+        reacoes: 154,
+        quandoRotulo: "12h",
+      },
+    ],
     diasAtras: 1,
   },
 ];
