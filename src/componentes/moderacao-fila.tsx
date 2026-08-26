@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type {
   AcaoDeclarada,
   AcaoDaModeracao,
@@ -9,8 +9,12 @@ import type {
   Escopo,
   FaixaDeScore,
   IdDoEscopo,
+  ConcentracaoMedida,
+  IdDaOrdenacao,
   ItemDaFila,
+  MotivoDeDenuncia,
   NumerosDaModeracao,
+  Ordenacao,
   OrigemDeclarada,
   OrigemDoItem,
 } from "@/dados/moderacao";
@@ -71,7 +75,60 @@ const ROTULO_ORIGEM: Record<OrigemDoItem, string> = {
   produtor: "produtor",
   ingestao: "ingestão automática",
   ia: "sugestão de IA",
+  denuncia: "denúncia do público",
 };
+
+// ---------------------------------------------------------------------------
+// O armazém — a decisão sobrevive ao recarregamento, e o reinício a apaga
+// ---------------------------------------------------------------------------
+
+/**
+ * A chave versionada deste protótipo. `moderacao.v1`, no mesmo espaço de nomes que a S7
+ * usa em `studio.v1` — cada nível tem o seu, e o número no fim é o que permite mudar a
+ * forma do registro sem ler lixo da versão anterior no navegador de quem avalia.
+ */
+const CHAVE_DO_ARMAZEM = "moderacao.v1";
+
+/**
+ * LEITURA SÓ EM `useEffect`, NUNCA NO RENDER (T-03-10). Ler `localStorage` durante a
+ * renderização faria o HTML exportado no build e a página hidratada no navegador
+ * divergirem na primeira passada — o servidor não tem armazém nenhum, e o cliente pode ter
+ * cinco decisões. O sintoma seria um aviso de hidratação e, pior, uma tela que mostra o
+ * estado errado por um quadro.
+ */
+function lerArmazem(): Decisao[] {
+  try {
+    const cru = window.localStorage.getItem(CHAVE_DO_ARMAZEM);
+    if (!cru) return [];
+    const lido: unknown = JSON.parse(cru);
+    if (!Array.isArray(lido)) return [];
+    // Confere campo a campo em vez de confiar no que estava no navegador. O armazém é
+    // entrada externa como qualquer outra: uma versão anterior da tela, ou uma extensão,
+    // pode ter deixado ali qualquer coisa, e uma decisão sem autor renderizaria uma linha
+    // de histórico assinada por `undefined`.
+    return lido.filter(
+      (d): d is Decisao =>
+        typeof d === "object" && d !== null &&
+        typeof (d as Decisao).itemId === "string" &&
+        typeof (d as Decisao).acao === "string" &&
+        typeof (d as Decisao).quem === "string" &&
+        typeof (d as Decisao).quando === "string",
+    );
+  } catch {
+    // Modo privado, cota estourada, JSON corrompido. A tela abre vazia e funciona; o que
+    // ela não pode é deixar de abrir porque o armazém do navegador recusou.
+    return [];
+  }
+}
+
+function gravarArmazem(decisoes: Decisao[]): void {
+  try {
+    window.localStorage.setItem(CHAVE_DO_ARMAZEM, JSON.stringify(decisoes));
+  } catch {
+    // Sem armazém a sessão continua: as decisões vivem em memória e somem ao recarregar.
+    // Falhar a gravação não pode derrubar a decisão que acabou de ser tomada.
+  }
+}
 
 function comSeparador(n: number): string {
   return n.toLocaleString("pt-BR");
@@ -115,6 +172,10 @@ function LinhaDaFila({
       // D-82 — a origem vai na LINHA, não só no painel: a tela existe para que a
       // procedência de cada item seja legível varrendo a fila, sem abrir item nenhum.
       data-procedencia-item={item.origem}
+      // 124 — o denominador da ordem, NA LINHA. Sem ele a fila estaria ordenada por um
+      // critério invisível, e «prioridade por vazio» seria uma afirmação sobre a tela em
+      // vez de uma propriedade dela. Vazio quando o acervo não resolve a UF do item.
+      data-registros-uf={item.registrosNaUf ?? ""}
       data-realcado={escolhido ? "sim" : "nao"}
     >
       <button type="button" className="moderacao-linha-botao" onClick={aoEscolher}>
@@ -136,6 +197,19 @@ function LinhaDaFila({
           <span className="moderacao-classe">{item.classe}</span>
           <span className="studio-rotulo">procedência {item.procedencia}</span>
           {item.territorio ? <span>{item.territorio}</span> : null}
+          {/* O registro da UF fica À VISTA na linha: é o número que explica por que este
+              item subiu, e uma ordem cujo critério não está na tela é indistinguível de
+              uma ordem arbitrária. Quando o acervo não resolve a UF, a linha diz isso em
+              texto em vez de deixar o espaço em branco. */}
+          {item.uf ? (
+            <span className="moderacao-registros-uf">
+              {item.uf} · {comSeparador(item.registrosNaUf ?? 0)} registros no acervo
+            </span>
+          ) : (
+            <span className="moderacao-registros-uf" data-nao-sustenta>
+              sem UF no acervo
+            </span>
+          )}
         </span>
       </button>
     </li>
@@ -197,6 +271,10 @@ export function ModeracaoFila({
   carimbo,
   itensPorOrigem,
   itemInicial,
+  ordenacoes,
+  concentracao,
+  motivosDeDenuncia,
+  regraDaDenuncia,
 }: {
   /** Os 60 itens já achatados em primitivo. Nenhuma `Entidade` atravessa a fronteira. */
   fila: ItemDaFila[];
@@ -220,16 +298,46 @@ export function ModeracaoFila({
   itensPorOrigem: number;
   /** Em que item a tela abre. Constante do módulo, e não sorteio a cada build. */
   itemInicial: string;
+  /** As ordens possíveis, com o campo que cada uma observa e o porquê dela. */
+  ordenacoes: readonly Ordenacao[];
+  /** A concentração do acervo nas 27 unidades federativas. Medida, nunca digitada. */
+  concentracao: ConcentracaoMedida;
+  motivosDeDenuncia: readonly MotivoDeDenuncia[];
+  regraDaDenuncia: string;
 }) {
   const [escopo, setEscopo] = useState<IdDoEscopo>("nacional");
+  /**
+   * A fila abre ORDENADA POR VAZIO, e é a decisão de produto da funcionalidade 124: a
+   * ordem padrão de uma fila é a política dela. Abrir por volume poria São Paulo no alto
+   * todo dia, e ninguém precisaria escolher isso — bastaria não escolher nada.
+   */
+  const [ordenacao, setOrdenacao] = useState<IdDaOrdenacao>("vazio");
   const [escolhidoId, setEscolhidoId] = useState<string>(itemInicial);
 
   /**
-   * As decisões desta sessão. Estado de componente, e não `localStorage`: recarregar
-   * limpa, e a tela declara isso. Este protótipo NÃO TEM ESCRITA — o que ele demonstra é
-   * a FORMA da decisão (quem, quando, por quê), não a persistência dela.
+   * As decisões desta sessão, no armazém do navegador. **Recarregar preserva**, e é
+   * requisito: quem avalia a proposta decide um item, recarrega a página e precisa ver que
+   * a decisão ficou — uma tela que esquece ao recarregar demonstra a forma da decisão e
+   * não o registro dela, e o registro é o que a moderação existe para provar.
+   *
+   * Começa VAZIO no primeiro render, de propósito. O HTML sai do build sem armazém nenhum,
+   * e o `useEffect` abaixo é que traz o que estava gravado — é essa ordem que faz a página
+   * exportada e a hidratada coincidirem.
    */
   const [decisoes, setDecisoes] = useState<Decisao[]>([]);
+  const [armazemLido, setArmazemLido] = useState(false);
+
+  useEffect(() => {
+    setDecisoes(lerArmazem());
+    setArmazemLido(true);
+  }, []);
+
+  useEffect(() => {
+    // Só grava DEPOIS de ter lido. Sem esta guarda, o primeiro efeito gravaria o array
+    // vazio do estado inicial por cima do que estava no navegador — e o recarregamento
+    // apagaria as decisões em vez de as preservar.
+    if (armazemLido) gravarArmazem(decisoes);
+  }, [decisoes, armazemLido]);
 
   /** O veto é a única ação com passo de confirmação. A assimetria é o conteúdo (D-83). */
   const [vetando, setVetando] = useState(false);
@@ -246,6 +354,11 @@ export function ModeracaoFila({
     [escopos, escopo],
   );
 
+  const ordenacaoAtiva = useMemo(
+    () => ordenacoes.find((o) => o.id === ordenacao) ?? ordenacoes[0],
+    [ordenacoes, ordenacao],
+  );
+
   /**
    * O RECORTE. Despachado sobre `Escopo.campo`, que veio no DTO — a mesma decisão que
    * `itemNoEscopo` toma do lado do build. O nome do campo viaja em vez de a regra ser
@@ -258,10 +371,38 @@ export function ModeracaoFila({
     return true;
   };
 
+  /**
+   * A ORDEM. Despachada sobre `Ordenacao.campo`, exatamente como o recorte — o nome do
+   * campo viaja no DTO e o critério não é reescrito aqui.
+   *
+   * `por vazio` sobe quem o acervo menos documenta: o item de menor `registrosNaUf`
+   * primeiro. Os itens SEM UF não vão para o fim nem para o começo — vão para um bloco
+   * próprio, depois dos que têm, porque «não sei onde isto fica» não é o mesmo que «isto
+   * fica num lugar bem documentado», e empurrá-los para qualquer uma das pontas afirmaria
+   * uma das duas coisas. O número deles está declarado na tela.
+   *
+   * O desempate é sempre o `id`: sem ele, dois itens da mesma UF trocariam de lugar entre
+   * renderizações e a fila pareceria embaralhar sozinha.
+   */
+  const ordenar = (a: ItemDaFila, b: ItemDaFila): number => {
+    if (ordenacaoAtiva.campo === "registrosNaUf") {
+      const ra = a.registrosNaUf;
+      const rb = b.registrosNaUf;
+      if (ra === null && rb !== null) return 1;
+      if (rb === null && ra !== null) return -1;
+      if (ra !== null && rb !== null && ra !== rb) return ra - rb;
+      return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+    }
+    const ia = origens.findIndex((o) => o.id === a.origem);
+    const ib = origens.findIndex((o) => o.id === b.origem);
+    if (ia !== ib) return ia - ib;
+    return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+  };
+
   const pendentes = useMemo(
-    () => fila.filter((i) => !decididos.has(i.id) && noEscopo(i)),
+    () => fila.filter((i) => !decididos.has(i.id) && noEscopo(i)).sort(ordenar),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fila, decididos, escopoAtivo],
+    [fila, decididos, escopoAtivo, ordenacaoAtiva],
   );
 
   /**
@@ -274,8 +415,20 @@ export function ModeracaoFila({
     [pendentes, escolhidoId],
   );
 
+  /**
+   * Quantos itens pendentes o escopo ativo DEIXA DE FORA (122). Medido sobre a mesma fila,
+   * e não estimado: é o número que impede o moderador de confundir o recorte dele com a
+   * fila inteira. Conta só os pendentes — um item já decidido não está «fora do escopo»,
+   * está resolvido.
+   */
+  const foraDoEscopo = useMemo(
+    () => fila.filter((i) => !decididos.has(i.id) && !noEscopo(i)).length,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fila, decididos, escopoAtivo],
+  );
+
   const contadas = useMemo(() => {
-    const c: Record<string, number> = { produtor: 0, ingestao: 0, ia: 0 };
+    const c: Record<string, number> = { produtor: 0, ingestao: 0, ia: 0, denuncia: 0 };
     for (const i of pendentes) c[i.origem] = (c[i.origem] ?? 0) + 1;
     return c;
   }, [pendentes]);
@@ -333,6 +486,28 @@ export function ModeracaoFila({
   const desfazer = (itemId: string) =>
     setDecisoes((antes) => antes.filter((d) => d.itemId !== itemId));
 
+  /**
+   * Reinicia a demonstração: apaga o armazém e devolve a fila ao estado de abertura.
+   *
+   * Existe porque a mesma tela é aberta por várias pessoas em sequência numa avaliação, e
+   * a segunda encontraria a fila já decidida pela primeira sem entender por quê. O
+   * `setDecisoes([])` dispara o efeito de gravação e o armazém fica vazio pelo mesmo
+   * caminho de sempre — não há segunda escrita em `localStorage` aqui, que seria a cópia
+   * que diverge no dia em que a forma do registro mudar.
+   */
+  const [confirmandoReinicio, setConfirmandoReinicio] = useState(false);
+
+  const reiniciar = () => {
+    setDecisoes([]);
+    setEscolhidoId(itemInicial);
+    setEscopo("nacional");
+    setOrdenacao("vazio");
+    setVetando(false);
+    setMotivoVeto("");
+    setComentarioDevolucao("");
+    setConfirmandoReinicio(false);
+  };
+
   const acaoDoVeto = acoes.find((a) => a.id === "vetar");
   const acaoDeDevolver = acoes.find((a) => a.id === "devolver");
 
@@ -363,6 +538,9 @@ export function ModeracaoFila({
                 aria-pressed={escopo === e.id}
                 onClick={() => setEscopo(e.id)}
               >
+                {/* O alcance vem do MÓDULO e é medido sobre a fila que existe. Um número
+                    digitado aqui passaria a mentir na primeira regeração do grafo — e o
+                    escopo é justamente o que precisa dizer quanto NÃO está sendo visto. */}
                 {e.rotulo} · {comSeparador(e.alcance)}
               </button>
             ))}
@@ -373,6 +551,45 @@ export function ModeracaoFila({
         </div>
 
         <p className="moderacao-escopo-descricao">{escopoAtivo.descricao}</p>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* 122 — o escopo IMPRESSO: o que este recorte deixa de fora, contado */}
+        {/* ---------------------------------------------------------------- */}
+        <p className="moderacao-escopo-fora" data-escopo-fora={foraDoEscopo}>
+          {foraDoEscopo > 0 ? (
+            <>
+              <strong>{comSeparador(foraDoEscopo)}</strong> {""}
+              {foraDoEscopo === 1 ? "item pendente está" : "itens pendentes estão"} fora
+              deste escopo e não {foraDoEscopo === 1 ? "aparece" : "aparecem"} na lista
+              abaixo. Eles não sumiram — estão fora do corte, e trocar o escopo acima os
+              devolve. Um moderador que não sabe o tamanho do que não vê acha que a fila
+              dele é a fila inteira.
+            </>
+          ) : (
+            <>Este escopo alcança todos os itens pendentes: nada está fora do corte.</>
+          )}
+        </p>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* 124 — a ordem é política, e por isso ela é declarada e trocável    */}
+        {/* ---------------------------------------------------------------- */}
+        <div className="moderacao-ordenacoes">
+          <span className="studio-rotulo">ordem da fila</span>
+          <div className="web-alternador" role="group" aria-label="ordem da fila">
+            {ordenacoes.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                data-ordenacao-fila={o.id}
+                aria-pressed={ordenacao === o.id}
+                onClick={() => setOrdenacao(o.id)}
+              >
+                {o.rotulo}
+              </button>
+            ))}
+          </div>
+        </div>
+        <p className="moderacao-ordenacao-porque">{ordenacaoAtiva.porque}</p>
 
       </header>
 
@@ -426,8 +643,43 @@ export function ModeracaoFila({
             <p>{fraseDaAtribuicao}</p>
             <p>{regraDaAmostragem}</p>
             <p>
-              São {comSeparador(itensPorOrigem)} itens por origem, {""}
+              São {comSeparador(itensPorOrigem)} itens por origem nas três de submissão,
+              mais {comSeparador(numeros.itensPorOrigem.denuncia)} denúncias — {""}
               {comSeparador(numeros.itensNaFila)} no total.
+            </p>
+            <p>{regraDaDenuncia}</p>
+            <p>
+              A UF de cada item sai da hierarquia territorial do acervo, e {""}
+              <strong>
+                {comSeparador(numeros.itensNaFila - numeros.itensComUf)} dos {""}
+                {comSeparador(numeros.itensNaFila)}
+              </strong>{" "}
+              não têm nenhuma — eles aparecem no fim da ordem por vazio, num bloco próprio,
+              porque «o acervo não sabe onde isto fica» não é o mesmo que «isto fica num
+              lugar bem documentado». Os que têm cobrem {comSeparador(numeros.ufsNaFila)} {""}
+              das {comSeparador(concentracao.unidades)} unidades federativas.
+            </p>
+          </div>
+
+          {/* -------------------------------------------------------------- */}
+          {/* A SEGUNDA FONTE — declarada mesmo vazia, com o número            */}
+          {/* -------------------------------------------------------------- */}
+          <div className="studio-nao-sustenta" data-nao-sustenta data-registros-vivos={numeros.registrosVivos}>
+            <span className="studio-nao-sustenta-rotulo">
+              a segunda fonte da fila · {comSeparador(numeros.registrosVivos)} registros
+            </span>
+            <p>
+              Esta fila tem <strong>duas fontes por desenho</strong>: os {""}
+              {comSeparador(numeros.itensNaFila)} itens encenados do acervo, acima, e os
+              registros que um produtor enviou do Studio e estão em moderação. A segunda
+              está em <strong>{comSeparador(numeros.registrosVivos)}</strong> porque a
+              ligação com o armazém do Studio ainda não foi construída — não porque nenhum
+              produtor enviou.
+            </p>
+            <p>
+              O número aparece declarado, e vazio, em vez de a tela omitir a fonte: uma fila
+              que mostra só o que tem parece completa, e é assim que uma integração que
+              falhou passa por uma fila sem trabalho.
             </p>
           </div>
         </section>
@@ -540,6 +792,47 @@ export function ModeracaoFila({
                   origens achataria a distinção que esta tela existe para fazer.
                 </p>
               )}
+
+              {/* ---- 120: a denúncia, com o que se confere e para onde vai ---- */}
+              {item.denuncia ? (
+                <div className="moderacao-denuncia" data-denuncia={item.denuncia.motivo}>
+                  <span className="studio-nao-sustenta-rotulo">
+                    denúncia do público · {item.denuncia.rotulo}
+                  </span>
+                  <p className="studio-nota">
+                    <strong>
+                      {comSeparador(item.denuncia.quantas)} {""}
+                      {item.denuncia.quantas === 1 ? "pessoa denunciou" : "pessoas denunciaram"}
+                    </strong>{" "}
+                    este item pelo mesmo motivo. Ele <strong>já está publicado</strong> — o
+                    que se decide aqui não é se entra, é se a afirmação de quem denunciou
+                    procede.
+                  </p>
+                  {(() => {
+                    const m = motivosDeDenuncia.find((x) => x.id === item.denuncia?.motivo);
+                    return m ? (
+                      <div className="studio-tabela">
+                        <div className="studio-linha">
+                          <div className="studio-celula studio-celula-rotulo">
+                            o que se confere
+                          </div>
+                          <div className="studio-celula">{m.confere}</div>
+                        </div>
+                        <div className="studio-linha">
+                          <div className="studio-celula studio-celula-rotulo">
+                            se procede, vai para
+                          </div>
+                          {/* «Procede» não é o fim do caminho, é o começo do
+                              encaminhamento. Uma fila que confirma a denúncia e não diz
+                              para onde ela vai dá razão a quem reclamou e não conserta
+                              nada — e quem denunciou continua vendo o mesmo item no ar. */}
+                          <div className="studio-celula">{m.encaminha}</div>
+                        </div>
+                      </div>
+                    ) : null;
+                  })()}
+                </div>
+              ) : null}
 
               {/* ---- D-86: a sugestão da IA, com a aresta que a produziu ---- */}
               {item.sugestao ? (
@@ -718,6 +1011,58 @@ export function ModeracaoFila({
             <div className="studio-nao-sustenta" data-nao-sustenta>
               <span className="studio-nao-sustenta-rotulo">sobre a autoria da decisão</span>
               <p>{moderadorEhAutorado}</p>
+              <p>
+                As decisões ficam no navegador de quem opera, sob a chave{" "}
+                <code className="studio-literal">{CHAVE_DO_ARMAZEM}</code>:{" "}
+                <strong>recarregar a página preserva</strong>. Elas não vão para servidor
+                nenhum — este protótipo não tem back-end, e o que ele demonstra é o registro
+                da decisão, com autor e carimbo, não a infraestrutura que a guardaria.
+              </p>
+            </div>
+
+            {/* ------------------------------------------------------------ */}
+            {/* Reiniciar a demonstração — a mesma tela é aberta em sequência */}
+            {/* ------------------------------------------------------------ */}
+            <div className="moderacao-reinicio">
+              {confirmandoReinicio ? (
+                <>
+                  {/* Apagar decisão é destrutivo e não tem desfazer, então tem passo de
+                      confirmação. Não é a mesma trava do veto: aqui a confirmação protege
+                      o trabalho já feito, lá ela obriga a explicar. */}
+                  <p className="studio-nota">
+                    Isto apaga {comSeparador(decisoes.length)} {""}
+                    {decisoes.length === 1 ? "decisão registrada" : "decisões registradas"} e
+                    devolve a fila ao estado de abertura. Não há como desfazer.
+                  </p>
+                  <div className="studio-acoes">
+                    <button
+                      type="button"
+                      className="studio-botao studio-botao-primario"
+                      data-reiniciar-confirmado
+                      onClick={reiniciar}
+                    >
+                      Apagar e reiniciar
+                    </button>
+                    <button
+                      type="button"
+                      className="studio-botao"
+                      onClick={() => setConfirmandoReinicio(false)}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  className="studio-botao"
+                  data-reiniciar-demonstracao
+                  disabled={decisoes.length === 0}
+                  onClick={() => setConfirmandoReinicio(true)}
+                >
+                  Reiniciar a demonstração
+                </button>
+              )}
             </div>
           </section>
         </div>

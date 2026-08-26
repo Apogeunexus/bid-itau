@@ -526,3 +526,120 @@
   border-radius: 1.25rem;
   background: var(--cor-superficie);
 }
+
+/* ===========================================================================
+ * M1 — o que a S3 acrescentou à fila herdada
+ *
+ * Quatro peças, e cada uma existe por uma pergunta que a tela precisa responder
+ * sem legenda: quanto eu NÃO estou vendo (122), por que esta ordem e não outra
+ * (124), o que é uma denúncia e para onde ela vai (120), e como recomeçar.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * 122 — o escopo impresso
+ *
+ * Ele NÃO é um aviso de erro e não usa a cor de ação: um recorte que deixa 41
+ * itens de fora é o funcionamento normal do escopo, não um defeito. O que ele
+ * precisa é ser lido, e por isso tem peso de texto e não de alarme.
+ * ------------------------------------------------------------------------- */
+
+.moderacao-escopo-fora {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid var(--cor-borda-forte);
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  line-height: 1.5;
+}
+
+/* Zero itens fora do corte é informação boa, e some do primeiro plano: a borda
+ * fica lavada para o bloco continuar existindo — quem procura o número o
+ * encontra — sem competir com a fila por atenção. */
+.moderacao-escopo-fora[data-escopo-fora="0"] {
+  border-left-color: var(--cor-borda);
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * 124 — a ordem da fila, e o porquê dela
+ * ------------------------------------------------------------------------- */
+
+.moderacao-ordenacoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* A justificativa da ordem é texto longo e é o argumento da funcionalidade 124 —
+ * ela fica LEGÍVEL, com medida de linha própria, em vez de virar nota de rodapé.
+ * Uma ordenação que prioriza o vazio sem dizer por quê parece defeito. */
+.moderacao-ordenacao-porque {
+  max-width: 68ch;
+  margin-top: 0.5rem;
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------------------
+ * 120 — a denúncia
+ *
+ * É a única origem em que o item JÁ ESTÁ PUBLICADO, e o bloco precisa dizer isso
+ * antes de qualquer outra coisa. Ele usa a mesma marca de superfície das
+ * declarações de ausência, e não a cor de ação: denúncia não é erro confirmado,
+ * é afirmação a conferir — pintá-la de alarme já daria a decisão por tomada.
+ * ------------------------------------------------------------------------- */
+
+.moderacao-denuncia {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.moderacao-denuncia .studio-tabela {
+  margin-top: 0.5rem;
+}
+
+/* O selo da quarta origem se distingue das três de submissão pela BORDA, não por
+ * cor de fundo nova: nenhum hex entra aqui, e a laranja de ação já é da IA. A
+ * diferença visual precisa existir porque a origem é o primeiro elemento que
+ * quem varre a fila lê. */
+.moderacao-selo-origem[data-origem="denuncia"] {
+  border-style: dashed;
+  border-color: var(--cor-tinta-2);
+  color: var(--cor-tinta);
+}
+
+/* ---------------------------------------------------------------------------
+ * Reiniciar a demonstração
+ * ------------------------------------------------------------------------- */
+
+.moderacao-reinicio {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--cor-borda);
+}
+
+/* Desabilitado quando não há nada a apagar. Ele continua VISÍVEL, e não some: um
+ * botão que aparece só depois da primeira decisão faz quem opera procurar uma
+ * saída que não estava lá quando ele olhou. */
+.moderacao-reinicio .studio-botao[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* O denominador da ordem por vazio, na linha. Discreto de propósito: ele precisa estar
+ * lá para a ordem ser conferível, e não pode competir com o título do item, que é o que
+ * quem modera está lendo. */
+.moderacao-registros-uf {
+  color: var(--cor-tinta-3);
+  font-size: var(--tipo-micro);
+  white-space: nowrap;
+}

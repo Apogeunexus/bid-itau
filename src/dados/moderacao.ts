@@ -37,7 +37,8 @@
  *    para a ocasião seria a IA «escrevendo verbete», que é o terceiro limite de D-86.
  */
 
-import { porId, porSlug, slugsPorTipo, vizinhos } from "./grafo";
+import { porId, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "./grafo";
+import { densidadePorUf } from "./geo";
 import { motivoDaAresta } from "./motivo";
 import { DATA_DE_REFERENCIA } from "./alerta";
 import type { OrigemMotivo } from "./cartao";
@@ -186,16 +187,22 @@ function pontuar(e: Entidade): number {
 // ---------------------------------------------------------------------------
 
 /**
- * As três origens de D-82.
+ * As quatro origens: as três de D-82 e a denúncia do público, da funcionalidade 120.
  *
- * `score` existe **só** em `"ia"`, e nos outros dois é `null`. Não é economia de campo: é
+ * `score` existe **só** em `"ia"`, e nas outras três é `null`. Não é economia de campo: é
  * a distinção que a tela existe para fazer. Produtor e ingestão **afirmam** — um produtor
  * declara que o evento é dele, o lote de ingestão declara de que sistema veio. A IA
  * **estima**, e estimativa sem intervalo de confiança à vista é a coisa que esta tela
- * recusa. Pôr um score nos três achataria as duas afirmações na estimativa e apagaria
+ * recusa. Pôr um score nas quatro achataria as afirmações na estimativa e apagaria
  * justamente o argumento.
+ *
+ * `denuncia` entra pelo outro lado e é a que mais muda a fila: as três primeiras chegam de
+ * quem QUER PUBLICAR, e ela chega de quem já leu o que foi publicado. Não é uma quarta
+ * fonte de submissão — é a única em que o item já está no ar e alguém de fora afirma que
+ * não deveria estar. Por isso ela não tem score também, e por um motivo diferente do das
+ * outras duas: não há nada a estimar sobre uma reclamação, há uma afirmação a conferir.
  */
-export type OrigemDoItem = "produtor" | "ingestao" | "ia";
+export type OrigemDoItem = "produtor" | "ingestao" | "ia" | "denuncia";
 
 /**
  * A procedência da ATRIBUIÇÃO de origem e do score — de TODOS os itens, sem exceção.
@@ -252,6 +259,16 @@ export const ORIGENS_DECLARADAS: readonly OrigemDeclarada[] = [
       "afirmação, ela vem com score de confiança visível.",
     temScore: true,
   },
+  {
+    id: "denuncia",
+    rotulo: "denúncia do público",
+    regra:
+      "Entidade JÁ PUBLICADA sobre a qual chegou reclamação pelo app (funcionalidade 120). " +
+      "Diferente das outras três, ela não pede para entrar: já está no ar, e alguém de fora " +
+      "afirma que não deveria estar. O que a moderação decide aqui não é publicar — é se a " +
+      "afirmação de quem denunciou procede.",
+    temScore: false,
+  },
 ];
 
 export interface SugestaoDaIa {
@@ -266,6 +283,85 @@ export interface SugestaoDaIa {
   motivo: string;
   origemMotivo: OrigemMotivo;
   procedenciaAresta: Procedencia;
+}
+
+// ---------------------------------------------------------------------------
+// 120 — a denúncia do público, e o vocabulário fechado dos motivos
+// ---------------------------------------------------------------------------
+
+/**
+ * Por que alguém denuncia. **Vocabulário fechado, e é dado — não texto livre.**
+ *
+ * Campo aberto aqui pareceria mais generoso e seria pior: a moderação precisa AGRUPAR
+ * denúncias sobre o mesmo item para saber se três pessoas reclamaram da mesma coisa ou de
+ * três coisas diferentes, e cinquenta redações do mesmo problema não agrupam. O relato em
+ * texto continua existindo do lado de quem denuncia; o que viaja para a fila é a categoria,
+ * que é o que a decisão observa.
+ *
+ * Cada motivo diz também A QUEM a denúncia pertence quando procede — porque «procede» não
+ * é o fim do caminho, é o começo do encaminhamento, e uma fila que confirma sem encaminhar
+ * devolve razão a quem reclamou e não conserta nada.
+ */
+export interface MotivoDeDenuncia {
+  id: string;
+  rotulo: string;
+  /** O que a moderação confere para decidir se procede. */
+  confere: string;
+  /** Para onde vai quando procede. Nunca «para lugar nenhum». */
+  encaminha: string;
+}
+
+export const MOTIVOS_DE_DENUNCIA: readonly MotivoDeDenuncia[] = [
+  {
+    id: "data-ou-local",
+    rotulo: "data ou local errado",
+    confere: "a ficha da ocorrência contra a fonte declarada",
+    encaminha: "devolução ao produtor, que é quem declara data e local",
+  },
+  {
+    id: "credito",
+    rotulo: "imagem sem crédito ou uso indevido",
+    confere: "o campo `creditoImagem` e a procedência da mídia",
+    encaminha: "Organização, que responde por mídia e crédito",
+  },
+  {
+    id: "nao-aconteceu",
+    rotulo: "o evento não aconteceu",
+    confere: "se há ocorrência datada e se a fonte ainda a publica",
+    encaminha: "devolução ao produtor, com o registro suspenso enquanto isso",
+  },
+  {
+    id: "pessoa-citada",
+    rotulo: "pessoa citada sem consentimento",
+    confere: "a aresta `atua_em` e o verbete da Enciclopédia",
+    encaminha: "Moderação decide sozinha — é afirmação sobre pessoa real (M5)",
+  },
+  {
+    id: "conteudo-ofensivo",
+    rotulo: "conteúdo ofensivo",
+    confere: "o texto publicado, na íntegra",
+    encaminha: "Editor, que responde pelo texto — a moderação não reescreve verbete",
+  },
+];
+
+/** Quantas denúncias a fila encena. Ver `REGRA_DA_DENUNCIA`. */
+export const DENUNCIAS_NA_FILA = 8;
+
+export const REGRA_DA_DENUNCIA =
+  "As denúncias são ENCENADAS, e por regra determinística: as entidades já publicadas do " +
+  "acervo são ordenadas pelo `id` — chave estável, nunca `localeCompare` — e as primeiras " +
+  `${DENUNCIAS_NA_FILA} recebem um motivo do vocabulário fechado, em rodízio, com a ` +
+  "quantidade derivada da posição. O acervo do Itaú Cultural NÃO publica denúncia do " +
+  "público: não existe esse campo em entidade nenhuma. Exibir reclamações reais seria " +
+  "inventá-las; exibi-las sem rótulo seria pôr texto nosso sob o crachá do IC. São oito e " +
+  "não vinte porque denúncia não chega no volume de uma fila de submissão — uma fila com " +
+  "tantas denúncias quanto submissões descreveria uma plataforma em crise, não esta.";
+
+export interface DenunciaDeclarada {
+  motivo: string;
+  rotulo: string;
+  /** Quantas pessoas denunciaram o MESMO item pelo mesmo motivo. */
+  quantas: number;
 }
 
 export interface ItemDaFila {
@@ -288,6 +384,24 @@ export interface ItemDaFila {
   sugestao: SugestaoDaIa | null;
   /** Título do território que alcança este item, ou `null`. Alimenta o escopo territorial. */
   territorio: string | null;
+  /**
+   * A sigla da unidade federativa que contém o território deste item, ou `null`.
+   *
+   * É o que a PRIORIDADE POR VAZIO (124) observa. Vem da descida da hierarquia territorial
+   * por `porTerritorio()`, de `grafo.ts` — a mesma travessia que o Observatório usa, e não
+   * uma segunda escrita aqui. `null` não é falha: 45 dos 60 itens não têm território
+   * algum, e o número está declarado ao lado da ordenação.
+   */
+  uf: string | null;
+  /**
+   * Quantos registros de lugar o acervo inteiro tem na UF deste item. **Medido, nunca
+   * digitado.** É o denominador que torna a ordenação por vazio conferível a olho: um item
+   * do Ceará traz 17 e um de São Paulo traz 274, e quem lê a fila vê por que o primeiro
+   * subiu. `null` quando não há UF.
+   */
+  registrosNaUf: number | null;
+  /** `null` fora da origem `denuncia`. */
+  denuncia: DenunciaDeclarada | null;
   /** A rota pública da entidade, quando a classe tem uma nesta fase. */
   rota: string | null;
 }
@@ -328,14 +442,151 @@ function territorioDe(e: Entidade): string | null {
 }
 
 // ---------------------------------------------------------------------------
+// 124 — a prioridade por vazio, e o dado que a torna conferível
+// ---------------------------------------------------------------------------
+
+/**
+ * `entidadeId` → sigla da UF que a contém.
+ *
+ * CONSTRUÍDO SOBRE `porTerritorio()`, de `grafo.ts`, que é a MESMA descida de hierarquia
+ * que o Observatório usa em `densidadePorUf()`. Uma segunda travessia escrita aqui daria a
+ * mesma resposta hoje e uma resposta diferente no dia em que alguém corrigisse só uma das
+ * duas — e o sintoma seria a fila ordenando por um mapa e o Observatório denunciando por
+ * outro, sem nenhum dos dois quebrar.
+ *
+ * A lista das 27 vem de `densidadePorUf()`, que a lê da tabela de centroides e não do
+ * grafo: é assim que Sergipe e Tocantins continuam existindo como AUSÊNCIA em vez de
+ * simplesmente não aparecerem.
+ */
+let ufPorEntidadeMemo: Map<string, string> | null = null;
+
+function ufPorEntidade(): Map<string, string> {
+  if (ufPorEntidadeMemo) return ufPorEntidadeMemo;
+  const porTitulo = new Map(densidadePorUf().ufs.map((u) => [u.titulo, u.sigla]));
+  const mapa = new Map<string, string>();
+  for (const slug of slugsPorTipo("territorio")) {
+    const t = porSlug("territorio", slug);
+    // `centroide-estado` é o que marca um território como unidade federativa. O mesmo
+    // critério de `densidadePorUf()`, e de propósito: dois critérios para «isto é um
+    // estado» divergiriam na primeira cidade que ganhasse centroide próprio.
+    if (t?.coordenada?.metodo !== "centroide-estado") continue;
+    const sigla = porTitulo.get(t.titulo);
+    if (!sigla) continue;
+    for (const e of porTerritorio(t.id)) {
+      if (!mapa.has(e.id)) mapa.set(e.id, sigla);
+    }
+  }
+  ufPorEntidadeMemo = mapa;
+  return mapa;
+}
+
+/** Registros de lugar por sigla, do Observatório. Medido sobre o grafo, nunca digitado. */
+let registrosPorUfMemo: Map<string, number> | null = null;
+
+function registrosPorUf(): Map<string, number> {
+  if (registrosPorUfMemo) return registrosPorUfMemo;
+  registrosPorUfMemo = new Map(densidadePorUf().ufs.map((u) => [u.sigla, u.registros]));
+  return registrosPorUfMemo;
+}
+
+export type IdDaOrdenacao = "vazio" | "origem";
+
+export interface Ordenacao {
+  id: IdDaOrdenacao;
+  rotulo: string;
+  /**
+   * O CAMPO do item que esta ordenação observa — dado, e não função, pela mesma razão que
+   * `Escopo.campo`: o componente de cliente não pode importar este módulo por valor, e
+   * reescrever o critério lá criaria a segunda cópia que diverge em silêncio.
+   */
+  campo: "registrosNaUf" | "origem";
+  /** Por que esta ordem existe. Vai para a tela, por extenso. */
+  porque: string;
+}
+
+/**
+ * A concentração, medida. É o denominador da frase que justifica a ordenação por vazio, e
+ * sai da mesma função que alimenta o Observatório — um número digitado aqui passaria a
+ * mentir na primeira regeração do grafo.
+ */
+export interface ConcentracaoMedida {
+  /** Registros de lugar somados nas 27. */
+  total: number;
+  /** Quantos deles estão nos dois estados maiores. */
+  doisMaiores: number;
+  /** Quantas unidades federativas existem na tabela. Sempre 27. */
+  unidades: number;
+  /** Quantas o acervo alcança. */
+  comRegistro: number;
+  /** Siglas que o acervo não alcança de forma alguma. */
+  semRegistro: string[];
+  /** Siglas com um único registro. */
+  comUmRegistro: string[];
+}
+
+let concentracaoMemo: ConcentracaoMedida | null = null;
+
+export function concentracaoDoAcervo(): ConcentracaoMedida {
+  if (concentracaoMemo) return concentracaoMemo;
+  const d = densidadePorUf();
+  concentracaoMemo = {
+    total: d.total,
+    doisMaiores: d.doisMaiores,
+    unidades: d.ufs.length,
+    comRegistro: d.ufs.filter((u) => u.registros > 0).length,
+    semRegistro: d.semRegistro.map((u) => u.sigla),
+    comUmRegistro: d.comUmRegistro.map((u) => u.sigla),
+  };
+  return concentracaoMemo;
+}
+
+export function ordenacoesDaFila(): Ordenacao[] {
+  const c = concentracaoDoAcervo();
+  const pct = Math.round((c.doisMaiores / c.total) * 100);
+  return [
+    {
+      id: "vazio",
+      rotulo: "por vazio",
+      campo: "registrosNaUf",
+      porque:
+        `Sobe primeiro o item da unidade federativa que o acervo menos documenta. ` +
+        `${c.doisMaiores} dos ${c.total} registros de lugar estão em dois dos ` +
+        `${c.unidades} estados — ${pct}% —, ${c.semRegistro.length} não aparecem em lugar ` +
+        `nenhum (${c.semRegistro.join(" e ")}) e ${c.comUmRegistro.length} têm um registro ` +
+        `só. Ordenar por volume poria São Paulo no alto de toda fila e reproduziria na ` +
+        "governança o deserto que o mapa denuncia: quem tem mais acervo receberia mais " +
+        "atenção de moderação, e quem não tem nenhum continuaria sem. O número ao lado de " +
+        "cada item é o registro do estado dele, para a ordem ser conferível a olho.",
+    },
+    {
+      id: "origem",
+      rotulo: "por origem",
+      campo: "origem",
+      porque:
+        "Agrupa por de onde o item veio — produtor, ingestão, IA, denúncia — na ordem em " +
+        "que as origens estão declaradas. É a ordem de quem quer varrer uma origem de cada " +
+        "vez; ela NÃO prioriza nada, e por isso não é a padrão.",
+    },
+  ];
+}
+
+/** Congelada como `readonly` para o componente não poder reordenar o que a tela declara. */
+export const ORDENACOES_DA_FILA: readonly Ordenacao[] = ordenacoesDaFila();
+
+// ---------------------------------------------------------------------------
 // A escolha dos itens — determinística, por chave estável, e declarada
 // ---------------------------------------------------------------------------
 
 /** Quantos itens por origem. Declarado, e citado na tela. */
 export const ITENS_POR_ORIGEM = 20;
 
-/** O tamanho total da fila. Bem abaixo dos 84 grupos da fase 4, e percorrível ao vivo. */
-export const TAMANHO_DA_FILA = ITENS_POR_ORIGEM * 3;
+/**
+ * O tamanho total da fila: as três origens de submissão mais as denúncias.
+ *
+ * Não é `ITENS_POR_ORIGEM * 4`, e a assimetria é o conteúdo: denúncia não chega no volume
+ * de uma fila de submissão. Ver `REGRA_DA_DENUNCIA`.
+ */
+export const TAMANHO_DA_FILA = ITENS_POR_ORIGEM * 3 + DENUNCIAS_NA_FILA;
 
 /**
  * O que a IA nunca propõe publicar, por mais que o grafo alcance.
@@ -445,8 +696,10 @@ function paraItem(
   e: Entidade,
   origem: OrigemDoItem,
   sugestao: SugestaoDaIa | null,
+  denuncia: DenunciaDeclarada | null = null,
 ): ItemDaFila {
   const ehIa = origem === "ia";
+  const uf = ufPorEntidade().get(e.id) ?? null;
   return {
     id: `fila:${origem}:${e.id}`,
     entidadeId: e.id,
@@ -461,8 +714,45 @@ function paraItem(
     componentes: ehIa ? componentesAtendidos(e) : null,
     sugestao,
     territorio: territorioDe(e),
+    uf,
+    registrosNaUf: uf ? (registrosPorUf().get(uf) ?? 0) : null,
+    denuncia,
     rota: rotaDe(e),
   };
+}
+
+/**
+ * As entidades que a fila encena como denunciadas.
+ *
+ * São `conteudo` e `midia` — as classes que o público de fato LÊ e sobre as quais faz
+ * sentido reclamar. Um evento futuro não recebe denúncia de «não aconteceu», e é a
+ * ordenação por `id` que torna a escolha reproduzível entre duas gerações do acervo.
+ */
+function candidatosDeDenuncia(): Entidade[] {
+  const saida: Entidade[] = [];
+  for (const classe of ["conteudo", "midia"] as const) {
+    for (const slug of slugsPorTipo(classe)) {
+      const e = porSlug(classe, slug);
+      // Só o que o acervo publica de fato: sem resumo não há o que ler, e sem nada para
+      // ler não há sobre o que reclamar.
+      if (e && e.procedencia !== "autorado" && (e.resumo ?? "").length >= 60) saida.push(e);
+    }
+  }
+  return saida.sort(porIdEstavel);
+}
+
+function denunciasDaFila(): ItemDaFila[] {
+  const candidatos = amostrar(candidatosDeDenuncia(), DENUNCIAS_NA_FILA);
+  return candidatos.map((e, i) => {
+    const motivo = MOTIVOS_DE_DENUNCIA[i % MOTIVOS_DE_DENUNCIA.length];
+    return paraItem(e, "denuncia", null, {
+      motivo: motivo.id,
+      rotulo: motivo.rotulo,
+      // Derivada da posição, nunca sorteada: 1, 2, 3, 1, 2, 3… Duas gerações do acervo
+      // com o mesmo dado produzem a mesma fila, que é o que `REGRA_DA_AMOSTRAGEM` promete.
+      quantas: (i % 3) + 1,
+    });
+  });
 }
 
 let filaMemo: ItemDaFila[] | null = null;
@@ -573,6 +863,7 @@ export function filaDaModeracao(): ItemDaFila[] {
     ...rodizioPorFaixaDeScore(ordenadosIa, ITENS_POR_ORIGEM).map((c) =>
       paraItem(c.entidade, "ia", c.sugestao),
     ),
+    ...denunciasDaFila(),
   ];
 
   // --- Conferências que derrubam o build (falha alta e nomeada) ---
@@ -821,6 +1112,18 @@ export interface NumerosDaModeracao {
   acoes: number;
   acoesQueExigemMotivo: number;
   limitesDaIa: number;
+  /** Itens cuja UF o acervo resolve. O resto entra na declaração, com denominador. */
+  itensComUf: number;
+  /** Unidades federativas distintas presentes na fila. */
+  ufsNaFila: number;
+  motivosDeDenuncia: number;
+  /**
+   * Registros vivos vindos do Studio da S7. **Zero enquanto a tarefa 5 estiver bloqueada**,
+   * e é por isso que ele é um campo medido e não uma ausência silenciosa: a fila tem duas
+   * fontes por desenho, e a tela declara que a segunda está vazia em vez de fingir que não
+   * existe.
+   */
+  registrosVivos: number;
   bytesDoDto: number;
   tetoDoDto: number;
 }
@@ -851,6 +1154,7 @@ export function numerosDaModeracao(): NumerosDaModeracao {
       produtor: fila.filter((i) => i.origem === "produtor").length,
       ingestao: fila.filter((i) => i.origem === "ingestao").length,
       ia: fila.filter((i) => i.origem === "ia").length,
+      denuncia: fila.filter((i) => i.origem === "denuncia").length,
     },
     itensComScore: scores.length,
     scoreMinimo: Math.min(...scores),
@@ -864,6 +1168,10 @@ export function numerosDaModeracao(): NumerosDaModeracao {
     acoes: ACOES_DA_MODERACAO.length,
     acoesQueExigemMotivo: ACOES_DA_MODERACAO.filter((a) => a.motivo === "obrigatorio").length,
     limitesDaIa: LIMITES_DA_IA.length,
+    itensComUf: fila.filter((i) => i.uf !== null).length,
+    ufsNaFila: new Set(fila.map((i) => i.uf).filter(Boolean)).size,
+    motivosDeDenuncia: MOTIVOS_DE_DENUNCIA.length,
+    registrosVivos: 0,
     bytesDoDto: bytes,
     tetoDoDto: TETO_DO_DTO,
   };

@@ -10,10 +10,14 @@ import {
   FRASE_DA_ATRIBUICAO,
   ITENS_POR_ORIGEM,
   LIMITES_DA_IA,
+  MOTIVOS_DE_DENUNCIA,
+  ORDENACOES_DA_FILA,
   ORIGENS_DECLARADAS,
   POR_QUE_RODIZIO_NA_IA,
   REGRA_DA_AMOSTRAGEM,
+  REGRA_DA_DENUNCIA,
   REGRA_DO_SCORE,
+  concentracaoDoAcervo,
   declaracoesDaModeracao,
   distribuicaoDeScore,
   filaDaModeracao,
@@ -69,6 +73,10 @@ export default function PaginaModeracaoFila() {
       carimbo={CARIMBO_DA_DECISAO}
       itensPorOrigem={ITENS_POR_ORIGEM}
       itemInicial={itemInicialDaFila()}
+      ordenacoes={ORDENACOES_DA_FILA}
+      concentracao={concentracaoDoAcervo()}
+      motivosDeDenuncia={MOTIVOS_DE_DENUNCIA}
+      regraDaDenuncia={REGRA_DA_DENUNCIA}
     />
   );
 }
