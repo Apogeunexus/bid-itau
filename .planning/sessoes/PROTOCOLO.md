@@ -179,9 +179,45 @@ Observatório, deixava passar **nome de moderador na tela que existe para não e
 moderador**. Um gate de privacidade verde sobre o vazamento é pior do que não ter gate: a
 tela ganha uma garantia escrita que ninguém confere.
 
-**A regra: teste de ausência só vale depois de ser visto VERMELHO com o defeito injetado.**
+**A regra 1: teste de ausência só vale depois de ser visto VERMELHO com o defeito injetado.**
 Escreva o defeito, confirme que o gate acusa, restaure o arquivo, confira o `git diff` vazio.
 Sem isso, «não contém», «não expõe» e «não importa» são promessas sem prova.
+
+**A regra 2, e ela pega o que a primeira não pega: toda asserção de ausência precisa de um
+PISO.** Prove que o conjunto que você mede **não está vazio** antes de afirmar que ele não
+contém o defeito. `nenhum X entre N` é verificação; **`nenhum X` sozinho é uma frase que fica
+verde no dia em que o N virar zero** — e o N vira zero sem ninguém perceber, porque um
+seletor renomeado não quebra o gate: ele o faz parar de medir.
+
+Não é hipótese. `.web-alternador` **foi renomeada** numa reforma do design system, e quatro
+telas ficaram com a classe morta sem nenhum portão acusar. Um gate de privacidade escrito
+sobre um seletor assim teria ficado verde sobre a tela cheia do que ele proíbe.
+
+Duas formas de defeito, as duas achadas em suítes desta noite:
+
+```js
+// SEM PISO — conjunto vazio passa
+const rotulos = [...document.querySelectorAll('.web-denominador-rotulo')].map(…).join(' | ');
+exigir(!prometePublico, …)                    // rotulos === "" → verde sobre qualquer coisa
+
+// COM PISO
+exigir(rotulos.length > 0 && !prometePublico, …)
+```
+
+```js
+// SEM PISO — seletor descendente com DOIS atributos; renomeie um e o conjunto some
+semScore: document.querySelectorAll('[data-item-escolhido] [data-score-ia]').length === 0
+```
+
+**E ponha o denominador na linha de evidência**, como a `verificar-gestor.mjs:157` faz:
+`${todos.length} arquivos varridos · permitidos por nome: …`. Uma varredura vazia aparece
+como «0 arquivos varridos» em vez de passar em silêncio.
+
+**Padrão mais estreito que a promessa** é a irmã menor da mesma classe: um gate que diz «sem
+relógio» e só pega `new Date(`, deixando `Date.now()` passar; um que diz «nenhum campo de
+latitude» e só casa atributo com aspas duplas literais, deixando `id={campoLat}` passar. Não
+ficam verdes sobre o vazio — ficam verdes sobre a forma que ninguém previu. **Escreva o
+padrão contra as formas que o código realmente usa, e prove com uma delas injetada.**
 
 ### 9.2 · Um substantivo fundindo duas contagens que o código separa
 
