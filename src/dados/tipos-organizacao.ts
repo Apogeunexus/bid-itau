@@ -21,6 +21,16 @@
 import type { Acessibilidade, MetodoCoordenada } from "./tipos";
 import type { ProcedenciaDePapel } from "./tipos-acesso";
 import { acessibilidadeVazia } from "./tipos-acesso";
+/**
+ * A normalização de título vem do ÍNDICE DE BUSCA, e não é reescrita aqui.
+ *
+ * Ela é a primeira parte do critério de identidade do evento, e a fila de duplicatas dispara
+ * contra ela. Uma segunda implementação — ainda que «equivalente» — faria o lote importado
+ * gravar chave diferente da que o acervo usa, e o sintoma seria a duplicata que a máquina não
+ * acha. `normalizar` é função de string sem dependência de dado: importá-la por valor no
+ * cliente não arrasta byte nenhum do grafo, exatamente como `tipos-acesso.ts` já faz.
+ */
+import { normalizar } from "./indice";
 
 // ---------------------------------------------------------------------------
 // Os recursos físicos do lugar — PEDIDO-S6-01
@@ -447,7 +457,7 @@ export const TELAS_DA_ORGANIZACAO: readonly TelaDaOrganizacao[] = [
     rotulo: "Integração",
     rota: "/studio/integracao",
     objetivo: "Importar em lote sem digitar duas vezes",
-    pronta: false,
+    pronta: true,
   },
   {
     id: "alcance",
@@ -1149,3 +1159,177 @@ export function faltasDoEdital(e: Edital | undefined): Falta[] {
   }
   return saida;
 }
+
+// ---------------------------------------------------------------------------
+// A importação em lote — O8
+// ---------------------------------------------------------------------------
+
+export const ORIGENS_DE_LOTE = ["ical", "json"] as const;
+export type OrigemDeLote = (typeof ORIGENS_DE_LOTE)[number];
+
+export const ROTULO_DA_ORIGEM: Record<OrigemDeLote, string> = {
+  ical: "iCal (.ics)",
+  json: "JSON",
+};
+
+/**
+ * O que a importação NÃO traz, dito antes de ela rodar.
+ *
+ * É a frase mais útil da tela. Um lote de agenda traz título, data e, com sorte, o nome do
+ * local em texto livre — e não traz espaço cadastrado, elenco com papel, preço, canal de
+ * ingresso nem ficha de acessibilidade. Uma tela que só mostrasse «12 eventos importados»
+ * faria parecer que o trabalho acabou; o que acabou foi a digitação.
+ */
+export const O_QUE_O_LOTE_NAO_TRAZ: readonly string[] = [
+  "espaço cadastrado — o arquivo traz nome de local em texto, e nome de local não é espaço",
+  "elenco com papel — a aresta «atua_em» exige papel, e nenhum formato de agenda o carrega",
+  "preço e canal de ingresso",
+  "ficha de acessibilidade — nem os recursos, nem o ato de declarar que não oferece",
+];
+
+/** Uma linha do lote, já lida e conferida contra o acervo. */
+export interface LinhaDoLote {
+  titulo: string;
+  inicio: string;
+  fim: string;
+  /** O nome do local como o arquivo o traz. TEXTO, e a tela não o promove a espaço. */
+  local: string;
+  /** Título normalizado — a mesma normalização do índice de busca. */
+  normalizado: string;
+  /** Título de evento do acervo que colide por identidade, quando há. */
+  colideCom: string | null;
+  /** O que ficou vazio nesta linha, nomeado. */
+  vazios: string[];
+}
+
+export interface Lote {
+  id: string;
+  origem: OrigemDeLote;
+  linhas: LinhaDoLote[];
+  /** `null` enquanto o lote é só prévia. Aplicar é ato, e carimba. */
+  aplicadoEm: string | null;
+  autor: string;
+  quando: string;
+}
+
+/**
+ * A chave de integração.
+ *
+ * QUEM EMITE E LIMITA É O ADMIN (97). A organização vê a própria chave, usa e revoga — e
+ * não existe caminho neste módulo para criar uma. É a terceira segregação da sessão, junto
+ * com «a organização não se verifica» e «a organização não declara fato de evento», e as
+ * três seguem a mesma disciplina: a impossibilidade mora no código, não num aviso.
+ */
+export interface ChaveDeIntegracao {
+  id: string;
+  rotulo: string;
+  /** O recorte que o Admin concedeu. Texto vindo do outro nível, não editável aqui. */
+  escopo: string;
+  limitePorDia: number;
+  emitidaPor: string;
+  emitidaEm: string;
+  revogada: boolean;
+}
+
+export const QUEM_EMITE_A_CHAVE =
+  "A chave é emitida e limitada pelo Admin (97). A organização vê a própria, usa e revoga — " +
+  "e não há nesta tela caminho para criar uma. Emitir a própria credencial e definir o " +
+  "próprio limite seria a organização se autorizando, que é o mesmo defeito de ela se " +
+  "verificar.";
+
+/** Desdobra uma linha de iCal, tratando a continuação por espaço que o formato permite. */
+function linhasDesdobradas(texto: string): string[] {
+  const cruas = texto.split(/\r?\n/);
+  const saida: string[] = [];
+  for (const l of cruas) {
+    if (/^[ \t]/.test(l) && saida.length > 0) saida[saida.length - 1] += l.slice(1);
+    else saida.push(l);
+  }
+  return saida;
+}
+
+/**
+ * Lê um lote de iCal ou de JSON.
+ *
+ * O LEITOR É ESTREITO DE PROPÓSITO. Ele pega `SUMMARY`, `DTSTART`, `DTEND` e `LOCATION`, e
+ * ignora o resto — não porque o resto não importe, mas porque fingir que lê um iCal completo
+ * seria prometer um comportamento que este protótipo não tem. O que ele NÃO entende, ele
+ * deixa de fora, e a tela lista o que ficou vazio.
+ *
+ * ENTRADA EXTERNA: nada aqui confia no formato. JSON malformado, campo ausente e tipo errado
+ * caem no mesmo lugar — uma linha com o campo vazio e o nome dele na lista de vazios.
+ */
+export function lerLote(texto: string, origem: OrigemDeLote): Omit<LinhaDoLote, "colideCom">[] {
+  const brutas: { titulo: string; inicio: string; fim: string; local: string }[] = [];
+
+  if (origem === "ical") {
+    let atual: Record<string, string> | null = null;
+    for (const linha of linhasDesdobradas(texto)) {
+      if (/^BEGIN:VEVENT/i.test(linha)) atual = {};
+      else if (/^END:VEVENT/i.test(linha)) {
+        if (atual) {
+          brutas.push({
+            titulo: atual.SUMMARY ?? "",
+            inicio: atual.DTSTART ?? "",
+            fim: atual.DTEND ?? "",
+            local: atual.LOCATION ?? "",
+          });
+        }
+        atual = null;
+      } else if (atual) {
+        const corte = linha.indexOf(":");
+        if (corte > 0) {
+          const chave = linha.slice(0, corte).split(";")[0].toUpperCase();
+          atual[chave] = linha.slice(corte + 1).trim();
+        }
+      }
+    }
+  } else {
+    let lido: unknown = null;
+    try {
+      lido = JSON.parse(texto);
+    } catch {
+      // Arquivo ilegível é lote vazio, e a tela diz que veio vazio. Lançar aqui derrubaria
+      // a tela inteira por causa de um arquivo que a pessoa pode simplesmente trocar.
+      return [];
+    }
+    const lista = Array.isArray(lido) ? lido : [];
+    for (const item of lista) {
+      if (typeof item !== "object" || item === null) continue;
+      const o = item as Record<string, unknown>;
+      brutas.push({
+        titulo: typeof o.titulo === "string" ? o.titulo : "",
+        inicio: typeof o.inicio === "string" ? o.inicio : "",
+        fim: typeof o.fim === "string" ? o.fim : "",
+        local: typeof o.local === "string" ? o.local : "",
+      });
+    }
+  }
+
+  return brutas.map((b) => {
+    const vazios: string[] = [];
+    if (b.titulo.trim().length === 0) vazios.push("título");
+    if (b.inicio.trim().length === 0) vazios.push("início");
+    if (b.fim.trim().length === 0) vazios.push("fim");
+    if (b.local.trim().length === 0) vazios.push("local");
+    return { ...b, normalizado: normalizar(b.titulo), vazios };
+  });
+}
+
+/**
+ * Uma linha pode ser gravada?
+ *
+ * SÓ COM TÍTULO. O critério de identidade do evento é «título normalizado + agente
+ * realizador + obra», e sem o primeiro terço não há chave nenhuma — gravar assim produziria
+ * registro sem identidade, e a fila de duplicatas passaria a acusar o próprio sistema. Os
+ * outros vazios diminuem o registro; este o impede.
+ */
+export function linhaGravavel(l: LinhaDoLote): boolean {
+  return l.titulo.trim().length > 0;
+}
+
+export const POR_QUE_A_PREVIA =
+  "A prévia vem sempre antes de aplicar, e não é cautela genérica: o lote é a origem " +
+  "clássica de duplicata, e o critério de identidade roda ANTES de gravar. Aplicar sem ver " +
+  "seria deixar a máquina criar exatamente os pares que a fila de duplicatas existe para " +
+  "desfazer depois.";

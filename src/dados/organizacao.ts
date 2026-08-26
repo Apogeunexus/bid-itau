@@ -18,6 +18,7 @@
 
 import vocabularioJson from "./gerado/vocabulario.json";
 import { DATA_DE_REFERENCIA } from "./alerta";
+import { normalizar } from "./indice";
 import { ocorrenciasDe, porSlug, slugsPorTipo, vizinhos } from "./grafo";
 import type { Entidade, MetodoCoordenada, Procedencia, Vocabulario } from "./tipos";
 
@@ -383,11 +384,14 @@ export function numerosDasInstituicoes(): NumerosDasInstituicoes {
 export function declaracoesDasInstituicoes(n: NumerosDasInstituicoes): DeclaracaoDaTela[] {
   return [
     {
-      titulo: "Nenhuma instituição tem lugar",
+      titulo: "Nenhuma instituição tem coordenada própria",
       texto:
-        `${n.comCoordenada} de ${n.total} instituições têm coordenada. Uma instituição sem lugar ` +
-        `não aparece no mapa, e o mapa é a lente de todo o produto. Esta tela cadastra o ` +
-        `endereço — e a coordenada continua derivada, pelo mesmo motivo da tela de espaços.`,
+        `${n.comCoordenada} de ${n.total} instituições têm coordenada PRÓPRIA. Isso não quer ` +
+        `dizer que elas sumam do mapa: quem não tem coordenada própria pode ser posicionado ` +
+        `por herança — do município, do estado, do país —, e a diferença entre as duas ` +
+        `contagens é grande. O que a ausência de coordenada própria significa é que o ponto ` +
+        `no mapa é do MUNICÍPIO e não da porta: cadastrar o endereço aqui é o que troca o ` +
+        `método da derivação por um mais fino.`,
     },
     {
       titulo: "Nenhuma instituição declara acessibilidade",
@@ -572,6 +576,9 @@ export function declaracoesDasMidias(n: NumerosDasMidias): DeclaracaoDaTela[] {
 export interface EventoParaPrograma {
   id: string;
   titulo: string;
+  /** A MESMA normalização do índice de busca — é contra ela que a duplicata do lote
+   *  importado dispara, e é por isso que ela viaja junto em vez de ser recalculada. */
+  normalizado: string;
   /** O período que o CMS publica, quando publica. Texto, como vem. */
   periodo: string | null;
   /** Quem `realiza` o evento — a relação organizacional de verdade. */
@@ -595,6 +602,7 @@ export function eventosParaPrograma(): EventoParaPrograma[] {
   const saida = entidadesDe("evento").map((e) => ({
     id: e.id,
     titulo: e.titulo,
+    normalizado: normalizar(e.titulo),
     periodo: texto(e, "periodo") || null,
     realizadoPor:
       vizinhos(e.id, "realiza")
@@ -833,6 +841,86 @@ export function declaracoesDosEditais(v: VocabularioDoEdital): DeclaracaoDaTela[
         `${v.ufsAusentes.join(" e ")}. A lista de critérios oferece as 27, e não as ` +
         `${cobertas} — um edital que não pode mirar onde não há acervo é o mecanismo exato ` +
         `pelo qual o deserto se perpetua.`,
+    },
+  ];
+}
+
+// ---------------------------------------------------------------------------
+// A integração — O8
+// ---------------------------------------------------------------------------
+
+/**
+ * A chave que o Admin emitiu para esta organização.
+ *
+ * ELA CHEGA PRONTA, E ISSO É A SEGREGAÇÃO EM FORMA DE DADO. A organização não emite: a chave
+ * vem do nível 1 com escopo e limite já definidos, e o único verbo que a O8 tem sobre ela é
+ * revogar. Semeá-la aqui, no servidor, é o que impede a tela de ter um caminho de criação —
+ * não há função de emitir em lugar nenhum deste módulo.
+ */
+export const CHAVE_EMITIDA_PELO_ADMIN = {
+  id: "chave-1",
+  rotulo: "Integração do CMS institucional",
+  escopo: "agenda — leitura e escrita de evento, temporada e ocorrência",
+  limitePorDia: 500,
+  emitidaPor: "Admin (97)",
+  emitidaEm: DATA_DE_REFERENCIA,
+  revogada: false,
+} as const;
+
+export interface NumerosDaIntegracao {
+  eventos: number;
+  /** Quantos títulos distintos, depois de normalizados. A diferença para o total é o
+   *  tamanho da colisão que já existe no acervo, antes de qualquer importação. */
+  titulosDistintos: number;
+  ocorrencias: number;
+  ocorrenciasComEspaco: number;
+}
+
+export function numerosDaIntegracao(): NumerosDaIntegracao {
+  const eventos = entidadesDe("evento");
+  const distintos = new Set(eventos.map((e) => normalizar(e.titulo)));
+
+  let ocorrencias = 0;
+  let ocorrenciasComEspaco = 0;
+  for (const e of eventos) {
+    for (const o of ocorrenciasDe(e.id)) {
+      ocorrencias += 1;
+      if (o.espacoId) ocorrenciasComEspaco += 1;
+    }
+  }
+
+  return {
+    eventos: eventos.length,
+    titulosDistintos: distintos.size,
+    ocorrencias,
+    ocorrenciasComEspaco,
+  };
+}
+
+export function declaracoesDaIntegracao(n: NumerosDaIntegracao): DeclaracaoDaTela[] {
+  return [
+    {
+      titulo: "O lote é a origem clássica de duplicata",
+      texto:
+        `O acervo tem ${n.eventos} eventos e ${n.titulosDistintos} títulos distintos depois de ` +
+        `normalizados — a diferença já existe antes de qualquer importação. Por isso o ` +
+        `critério de identidade roda ANTES de gravar, e não depois: aplicar sem prévia seria ` +
+        `deixar a máquina criar os pares que a fila de duplicatas existe para desfazer.`,
+    },
+    {
+      titulo: "O que o lote não traz continua faltando",
+      texto:
+        `${n.ocorrenciasComEspaco} de ${n.ocorrencias} ocorrências têm espaço declarado. Um ` +
+        `arquivo de agenda traz nome de local em texto livre, e nome de local não é espaço ` +
+        `cadastrado — importar não move este número. A tela lista o que ficou vazio em vez de ` +
+        `dizer «12 eventos importados» e deixar parecer que o trabalho acabou.`,
+    },
+    {
+      titulo: "A chave vem do Admin, e só a revogação é daqui",
+      texto:
+        `A chave de integração é emitida e limitada pelo Admin (97), com escopo e teto já ` +
+        `definidos. A organização vê a própria, usa e revoga — e não há nesta tela caminho ` +
+        `para criar uma. Emitir a própria credencial seria a organização se autorizando.`,
     },
   ];
 }

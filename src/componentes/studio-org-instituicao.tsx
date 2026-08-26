@@ -254,8 +254,8 @@ export function StudioOrgInstituicao({
               <h2 className="studio-painel-nome">Onde ela fica, e com quem falar</h2>
               <p className="studio-nota">
                 {atual.temCoordenada
-                  ? "Esta instituição tem coordenada."
-                  : `Esta instituição não tem coordenada — nenhuma das ${numeros.total} tem. Sem lugar, ela não aparece no mapa.`}
+                  ? "Esta instituição tem coordenada própria."
+                  : `Esta instituição não tem coordenada própria — nenhuma das ${numeros.total} tem. Ela ainda pode aparecer no mapa por herança do município; o que falta é o ponto ser da porta e não da cidade.`}
               </p>
 
               <label className="studio-campo">

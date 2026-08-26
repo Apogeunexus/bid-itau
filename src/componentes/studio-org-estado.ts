@@ -39,9 +39,11 @@ import type {
   EntradaDeEquipe,
   CadastroDeFormacao,
   EdicaoDePrograma,
+  ChaveDeIntegracao,
   Edital,
   EstadoDoEdital,
   InscricaoNoEdital,
+  Lote,
   FichaTecnicaDeMidia,
   MaterialDidatico,
   Programa,
@@ -98,6 +100,9 @@ interface EstadoPersistido {
    *  existe no acervo. */
   editais: Edital[];
   atualEditalId: string | null;
+  /** A O8: o histórico de importações e as chaves que o Admin emitiu. */
+  lotes: Lote[];
+  chaves: ChaveDeIntegracao[];
 }
 
 export interface ContextoDaOrganizacao {
@@ -124,6 +129,8 @@ export interface SementeDaOrganizacao {
   equipe?: Colaborador[];
   midiaId?: string | null;
   formacaoId?: string | null;
+  /** As chaves que o Admin emitiu. Chegam prontas: a O8 não tem como criar uma. */
+  chaves?: ChaveDeIntegracao[];
 }
 
 let primeiroId: string | null = null;
@@ -131,6 +138,7 @@ let primeiraInstituicaoId: string | null = null;
 let equipeSemeada: Colaborador[] = [];
 let primeiraMidiaId: string | null = null;
 let primeiraFormacaoId: string | null = null;
+let chavesSemeadas: ChaveDeIntegracao[] = [];
 
 const ouvintes = new Set<() => void>();
 
@@ -198,6 +206,8 @@ function pareceEstado(v: unknown): v is EstadoPersistido {
   if (o.formacoes !== undefined && (typeof o.formacoes !== "object" || o.formacoes === null)) return false;
   if (o.visitas !== undefined && !Array.isArray(o.visitas)) return false;
   if (o.editais !== undefined && !Array.isArray(o.editais)) return false;
+  if (o.lotes !== undefined && !Array.isArray(o.lotes)) return false;
+  if (o.chaves !== undefined && !Array.isArray(o.chaves)) return false;
   if (o.historicoDaEquipe !== undefined && !Array.isArray(o.historicoDaEquipe)) return false;
   return Object.values(o.cadastros as Record<string, unknown>).every((c) => {
     if (typeof c !== "object" || c === null) return false;
@@ -232,6 +242,8 @@ function doZero(): EstadoPersistido {
     visitas: [],
     editais: [],
     atualEditalId: null,
+    lotes: [],
+    chaves: chavesSemeadas.map((c) => ({ ...c })),
   };
 }
 
@@ -259,6 +271,7 @@ function hidratar(contextoNovo: ContextoDaOrganizacao, semente: SementeDaOrganiz
   if (semente.equipe && semente.equipe.length > 0) equipeSemeada = semente.equipe;
   if (semente.midiaId != null) primeiraMidiaId = semente.midiaId;
   if (semente.formacaoId != null) primeiraFormacaoId = semente.formacaoId;
+  if (semente.chaves && semente.chaves.length > 0) chavesSemeadas = semente.chaves;
   if (estado !== null) return;
 
   let cru: string | null = null;
@@ -305,6 +318,8 @@ function hidratar(contextoNovo: ContextoDaOrganizacao, semente: SementeDaOrganiz
     visitas: lido.visitas ?? [],
     editais: lido.editais ?? [],
     atualEditalId: lido.atualEditalId ?? null,
+    lotes: lido.lotes ?? [],
+    chaves: lido.chaves?.length ? lido.chaves : chavesSemeadas.map((c) => ({ ...c })),
   };
   avisar();
 }
@@ -571,6 +586,16 @@ export interface Organizacao {
   /** A inscrição do funil da 49: quem se inscreve entra no grafo como agente proposto. */
   inscrever: (id: string, inscricao: Omit<InscricaoNoEdital, "id" | "autor" | "quando">) => void;
   mudarEstadoDoEdital: (id: string, estado: EstadoDoEdital) => void;
+
+  // --- O8 · integração -----------------------------------------------------
+  lotes: Lote[];
+  chaves: ChaveDeIntegracao[];
+  /** Guarda a prévia. Ela ainda não gravou nada: aplicar é outro ato. */
+  registrarLote: (lote: Omit<Lote, "id" | "aplicadoEm" | "autor" | "quando">) => void;
+  aplicarLote: (id: string) => void;
+  /** Revogar é o ÚNICO verbo da organização sobre a chave. Não existe `emitirChave` neste
+   *  módulo, e a ausência é a segregação. */
+  revogarChave: (id: string) => void;
 }
 
 export function useOrganizacao(
@@ -911,6 +936,46 @@ export function useOrganizacao(
     comEdital(id, (e) => ({ ...e, estado: novoEstado }));
   }, []);
 
+  const registrarLote = useCallback(
+    (lote: Omit<Lote, "id" | "aplicadoEm" | "autor" | "quando">) => {
+      if (estado === null) return;
+      gravar({
+        ...estado,
+        lotes: [
+          {
+            ...lote,
+            id: `lote-${estado.lotes.length + 1}`,
+            aplicadoEm: null,
+            autor: contexto.autor,
+            quando: contexto.dataDeReferencia,
+          },
+          ...estado.lotes,
+        ],
+      });
+    },
+    [],
+  );
+
+  const aplicarLote = useCallback((id: string) => {
+    if (estado === null) return;
+    gravar({
+      ...estado,
+      lotes: estado.lotes.map((l) =>
+        l.id === id && l.aplicadoEm === null
+          ? { ...l, aplicadoEm: contexto.dataDeReferencia, autor: contexto.autor }
+          : l,
+      ),
+    });
+  }, []);
+
+  const revogarChave = useCallback((id: string) => {
+    if (estado === null) return;
+    gravar({
+      ...estado,
+      chaves: estado.chaves.map((c) => (c.id === id ? { ...c, revogada: true } : c)),
+    });
+  }, []);
+
   const reiniciar = useCallback(() => {
     try {
       window.localStorage.removeItem(CHAVE_DA_ORGANIZACAO);
@@ -977,5 +1042,10 @@ export function useOrganizacao(
     alternarCriterio,
     inscrever,
     mudarEstadoDoEdital,
+    lotes: atualEstado?.lotes ?? [],
+    chaves: atualEstado?.chaves ?? [],
+    registrarLote,
+    aplicarLote,
+    revogarChave,
   };
 }

@@ -284,3 +284,18 @@
   color: var(--cor-tinta-3);
   cursor: default;
 }
+
+/* ---------------------------------------------------------------------------
+ * 6 · Ações DENTRO de uma linha de lista.
+ *
+ * `.studio-acoes` é rodapé de painel e traz `border-top`: dentro de uma linha ela
+ * desenha uma régua atravessando cada item, e vinte linhas viram vinte traços que
+ * não separam nada. Aqui o par de botões é parte da linha, não o fim dela.
+ * ------------------------------------------------------------------------- */
+
+.org-linha-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}

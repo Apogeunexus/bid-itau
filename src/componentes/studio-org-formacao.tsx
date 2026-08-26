@@ -379,7 +379,7 @@ export function StudioOrgFormacao({
                               motivo ? (
                                 <span className="org-falta-dono">{motivo}</span>
                               ) : (
-                                <span className="studio-acoes">
+                                <span className="org-linha-acoes">
                                   <button
                                     type="button"
                                     className="studio-botao studio-botao-primario"
