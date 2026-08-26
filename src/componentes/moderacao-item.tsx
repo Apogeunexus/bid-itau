@@ -528,7 +528,7 @@ export function ModeracaoItem({
                     {decisaoDoItem.motivo}
                   </span>
                 ) : null}
-                <span className="moderacao-decisao-assinatura">
+                <span className="moderacao-decisao-assinatura" data-carimbo={decisaoDoItem.quando} data-autor={decisaoDoItem.autor}>
                   {decisaoDoItem.autor} · {decisaoDoItem.quando}
                 </span>
                 <button

@@ -1162,6 +1162,157 @@ export const FRASE_DA_ASSIMETRIA =
   "é a única que deve explicação por escrito.";
 
 // ---------------------------------------------------------------------------
+// M2 — a ficha: os direitos, a classificação e a porta do termo
+// ---------------------------------------------------------------------------
+
+/**
+ * Um bloco de conferência da ficha: o que a moderação olha antes de decidir.
+ *
+ * `bloqueiaPublicacao` é o campo que separa uma observação de uma BARREIRA. A tela precisa
+ * dizer não só que falta crédito, mas que a falta impede a publicação — e por quê. Bloquear
+ * sem explicar é a moderação silenciosa vista do outro lado: quem submeteu leva um não e
+ * não sabe o que corrigir.
+ */
+export interface ConferenciaDaFicha {
+  id: string;
+  rotulo: string;
+  /** O que a moderação confere, em texto de produto. */
+  oQue: string;
+  /** Por que isto é responsabilidade da moderação, e o que ela NÃO decide aqui. */
+  limite: string;
+  bloqueiaPublicacao: boolean;
+}
+
+export const CONFERENCIAS_DA_FICHA: readonly ConferenciaDaFicha[] = [
+  {
+    id: "credito",
+    rotulo: "direitos e crédito de imagem",
+    oQue:
+      "O campo `creditoImagem`. Imagem declarada sem crédito não publica — e a ficha diz " +
+      "por que, em vez de só desabilitar o botão.",
+    limite:
+      "A moderação confere a PRESENÇA do crédito, não a titularidade do direito. Quem " +
+      "publica a imagem responde por ela; o que esta tela impede é o acervo do Itaú " +
+      "Cultural exibir uma foto sem dizer de quem ela é.",
+    bloqueiaPublicacao: true,
+  },
+  {
+    id: "distribuicao",
+    rotulo: "direito de distribuição e uso offline",
+    oQue:
+      "Se a mídia pode ser redistribuída e baixada para uso sem conexão — o que o app " +
+      "oferece em «salvos» e no Play.",
+    limite:
+      "O acervo NÃO tem este campo em entidade nenhuma. A ficha declara a ausência com " +
+      "denominador em vez de oferecer uma caixa que não guarda nada: uma tela que coleta o " +
+      "que o modelo não sustenta produz silêncio, e silêncio é o que a plataforma se " +
+      "proibiu de interpretar.",
+    bloqueiaPublicacao: false,
+  },
+  {
+    id: "classificacao",
+    rotulo: "classificação indicativa",
+    oQue: "A faixa etária declarada por quem realiza o evento.",
+    limite:
+      "A moderação CONFERE O DECLARADO, não arbitra. A distinção é de responsabilidade: " +
+      "quem realiza o evento responde pela classificação, e uma plataforma que a atribui " +
+      "por conta própria assume um risco que não é dela e tira de quem é. O campo " +
+      "`faixaEtaria` não existe em `tipos.ts` — entrou por extensão em `tipos-acesso.ts` e " +
+      "nenhuma entidade do acervo o preenche.",
+    bloqueiaPublicacao: false,
+  },
+  {
+    id: "termo",
+    rotulo: "termo fora do vocabulário",
+    oQue: "Termos vinculados ao item que não estão no vocabulário controlado.",
+    limite:
+      "A moderação ENCAMINHA ao Editor e não decide. Criar termo aqui abriria uma segunda " +
+      "porta para o vocabulário, e um vocabulário com duas portas deixa de ser controlado " +
+      "na primeira vez que as duas discordarem. O botão é «encaminhar», nunca «criar».",
+    bloqueiaPublicacao: false,
+  },
+];
+
+export const FRASE_DO_BLOQUEIO =
+  "Uma barreira que não explica é um não sem endereço: quem submeteu não sabe o que " +
+  "corrigir, e volta a submeter a mesma coisa. Por isso o que impede a publicação aparece " +
+  "com o campo nomeado, o motivo escrito e de quem é a responsabilidade de preencher.";
+
+// ---------------------------------------------------------------------------
+// M9 — o histórico, e o que ele NÃO é (funcionalidade 121)
+// ---------------------------------------------------------------------------
+
+/**
+ * Para onde cada ação leva o item, do lado de QUEM RECEBE.
+ *
+ * Uma decisão que não diz onde foi parar é um registro sem consequência: o histórico
+ * mostraria «devolvido» e ninguém saberia onde procurar o que foi devolvido. `rotaDoOutroLado`
+ * é o mesmo campo que `EntradaDeHistorico` já usa em `ocorrencias-studio.ts`, e existe pela
+ * mesma razão — a decisão tem dois lados, e a tela de quem decide precisa apontar o outro.
+ */
+export interface DestinoDaAcao {
+  acao: AcaoDaModeracao;
+  /** O que aconteceu, do ponto de vista de quem recebeu. */
+  doOutroLado: string;
+  /** A rota onde a MESMA decisão aparece do lado de quem recebe, ou `null`. */
+  rotaDoOutroLado: string | null;
+  /** Por que a rota é `null`, quando é. Ausência declarada, nunca campo em branco. */
+  porqueSemRota: string | null;
+}
+
+export const DESTINOS_DA_ACAO: readonly DestinoDaAcao[] = [
+  {
+    acao: "aprovar",
+    doOutroLado:
+      "O item entra no acervo público e passa a aparecer para quem usa o app, com a " +
+      "procedência de quem o submeteu.",
+    rotaDoOutroLado: "/acervo/",
+    porqueSemRota: null,
+  },
+  {
+    acao: "editar",
+    doOutroLado:
+      "A ficha volta para correção e o registro SEGUE na fila — `editar` não o tira de " +
+      "`em-moderacao`, e por isso ele continua aparecendo aqui.",
+    rotaDoOutroLado: "/moderacao/fila/",
+    porqueSemRota: null,
+  },
+  {
+    acao: "vetar",
+    doOutroLado:
+      "O item é barrado com motivo escrito e NÃO chega ao acervo público. Ele não volta a " +
+      "ser editável: para seguir, é preciso um registro novo.",
+    rotaDoOutroLado: null,
+    porqueSemRota:
+      "Não há tela do outro lado porque não há outro lado: o veto encerra o assunto, e é " +
+      "exatamente por isso que ele é a única ação da fila que deve explicação por escrito. " +
+      "O motivo fica aqui, no histórico, e é o que uma auditoria procura primeiro.",
+  },
+  {
+    acao: "devolver",
+    doOutroLado:
+      "O registro volta ao Studio de quem submeteu, editável, com o comentário da moderação " +
+      "à vista — quando houve comentário.",
+    rotaDoOutroLado: "/studio/publicar/",
+    porqueSemRota: null,
+  },
+];
+
+export const O_HISTORICO_E_DO_MODERADOR =
+  "Este histórico é o das decisões DESTE moderador, e serve para ele responder pelo que " +
+  "decidiu. Ele NÃO compara moderadores, não mede tempo médio de fila e não pontua " +
+  "concordância entre pessoas: isso é a funcionalidade 169, é do Admin, e misturar as duas " +
+  "aqui transformaria a ferramenta de quem responde pelas próprias decisões na ferramenta " +
+  "de quem avalia o desempenho dela — que é outra coisa, com outro dono e outras " +
+  "salvaguardas.";
+
+export const POR_QUE_O_VETO_SEPARADO =
+  "Os vetos aparecem separados, com o motivo por extenso, porque é o que uma auditoria abre " +
+  "primeiro: das quatro ações, o veto é a única que encerra o assunto sem devolver a " +
+  "palavra a quem submeteu. Um veto cujo motivo estivesse a três cliques de distância " +
+  "seria, na prática, um veto sem motivo.";
+
+// ---------------------------------------------------------------------------
 // D-90 — o que o acervo não sustenta na tela 34
 // ---------------------------------------------------------------------------
 

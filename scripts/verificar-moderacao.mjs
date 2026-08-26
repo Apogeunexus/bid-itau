@@ -85,7 +85,14 @@ async function abrirFilaLimpa(cdp) {
 async function principal() {
   console.log(`\nVERIFICAR MODERAÇÃO — S3\nmedindo ${ROTA_DA_FILA}\n`);
 
-  const cdp = await abrirNavegador();
+  // O TETO DE NAVEGAÇÃO É MAIOR QUE O PADRÃO, e o motivo está medido.
+  //
+  // O padrão de `navegador.mjs` são 30 s, calibrados numa máquina que compila sozinha.
+  // Esta suíte roda com seis sessões trabalhando no mesmo repositório, e o servidor de
+  // desenvolvimento chegou a 44 s numa página que costuma levar 2 s. Um teto apertado
+  // transformaria contenção de CPU em «FALHA: tempo esgotado», e a leitura seria de que a
+  // tela quebrou — que é o tipo de vermelho falso que faz gate deixar de ser lido.
+  const cdp = await abrirNavegador({ tetoNavegacao: 120_000, tetoHidratacao: 60_000 });
   try {
     // -----------------------------------------------------------------------
     titulo("── M1 · a fila: quatro origens, score só na IA, ordem por vazio ──");
@@ -376,8 +383,8 @@ async function principal() {
           decisoes: ds.length,
           acao: primeira ? primeira.getAttribute('data-acao-registrada') : null,
           temMotivo: t.includes('Sem crédito de imagem declarado'),
-          temAutor: t.includes('Moderação'),
-          temCarimbo: /\\d{2}\\.\\d{2}\\.\\d{4}/.test(t),
+          temAutor: Boolean(primeira && primeira.querySelector('[data-autor]')),
+          temCarimbo: Boolean(primeira && primeira.querySelector('[data-carimbo]')),
         };
       `),
     );
@@ -728,6 +735,129 @@ async function principal() {
       "a decisão tomada na FICHA aparece na FILA — as duas telas escrevem no mesmo armazém",
       `${naFila.decisoes} decisão «${naFila.acao}» na fila`,
       "1 · devolver",
+    );
+
+    // =======================================================================
+    titulo("── M9 · o histórico: auditável, com destino, e com o limite dito ──");
+    // =======================================================================
+
+    // Chega com UMA decisão de devolver já registrada, vinda da M2. O histórico é a tela
+    // que prova que a decisão sobrevive à tela em que foi tomada.
+    await cdp.navegar(`${BASE}/moderacao/historico/`);
+    await cdp.assentar();
+
+    const hist = await cdp.avaliar(
+      naPagina(`
+        const linhas = todos('[data-tabela-historico] [data-decisao-moderacao]');
+        const primeira = linhas[0];
+        const t = primeira ? (primeira.textContent || '') : '';
+        return {
+          decisoes: linhas.length,
+          acao: primeira ? primeira.getAttribute('data-acao-registrada') : null,
+          temAutor: Boolean(primeira && primeira.querySelector('[data-autor]')),
+          // POR ATRIBUTO, e não por regex sobre o texto: dentro de um template literal
+          // JS a barra invertida de um padrão colapsa e ele passa a não casar nada, o que
+          // deixa o gate verde por acidente ou vermelho sem causa. O atributo traz o valor
+          // exato, e não depende de escape nenhum sobreviver a duas camadas de string.
+          temCarimbo: Boolean(primeira && primeira.querySelector('[data-carimbo]')?.getAttribute('data-carimbo')),
+          temDestino: Boolean(primeira && primeira.querySelector('[data-destino]')),
+          destinoDiz: primeira ? (primeira.querySelector('[data-destino]')?.textContent || '') : '',
+          filtrosAcao: todos('[data-filtro-acao]').length,
+          filtrosOrigem: todos('[data-filtro-origem]').length,
+          filtrosEscopo: todos('[data-filtro-escopo]').length,
+        };
+      `),
+    );
+
+    exigir(
+      hist.decisoes === 1 && hist.acao === "devolver" && hist.temAutor && hist.temCarimbo,
+      "a decisão da M2 aparece no histórico, com autor e carimbo",
+      `${hist.decisoes} decisão «${hist.acao}» · autor ${hist.temAutor} · carimbo ${hist.temCarimbo}`,
+      "1 · devolver · os dois presentes",
+    );
+
+    // `rotaDoOutroLado`: sem isto o histórico mostra «devolvido» e ninguém sabe onde
+    // procurar o que foi devolvido.
+    exigir(
+      hist.temDestino && hist.destinoDiz.includes("volta ao Studio"),
+      "cada decisão diz PARA ONDE foi, do lado de quem recebeu",
+      `destino presente: ${hist.temDestino} · «${hist.destinoDiz.slice(0, 60)}…»`,
+      "o destino nomeado",
+    );
+
+    exigir(
+      hist.filtrosAcao === 5 && hist.filtrosOrigem === 5 && hist.filtrosEscopo === 4,
+      "os três filtros: ação, origem e escopo, cada um com a opção «todas»",
+      `${hist.filtrosAcao} ação · ${hist.filtrosOrigem} origem · ${hist.filtrosEscopo} escopo`,
+      "5 · 5 · 4",
+    );
+
+    // ---- o filtro RECORTA, e o que sai não some: volta ao trocar ----
+    await cdp.clicar(`document.querySelector('[data-filtro-acao="vetar"]')`);
+    await cdp.assentar();
+    const filtrado = await cdp.avaliar(
+      naPagina(`
+        return {
+          linhas: todos('[data-tabela-historico] [data-decisao-moderacao]').length,
+          vazio: Boolean(document.querySelector('[data-historico-vazio]')),
+          diz: (document.querySelector('[data-historico-vazio]')?.textContent || ''),
+        };
+      `),
+    );
+    // Filtrar por «vetar» com só uma devolução registrada tem de dar vazio — e o vazio
+    // precisa DIZER que as outras continuam lá, senão lê-se como perda.
+    exigir(
+      filtrado.linhas === 0 && filtrado.vazio && filtrado.diz.includes("continuam registradas"),
+      "filtro sem resultado DIZ que as outras decisões continuam registradas",
+      `${filtrado.linhas} linhas · declara: ${filtrado.diz.slice(0, 50)}…`,
+      "vazio explicado, nunca em branco",
+    );
+
+    await cdp.clicar(`document.querySelector('[data-filtro-acao="todas"]')`);
+    await cdp.assentar();
+
+    // ---- o painel de vetos e o limite da tela ----
+    const limite = await cdp.avaliar(
+      naPagina(`
+        const vetos = document.querySelector('[data-painel-vetos]');
+        const lim = document.querySelector('[data-limite-do-historico]');
+        const t = lim ? (lim.textContent || '') : '';
+        return {
+          temPainelDeVetos: Boolean(vetos),
+          // 169 é do Admin. Uma tela que mede desempenho entre moderadores tem outro dono
+          // e outras salvaguardas — e esta diz isso em vez de apenas não fazer.
+          dizQueNaoCompara: t.includes("NÃO compara moderadores"),
+          nomeiaA169: t.includes("169"),
+          dizQueEDoAdmin: t.includes("é do Admin"),
+        };
+      `),
+    );
+    exigir(
+      limite.temPainelDeVetos &&
+        limite.dizQueNaoCompara &&
+        limite.nomeiaA169 &&
+        limite.dizQueEDoAdmin,
+      "a tela DIZ o que não é: não compara moderadores, e nomeia a 169 como do Admin",
+      `painel de vetos: ${limite.temPainelDeVetos} · declara o limite: ${limite.dizQueNaoCompara} · nomeia 169: ${limite.nomeiaA169}`,
+      "tudo presente",
+    );
+
+    // ---- desfazer no histórico volta o item à fila ----
+    await cdp.clicar(`document.querySelector('[data-desfazer-decisao]')`);
+    await cdp.assentar();
+    const aposDesfazer = await cdp.avaliar(
+      naPagina(`return { decisoes: todos('[data-decisao-moderacao]').length };`),
+    );
+    await cdp.navegar(ROTA_DA_FILA);
+    await cdp.assentar();
+    const filaDepois = await cdp.avaliar(
+      naPagina(`return { itens: todos('[data-item-fila]').length };`),
+    );
+    exigir(
+      aposDesfazer.decisoes === 0 && filaDepois.itens === fila.itens,
+      "desfazer no histórico devolve o item à fila — as três telas leem o mesmo armazém",
+      `${aposDesfazer.decisoes} decisões · ${filaDepois.itens} itens na fila`,
+      `0 · ${fila.itens}`,
     );
 
     // -----------------------------------------------------------------------

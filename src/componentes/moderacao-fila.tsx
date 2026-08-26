@@ -968,7 +968,7 @@ export function ModeracaoFila({
                         {d.motivo}
                       </span>
                     ) : null}
-                    <span className="moderacao-decisao-assinatura">
+                    <span className="moderacao-decisao-assinatura" data-carimbo={d.quando} data-autor={d.autor}>
                       {d.autor} · {d.quando}
                     </span>
                     <button

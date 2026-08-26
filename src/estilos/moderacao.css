@@ -802,3 +802,48 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+/* ===========================================================================
+ * M9 — o histórico
+ * ======================================================================== */
+
+.moderacao-filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.moderacao-filtro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* O destino da decisão é a única linha do registro que fala do OUTRO LADO, e por
+ * isso ganha marca própria: quem lê o histórico está procurando o que aconteceu
+ * com o item, e essa é a resposta. */
+.moderacao-decisao-destino {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--cor-borda-forte);
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  line-height: 1.5;
+}
+
+/* O veto é o único destino sem rota do outro lado, porque não há outro lado. A
+ * borda mais forte marca isso sem precisar de cor de alarme. */
+.moderacao-decisao-destino[data-destino="vetar"] {
+  border-left-color: var(--cor-acao);
+}
+
+.moderacao-vetos .moderacao-decisao-motivo {
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+}
