@@ -1,12 +1,12 @@
 {
-  "varredura": "26/08, 02:59",
+  "varredura": "26/08, 03:48",
   "kpi": {
-    "concluidas": 50,
+    "concluidas": 52,
     "totalTarefas": 64,
     "ativas": 5,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 6,
+    "sujos": 5,
     "folgaS6": 7,
     "pedidos": 10
   },
@@ -171,7 +171,7 @@
       "pasta": "src/app/(bastidor)/moderacao",
       "sessaoNome": "bid-ita-68",
       "estado": "rodando",
-      "feitas": 9,
+      "feitas": 11,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -267,19 +267,19 @@
           "n": 10,
           "rot": "M7 duplicatas",
           "inicio": 10,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "d081237",
+          "nota": "**O recorte devolve ZERO: nenhum dos 84 grupos junta fontes diferentes** — este acervo não tem uma única duplicata entre organizações. Declarado com os dois denominadores em vez de forçado. Sem botão de decisão nos grupos listados: oferecer um que a moderação não deve apertar desfaria a regra na interface. `autorado` não conta como fonte — sem esse filtro a tela mostraria 12 casos falsos. **67 verdes.**",
+          "quando": "26.08 03:2x"
         },
         {
           "n": 11,
           "rot": "suíte e medidas",
           "inicio": 11,
-          "estado": "aguardando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "934cdb2",
+          "nota": "`--provar-ausencias`: 7 defeitos injetados, **7 vistos vermelhos**, árvore restaurada limpa. A primeira execução pegou 4 de 7, e os 3 restantes ensinaram mais: **um gate estava genuinamente quebrado** (padrão em template literal afirmando «sem pontuação» sobre texto com «similaridade: 0,94»); o veto não caiu com UMA trava derrubada porque são três independentes; e uma injeção apontava o gate errado.",
+          "quando": "26.08 03:5x"
         }
       ]
     },
@@ -833,6 +833,20 @@
       "rot": "M4 similaridade",
       "nota": "**47.259 arestas, 71% do grafo, medido por caminho independente e batendo com a ontologia.** Governa a REGRA, não a aresta: 12 famílias por padrão de justificativa, com amostra e método declarados. O contador de **quantas seguem sem revisão fica no topo**, e a cauda (529 famílias, 28.352 arestas) entra nele em vez de sumir. Reprovar milhares de uma vez exige motivo. **63 verdes.** Surpreendeu: `replace(/\\D/g)` dentro de template literal colapsa a barra — **três vermelhos falsos**, e passava por acidente com números < 1.000. **Nove ocorrências corrigidas: todo número e data agora viajam como atributo.** E o gate da denúncia ganhou piso por fonte (achado da S1), provado com o atributo renomeado: ficou vermelho.",
       "quando": "26.08 02:5x"
+    },
+    {
+      "sessao": "S3",
+      "n": 10,
+      "rot": "M7 duplicatas",
+      "nota": "**O recorte devolve ZERO: nenhum dos 84 grupos junta fontes diferentes** — este acervo não tem uma única duplicata entre organizações. Declarado com os dois denominadores em vez de forçado. Sem botão de decisão nos grupos listados: oferecer um que a moderação não deve apertar desfaria a regra na interface. `autorado` não conta como fonte — sem esse filtro a tela mostraria 12 casos falsos. **67 verdes.**",
+      "quando": "26.08 03:2x"
+    },
+    {
+      "sessao": "S3",
+      "n": 11,
+      "rot": "suíte e medidas",
+      "nota": "`--provar-ausencias`: 7 defeitos injetados, **7 vistos vermelhos**, árvore restaurada limpa. A primeira execução pegou 4 de 7, e os 3 restantes ensinaram mais: **um gate estava genuinamente quebrado** (padrão em template literal afirmando «sem pontuação» sobre texto com «similaridade: 0,94»); o veto não caiu com UMA trava derrubada porque são três independentes; e uma injeção apontava o gate errado.",
+      "quando": "26.08 03:5x"
     },
     {
       "sessao": "S2",
