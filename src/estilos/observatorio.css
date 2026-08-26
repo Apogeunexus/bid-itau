@@ -799,3 +799,61 @@
   line-height: 1.4;
   color: var(--cor-tinta-2);
 }
+
+/* ---------------------------------------------------------------------------
+ * G6 · a ausência declarada.
+ *
+ * DUAS COLUNAS POR LINHA, e a da direita é a que faz a tela valer: a medida à
+ * esquerda, o dono e a projeção à direita. Numa coluna só, «quem preenche»
+ * viraria rodapé de cada bloco e a tela leria como oito desculpas empilhadas.
+ * ------------------------------------------------------------------------ */
+[data-view="web"] .obs-ausencias {
+  display: flex;
+  flex-direction: column;
+  gap: var(--web-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+[data-view="web"] .obs-ausencia {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: start;
+  gap: 1.5rem;
+}
+
+[data-view="web"] .obs-ausencia-medida,
+[data-view="web"] .obs-ausencia-plano {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* A coluna do plano é separada por um filete, e não por fundo próprio: fundo
+   diferente diria «isto é outra coisa», e é a mesma coisa — o buraco e quem o
+   fecha são as duas metades de uma afirmação só. */
+[data-view="web"] .obs-ausencia-plano {
+  padding-left: 1.5rem;
+  border-left: var(--web-borda);
+}
+
+[data-view="web"] .obs-ausencia-nivel,
+[data-view="web"] .obs-ausencia-projecao {
+  margin: 0;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+  color: var(--cor-tinta-2);
+}
+
+[data-view="web"] .obs-ausencia-nivel {
+  color: var(--cor-tinta);
+  font-weight: 600;
+}
+
+/* A barra do buraco é NEUTRA, e não laranja. Laranja é a cor de ação do
+   manual, e uma faixa cheia em laranja lê como meta batida — o oposto do que a
+   linha diz. Aqui a faixa mede o que falta, e o que falta não é conquista. */
+[data-view="web"] .obs-barra-buraco {
+  background: var(--cor-tinta-2);
+}

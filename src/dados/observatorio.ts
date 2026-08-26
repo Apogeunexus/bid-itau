@@ -38,9 +38,10 @@
  * build.
  */
 
-import { contagens, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "./grafo";
+import { contagens, ocorrenciasDe, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "./grafo";
 import { densidadePorUf } from "./geo";
 import { PERSONAS } from "./personas";
+import { COMPONENTES_DO_CRITERIO } from "./duplicatas";
 import { repertorioDe } from "./repertorio";
 import metaJson from "./gerado/meta.json";
 import type { ClasseEntidade, Entidade, Procedencia, Relacao } from "./tipos";
@@ -1492,4 +1493,227 @@ export function montarProcedencia(): DadosDaProcedencia {
     emProducao: eixo.filter((d) => d.emProducao).length,
   };
   return procedenciaMemorizada;
+}
+
+// ---------------------------------------------------------------------------
+// G6 · Ausência declarada — os buracos, com denominador e com dono
+// ---------------------------------------------------------------------------
+
+/**
+ * Uma ausência do acervo, declarada.
+ *
+ * O CAMPO QUE FAZ ESTA TELA VALER É `nivelQuePreenche`. Sem ele, isto é uma lista de
+ * buracos — o gênero de tela que um avaliador lê como desculpa. Com ele, é um plano de
+ * trabalho: cada buraco tem um dono nomeado entre os oito níveis de acesso, e a coluna
+ * inteira vira o argumento de que o bastidor não é enfeite da proposta, é o mecanismo pelo
+ * qual cada um destes números muda sem ninguém tocar em código.
+ *
+ * E `projecao` é o par dele: o que este número VIRA quando aquele nível entrar no ar. As
+ * duas colunas juntas são a diferença entre «não sabemos» e «não sabemos, sabemos quem
+ * saberia, e sabemos o que acontece quando souber».
+ */
+export interface AusenciaDeclarada {
+  id: string;
+  /** O que existe — quase sempre zero, e o zero aqui é sempre MEDIDO. */
+  quantos: number;
+  de: number;
+  /** O que se está contando, com o denominador nomeado. */
+  do_que: string;
+  rotulo: string;
+  nivelQuePreenche: string;
+  projecao: string;
+  procedenciaDoNumero: string;
+}
+
+let ausenciasMemorizadas: AusenciaDeclarada[] | null = null;
+
+export function ausenciasDeclaradas(): AusenciaDeclarada[] {
+  if (ausenciasMemorizadas) return ausenciasMemorizadas;
+
+  const a = acervo();
+
+  let eventos = 0;
+  let comPreco = 0;
+  let instituicoes = 0;
+  let instituicoesComCoordenada = 0;
+  let midias = 0;
+
+  for (const e of a.entidades) {
+    if (e.classe === "evento") {
+      eventos += 1;
+      const extra = e.extra as { preco?: unknown } | undefined;
+      if (extra?.preco != null && extra.preco !== "") comPreco += 1;
+    }
+    if (e.classe === "instituicao") {
+      instituicoes += 1;
+      if (e.coordenada) instituicoesComCoordenada += 1;
+    }
+    if (e.classe === "midia") midias += 1;
+  }
+
+  // Os eventos DATADOS são os que têm sessão no grafo, e não os 300 do acervo: falar de
+  // elenco num evento sem data é falar de um evento que ninguém pode ir ver. É a mesma
+  // regra que `indiceDeSalvaveis()` usa para montar o índice do que dá para salvar.
+  let eventosDatados = 0;
+  let eventosDatadosComElenco = 0;
+  let ocorrencias = 0;
+  let ocorrenciasComEspaco = 0;
+
+  for (const slug of slugsPorTipo("evento")) {
+    const evento = porSlug("evento", slug);
+    if (!evento) continue;
+    const sessoes = ocorrenciasDe(evento.id);
+    if (!sessoes.length) continue;
+    eventosDatados += 1;
+    if (vizinhos(evento.id, "atua_em").length > 0) eventosDatadosComElenco += 1;
+    for (const o of sessoes) {
+      ocorrencias += 1;
+      if (o.espacoId) ocorrenciasComEspaco += 1;
+    }
+  }
+
+  const ficha = META.fichaDeAcessibilidade;
+  const totalDeEntidades = META.totais.entidades;
+  const audiodescricao = META.acessibilidadeIncluindoDerivadas.audio_description ?? 0;
+
+  // Os quatro elementos que a ontologia DECLARA e ninguém escreve. `porClasse` e
+  // `porRelacao` não trazem chave para o que tem zero instâncias — a ausência da chave É a
+  // medida, e lê-la como zero é a leitura certa aqui, ao contrário do resto desta tela.
+  const vazios = [
+    { elemento: "programa", n: META.porClasse.programa ?? 0, tipo: "classe" },
+    { elemento: "influenciou", n: META.porRelacao.influenciou ?? 0, tipo: "relação" },
+    { elemento: "deriva_de", n: META.porRelacao.deriva_de ?? 0, tipo: "relação" },
+    { elemento: "curou", n: META.porRelacao.curou ?? 0, tipo: "relação" },
+  ];
+  const instanciasNosVazios = soma(vazios.map((v) => v.n));
+  const sustentados = COMPONENTES_DO_CRITERIO.filter((c) => c.sustentado);
+
+  const lista: AusenciaDeclarada[] = [
+    {
+      id: "ingresso-declarado",
+      quantos: comPreco,
+      de: eventos,
+      do_que: "eventos do acervo declaram preço de ingresso",
+      rotulo: "Preço de ingresso",
+      nivelQuePreenche:
+        "Produtor cultural (nível 7) — é ele que sabe quanto custa entrar, e é a única pessoa que sabe",
+      projecao:
+        "O corte gratuito × pago acende sem uma linha de código nova: o indicador já existe e está desligado, esperando dado.",
+      procedenciaDoNumero:
+        "src/dados/grafo.ts · extra.preco sobre as entidades de classe evento, varridas uma a uma",
+    },
+    {
+      id: "espaco-na-ocorrencia",
+      quantos: ocorrenciasComEspaco,
+      de: ocorrencias,
+      do_que: "sessões datadas declaram em que espaço acontecem",
+      rotulo: "Espaço da sessão",
+      nivelQuePreenche:
+        "Organização (nível 6) cadastra o espaço com a ficha de acessibilidade; Produtor (nível 7) aponta a sessão para ele",
+      projecao:
+        "«Perto de mim» passa a funcionar sobre sessão e não sobre evento, e a ficha de acessibilidade do lugar chega a quem vai.",
+      procedenciaDoNumero:
+        "src/dados/grafo.ts · ocorrenciasDe() sobre os eventos com sessão · campo espacoId de cada Ocorrencia",
+    },
+    {
+      id: "elenco-em-evento-datado",
+      quantos: eventosDatadosComElenco,
+      de: eventosDatados,
+      do_que: "eventos com data no acervo têm elenco vinculado",
+      rotulo: "Elenco do que está em cartaz",
+      nivelQuePreenche:
+        "Produtor cultural (nível 7), pela aresta atua_em — e o papel mora na aresta, nunca numa classe própria",
+      projecao:
+        "Quem procura por um artista encontra o que ele faz ESTA SEMANA, e não só o verbete dele na Enciclopédia.",
+      procedenciaDoNumero:
+        "src/dados/grafo.ts · vizinhos(evento, «atua_em») sobre os eventos que têm sessão datada",
+    },
+    {
+      id: "ficha-de-acessibilidade",
+      quantos: ficha.declaram,
+      de: totalDeEntidades,
+      do_que: "entidades preencheram a ficha de acessibilidade — as outras não a preencheram, e não é a mesma coisa que não oferecer",
+      rotulo: "Ficha de acessibilidade",
+      nivelQuePreenche:
+        "Organização (nível 6) para espaço e mídia; Produtor (nível 7) para evento — e a ficha exige o ato explícito «declaro que não oferece nenhum destes recursos»",
+      projecao:
+        "A ausência para de ser silêncio e vira declaração: quem não oferece diz que não oferece, e o filtro passa a recortar sobre resposta em vez de sobre vazio.",
+      procedenciaDoNumero: "src/dados/gerado/meta.json · fichaDeAcessibilidade e totais.entidades",
+    },
+    {
+      id: "audiodescricao",
+      quantos: audiodescricao,
+      de: midias,
+      do_que: "mídias do acervo registram audiodescrição",
+      rotulo: "Audiodescrição",
+      nivelQuePreenche:
+        "Organização (nível 6), que é quem publica mídia com crédito — e quem sabe se a peça tem faixa de audiodescrição",
+      projecao:
+        "A dimensão sai de zero e o recorte por audiodescrição passa a devolver resultado em vez de devolver a explicação de por que está vazio.",
+      procedenciaDoNumero:
+        "src/dados/gerado/meta.json · acessibilidadeIncluindoDerivadas.audio_description sobre a contagem de entidades de classe midia",
+    },
+    {
+      id: "coordenada-de-instituicao",
+      quantos: instituicoesComCoordenada,
+      de: instituicoes,
+      do_que: "instituições do acervo têm coordenada",
+      rotulo: "Onde ficam as instituições",
+      nivelQuePreenche:
+        "Admin (nível 1) para o território e o centroide; Organização (nível 6) para o endereço da própria casa",
+      projecao:
+        "O mapa deixa de mostrar só o que tem sessão datada e passa a mostrar a infraestrutura cultural do país — que é o que um observatório territorial precisa ver.",
+      procedenciaDoNumero:
+        "src/dados/grafo.ts · campo coordenada sobre as entidades de classe instituicao, varridas uma a uma",
+    },
+    {
+      id: "componentes-da-chave",
+      quantos: sustentados.length,
+      de: COMPONENTES_DO_CRITERIO.length,
+      do_que: `componentes da chave de identidade são sustentados pelo acervo — hoje só ${sustentados.map((c) => c.rotulo).join(", ")}`,
+      rotulo: "A chave que diz o que é a mesma coisa",
+      nivelQuePreenche:
+        "Produtor cultural (nível 7) preenche os outros dois terços — agente realizador e obra —, e é o que faz a fila de duplicatas parar de acusar o próprio sistema",
+      projecao:
+        "A chave passa a afirmar identidade de verdade: duas linhas só são a mesma coisa quando são a mesma coisa no mundo, e não quando o título se parece.",
+      procedenciaDoNumero:
+        "src/dados/duplicatas.ts · COMPONENTES_DO_CRITERIO, o critério da ontologia e não uma medida de parecença entre textos",
+    },
+    {
+      id: "elementos-vazios-da-ontologia",
+      quantos: instanciasNosVazios,
+      de: vazios.length,
+      do_que: `instâncias somadas entre os ${vazios.length} elementos que a ontologia declara e ninguém escreve — ${vazios.map((v) => `${v.elemento} (${v.tipo})`).join(", ")}`,
+      rotulo: "O que o contrato prevê e ninguém escreve",
+      nivelQuePreenche:
+        "Organização (nível 6) povoa programa; Editor / Curador (nível 5) escreve influenciou, deriva_de e curou — as três relações de SENTIDO, e por isso assinadas",
+      projecao:
+        "O grafo passa a ter ligação autorada por gente: hoje 71% das ligações são semelhança de máquina, e nenhuma delas afirma influência, derivação ou curadoria.",
+      procedenciaDoNumero:
+        "src/dados/gerado/meta.json · porClasse e porRelacao — a ausência da chave é a medida de zero instâncias",
+    },
+  ];
+
+  for (const x of lista) {
+    if (typeof x.quantos !== "number" || typeof x.de !== "number" || x.de <= 0) {
+      throw new Error(
+        `observatorio.ts: a ausência «${x.id}» sem denominador utilizável (${x.quantos} de ${x.de}). ` +
+          `Ausência sem denominador é a mesma coisa que número sem denominador, e esta tela existe para o contrário.`,
+      );
+    }
+    if (x.quantos > x.de) {
+      throw new Error(
+        `observatorio.ts: a ausência «${x.id}» tem ${x.quantos} de ${x.de} — o que existe não pode ser maior que o total.`,
+      );
+    }
+    if (!x.nivelQuePreenche || !x.projecao || !x.procedenciaDoNumero) {
+      throw new Error(
+        `observatorio.ts: a ausência «${x.id}» sem nível que preenche, sem projeção ou sem origem do número. ` +
+          `Os três juntos são o que transforma lista de buracos em plano de trabalho.`,
+      );
+    }
+  }
+
+  ausenciasMemorizadas = lista;
+  return lista;
 }
