@@ -127,30 +127,78 @@ export function ObservatorioTerritorio({
         <p className="obs-publico-nota">
           <strong>Nenhuma coordenada deste acervo veio no dado.</strong> Todas são derivadas por
           regra, e o método diz quão grosso é o chute: o centroide de um município localiza um
-          bairro errado, o centroide de um país inteiro não localiza nada. São{" "}
-          <strong>{milhar(d.metodos[0]?.de ?? 0)}</strong> entidades com coordenada resolvida, das
-          quais <strong>{milhar(d.foraDoBrasil)}</strong> caem fora do retângulo do Brasil e não são
-          desenhadas — contadas e declaradas, porque uma entidade ausente do índice seria
-          indistinguível de uma sem coordenada nenhuma.
+          bairro errado, o centroide de um país inteiro não localiza nada.
         </p>
 
-        <ul className="obs-metodos" data-metodos={d.metodos.length}>
-          {d.metodos.map((m) => (
-            <li key={m.metodo} className="obs-metodo" data-metodo={m.metodo}>
-              <span className="obs-metodo-rotulo">{m.rotulo}</span>
-              <span className="obs-trilho" aria-hidden="true">
-                <span
-                  className="obs-barra obs-barra-buraco"
-                  style={{ width: `${m.de > 0 ? ((m.n / m.de) * 100).toFixed(2) : 0}%` }}
-                />
-              </span>
-              <span className="obs-detalhe-valor">
-                {milhar(m.n)}
-                <span className="obs-detalhe-de"> de {milhar(m.de)}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
+        <p className="obs-publico-declaracao" data-duas-contagens-de-coordenada>
+          E há <strong>duas contagens</strong> aqui, que não são a mesma coisa e por isso
+          aparecem separadas.{" "}
+          <strong>{milhar(d.comCoordenadaPropria)}</strong> entidades têm coordenada{" "}
+          <strong>própria</strong> — é o tamanho da tabela. E{" "}
+          <strong>{milhar(d.metodos[0]?.de ?? 0)}</strong> conseguem ser{" "}
+          <strong>posicionadas</strong> no mapa, porque a ocorrência herda o lugar do espaço e o
+          espaço herda o do município — é o tamanho do desenho. Citar cobertura de coordenada
+          sem dizer qual das duas se está citando afirma a errada metade das vezes.
+        </p>
+
+        <div className="obs-duas-contagens">
+          <div>
+            <h3 className="obs-indicador-titulo">
+              Posicionadas no mapa — {milhar(d.metodos[0]?.de ?? 0)}
+            </h3>
+            <p className="obs-metodo-rotulo">
+              A coordenada RESOLVIDA de cada entidade que o mapa consegue desenhar, herança
+              incluída. Destas, <strong>{milhar(d.foraDoBrasil)}</strong> caem fora do retângulo do
+              Brasil e não são desenhadas — contadas e declaradas, porque uma entidade ausente do
+              índice seria indistinguível de uma sem coordenada nenhuma.
+            </p>
+            <ul className="obs-metodos" data-metodos={d.metodos.length}>
+              {d.metodos.map((m) => (
+                <li key={m.metodo} className="obs-metodo" data-metodo={m.metodo}>
+                  <span className="obs-metodo-rotulo">{m.rotulo}</span>
+                  <span className="obs-trilho" aria-hidden="true">
+                    <span
+                      className="obs-barra obs-barra-buraco"
+                      style={{ width: `${m.de > 0 ? ((m.n / m.de) * 100).toFixed(2) : 0}%` }}
+                    />
+                  </span>
+                  <span className="obs-detalhe-valor">
+                    {milhar(m.n)}
+                    <span className="obs-detalhe-de"> de {milhar(m.de)}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="obs-indicador-titulo">
+              Com coordenada própria — {milhar(d.comCoordenadaPropria)}
+            </h3>
+            <p className="obs-metodo-rotulo">
+              Só quem tem coordenada escrita na própria entidade, sem herdar de ninguém. É o
+              número que descreve a TABELA de geolocalização, e é sobre ele que se mede a
+              qualidade do acervo geográfico.
+            </p>
+            <ul className="obs-metodos" data-metodos-proprios={d.metodosProprios.length}>
+              {d.metodosProprios.map((m) => (
+                <li key={m.metodo} className="obs-metodo" data-metodo-proprio={m.metodo}>
+                  <span className="obs-metodo-rotulo">{m.rotulo}</span>
+                  <span className="obs-trilho" aria-hidden="true">
+                    <span
+                      className="obs-barra obs-barra-buraco"
+                      style={{ width: `${m.de > 0 ? ((m.n / m.de) * 100).toFixed(2) : 0}%` }}
+                    />
+                  </span>
+                  <span className="obs-detalhe-valor">
+                    {milhar(m.n)}
+                    <span className="obs-detalhe-de"> de {milhar(m.de)}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
         <ul className="web-denominadores obs-denominadores">
           <li className="web-denominador obs-denominador" data-denominador="territorio:eventos-fora">

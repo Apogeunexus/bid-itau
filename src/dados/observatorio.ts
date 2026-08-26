@@ -50,6 +50,7 @@ import { CONTORNO_BRASIL, ROTULO_CONTORNO, ROTULO_UNIDADES_FEDERATIVAS, UNIDADES
 import type { DadosDesertos } from "@/componentes/desertos";
 import { alcancadosDaPersona } from "./caminhada";
 import { LIMITE_FEED, PRECOMPUTO } from "./feeds";
+import { ESCOPOS_DE_CURADORIA, declaracoesDaModeracao, filaDaModeracao } from "./moderacao";
 import { PERSONAS } from "./personas";
 import { COMPONENTES_DO_CRITERIO } from "./duplicatas";
 import { repertorioDe } from "./repertorio";
@@ -76,6 +77,13 @@ const META = metaJson as unknown as {
   acessibilidade: Record<string, number>;
   acessibilidadeIncluindoDerivadas: Record<string, number>;
   fichaDeAcessibilidade: { declaram: number; naoDeclaram: number };
+  cobertura: {
+    coordenadas: {
+      /** Entidades com coordenada PRÓPRIA — o tamanho da tabela, não o do mapa. */
+      comCoordenada: number;
+      porMetodo: Record<string, number>;
+    };
+  };
 };
 
 /** Teto do DTO que atravessa a fronteira RSC. 60 KB, medido a cada build. */
@@ -1800,7 +1808,20 @@ export interface DadosDoTerritorio {
   ufsNoAcervo: number;
   semRegistro: string[];
   comUmRegistro: string[];
+  /** Como foi obtida a coordenada RESOLVIDA de cada entidade posicionável. */
   metodos: MetodoDeCoordenada[];
+  /**
+   * O mesmo, sobre as entidades com coordenada PRÓPRIA — a tabela, e não o mapa.
+   *
+   * AS DUAS CONTAGENS EXISTEM E NÃO SÃO A MESMA, e é a mesma família do «773 registros
+   * contra 718 entidades»: `meta.json` conta quem TEM coordenada escrita; o índice de pinos
+   * conta quem CONSEGUE ser posicionado, porque ocorrência herda do espaço e espaço herda do
+   * município. A fatia de centroide-de-país é 45,3% numa e 29,1% na outra — quem citar
+   * cobertura de coordenada sem dizer qual das duas está citando afirma a errada metade das
+   * vezes.
+   */
+  metodosProprios: MetodoDeCoordenada[];
+  comCoordenadaPropria: number;
   /** Entidades com coordenada resolvida, dentro e fora do retângulo do Brasil. */
   posicionadas: number;
   foraDoBrasil: number;
@@ -1853,6 +1874,16 @@ export function montarTerritorio(): DadosDoTerritorio {
       de: pinos.length,
     }));
 
+  const propria = META.cobertura.coordenadas;
+  const metodosProprios: MetodoDeCoordenada[] = Object.entries(propria.porMetodo)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([metodo, n]) => ({
+      metodo,
+      rotulo: ROTULO_DO_METODO[metodo] ?? metodo,
+      n,
+      de: propria.comCoordenada,
+    }));
+
   const semCoordenadaDeInstituicao = ausenciasDeclaradas().find(
     (a) => a.id === "coordenada-de-instituicao",
   );
@@ -1873,6 +1904,8 @@ export function montarTerritorio(): DadosDoTerritorio {
     semRegistro: d.semRegistro.map((uf) => uf.titulo),
     comUmRegistro: d.comUmRegistro.map((uf) => uf.titulo),
     metodos,
+    metodosProprios,
+    comCoordenadaPropria: propria.comCoordenada,
     posicionadas: pinos.length - foraDoBrasil,
     foraDoBrasil,
     eventosSituados,
@@ -2315,4 +2348,203 @@ export function montarDadosAbertos(): DadosAbertos {
     recortes,
   };
   return dadosAbertosMemorizados;
+}
+
+// ---------------------------------------------------------------------------
+// G8 · Leitura da moderação — agregada, anonimizada, e cruzada com a densidade
+// ---------------------------------------------------------------------------
+
+/**
+ * Um território na fila de moderação.
+ *
+ * O CRUZAMENTO COM A DENSIDADE NÃO FECHA, E A TELA DIZ ISSO EM VEZ DE FORÇÁ-LO. A ideia era
+ * boa e é a razão de esta tela existir do lado de quem observa: um território com pouco
+ * acervo e fila parada é ABANDONO e não calmaria, e só aqui os dois números convivem. Só que
+ * a fila carrega o título do território que ALCANÇA o item — e medido, esses títulos são
+ * municípios e cidades estrangeiras (Belém, Berlin, Brno, Cidade do México), enquanto
+ * `densidadePorUf()` conta por unidade federativa. Casar os dois pelo nome faria «São Paulo»
+ * da fila encontrar os 274 registros do ESTADO de São Paulo sem que ninguém tenha decidido
+ * que são a mesma coisa — a falsa equivalência exata que esta superfície existe para não
+ * cometer. O que fica na tela é a composição da fila e a marca de quais títulos sequer são
+ * unidade federativa.
+ */
+export interface TerritorioNaFila {
+  titulo: string;
+  naFila: number;
+  /** O título coincide com o de uma das 27 unidades federativas? Coincidir não é ser. */
+  coincideComUf: boolean;
+}
+
+export interface DadosDaModeracao {
+  /** Os indicadores que a página de servidor NÃO pode medir, cada um com o seu motivo. */
+  semLastro: Indicador[];
+  /** O que ela mede: a composição da fila, cruzada com o acervo. */
+  fila: number;
+  porEscopo: LinhaDeIndicador[];
+  porTerritorio: TerritorioNaFila[];
+  semTerritorio: number;
+  /** A distinção entre M9, A10 e esta tela, escrita — confundi-las vira vigilância. */
+  asTresTelas: { tela: string; deQuem: string; oQueMede: string }[];
+  /** A declaração da própria Moderação sobre a antiguidade, citada como procedência. */
+  sobreAAntiguidade: string;
+}
+
+let moderacaoMemorizada: DadosDaModeracao | null = null;
+
+export function montarLeituraDaModeracao(): DadosDaModeracao {
+  if (moderacaoMemorizada) return moderacaoMemorizada;
+
+  const fila = filaDaModeracao();
+  const densidade = densidadePorUf();
+  const registrosPorTitulo = new Map(densidade.ufs.map((uf) => [uf.titulo, uf.registros]));
+
+  const naFilaPorTerritorio = new Map<string, number>();
+  let semTerritorio = 0;
+  for (const item of fila) {
+    if (!item.territorio) {
+      semTerritorio += 1;
+      continue;
+    }
+    naFilaPorTerritorio.set(item.territorio, (naFilaPorTerritorio.get(item.territorio) ?? 0) + 1);
+  }
+
+  const porTerritorio: TerritorioNaFila[] = [...naFilaPorTerritorio.entries()]
+    .map(([titulo, naFila]) => ({
+      titulo,
+      naFila,
+      coincideComUf: registrosPorTitulo.has(titulo),
+    }))
+    .sort((a, b) => b.naFila - a.naFila || a.titulo.localeCompare(b.titulo));
+
+  const coincidentes = porTerritorio.filter((x) => x.coincideComUf).length;
+
+  const porEscopo: LinhaDeIndicador[] = ESCOPOS_DE_CURADORIA.map((e) => ({
+    rotulo: e.rotulo,
+    valor: e.alcance,
+    de: fila.length,
+    nota: e.descricao,
+  }));
+
+  const sobreAAntiguidade =
+    declaracoesDaModeracao().find((d) => /antiguidade|submiss/i.test(d.texto))?.texto ??
+    "A Moderação declara, no próprio módulo, que o acervo não carrega data de submissão.";
+
+  /**
+   * As duas ausências desta tela são de espécies DIFERENTES, e achatá-las numa só apagaria
+   * informação — a mesma falha que `valor: null` contra `valor: 0` combate no dado.
+   *
+   * Tempo de fila O ACERVO NÃO SUSTENTA: nenhum registro carrega data de submissão, e a
+   * própria Moderação já declara isso por escrito. Volume decidido e taxa de veto EXISTEM a
+   * partir da M2 — só que vivem no armazém do cliente, escritos por gesto de quem opera a
+   * tela, e uma página de servidor que roda no BUILD não alcança o `localStorage` de
+   * ninguém. Lê-los no cliente é possível e seria outra tela: mediria a sessão de quem está
+   * olhando, e não o sistema de moderação.
+   */
+  const semLastro: Indicador[] = [
+    conferirIndicador({
+      id: "tempo-de-fila",
+      rotulo: "Tempo de fila por escopo",
+      valor: null,
+      unidade: "—",
+      denominador: {
+        n: 0,
+        do_que: `carimbos de submissão entre os ${fila.length} itens da fila — o acervo não tem o campo`,
+      },
+      denominadorSecundario: {
+        n: fila.length,
+        do_que: "itens na fila, todos sem data de entrada",
+      },
+      sustentado: false,
+      procedenciaDoNumero:
+        "src/dados/moderacao.ts · declaracoesDaModeracao() — a própria Moderação declara que nenhum registro do acervo carrega data de submissão",
+      declaracao:
+        `Tempo de fila exige saber quando o item entrou, e nenhum registro deste acervo carrega data de submissão. ` +
+        `A fila não ordena por «mais antigo primeiro» e diz isso na própria tela; inventar um «entrouEm» aqui ` +
+        `fabricaria a antiguidade que a Moderação declara não ter. É ausência do ACERVO, e não atraso de ninguém.`,
+      leitura:
+        "É o indicador que a banca mais espera num painel de moderação, e é o que este acervo menos pode dar. Ele acende no dia em que a submissão passar a carimbar a hora — e quem carimba é o próprio ato de submeter, não uma tela.",
+      detalhe: [],
+    }),
+    conferirIndicador({
+      id: "volume-decidido",
+      rotulo: "Volume decidido por ação e taxa de veto",
+      valor: null,
+      unidade: "—",
+      denominador: {
+        n: 0,
+        do_que: "decisões alcançáveis por esta página — ela roda no build, e as decisões moram no navegador de quem decidiu",
+      },
+      denominadorSecundario: {
+        n: fila.length,
+        do_que: "itens na fila, que é o que uma página de servidor consegue ver",
+      },
+      sustentado: false,
+      procedenciaDoNumero:
+        "não há origem alcançável: as decisões são gravadas em `localStorage` pelo gesto de quem opera a Moderação, e DP-F separa o build do navegador",
+      declaracao:
+        "Volume decidido e taxa de veto EXISTEM — a Moderação registra cada decisão com autor e motivo. Só que elas vivem no armazém do cliente, e esta é uma página de servidor que roda no build: o `localStorage` de quem decidiu está do outro lado da fronteira. A ausência aqui é de LUGAR, e não de dado — diferente do tempo de fila, logo acima, que o acervo simplesmente não tem. Ler o armazém no cliente é possível e seria outra tela: mediria a sessão de quem está olhando, e não o sistema de moderação.",
+      leitura:
+        "As duas ausências desta tela têm causas diferentes e ficam separadas de propósito. Achatá-las numa só apagaria a informação de que uma delas já tem solução e a outra depende do acervo mudar.",
+      detalhe: [],
+    }),
+  ];
+
+  semLastro.push(
+    conferirIndicador({
+      id: "fila-cruzada-com-densidade",
+      rotulo: "Fila parada por território, cruzada com o acervo",
+      valor: null,
+      unidade: "—",
+      denominador: {
+        n: coincidentes,
+        do_que: `dos ${porTerritorio.length} títulos de território da fila coincidem com uma das ${densidade.ufs.length} unidades federativas — e coincidir não é ser`,
+      },
+      denominadorSecundario: {
+        n: fila.length,
+        do_que: `itens na fila, dos quais ${semTerritorio} não têm território nenhum`,
+      },
+      sustentado: false,
+      procedenciaDoNumero:
+        "src/dados/moderacao.ts · ItemDaFila.territorio (título) contra src/dados/geo.ts · densidadePorUf() (unidade federativa) — duas granularidades que não casam",
+      declaracao:
+        `Esta é a leitura que só faria sentido aqui — um território com pouco acervo e fila parada é abandono, não calmaria —, e ela NÃO FECHA neste acervo. A fila carrega o título do território que alcança o item, e medido, esses títulos são municípios e cidades estrangeiras; a densidade conta por unidade federativa. Casar os dois pelo nome faria «São Paulo» da fila encontrar os registros do ESTADO de São Paulo sem que ninguém tenha decidido que são a mesma coisa. Só ${coincidentes} dos ${porTerritorio.length} títulos sequer coincidem com o nome de uma unidade federativa, e coincidência de nome não é identidade — é o mesmo critério que a ontologia aplica a duplicata: o que faz duas linhas serem a mesma coisa no mundo, não a parecença entre textos.`,
+      leitura:
+        "O cruzamento acende sozinho quando o item da fila carregar o ID do território em vez do título: aí a resolução até a unidade federativa é travessia de grafo, e não comparação de string. É pedido de contrato, não falta de tela.",
+      detalhe: porTerritorio.slice(0, 8).map((x) => ({
+        rotulo: x.titulo,
+        valor: x.naFila,
+        de: fila.length,
+        nota: x.coincideComUf
+          ? "o nome coincide com o de uma unidade federativa — e coincidir não é ser"
+          : "não é unidade federativa: não há densidade com que cruzar",
+      })),
+    }),
+  );
+
+  moderacaoMemorizada = {
+    semLastro,
+    fila: fila.length,
+    porEscopo,
+    porTerritorio,
+    semTerritorio,
+    asTresTelas: [
+      {
+        tela: "M9 · meu histórico",
+        deQuem: "do moderador, para ele mesmo",
+        oQueMede: "as próprias decisões, com nome porque o nome é dele",
+      },
+      {
+        tela: "A10 · desempenho",
+        deQuem: "do Admin",
+        oQueMede: "quem modera, para governar — nome, volume e concordância entre moderadores",
+      },
+      {
+        tela: "G8 · esta tela",
+        deQuem: "do Gestor",
+        oQueMede: "o sistema de moderação, agregado e anonimizado — nenhum nome aparece aqui",
+      },
+    ],
+    sobreAAntiguidade,
+  };
+  return moderacaoMemorizada;
 }
