@@ -18,6 +18,18 @@
  *     node scripts/verificar-moderacao.mjs
  *     node scripts/verificar-moderacao.mjs --base http://localhost:4000
  *
+ * NENHUM PADRÃO SOBRE TEXTO, E A RAZÃO CUSTOU TRÊS VERMELHOS FALSOS.
+ *
+ * Tudo que esta suíte avalia na página viaja dentro de um template literal, e ali a barra
+ * invertida de um padrão COLAPSA: `\d` vira `d`, `\D` vira `D`. `replace(/\D/g, "")` sobre
+ * «47.259» deixa de remover o ponto, `Number` lê 47,259, e o gate reprova um número certo.
+ * Pior: quando o número é pequeno — «68», «49» — o mesmo código funciona por acidente, e o
+ * gate fica verde até o dia em que o dado passa de mil.
+ *
+ * Por isso **todo número e toda data que esta suíte confere viajam como atributo**:
+ * `data-valor`, `data-carimbo`, `data-inicio`, `data-arestas`. O atributo carrega o valor
+ * exato e não depende de escape nenhum sobreviver a duas camadas de string.
+ *
  * O CÓDIGO DE SAÍDA É O RESULTADO: 0 com tudo verde, 1 com qualquer falha. Sem isso a
  * suíte vira relatório que ninguém lê, e um portão que não reprova não é portão.
  */
@@ -286,7 +298,12 @@ async function principal() {
           motivo: bloco.getAttribute('data-denuncia'),
           dizQueJaPublicado: t.includes('já está publicado'),
           temEncaminhamento: t.includes('se procede, vai para'),
-          semScore: document.querySelectorAll('[data-item-escolhido] [data-score-ia]').length === 0,
+          // ASSERÇÃO DE AUSÊNCIA COM PISO. Medir «nenhum score aqui dentro» sem antes
+          // provar que o «aqui dentro» existe é uma frase que fica VERDE no dia em que o
+          // seletor for renomeado: o conjunto vira vazio, o gate para de medir e continua
+          // reportando sucesso. O piso é o painel; a ausência é medida dentro dele.
+          painelExiste: Boolean(document.querySelector('[data-item-escolhido]')),
+          scoresNoPainel: document.querySelectorAll('[data-item-escolhido] [data-score-ia]').length,
         };
       `),
     );
@@ -299,10 +316,10 @@ async function principal() {
       "as duas frases presentes",
     );
     exigir(
-      painelDenuncia.semScore,
+      painelDenuncia.painelExiste && painelDenuncia.scoresNoPainel === 0,
       "e a denúncia NÃO tem score — não há estimativa, há afirmação a conferir",
-      `${painelDenuncia.semScore}`,
-      "true",
+      `painel presente: ${painelDenuncia.painelExiste} · ${painelDenuncia.scoresNoPainel} scores dentro dele`,
+      "painel existe E zero scores — a ausência medida sobre um piso, não sobre o vazio",
     );
 
     // -----------------------------------------------------------------------
@@ -704,7 +721,9 @@ async function principal() {
           // clica, nada acontece, e só então lê o texto que explica o porquê.
           todosApagados: opacidades.every((o) => o < 0.7),
           declaraTruncagem: Boolean(truncada),
-          diseQuantosFaltam: /\d+/.test(t) && t.includes('esta lista não mostra'),
+          // Por atributo, e nunca por padrão sobre o texto: dentro deste template a
+          // barra invertida de um padrão colapsa, e o gate mente nas duas direções.
+          diseQuantosFaltam: Number(truncada?.getAttribute('data-lista-truncada') ?? 0) > 0,
         };
       `),
     );
@@ -991,13 +1010,13 @@ async function principal() {
 
     const esc = await cdp.avaliar(
       naPagina(`
-        const dentro = document.querySelector('[data-alcance="dentro"] .web-denominador-numero');
-        const fora = document.querySelector('[data-alcance="fora"] .web-denominador-numero');
+        const dentro = document.querySelector('[data-alcance="dentro"]');
+        const fora = document.querySelector('[data-alcance="fora"]');
         const semUf = document.querySelector('[data-sem-uf]');
         return {
           escopos: todos('[data-escopo-curador]').length,
-          dentro: dentro ? Number((dentro.textContent || '0').replace(/\D/g, '')) : null,
-          fora: fora ? Number((fora.textContent || '0').replace(/\D/g, '')) : null,
+          dentro: dentro ? Number(dentro.getAttribute('data-valor')) : null,
+          fora: fora ? Number(fora.getAttribute('data-valor')) : null,
           ufs: todos('[data-uf-na-fila]').length,
           semUf: semUf ? Number(semUf.getAttribute('data-sem-uf')) : null,
           escalonamentos: todos('[data-escalonamento]').length,
@@ -1022,8 +1041,8 @@ async function principal() {
     await cdp.assentar();
     const territorial = await cdp.avaliar(
       naPagina(`
-        const d = Number((document.querySelector('[data-alcance="dentro"] .web-denominador-numero').textContent || '0').replace(/\D/g, ''));
-        const f = Number((document.querySelector('[data-alcance="fora"] .web-denominador-numero').textContent || '0').replace(/\D/g, ''));
+        const d = Number(document.querySelector('[data-alcance="dentro"]').getAttribute('data-valor'));
+        const f = Number(document.querySelector('[data-alcance="fora"]').getAttribute('data-valor'));
         return { dentro: d, fora: f, url: location.pathname };
       `),
     );
@@ -1251,6 +1270,126 @@ async function principal() {
       "reconciliar deixa registro nomeando o verbete ligado",
       `«${noHist.titulo.slice(0, 60)}» · carimbo ${noHist.temCarimbo}`,
       "o nome do verbete no registro",
+    );
+
+    // =======================================================================
+    titulo("── M4 · similaridade: governar 47.259 sem fingir que revisou ──");
+    // =======================================================================
+
+    await cdp.avaliar(`window.localStorage.removeItem("moderacao.v1")`);
+    await cdp.navegar(`${BASE}/moderacao/similaridade/`);
+    await cdp.assentar();
+
+    const sim = await cdp.avaliar(
+      naPagina(`
+        const alc = document.querySelector('[data-revisao="alcancada"]');
+        const sem = document.querySelector('[data-revisao="sem-revisao"]');
+        const cauda = document.querySelector('[data-cauda]');
+        const fams = todos('[data-familia]');
+        const soma = fams.reduce((s, el) => s + Number(el.getAttribute('data-arestas') || 0), 0);
+        return {
+          familias: fams.length,
+          somaDasFamilias: soma,
+          alcancadas: alc ? Number(alc.getAttribute('data-valor')) : null,
+          semRevisao: sem ? Number(sem.getAttribute('data-valor')) : null,
+          arestasNaCauda: cauda ? Number(cauda.getAttribute('data-cauda')) : null,
+          pendentes: fams.filter((el) => el.getAttribute('data-veredito') === 'pendente').length,
+        };
+      `),
+    );
+
+    // O CONTADOR HONESTO, e ele tem de fechar: alcançadas + sem revisão = o total. Com
+    // zero decisões, TUDO está sem revisão — e a tela abre dizendo isso.
+    exigir(
+      sim.alcancadas === 0 && sim.semRevisao === 47259,
+      "sem decisão nenhuma, a tela declara as 47.259 arestas como SEM revisão",
+      `${sim.alcancadas} alcançadas · ${sim.semRevisao} sem revisão`,
+      "0 · 47259",
+    );
+
+    // A cauda entra no denominador em vez de sumir: 12 famílias mostradas + a cauda têm
+    // de somar o total, senão as 12 pareceriam o conjunto inteiro.
+    exigir(
+      sim.familias === 12 &&
+        sim.arestasNaCauda !== null &&
+        sim.somaDasFamilias + sim.arestasNaCauda === 47259,
+      "as 12 famílias mostradas mais a cauda declarada somam as 47.259",
+      `${sim.familias} famílias = ${sim.somaDasFamilias} + cauda ${sim.arestasNaCauda} = ${sim.somaDasFamilias + (sim.arestasNaCauda ?? 0)}`,
+      "soma === 47259",
+    );
+
+    // ---- aprovar uma família move o contador pelo NÚMERO DE ARESTAS DELA ----
+    const antesDeAprovar = await cdp.avaliar(
+      naPagina(`return Number(document.querySelector('[data-familia]').getAttribute('data-arestas'));`),
+    );
+    await cdp.clicar(`document.querySelector('[data-veredito-familia="aprovada"]')`);
+    await cdp.assentar();
+    const depois = await cdp.avaliar(
+      naPagina(`
+        const alc = document.querySelector('[data-revisao="alcancada"]');
+        const sem = document.querySelector('[data-revisao="sem-revisao"]');
+        return {
+          alcancadas: Number(alc.getAttribute('data-valor')),
+          semRevisao: Number(sem.getAttribute('data-valor')),
+        };
+      `),
+    );
+    exigir(
+      depois.alcancadas === antesDeAprovar &&
+        depois.alcancadas + depois.semRevisao === 47259,
+      "aprovar a família move o contador pelas arestas DELA, e a soma continua fechando",
+      `família de ${antesDeAprovar} arestas → ${depois.alcancadas} alcançadas + ${depois.semRevisao} sem revisão = ${depois.alcancadas + depois.semRevisao}`,
+      `${antesDeAprovar} · soma 47259`,
+    );
+
+    // ---- reprovar milhares de arestas de uma vez EXIGE motivo ----
+    await cdp.avaliar(
+      naPagina(`
+        const outra = todos('[data-familia]').find((el) => el.getAttribute('data-veredito') === 'pendente');
+        if (outra) outra.querySelector('button').click();
+        return true;
+      `),
+    );
+    await cdp.assentar();
+    await cdp.clicar(`document.querySelector('[data-veredito-familia="reprovada"]')`);
+    await cdp.assentar();
+    const repr = await cdp.avaliar(
+      naPagina(`
+        const b = document.querySelector('[data-veto-bloqueado]');
+        b.click();
+        const f = b.closest('form');
+        if (f) f.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        const alc = document.querySelector('[data-revisao="alcancada"]');
+        return {
+          bloqueado: b.getAttribute('data-veto-bloqueado'),
+          alcancadas: Number(alc.getAttribute('data-valor')),
+        };
+      `),
+    );
+    exigir(
+      repr.bloqueado === "sim" && repr.alcancadas === antesDeAprovar,
+      "reprovar milhares de arestas de uma vez EXIGE motivo — o contador não se mexe sem ele",
+      `bloqueado=${repr.bloqueado} · contador parado em ${repr.alcancadas}`,
+      `sim · ${antesDeAprovar}`,
+    );
+
+    // ---- a tela declara o que NÃO faz ----
+    const declara = await cdp.avaliar(
+      naPagina(`
+        const d = document.querySelector('[data-declaracao-revisao]');
+        const t = d ? (d.textContent || '') : '';
+        return {
+          existe: Boolean(d),
+          dizQueNaoRevisaUmaAUma: t.includes('não revisa aresta a aresta'),
+          declaraAusencia: t.includes('declarado como ausência'),
+        };
+      `),
+    );
+    exigir(
+      declara.existe && declara.dizQueNaoRevisaUmaAUma && declara.declaraAusencia,
+      "a tela declara que NÃO revisa uma a uma, e o que falta entra como ausência",
+      `diz que não revisa: ${declara.dizQueNaoRevisaUmaAUma} · declara a ausência: ${declara.declaraAusencia}`,
+      "as duas coisas",
     );
 
     // -----------------------------------------------------------------------

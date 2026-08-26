@@ -149,11 +149,11 @@ export function ModeracaoEscopo({
               tipográfico do que fica dentro, de propósito: são as duas metades da mesma
               informação, e destacar só uma é o que faz o recorte parecer a fila inteira. */}
           <div className="web-denominadores" data-escopo-impresso={escopo}>
-            <span className="web-denominador" data-alcance="dentro">
+            <span className="web-denominador" data-alcance="dentro" data-valor={dentro}>
               <span className="web-denominador-numero">{comSeparador(dentro)}</span>
               <span className="web-denominador-rotulo">itens que este escopo alcança</span>
             </span>
-            <span className="web-denominador" data-alcance="fora">
+            <span className="web-denominador" data-alcance="fora" data-valor={fora}>
               <span className="web-denominador-numero">{comSeparador(fora)}</span>
               <span className="web-denominador-rotulo">
                 itens que ele NÃO alcança — e alguém precisa ver

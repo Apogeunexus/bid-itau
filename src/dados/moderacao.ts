@@ -37,7 +37,7 @@
  *    para a ocasião seria a IA «escrevendo verbete», que é o terceiro limite de D-86.
  */
 
-import { porId, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "./grafo";
+import { contagens, porId, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "./grafo";
 import { densidadePorUf } from "./geo";
 import { motivoDaAresta } from "./motivo";
 import { DATA_DE_REFERENCIA } from "./alerta";
@@ -46,6 +46,17 @@ import { ROTA_POR_CLASSE } from "./rotas";
 import { normalizar } from "./indice";
 import type { ClasseEntidade, Entidade, Procedencia, Relacao } from "./tipos";
 import type { AcaoDeModeracao, DecisaoDeModeracao, Situacao } from "./tipos-acesso";
+import metaJson from "./gerado/meta.json";
+
+/**
+ * As contagens de aresta por relação, de `meta.json`.
+ *
+ * `contagens()` conta ENTIDADES e não arestas. `meta.json` é escrito por
+ * `scripts/gerar-grafo.mjs` na mesma passada que produziu o grafo, e é a mesma fonte que o
+ * Observatório usa como testemunha independente das próprias contas.
+ */
+const META_DAS_ARESTAS = (metaJson as unknown as { porRelacao: Record<string, number> })
+  .porRelacao;
 
 // ---------------------------------------------------------------------------
 // Autoria e carimbo — D-84, e o mesmo padrão de `ocorrencias-studio.ts`
@@ -1338,6 +1349,139 @@ export const APROVAR_E_A_UNICA_PORTA =
   "carimbo. O score ao lado de cada sugestão não decide nada — ele é a fração de cinco " +
   "perguntas sobre a ficha da própria entidade, exibidas marcadas uma a uma, para que quem " +
   "decide confira a conta em vez de confiar no número.";
+
+// ---------------------------------------------------------------------------
+// M4 — revisão de similaridade (112) · governar 47.259 arestas sem fingir
+// ---------------------------------------------------------------------------
+
+/**
+ * Uma família de arestas `semelhante_a` que compartilham o padrão de justificativa.
+ *
+ * O PROBLEMA, MEDIDO: `semelhante_a` é **71% do grafo** — 47.259 de 66.563 arestas, todas
+ * de máquina, todas com `motivo` obrigatório, nenhuma revisada por humano. Uma fila item a
+ * item levaria anos, e é aritmética simples: a um minuto por aresta, oito horas por dia,
+ * são mais de quatro meses de trabalho contínuo para uma pessoa.
+ *
+ * **Fingir que revisou seria pior do que não revisar.** Uma tela que mostrasse cem arestas
+ * e um botão «aprovar todas» produziria um carimbo de revisão humana sobre 47 mil ligações
+ * que ninguém leu — e o carimbo é justamente o que dá a elas o peso que hoje não têm.
+ *
+ * A SAÍDA É GOVERNAR A REGRA, NÃO A ARESTA. As arestas compartilham famílias de
+ * justificativa — «Outro verbete de artes visuais» são 3.499 delas —, e decidir sobre a
+ * família é uma decisão que uma pessoa consegue de fato tomar: ela lê a regra, lê uma
+ * amostra, e diz se a regra se sustenta. O que não se pode é chamar isso de «revisado» sem
+ * dizer quantas a decisão alcançou e quantas seguem sem revisão.
+ */
+export interface FamiliaDeSimilaridade {
+  id: string;
+  /** O padrão de justificativa, por extenso — é ele que agrupa. */
+  padrao: string;
+  /** Quantas arestas do grafo inteiro caem nesta família. MEDIDO. */
+  arestas: number;
+  /** A amostra que a tela mostra, com os dois lados de cada ligação. */
+  amostra: { de: string; para: string; motivo: string }[];
+}
+
+export interface PanoramaDaSimilaridade {
+  /** O total de `semelhante_a` no grafo. Contado, nunca digitado. */
+  totalDeArestas: number;
+  /** O total de arestas do grafo, para a fração ser conferível. */
+  totalDoGrafo: number;
+  /** Quantas famílias distintas existem. */
+  totalDeFamilias: number;
+  /** As famílias que a tela mostra. */
+  familias: FamiliaDeSimilaridade[];
+  /** Quantas arestas as famílias mostradas somam. */
+  arestasNasFamilias: number;
+  /** Famílias que a tela NÃO mostra, e quantas arestas elas somam. */
+  familiasNaCauda: number;
+  arestasNaCauda: number;
+  /** O tamanho da amostra por família, e o método. Declarados. */
+  tamanhoDaAmostra: number;
+  metodoDaAmostra: string;
+}
+
+/** Quantas famílias a tela mostra. A cauda entra como número, não some. */
+export const FAMILIAS_MOSTRADAS = 12;
+
+/** Quantas ligações de cada família a tela exibe. */
+export const AMOSTRA_POR_FAMILIA = 3;
+
+export const REGRA_DA_AMOSTRA_DE_SIMILARIDADE =
+  `As ${AMOSTRA_POR_FAMILIA} ligações de cada família são as PRIMEIRAS na ordem do ` +
+  "`id` da entidade de origem — chave estável do acervo, nunca sorteio. Não é uma amostra " +
+  "aleatória e a tela não a chama de representativa: é um recorte determinístico, que duas " +
+  "gerações do acervo reproduzem igual. Uma amostra sorteada mudaria a cada build e faria " +
+  "duas pessoas conferirem coisas diferentes achando que conferiram a mesma.";
+
+export const FRASE_DA_REVISAO_HONESTA =
+  "Nenhuma destas arestas foi revisada por humano até hoje: são 47.259 ligações de máquina " +
+  "sustentando 71% do grafo. Esta tela não as revisa uma a uma — ela governa a REGRA que as " +
+  "produziu, que é a única decisão que uma pessoa consegue de fato tomar sobre 47 mil " +
+  "coisas. E o contador ao lado diz, sempre, quantas a decisão alcançou e quantas seguem " +
+  "sem revisão nenhuma. Sem denominador, «revisado» mente.";
+
+let panoramaMemo: PanoramaDaSimilaridade | null = null;
+
+export function panoramaDaSimilaridade(): PanoramaDaSimilaridade {
+  if (panoramaMemo) return panoramaMemo;
+
+  const familias = new Map<
+    string,
+    { arestas: number; amostra: { de: string; para: string; motivo: string }[] }
+  >();
+  let total = 0;
+
+  for (const classe of Object.keys(contagens().porClasse) as ClasseEntidade[]) {
+    for (const slug of slugsPorTipo(classe)) {
+      const e = porSlug(classe, slug);
+      if (!e) continue;
+      for (const v of vizinhos(e.id, "semelhante_a")) {
+        // `semelhante_a` é registrada nos dois sentidos pelo gerador; contar só as que
+        // SAEM evita contar cada ligação duas vezes e chegar a um total que não existe.
+        if (v.aresta.de !== e.id) continue;
+        total += 1;
+        const m = motivoDaAresta(v.aresta, e, v.entidade);
+        // O padrão da família é o começo da frase, antes da primeira pontuação: é a parte
+        // que se repete — «Outro verbete de artes visuais» — e o resto é o que varia.
+        const padrao = m.texto.split(/[:;,]/)[0].slice(0, 70).trim();
+        const atual = familias.get(padrao) ?? { arestas: 0, amostra: [] };
+        atual.arestas += 1;
+        if (atual.amostra.length < AMOSTRA_POR_FAMILIA) {
+          atual.amostra.push({ de: e.titulo, para: v.entidade.titulo, motivo: m.texto });
+        }
+        familias.set(padrao, atual);
+      }
+    }
+  }
+
+  const ordenadas = [...familias.entries()].sort(
+    (a, b) => b[1].arestas - a[1].arestas || (a[0] < b[0] ? -1 : 1),
+  );
+  const mostradas = ordenadas.slice(0, FAMILIAS_MOSTRADAS);
+  const cauda = ordenadas.slice(FAMILIAS_MOSTRADAS);
+
+  panoramaMemo = {
+    totalDeArestas: total,
+    // De `meta.json`, escrito por `gerar-grafo.mjs` num processo separado — a mesma
+    // testemunha independente que o Observatório usa. O total de arestas não sai de
+    // `contagens()`, que só conta entidades.
+    totalDoGrafo: Object.values(META_DAS_ARESTAS).reduce((a, b) => a + b, 0),
+    totalDeFamilias: ordenadas.length,
+    familias: mostradas.map(([padrao, v], i) => ({
+      id: `familia:${i}`,
+      padrao,
+      arestas: v.arestas,
+      amostra: v.amostra,
+    })),
+    arestasNasFamilias: mostradas.reduce((s, [, v]) => s + v.arestas, 0),
+    familiasNaCauda: cauda.length,
+    arestasNaCauda: cauda.reduce((s, [, v]) => s + v.arestas, 0),
+    tamanhoDaAmostra: AMOSTRA_POR_FAMILIA,
+    metodoDaAmostra: REGRA_DA_AMOSTRA_DE_SIMILARIDADE,
+  };
+  return panoramaMemo;
+}
 
 // ---------------------------------------------------------------------------
 // M5 — elenco declarado (116) · a barreira ética do sistema

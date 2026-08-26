@@ -1028,3 +1028,66 @@
 .moderacao-linha[data-proposto="sim"] {
   border-left: 2px solid var(--cor-acao);
 }
+
+/* ===========================================================================
+ * M4 — a revisão de similaridade
+ * ======================================================================== */
+
+.moderacao-familias {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.moderacao-familia {
+  border-left: 2px solid var(--cor-borda);
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+/* Os três vereditos se distinguem pela borda. A pendente fica lavada e as
+ * decididas ganham marca — porque a pergunta que se faz varrendo esta lista é
+ * «o que ainda não olhei», e não «o que já aprovei». */
+.moderacao-familia[data-veredito="aprovada"] {
+  border-left-color: var(--cor-acao);
+}
+
+.moderacao-familia[data-veredito="reprovada"] {
+  border-left-color: var(--cor-tinta-2);
+}
+
+.moderacao-familia[data-veredito="ajustar"] {
+  border-left-style: dashed;
+  border-left-color: var(--cor-acao);
+}
+
+/* O número de arestas vem ANTES do padrão, e maior: a escala é a informação que
+ * decide se vale a pena abrir a família — 3.499 arestas e 12 arestas pedem
+ * atenções diferentes, e o padrão sozinho não diz qual é qual. */
+.moderacao-familia-numero {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.moderacao-amostra {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.moderacao-ligacao {
+  padding: 0.5rem 0.75rem;
+  border-left: 1px solid var(--cor-borda-forte);
+}
+
+.moderacao-ligacao-nos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: var(--tipo-legenda);
+}
