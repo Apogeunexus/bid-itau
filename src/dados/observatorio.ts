@@ -71,6 +71,132 @@ const META = metaJson as unknown as {
 export const TETO_DO_DTO = 61_440;
 
 // ---------------------------------------------------------------------------
+// A superfície — oito telas, e o recorte que impede o DTO inteiro de ir a todas
+// ---------------------------------------------------------------------------
+
+/**
+ * Uma tela da superfície do Observatório.
+ *
+ * A superfície nasceu como TELA ÚNICA e virou oito. A tentação, quando isso acontece, é
+ * mandar `montarObservatorio()` para as oito e deixar cada uma escolher o que exibe: o
+ * código fica menor e o artefato fica oito vezes maior, porque o que não é exibido
+ * atravessa a fronteira RSC do mesmo jeito. O recorte é POR TELA, feito no servidor, e
+ * `aferirDto()` é o que o torna conferido em vez de pretendido.
+ *
+ * A PERGUNTA É CAMPO OBRIGATÓRIO, e não enfeite. Uma tela de painel institucional que não
+ * saiba dizer que pergunta responde é uma tela que existe porque cabia no menu — e a
+ * pergunta escrita ao lado do rótulo é o que impede a navegação de virar gaveta.
+ */
+export interface TelaDaSuperficie {
+  id: string;
+  /** Rota do artefato estático. Termina em barra: sem ela é outra página. */
+  rota: string;
+  rotulo: string;
+  /** A pergunta que esta tela responde. */
+  pergunta: string;
+  /** As funcionalidades do catálogo que ela entrega. */
+  funcionalidades: readonly string[];
+}
+
+export const TELAS: readonly TelaDaSuperficie[] = [
+  {
+    id: "visao-geral",
+    rota: "/observatorio/",
+    rotulo: "Visão geral",
+    pergunta: "os mesmos indicadores — para quem estou olhando, e em que ordem?",
+    funcionalidades: ["101"],
+  },
+  {
+    id: "produto",
+    rota: "/observatorio/produto/",
+    rotulo: "Produto",
+    pergunta: "qual recorte já funciona e qual está esperando dado?",
+    funcionalidades: ["102"],
+  },
+  {
+    id: "impacto",
+    rota: "/observatorio/impacto/",
+    rotulo: "Impacto cultural",
+    pergunta: "o que a plataforma amplia no repertório de quem a atravessa?",
+    funcionalidades: ["103"],
+  },
+  {
+    id: "territorio",
+    rota: "/observatorio/territorio/",
+    rotulo: "Território",
+    pergunta: "onde a documentação da cultura brasileira não chega?",
+    funcionalidades: ["104"],
+  },
+  {
+    id: "procedencia",
+    rota: "/observatorio/procedencia/",
+    rotulo: "Procedência",
+    pergunta: "de onde veio cada coisa que estas telas mostram?",
+    funcionalidades: ["105"],
+  },
+  {
+    id: "ausencia",
+    rota: "/observatorio/ausencia/",
+    rotulo: "Ausência declarada",
+    pergunta: "o que este acervo não sabe, e quem preencheria?",
+    funcionalidades: ["106"],
+  },
+  {
+    id: "dados",
+    rota: "/observatorio/dados/",
+    rotulo: "Dados abertos",
+    pergunta: "o que daqui sai para quem quiser construir em cima?",
+    funcionalidades: ["107"],
+  },
+  {
+    id: "moderacao",
+    rota: "/observatorio/moderacao/",
+    rotulo: "Leitura da moderação",
+    pergunta: "o sistema de moderação dá conta, e onde ele parou?",
+    funcionalidades: ["169"],
+  },
+];
+
+// A mesma disciplina de PUBLICOS, e pelo mesmo motivo: a navegação das oito telas é montada
+// a partir desta lista. Sob `output: "export"` uma rota digitada errado não dá 404 no
+// desenvolvimento — ela sai no artefato como link para lugar nenhum, e o sintoma aparece na
+// frente de quem avalia.
+const IDS_DE_TELA = new Set<string>();
+for (const t of TELAS) {
+  if (IDS_DE_TELA.has(t.id)) {
+    throw new Error(`observatorio.ts: a tela «${t.id}» aparece duas vezes em TELAS.`);
+  }
+  IDS_DE_TELA.add(t.id);
+  if (!t.rota.startsWith("/observatorio/") || !t.rota.endsWith("/")) {
+    throw new Error(
+      `observatorio.ts: a rota «${t.rota}» da tela «${t.id}» não é da superfície do Observatório ` +
+        `ou não termina em barra — e sob output: "export" a rota sem barra final é OUTRA página.`,
+    );
+  }
+}
+
+/**
+ * O teto do DTO, aferido POR TELA em vez de uma vez só.
+ *
+ * `numerosDoObservatorio()` afere o DTO da raiz desde 05-05. Este é o mesmo teto aplicado às
+ * outras sete: cada página de servidor passa por aqui o que vai mandar ao cliente, e a tela
+ * que estourar não compila. Aferir só a raiz deixaria as sete crescerem sem sintoma nenhum
+ * até o artefato dobrar de tamanho — e o sintoma, quando viesse, seria lentidão sem causa
+ * aparente, que é a forma de dívida mais cara de achar.
+ */
+export function aferirDto<T>(tela: string, dto: T): T {
+  const bytes = JSON.stringify(dto).length;
+  if (bytes > TETO_DO_DTO) {
+    throw new Error(
+      `observatorio.ts: o DTO da tela «${tela}» ficou com ${bytes} bytes, acima do teto de ${TETO_DO_DTO}. ` +
+        `Recorte o que esta tela NÃO exibe — detalhe de indicador que ela não abre, composição de fatia que ` +
+        `ela não mostra — e DECLARE o corte na tela, em vez de reduzir o que ela afirma.`,
+    );
+  }
+  return dto;
+}
+
+// ---------------------------------------------------------------------------
 // Procedência — o vocabulário, e a frase que não pode ser suavizada
 // ---------------------------------------------------------------------------
 
