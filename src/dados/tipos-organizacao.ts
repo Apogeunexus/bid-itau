@@ -464,14 +464,14 @@ export const TELAS_DA_ORGANIZACAO: readonly TelaDaOrganizacao[] = [
     rotulo: "Alcance",
     rota: "/studio/alcance",
     objetivo: "O retorno para quem publica — sem número que o acervo não sustenta",
-    pronta: false,
+    pronta: true,
   },
   {
     id: "conformidade",
     rotulo: "Conformidade",
     rota: "/studio/conformidade",
     objetivo: "A fila dos próprios produtores, que a organização não via",
-    pronta: false,
+    pronta: true,
   },
 ];
 
@@ -1333,3 +1333,70 @@ export const POR_QUE_A_PREVIA =
   "clássica de duplicata, e o critério de identidade roda ANTES de gravar. Aplicar sem ver " +
   "seria deixar a máquina criar exatamente os pares que a fila de duplicatas existe para " +
   "desfazer depois.";
+
+// ---------------------------------------------------------------------------
+// O alcance — O9. A tela onde é mais fácil mentir
+// ---------------------------------------------------------------------------
+
+/**
+ * O que o acervo NÃO sustenta, item a item, com o motivo.
+ *
+ * ESTA CONSTANTE É O CONTEÚDO PRINCIPAL DA O9, e não um rodapé de ressalva. Um painel de
+ * alcance com número inventado destrói o argumento de procedência da proposta inteira — e
+ * num painel institucional ninguém confere, que é exatamente o que torna a mentira barata.
+ * Cada linha aqui é um número que a tela PODERIA exibir e escolhe não exibir, com a razão.
+ */
+export const O_QUE_O_ALCANCE_NAO_SUSTENTA: readonly { medida: string; porque: string }[] = [
+  {
+    medida: "público presente",
+    porque:
+      "não existe sinal de presença no acervo: nenhuma ocorrência declara lotação, bilheteria " +
+      "ou contagem de porta. Um número aqui seria inventado inteiro.",
+  },
+  {
+    medida: "visualizações e escutas",
+    porque:
+      "o acervo traz a mídia, não a métrica dela. Play e Cast são telas do produto; o " +
+      "contador de reprodução mora no serviço que serve o arquivo, e não há um.",
+  },
+  {
+    medida: "inscrições efetivadas",
+    porque:
+      "a inscrição existe como funcionalidade e não como dado: nenhum registro do acervo " +
+      "guarda quem se inscreveu em quê.",
+  },
+  {
+    medida: "comparação com o próprio histórico",
+    porque:
+      "comparar exige duas medidas do mesmo indicador em datas diferentes. O grafo é uma " +
+      "fotografia, e a data de referência é uma só.",
+  },
+  {
+    medida: "alcance por faixa etária ou perfil",
+    porque:
+      "o campo de faixa etária é adição de contrato desta onda e ainda não tem dado; perfil " +
+      "de público autenticado é do nível 8, e o acervo tem 3 pessoas-usuárias.",
+  },
+];
+
+export const REGRA_DO_ALCANCE =
+  "Se o dado não sustenta, a tela diz. Um painel de alcance com número inventado destrói o " +
+  "argumento de procedência da proposta inteira — e num painel institucional ninguém " +
+  "confere, que é justamente o que torna a mentira barata.";
+
+// ---------------------------------------------------------------------------
+// A conformidade — O10, funcionalidade 168
+// ---------------------------------------------------------------------------
+
+export const CONFORMIDADE_NAO_E_VIGILANCIA =
+  "Isto é conformidade, não vigilância: mede o REGISTRO, não a pessoa. O recorte por " +
+  "colaborador existe para a organização corrigir processo — três devoluções pelo mesmo " +
+  "motivo são um problema de instrução, não de quem preencheu —, e nenhuma medida daqui " +
+  "vira nota de desempenho de ninguém.";
+
+export const COMO_A_O10_LE_A_FILA =
+  "A fila do produtor mora sob outra chave de armazenamento, escrita pelo nível 7. Esta tela " +
+  "a lê pelo CONTRATO COMPARTILHADO — a chave e o tipo do rascunho são exportados por " +
+  "`tipos-acesso.ts`, que existe exatamente para atravessar níveis —, e a lê em LEITURA: não " +
+  "há aqui nenhum caminho que escreva no registro do produtor. A organização vê a fila; quem " +
+  "decide sobre ela continua sendo a moderação.";

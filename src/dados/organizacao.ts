@@ -311,7 +311,13 @@ export function instituicoesDoAcervo(): InstituicaoDoAcervo[] {
       linguagens: e.linguagens.map((id) => ROTULO_DA_LINGUAGEM.get(id) ?? id),
       territorio,
       locais: locaisDe(e),
-      eventosRealizados: vizinhos(e.id, "realiza").length,
+      // Eventos DISTINTOS, e não arestas: `vizinhos` devolve a adjacência inteira, e contar
+      // aresta faria uma instituição ligada duas vezes ao mesmo evento parecer realizar dois.
+      eventosRealizados: new Set(
+        vizinhos(e.id, "realiza")
+          .filter((v) => v.entidade.classe === "evento")
+          .map((v) => v.entidade.id),
+      ).size,
       temCoordenada: e.coordenada !== undefined,
       declaraAcessibilidade: e.declaraAcessibilidade,
     };
@@ -581,8 +587,19 @@ export interface EventoParaPrograma {
   normalizado: string;
   /** O período que o CMS publica, quando publica. Texto, como vem. */
   periodo: string | null;
-  /** Quem `realiza` o evento — a relação organizacional de verdade. */
-  realizadoPor: string | null;
+  /**
+   * Quem `realiza` o evento — a relação organizacional de verdade, e ela é de MUITOS PARA
+   * MUITOS. Medido no acervo: 527 arestas cobrem 41 dos 300 eventos, com 127 instituições
+   * distintas na ponta de origem — cerca de treze instituições por evento realizado. Um
+   * campo único aqui devolveria a primeira da lista e faria as outras doze desaparecerem,
+   * cada uma vendo zero eventos no próprio painel de alcance.
+   */
+  realizadoPor: string[];
+  realizadoPorIds: string[];
+  /** Rótulos do vocabulário controlado, já resolvidos. */
+  linguagens: string[];
+  /** O território a que o evento está ligado por `situado_em`, quando há. */
+  territorio: string | null;
   procedencia: Procedencia;
   ocorrencias: number;
 }
@@ -594,8 +611,25 @@ export interface NumerosDosProgramas {
   eventosDaFonte: number;
   eventosAutorados: number;
   eventosComRealizador: number;
+  /** Arestas `instituicao → evento`. Bem maior que `eventosComRealizador`: o mesmo evento
+   *  é realizado por várias instituições, e a média entre os dois é o que a tela declara. */
+  arestasDeRealiza: number;
   /** Quantas das 20 classes da ontologia estão vazias. Hoje: uma. */
   classesVazias: number;
+}
+
+/**
+ * TODAS as instituições que `realiza` o evento, em ordem de título.
+ *
+ * PLURAL, E NÃO SINGULAR, e a diferença é um defeito que só aparece em tela: `find()`
+ * devolveria a primeira da adjacência, e as outras doze instituições do mesmo evento
+ * veriam zero no próprio painel de alcance — cada uma achando que não realiza nada.
+ */
+function realizadoresDe(e: Entidade) {
+  return vizinhos(e.id, "realiza")
+    .map((v) => v.entidade)
+    .filter((x) => x.classe === "instituicao")
+    .sort((a, b) => a.titulo.localeCompare(b.titulo, "pt-BR"));
 }
 
 export function eventosParaPrograma(): EventoParaPrograma[] {
@@ -604,10 +638,13 @@ export function eventosParaPrograma(): EventoParaPrograma[] {
     titulo: e.titulo,
     normalizado: normalizar(e.titulo),
     periodo: texto(e, "periodo") || null,
-    realizadoPor:
-      vizinhos(e.id, "realiza")
+    realizadoPor: realizadoresDe(e).map((x) => x.titulo),
+    realizadoPorIds: realizadoresDe(e).map((x) => x.id),
+    linguagens: e.linguagens.map((id) => ROTULO_DA_LINGUAGEM.get(id) ?? id),
+    territorio:
+      vizinhos(e.id, "situado_em")
         .map((v) => v.entidade)
-        .find((x) => x.classe === "instituicao")?.titulo ?? null,
+        .find((x) => x.classe === "territorio")?.titulo ?? null,
     procedencia: e.procedencia,
     ocorrencias: ocorrenciasDe(e.id).length,
   }));
@@ -627,6 +664,11 @@ export function numerosDosProgramas(): NumerosDosProgramas {
     eventosComRealizador: eventos.filter(
       (e) => vizinhos(e.id, "realiza").some((v) => v.entidade.classe === "instituicao"),
     ).length,
+    arestasDeRealiza: eventos.reduce(
+      (soma, e) =>
+        soma + vizinhos(e.id, "realiza").filter((v) => v.entidade.classe === "instituicao").length,
+      0,
+    ),
     classesVazias: programas.length === 0 ? 1 : 0,
   };
 }
@@ -650,11 +692,14 @@ export function declaracoesDosProgramas(n: NumerosDosProgramas): DeclaracaoDaTel
         `alguém a povoasse.`,
     },
     {
-      titulo: "«realiza» é o que liga a organização ao que acontece",
+      titulo: "«realiza» é de muitos para muitos, e isso muda a chave",
       texto:
-        `${n.eventosComRealizador} de ${n.eventos} eventos têm instituição realizadora ` +
-        `declarada. É a mesma relação que fecha o segundo terço da chave de identidade do ` +
-        `evento — e um programa reúne exatamente o que a organização realiza.`,
+        `${n.eventosComRealizador} de ${n.eventos} eventos têm instituição realizadora, e são ` +
+        `${n.arestasDeRealiza} arestas ao todo — cerca de ` +
+        `${n.eventosComRealizador > 0 ? Math.round(n.arestasDeRealiza / n.eventosComRealizador) : 0} ` +
+        `instituições por evento realizado. A chave de identidade do evento pede «agente ` +
+        `realizador» no singular, e o acervo devolve treze: fechar o segundo terço da chave ` +
+        `exige escolher qual deles responde, e essa escolha é da organização, não da máquina.`,
     },
   ];
 }

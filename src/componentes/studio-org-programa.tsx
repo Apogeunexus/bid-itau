@@ -335,7 +335,7 @@ export function StudioOrgPrograma({
                           >
                             <span className="web-linha-titulo">{e.titulo}</span>
                             <span className="web-linha-meta">
-                              {e.realizadoPor ?? "sem instituição realizadora"} ·{" "}
+                              {e.realizadoPor.length > 0 ? e.realizadoPor.join(", ") : "sem instituição realizadora"} ·{" "}
                               {e.ocorrencias} sessões · {e.procedencia} — clique para tirar
                             </span>
                           </button>
