@@ -291,6 +291,7 @@ async function principal() {
     const painelDenuncia = await cdp.avaliar(
       naPagina(`
         const bloco = document.querySelector('[data-denuncia]');
+        const painel = document.querySelector('[data-item-escolhido]');
         if (!bloco) return { presente: false };
         const t = bloco.textContent || '';
         return {
@@ -302,8 +303,11 @@ async function principal() {
           // provar que o «aqui dentro» existe é uma frase que fica VERDE no dia em que o
           // seletor for renomeado: o conjunto vira vazio, o gate para de medir e continua
           // reportando sucesso. O piso é o painel; a ausência é medida dentro dele.
-          painelExiste: Boolean(document.querySelector('[data-item-escolhido]')),
-          scoresNoPainel: document.querySelectorAll('[data-item-escolhido] [data-score-ia]').length,
+          // O piso é sobre A FONTE VARRIDA, e o seletor descendente sai: ele esconde o
+          // desaparecimento do primeiro atributo dentro do resultado do segundo, e não há
+          // como pôr piso num conjunto que já veio filtrado.
+          painelExiste: Boolean(painel),
+          scoresNoPainel: painel ? painel.querySelectorAll('[data-score-ia]').length : -1,
         };
       `),
     );
