@@ -1,12 +1,12 @@
 {
-  "varredura": "25/08, 21:43",
+  "varredura": "25/08, 21:44",
   "kpi": {
-    "concluidas": 3,
+    "concluidas": 4,
     "totalTarefas": 64,
     "ativas": 5,
     "bloqueadas": 1,
     "divergencias": 0,
-    "sujos": 7,
+    "sujos": 3,
     "folgaS6": 10,
     "pedidos": 4
   },
@@ -290,7 +290,7 @@
       "pasta": "src/app/(bastidor)/observatorio",
       "sessaoNome": "bid-ita-53 [7ad229]",
       "estado": "rodando",
-      "feitas": 0,
+      "feitas": 1,
       "total": 10,
       "commit": null,
       "frescor": null,
@@ -307,16 +307,16 @@
           "n": 1,
           "rot": "recorte do DTO",
           "inicio": 0,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "36c5a89",
+          "nota": "`TELAS` com as 8 rotas e a pergunta de cada uma; `aferirDto()` estende às 7 telas novas o teto de 61.440 que só a raiz aferia. Achado da leitura: o portão 05-08 congela a raiz — ver B1",
+          "quando": "25.08 21:55"
         },
         {
           "n": 2,
           "rot": "G1 público",
           "inicio": 1,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -749,6 +749,13 @@
       "rot": "separação de território",
       "nota": "`moderacao.ts` + `moderacao.css` nascem, a tela 34 vira `/moderacao/fila/`, uma linha em `globals.css`. **Libera a S5**: `redacao.ts` e `redacao.css` ficaram só com o editor de trilha e **nenhuma classe CSS é compartilhada** — a fila usa `moderacao-*`. Tocou 9 arquivos fora da pasta, com autorização explícita do dono do projeto e **antes de o PROTOCOLO §6 existir** — ver INVASÃO abaixo.",
       "quando": "25.08 20:47"
+    },
+    {
+      "sessao": "S2",
+      "n": 1,
+      "rot": "recorte do DTO",
+      "nota": "`TELAS` com as 8 rotas e a pergunta de cada uma; `aferirDto()` estende às 7 telas novas o teto de 61.440 que só a raiz aferia. Achado da leitura: o portão 05-08 congela a raiz — ver B1",
+      "quando": "25.08 21:55"
     },
     {
       "sessao": "S5",
