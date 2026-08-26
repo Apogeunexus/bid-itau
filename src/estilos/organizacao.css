@@ -222,9 +222,20 @@
   font-weight: 700;
 }
 
+/* «Declarado ausente» — a ficha foi preenchida e disse que não tem. Borda
+ * inteira e tinta apagada, a MESMA gramática que `ficha-acessibilidade.tsx` usa
+ * para o segundo dos três estados de D-43: duas telas que pintassem o mesmo
+ * estado de formas diferentes fariam quem confere achar que são estados
+ * diferentes. */
+.org-fisico-item[data-estado="declarado-ausente"] {
+  border-color: var(--cor-tinta-2);
+  color: var(--cor-tinta-2);
+}
+
 /* «Não declarado» é tracejado, e é um estado próprio — nunca uma variação do
  * «não». Um espaço que não fala de rampa não afirma que não tem rampa, e a
- * plataforma não afirma isso em nome de ninguém. */
+ * plataforma não afirma isso em nome de ninguém. É o terceiro estado de D-43, e
+ * é o que 113 de 113 espaços exibem hoje. */
 .org-fisico-item[data-estado="nao-declarado"] {
   border-style: dashed;
   color: var(--cor-tinta-3);
