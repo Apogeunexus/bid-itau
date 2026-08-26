@@ -426,7 +426,7 @@ export const TELAS_DA_ORGANIZACAO: readonly TelaDaOrganizacao[] = [
     rotulo: "Programa",
     rota: "/studio/programa",
     objetivo: "A camada acima do evento — a única classe com zero instâncias",
-    pronta: false,
+    pronta: true,
   },
   {
     id: "formacao",
@@ -807,5 +807,80 @@ export function faltasDaMidia(
     dono: "Moderador (114, 115)",
   });
 
+  return saida;
+}
+
+// ---------------------------------------------------------------------------
+// O programa — O3. A única classe da ontologia com ZERO instâncias
+// ---------------------------------------------------------------------------
+
+/**
+ * Uma edição do programa — Rumos 2015, Rumos 2017.
+ *
+ * `rotulo` e não «ano»: nem toda edição é anual, e um campo numérico obrigaria «Temporada
+ * 2024/2025» a virar dois registros ou uma mentira.
+ */
+export interface EdicaoDePrograma {
+  rotulo: string;
+  inicio: string;
+  fim: string;
+}
+
+/**
+ * O guarda-chuva acima do evento.
+ *
+ * `programa` EXISTE NO TIPO E NÃO EXISTE NO ACERVO — zero instâncias em 7.810 entidades. O
+ * motor de caminhada a percorre e nada a popula. Por isso esta é a única tela da sessão que
+ * não tem lista para editar: ela CRIA, e o que aparece nela é o que a organização criou na
+ * demonstração.
+ *
+ * `eventoIds` aponta para eventos REAIS do acervo. É o desenho inteiro da tela: o
+ * guarda-chuva é autorado, os 300 eventos embaixo dele não são — e é essa mistura que deixa
+ * ver o que a classe faria se alguém a povoasse.
+ */
+export interface Programa {
+  id: string;
+  titulo: string;
+  resumo: string;
+  edicoes: EdicaoDePrograma[];
+  eventoIds: string[];
+  autor: string;
+  quando: string;
+}
+
+export const PROGRAMA_TEM_ZERO =
+  "«programa» é a única das 20 classes da ontologia com zero instâncias: ela existe em " +
+  "`tipos.ts`, o motor de caminhada a percorre, e nada no acervo a popula. Tudo o que " +
+  "aparece nesta tela foi criado aqui, agora — e os eventos reunidos embaixo, não.";
+
+export function faltasDoPrograma(p: Programa | undefined): Falta[] {
+  const saida: Falta[] = [];
+  if (!p) return saida;
+
+  if (p.titulo.trim().length === 0) {
+    saida.push({ texto: "título — sem ele o programa não tem como ser referenciado", bloqueia: true, dono: null });
+  }
+  if (p.resumo.trim().length === 0) {
+    saida.push({ texto: "resumo — é o que o app público mostra acima dos eventos reunidos", bloqueia: false, dono: null });
+  }
+  if (p.edicoes.length === 0) {
+    saida.push({
+      texto: "nenhuma edição — um programa sem edição é indistinguível de uma etiqueta",
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  if (p.eventoIds.length === 0) {
+    saida.push({
+      texto: "nenhum evento reunido — o guarda-chuva existe e não cobre nada",
+      bloqueia: false,
+      dono: null,
+    });
+  }
+  saida.push({
+    texto: "aprovação do programa antes de ir ao acervo público",
+    bloqueia: false,
+    dono: "Moderador (108)",
+  });
   return saida;
 }

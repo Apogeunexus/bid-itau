@@ -37,7 +37,9 @@ import type {
   Colaborador,
   DireitoDeDistribuicao,
   EntradaDeEquipe,
+  EdicaoDePrograma,
   FichaTecnicaDeMidia,
+  Programa,
 } from "@/dados/tipos-organizacao";
 
 /**
@@ -78,6 +80,10 @@ interface EstadoPersistido {
   /** O acervo de ativos — a O5. Aditivo, como os anteriores. */
   midias: Record<string, CadastroDeMidia>;
   atualMidiaId: string | null;
+  /** Os programas criados na demonstração — a O3. Lista e não mapa: eles NASCEM aqui, e
+   *  não existe id de acervo para servir de chave. */
+  programas: Programa[];
+  atualProgramaId: string | null;
 }
 
 export interface ContextoDaOrganizacao {
@@ -172,6 +178,7 @@ function pareceEstado(v: unknown): v is EstadoPersistido {
   }
   if (o.equipe !== undefined && !Array.isArray(o.equipe)) return false;
   if (o.midias !== undefined && (typeof o.midias !== "object" || o.midias === null)) return false;
+  if (o.programas !== undefined && !Array.isArray(o.programas)) return false;
   if (o.historicoDaEquipe !== undefined && !Array.isArray(o.historicoDaEquipe)) return false;
   return Object.values(o.cadastros as Record<string, unknown>).every((c) => {
     if (typeof c !== "object" || c === null) return false;
@@ -199,6 +206,8 @@ function doZero(): EstadoPersistido {
     historicoDaEquipe: [],
     midias: {},
     atualMidiaId: primeiraMidiaId,
+    programas: [],
+    atualProgramaId: null,
   };
 }
 
@@ -264,6 +273,8 @@ function hidratar(contextoNovo: ContextoDaOrganizacao, semente: SementeDaOrganiz
     historicoDaEquipe: lido.historicoDaEquipe ?? [],
     midias: lido.midias ?? {},
     atualMidiaId: lido.atualMidiaId ?? primeiraMidiaId,
+    programas: lido.programas ?? [],
+    atualProgramaId: lido.atualProgramaId ?? null,
   };
   avisar();
 }
@@ -386,6 +397,18 @@ function comMidia(midiaId: string, transformar: (c: CadastroDeMidia) => Cadastro
   gravar({ ...estado, midias: { ...estado.midias, [midiaId]: proximo } });
 }
 
+function comPrograma(id: string, transformar: (p: Programa) => Programa) {
+  if (estado === null) return;
+  gravar({
+    ...estado,
+    programas: estado.programas.map((p) =>
+      p.id === id
+        ? { ...transformar(p), autor: contexto.autor, quando: contexto.dataDeReferencia }
+        : p,
+    ),
+  });
+}
+
 // ---------------------------------------------------------------------------
 // O gancho
 // ---------------------------------------------------------------------------
@@ -446,6 +469,17 @@ export interface Organizacao {
    *  deixar dois booleanos em `false` significando duas coisas ao mesmo tempo. */
   declararSemDireito: (id: string) => void;
   alterarAcessibilidadeDaMidia: (id: string, ficha: AcessibilidadeDeEspaco) => void;
+
+  // --- O3 · programa -------------------------------------------------------
+  programas: Programa[];
+  atualProgramaId: string | null;
+  escolherPrograma: (id: string) => void;
+  criarPrograma: (titulo: string) => void;
+  alterarPrograma: (id: string, mudanca: Partial<Omit<Programa, "id">>) => void;
+  /** Liga ou desliga um evento REAL do acervo do guarda-chuva autorado. */
+  alternarEvento: (id: string, eventoId: string) => void;
+  acrescentarEdicao: (id: string, edicao: EdicaoDePrograma) => void;
+  removerEdicao: (id: string, indice: number) => void;
 }
 
 export function useOrganizacao(
@@ -614,6 +648,55 @@ export function useOrganizacao(
     [],
   );
 
+  const escolherPrograma = useCallback((id: string) => {
+    if (estado === null) return;
+    gravar({ ...estado, atualProgramaId: id });
+  }, []);
+
+  const criarPrograma = useCallback((titulo: string) => {
+    if (estado === null) return;
+    // Id determinístico pela posição, e não sorteado: dois navegadores rodando a mesma
+    // demonstração produzem a mesma sequência, e o HTML exportado não diverge do hidratado.
+    const id = `programa:autorado:${estado.programas.length + 1}`;
+    gravar({
+      ...estado,
+      programas: [
+        ...estado.programas,
+        {
+          id,
+          titulo,
+          resumo: "",
+          edicoes: [],
+          eventoIds: [],
+          autor: contexto.autor,
+          quando: contexto.dataDeReferencia,
+        },
+      ],
+      atualProgramaId: id,
+    });
+  }, []);
+
+  const alterarPrograma = useCallback((id: string, mudanca: Partial<Omit<Programa, "id">>) => {
+    comPrograma(id, (p) => ({ ...p, ...mudanca }));
+  }, []);
+
+  const alternarEvento = useCallback((id: string, eventoId: string) => {
+    comPrograma(id, (p) => ({
+      ...p,
+      eventoIds: p.eventoIds.includes(eventoId)
+        ? p.eventoIds.filter((x) => x !== eventoId)
+        : [...p.eventoIds, eventoId],
+    }));
+  }, []);
+
+  const acrescentarEdicao = useCallback((id: string, edicao: EdicaoDePrograma) => {
+    comPrograma(id, (p) => ({ ...p, edicoes: [...p.edicoes, edicao] }));
+  }, []);
+
+  const removerEdicao = useCallback((id: string, indice: number) => {
+    comPrograma(id, (p) => ({ ...p, edicoes: p.edicoes.filter((_, i) => i !== indice) }));
+  }, []);
+
   const reiniciar = useCallback(() => {
     try {
       window.localStorage.removeItem(CHAVE_DA_ORGANIZACAO);
@@ -655,5 +738,13 @@ export function useOrganizacao(
     alterarDireito,
     declararSemDireito,
     alterarAcessibilidadeDaMidia,
+    programas: atualEstado?.programas ?? [],
+    atualProgramaId: atualEstado?.atualProgramaId ?? null,
+    escolherPrograma,
+    criarPrograma,
+    alterarPrograma,
+    alternarEvento,
+    acrescentarEdicao,
+    removerEdicao,
   };
 }

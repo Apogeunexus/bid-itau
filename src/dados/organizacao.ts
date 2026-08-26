@@ -564,3 +564,89 @@ export function declaracoesDasMidias(n: NumerosDasMidias): DeclaracaoDaTela[] {
     },
   ];
 }
+
+// ---------------------------------------------------------------------------
+// O programa — O3
+// ---------------------------------------------------------------------------
+
+export interface EventoParaPrograma {
+  id: string;
+  titulo: string;
+  /** O período que o CMS publica, quando publica. Texto, como vem. */
+  periodo: string | null;
+  /** Quem `realiza` o evento — a relação organizacional de verdade. */
+  realizadoPor: string | null;
+  procedencia: Procedencia;
+  ocorrencias: number;
+}
+
+export interface NumerosDosProgramas {
+  /** Zero, e a tela existe por causa disso. Contado, não digitado. */
+  programas: number;
+  eventos: number;
+  eventosDaFonte: number;
+  eventosAutorados: number;
+  eventosComRealizador: number;
+  /** Quantas das 20 classes da ontologia estão vazias. Hoje: uma. */
+  classesVazias: number;
+}
+
+export function eventosParaPrograma(): EventoParaPrograma[] {
+  const saida = entidadesDe("evento").map((e) => ({
+    id: e.id,
+    titulo: e.titulo,
+    periodo: texto(e, "periodo") || null,
+    realizadoPor:
+      vizinhos(e.id, "realiza")
+        .map((v) => v.entidade)
+        .find((x) => x.classe === "instituicao")?.titulo ?? null,
+    procedencia: e.procedencia,
+    ocorrencias: ocorrenciasDe(e.id).length,
+  }));
+  saida.sort((a, b) => a.titulo.localeCompare(b.titulo, "pt-BR"));
+  return saida;
+}
+
+export function numerosDosProgramas(): NumerosDosProgramas {
+  const eventos = entidadesDe("evento");
+  const programas = entidadesDe("programa");
+
+  return {
+    programas: programas.length,
+    eventos: eventos.length,
+    eventosDaFonte: eventos.filter((e) => e.procedencia === "ic").length,
+    eventosAutorados: eventos.filter((e) => e.procedencia === "autorado").length,
+    eventosComRealizador: eventos.filter(
+      (e) => vizinhos(e.id, "realiza").some((v) => v.entidade.classe === "instituicao"),
+    ).length,
+    classesVazias: programas.length === 0 ? 1 : 0,
+  };
+}
+
+export function declaracoesDosProgramas(n: NumerosDosProgramas): DeclaracaoDaTela[] {
+  return [
+    {
+      titulo: "A classe existe e está vazia",
+      texto:
+        `«programa» tem ${n.programas} instâncias no acervo. É a única das 20 classes da ` +
+        `ontologia nessa situação: ela está declarada em «tipos.ts», o motor de caminhada a ` +
+        `percorre, e nada a popula. Esta tela é a única da sessão sem lista para editar — ela ` +
+        `cria, e diz que cria.`,
+    },
+    {
+      titulo: "Os eventos embaixo do guarda-chuva são reais",
+      texto:
+        `São ${n.eventos} eventos no acervo: ${n.eventosDaFonte} da fonte e ` +
+        `${n.eventosAutorados} autorados para o cenário de duplicatas. O programa é autorado; ` +
+        `os eventos que ele reúne, não. É essa mistura que deixa ver o que a classe faria se ` +
+        `alguém a povoasse.`,
+    },
+    {
+      titulo: "«realiza» é o que liga a organização ao que acontece",
+      texto:
+        `${n.eventosComRealizador} de ${n.eventos} eventos têm instituição realizadora ` +
+        `declarada. É a mesma relação que fecha o segundo terço da chave de identidade do ` +
+        `evento — e um programa reúne exatamente o que a organização realiza.`,
+    },
+  ];
+}
