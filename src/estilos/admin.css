@@ -179,3 +179,17 @@
 .admin-concentradores .studio-linha {
   grid-template-columns: 19rem 1fr;
 }
+
+/* A ação dentro de uma linha de tabela.
+ *
+ * `.studio-acoes` é o RODAPÉ de um painel: ela traz `border-top` e respiro para separar as
+ * decisões do conteúdo acima. Dentro de uma célula, aquela régua atravessa a linha inteira e
+ * lê como separador de registro — na tabela de candidatos, doze linhas ganharam doze traços
+ * que não separavam nada. O botão em linha não precisa de moldura própria; precisa de
+ * distância do texto ao lado. */
+
+.admin-acao-em-linha {
+  margin-top: 0.25rem;
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.75rem;
+}

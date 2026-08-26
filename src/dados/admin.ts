@@ -30,11 +30,11 @@ import {
   LIMIAR_PROBABILISTICO,
   numerosDaDeduplicacao,
 } from "./duplicatas";
-import { densidadePorUf } from "./geo";
-import { contagens } from "./grafo";
+import { coordenadaDe, densidadePorUf } from "./geo";
+import { contagens, porSlug, slugsPorTipo, vizinhos } from "./grafo";
 import { aferirDto } from "./observatorio";
 import metaJson from "./gerado/meta.json";
-import type { MetodoCoordenada, Procedencia } from "./tipos";
+import type { ClasseEntidade, MetodoCoordenada, Procedencia } from "./tipos";
 
 export { aferirDto };
 
@@ -96,6 +96,10 @@ const comDuasCasas = (n: number): string => n.toFixed(2).replace(".", ",");
 /** Separador de milhar, para as contagens grandes ficarem legíveis na tela densa. */
 const comSeparador = (n: number): string => n.toLocaleString("pt-BR");
 
+/** Fração → «45,3%». Em tela em português, «45.3%» é erro de idioma, não estilo. */
+const emPorcento = (fracao: number): string =>
+  `${(fracao * 100).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`;
+
 // ---------------------------------------------------------------------------
 // Quem escreve, e com que carimbo
 // ---------------------------------------------------------------------------
@@ -141,24 +145,69 @@ export const CARIMBO_DO_ADMIN = `${dataCurta(DATA_DE_REFERENCIA)}, ${HORA_DO_CAR
  * velho lido com o formato novo apareceria na trilha como decisão malformada — numa tela
  * cuja tese é que a trilha não mente.
  */
-export const CHAVE_DE_ARMAZENAMENTO = "admin.v1";
+export const CHAVE_DE_ARMAZENAMENTO = "admin.v2";
 
 /**
- * Uma mudança de parâmetro, registrada.
+ * O que toda escrita do Admin carrega, sem exceção.
  *
- * NÃO EXISTE MUDANÇA SEM MOTIVO E SEM AUTOR. É a mesma regra do veto na moderação, e aqui
- * ela é mais dura: quem muda um limiar muda o que 66 mil arestas produzem para todo mundo,
- * e é o único papel capaz de fazer isso sem que ninguém veja.
+ * NÃO EXISTE ESCRITA SEM MOTIVO E SEM AUTOR. É a mesma regra do veto na moderação, e aqui
+ * ela é mais dura: quem muda um limiar muda o que 66 mil arestas produzem para todo mundo, e
+ * é o único papel capaz de fazer isso sem que ninguém veja.
  */
-export interface MudancaDeParametro {
+interface EscritaDoAdmin {
+  motivo: string;
+  autor: string;
+  carimbo: string;
+}
+
+/** Mudança de um parâmetro do motor (A2). */
+export interface MudancaDeParametro extends EscritaDoAdmin {
+  tipo: "parametro";
   parametroId: string;
   /** O valor que estava lá, como a tela o exibia. */
   de: string;
   /** O valor proposto, como a pessoa o digitou. */
   para: string;
-  motivo: string;
-  autor: string;
-  carimbo: string;
+}
+
+/** Município acrescentado à tabela de centroides (A3). */
+export interface MunicipioAcrescentado extends EscritaDoAdmin {
+  tipo: "municipio";
+  municipio: string;
+  /** Quantas entidades saem de «centroide de país» — contado, não estimado. */
+  entidadesMovidas: number;
+}
+
+/**
+ * A trilha, num tipo só.
+ *
+ * União discriminada e lista ÚNICA desde a primeira tela, e não uma lista por superfície: a
+ * A7 lê a trilha inteira, e uma trilha montada pela junção de várias listas é uma trilha que
+ * pode perder um pedaço sem que ninguém note. O `tipo` é o que permite renderizar cada
+ * escrita com a frase certa sem perder a ordem entre elas.
+ */
+export type EventoDeAuditoria = MudancaDeParametro | MunicipioAcrescentado;
+
+/** Só o que veio do nosso próprio formato entra de volta. O armazenamento é editável por
+ *  quem avalia, e registro malformado numa trilha de auditoria é pior que registro nenhum. */
+export function eventosValidos(bruto: unknown): EventoDeAuditoria[] {
+  if (!Array.isArray(bruto)) return [];
+  return bruto.filter((r): r is EventoDeAuditoria => {
+    if (!r || typeof r !== "object") return false;
+    const m = r as Record<string, unknown>;
+    const comum =
+      typeof m.motivo === "string" && typeof m.autor === "string" && typeof m.carimbo === "string";
+    if (!comum) return false;
+    if (m.tipo === "parametro") {
+      return (
+        typeof m.parametroId === "string" && typeof m.de === "string" && typeof m.para === "string"
+      );
+    }
+    if (m.tipo === "municipio") {
+      return typeof m.municipio === "string" && typeof m.entidadesMovidas === "number";
+    }
+    return false;
+  });
 }
 
 /**
@@ -410,12 +459,148 @@ export interface FatiaDeMetodo {
   rotulo: string;
   entidades: number;
   percentual: number;
+  /** O mesmo percentual em português — «45,3%», nunca «45.3%». */
+  percentualEscrito: string;
   significa: string;
 }
 
 export interface MunicipioAproximado {
   municipio: string;
   estado: string;
+}
+
+/**
+ * As 19 classes do acervo. Escrita aqui e não importada de `grafo.ts` porque `CLASSES` é
+ * interna de lá; a lista é o mesmo conjunto que `porClasse` do `meta.json` declara, e a
+ * varredura abaixo confere o total que produziu contra `comCoordenada` do próprio arquivo.
+ */
+const CLASSES_DO_ACERVO: readonly ClasseEntidade[] = [
+  "linguagem", "tema", "termo", "territorio", "pessoa", "coletivo", "instituicao", "espaco",
+  "obra", "programa", "evento", "temporada", "ocorrencia", "conteudo", "midia", "publicacao",
+  "formacao", "pessoa-usuaria", "repertorio", "trilha",
+];
+
+/** Quantos candidatos a município a tela lista. O corte é DECLARADO na tela. */
+const TETO_DE_CANDIDATOS = 12;
+
+export interface CandidatoAMunicipio {
+  /** O território que hoje entrega a coordenada — quase sempre uma cidade estrangeira. */
+  origem: string;
+  /** Quantas entidades sairiam de «centroide de país» se ele entrasse na tabela. */
+  entidades: number;
+  /** O território acima dele: «Île-de-France» para Paris, «Texas» para Austin. */
+  dentroDe: string;
+}
+
+export interface CoberturaResolvida {
+  /** Entidades que o grafo consegue posicionar, somando as três vias. */
+  total: number;
+  /** O mesmo total com separador de milhar. */
+  totalEscrito: string;
+  porMetodo: FatiaDeMetodo[];
+  /** Origens que SÃO cidades e que um município na tabela resolveria. */
+  candidatos: CandidatoAMunicipio[];
+  /** Quantas origens de cidade ficaram de fora da lista, por corte declarado. */
+  candidatosOcultos: number;
+  /** Quantas origens de cidade existem ao todo. */
+  origensDeCidade: number;
+  /**
+   * Origens que são o PRÓPRIO PAÍS — não têm território acima delas no acervo. Acrescentar
+   * município não move nenhuma: o acervo só sabe o país, e a tela declara isso em vez de
+   * oferecer uma ação que não faria nada.
+   */
+  soOPais: CandidatoAMunicipio[];
+  /** Quantos países ao todo, para a tela declarar o corte da lista acima. */
+  paisesSemCidade: number;
+  entidadesPresasNoPais: number;
+}
+
+let resolvidaMemorizada: CoberturaResolvida | null = null;
+
+/**
+ * O QUE O MAPA REALMENTE MOSTRA, que não é o que `meta.json` conta.
+ *
+ * `cobertura.coordenadas` do `meta.json` conta as 472 entidades com coordenada PRÓPRIA — o
+ * tamanho da tabela de referência. Só que o mapa posiciona muito mais: uma ocorrência sem
+ * coordenada herda a do espaço, e o espaço herda a do município. Varrendo o acervo com a
+ * mesma `coordenadaDe()` que o mapa usa, são **1.380** entidades posicionáveis, e a
+ * distribuição por método é OUTRA.
+ *
+ * As duas contagens são verdadeiras e querem dizer coisas diferentes. A tela mostra as duas
+ * com o nome certo, porque governar a tabela sem saber o que ela produz no mapa é governar
+ * no escuro — e porque «45% das coordenadas são centroide de país» é verdade sobre a tabela
+ * e falso sobre o mapa, onde a fatia é 29%.
+ *
+ * E É AQUI QUE ESTÁ A ALAVANCA. Entre as entidades que caem em centroide de país, a origem
+ * mais comum não é um país: é «Paris», «Nova York», «Lisboa» — CIDADES que não estão na
+ * tabela de municípios e por isso desabam para o centroide do país. Cada uma que entra na
+ * tabela move um número contado de entidades. A tela lista quais, e quantas.
+ */
+function coberturaResolvida(): CoberturaResolvida {
+  if (resolvidaMemorizada) return resolvidaMemorizada;
+
+  const porMetodo = new Map<MetodoCoordenada, number>();
+  const origens = new Map<string, { entidades: number; origemId: string }>();
+  let total = 0;
+
+  for (const classe of CLASSES_DO_ACERVO) {
+    for (const slug of slugsPorTipo(classe)) {
+      const entidade = porSlug(classe, slug);
+      if (!entidade) continue;
+      const r = coordenadaDe(entidade.id);
+      if (!r) continue;
+      total += 1;
+      porMetodo.set(r.metodo, (porMetodo.get(r.metodo) ?? 0) + 1);
+      if (r.metodo === "centroide-pais") {
+        const at = origens.get(r.origemTitulo) ?? { entidades: 0, origemId: r.origemId };
+        at.entidades += 1;
+        origens.set(r.origemTitulo, at);
+      }
+    }
+  }
+
+  /**
+   * CIDADE OU PAÍS, e a diferença decide se existe ação.
+   *
+   * Um território sem nenhum `situado_em` saindo dele é um país: «Estados Unidos» e
+   * «Portugal» não estão dentro de nada no acervo. «Paris» está dentro de Île-de-France,
+   * «Austin» dentro do Texas. Para a cidade, acrescentar o município à tabela move as
+   * entidades; para o país, não move nenhuma — o acervo não sabe a cidade. Oferecer o mesmo
+   * botão nos dois casos seria oferecer uma ação que não faz nada.
+   */
+  const comPaiOuNao = [...origens.entries()].map(([origem, { entidades, origemId }]) => {
+    const acima = vizinhos(origemId, "situado_em")
+      .filter((v) => v.aresta.de === origemId && v.entidade.classe === "territorio")
+      .map((v) => v.entidade.titulo);
+    return { origem, entidades, dentroDe: acima[0] ?? "" };
+  });
+  const porTamanho = (a: CandidatoAMunicipio, b: CandidatoAMunicipio) =>
+    b.entidades - a.entidades || a.origem.localeCompare(b.origem);
+
+  const cidades = comPaiOuNao.filter((c) => c.dentroDe !== "").sort(porTamanho);
+  const paises = comPaiOuNao.filter((c) => c.dentroDe === "").sort(porTamanho);
+
+  resolvidaMemorizada = {
+    total,
+    totalEscrito: comSeparador(total),
+    porMetodo: (Object.keys(ROTULO_DO_METODO) as MetodoCoordenada[])
+      .map((m) => ({
+        metodo: m,
+        rotulo: ROTULO_DO_METODO[m],
+        entidades: porMetodo.get(m) ?? 0,
+        percentual: Number((((porMetodo.get(m) ?? 0) / total) * 100).toFixed(1)),
+        percentualEscrito: emPorcento((porMetodo.get(m) ?? 0) / total),
+        significa: SIGNIFICADO_DO_METODO[m],
+      }))
+      .sort((a, b) => b.entidades - a.entidades),
+    candidatos: cidades.slice(0, TETO_DE_CANDIDATOS),
+    candidatosOcultos: Math.max(0, cidades.length - TETO_DE_CANDIDATOS),
+    origensDeCidade: cidades.length,
+    soOPais: paises.slice(0, TETO_DE_CANDIDATOS),
+    paisesSemCidade: paises.length,
+    entidadesPresasNoPais: paises.reduce((soma, p) => soma + p.entidades, 0),
+  };
+  return resolvidaMemorizada;
 }
 
 export interface TerritoriosDoAdmin {
@@ -432,8 +617,10 @@ export interface TerritoriosDoAdmin {
   registros: number;
   entidadesDistintas: number;
   registrosNosDoisMaiores: number;
-  percentualNosDoisMaiores: number;
+  percentualNosDoisMaiores: string;
   regraDaProcedencia: string;
+  /** O que o mapa resolve, que é maior e diferente do que a tabela guarda. */
+  resolvida: CoberturaResolvida;
 }
 
 /**
@@ -466,6 +653,7 @@ export function territoriosDoAdmin(): TerritoriosDoAdmin {
       rotulo: ROTULO_DO_METODO[m],
       entidades: c.porMetodo[m] ?? 0,
       percentual: Number((((c.porMetodo[m] ?? 0) / c.comCoordenada) * 100).toFixed(1)),
+      percentualEscrito: emPorcento((c.porMetodo[m] ?? 0) / c.comCoordenada),
       significa: SIGNIFICADO_DO_METODO[m],
     }))
     .sort((a, b) => b.entidades - a.entidades);
@@ -493,8 +681,9 @@ export function territoriosDoAdmin(): TerritoriosDoAdmin {
     registros: d.total,
     entidadesDistintas: d.entidadesDistintas,
     registrosNosDoisMaiores: d.doisMaiores,
-    percentualNosDoisMaiores: Number(((d.doisMaiores / d.total) * 100).toFixed(1)),
+    percentualNosDoisMaiores: emPorcento(d.doisMaiores / d.total),
     regraDaProcedencia: REGRA_DA_COORDENADA,
+    resolvida: coberturaResolvida(),
   };
 }
 

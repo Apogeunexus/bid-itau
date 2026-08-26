@@ -31,9 +31,15 @@ import {
   ADMIN_E_AUTORADO,
   CARIMBO_DO_ADMIN,
   CHAVE_DE_ARMAZENAMENTO,
+  eventosValidos,
   oQueFaltaNaMudanca,
 } from "@/dados/admin";
-import type { Concentradores, MudancaDeParametro, ParametroDoMotor } from "@/dados/admin";
+import type {
+  Concentradores,
+  EventoDeAuditoria,
+  MudancaDeParametro,
+  ParametroDoMotor,
+} from "@/dados/admin";
 
 export interface DadosDoMotor {
   parametros: ParametroDoMotor[];
@@ -51,27 +57,10 @@ const O_QUE_O_ADMIN_GOVERNA =
   "O Admin não escreve o dado. Escreve a regra pela qual o dado é escrito — e cada uma " +
   "destas quatro regras decide o que o acervo inteiro produz na tela de quem usa o app.";
 
-/** Só o que veio do nosso próprio formato entra de volta: o armazenamento é editável por
- *  quem avalia, e um registro malformado numa trilha de auditoria é pior que registro
- *  nenhum. */
-function registrosValidos(bruto: unknown): MudancaDeParametro[] {
-  if (!Array.isArray(bruto)) return [];
-  return bruto.filter((r): r is MudancaDeParametro => {
-    if (!r || typeof r !== "object") return false;
-    const m = r as Record<string, unknown>;
-    return (
-      typeof m.parametroId === "string" &&
-      typeof m.de === "string" &&
-      typeof m.para === "string" &&
-      typeof m.motivo === "string" &&
-      typeof m.autor === "string" &&
-      typeof m.carimbo === "string"
-    );
-  });
-}
-
 export function AdminMotor({ dados }: { dados: DadosDoMotor }) {
-  const [registros, setRegistros] = useState<MudancaDeParametro[]>([]);
+  /** A trilha INTEIRA, e não só o que esta tela escreveu: ela é uma lista só, guardada sob
+   *  uma chave só, e a A7 vai lê-la de ponta a ponta. Esta tela filtra o que exibe. */
+  const [trilha, setTrilha] = useState<EventoDeAuditoria[]>([]);
   const [aberto, setAberto] = useState<string | null>(null);
   /**
    * O armazenamento pode estar bloqueado — janela privada, cookies de terceiros desligados.
@@ -83,15 +72,15 @@ export function AdminMotor({ dados }: { dados: DadosDoMotor }) {
   useEffect(() => {
     try {
       const bruto = window.localStorage.getItem(CHAVE_DE_ARMAZENAMENTO);
-      setRegistros(registrosValidos(bruto ? JSON.parse(bruto) : null));
+      setTrilha(eventosValidos(bruto ? JSON.parse(bruto) : null));
     } catch {
       setSemArmazenamento(true);
     }
   }, []);
 
   const registrar = (mudanca: MudancaDeParametro) => {
-    const proximos = [mudanca, ...registros];
-    setRegistros(proximos);
+    const proximos: EventoDeAuditoria[] = [mudanca, ...trilha];
+    setTrilha(proximos);
     setAberto(null);
     try {
       window.localStorage.setItem(CHAVE_DE_ARMAZENAMENTO, JSON.stringify(proximos));
@@ -124,15 +113,23 @@ export function AdminMotor({ dados }: { dados: DadosDoMotor }) {
           aberto={aberto === p.id}
           alternar={() => setAberto(aberto === p.id ? null : p.id)}
           registrar={registrar}
-          registros={registros.filter((r) => r.parametroId === p.id)}
+          registros={registrosDoParametro(trilha, p.id)}
         />
       ))}
 
       <PainelDeConcentradores dados={dados.concentradores} />
 
-      <Trilha registros={registros} semArmazenamento={semArmazenamento} />
+      <Trilha
+        registros={trilha.filter((e) => e.tipo === "parametro")}
+        semArmazenamento={semArmazenamento}
+      />
     </div>
   );
+}
+
+/** As escritas desta tela sobre um parâmetro, na ordem em que entraram na trilha. */
+function registrosDoParametro(trilha: EventoDeAuditoria[], id: string): MudancaDeParametro[] {
+  return trilha.filter((e): e is MudancaDeParametro => e.tipo === "parametro" && e.parametroId === id);
 }
 
 // ---------------------------------------------------------------------------
@@ -248,6 +245,7 @@ function FormularioDeMudanca({
         e.preventDefault();
         if (falta.length > 0) return;
         registrar({
+          tipo: "parametro",
           parametroId: parametro.id,
           de: parametro.valor,
           para: para.trim(),
