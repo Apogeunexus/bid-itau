@@ -87,6 +87,20 @@ const MEUS = [
   "src/componentes/studio-org-conformidade.tsx",
 ];
 
+/** As telas desta sessão que coletam entrada. Cada uma é uma FONTE do portão de latitude:
+ *  se qualquer uma delas parar de contribuir atributo, o portão falha em vez de deixar as
+ *  outras sustentarem o piso. */
+const TELAS_COM_FORMULARIO = [
+  "studio-org-espacos.tsx",
+  "studio-org-instituicao.tsx",
+  "studio-org-equipe.tsx",
+  "studio-org-midia.tsx",
+  "studio-org-programa.tsx",
+  "studio-org-formacao.tsx",
+  "studio-org-editais.tsx",
+  "studio-org-integracao.tsx",
+];
+
 let verdes = 0;
 const falhas = [];
 
@@ -98,6 +112,44 @@ function exigir(condicao, nome, medida, esperado = "") {
   }
   console.log(`  FALHA ${nome}: medido ${medida}${esperado ? ` · esperado ${esperado}` : ""}`);
   falhas.push(nome);
+}
+
+/**
+ * Asserção de AUSÊNCIA, com piso — §9.1 do protocolo.
+ *
+ * «Nenhum X» sozinho é uma frase que fica verde quando o universo virar zero: basta alguém
+ * renomear o seletor, mover o arquivo ou trocar o atributo, e o gate passa a atestar a
+ * ausência de um defeito num conjunto vazio. Aconteceu no projeto: `.web-alternador` deixou
+ * de existir numa reforma do design system e quatro telas ficaram com a classe morta sem
+ * portão nenhum acusar.
+ *
+ * Aqui a ausência só vale acompanhada do tamanho do universo medido, e o gate FALHA quando
+ * esse universo é zero — porque universo vazio significa que o portão parou de medir, e não
+ * que o defeito sumiu. A linha de evidência sempre diz «nenhum X entre N», nunca «nenhum X».
+ */
+function exigirAusencia(nome, { fontes, achados, esperado = "0" }) {
+  // O PISO É POR FONTE, NUNCA SOBRE A UNIÃO DELAS. Um gate que varre duas coleções — os
+  // módulos e as telas, por exemplo — e põe o piso na SOMA continua verde quando uma das
+  // duas zera: a outra sustenta o número sozinha, e a asserção segue afirmando sobre um
+  // conjunto que deixou de ser varrido. É o buraco que o piso existia para fechar, e ele
+  // só aparece quando se injeta a renomeação que esvazia UMA das fontes.
+  const vazias = fontes.filter((f) => f.tamanho === 0);
+  if (vazias.length > 0) {
+    console.log(
+      `  FALHA ${nome}: fonte VAZIA — ${vazias
+        .map((f) => f.nome)
+        .join(", ")} · o portão parou de varrer, e ausência sobre zero não é ausência`,
+    );
+    falhas.push(nome);
+    return;
+  }
+  const conta = fontes.map((f) => `${f.tamanho} ${f.nome}`).join(" + ");
+  exigir(
+    achados.length === 0,
+    nome,
+    achados.length === 0 ? `0 entre ${conta}` : `${achados.length} de ${conta}: ${achados.slice(0, 4).join(" | ")}`,
+    esperado,
+  );
 }
 
 function titulo(t) {
@@ -129,18 +181,31 @@ async function portoesEstaticos() {
   // O portão do PRD é «componentes da S7 reusados, não duplicados». A medida é a lista das
   // oito dimensões: se ela aparecer escrita mais de uma vez nos meus arquivos, existe uma
   // segunda ficha — porque quem redesenha a ficha redigita as oito.
+  //
+  // O piso é o EDITOR: ele precisa existir e consumir `DIMENSOES_DE_ACESSIBILIDADE` do
+  // contrato da S7. Sem esse piso, apagar o editor faria o portão ficar verde — «nenhuma
+  // segunda ficha» é trivialmente verdadeiro quando não há nem a primeira.
   {
-    const comAsOito = limpos.filter(
-      (m) => /closed_caption/.test(m.limpo) && /descriptive_subtitle/.test(m.limpo),
+    const editor = limpos.find((m) => m.rel.endsWith("studio-org-acessibilidade.tsx"));
+    const editorConsomeOContrato = Boolean(
+      editor && /\bDIMENSOES_DE_ACESSIBILIDADE\b/.test(editor.limpo),
     );
-    exigir(
-      comAsOito.length <= 1,
-      "nenhuma segunda ficha de acessibilidade",
-      comAsOito.length === 0
-        ? "0 arquivos redigitam as 8 dimensões"
-        : comAsOito.map((m) => path.basename(m.rel)).join(", "),
-      "no máximo 1 (o editor compartilhado)",
-    );
+    const redigitam = limpos
+      .filter((m) => /closed_caption/.test(m.limpo) && /descriptive_subtitle/.test(m.limpo))
+      // `organizacao.ts` conta as oito no servidor para medir o acervo: é medida, não ficha.
+      .filter((m) => !m.rel.endsWith("dados/organizacao.ts"))
+      .map((m) => path.basename(m.rel));
+    exigirAusencia("nenhuma segunda ficha de acessibilidade", {
+      fontes: [
+        {
+          nome: "editor de ficha consumindo as 8 do contrato",
+          tamanho: editorConsomeOContrato ? 1 : 0,
+        },
+        { nome: "arquivos desta sessão varridos", tamanho: limpos.length },
+      ],
+      achados: redigitam,
+      esperado: "0 arquivos redigitando as 8",
+    });
   }
 
   // 2. O editor da ficha é UM, e as telas que coletam acessibilidade o importam.
@@ -163,24 +228,62 @@ async function portoesEstaticos() {
   // `coordenada.procedencia` é o literal `"derivado"` no tipo. Um campo de lat/lon no
   // formulário produziria coordenada autorada, que o tipo proíbe — e a proibição do tipo não
   // aparece como erro se ninguém tentar atribuir; ela aparece como tela que mente.
+  //
+  // O PADRÃO MEDE O CAMPO INTEIRO, e não um atributo com aspas duplas. A forma estreita
+  // — `(?:name|id|placeholder)="…lat…"` — deixa passar `id={campoLat}` em JSX,
+  // `aria-label="Latitude"` e qualquer rótulo associado. Aqui a unidade é a tag `<input>`
+  // com tudo o que ela carrega, e o piso é o número de campos que existem: zero campo
+  // significaria que a tela de cadastro perdeu o formulário, não que ela ficou honesta.
   {
+    // A UNIDADE É O ATRIBUTO, e não a tag. Tentar capturar `<input …>` com `[^>]*` trunca no
+    // primeiro `>` — e em JSX o primeiro `>` costuma ser a seta de um `onChange={(e) => …}`,
+    // então tudo o que vem depois dela fica fora da medição. O padrão estreito dava verde
+    // sobre um `placeholder="latitude"` escrito depois do `onChange`.
+    // O PISO CONTA CAMPOS; a varredura mede ATRIBUTOS. Separar os dois papéis é o que faz o
+    // piso sobreviver a uma tela cujo campo é rotulado por `<label>` em volta, sem atributo
+    // nenhum — a de integração é assim, e contá-la por atributo daria fonte vazia sobre uma
+    // tela que está lá, inteira e acessível. Contar só o token de abertura também escapa da
+    // armadilha do `[^>]*`, que trunca no `=>` de qualquer `onChange`.
+    const camposPorTela = new Map();
     const hits = [];
-    for (const m of limpos) {
-      for (const achado of m.limpo.matchAll(/(?:name|id|placeholder)="[^"]*(?:lat|lon)[^"]*"/gi)) {
-        hits.push(`${path.basename(m.rel)}: ${achado[0]}`);
+    const PADRAO = /(placeholder|aria-label|name|id|htmlFor|title)\s*=\s*(?:"([^"]*)"|'([^']*)'|\{([^}]*)\})/g;
+    for (const m of limpos.filter((x) => x.rel.endsWith(".tsx"))) {
+      const nome = path.basename(m.rel);
+      camposPorTela.set(nome, [...m.limpo.matchAll(/<(?:input|textarea|select)\b/g)].length);
+      for (const achado of m.limpo.matchAll(PADRAO)) {
+        const valor = achado[2] ?? achado[3] ?? achado[4] ?? "";
+        if (/\b(lat|lon|latitude|longitude)\b/i.test(valor)) {
+          hits.push(`${nome}: ${achado[0].slice(0, 50)}`);
+        }
       }
     }
-    exigir(hits.length === 0, "nenhum campo de latitude ou longitude", `${hits.length}`, "0");
+    // UMA FONTE POR TELA DE FORMULÁRIO. Somar os atributos das oito num número só deixaria
+    // uma tela perder o formulário inteiro sem o portão notar — as outras sete sustentariam
+    // o piso, e a ausência de latitude passaria a ser afirmada sobre uma tela não varrida.
+    exigirAusencia("nenhum campo de latitude ou longitude", {
+      fontes: TELAS_COM_FORMULARIO.map((nome) => ({
+        nome: `campos em ${nome}`,
+        tamanho: camposPorTela.get(nome) ?? 0,
+      })),
+      achados: hits,
+    });
   }
 
   // 4. Sem relógio e sem sorteio: o HTML exportado e a página hidratada precisam coincidir.
+  //
+  // `Date.now()` entra junto com `new Date()`: é a OUTRA forma de ler o relógio, produz o
+  // mesmo defeito de hidratação, e a primeira versão deste portão não a via.
   {
     const hits = [];
     for (const m of limpos) {
-      if (/new Date\(/.test(m.limpo)) hits.push(`${path.basename(m.rel)}: new Date`);
-      if (/Math\.random\(/.test(m.limpo)) hits.push(`${path.basename(m.rel)}: Math.random`);
+      for (const forma of [/new Date\(/, /Date\.now\(/, /Math\.random\(/]) {
+        if (forma.test(m.limpo)) hits.push(`${path.basename(m.rel)}: ${String(forma).slice(1, -1)}`);
+      }
     }
-    exigir(hits.length === 0, "sem relógio e sem sorteio", hits.join(", ") || "0", "0");
+    exigirAusencia("sem relógio e sem sorteio", {
+      fontes: [{ nome: "arquivos desta sessão", tamanho: limpos.length }],
+      achados: hits,
+    });
   }
 
   // 5. As três segregações moram no CÓDIGO, e não num aviso.
@@ -188,53 +291,84 @@ async function portoesEstaticos() {
   // A Organização não se verifica, não emite chave de integração e não declara fato de
   // evento. A medida é a ausência do verbo: nenhum módulo desta sessão sabe escrever
   // `"verificada"`, nem tem função de emitir chave.
+  //
+  // O PADRÃO NÃO PERSEGUE A FORMA DA ATRIBUIÇÃO, porque há muitas: objeto literal,
+  // `estado.verificacao = …`, uma constante intermediária. Ele proíbe a STRING inteira
+  // fora do contrato — `tipos-organizacao.ts` declara o vocabulário e é o único lugar onde
+  // «verificada» pode aparecer. O piso é a existência do próprio conceito: se
+  // `EstadoDaVerificacao` sumir do contrato, o portão não tem mais o que guardar.
   {
-    const escreveVerificada = limpos.filter((m) =>
-      /verificacao:\s*"verificada"|verificacao,\s*"verificada"/.test(m.limpo),
-    );
-    exigir(
-      escreveVerificada.length === 0,
+    const contrato = limpos.find((m) => m.rel.endsWith("tipos-organizacao.ts"));
+    const conceitoExiste = Boolean(contrato && /\bEstadoDaVerificacao\b/.test(contrato.limpo));
+    const foraDoContrato = limpos.filter((m) => !m.rel.endsWith("tipos-organizacao.ts"));
+    const escreveVerificada = foraDoContrato
+      .filter((m) => /"verificada"|'verificada'/.test(m.limpo))
+      .map((m) => path.basename(m.rel));
+    exigirAusencia(
       "nenhum módulo da Organização escreve «verificada» — quem verifica é o Admin (92)",
-      `${escreveVerificada.length}`,
-      "0",
+      {
+        fontes: [
+          { nome: "declaração de EstadoDaVerificacao no contrato", tamanho: conceitoExiste ? 1 : 0 },
+          { nome: "arquivos fora do contrato varridos", tamanho: foraDoContrato.length },
+        ],
+        achados: escreveVerificada,
+      },
     );
 
-    const emiteChave = limpos.filter((m) => /function\s+emitirChave|emitirChave\s*[:=]/.test(m.limpo));
-    exigir(
-      emiteChave.length === 0,
-      "nenhuma função de emitir chave — quem emite é o Admin (97)",
-      `${emiteChave.length}`,
-      "0",
-    );
+    // O piso da chave é o verbo que a organização TEM: se `revogarChave` sumir, não existe
+    // mais chave nesta sessão, e afirmar que ninguém a emite deixa de significar algo.
+    const revoga = limpos.filter((m) => /\brevogarChave\b/.test(m.limpo));
+    const emiteChave = limpos
+      .filter((m) => /emitirChave|emitir_chave|criarChave/.test(m.limpo))
+      .map((m) => path.basename(m.rel));
+    exigirAusencia("nenhuma função de emitir chave — quem emite é o Admin (97)", {
+      fontes: [
+        { nome: "arquivos que conhecem a chave (revogarChave)", tamanho: revoga.length },
+        { nome: "arquivos desta sessão varridos", tamanho: limpos.length },
+      ],
+      achados: emiteChave,
+    });
   }
 
   // 6. A procedência de chegada é UMA constante, e nenhuma tela a digita.
   {
-    const literais = limpos
-      .filter((m) => m.rel.endsWith(".tsx"))
-      .filter((m) => /"parceiro"|'parceiro'/.test(m.limpo));
-    exigir(
-      literais.length === 0,
-      "nenhuma tela digita a procedência — ela sai de PROCEDENCIA_DA_ORGANIZACAO",
-      literais.map((m) => path.basename(m.rel)).join(", ") || "0",
-      "0",
-    );
+    const telas = limpos.filter((m) => m.rel.endsWith(".tsx"));
+    // O piso é o uso da constante: se nenhuma tela a importa, «nenhuma tela digita o
+    // literal» ficaria verde sobre uma sessão que parou de carimbar procedência.
+    const usamAConstante = telas.filter((m) => /\bPROCEDENCIA_DA_ORGANIZACAO\b/.test(m.limpo));
+    const literais = telas
+      .filter((m) => /"parceiro"|'parceiro'/.test(m.limpo))
+      .map((m) => path.basename(m.rel));
+    exigirAusencia("nenhuma tela digita a procedência — ela sai de PROCEDENCIA_DA_ORGANIZACAO", {
+      fontes: [
+        { nome: "telas que carimbam pela constante", tamanho: usamAConstante.length },
+        { nome: "telas varridas", tamanho: telas.length },
+      ],
+      achados: literais,
+    });
   }
 
   // 7. DP-F: componente de cliente não importa o módulo de dado POR VALOR.
   {
+    const clientes = limpos.filter((x) => x.rel.endsWith(".tsx") || x.rel.endsWith("estado.ts"));
+    // O piso é o import POR TIPO: se ninguém mais importa o módulo de dado nem como tipo, a
+    // fronteira que este portão guarda deixou de existir — e o verde passa a ser sobre nada.
+    const importamPorTipo = clientes.filter((m) =>
+      /^import\s+type[^;]*?from\s+"@\/dados\/organizacao"/m.test(m.limpo),
+    );
     const hits = [];
-    for (const m of limpos.filter((x) => x.rel.endsWith(".tsx") || x.rel.endsWith("estado.ts"))) {
+    for (const m of clientes) {
       for (const achado of m.limpo.matchAll(/^import\s+(?!type)([^;]*?)from\s+"@\/dados\/organizacao"/gm)) {
         hits.push(`${path.basename(m.rel)}: ${achado[1].trim()}`);
       }
     }
-    exigir(
-      hits.length === 0,
-      "nenhum componente de cliente importa @/dados/organizacao por valor (DP-F)",
-      hits.join(" | ") || "0",
-      "0",
-    );
+    exigirAusencia("nenhum componente de cliente importa @/dados/organizacao por valor (DP-F)", {
+      fontes: [
+        { nome: "clientes que importam por tipo", tamanho: importamPorTipo.length },
+        { nome: "clientes varridos", tamanho: clientes.length },
+      ],
+      achados: hits,
+    });
   }
 
   // 8. As dez telas existem como rota, e a navegação não promete o que não existe.
@@ -258,12 +392,13 @@ async function portoesEstaticos() {
       .filter(([, id]) => TELAS.includes(id))
       .map(([, id, pronta]) => ({ id, pronta: pronta === "true" }));
     const mentindo = prontas.filter((p) => p.pronta && !rotas.has(p.id));
-    exigir(
-      mentindo.length === 0,
-      "nenhuma tela marcada «pronta» sem rota no disco",
-      mentindo.map((p) => p.id).join(", ") || "0",
-      "0",
-    );
+    exigirAusencia("nenhuma tela marcada «pronta» sem rota no disco", {
+      fontes: [
+        { nome: "telas marcadas prontas no contrato", tamanho: prontas.filter((p) => p.pronta).length },
+        { nome: "rotas no disco", tamanho: rotas.size },
+      ],
+      achados: mentindo.map((p) => p.id),
+    });
   }
 }
 
@@ -330,13 +465,18 @@ async function portoesDeNavegador(cdp) {
   await pausa(cdp);
   const para = await cdp.avaliar(`document.querySelector('.org-conversao-para')?.textContent ?? '—'`);
   exigir(para !== "aguardando cadastro" && para !== "derivado", "o cadastro converte a procedência", para);
-  exigir(
-    (await cdp.avaliar(
-      `[...document.querySelectorAll('input')].some(i=>/lat|lon|coorden/i.test((i.getAttribute('placeholder')??'')+(i.name??'')+(i.id??'')))`,
-    )) === false,
-    "nenhum campo de latitude na tela",
-    "0",
-  );
+  {
+    const campos = await cdp.avaliar(`document.querySelectorAll('input, textarea, select').length`);
+    const suspeitos = await cdp.avaliar(
+      `[...document.querySelectorAll('input, textarea, select')]
+        .filter(i=>/\\b(lat|lon|latitude|longitude)\\b/i.test(i.outerHTML + ' ' + (i.getAttribute('aria-label')??'')))
+        .map(i=>i.outerHTML.slice(0,60))`,
+    );
+    exigirAusencia("nenhum campo de latitude na tela", {
+      fontes: [{ nome: "campos na tela de espaços", tamanho: campos }],
+      achados: suspeitos,
+    });
+  }
   exigir(
     (await cdp.avaliar(`document.body.textContent.includes('centroide-municipio')`)) === true,
     "a coordenada troca de MÉTODO e continua derivada",
@@ -420,22 +560,30 @@ async function portoesDeNavegador(cdp) {
     const rotulos = await cdp.avaliar(
       `[...document.querySelectorAll('.web-denominador-rotulo')].map(n=>n.textContent.trim()).join(' | ')`,
     );
-    const prometePublico =
-      /p[úu]blico|audi[êe]ncia|alcance|espectador|visualiza|acesso|engajamento/i.test(rotulos);
-    exigir(
-      !prometePublico,
-      "nenhum indicador com número promete público",
-      rotulos || "(nenhum indicador)",
-      "só contagens de grafo",
+    const quantos = await cdp.avaliar(
+      `document.querySelectorAll('.web-denominador-rotulo').length`,
     );
+    const prometem = rotulos
+      .split(" | ")
+      .filter((r) => /p[úu]blico|audi[êe]ncia|alcance|espectador|visualiza|acesso|engajamento/i.test(r));
+    // O PISO É O QUE FALTAVA AQUI. Se `.web-denominador-rotulo` deixar de casar — uma
+    // renomeação no design system basta —, `rotulos` vira string vazia, o padrão não acha
+    // nada e o portão passa a atestar que uma tela cheia de indicadores de alcance não tem
+    // nenhum. `.web-alternador` já desapareceu assim neste projeto, sem portão acusar.
+    exigirAusencia("nenhum indicador com número promete público", {
+      fontes: [{ nome: `indicadores medidos (${rotulos})`, tamanho: quantos }],
+      achados: prometem,
+      esperado: "só contagens de grafo",
+    });
 
     const recusadas = await cdp.avaliar(
       `[...document.querySelectorAll('aside .org-falta-item strong')].map(n=>n.textContent.trim()).join(' | ')`,
     );
     exigir(
-      /p[úu]blico presente/.test(recusadas),
+      recusadas.length > 0 && /p[úu]blico presente/.test(recusadas),
       "«público presente» aparece como medida RECUSADA, e não como indicador",
-      recusadas,
+      recusadas || "(nenhuma medida recusada listada — o portão parou de medir)",
+      "a lista de recusas, com «público presente» nela",
     );
   }
 
@@ -546,6 +694,79 @@ const DEFEITOS = [
       "  const agora = new Date();\n  void agora;\n" +
       "  const [selecionadoId, setSelecionadoId] = useState<string | null>(null);",
   },
+
+  // --- as formas que a versão ESTREITA de cada padrão deixava passar -------
+  //
+  // Estes três existem porque a primeira versão desta suíte dava VERDE sobre eles. Não eram
+  // defeito vivo; eram a porta pela qual o defeito entraria na próxima renomeação.
+  {
+    portao: "sem relógio e sem sorteio",
+    nome: "sem relógio — a forma `Date.now()`, que o padrão estreito não via",
+    arquivo: "src/componentes/studio-org-equipe.tsx",
+    de: "  const [selecionadoId, setSelecionadoId] = useState<string | null>(null);",
+    para: "  const agora = Date.now();\n  void agora;\n  const [selecionadoId, setSelecionadoId] = useState<string | null>(null);",
+  },
+  {
+    portao: "nenhum campo de latitude ou longitude",
+    nome: "campo de latitude — a forma `aria-label`, sem o nome do atributo esperado",
+    arquivo: "src/componentes/studio-org-espacos.tsx",
+    de: '                    placeholder="Rua, número"',
+    para: '                    aria-label="Latitude"\n                    placeholder="Rua, número"',
+  },
+  {
+    portao: "nenhum módulo da Organização escreve «verificada»",
+    nome: "«verificada» — a forma de atribuição, e não de objeto literal",
+    arquivo: "src/componentes/studio-org-estado.ts",
+    de: "  const revogarChave = useCallback((id: string) => {",
+    para: '  const marcar = (c: { verificacao: string }) => { c.verificacao = "verificada"; };\n  void marcar;\n  const revogarChave = useCallback((id: string) => {',
+  },
+
+  // --- e os PISOS: sumir com o universo tem de deixar o portão VERMELHO ----
+  //
+  // É o que o modo sozinho não pegava, e é o achado que motivou a §9.1 ganhar a regra do
+  // piso. Os defeitos acima provam que o portão acusa HOJE, com os seletores atuais; estes
+  // três provam que ele acusa também quando alguém renomeia o seletor e o universo medido
+  // vira zero — que é exatamente como um portão de ausência morre em silêncio.
+  {
+    portao: "nenhum módulo da Organização escreve «verificada»",
+    nome: "piso: o conceito de verificação some do contrato",
+    arquivo: "src/dados/tipos-organizacao.ts",
+    // O identificador NU, e não a linha da declaração: `EstadoDaVerificacao` aparece também
+    // no `Record` do rótulo e no campo do cadastro, e renomear só a declaração deixaria o
+    // piso satisfeito pelas outras ocorrências — a injeção pela metade daria falso verde.
+    de: "EstadoDaVerificacao",
+    para: "EstadoDaVerificacaoRenomeado",
+  },
+  {
+    portao: "nenhuma tela digita a procedência",
+    nome: "piso: nenhuma tela carimba mais pela constante",
+    arquivo: "src/componentes/studio-org-espacos.tsx",
+    de: "PROCEDENCIA_DA_ORGANIZACAO",
+    para: "PROCEDENCIA_RENOMEADA",
+  },
+  {
+    portao: "nenhuma segunda ficha de acessibilidade",
+    nome: "piso: o editor deixa de consumir as 8 dimensões do contrato",
+    arquivo: "src/componentes/studio-org-acessibilidade.tsx",
+    de: "DIMENSOES_DE_ACESSIBILIDADE",
+    para: "DIMENSOES_RENOMEADAS",
+  },
+
+
+  // --- e o piso POR FONTE, que o piso sobre a união deixava passar ---------
+  //
+  // Esvaziar UMA tela enquanto as outras sete continuam cheias: sob um piso somado, as
+  // sete sustentariam o número e o portão seguiria verde afirmando ausência de latitude
+  // numa tela que deixou de ser varrida. Sob piso por fonte, ele fica vermelho e DIZ qual
+  // fonte esvaziou.
+  {
+    portao: "nenhum campo de latitude ou longitude",
+    nome: "piso por fonte: uma tela perde o formulário e as outras sete não a cobrem",
+    arquivo: "src/componentes/studio-org-integracao.tsx",
+    de: "<textarea",
+    para: "<div data-era-textarea",
+  },
+
 ];
 
 /** Roda só os portões estáticos e devolve a saída, sem tocar no navegador. */
@@ -568,13 +789,16 @@ async function saidaDosEstaticos() {
 async function provarAusencias() {
   titulo("── (c) prova dos portões de ausência (§9.1) ──");
   for (const d of DEFEITOS) {
+    const rotulo = d.nome ?? d.portao;
     const caminho = path.join(RAIZ, d.arquivo);
     const original = await readFile(caminho, "utf8");
     if (!original.includes(d.de)) {
-      exigir(false, `prova: ${d.portao}`, `âncora não encontrada em ${d.arquivo}`, "âncora presente");
+      exigir(false, `prova: ${rotulo}`, `âncora não encontrada em ${d.arquivo}`, "âncora presente");
       continue;
     }
-    await writeFile(caminho, original.replace(d.de, d.para));
+    // `replaceAll`, e não `replace`: trocar só a primeira ocorrência deixaria o identificador
+    // vivo nas outras e o piso de pé — o caso do piso passaria verde por metade da injeção.
+    await writeFile(caminho, original.replaceAll(d.de, d.para));
     let saida = "";
     try {
       saida = await saidaDosEstaticos();
@@ -586,7 +810,7 @@ async function provarAusencias() {
     const vermelho = Boolean(linha && linha.trim().startsWith("FALHA"));
     exigir(
       vermelho && restaurado === original,
-      `prova: ${d.portao}`,
+      `prova: ${rotulo}`,
       vermelho
         ? restaurado === original
           ? "vermelho com o defeito, e o arquivo voltou byte a byte"
