@@ -162,7 +162,71 @@ Se ela mandar mensagem, responda. Se você travar, avise.
 
 ---
 
-## 9. Antes de cada tela
+## 9. Três classes de defeito que os portões não pegam
+
+Achadas na noite de 25 para 26 de agosto, cada uma por uma sessão diferente, todas com
+`tsc` e `verificar-ds` verdes. Não são casos: são classes, e as três se repetiram.
+
+### 9.1 · Teste de AUSÊNCIA com `\b` no fim do padrão dá verde sobre o defeito
+
+`/\bautor\b\s*[:.]/` não pega `autorDaDecisao:` — depois de «autor» vem «D», que é
+caractere de palavra, e a fronteira final não casa. **Tire o `\b` do fim, mantenha no
+começo**: é o do começo que impede «suspender» de casar com «remover».
+
+Aconteceu duas vezes na mesma noite. No gate do Admin, deixava passar um botão destrutivo
+com rótulo inocente — `onClick={() => apagarRegistros()}` sob «Confirmar». No gate do
+Observatório, deixava passar **nome de moderador na tela que existe para não expor nome de
+moderador**. Um gate de privacidade verde sobre o vazamento é pior do que não ter gate: a
+tela ganha uma garantia escrita que ninguém confere.
+
+**A regra: teste de ausência só vale depois de ser visto VERMELHO com o defeito injetado.**
+Escreva o defeito, confirme que o gate acusa, restaure o arquivo, confira o `git diff` vazio.
+Sem isso, «não contém», «não expõe» e «não importa» são promessas sem prova.
+
+### 9.2 · Um substantivo fundindo duas contagens que o código separa
+
+Três vezes na mesma noite, sempre com o código certo e o texto errado:
+
+| O que se dizia | O que era |
+|---|---|
+| «59% de 773 **entidades**» | 773 são **registros** de `situado_em`; as entidades distintas são **718** |
+| «cobertura de coordenada: 472» | 472 têm coordenada **própria**; **1.380** são **posicionadas**, por herança |
+| «eventos realizados por instituição» | `realiza` é de **muitos para muitos** — 527 vínculos, 41 eventos, 36 deles com mais de uma origem, um com 46 |
+
+**Quando a tela mostrar N, o denominador embaixo diz de que é o N** — registros ou entidades,
+próprias ou herdadas, eventos ou vínculos. Somar por uma e comparar com a outra faz o painel
+mentir sem que ninguém consiga apontar onde.
+
+### 9.3 · Forma e estado, que nenhum portão vê
+
+`tsc` prova que compila, `verificar-ds` prova que a folha usa token, **e a sonda de
+comportamento também não vê forma** — uma tela com 16 verdes de gesto tinha três defeitos.
+
+O que apareceu: campo de formulário sem moldura, idêntico a texto fixo, sem onde clicar;
+coluna esticando a 1.100 px com o texto quebrando aos 610; id partido no meio de uma data,
+fazendo duas chaves iguais parecerem diferentes; botão `disabled` com desenho de botão ativo;
+e **lista truncada que não diz que truncou** — «68 pendentes» mostrando oito, «24 temas» de 94.
+
+A generalização, e é a mais útil das três: **procure o que a tela sabe e não está dizendo.**
+É a regra de ausência declarada, que este projeto aplica ao dado, aplicada à interface. E a
+consequência não fica na tela: a lista de temas que escondia 70 de 94 fazia quem não achasse
+o termo propor um duplicado — **a falha de interface de uma tela virava fila de trabalho na
+moderação**.
+
+**Abra a tela antes de chamá-la de pronta.** Toda vez que alguém abriu, achou.
+
+### 9.4 · Duas armadilhas de ferramenta, do mesmo tipo
+
+- **`innerText.includes('rótulo (N)')` sobre string montada em JSX** dá falso negativo *e*
+  falso positivo. React parte `Capítulos (` · `{n}` · `)` em nós vizinhos e `innerText` é
+  baseado em layout, não em conteúdo. Meça por `textContent`, por atributo, ou por `Range`
+- **`new Date("2026-08-22")`** é meia-noite UTC e volta como **dia 21** em fuso brasileiro.
+  Para **aritmética**, `Date.parse` com `T00:00:00Z` nos dois lados; para **formatação**,
+  quebre a string em partes. As duas defesas juntas
+
+---
+
+## 10. Antes de cada tela
 
 Escreva o que vai fazer e **espere confirmação**. Depois: `npm run checar` verde, commit,
 e o arquivo de estado atualizado.
