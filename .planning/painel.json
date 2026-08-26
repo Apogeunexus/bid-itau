@@ -1,12 +1,12 @@
 {
-  "varredura": "25/08, 23:31",
+  "varredura": "25/08, 23:32",
   "kpi": {
-    "concluidas": 14,
+    "concluidas": 15,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 9,
+    "sujos": 5,
     "folgaS6": 9,
     "pedidos": 10
   },
@@ -625,7 +625,7 @@
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-53 [913196]",
       "estado": "rodando",
-      "feitas": 2,
+      "feitas": 3,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -662,16 +662,16 @@
           "n": 3,
           "rot": "O1 ficha da instituição",
           "inicio": 13,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "d53bf22",
+          "nota": "246 instituições, **0 com coordenada**, **0 declarando acessibilidade**, 22 com imagem e 19 com crédito — as **3 com imagem sem crédito** viraram campo bloqueante nomeado. A O1 **herda literalmente** o padrão da O2: o editor das 13 caixas mais o ato virou `studio-org-acessibilidade.tsx`, um componente só para as duas telas. A frase do ato perdeu o sujeito na mesma mudança. **A Organização não se verifica** — o método da loja não sabe escrever «verificada», e a impossibilidade é o ponto. As dez telas passam a aparecer no cabeçalho; as oito que faltam aparecem nomeadas e **inertes**, não como link para 404. Surpresa: o acervo **não tem** instituição chamada «Itaú Cultural» — a tela abre por regra na primeira das 127 que realizam evento, e declara isso.",
+          "quando": "26.08 00:20"
         },
         {
           "n": 4,
           "rot": "O7 equipe e alçadas",
           "inicio": 14,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -840,6 +840,13 @@
       "rot": "O2 espaços",
       "nota": "Os 113 espaços do acervo são 113 derivados e 0 da fonte, medido no build e não digitado. A tela mostra a conversão acontecendo. Três regras duras com lugar visível: **não existe campo de latitude** (o tipo `Coordenada` fixa `procedencia: \"derivado\"` como literal — o endereço troca só o MÉTODO, para `centroide-municipio`); a ficha tem **ato explícito** com peso igual ao de salvar; e o selo mostra `derivado → parceiro`. Surpresa: a ontologia **não tem** valor de procedência chamado «organização» — escolhi `parceiro` entre os seis do PRD §6 e registrei como PEDIDO-S6-05, em vez de inventar o sétimo.",
       "quando": "25.08 23:40"
+    },
+    {
+      "sessao": "S6",
+      "n": 3,
+      "rot": "O1 ficha da instituição",
+      "nota": "246 instituições, **0 com coordenada**, **0 declarando acessibilidade**, 22 com imagem e 19 com crédito — as **3 com imagem sem crédito** viraram campo bloqueante nomeado. A O1 **herda literalmente** o padrão da O2: o editor das 13 caixas mais o ato virou `studio-org-acessibilidade.tsx`, um componente só para as duas telas. A frase do ato perdeu o sujeito na mesma mudança. **A Organização não se verifica** — o método da loja não sabe escrever «verificada», e a impossibilidade é o ponto. As dez telas passam a aparecer no cabeçalho; as oito que faltam aparecem nomeadas e **inertes**, não como link para 404. Surpresa: o acervo **não tem** instituição chamada «Itaú Cultural» — a tela abre por regra na primeira das 127 que realizam evento, e declara isso.",
+      "quando": "26.08 00:20"
     }
   ]
 }
