@@ -1035,8 +1035,8 @@ export function RedacaoTrilha({
 
             <p className="studio-nota">
               A prévia não pode divergir do público porque as duas pontas leem a mesma
-              string: o campo acima e o selo aqui são o mesmo `motivo`, renderizado com a
-              classe `selo-motivo` que `/trilha/[slug]/` usa.
+              string: o campo acima e o selo aqui são o mesmo motivo, renderizado com o mesmo
+              estilo de selo que a trilha pública usa.
             </p>
             <Link href={`/trilha/${trilha.slug}/`} className="studio-botao">
               abrir a trilha pública de verdade ↗

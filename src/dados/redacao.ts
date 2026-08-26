@@ -230,7 +230,7 @@ export const REGRA_DO_MOTIVO_OBRIGATORIO =
   "interna: é o texto que aparece ao público como selo do passo em Descobrir, e uma trilha " +
   "que publica um selo em branco entrega ao leitor uma ponte sem explicação. As outras três " +
   "regras de publicabilidade — cadeia vazia, cadeia que não termina em evento, evento sem " +
-  "sessão datada — vêm de `trilhaEhPublicavel`, da fase 2, e não são reescritas aqui.";
+  "sessão datada — vêm de «trilhaEhPublicavel», da fase 2, e não são reescritas aqui.";
 
 /**
  * A REGRA DO DESTINO — e por que ela viaja como texto em vez de como código.
@@ -255,7 +255,7 @@ export const REGRA_DO_MOTIVO_OBRIGATORIO =
  */
 export const REGRA_DO_DESTINO =
   "Uma trilha de primeira vez termina em algo a que se possa IR, com data — é a regra da " +
-  "fase 2, e ela vive em `trilhaEhPublicavel`. Enquanto a cadeia está na ordem do acervo, " +
+  "fase 2, e ela vive em «trilhaEhPublicavel». Enquanto a cadeia está na ordem do acervo, " +
   "quem responde por ela é o veredito do acervo, com a frase que veio de lá. Ao reordenar " +
   "ou acrescentar passos, o curador monta uma cadeia que o acervo não conhece: aí a tela " +
   "aplica a MESMA regra sobre os fatos que vieram medidos do grafo — a classe do último nó " +
@@ -355,7 +355,19 @@ export interface CatalogoDeArrasto {
   regra: string;
 }
 
-/** As classes que o catálogo varre. `ocorrencia` fica fora: ela não é passo de trilha. */
+/**
+ * As classes que o catálogo varre.
+ *
+ * `ocorrencia` e `temporada` ficam FORA, e pelo mesmo motivo: nenhuma das duas é nó de
+ * travessia. Uma ocorrência é uma sessão datada; uma temporada é um intervalo de datas de um
+ * evento. `sugestaoDeProximoPasso` já pulava as duas desde a fase 2, e o catálogo continuava
+ * oferecendo temporada — a mesma tela recusava como sugestão o que oferecia como candidato.
+ *
+ * O sintoma apareceu na revisão em navegador: as 15 temporadas do catálogo eram os ÚNICOS
+ * candidatos com data em ISO no título («… — 2024-10-24 a 2025-02-24»), porque o gerador
+ * compõe o título da temporada a partir do intervalo. O título é do acervo e não se reescreve
+ * aqui; o que estava errado era a temporada estar na lista.
+ */
 const CLASSES_DO_CATALOGO: readonly ClasseEntidade[] = [
   "pessoa",
   "coletivo",
@@ -365,7 +377,6 @@ const CLASSES_DO_CATALOGO: readonly ClasseEntidade[] = [
   "termo",
   "programa",
   "evento",
-  "temporada",
   "conteudo",
   "midia",
   "publicacao",
@@ -377,8 +388,7 @@ const CLASSES_DO_CATALOGO: readonly ClasseEntidade[] = [
 ];
 // `pessoa-usuaria` e `repertorio` ficam fora pelo mesmo motivo de
 // `CLASSES_QUE_NAO_SE_PUBLICAM`: uma trilha curada não tem como passo a lista de salvos
-// de alguém. `ocorrencia` também não está aqui — ela é uma sessão datada, não um nó de
-// travessia.
+// de alguém.
 
 /** Quantos candidatos viajam. Medido contra o teto de 60 KB do plano. */
 export const TETO_DO_CATALOGO = 150;
@@ -403,7 +413,7 @@ export const REGRA_DO_CATALOGO =
   "por regra declarada — entidade " +
   "com resumo de pelo menos 60 caracteres e grau 2 ou mais no acervo, para o curador poder " +
   "julgar o candidato e para o passo ter ponte de onde sair — e depois amostra com passo " +
-  "fixo sobre a ordem de `id`, atravessando todas as classes. A tela diz «N de " +
+  "fixo sobre a ordem de «id», atravessando todas as classes. A tela diz «N de " +
   `${comPonto(TOTAL_DE_ENTIDADES)}», e não «o grafo completo»: dizer «completo» sobre um ` +
   "recorte seria a mentira barata que esta obra recusa.";
 
@@ -472,7 +482,7 @@ export const FRONTEIRA_DA_AFIRMACAO =
  */
 export const REGRA_DO_MOTIVO_DA_PONTE =
   "Toda ponte escrita aqui carrega motivo em português legível e assinatura, sem exceção. " +
-  "O tipo base obriga o motivo só em `semelhante_a`; esta tela obriga nas cinco, porque uma " +
+  "O tipo base obriga o motivo só em «semelhante a»; esta tela obriga nas cinco, porque uma " +
   "afirmação sem justificativa não é curadoria — é uma linha no banco que ninguém consegue " +
   "contestar. O texto que o curador escreve aqui é o MESMO que aparece ao público no selo " +
   "da ligação, como na trilha.";

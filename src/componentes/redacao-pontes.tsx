@@ -308,8 +308,8 @@ export function RedacaoPontes({
             </ul>
 
             <p className="studio-nota">
-              As três que marcam <strong>0 no acervo</strong> estão no vocabulário fechado de
-              `tipos.ts` e o motor de caminhada as percorre — ninguém nunca as escreveu. É
+              As três que marcam <strong>0 no acervo</strong> estão no vocabulário fechado do
+              contrato e o motor de caminhada as percorre — ninguém nunca as escreveu. É
               esta tela que as tira do zero.
             </p>
           </section>

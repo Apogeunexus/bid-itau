@@ -303,7 +303,7 @@ export function RedacaoAssinaturas({
                   )
                   .join(" · ")}
                 . A classificação é lida da estrutura do grafo — quem participa de
-                `duplicata_suspeita` é semeadura da fila —, e não de marca no nome.
+                «duplicata suspeita» é semeadura da fila —, e não de marca no nome.
               </p>
             </div>
 
@@ -312,8 +312,8 @@ export function RedacaoAssinaturas({
               <p>
                 Das {fatia.arestasDeclaradas} ligações autoradas do acervo, esta tela enxerga{" "}
                 {fatia.arestasAlcancadas} — as que tocam um nó também autorado. Uma ponte
-                autorada entre dois nós vindos da fonte não aparece na varredura, porque
-                `grafo.ts` não expõe iteração sobre todas as arestas. Os dois números ficam
+                autorada entre dois nós vindos da fonte não aparece na varredura, porque a
+                leitura do acervo não expõe iteração sobre todas as arestas. Os dois números ficam
                 lado a lado em vez de o alcançado ser apresentado como total.
               </p>
             </div>
