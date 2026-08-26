@@ -187,14 +187,14 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "26/08, 02:17",
+  "varredura": "26/08, 02:36",
   "kpi": {
-    "concluidas": 45,
+    "concluidas": 49,
     "totalTarefas": 64,
     "ativas": 5,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 11,
+    "sujos": 7,
     "folgaS6": 7,
     "pedidos": 10
   },
@@ -359,7 +359,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/moderacao",
       "sessaoNome": "bid-ita-68",
       "estado": "rodando",
-      "feitas": 5,
+      "feitas": 8,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -419,34 +419,34 @@ const DADOS = {
           "n": 6,
           "rot": "M3 revisão da IA",
           "inicio": 6,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "181d092",
+          "nota": "O escopo imprime as DUAS metades: 19 dentro + 49 fora = 68. 4 escalonamentos com destinatário nomeado — um deles existe só para os 53 sem território. Delegação com início e fim; a encerrada continua listada. **50 verdes.** Achei dois defeitos de raiz: `.web-alternador` **não existe mais** (virou a primitiva `Segmento`) e os botões saíam nus nas 4 telas — herdado da fase 5; e a aritmética de data virou inteiro `AAAAMMDD`. **Testei o portão central com defeito injetado: ficou VERMELHO.**",
+          "quando": "26.08 01:2x"
         },
         {
           "n": 7,
           "rot": "M8 escopo e escalonamento",
           "inicio": 7,
-          "estado": "aguardando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "b3f0696",
+          "nota": "Data ISO na frase do carimbo → formatada (achado da S1). E `territorioDe()` passou a filtrar relação e direção como `geo.ts` faz: 0 de 68 afetados hoje, mas «certo por acidente do dado» deixa de ser certo quando o acervo cresce. Mesmos 19/15 depois da mudança.",
+          "quando": "26.08 01:4x"
         },
         {
           "n": 8,
           "rot": "M5 elenco · M6 reconciliação",
           "inicio": 8,
-          "estado": "aguardando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "6c2b259",
+          "nota": "A barreira ética: a única tela em que a pessoa afetada não está na conversa. Vínculo sem verbete **não se confirma** — criaria a pessoa pela porta dos fundos —, com trava no botão e na função. Reconciliação **liga e nunca edita**, aviso permanente acima da decisão, candidatos por nome normalizado e **zero pontuação de similaridade**. **58 verdes.** Surpreendeu: a grafia variante casa sempre no dado encenado, então o caminho «nenhum destes» existe mas não é exercitado — declarado na tela.",
+          "quando": "26.08 02:1x"
         },
         {
           "n": 9,
           "rot": "M4 similaridade",
           "inicio": 9,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -706,7 +706,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/redacao",
       "sessaoNome": "bid-ita-7d [b1187f]",
       "estado": "rodando",
-      "feitas": 4,
+      "feitas": 5,
       "total": 10,
       "commit": null,
       "frescor": null,
@@ -754,16 +754,16 @@ const DADOS = {
           "n": 5,
           "rot": "E2 destaque",
           "inicio": 6,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "eea0e07",
+          "nota": "A tela mostra **o cartão que saiu** para o destaque caber — sobrepor o algoritmo tem custo, e escondê-lo apresentaria o destaque como se fosse de graça. Descoberto sem reimplementar nada: `montarFeed` é determinística e aceita `limite`, então o mesmo feed montado com uma vaga a mais devolve o cartão que não coube. Medido: entra a trilha «Do rap ao teatro documentário», sai o espaço «Espaço Cultural Airton Queiroz». A serendipidade fica ao lado **para contraste** — também sobrepõe o rodízio e também tem posição fixa, mas é dosagem do motor com parâmetro do Admin, não escolha; sem essa distinção a tela ensinaria o operador a confundir as duas. O teto de UM vale no registro (o novo substitui), não só no texto. Junto: a data de agendamento saía crua em ISO em **três** telas, mesma classe do defeito da §9.3 — o formatador foi para `redacao-registro.ts` em vez de virar segunda cópia. Sonda: 13 verdes; E1, E3 e E9 reexecutadas sem regressão",
+          "quando": "26.08 02:33"
         },
         {
           "n": 6,
           "rot": "E4 tesauro",
           "inicio": 7,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -995,6 +995,27 @@ const DADOS = {
       "quando": "26.08 00:5x"
     },
     {
+      "sessao": "S3",
+      "n": 6,
+      "rot": "M3 revisão da IA",
+      "nota": "O escopo imprime as DUAS metades: 19 dentro + 49 fora = 68. 4 escalonamentos com destinatário nomeado — um deles existe só para os 53 sem território. Delegação com início e fim; a encerrada continua listada. **50 verdes.** Achei dois defeitos de raiz: `.web-alternador` **não existe mais** (virou a primitiva `Segmento`) e os botões saíam nus nas 4 telas — herdado da fase 5; e a aritmética de data virou inteiro `AAAAMMDD`. **Testei o portão central com defeito injetado: ficou VERMELHO.**",
+      "quando": "26.08 01:2x"
+    },
+    {
+      "sessao": "S3",
+      "n": 7,
+      "rot": "M8 escopo e escalonamento",
+      "nota": "Data ISO na frase do carimbo → formatada (achado da S1). E `territorioDe()` passou a filtrar relação e direção como `geo.ts` faz: 0 de 68 afetados hoje, mas «certo por acidente do dado» deixa de ser certo quando o acervo cresce. Mesmos 19/15 depois da mudança.",
+      "quando": "26.08 01:4x"
+    },
+    {
+      "sessao": "S3",
+      "n": 8,
+      "rot": "M5 elenco · M6 reconciliação",
+      "nota": "A barreira ética: a única tela em que a pessoa afetada não está na conversa. Vínculo sem verbete **não se confirma** — criaria a pessoa pela porta dos fundos —, com trava no botão e na função. Reconciliação **liga e nunca edita**, aviso permanente acima da decisão, candidatos por nome normalizado e **zero pontuação de similaridade**. **58 verdes.** Surpreendeu: a grafia variante casa sempre no dado encenado, então o caminho «nenhum destes» existe mas não é exercitado — declarado na tela.",
+      "quando": "26.08 02:1x"
+    },
+    {
       "sessao": "S2",
       "n": 1,
       "rot": "recorte do DTO",
@@ -1168,6 +1189,13 @@ const DADOS = {
       "rot": "E9 assinaturas",
       "nota": "**A fatia autorada tem 47 nós e exatamente UM é curadoria.** Varri o acervo por `grafo.ts` (D-47) e bate com `meta.json`: 47 de 47 — mas 40 são duplicatas semeadas para a fila da moderação e 6 são personas do protótipo. Mostrar 47 como «afirmação assinada» inflaria a curadoria por 47×, numa tela que existe para auditar isso; a classificação é lida da estrutura (quem tem `duplicata_suspeita`), não de marca no slug. A varredura vê 78 das 81 ligações e diz que vê — só alcança as que tocam nó autorado. **A E1 não registrava a publicação**, então a E9 abriria vazia logo após publicar: virou registro em `redacao-registro.ts`, módulo que o cliente pode importar porque não alcança o grafo. Sem filtro por período, e a tela diz por quê (sem relógio, tudo carrega a mesma data). **Retirar ponte passou a confirmar** — era irreversível a um clique. Sondas: E9 12 verdes, E1 e E3 reexecutadas sem regressão",
       "quando": "25.08 23:45"
+    },
+    {
+      "sessao": "S5",
+      "n": 5,
+      "rot": "E2 destaque",
+      "nota": "A tela mostra **o cartão que saiu** para o destaque caber — sobrepor o algoritmo tem custo, e escondê-lo apresentaria o destaque como se fosse de graça. Descoberto sem reimplementar nada: `montarFeed` é determinística e aceita `limite`, então o mesmo feed montado com uma vaga a mais devolve o cartão que não coube. Medido: entra a trilha «Do rap ao teatro documentário», sai o espaço «Espaço Cultural Airton Queiroz». A serendipidade fica ao lado **para contraste** — também sobrepõe o rodízio e também tem posição fixa, mas é dosagem do motor com parâmetro do Admin, não escolha; sem essa distinção a tela ensinaria o operador a confundir as duas. O teto de UM vale no registro (o novo substitui), não só no texto. Junto: a data de agendamento saía crua em ISO em **três** telas, mesma classe do defeito da §9.3 — o formatador foi para `redacao-registro.ts` em vez de virar segunda cópia. Sonda: 13 verdes; E1, E3 e E9 reexecutadas sem regressão",
+      "quando": "26.08 02:33"
     },
     {
       "sessao": "S6",

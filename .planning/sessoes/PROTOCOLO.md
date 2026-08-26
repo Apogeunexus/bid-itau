@@ -226,8 +226,20 @@ existir.
 **Nenhum portão vê:** `tsc` compila, `verificar-ds` confere token, e a sonda de comportamento
 clica no que está visível. Só medir a altura da coluna contra a altura da janela pega.
 
-**A saída:** teto de altura na coluna e rolagem por dentro, no mesmo desenho que
-`.web-coluna-fixa` já usa no app público.
+**A saída:** teto de altura na coluna e rolagem por dentro. **Não invente regra** —
+`.web-coluna-fixa` em `web.css` já existe, e o comentário dela já nomeava o problema:
+*«sem `max-height` + `overflow-y`… o pé dela seria inalcançável — a coluna colada nunca rola
+para revelar o próprio fim»*. Duas sessões chegaram nessa saída sozinhas porque a casa já
+tinha chegado nela antes.
+
+**A asserção certa não é «a coluna cabe na janela».** A S7 escreveu esse teste primeiro e ele
+**passou**; depois escreveu «a coluna gruda inteira dentro da janela» e ele **falhou**, com o
+topo em `y=-24` no fim da página — que é o `sticky` sendo empurrado pelo fim da própria
+grade, não o teto. A asserção é que estava errada.
+
+**Meça «cada painel da coluna chega inteiro à vista»**, painel a painel, e nas duas larguras
+— 1440 e 1280. «Cabe hoje» também não basta: coluna que cresce com o conteúdo — número de
+vínculos, colisões de chave — cabe até parar de caber, sem sintoma antes.
 
 **Quem tem coluna colada:** `studio-publicar.tsx`, `studio-elenco.tsx`, `studio-grade.tsx`,
 `organizacao.css`, `studio-duplicatas.css`. Meça a sua.
