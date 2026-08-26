@@ -1,12 +1,12 @@
 {
-  "varredura": "26/08, 00:39",
+  "varredura": "26/08, 00:49",
   "kpi": {
-    "concluidas": 28,
+    "concluidas": 30,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 19,
+    "sujos": 12,
     "folgaS6": 8,
     "pedidos": 10
   },
@@ -290,7 +290,7 @@
       "pasta": "src/app/(bastidor)/observatorio",
       "sessaoNome": "bid-ita-53 [7ad229]",
       "estado": "rodando",
-      "feitas": 5,
+      "feitas": 6,
       "total": 10,
       "commit": null,
       "frescor": null,
@@ -352,16 +352,16 @@
           "n": 6,
           "rot": "G4 território",
           "inicio": 5,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "55754f7",
+          "nota": "**registro não é entidade**: 773 registros de `situado_em` contra 718 entidades distintas, com as duas contagens separadas na tela — 458 dos 773 em dois estados (59,2%). Nenhuma coordenada veio no dado: 592 município · 401 país inteiro · 345 espaço · 42 estado, de 1.380; e 439 fora do retângulo do Brasil, contadas em vez de omitidas. **48 de 158 eventos situados fora do Brasil bate exato com o PRD**; a distribuição por método (PRD dizia 214/118/113/27) é sobre outro recorte — afirmo o que medi, com denominador. `montarDesertos` subiu para o módulo: a raiz e a G4 usam a mesma",
+          "quando": "26.08 01:35"
         },
         {
           "n": 7,
           "rot": "G2 KPIs de produto",
           "inicio": 6,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -625,7 +625,7 @@
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-53 [913196]",
       "estado": "rodando",
-      "feitas": 7,
+      "feitas": 8,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -707,16 +707,16 @@
           "n": 8,
           "rot": "O6 editais",
           "inicio": 18,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "dfbc831",
+          "nota": "`edital` aprovado como **classe própria** e criado por extensão aditiva, sem tocar `tipos.ts`. Os critérios são **dado estruturado** — 33 linguagens + 27 UFs — e a tela roda o **casamento ao vivo** contra um perfil, porque «isto casa com o perfil do produtor» precisa ser demonstrável e não afirmada. **Critério vazio é «serve para todos»**, não o contrário. A lista traz as **27 UFs, não as 25** do acervo: Sergipe e Tocantins aparecem marcadas como «sem acervo», porque um edital que não pode mirar onde não há acervo perpetua o deserto.",
+          "quando": "26.08 03:40"
         },
         {
           "n": 9,
           "rot": "O8 integração",
           "inicio": 19,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -826,6 +826,13 @@
       "rot": "G6 ausência declarada",
       "nota": "oito buracos medidos: 0 de 300 ingresso · 0 de 2.425 espaço · 0 de 129 elenco · 5.108 de 7.810 ficha · 0 de 529 audiodescrição · 0 de 246 coordenada · 1 de 3 chave · 0 de 4 elementos vazios. `nivelQuePreenche` + `projecao` é o que separa plano de trabalho de lista de desculpas. **Achado na tela aberta:** barra cheia em laranja nos seis zeros lia como meta batida — a «barra de 100% gratuito» cometida do outro lado; saiu",
       "quando": "26.08 01:10"
+    },
+    {
+      "sessao": "S2",
+      "n": 6,
+      "rot": "G4 território",
+      "nota": "**registro não é entidade**: 773 registros de `situado_em` contra 718 entidades distintas, com as duas contagens separadas na tela — 458 dos 773 em dois estados (59,2%). Nenhuma coordenada veio no dado: 592 município · 401 país inteiro · 345 espaço · 42 estado, de 1.380; e 439 fora do retângulo do Brasil, contadas em vez de omitidas. **48 de 158 eventos situados fora do Brasil bate exato com o PRD**; a distribuição por método (PRD dizia 214/118/113/27) é sobre outro recorte — afirmo o que medi, com denominador. `montarDesertos` subiu para o módulo: a raiz e a G4 usam a mesma",
+      "quando": "26.08 01:35"
     },
     {
       "sessao": "S1",
@@ -938,6 +945,13 @@
       "rot": "O4 formação",
       "nota": "As 54 formações são a única classe com **100% de ficha, imagem, crédito e alt** — e somam **6 marcações de dimensão em 432 possíveis**. As duas medidas ficam lado a lado: preencher é o que a plataforma exige, oferecer é o que ela mede. A visita educativa é **gestão de reserva**: o botão de confirmar só existe quando a conta fecha, e no lugar dele aparece o **motivo** — «não cabe: 30 já confirmadas mais 20 passa das 40 vagas». A biblioteca mostra as 46 publicações e diz de que lado está a falta.",
       "quando": "26.08 03:00"
+    },
+    {
+      "sessao": "S6",
+      "n": 8,
+      "rot": "O6 editais",
+      "nota": "`edital` aprovado como **classe própria** e criado por extensão aditiva, sem tocar `tipos.ts`. Os critérios são **dado estruturado** — 33 linguagens + 27 UFs — e a tela roda o **casamento ao vivo** contra um perfil, porque «isto casa com o perfil do produtor» precisa ser demonstrável e não afirmada. **Critério vazio é «serve para todos»**, não o contrário. A lista traz as **27 UFs, não as 25** do acervo: Sergipe e Tocantins aparecem marcadas como «sem acervo», porque um edital que não pode mirar onde não há acervo perpetua o deserto.",
+      "quando": "26.08 03:40"
     }
   ]
 }
