@@ -187,14 +187,14 @@ tr:last-child td{border-bottom:0}
 <script>
 /* DADOS:INICIO */
 const DADOS = {
-  "varredura": "26/08, 01:51",
+  "varredura": "26/08, 01:55",
   "kpi": {
-    "concluidas": 42,
+    "concluidas": 43,
     "totalTarefas": 64,
     "ativas": 6,
     "bloqueadas": 0,
     "divergencias": 0,
-    "sujos": 18,
+    "sujos": 13,
     "folgaS6": 8,
     "pedidos": 10
   },
@@ -813,7 +813,7 @@ const DADOS = {
       "pasta": "src/app/(bastidor)/studio",
       "sessaoNome": "bid-ita-53 [913196]",
       "estado": "rodando",
-      "feitas": 9,
+      "feitas": 10,
       "total": 11,
       "commit": null,
       "frescor": null,
@@ -913,16 +913,16 @@ const DADOS = {
           "n": 10,
           "rot": "O9 alcance · O10 conformidade",
           "inicio": 20,
-          "estado": "rodando",
-          "commit": null,
-          "nota": null,
-          "quando": null
+          "estado": "entregue",
+          "commit": "5cda0e5",
+          "nota": "Metade da O9 é a lista do que ela **se recusa a exibir** — cinco medidas, cada uma com o motivo, no mesmo tamanho do que ela conta. A O10 lê a fila do produtor **pelo contrato compartilhado**, e o smoke prova que o armazenamento dele sai **byte a byte igual** depois da visita. **E achei um defeito meu de modelagem:** `realiza` é de muitos para muitos — 527 arestas cobrem 41 dos 300 eventos, ~13 instituições por evento — e o meu DTO devolvia a **primeira** da adjacência. A instituição com que a demonstração abre via **zero** eventos no próprio painel. Virou lista.",
+          "quando": "26.08 05:10"
         },
         {
           "n": 11,
           "rot": "suíte e medidas",
           "inicio": 21,
-          "estado": "aguardando",
+          "estado": "rodando",
           "commit": null,
           "nota": null,
           "quando": null
@@ -1224,6 +1224,13 @@ const DADOS = {
       "rot": "O8 integração",
       "nota": "**Achei e consertei uma duplicação minha antes de commitar:** eu tinha escrito uma normalização de título «equivalente» à do índice — trocava pontuação por espaço, o índice só colapsa espaço. Duas regras fariam o lote gravar chave diferente da do acervo, e o sintoma seria **a duplicata que a máquina não acha**. Agora as duas pontas usam `normalizar` do índice. Guardar e aplicar são **dois atos**; linha sem título não grava; a chave vem pronta do Admin (97) e **não existe função de emitir** em módulo nenhum meu.",
       "quando": "26.08 04:20"
+    },
+    {
+      "sessao": "S6",
+      "n": 10,
+      "rot": "O9 alcance · O10 conformidade",
+      "nota": "Metade da O9 é a lista do que ela **se recusa a exibir** — cinco medidas, cada uma com o motivo, no mesmo tamanho do que ela conta. A O10 lê a fila do produtor **pelo contrato compartilhado**, e o smoke prova que o armazenamento dele sai **byte a byte igual** depois da visita. **E achei um defeito meu de modelagem:** `realiza` é de muitos para muitos — 527 arestas cobrem 41 dos 300 eventos, ~13 instituições por evento — e o meu DTO devolvia a **primeira** da adjacência. A instituição com que a demonstração abre via **zero** eventos no próprio painel. Virou lista.",
+      "quando": "26.08 05:10"
     }
   ]
 };
