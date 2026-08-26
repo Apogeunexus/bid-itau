@@ -778,3 +778,76 @@ export function chaveDaSessao(r: RascunhoDoProdutor, o: OcorrenciaDoRascunho): s
   );
   return chaveDaOcorrencia(daTemporada, o.inicio, o.espacoId);
 }
+
+// ---------------------------------------------------------------------------
+// A decisão da moderação — o que atravessa entre a S3 e a S7
+// ---------------------------------------------------------------------------
+
+/**
+ * O que a moderação faz com um item da fila.
+ *
+ * Vocabulário fechado, e cada valor mapeia para exatamente uma `Situacao` — é esse mapa,
+ * e não a boa vontade das duas telas, que faz o produtor e o moderador concordarem sobre o
+ * que aconteceu com o registro.
+ */
+export type AcaoDeModeracao = "aprovar" | "devolver" | "suspender" | "adiar";
+
+export const ROTULO_DA_ACAO: Record<AcaoDeModeracao, string> = {
+  aprovar: "aprovado",
+  devolver: "devolvido para correção",
+  suspender: "suspenso",
+  adiar: "adiado — segue na fila",
+};
+
+/**
+ * Uma decisão de moderação, com autor e motivo.
+ *
+ * MORA AQUI, E NÃO EM `moderacao.ts`, porque atravessa dois níveis: a S3 escreve, a S7 lê.
+ * O painel do produtor exibe a devolução COM O MOTIVO que o moderador escreveu, e um tipo
+ * declarado dos dois lados divergiria no primeiro campo acrescentado. A regra que separa os
+ * dois arquivos é essa: **o que cruza entre níveis mora em `tipos-acesso.ts`; o que só um
+ * nível lê mora no módulo daquele nível.**
+ *
+ * `motivo` é OBRIGATÓRIO em `devolver` e `suspender`. Não é rigor de formulário: §4 da
+ * ontologia diz que o moderador escreve «decisões, com autor e motivo», e decisão sem
+ * motivo chega ao produtor como uma parede — ele não sabe o que corrigir, e a porta de
+ * volta que as três portas existem para garantir deixa de existir.
+ */
+export interface DecisaoDeModeracao {
+  /** O id do registro decidido — `evento:produtor:<seq>` no caso da S7. */
+  itemId: string;
+  acao: AcaoDeModeracao;
+  /** Em português legível. Obrigatório quando a ação é `devolver` ou `suspender`. */
+  motivo: string | null;
+  /** Quem decidiu. Nunca anônimo — §3: nenhum papel escreve sem deixar autor. */
+  autor: string;
+  /** AAAA-MM-DD. Sempre `DATA_DE_REFERENCIA`, nunca o relógio de quem avalia. */
+  quando: string;
+  /** O recorte do moderador que decidiu — território, tipo de conteúdo ou fila (§4). */
+  escopo: string | null;
+}
+
+/** A situação que cada ação produz. `adiar` não move o registro: ele segue na fila, e é
+ *  por isso que devolve `"em-moderacao"` em vez de um estado próprio. */
+export function situacaoApos(acao: AcaoDeModeracao): Situacao {
+  switch (acao) {
+    case "aprovar":
+      return "publicado";
+    case "devolver":
+      return "devolvido";
+    case "suspender":
+      return "suspenso";
+    case "adiar":
+      return "em-moderacao";
+  }
+}
+
+/** `true` quando a decisão está completa o bastante para ser gravada. A S3 valida por aqui
+ *  em vez de reescrever a regra, e a S7 confere o que recebeu antes de exibir. */
+export function decisaoCompleta(d: DecisaoDeModeracao): boolean {
+  if (d.autor.trim() === "" || d.quando.trim() === "") return false;
+  if (d.acao === "devolver" || d.acao === "suspender") {
+    return (d.motivo ?? "").trim().length > 0;
+  }
+  return true;
+}
