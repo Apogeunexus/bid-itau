@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Play } from "@/componentes/play";
+import { PreferenciaFaixa } from "@/componentes/preferencia-faixa";
 import {
   catalogoNoFioStreaming,
   destaqueDoStreaming,
@@ -24,12 +25,35 @@ export const metadata: Metadata = { title: "Play — Itaú Cultural" };
  * É ELA que toca `@/dados/play` — o módulo alcança o grafo de 23 MB e por DP-F
  * nenhum `"use client"` pode importá-lo por valor.
  */
+const CATALOGO = catalogoNoFioStreaming();
+
+/* As categorias que o acervo DECLARA neste recorte. Podcast não entra: ele tem porta
+ * própria em /cast, e oferecê-lo aqui mandaria a pessoa para uma prateleira que esta tela
+ * não mostra. */
+const CATEGORIAS = CATALOGO.categorias.filter((c) => c.valor !== "podcasts");
+
 export default function PaginaPlay() {
   return (
-    <Play
-      catalogo={catalogoNoFioStreaming()}
-      destaque={destaqueDoStreaming()}
-      dimensoes={dimensoesDoStreaming()}
-    />
+    <>
+      <PreferenciaFaixa
+        app="play"
+        pergunta="O que você quer ver primeiro?"
+        opcoes={CATEGORIAS}
+        declaracao={
+          <>
+            O acervo <strong>não declara gênero de filme</strong>: não há campo de tipo nem
+            de formato, então não existe «documentário» nem «ficção» para escolher aqui — o
+            que existe é a categoria acima, do jeito que o CMS a escreve. E das{" "}
+            {CATALOGO.total.toLocaleString("pt-BR")} mídias do acervo, as de podcast moram
+            no Cast: aqui são {CATALOGO.itens.length.toLocaleString("pt-BR")} para assistir.
+          </>
+        }
+      />
+      <Play
+        catalogo={CATALOGO}
+        destaque={destaqueDoStreaming()}
+        dimensoes={dimensoesDoStreaming()}
+      />
+    </>
   );
 }

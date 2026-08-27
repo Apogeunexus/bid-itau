@@ -52,6 +52,8 @@ const CHAVE_SALVOS = "agenda-cultural:salvos";
 const CHAVE_SEMENTES = "agenda-cultural:sementes";
 /** Marca que a pessoa PASSOU pelo onboarding, mesmo tendo pulado sem marcar nada. */
 const CHAVE_SEMEADO = "agenda-cultural:semeado";
+/** As preferências de cada app, num objeto só: `{ play: ["series"], cast: [...] }`. */
+const CHAVE_PREFERENCIAS = "agenda-cultural:preferencias";
 
 interface ContextoSessao {
   personaId: string;
@@ -77,6 +79,13 @@ interface ContextoSessao {
    */
   semeado: boolean;
   marcarSemeado: () => void;
+  /**
+   * O recorte que cada app guarda, por chave de app: `play`, `cast`, `cursos`,
+   * `noticias`. Um objeto só, e não uma chave de storage por app, porque são quatro
+   * listas curtas e quatro chaves separadas quebrariam juntas na primeira renomeação.
+   */
+  preferencias: Record<string, string[]>;
+  alternarPreferencia: (app: string, valor: string) => void;
   /** Falso até o localStorage ter sido lido — evita piscar a persona errada. */
   hidratado: boolean;
 }
@@ -92,6 +101,27 @@ function lerLista(chave: string): string[] {
     return Array.isArray(valor) ? valor.filter((v): v is string => typeof v === "string") : [];
   } catch {
     return [];
+  }
+}
+
+/**
+ * Mapa de listas guardado como JSON. Storage corrompido devolve mapa vazio — a mesma
+ * leitura defensiva de `lerLista`, porque o valor vem de storage que o avaliador pode
+ * editar (T-02-02) e uma tela não pode cair por causa disso.
+ */
+function lerMapa(chave: string): Record<string, string[]> {
+  try {
+    const bruto = window.localStorage.getItem(chave);
+    if (!bruto) return {};
+    const valor: unknown = JSON.parse(bruto);
+    if (!valor || typeof valor !== "object" || Array.isArray(valor)) return {};
+    const saida: Record<string, string[]> = {};
+    for (const [k, v] of Object.entries(valor as Record<string, unknown>)) {
+      if (Array.isArray(v)) saida[k] = v.filter((x): x is string => typeof x === "string");
+    }
+    return saida;
+  } catch {
+    return {};
   }
 }
 
@@ -112,6 +142,7 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
   const [salvos, setSalvos] = useState<string[]>([]);
   const [sementes, setSementes] = useState<ChaveSemente[]>([]);
   const [semeado, setSemeado] = useState(false);
+  const [preferencias, setPreferencias] = useState<Record<string, string[]>>({});
   const [hidratado, setHidratado] = useState(false);
 
   useEffect(() => {
@@ -127,6 +158,7 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
     setDisposicoes(lerLista(CHAVE_DISPOSICOES));
     setSalvos(lerLista(CHAVE_SALVOS));
     setSementes(lerLista(CHAVE_SEMENTES));
+    setPreferencias(lerMapa(CHAVE_PREFERENCIAS));
     try {
       setSemeado(window.localStorage.getItem(CHAVE_SEMEADO) === "1");
     } catch {
@@ -169,6 +201,18 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const alternarPreferencia = useCallback((app: string, valor: string) => {
+    setPreferencias((atual) => {
+      const lista = atual[app] ?? [];
+      const proximaLista = lista.includes(valor)
+        ? lista.filter((v) => v !== valor)
+        : [...lista, valor];
+      const proxima = { ...atual, [app]: proximaLista };
+      gravar(CHAVE_PREFERENCIAS, JSON.stringify(proxima));
+      return proxima;
+    });
+  }, []);
+
   const marcarSemeado = useCallback(() => {
     setSemeado(true);
     gravar(CHAVE_SEMEADO, "1");
@@ -196,6 +240,8 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
       definirSementes,
       semeado,
       marcarSemeado,
+      preferencias,
+      alternarPreferencia,
       hidratado,
     }),
     [
@@ -211,6 +257,8 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
       definirSementes,
       semeado,
       marcarSemeado,
+      preferencias,
+      alternarPreferencia,
       hidratado,
     ],
   );

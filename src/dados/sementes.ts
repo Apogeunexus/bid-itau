@@ -304,7 +304,23 @@ export function catalogoDeSementes(): CatalogoDeSementes {
  * 88. A contagem de cada um continua vindo do acervo: o que é nosso é a escolha de quais
  * entram, nunca o número ao lado.
  */
-export const TEMAS_DE_LEITURA: readonly string[] = [
+/**
+ * Casa o tema curado com o do acervo pelo TÍTULO, não pelo slug.
+ *
+ * Pela primeira escrita isto casava por slug, e cinco dos oito temas silenciosamente
+ * sumiam da tela: «questões raciais» vira `questoes-raciais` no acervo, e trocar espaço
+ * por hífen não tira o acento. O sintoma era uma lista de três itens onde deveriam estar
+ * oito — sem erro, sem aviso, com os números certos nos três que sobraram.
+ */
+function normalizar(texto: string): string {
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR")
+    .trim();
+}
+
+const TEMAS_DE_LEITURA: readonly string[] = [
   "filme",
   "questões raciais",
   "ocupação",
@@ -314,3 +330,30 @@ export const TEMAS_DE_LEITURA: readonly string[] = [
   "políticas culturais",
   "acessibilidade",
 ];
+
+/**
+ * Os temas de leitura com a contagem de matérias de cada um, contada no grafo.
+ *
+ * O que é nosso é a ESCOLHA de quais entram; o número ao lado é do acervo, sempre. Tema
+ * curado que não existir mais no grafo simplesmente não aparece — a lista encolhe em
+ * silêncio em vez de mostrar um recorte que devolveria zero.
+ */
+export function temasDeLeitura(): { valor: string; rotulo: string; n: number }[] {
+  const porTitulo = new Map<string, string>();
+  for (const slug of slugsPorTipo("tema")) {
+    const tema = porSlug("tema", slug);
+    if (tema) porTitulo.set(normalizar(tema.titulo), tema.id);
+  }
+  return TEMAS_DE_LEITURA.map((rotulo) => {
+    const id = porTitulo.get(normalizar(rotulo));
+    const n = id ? porLinguagem(id, "conteudo").length : 0;
+    return { valor: id ?? rotulo, rotulo, n };
+  }).filter((t) => t.n > 0);
+}
+
+/** Quantos temas têm matéria atrás. É o denominador da declaração do Notícias. */
+export function totalDeTemasComMateria(): number {
+  return slugsPorTipo("tema").filter(
+    (slug) => porLinguagem(porSlug("tema", slug)?.id ?? slug, "conteudo").length > 0,
+  ).length;
+}
