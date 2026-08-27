@@ -125,6 +125,50 @@ function ordenarDaSemente(lista: Candidato[], chave: ChaveSemente): Candidato[] 
   });
 }
 
+/**
+ * Distribui o teto POR CLASSE, em vez de cortar os 24 melhores no geral.
+ *
+ * ISTO CORRIGE UM DEFEITO QUE ESVAZIAVA APPS INTEIROS. Medido nos dois lados: sem teto,
+ * das 33 linguagens, 29 alcançam conteúdo, 27 alcançam evento, 24 alcançam mídia e 15
+ * alcançam formação. Depois de cortar os 24 melhores por mérito, sobrava mídia em 3% das
+ * sementes e formação em 1% — porque a ordenação (salto → concentrador → imagem) empurra
+ * pessoa e obra para o topo e as classes raras morrem no corte.
+ *
+ * O sintoma era um feed que nunca recomendava um curso. E o rodízio de `comporFeed` não
+ * salvava: ele intercala o que sobreviveu, e não havia sobrevivente para intercalar.
+ *
+ * A cota não é igualitária: cada classe leva no máximo `COTA_POR_CLASSE`, e o que sobrar
+ * do orçamento vai para os melhores no geral. Assim as classes raras têm PRESENÇA
+ * garantida sem que o mérito deixe de mandar no resto.
+ *
+ * DOIS, e não três: com cota 3 o Cursos ficava com 3 cartões no perfil de teste e o
+ * payload em 93% do teto; com cota 2 ele fica com 6 e o payload em 92%. Presença já está
+ * garantida com dois, e o orçamento que sobra volta para o mérito.
+ */
+const COTA_POR_CLASSE = 2;
+
+function comCotaPorClasse(ordenados: Candidato[]): Candidato[] {
+  const porClasse = new Map<string, number>();
+  const escolhidos: Candidato[] = [];
+  const sobra: Candidato[] = [];
+
+  for (const c of ordenados) {
+    const classe = c.entidade.classe;
+    const n = porClasse.get(classe) ?? 0;
+    if (n < COTA_POR_CLASSE && escolhidos.length < TETO_POR_SEMENTE) {
+      porClasse.set(classe, n + 1);
+      escolhidos.push(c);
+    } else {
+      sobra.push(c);
+    }
+  }
+  for (const c of sobra) {
+    if (escolhidos.length >= TETO_POR_SEMENTE) break;
+    escolhidos.push(c);
+  }
+  return escolhidos;
+}
+
 // ---------------------------------------------------------------------------
 // O precômputo
 // ---------------------------------------------------------------------------
@@ -208,7 +252,7 @@ function semear(): Semeadura {
     if (candidatos.length === 0) return;
 
     const linhas: TravessiaNoFio[] = [];
-    for (const c of ordenarDaSemente(candidatos, chave).slice(0, TETO_POR_SEMENTE)) {
+    for (const c of comCotaPorClasse(ordenarDaSemente(candidatos, chave))) {
       const cartao = paraCartao(c);
       const meio = c.caminho.length > 1 ? c.caminho[0] : undefined;
       linhas.push([

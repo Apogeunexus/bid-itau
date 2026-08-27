@@ -180,8 +180,23 @@ export interface MedidasDeSementes {
  */
 export const LASTRO_FORTE = 50;
 
-/** Cartões por semente no precômputo. Medido: com 32 o payload vai a 90% do teto. */
-export const TETO_POR_SEMENTE = 24;
+/**
+ * Cartões por semente no precômputo.
+ *
+ * Desceu de 24 para 18 quando o teto passou a ser distribuído POR CLASSE (ver
+ * `comCotaPorClasse` em `sementes.ts`). A cota resgatou as classes raras que o corte por
+ * mérito matava, mas cada classe nova traz cartões distintos para a tabela e o payload
+ * foi a 102% do limite.
+ *
+ * As quatro combinações foram medidas, e a escolhida não é a mais folgada: cota 3 com
+ * teto 18 cabia em 93% e deixava Cursos com 3 cartões; cota 2 com teto 18 cabe em 92% e
+ * deixa Cursos com 6. Baixar a cota e manter o teto cobre melhor que o contrário, porque
+ * a presença já está garantida com 2 e o resto do orçamento volta para o mérito.
+ *
+ * É este número que se mexe quando o payload apertar — nunca o universo de sementes, que
+ * é o que o portão 4 diz na mensagem de falha.
+ */
+export const TETO_POR_SEMENTE = 18;
 
 /**
  * A ordem do rodízio de classe, a MESMA de `caminhada.ts`.
