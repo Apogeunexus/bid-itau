@@ -10,6 +10,7 @@
     "gerar-grafo": "node scripts/gerar-grafo.mjs",
     "smoke": "tsx scripts/smoke-grafo.ts",
     "testar-caminhada": "tsx scripts/testar-caminhada.ts",
+    "medir-sementes": "tsx scripts/medir-sementes.ts",
     "verificar-fase2": "node scripts/verificar-fase2.mjs",
     "verificar-fase3": "node scripts/verificar-fase3.mjs",
     "verificar-fase4": "node scripts/verificar-fase4.mjs",
