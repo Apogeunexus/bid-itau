@@ -846,6 +846,9 @@
 .selo-nivel {
   width: 7.5rem;
   height: 7.5rem;
+  /* As artes são quadradas com respiro próprio; `contain` garante que nenhuma
+     seja esticada se um dos arquivos vier fora de proporção. */
+  object-fit: contain;
 }
 
 .desafios-barra {
@@ -1386,9 +1389,16 @@
   background: var(--cor-superficie);
 }
 
-/* No computador as quatro leituras cabem lado a lado, que é onde o espelho da
-   referência funciona de verdade: o olho varre estrelas → nome → prêmio → falta. */
-@media (min-width: 48rem) {
+/* Na VISÃO WEB as quatro leituras cabem lado a lado, que é onde o espelho da
+   referência funciona de verdade: o olho varre estrelas → nome → prêmio → falta.
+
+   PRESO A `[data-view]`, E NÃO A MEDIA QUERY, e a diferença é o defeito que estava aqui.
+   Media query mede a JANELA; na visão App o cartão vive dentro da moldura de celular —
+   370px dentro de uma janela de 1440px. A janela larga disparava as quatro colunas dentro
+   dos 370px, a coluna de texto colapsava e cada palavra quebrava numa linha. É a regra
+   que `base.css` já registra: divergência por visão se faz pelo atributo, nunca por
+   largura de janela. */
+[data-view="web"] {
   .missao-linha {
     grid-template-columns: auto 1fr auto minmax(9rem, 12rem);
     grid-template-areas: "estrelas corpo recompensa estado";
@@ -1404,8 +1414,18 @@
 .estrelas-missao {
   grid-area: estrelas;
   display: flex;
-  align-items: center;
+  /* Alinhadas pelo PÉ, não pelo centro: é o que permite a do meio subir sem empurrar as
+     outras nem crescer a altura do grupo. */
+  align-items: flex-end;
   gap: 0.25rem;
+}
+
+/* A DO MEIO SOBE. É o desenho clássico de classificação por estrelas — o arco põe a
+   central em destaque e diz, sem texto, que a terceira é a que fecha. Selecionada pela
+   posição e não por classe: quem desenha o cartão não deveria ter de saber que a segunda
+   é especial. */
+.estrelas-missao > .estrela:nth-child(2) {
+  transform: translateY(-0.1875rem);
 }
 
 .estrela {
@@ -1587,4 +1607,125 @@
 .selo-nivel[data-porte="pequeno"] {
   width: 1rem;
   height: 1rem;
+}
+
+/* --- O painel do nível e a escada de 18 degraus --------------------------- */
+
+.saldo-xp {
+  position: relative;
+  display: inline-flex;
+}
+
+button.saldo-pilula {
+  cursor: pointer;
+  font: inherit;
+}
+
+.painel-nivel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  width: 16rem;
+  max-width: calc(100vw - 2rem);
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-2);
+}
+
+.escada {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.escada-faixa {
+  display: block;
+  padding: var(--espaco-pilha) 0 0.25rem;
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
+
+.escada-degrau {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-cartao);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+/* O DEGRAU NÃO ALCANÇADO MOSTRA A ARTE INTEIRA, em cor cheia.
+ *
+ * A primeira versão desta regra baixava a opacidade para 0,55 — e o resultado
+ * sobre o tema escuro foi um conjunto de selos lavados, indistinguíveis entre si.
+ * A meta é o que a pessoa vem ver: apagá-la é apagar o motivo de a tela existir.
+ * Quem diz o que já foi alcançado é o texto de cada linha e a moldura do degrau
+ * atual, que não custam contraste nenhum à arte. */
+.escada-degrau[data-alcancado="nao"] .selo-nivel {
+  opacity: 1;
+}
+
+.escada-degrau[data-atual="sim"] {
+  border-color: var(--cor-acao);
+  border-width: 2px;
+  background: var(--cor-acao-lavada);
+}
+
+.escada-voce {
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+}
+
+.escada-degrau .selo-nivel {
+  width: 3rem;
+  height: 3rem;
+  flex: none;
+}
+
+/* ===========================================================================
+ * O cabeçalho de Desafios — título e filtro na mesma linha.
+ *
+ * O trilho de cinco pílulas ocupava uma faixa inteira para uma escolha única. `<select>`
+ * é o controle certo para escolha única em lista: o sistema operacional já sabe
+ * apresentá-lo, e no telefone traz busca por digitação de graça.
+ *
+ * A APARÊNCIA VEM DE `.filtros-select`, em `filtros.css` — o mesmo controle nas duas
+ * telas tem a mesma cara, e uma segunda definição aqui divergiria na primeira mudança.
+ * ======================================================================== */
+
+.desafios-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-cartao);
+  flex-wrap: wrap;
+}
+
+.desafios-cabecalho-titulo {
+  display: flex;
+  align-items: baseline;
+  gap: var(--espaco-pilha);
+}
+
+.desafios-filtro {
+  flex: none;
+  min-width: 0;
 }

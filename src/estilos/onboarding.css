@@ -481,3 +481,255 @@
   font-size: var(--tipo-detalhe);
   color: var(--cor-tinta-2);
 }
+
+/* ===========================================================================
+ * O convite de semeadura — o cartão que aparece enquanto o feed é genérico.
+ *
+ * ELE SOME NA PRIMEIRA SEMENTE, e por isso pode ser bonito sem virar ruído: não é um
+ * aviso permanente, é um convite que se resolve sozinho. A caixa tracejada de antes
+ * dizia a mesma coisa com cara de erro de validação — e o que o feed base tem não é
+ * defeito, é falta de contexto sobre quem chegou.
+ *
+ * O mosaico de seis capas é o argumento visual: o acervo é grande, e a pergunta é qual
+ * parte dele é sua.
+ * ======================================================================== */
+
+.convite-semente {
+  position: relative;
+  display: block;
+  margin-block-end: var(--espaco-cartao);
+  border-radius: var(--raio-g);
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--ic-branco);
+  transition: transform var(--dur-1) var(--ease-padrao);
+}
+
+.convite-semente:hover {
+  transform: translateY(-1px);
+}
+
+.convite-semente:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
+}
+
+.convite-semente-mosaico {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.convite-semente-mosaico img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* O véu não é escurecimento por gosto: sem ele o texto depende das seis fotos que
+   calharem de entrar, e o contraste deixa de ser medido. */
+.convite-semente-veu {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--ic-preto) 92%, transparent),
+    color-mix(in srgb, var(--ic-preto) 72%, transparent) 65%,
+    color-mix(in srgb, var(--ic-preto) 45%, transparent)
+  );
+}
+
+.convite-semente-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--espaco-cartao);
+}
+
+.convite-semente-titulo {
+  font-size: var(--tipo-destaque);
+  font-weight: 700;
+  letter-spacing: -0.012em;
+}
+
+.convite-semente-texto {
+  max-width: 26ch;
+  font-size: var(--tipo-legenda);
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
+}
+
+/* Parece botão porque É a ação da tela — o cartão inteiro é o link, e o rótulo diz
+   para onde ele leva. */
+.convite-semente-acao {
+  align-self: flex-start;
+  margin-block-start: var(--espaco-pilha);
+  padding: 0.5rem 1rem;
+  border-radius: var(--raio-pilula);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+[data-view="web"] {
+  .convite-semente-corpo {
+    padding: var(--espaco-secao) var(--espaco-cartao);
+  }
+
+  .convite-semente-titulo {
+    font-size: var(--tipo-titulo-3);
+  }
+}
+
+/* ===========================================================================
+ * O convite em folha, logo depois de entrar.
+ *
+ * `position: absolute` contra a moldura, NUNCA `fixed`: dentro do telefone o `fixed`
+ * escapa da moldura e cola na janela (D-03, e é regra da casa). O ancestral posicionado
+ * é `.moldura`, que já é `relative; overflow: hidden`.
+ * ======================================================================== */
+
+/* CENTRALIZADO, e não ancorado no pé. Colado embaixo ele encostava na barra de abas e
+   parecia parte dela — e a barra é navegação permanente, não conteúdo do convite. No
+   centro, a folha lê como camada por cima da tela, que é o que ela é. */
+.convite-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-tela);
+}
+
+/* O fundo é botão, e não `div` com `onClick`: tocar fora fecha, e quem navega por teclado
+   alcança a mesma saída sem precisar do Escape. */
+.convite-modal-fundo {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: color-mix(in srgb, var(--ic-preto) 65%, transparent);
+  cursor: pointer;
+}
+
+/* MAIS ALTA, para o mosaico existir. Na primeira versão a folha tinha a altura do texto e
+   as seis capas viravam uma tarja fina — o argumento visual («o acervo é grande») não
+   cabia no espaço que sobrava. */
+.convite-modal-folha {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  min-height: 24rem;
+  border-radius: var(--raio-g);
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--ic-branco);
+  box-shadow: var(--sombra-3);
+}
+
+.convite-modal-mosaico {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+/* Saturação acima do natural: sob véu escuro as capas desbotavam e o mosaico virava
+   cinza. O ajuste devolve a cor que a foto tem, em vez de inventar outra. */
+.convite-modal-mosaico img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.35) contrast(1.06);
+}
+
+.convite-modal-veu {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* O VÉU ESCURECE ONDE O TEXTO ESTÁ, e some no topo. Antes era escuro de ponta a ponta:
+     garantia contraste e matava o mosaico junto. Assim as capas aparecem em cima, com cor,
+     e o texto embaixo continua com contraste medido. */
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--ic-preto) 28%, transparent) 38%,
+    color-mix(in srgb, var(--ic-preto) 85%, transparent) 66%,
+    color-mix(in srgb, var(--ic-preto) 94%, transparent)
+  );
+}
+
+.convite-modal-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--espaco-pilha) / 2);
+  padding: var(--espaco-secao) var(--espaco-tela) var(--espaco-tela);
+}
+
+.convite-modal-titulo {
+  margin: 0;
+  font-size: var(--tipo-titulo-3);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.convite-modal-texto {
+  margin: 0;
+  max-width: 30ch;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ic-branco) 82%, transparent);
+}
+
+.convite-modal-primario {
+  margin-block-start: var(--espaco-cartao);
+  padding: var(--espaco-cartao);
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: var(--ic-branco);
+  color: var(--ic-preto);
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.convite-modal-primario:focus-visible {
+  outline: 2px solid var(--ic-branco);
+  outline-offset: 3px;
+}
+
+/* «Agora não» tem peso de leitura real. Saída apagada é convite que finge ter saída, e o
+   padrão escuro começa exatamente aí. */
+.convite-modal-pular {
+  padding: var(--espaco-pilha);
+  border: 0;
+  background: none;
+  color: var(--ic-branco);
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.convite-modal-pular:focus-visible {
+  outline: 2px solid var(--ic-branco);
+  outline-offset: 2px;
+}
+
+[data-view="web"] {
+  .convite-modal-folha {
+    max-width: 28rem;
+    min-height: 28rem;
+  }
+}

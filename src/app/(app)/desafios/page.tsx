@@ -1,16 +1,14 @@
-import { Grafismo } from "@/componentes/grafismo";
 import { Desafios } from "@/componentes/desafios";
 
+/**
+ * O TÍTULO MORA NO COMPONENTE, e não aqui. Ele divide a linha com o seletor de filtro, e
+ * o filtro é estado de cliente — deixar o `<h1>` na página de servidor obrigaria a
+ * duplicar a linha em dois lugares ou a levantar o estado para cá, que é pior: a página
+ * passaria a existir para segurar um `useState`.
+ */
 export default function PaginaDesafios() {
   return (
     <div className="flex flex-col gap-5 p-5 desk:p-8">
-      <header className="flex flex-col gap-2">
-        <div className="flex items-baseline gap-2">
-          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
-          <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Desafios</h1>
-        </div>
-      </header>
-
       <Desafios />
     </div>
   );

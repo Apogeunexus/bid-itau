@@ -12,7 +12,9 @@
 
 import { Motor } from "../src/lib/pontos/motor";
 import { PROGRAMA } from "../src/dados/programa";
+import { podeEnviar } from "../src/lib/pontos/comprovacoes";
 import { saldo } from "../src/lib/pontos/livro";
+import { LIMIAR_DE_CONFIANCA, validar } from "../src/lib/pontos/validacao";
 import type { EstadoDoMotor } from "../src/lib/pontos/tipos";
 
 let falhas = 0;
@@ -155,7 +157,16 @@ titulo("5. Subida de nível");
     const r = m.emitir("curso.concluido", { tipo: "formacao", id: "curso-" + i });
     if (r.efeitos.some((e) => e.tipo === "subiuDeNivel")) subiu = true;
   }
-  conferir("três cursos (600) levam ao nível 3", m.nivel().numero === 3, `${m.saldoDe("percurso")} de percurso, nível ${m.nivel().numero}`);
+  // O NÚMERO SAI DA ESCADA, e não de uma constante escrita aqui: a escada tem 18
+  // degraus desde 2026-08 e vai ser rebalanceada de novo. O portão confere a
+  // PROMESSA — «três cursos fazem o nível subir e o percurso bate com o degrau
+  // declarado» —, que continua valendo qualquer que seja a curva.
+  const esperado = PROGRAMA.config.limiaresDeNivel.filter((l) => l <= m.saldoDe("percurso")).length;
+  conferir(
+    "três cursos sobem o nível de acordo com a escada",
+    m.nivel().numero === esperado && esperado > 1,
+    `${m.saldoDe("percurso")} de percurso, nível ${m.nivel().numero}, esperado ${esperado}`,
+  );
   conferir("o efeito de subida foi emitido", subiu);
   conferir("percurso NUNCA debita", m.atual.livro.every((l) => l.ativo !== "percurso" || l.sentido === "credito"));
 }
@@ -209,14 +220,14 @@ titulo("7. Recuperação sem perder a contagem");
 
 /* ── 8. Resgate: saldo, estoque e esteira ────────────────────────────────── */
 
-titulo("8. Resgate na loja");
+titulo("8. Resgate nas recompensas");
 {
   const m = novoMotor();
   const caro = m.catalogo.recompensas.find((r) => r.custo === 520);
   if (!caro) throw new Error("catálogo sem a recompensa de 520 — o teste precisa dela");
 
   const fichasAntes = m.saldoDe("ficha");
-  const rastro = m.emitir("loja.resgate.efetuado", { tipo: "recompensa", id: caro.id });
+  const rastro = m.emitir("recompensa.resgatada", { tipo: "recompensa", id: caro.id });
   conferir("saldo insuficiente NÃO debita", m.saldoDe("ficha") === fichasAntes);
   conferir("e o motor diz o motivo", rastro.efeitos.some((e) => e.tipo === "tetoAtingido"));
   conferir("nenhum resgate foi criado", m.atual.resgates.length === 0);
@@ -231,8 +242,13 @@ titulo("8. Resgate na loja");
   const antesDoResgate = m.saldoDe("ficha");
   conferir("juntou fichas suficientes", antesDoResgate >= barato.custo, String(antesDoResgate));
 
-  m.emitir("loja.resgate.efetuado", { tipo: "recompensa", id: barato.id });
-  conferir("o custo foi debitado", m.saldoDe("ficha") === antesDoResgate - barato.custo, String(m.saldoDe("ficha")));
+  m.emitir("recompensa.resgatada", { tipo: "recompensa", id: barato.id });
+  // A LINHA, não o saldo — a regra do cabeçalho vale aqui também. Desde que a
+  // trilha de abertura «O primeiro resgate» existe, o mesmo evento debita 90 E
+  // credita 3 pela missão que fecha junto; medir pelo total daria falso com o
+  // débito perfeitamente correto.
+  const debito = porMotivo(m, "Resgate: " + barato.titulo, "ficha");
+  conferir("o custo foi debitado", debito.quantas === 1 && debito.soma === barato.custo, String(debito.soma));
   conferir("o estoque DECREMENTOU", barato.estoque === (estoqueAntes ?? 0) - 1, String(barato.estoque));
   conferir("o resgate nasce em «resgatado»", m.atual.resgates[0]?.fase === "resgatado");
 
@@ -276,7 +292,7 @@ titulo("10. O livro fecha");
   m.emitir("cast.episodio.concluido", { tipo: "midia", id: "f-2" });
   m.emitir("curso.concluido", { tipo: "formacao", id: "f-3" });
   m.emitir("ocorrencia.presenca.confirmada", { tipo: "ocorrencia", id: "f-4" });
-  m.emitir("loja.resgate.efetuado", { tipo: "recompensa", id: "rec-visita" });
+  m.emitir("recompensa.resgatada", { tipo: "recompensa", id: "rec-visita" });
 
   const estado: EstadoDoMotor = m.atual;
   for (const ativo of ["ficha", "percurso", "reputacao"] as const) {
@@ -370,6 +386,120 @@ titulo("12. Ids de publicação são únicos");
     (c) => m.atual.publicacoes.filter((p) => p.comunidadeId === c.id).length < 5,
   );
   conferir("toda comunidade tem 5 ou mais publicações", magras.length === 0, magras.map((c) => c.id).join(", "));
+}
+
+/* ── 13. Comprovações: o fato pendente não é ponto ───────────────────────── */
+
+titulo("13. Comprovações");
+{
+  const m = novoMotor();
+  const missao = m.catalogo.missoes.find((x) => x.id === "m-primeira-exposicao");
+  if (!missao) throw new Error("catálogo sem m-primeira-exposicao — o teste precisa dela");
+
+  const arquivo = { nome: "exposicao.jpg", miniatura: "", hash: "hash-a" };
+
+  // 1. ENVIAR NÃO PAGA. É a promessa central do desenho: enquanto a análise não
+  // decidiu, o saldo é bit a bit o mesmo de antes do envio.
+  const fichasAntes = m.saldoDe("ficha");
+  const percursoAntes = m.saldoDe("percurso");
+  const linhasAntes = m.atual.livro.length;
+  const cpv = m.registrarProva(missao.id, arquivo);
+  conferir("prova enviada não credita ficha", m.saldoDe("ficha") === fichasAntes);
+  conferir("prova enviada não credita percurso", m.saldoDe("percurso") === percursoAntes);
+  conferir("prova enviada não escreve no livro", m.atual.livro.length === linhasAntes);
+  conferir("e ela existe, esperando decisão", m.atual.comprovacoes.length === 1);
+
+  // 2. MODERAÇÃO TAMBÉM NÃO PAGA. «Quase aprovado» é zero.
+  m.decidirProva(cpv.id, {
+    fase: "em-moderacao",
+    aderencia: "indefinida",
+    confianca: 58,
+    leitura: "-",
+  });
+  conferir("em moderação não credita", m.saldoDe("ficha") === fichasAntes);
+  conferir("em moderação não fecha a missão", !m.atual.missoes[missao.id]?.concluidaEm);
+
+  // 3. APROVAR PAGA, UMA VEZ SÓ.
+  const cpv2 = m.registrarProva(missao.id, { ...arquivo, hash: "hash-b" });
+  m.decidirProva(cpv2.id, { fase: "aprovada", aderencia: "sim", confianca: 91, leitura: "-" });
+  const pago = porMotivo(m, "Missão: " + missao.titulo, "ficha");
+  conferir("aprovação paga a missão", pago.quantas === 1 && pago.soma === missao.fichas, String(pago.soma));
+  conferir("e a missão fechou", Boolean(m.atual.missoes[missao.id]?.concluidaEm));
+
+  // 4. A TAG ENTRA NO PERFIL, e o selo junto.
+  conferir(
+    "a tag da conclusão entrou",
+    missao.tagAoConcluir !== undefined && m.atual.tags.includes(missao.tagAoConcluir),
+    m.atual.tags.join(", "),
+  );
+  conferir(
+    "o selo da missão foi concedido",
+    m.atual.emblemas.some((e) => e.emblemaId === missao.emblemaId),
+  );
+
+  // 5. UMA PROVA APROVADA ANDA SÓ NA MISSÃO DELA. Sem o escopo, este mesmo
+  // evento avançaria as outras sete missões de mídia do catálogo de uma vez.
+  const outras = m.catalogo.missoes.filter(
+    (x) => x.prova === "midia" && x.id !== missao.id,
+  );
+  const contaminadas = outras.filter((x) => (m.atual.missoes[x.id]?.progresso ?? 0) > 0);
+  conferir(
+    "a aprovação não contamina outras missões de mídia",
+    contaminadas.length === 0,
+    contaminadas.map((x) => x.id).join(", "),
+  );
+}
+
+/* ── 14. Comprovações: as travas ─────────────────────────────────────────── */
+
+titulo("14. Travas de envio");
+{
+  const m = novoMotor();
+  const missao = m.catalogo.missoes.find((x) => x.id === "m-campo-brasil");
+  if (!missao) throw new Error("catálogo sem m-campo-brasil");
+
+  const regras = missao.regrasDeAceite ?? { vale: [], naoVale: [] };
+  const base = { missaoId: missao.id, nome: "p.jpg", bytes: 1024, regras };
+
+  // A duplicidade é a única antifraude que este protótipo consegue honrar de
+  // verdade — então ela é conferida de verdade.
+  const primeiro = await validar({ ...base, hash: "mesmo-arquivo", jaEnviados: [] });
+  conferir("um arquivo inédito não é barrado por duplicidade", primeiro.fase !== "recusada" || primeiro.confianca !== 100);
+
+  const repetido = await validar({ ...base, hash: "mesmo-arquivo", jaEnviados: ["mesmo-arquivo"] });
+  conferir("o mesmo arquivo de novo é recusado", repetido.fase === "recusada");
+  conferir("e a recusa diz por quê", Boolean(repetido.motivo));
+
+  // O mesmo veredito para a mesma entrada: é o que permite ensaiar a demonstração.
+  const outraVez = await validar({ ...base, hash: "mesmo-arquivo", jaEnviados: [] });
+  conferir(
+    "o veredito é estável para a mesma prova",
+    outraVez.fase === primeiro.fase && outraVez.confianca === primeiro.confianca,
+  );
+
+  // Abaixo do limiar NUNCA aprova sozinho — é o corte de 80% do escopo.
+  conferir(
+    "nada abaixo do limiar é aprovado pela máquina",
+    !(outraVez.confianca < LIMIAR_DE_CONFIANCA && outraVez.fase === "aprovada"),
+  );
+
+  // A trava diária: `m-campo-brasil` aceita 1 por dia.
+  m.registrarProva(missao.id, { nome: "a.jpg", miniatura: "", hash: "h1" });
+  m.decidirProva(m.atual.comprovacoes[0].id, {
+    fase: "aprovada",
+    aderencia: "sim",
+    confianca: 90,
+    leitura: "-",
+    });
+  const depois = podeEnviar(m.atual, missao, m.atual.agora);
+  conferir("a trava diária barra o segundo envio do dia", !depois.pode);
+  conferir("e o botão recebe a legenda do porquê", Boolean(depois.motivo), depois.motivo);
+
+  // O ciclo fechado barra igual, e por outro motivo.
+  m.avancarDias(30);
+  const fechado = podeEnviar(m.atual, missao, m.atual.agora);
+  conferir("ciclo encerrado barra o envio", !fechado.pode);
+  conferir("com a legenda do ciclo", fechado.motivo?.includes("ciclo") === true, fechado.motivo);
 }
 
 /* ── Fecho ───────────────────────────────────────────────────────────────── */

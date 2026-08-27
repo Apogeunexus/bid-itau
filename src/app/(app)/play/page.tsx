@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Play } from "@/componentes/play";
-import { PreferenciaFaixa } from "@/componentes/preferencia-faixa";
 import {
   catalogoNoFioStreaming,
   destaqueDoStreaming,
@@ -38,17 +37,10 @@ const CATEGORIAS = CATALOGO.categorias.filter((c) => c.valor !== "podcasts");
 
 export default function PaginaPlay() {
   return (
-    <>
-      <PreferenciaFaixa
-        app="play"
-        pergunta="O que você quer ver primeiro?"
-        opcoes={CATEGORIAS}
-      />
       <Play
         catalogo={CATALOGO}
         destaque={destaqueDoStreaming()}
         dimensoes={dimensoesDoStreaming()}
       />
-    </>
   );
 }

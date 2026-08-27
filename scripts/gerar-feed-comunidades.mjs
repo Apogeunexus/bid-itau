@@ -65,7 +65,8 @@ function semear(texto) {
   return h >>> 0;
 }
 
-const AUTORES = ["p-ic", "p-maria", "p-carlos", "p-joana", "p-rita", "p-tiago"];
+/** Quem COMENTA — o público. Quem PUBLICA é sempre a própria comunidade. */
+const COMENTARISTAS = ["p-maria", "p-carlos", "p-joana", "p-rita", "p-tiago"];
 
 /**
  * Comentários de demonstração. São reações genéricas de pessoas FICTÍCIAS sobre
@@ -121,7 +122,9 @@ for (const c of comunidades) {
       // comunidade, e nada no código parece errado.
       id: `pub-ac-${c.id}-${i}`,
       comunidadeId: c.id,
-      autorId: AUTORES[(semente + i) % AUTORES.length],
+      // A comunidade assina. Publicação de terceiro numa comunidade que leva o
+      // nome de uma instituição faz ela parecer emprestada.
+      autorId: c.id,
       titulo: escolhida.titulo,
       corpo: "",
       etiqueta: CATEGORIA[escolhida.extra?.categoria] ?? "Do acervo",
@@ -131,7 +134,7 @@ for (const c of comunidades) {
       fonte: escolhida.fonte,
       reacoes: 40 + (s % 900),
       comentarios: Array.from({ length: quantosComentarios }, (_, k) => ({
-        autorId: AUTORES[(s + k + 1) % AUTORES.length],
+        autorId: COMENTARISTAS[(s + k + 1) % COMENTARISTAS.length],
         corpo: FALAS[(s + k) % FALAS.length],
         reacoes: s % 40,
         quandoRotulo: `${1 + ((s + k) % 6)}d`,

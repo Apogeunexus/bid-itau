@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
+import { ConviteOnboarding } from "./convite-onboarding";
 import { Cartao } from "@/componentes/cartao";
 import { useSessao } from "@/contexto/sessao";
 import type { AvisoFeed, Cartao as CartaoDTO, DiagnosticoFeed } from "@/dados/cartao";
@@ -110,8 +111,25 @@ export function Feed({
   const destaque = cartoes.find((c) => c.especial === "curado");
   const paraVoce = destaque ? cartoes.filter((c) => c !== destaque) : cartoes;
 
+/**
+ * As seis capas do convite de semeadura.
+ *
+ * ESCOLHIDAS POR PASSO FIXO sobre a ordem do diretório, e não a dedo nem por sorteio: o
+ * convite aparece em todas as páginas do export, e um `Math.random()` faria o HTML
+ * exportado divergir da página hidratada na primeira renderização.
+ */
+const CAPAS_DO_CONVITE: readonly string[] = [
+  "00353485916976e8.jpg",
+  "2ad9c5a3dc7aba46.jpeg",
+  "570d00b961da83b4.jpg",
+  "7fa0f481355e9b63.jpeg",
+  "a987698beeb72b46.jpg",
+  "d46fb4aabf7493f9.jpg",
+];
+
   return (
     <div className="flex flex-col gap-3">
+      <ConviteOnboarding />
       {/* SEM SEMENTE O FEED FUNCIONA E DIZ QUE ESTÁ GENÉRICO. Ele não é um erro nem um
           vazio: é o feed base, e a pessoa precisa saber que existe um mais seu a três
           toques de distância. Some assim que a primeira semente é marcada.
@@ -121,12 +139,25 @@ export function Feed({
           export — só aparecia depois do JavaScript. `doPerfil` já é `null` antes de
           hidratar, que é exatamente o estado de quem ainda não semeou. */}
       {!doPerfil ? (
-        <p className="onb-aviso-feed">
-          <span>Este é o feed base do acervo — ele ainda não sabe nada sobre você.</span>
-          <Link href="/onboarding/2/" className="onb-texto-acao">
-            Escolher o que te interessa
-          </Link>
-        </p>
+        <Link href="/onboarding/2/" className="convite-semente no-underline">
+          {/* Seis capas reais do acervo, escolhidas por passo fixo sobre a ordem do
+              diretório — nunca sorteadas, para o mesmo convite sair igual em todas as
+              5.475 páginas do export. O mosaico é o argumento: o acervo é grande, e a
+              tela pergunta qual parte dele é sua. */}
+          <span className="convite-semente-mosaico" aria-hidden="true">
+            {CAPAS_DO_CONVITE.map((capa) => (
+              <img key={capa} src={`/acervo/${capa}`} alt="" loading="lazy" />
+            ))}
+          </span>
+          <span className="convite-semente-veu" aria-hidden="true" />
+          <span className="convite-semente-corpo">
+            <span className="convite-semente-titulo">Queremos conhecer você melhor</span>
+            <span className="convite-semente-texto">
+              Este é o feed base do acervo. Diga o que te move e ele passa a ser seu.
+            </span>
+            <span className="convite-semente-acao">Escolher o que te interessa</span>
+          </span>
+        </Link>
       ) : null}
 
       {/* Os avisos do motor. NÃO são opcionais: quando um corte marcado não pôde filtrar

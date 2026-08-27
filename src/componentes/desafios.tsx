@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Moeda } from "@/componentes/pontos-base";
 import { EstrelaXp } from "@/componentes/estrela-xp";
 import { EstrelasDaMissao } from "@/componentes/estrelas-missao";
+import { Grafismo } from "./grafismo";
 import { SeloDeNivel } from "@/componentes/selo-nivel";
 import { usePontos } from "@/contexto/pontos";
 import { MISSOES } from "@/dados/pontos";
@@ -199,6 +200,33 @@ export function Desafios() {
 
   return (
     <div className="flex flex-col gap-4">
+      {/* O FILTRO DIVIDE A LINHA COM O TÍTULO. Como trilho de cinco pílulas ele ocupava
+          uma faixa inteira para uma escolha única — e escolha única com cinco opções é o
+          que `<select>` faz melhor que qualquer coisa montada à mão: lista longa, busca
+          por digitação no telefone, teclado de graça. */}
+      <header className="desafios-cabecalho">
+        <div className="desafios-cabecalho-titulo">
+          <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
+          <h1 className="text-2xl leading-tight font-bold desk:text-3xl">Desafios</h1>
+        </div>
+
+        <label className="desafios-filtro">
+          <span className="sr-only">Filtrar desafios</span>
+          <select
+            className="filtros-select"
+            value={filtro}
+            onChange={(e) => setFiltro(e.target.value as typeof filtro)}
+            data-filtro-desafios
+          >
+            {FILTROS.map((nome) => (
+              <option key={nome} value={nome}>
+                {nome}
+              </option>
+            ))}
+          </select>
+        </label>
+      </header>
+
       <div className="desafios-topo">
         <SeloDeNivel nivel={nivel.numero} />
         <span className="tipo-detalhe font-bold">{nivel.nome}</span>
@@ -240,21 +268,6 @@ export function Desafios() {
             ? "Semana fechada. Constância vale mais que volume."
             : `Faltam ${Math.max(0, faltam)} · a semana vira em ${diasParaVirar} ${diasParaVirar === 1 ? "dia" : "dias"}`}
         </span>
-      </div>
-
-      <div className="filtros-missao" role="group" aria-label="Filtrar desafios">
-        {FILTROS.map((nome) => (
-          <button
-            key={nome}
-            type="button"
-            className="filtro-missao"
-            data-ativo={filtro === nome ? "sim" : "nao"}
-            aria-pressed={filtro === nome}
-            onClick={() => setFiltro(nome)}
-          >
-            {nome}
-          </button>
-        ))}
       </div>
 
       {mostrarAbertura && (

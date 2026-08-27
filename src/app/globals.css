@@ -136,6 +136,7 @@
  * do Play, do Cast, de Cursos, do Museu e do Notícias, e precisa vencer o
  * vocabulário de cada uma dessas folhas sem que nenhuma delas saiba dela. */
 @import "../estilos/onboarding.css";
+@import "../estilos/entrar.css";
 
 /* ---------------------------------------------------------------------------
  * A base visual (camada base tipográfica, moldura D-03, cartão)
