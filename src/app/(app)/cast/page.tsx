@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Cast } from "@/componentes/cast";
 import { PreferenciaFaixa } from "@/componentes/preferencia-faixa";
 import { catalogoNoFioCast, linguagensDoCast } from "@/dados/cast";
-import { medidasDasFaixas } from "@/dados/sementes";
 
 export const metadata: Metadata = { title: "Cast — Itaú Cultural" };
 
@@ -34,7 +33,6 @@ const PROGRAMAS = CATALOGO.prateleiras.map((p) => ({
  * Contado item a item, e não somando as facetas: um podcast que declara literatura e
  * música entra nas duas, e a soma das facetas devolvia 286 de 336 — a tela dizia que 50
  * não declaravam quando são 100. Faceta conta declarações; a pergunta aqui é por ITENS. */
-const MEDIDAS = medidasDasFaixas();
 
 export default function PaginaCast() {
   return (
@@ -43,16 +41,6 @@ export default function PaginaCast() {
         app="cast"
         pergunta="Que programa você quer ouvir?"
         opcoes={PROGRAMAS}
-        declaracao={
-          <>
-            <strong>
-              {MEDIDAS.podcastsSemLinguagem.toLocaleString("pt-BR")} dos{" "}
-              {MEDIDAS.podcasts.toLocaleString("pt-BR")} podcasts não declaram linguagem
-            </strong>{" "}
-            no acervo, e eles continuam aparecendo: aqui a escolha ordena, não corta. O
-            recorte é por programa porque é assim que este acervo se divide de verdade.
-          </>
-        }
       />
       <Cast catalogo={CATALOGO} linguagens={LINGUAGENS} />
     </>

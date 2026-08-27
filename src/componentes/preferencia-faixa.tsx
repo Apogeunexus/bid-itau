@@ -14,14 +14,16 @@ import { useSessao } from "@/contexto/sessao";
  *    some quando a preferência já existe — vira uma linha discreta com «mudar». Quem
  *    chegou para ver o catálogo vê o catálogo; quem quiser recortar, recorta.
  *
- * 2. **A CONTAGEM VEM DO BUILD, coladas no rótulo.** Nenhum número de acervo escrito à
- *    mão em TSX: os quatro apps medem no próprio módulo de dados e passam contado.
+ * 2. **SÓ O NOME NA PASTILHA (27.08).** A contagem do acervo e a declaração de ausência
+ *    saíram das quatro faixas por pedido: eram texto e número em cima de uma escolha que
+ *    se faz pelo rótulo. O que elas diziam continua verdadeiro e continua medido em
+ *    `medidasDasFaixas()` — o que saiu foi a exibição.
  *
- * 3. **A DECLARAÇÃO DE AUSÊNCIA É TEXTO, NÃO TOOLTIP.** É onde a tela diz o que o acervo
- *    NÃO tem — que não há gênero de filme no Play, que 100 dos 336 podcasts não declaram
- *    linguagem, que 30 das 54 formações não declaram, que nenhum dos 1.805 conteúdos
- *    traz o nome de quem assina. Esconder isso atrás de um toque é escondê-lo, e a regra
- *    do produto é que ausência se declara com denominador.
+ *    O QUE ISSO CUSTA, dito para quem for reverter: as declarações eram a peça que
+ *    sustentava «ausência declarada com denominador» dentro do produto. Sem elas, quem
+ *    abre o Play não fica sabendo que o acervo não tem gênero de filme, e quem abre o
+ *    Cast não fica sabendo que 100 dos 336 podcasts não declaram linguagem. A informação
+ *    não sumiu do código; sumiu da tela.
  *
  * A preferência ORDENA, não corta. Um recorte que esvazia a tela transforma uma escolha
  * de gosto numa parede — e nenhum dos quatro apps tem acervo suficiente para sobreviver a
@@ -31,25 +33,17 @@ import { useSessao } from "@/contexto/sessao";
 export interface OpcaoDePreferencia {
   valor: string;
   rotulo: string;
-  /** Quantos itens do acervo, contado no build. */
-  n: number;
 }
 
 export function PreferenciaFaixa({
   app,
   pergunta,
   opcoes,
-  declaracao,
-  autorado = false,
 }: {
   /** Chave do app no estado: `play`, `cast`, `cursos`, `noticias`. */
   app: string;
   pergunta: string;
   opcoes: readonly OpcaoDePreferencia[];
-  /** O que o acervo não tem, dito com denominador. Obrigatório: os quatro têm o seu. */
-  declaracao: React.ReactNode;
-  /** Marca a lista como escolha nossa e não do acervo — hoje, só o Notícias. */
-  autorado?: boolean;
 }) {
   const { preferencias, alternarPreferencia, hidratado } = useSessao();
   const [editando, setEditando] = useState(false);
@@ -91,7 +85,6 @@ export function PreferenciaFaixa({
             className="pref-pastilha"
           >
             <span>{opcao.rotulo}</span>
-            <span className="onb-conta">{opcao.n.toLocaleString("pt-BR")}</span>
           </button>
         ))}
       </div>
@@ -101,11 +94,6 @@ export function PreferenciaFaixa({
           Pronto
         </button>
       ) : null}
-
-      <p className="declaracao">
-        {autorado ? <span className="declaracao-autorado">lista nossa</span> : null}
-        {declaracao}
-      </p>
     </section>
   );
 }

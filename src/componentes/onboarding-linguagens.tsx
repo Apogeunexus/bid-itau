@@ -32,15 +32,11 @@ export function OnboardingLinguagens({ linguagens }: { linguagens: LinguagemDeSe
   const fortes = linguagens.filter((l) => l.entidades >= LASTRO_FORTE);
   const fracas = linguagens.filter((l) => l.entidades < LASTRO_FORTE);
   const mostradas = verTodas ? linguagens : fortes;
-  const marcadas = hidratado ? sementes.filter((c) => c.startsWith("l:")).length : 0;
 
   return (
     <section className="flex flex-col gap-4">
       <div className="onb-cabeca">
         <h2 className="onb-pergunta">Por onde você entra?</h2>
-        <p className="onb-subtitulo">
-          Escolha quantas quiser. Três já dão um bom começo, e dá para mudar depois.
-        </p>
       </div>
 
       <div className="onb-grade">
@@ -67,11 +63,6 @@ export function OnboardingLinguagens({ linguagens }: { linguagens: LinguagemDeSe
         </button>
       ) : null}
 
-      <p className="onb-passos" aria-live="polite">
-        {marcadas === 0
-          ? "Nenhuma marcada ainda"
-          : `${marcadas} ${marcadas === 1 ? "marcada" : "marcadas"}`}
-      </p>
     </section>
   );
 }

@@ -35,9 +35,6 @@ import type { RostoDeSemente } from "@/dados/sementes-wire";
 /** Quantos rostos a grade mostra por vez. Rerolar troca esta janela, não filtra. */
 const POR_ROLAGEM = 24;
 
-/** Acima disto a tela para de sugerir mais — é sugestão, nunca trava. */
-const SUGERIDO = 12;
-
 function iniciaisDe(titulo: string): string {
   return titulo
     .split(/\s+/)
@@ -51,8 +48,6 @@ export function OnboardingSementes({ grade, busca }: { grade: RostoDeSemente[]; 
   const { sementes, alternarSemente, hidratado } = useSessao();
   const [rolagem, setRolagem] = useState(0);
   const [termo, setTermo] = useState("");
-
-  const marcadas = hidratado ? sementes.filter((c) => c.startsWith("e:")) : [];
 
   /**
    * A grade ordenada pelo passo 2: quem marcou música vê músicos primeiro. Não é filtro —
@@ -86,10 +81,6 @@ export function OnboardingSementes({ grade, busca }: { grade: RostoDeSemente[]; 
     <section className="flex flex-col gap-4">
       <div className="onb-cabeca">
         <h2 className="onb-pergunta">Escolha quem já te interessa.</h2>
-        <p className="onb-subtitulo">
-          Artistas e obras do acervo. Quanto mais você marcar, mais o que aparece depois se
-          parece com você — e cada cartão vai dizer por qual das suas escolhas ele chegou.
-        </p>
       </div>
 
       <div className="onb-busca">
@@ -97,16 +88,13 @@ export function OnboardingSementes({ grade, busca }: { grade: RostoDeSemente[]; 
           type="search"
           value={termo}
           onChange={(e) => setTermo(e.target.value)}
-          placeholder={`Procurar entre ${busca.length.toLocaleString("pt-BR")} artistas e obras`}
+          placeholder="Procurar artista ou obra"
           aria-label="Procurar artista ou obra pelo nome"
         />
       </div>
 
       {resultados?.length === 0 ? (
-        <p className="onb-aviso-feed">
-          Nenhum nome do acervo casa com «{termo.trim()}». Só entram aqui artistas e obras
-          ligados a alguma coisa no grafo — quem está solto não vira ponto de partida.
-        </p>
+        <p className="onb-aviso-feed">Nenhum nome do acervo casa com «{termo.trim()}».</p>
       ) : null}
 
       <div className="onb-grade">
@@ -163,13 +151,6 @@ export function OnboardingSementes({ grade, busca }: { grade: RostoDeSemente[]; 
         </div>
       ) : null}
 
-      <p className="onb-passos" aria-live="polite">
-        {marcadas.length === 0
-          ? "Nenhum marcado ainda — dá para pular"
-          : marcadas.length >= SUGERIDO
-            ? `${marcadas.length} marcados — já é bastante`
-            : `${marcadas.length} ${marcadas.length === 1 ? "marcado" : "marcados"}`}
-      </p>
     </section>
   );
 }

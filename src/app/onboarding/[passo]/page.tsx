@@ -110,10 +110,7 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
           {/* PORTAS REAIS dentro do esqueleto: o que já existe no produto entra como
               caminho de verdade; o esqueleto rotulado segue marcando o que falta. */}
           <section className="flex flex-col gap-2">
-            <p className="text-sm font-semibold">
-              Estou de viagem — as {cidadesComAcervo().length} cidades com acervo têm roteiro
-              pronto:
-            </p>
+            <p className="text-sm font-semibold">Estou de viagem</p>
             <div className="flex flex-wrap gap-2">
               {cidadesComAcervo().map((c) => (
                 <Link
@@ -121,22 +118,18 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
                   href={`/cidade/${c.slug}/`}
                   className="rounded-full border border-borda-forte px-3 py-1 text-xs font-semibold no-underline"
                 >
-                  {c.titulo} <span className="opacity-60">· {c.total}</span>
+                  {c.titulo}
                 </Link>
               ))}
             </div>
           </section>
 
           <section className="flex flex-col gap-2">
-            <p className="max-w-prose text-sm leading-snug">
-              As 8 dimensões já são filtro de primeira classe na tela de Filtros — marcadas
-              lá, valem para toda a agenda, com o denominador honesto de cada uma.
-            </p>
             <Link
               href="/filtros/"
               className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao no-underline transition-opacity hover:opacity-90"
             >
-              Abrir as 8 dimensões de acessibilidade
+              Acessibilidade
             </Link>
           </section>
         </>

@@ -19,10 +19,10 @@
  * `.onb-conta` continua existindo para as pastilhas das faixas dos apps, onde o
  * número é o próprio tamanho do recorte que se está escolhendo.
  *
- * A DECLARAÇÃO DE AUSÊNCIA (`.declaracao`) É TEXTO, NUNCA TOOLTIP. Ela diz o
- * que o acervo não tem — gênero de filme no Play, autor no Notícias — e
- * esconder isso atrás de um toque é escondê-lo. Nos dois portes ela é lida sem
- * interação.
+ * AS DECLARAÇÕES DE AUSÊNCIA SAÍRAM (27.08). Elas diziam o que o acervo não
+ * tem — gênero de filme no Play, autor no Notícias — em texto corrido, com
+ * denominador. Saíram por pedido, junto com as contagens; o vocabulário
+ * `.declaracao` saiu com elas. Quem for repor precisa das duas coisas de volta.
  *
  * REGRAS DA CASA: nunca importe esta folha de um componente; o único import de
  * CSS do projeto é `layout.tsx → globals.css`. Só token, nenhuma medida fora da
@@ -431,47 +431,7 @@
 }
 
 /* ---------------------------------------------------------------------------
- * 8 · Declaração de ausência
- *
- * O que o acervo NÃO tem, dito em texto corrido, com denominador. Fundo próprio
- * para não se confundir com a legenda de um item — isto é uma afirmação sobre o
- * acervo inteiro, não sobre a coisa mais perto dela.
- * ------------------------------------------------------------------------- */
-
-.declaracao {
-  padding: var(--espaco-cartao);
-  border-inline-start: 0.25rem solid var(--cor-borda-forte);
-  border-radius: var(--raio-p);
-  background: var(--cor-superficie-2);
-  font-size: var(--tipo-detalhe);
-  color: var(--cor-tinta-2);
-  line-height: 1.45;
-}
-
-.declaracao strong {
-  color: var(--cor-tinta);
-  font-weight: 600;
-}
-
-/* Selo de procedência autorada, para a lista de temas do Notícias — a mesma
- * distinção que `disposicoes.ts` já carrega no dado. */
-.declaracao-autorado {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  margin-inline-end: 0.5rem;
-  padding-inline: 0.5rem;
-  border-radius: var(--raio-pilula);
-  background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda);
-  font-size: var(--tipo-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--cor-tinta-3);
-}
-
-/* ---------------------------------------------------------------------------
- * 9 · Estados vazios do feed sem semente
+ * 8 · Estados vazios do feed sem semente
  * ------------------------------------------------------------------------- */
 
 .onb-aviso-feed {

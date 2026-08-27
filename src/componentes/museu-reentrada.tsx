@@ -76,11 +76,6 @@ export function MuseuReentrada({ obras }: { obras: RostoDeSemente[] }) {
         })}
       </div>
 
-      <p className="declaracao">
-        O que você marcar aqui vale no app inteiro — é a mesma escolha do onboarding, e é
-        dela que sai o seu Descobrir. O museu virtual é a <strong>coleção e os espaços</strong>,
-        não uma agenda de exposições: o acervo declara pouquíssima exposição com data.
-      </p>
     </section>
   );
 }

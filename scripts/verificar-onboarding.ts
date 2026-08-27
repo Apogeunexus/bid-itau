@@ -2,7 +2,7 @@
  * verificar-onboarding.ts — os portões da S8, sobre o GRAFO REAL.
  *
  * Sem mock e sem fixture: 7.810 entidades e 66.563 arestas, as mesmas que a tela usa. Os
- * três defeitos que esta sessão encontrou — feed monoclasse, desempate alfabético e cinco
+ * defeitos que esta sessão encontrou — feed monoclasse, desempate alfabético e cinco
  * temas engolidos por casamento de slug — passaram todos pelo `tsc` sem um aviso. Suíte
  * que roda sobre dado inventado não teria pego nenhum.
  *
@@ -13,12 +13,9 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   catalogoDeSementes,
-  medidasDasFaixas,
   precomputoDeSementes,
   temasDeLeitura,
 } from "../src/dados/sementes";
-import { catalogoDeCursos } from "../src/dados/cursos";
-import { catalogoDoPlay } from "../src/dados/play";
 import {
   ampliacaoDeRepertorio,
   comporFeed,
@@ -115,23 +112,7 @@ assercao("nenhum literal de acervo escrito à mão nas telas da S8", () => {
   }
 });
 
-console.log("\nPORTÃO 3 — as cinco declarações de ausência existem");
-
-const DECLARACOES: [string, RegExp, string][] = [
-  ["Play", /não declara gênero de filme/i, "src/app/(app)/play/page.tsx"],
-  ["Cast", /não declaram linguagem/i, "src/app/(app)/cast/page.tsx"],
-  ["Cursos", /nota, preço nem nome de instrutor/i, "src/app/(app)/cursos/page.tsx"],
-  ["Museu", /coleção e os espaços/i, "src/componentes/museu-reentrada.tsx"],
-  ["Notícias", /seguir um colunista/i, "src/app/(app)/noticias/page.tsx"],
-];
-
-for (const [app, padrao, caminho] of DECLARACOES) {
-  assercao(`${app} declara o que o acervo não tem`, () => {
-    exigir(padrao.test(ler(caminho)), `${caminho} perdeu a declaração de ausência`);
-  });
-}
-
-console.log("\nPORTÃO 4 — DP-F: nenhum cliente alcança o grafo");
+console.log("\nPORTÃO 3 — DP-F: nenhum cliente alcança o grafo");
 
 assercao("nenhum «use client» importa grafo, caminhada ou sementes.ts", () => {
   const clientes = [
@@ -168,7 +149,7 @@ assercao("nenhum «use client» importa grafo, caminhada ou sementes.ts", () => 
   }
 });
 
-console.log("\nPORTÃO 5 — o payload cabe no teto compartilhado");
+console.log("\nPORTÃO 4 — o payload cabe no teto compartilhado");
 
 const TETO = 1_500_000;
 
@@ -188,7 +169,7 @@ assercao(`precômputo de sementes + feeds abaixo de ${(TETO / 1_048_576).toFixed
   );
 });
 
-console.log("\nPORTÃO 6 — dois perfis distintos, dois feeds distintos");
+console.log("\nPORTÃO 5 — dois perfis distintos, dois feeds distintos");
 
 assercao("perfis diferentes não devolvem o mesmo feed", () => {
   const a = [catalogo.linguagens[0].chave, catalogo.grade[0].chave, catalogo.grade[1].chave];
@@ -244,7 +225,7 @@ assercao("a ordem de classes do wire é a mesma de caminhada.ts", () => {
   );
 });
 
-console.log("\nPORTÃO 7 — o catálogo não oferece o que não alcança");
+console.log("\nPORTÃO 6 — o catálogo não oferece o que não alcança");
 
 assercao("nenhuma semente da grade ou da busca tem alcance zero", () => {
   const ilhas = [...catalogo.grade, ...catalogo.busca].filter((r) => r.alcance === 0);
@@ -274,47 +255,7 @@ assercao("os temas do Notícias casam com o acervo, todos", () => {
   for (const t of temas) exigir(t.n > 0, `o tema «${t.rotulo}» casou com contagem zero`);
 });
 
-console.log("\nPORTÃO 8 — os denominadores das faixas batem com o acervo");
-
-assercao("cada medida das faixas confere com uma contagem independente", () => {
-  // ESTE PORTÃO EXISTE POR UM DEFEITO QUE CHEGOU AO HTML. As faixas somavam FACETAS para
-  // achar quantos itens declaram linguagem, e item com duas linguagens conta duas vezes:
-  // o build saiu dizendo «50 dos 336 podcasts não declaram linguagem» quando são 100, e
-  // «33 das 54 formações declaram» quando são 24. Aqui a conferência vem por outro
-  // caminho — os catálogos do próprio app — para uma fonte errada não confirmar a si
-  // mesma.
-  const m = medidasDasFaixas();
-  const midias = catalogoDoPlay();
-  const podcasts = midias.filter((x) => x.categoria === "podcasts");
-  const cursos = catalogoDeCursos();
-
-  const pares: [string, number, number][] = [
-    ["mídias", m.midias, midias.length],
-    ["podcasts", m.podcasts, podcasts.length],
-    [
-      "podcasts sem linguagem",
-      m.podcastsSemLinguagem,
-      podcasts.filter((x) => x.linguagens.length === 0).length,
-    ],
-    ["formações", m.formacoes, cursos.total],
-    [
-      "formações com linguagem",
-      m.formacoesComLinguagem,
-      cursos.itens.filter((c) => c.linguagens.length > 0).length,
-    ],
-  ];
-  for (const [nome, declarado, contado] of pares) {
-    exigir(declarado === contado, `${nome}: a faixa diz ${declarado}, o acervo tem ${contado}`);
-  }
-
-  // A soma das facetas TEM de divergir da contagem por item — se não divergisse, este
-  // portão estaria verde por acidente e não pegaria a volta do defeito.
-  const somaDeFacetas = cursos.linguagens.reduce((t, l) => t + l.n, 0);
-  exigir(
-    somaDeFacetas !== m.formacoesComLinguagem,
-    "soma de facetas igual à contagem por item — o portão perdeu o poder de separar as duas",
-  );
-});
+console.log("\nPORTÃO 7 — as seções existem no HTML estático");
 
 assercao("as seções de perfil existem no HTML de quem ainda não semeou", () => {
   // Devolver `null` até o localStorage ser lido tira a seção do HTML estático: ela passa
@@ -339,7 +280,7 @@ assercao("as seções de perfil existem no HTML de quem ainda não semeou", () =
   );
 });
 
-console.log("\nPORTÃO 9 — a ampliação de repertório é exata");
+console.log("\nPORTÃO 8 — a ampliação de repertório é exata");
 
 assercao("a métrica não é calculada sobre o teto do payload", () => {
   const perfil = [catalogo.linguagens[3].chave];
