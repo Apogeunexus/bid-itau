@@ -27,6 +27,7 @@ import {
   lerConversas,
   quandoPorExtenso,
   removerConversa,
+  semearExemplos,
   TETO_DE_CONVERSAS,
   type ConversaGuardada,
 } from "@/lib/ia-historico";
@@ -89,6 +90,71 @@ type Mensagem = MensagemUsuario | MensagemAssistente;
 
 /** Uma conversa guardada, com os tipos deste arquivo. Ver `lib/ia-historico.ts`. */
 type Conversa = ConversaGuardada<Mensagem, Pedido>;
+
+/**
+ * Cinco conversas de DEMONSTRAÇÃO, semeadas só quando o histórico está vazio.
+ *
+ * Elas existem porque uma lista vazia não mostra o que a lista faz — e a tela do histórico
+ * é justamente uma que só se entende cheia. Somem no instante em que existe uma conversa
+ * de verdade, e enquanto estão ali a folha DIZ que são exemplo: histórico cheio sem
+ * ninguém ter conversado é plausível e falso, e o que é nosso se declara.
+ *
+ * As perguntas são sobre o acervo REAL — São Paulo, Belém, teatro, fotografia — porque
+ * exemplo com conteúdo inventado ensina a pessoa a pedir o que o produto não tem.
+ */
+const DIA = 24 * 60 * 60 * 1000;
+
+const EXEMPLOS: readonly { titulo: string; resposta: string; dias: number; pedido: Pedido }[] = [
+  {
+    titulo: "Quatro dias em São Paulo, com música",
+    resposta:
+      "Montei quatro dias em São Paulo puxando pela música: shows, casas de escuta e o que o acervo tem de gravação por perto.",
+    dias: 0,
+    pedido: { gosto: "musica", companhia: null, dias: 4, cidade: "sao-paulo", pediuData: true },
+  },
+  {
+    titulo: "O que ver em Belém num fim de semana?",
+    resposta:
+      "Dois dias em Belém, começando pelos espaços do acervo na cidade e fechando com o que há de artes visuais por lá.",
+    dias: 1,
+    pedido: { gosto: "artes-visuais", companhia: null, dias: 2, cidade: "belem", pediuData: true },
+  },
+  {
+    titulo: "Um roteiro de teatro para levar quem não vai ao teatro",
+    resposta:
+      "Puxei pelo teatro, mas começando pelo que costuma converter quem nunca foi: montagem curta, casa pequena e algo para conversar depois.",
+    dias: 3,
+    pedido: { gosto: "teatro", companhia: "amigos", dias: 1, cidade: "sao-paulo", pediuData: false },
+  },
+  {
+    titulo: "Fotografia no Rio, com criança junto",
+    resposta:
+      "Roteiro de fotografia no Rio pensado para ir com criança: percursos curtos, com parada entre um lugar e outro.",
+    dias: 5,
+    pedido: { gosto: "fotografia", companhia: "familia", dias: 2, cidade: "rio-de-janeiro", pediuData: true },
+  },
+  {
+    titulo: "Tenho uma tarde livre e queria descobrir algo novo",
+    resposta:
+      "Sem cidade e sem gosto fechado, fui pelo que o acervo tem de mais atravessável numa tarde — e deixei uma coisa fora do seu repertório no meio.",
+    dias: 12,
+    pedido: { gosto: null, companhia: null, dias: 1, cidade: null, pediuData: false },
+  },
+];
+
+function exemplosDoHistorico(agora: number): Conversa[] {
+  return EXEMPLOS.map((e, i) => ({
+    id: `exemplo-${i}`,
+    exemplo: true,
+    quando: agora - e.dias * DIA,
+    titulo: e.titulo,
+    mensagens: [
+      { id: `exemplo-${i}-u`, papel: "usuario", texto: e.titulo },
+      { id: `exemplo-${i}-a`, papel: "assistente", texto: e.resposta },
+    ] as Mensagem[],
+    pedido: e.pedido,
+  }));
+}
 
 function ehAssistente(m: Mensagem): m is MensagemAssistente {
   return m.papel === "assistente";
@@ -553,7 +619,9 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
   // ler `localStorage` no primeiro render divergiria da hidratação (o mesmo motivo de
   // `sessao.tsx` guardar `hidratado`).
   useEffect(() => {
-    setHistorico(lerConversas<Mensagem, Pedido>());
+    const guardadas = lerConversas<Mensagem, Pedido>();
+    // Semeia os exemplos SÓ no histórico vazio — quem já conversou fica com o dele.
+    setHistorico(guardadas.length ? guardadas : semearExemplos(exemplosDoHistorico(Date.now())));
   }, []);
 
   /**
@@ -674,6 +742,9 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
                 >
                   <span className="ia-historico-titulo">{c.titulo}</span>
                   <span className="ia-historico-quando tipo-legenda">
+                    {c.exemplo ? (
+                      <span className="ia-historico-selo">exemplo</span>
+                    ) : null}
                     {quandoPorExtenso(c.quando, Date.now())}
                   </span>
                 </button>
@@ -690,6 +761,12 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
           </ul>
           {/* O teto é DITO, não escondido: lista que corta em silêncio faz a conversa
               antiga «sumir» sem explicação. */}
+          {historico.some((c) => c.exemplo) ? (
+            <p className="ia-historico-teto tipo-legenda">
+              Estas conversas são exemplo, escritas por nós para mostrar como a lista fica.
+              Elas somem assim que você tiver a sua primeira.
+            </p>
+          ) : null}
           {historico.length >= TETO_DE_CONVERSAS ? (
             <p className="ia-historico-teto tipo-legenda">
               As {TETO_DE_CONVERSAS} conversas mais recentes ficam guardadas aqui, neste

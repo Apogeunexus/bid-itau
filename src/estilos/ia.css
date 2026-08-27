@@ -1258,3 +1258,17 @@
   color: var(--cor-tinta-3);
   line-height: 1.4;
 }
+
+/* Selo de procedência na conversa de demonstração. Mesmo papel do selo de
+   linguagem no cartão: dizer de onde aquilo veio, sem tirar espaço do que
+   importa. */
+.ia-historico-selo {
+  display: inline-block;
+  margin-inline-end: 0.5rem;
+  padding-inline: 0.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}

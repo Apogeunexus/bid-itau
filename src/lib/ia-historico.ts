@@ -21,6 +21,14 @@ export const TETO_DE_CONVERSAS = 20;
 
 export interface ConversaGuardada<M = unknown, P = unknown> {
   id: string;
+  /**
+   * Conversa de DEMONSTRAÇÃO, semeada quando o histórico está vazio.
+   *
+   * O campo existe para a tela poder dizer que ela é exemplo. Um histórico que chega
+   * cheio sem a pessoa ter conversado nada é plausível e falso — e a regra do produto é
+   * que o que é nosso se declara. Some na primeira conversa de verdade.
+   */
+  exemplo?: boolean;
   /** Milissegundos. Ordena a lista e alimenta a data mostrada. */
   quando: number;
   /** A primeira coisa que a pessoa escreveu — é como ela reconhece a conversa depois. */
@@ -87,6 +95,19 @@ function gravar<M, P>(lista: ConversaGuardada<M, P>[], operacao: string): Conver
 export function guardarConversa<M, P>(conversa: ConversaGuardada<M, P>): ConversaGuardada<M, P>[] {
   const atuais = lerConversas<M, P>().filter((c) => c.id !== conversa.id);
   return gravar([conversa, ...atuais].slice(0, TETO_DE_CONVERSAS), "gravação");
+}
+
+/**
+ * Semeia o histórico com exemplos, e SÓ quando ele está vazio.
+ *
+ * Nunca sobrescreve: quem já conversou tem o próprio histórico, e substituí-lo por
+ * demonstração seria apagar o trabalho de alguém para mostrar uma tela mais bonita.
+ * Devolve o que ficou valendo, semeado ou não.
+ */
+export function semearExemplos<M, P>(exemplos: ConversaGuardada<M, P>[]): ConversaGuardada<M, P>[] {
+  const atuais = lerConversas<M, P>();
+  if (atuais.length) return atuais;
+  return gravar(exemplos.slice(0, TETO_DE_CONVERSAS), "semeadura");
 }
 
 export function removerConversa<M, P>(id: string): ConversaGuardada<M, P>[] {
