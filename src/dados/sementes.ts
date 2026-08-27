@@ -1,6 +1,6 @@
 import vocabularioJson from "./gerado/vocabulario.json";
 import { expandir, paraCartao, type Candidato } from "./caminhada";
-import { porLinguagem, porSlug, slugsPorTipo } from "./grafo";
+import { porId, porLinguagem, porSlug, slugsPorTipo } from "./grafo";
 import type { Persona } from "./personas";
 import {
   chaveDeEntidade,
@@ -151,6 +151,8 @@ function semear(): Semeadura {
   const idxNo = new Map<string, number>();
   const nos: [string, string][] = [];
   const travessias: Record<ChaveSemente, TravessiaNoFio[]> = {};
+  const linguagensDe: Record<ChaveSemente, string[]> = {};
+  const linguagensAUmSalto: Record<ChaveSemente, string[]> = {};
 
   const guardarCartao = (cartaoCompleto: ReturnType<typeof paraCartao>): number => {
     const existente = idxCartao.get(cartaoCompleto.id);
@@ -188,6 +190,19 @@ function semear(): Semeadura {
     // A própria semente nunca é cartão de si mesma.
     const candidatos = expansao.candidatos.filter((c) => c.entidade.id !== idProprio);
     alcancePorChave.set(chave, candidatos.length);
+
+    // As linguagens SEM TETO, e antes do corte de vazio: a métrica de ampliação de
+    // repertório se calcula sobre o alcance inteiro, não sobre os 24 que couberam no
+    // payload. São 33 ids no total — a lista completa por semente é barata e exata.
+    const proprias = porId(idProprio)?.linguagens ?? [];
+    const aUmSalto = new Set<string>();
+    for (const c of candidatos) {
+      if (c.saltos !== 1) continue;
+      for (const l of c.entidade.linguagens) aUmSalto.add(l);
+    }
+    if (proprias.length) linguagensDe[chave] = [...proprias];
+    if (aUmSalto.size) linguagensAUmSalto[chave] = [...aUmSalto].sort();
+
     if (candidatos.length === 0) return;
 
     const linhas: TravessiaNoFio[] = [];
@@ -210,6 +225,10 @@ function semear(): Semeadura {
     if (!entidade) continue;
     const chave = chaveDeLinguagem(slug);
     semearUma(chave, personaDaSemente(chave, slug), entidade.id);
+    // A entidade de linguagem não declara linguagem nenhuma no grafo; quem a atravessa
+    // atravessou ELA. Sem esta linha, marcar «música» apareceria como zero linguagem
+    // atravessada e toda a música contaria como ampliação.
+    linguagensDe[chave] = [slug];
     const doVocabulario = VOCABULARIO.linguagens.find((l) => l.id === slug);
     linguagens.push({
       chave,
@@ -260,7 +279,10 @@ function semear(): Semeadura {
     },
   };
 
-  memo = { precomputo: { cartoes, motivos, nos, travessias }, catalogo };
+  memo = {
+    precomputo: { cartoes, motivos, nos, travessias, linguagensDe, linguagensAUmSalto },
+    catalogo,
+  };
   return memo;
 }
 

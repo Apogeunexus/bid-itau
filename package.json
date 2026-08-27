@@ -23,7 +23,8 @@
     "verificar-admin": "node scripts/verificar-admin.mjs",
     "verificar-gestor": "node scripts/verificar-gestor.mjs",
     "verificar-moderacao": "node scripts/verificar-moderacao.mjs",
-    "verificar-pontos": "tsx scripts/verificar-pontos.ts"
+    "verificar-pontos": "tsx scripts/verificar-pontos.ts",
+    "verificar-onboarding": "tsx scripts/verificar-onboarding.ts"
   },
   "dependencies": {
     "animejs": "^4.5.0",

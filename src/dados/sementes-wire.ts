@@ -110,6 +110,16 @@ export interface PrecomputoDeSementes {
   nos: [string, string][];
   /** Por chave de semente, na ordem em que a caminhada as ranqueou. */
   travessias: Record<ChaveSemente, TravessiaNoFio[]>;
+  /**
+   * As linguagens que cada semente declara, e as que ela ALCANÇA a um salto.
+   *
+   * Guardadas à parte das travessias e sem teto nenhum, porque delas sai o indicador de
+   * ampliação de repertório que o RFP pede — e uma métrica de impacto calculada sobre os
+   * 24 cartões que couberam no payload seria uma amostra apresentada como medida. São 33
+   * ids no total: a lista completa por semente custa dezenas de KB e é exata.
+   */
+  linguagensDe: Record<ChaveSemente, string[]>;
+  linguagensAUmSalto: Record<ChaveSemente, string[]>;
 }
 
 export interface CatalogoDeSementes {
@@ -352,4 +362,45 @@ function rodiziar(compostos: CartaoComposto[], limite: number): CartaoComposto[]
     saida.push(c);
   }
   return saida;
+}
+
+// ---------------------------------------------------------------------------
+// Ampliação de repertório
+// ---------------------------------------------------------------------------
+
+export interface AmpliacaoDeRepertorio {
+  /** As linguagens que as sementes marcadas já declaram. */
+  atravessadas: string[];
+  /** As que estão a um passo delas e ainda não foram atravessadas. */
+  novas: string[];
+  /** Quantas linguagens o perfil alcança ao todo. */
+  alcancadas: number;
+}
+
+/**
+ * O quanto o perfil se amplia a UM passo — a mesma pergunta de `repertorio.ts`, feita
+ * sobre as sementes escolhidas em vez das três personas.
+ *
+ * Um salto, e não os dois da caminhada do feed: são perguntas diferentes. O feed responde
+ * «o que te interessaria ver agora» e vai a dois; aqui é «o que está encostado no que você
+ * já atravessou», e a promessa é literal — adjacente a um passo, nunca a dez.
+ */
+export function ampliacaoDeRepertorio(
+  precomputo: PrecomputoDeSementes,
+  marcadas: readonly ChaveSemente[],
+): AmpliacaoDeRepertorio {
+  const atravessadas = new Set<string>();
+  const alcancadas = new Set<string>();
+
+  for (const chave of marcadas) {
+    for (const l of precomputo.linguagensDe[chave] ?? []) atravessadas.add(l);
+    for (const l of precomputo.linguagensAUmSalto[chave] ?? []) alcancadas.add(l);
+  }
+
+  const novas = [...alcancadas].filter((l) => !atravessadas.has(l));
+  return {
+    atravessadas: [...atravessadas].sort(),
+    novas: novas.sort(),
+    alcancadas: alcancadas.size,
+  };
 }
