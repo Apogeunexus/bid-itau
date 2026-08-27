@@ -690,6 +690,26 @@
   bottom: 0;
 }
 
+/* O VÃO ENTRE O CAMPO E A BARRA.
+ *
+ * O container reserva 6rem no rodapé, mas a barra desenhada ocupa 78px: sobram 18px de
+ * frincha, e era por ali que a conversa aparecia rolando entre o campo e a barra. Medido,
+ * não estimado.
+ *
+ * O fundo do compositor se estende para baixo por essa faixa em vez de o compositor
+ * ganhar 18px de padding. A diferença importa: o padding empurraria o campo para cima e
+ * mudaria a altura da caixa a cada ajuste da barra, enquanto isto é só tinta — a régua
+ * continua sendo a reserva do container, e 1.5rem cobre a frincha com folga sem depender
+ * de a barra continuar com exatamente esta altura. */
+[data-view="mobile"] .ia-compositor::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 100%;
+  height: 1.5rem;
+  background: var(--cor-fundo);
+}
+
 [data-view="web"] .ia-compositor {
   margin-inline: 0;
   padding-inline: 0;
