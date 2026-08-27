@@ -1,0 +1,316 @@
+import vocabularioJson from "./gerado/vocabulario.json";
+import { expandir, paraCartao, type Candidato } from "./caminhada";
+import { porLinguagem, porSlug, slugsPorTipo } from "./grafo";
+import type { Persona } from "./personas";
+import {
+  chaveDeEntidade,
+  chaveDeLinguagem,
+  LASTRO_FORTE,
+  TETO_POR_SEMENTE,
+  type CartaoEnxuto,
+  type CatalogoDeSementes,
+  type ChaveSemente,
+  type LinguagemDeSemente,
+  type PrecomputoDeSementes,
+  type RostoDeSemente,
+  type TravessiaNoFio,
+} from "./sementes-wire";
+import type { MotivoCartao } from "./cartao";
+import type { Entidade, Vocabulario } from "./tipos";
+
+/**
+ * sementes.ts — o precômputo do onboarding cultural (S8).
+ *
+ * MÓDULO DE BUILD. Alcança `caminhada.ts`, que alcança o grafo: por DP-F nenhum
+ * `"use client"` pode importá-lo por valor. O que atravessa a fronteira é
+ * `precomputoDeSementes()` e `catalogoDeSementes()`, no formato de `sementes-wire.ts`.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────────────
+ * O QUE FOI MEDIDO CONTRA O ACERVO, e cada número desta tela é CONTADO:
+ *
+ * **O universo é 847 sementes**: 33 linguagens + 575 pessoas + 239 obras.
+ *
+ * **138 delas não alcançam nada** em 1 ou 2 saltos — são ilhas no grafo — e **51 dessas
+ * têm imagem local**. Sem esta contagem, a grade de reconhecimento do passo 3 ofereceria
+ * 51 cartas com foto bonita que entregam um feed VAZIO. É por isso que `alcance` é campo
+ * do catálogo e não detalhe interno: `alcance === 0` não é oferecível, e a tela mostra o
+ * denominador do que sobrou.
+ *
+ * **O alcance varia 200 vezes entre sementes**: mediana 320, mínimo 0, máximo 2.988. O
+ * teto de 24 por semente corta a cauda alta e não toca a baixa — a cauda baixa não é
+ * «pouco», é zero, e quem trata disso é o corte de `alcance`.
+ *
+ * **Nenhum dos motivos é escrito no acervo.** Nas travessias de semente, os 17.005
+ * motivos são todos COMPOSTOS por `motivo.ts` a partir de relação e títulos; nenhuma
+ * aresta atravessada carregava texto próprio. É um fato sobre estas travessias, não sobre
+ * o grafo inteiro — e é o que faz 366 textos distintos explicarem as 17.005.
+ *
+ * **A grade abre com as linguagens de 50 entidades ou mais.** São 19: artes visuais
+ * 2.623, teatro 799, literatura 736, música 569… e a cauda desce até culinária, Rádio e
+ * TV, com 2 cada. As 14 fracas continuam oferecíveis atrás de «ver todas», com a
+ * contagem à vista.
+ *
+ * **CORREÇÃO DE UMA JUSTIFICATIVA ERRADA**, que este arquivo carregou até a prova: não é
+ * verdade que semear uma linguagem fraca devolva um feed de um item. MEDIDO: «culinária»
+ * tem 2 entidades e alcança 15 cartões; «TV» tem 2 e alcança 42; «curta-metragem» tem 39
+ * e alcança 492. Tamanho de acervo e alcance são coisas diferentes, e a caminhada
+ * atravessa a linguagem para fora dela. O corte de `alcance` continua existindo e
+ * continua necessário — só que quem ele protege são as 138 sementes de ENTIDADE que não
+ * alcançam nada, nunca as linguagens.
+ * ------------------------------------------------------------------------------------ */
+
+const VOCABULARIO = vocabularioJson as Vocabulario;
+
+/** Quem pode ser semente de entidade. Pessoa e obra são as classes que se reconhece pelo nome. */
+const CLASSES_DE_SEMENTE = ["pessoa", "obra"] as const;
+
+type ClasseDeSemente = (typeof CLASSES_DE_SEMENTE)[number];
+
+// ---------------------------------------------------------------------------
+// A persona sintética de uma semente
+// ---------------------------------------------------------------------------
+
+/**
+ * `expandir` recebe uma `Persona` e lê só o repertório dela — é isso que permite semear a
+ * caminhada com UMA linguagem ou UMA entidade sem inventar persona no JSON.
+ *
+ * O `id` precisa ser único por semente: `CACHE_EXPANSAO`, em `caminhada.ts`, é chaveado
+ * por ele, e id repetido devolveria a expansão da semente anterior — o precômputo inteiro
+ * ficaria plausível e errado.
+ */
+function personaDaSemente(chave: ChaveSemente, linguagem?: string, entidade?: string): Persona {
+  return {
+    id: `semente:${chave}`,
+    nome: chave,
+    resumo: "",
+    procedencia: "autorado",
+    repertorio: {
+      id: `repertorio:${chave}`,
+      pessoaUsuariaId: `semente:${chave}`,
+      linguagens: linguagem ? [linguagem] : [],
+      entidades: entidade ? [entidade] : [],
+      ocorrenciasSalvas: [],
+      procedencia: "autorado",
+    },
+  };
+}
+
+function hash32(texto: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < texto.length; i++) {
+    h ^= texto.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+/**
+ * A ordem dentro de UMA semente. Mesmo critério de `ordenarBalde`: salto primeiro, depois
+ * fugir do concentrador, depois ter imagem, e o desempate por hash SEMEADO pela chave.
+ *
+ * O hash é semeado e não global porque, sem isso, a mesma entidade encabeçaria a lista de
+ * todas as sementes — é a falha M-4 de `caminhada.ts`, onde «Ademar Manarini» foi o
+ * primeiro cartão de pessoa das três personas por ordem alfabética de id.
+ */
+function ordenarDaSemente(lista: Candidato[], chave: ChaveSemente): Candidato[] {
+  return [...lista].sort((a, b) => {
+    if (a.saltos !== b.saltos) return a.saltos - b.saltos;
+    if (a.viaConcentrador !== b.viaConcentrador) return a.viaConcentrador ? 1 : -1;
+    const ia = a.entidade.imagem ? 0 : 1;
+    const ib = b.entidade.imagem ? 0 : 1;
+    if (ia !== ib) return ia - ib;
+    return hash32(`${chave}|${a.entidade.id}`) - hash32(`${chave}|${b.entidade.id}`);
+  });
+}
+
+// ---------------------------------------------------------------------------
+// O precômputo
+// ---------------------------------------------------------------------------
+
+interface Semeadura {
+  precomputo: PrecomputoDeSementes;
+  catalogo: CatalogoDeSementes;
+}
+
+let memo: Semeadura | undefined;
+
+/**
+ * Roda a caminhada pelas 847 sementes uma vez por processo de build.
+ *
+ * As 2.463 páginas do export chamam isto muitas vezes; sem o memo, seriam 2.463 × 847
+ * caminhadas. Com ele, 847 — medidas em ~1 segundo no total.
+ */
+function semear(): Semeadura {
+  if (memo) return memo;
+
+  // --- tabelas de deduplicação ---
+  const idxCartao = new Map<string, number>();
+  const cartoes: CartaoEnxuto[] = [];
+  const idxMotivo = new Map<string, number>();
+  const motivos: MotivoCartao[] = [];
+  const idxNo = new Map<string, number>();
+  const nos: [string, string][] = [];
+  const travessias: Record<ChaveSemente, TravessiaNoFio[]> = {};
+
+  const guardarCartao = (cartaoCompleto: ReturnType<typeof paraCartao>): number => {
+    const existente = idxCartao.get(cartaoCompleto.id);
+    if (existente !== undefined) return existente;
+    const { motivo: _motivo, caminho: _caminho, ...enxuto } = cartaoCompleto;
+    const i = cartoes.push(enxuto) - 1;
+    idxCartao.set(cartaoCompleto.id, i);
+    return i;
+  };
+
+  const guardarMotivo = (motivo: MotivoCartao): number => {
+    // A chave inclui a origem e a relação: dois motivos com o mesmo texto e procedências
+    // diferentes não são o mesmo motivo, e o selo mostra a procedência.
+    const chave = `${motivo.texto}|${motivo.origemMotivo}|${motivo.relacao}|${motivo.procedenciaAresta}`;
+    const existente = idxMotivo.get(chave);
+    if (existente !== undefined) return existente;
+    const i = motivos.push(motivo) - 1;
+    idxMotivo.set(chave, i);
+    return i;
+  };
+
+  const guardarNo = (id: string, titulo: string): number => {
+    const existente = idxNo.get(id);
+    if (existente !== undefined) return existente;
+    const i = nos.push([id, titulo]) - 1;
+    idxNo.set(id, i);
+    return i;
+  };
+
+  /** Alcance por chave, antes do teto. É o que separa semente oferecível de ilha. */
+  const alcancePorChave = new Map<ChaveSemente, number>();
+
+  const semearUma = (chave: ChaveSemente, persona: Persona, idProprio: string): void => {
+    const expansao = expandir(persona);
+    // A própria semente nunca é cartão de si mesma.
+    const candidatos = expansao.candidatos.filter((c) => c.entidade.id !== idProprio);
+    alcancePorChave.set(chave, candidatos.length);
+    if (candidatos.length === 0) return;
+
+    const linhas: TravessiaNoFio[] = [];
+    for (const c of ordenarDaSemente(candidatos, chave).slice(0, TETO_POR_SEMENTE)) {
+      const cartao = paraCartao(c);
+      const meio = c.caminho.length > 1 ? c.caminho[0] : undefined;
+      linhas.push([
+        guardarCartao(cartao),
+        guardarMotivo(cartao.motivo),
+        meio ? guardarNo(meio.paraId, meio.paraTitulo) : -1,
+      ]);
+    }
+    travessias[chave] = linhas;
+  };
+
+  // --- linguagens ---
+  const linguagens: LinguagemDeSemente[] = [];
+  for (const slug of slugsPorTipo("linguagem")) {
+    const entidade = porSlug("linguagem", slug);
+    if (!entidade) continue;
+    const chave = chaveDeLinguagem(slug);
+    semearUma(chave, personaDaSemente(chave, slug), entidade.id);
+    const doVocabulario = VOCABULARIO.linguagens.find((l) => l.id === slug);
+    linguagens.push({
+      chave,
+      slug,
+      rotulo: doVocabulario?.rotulo ?? entidade.titulo,
+      cor: doVocabulario?.cor ?? "--ic-cinza",
+      entidades: porLinguagem(slug).length,
+      alcance: alcancePorChave.get(chave) ?? 0,
+    });
+  }
+
+  // --- pessoas e obras ---
+  const entidades: RostoDeSemente[] = [];
+  for (const classe of CLASSES_DE_SEMENTE) {
+    for (const slug of slugsPorTipo(classe)) {
+      const e = porSlug(classe, slug);
+      if (!e) continue;
+      const chave = chaveDeEntidade(e.id);
+      semearUma(chave, personaDaSemente(chave, undefined, e.id), e.id);
+      entidades.push(rostoDe(e, classe, alcancePorChave.get(chave) ?? 0));
+    }
+  }
+
+  // --- medidas, todas contadas ---
+  const ilhadasEntidade = entidades.filter((r) => r.alcance === 0);
+  const ilhadasLinguagem = linguagens.filter((l) => l.alcance === 0);
+
+  const catalogo: CatalogoDeSementes = {
+    // A cauda fraca fica no fim, mas continua na lista: quem corta é a tela, com o
+    // número à vista, e não este módulo em silêncio.
+    linguagens: [...linguagens]
+      .filter((l) => l.alcance > 0)
+      .sort((a, b) => b.entidades - a.entidades),
+    grade: entidades
+      .filter((r) => r.alcance > 0 && r.imagem)
+      .sort((a, b) => b.alcance - a.alcance),
+    busca: entidades
+      .filter((r) => r.alcance > 0)
+      .sort((a, b) => a.titulo.localeCompare(b.titulo, "pt-BR")),
+    medidas: {
+      universo: linguagens.length + entidades.length,
+      ilhadas: ilhadasEntidade.length + ilhadasLinguagem.length,
+      ilhadasComRosto: ilhadasEntidade.filter((r) => r.imagem).length,
+      linguagensFortes: linguagens.filter(
+        (l) => l.entidades >= LASTRO_FORTE && l.alcance > 0,
+      ).length,
+      cartoesDistintos: cartoes.length,
+    },
+  };
+
+  memo = { precomputo: { cartoes, motivos, nos, travessias }, catalogo };
+  return memo;
+}
+
+function rostoDe(e: Entidade, classe: ClasseDeSemente, alcance: number): RostoDeSemente {
+  const rosto: RostoDeSemente = {
+    chave: chaveDeEntidade(e.id),
+    id: e.id,
+    titulo: e.titulo,
+    classe,
+    linguagens: e.linguagens,
+    alcance,
+  };
+  if (e.imagem) rosto.imagem = e.imagem;
+  return rosto;
+}
+
+/** O precômputo inteiro, no fio. Medido em 0,76 MB com o teto de 24. */
+export function precomputoDeSementes(): PrecomputoDeSementes {
+  return semear().precomputo;
+}
+
+/** O que as telas de escolha mostram, já sem as ilhas. */
+export function catalogoDeSementes(): CatalogoDeSementes {
+  return semear().catalogo;
+}
+
+// ---------------------------------------------------------------------------
+// Temas de leitura — a lista AUTORADA do Notícias
+// ---------------------------------------------------------------------------
+
+/**
+ * Os temas que o Notícias oferece, e por que esta lista é nossa e não do acervo.
+ *
+ * CONTADO: 88 temas têm conteúdo editorial atrás. Os cinco maiores são `institucional`
+ * 147, `ic play` 118, `filme` 108, `efemérides` 99 e `edital` 97 — e três deles são
+ * classificação operacional do CMS, não interesse de leitura. Uma lista ordenada por
+ * tamanho ofereceria «edital» como preferência de leitura na primeira posição.
+ *
+ * Por isso a lista é autorada, `procedencia: "autorado"`, exatamente como o vocabulário
+ * de disposição em `disposicoes.ts` — e a tela DIZ que é autorada, com o denominador dos
+ * 88. A contagem de cada um continua vindo do acervo: o que é nosso é a escolha de quais
+ * entram, nunca o número ao lado.
+ */
+export const TEMAS_DE_LEITURA: readonly string[] = [
+  "filme",
+  "questões raciais",
+  "ocupação",
+  "questões indígenas",
+  "coronavírus",
+  "debate",
+  "políticas culturais",
+  "acessibilidade",
+];

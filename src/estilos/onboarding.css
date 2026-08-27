@@ -13,10 +13,12 @@
  *    ela mora acima do conteúdo, rola junto com ele e some quando a preferência
  *    já existe. Pastilha em rolagem horizontal no telefone, linha na web.
  *
- * A CONTAGEM É PARTE DO ROTULO, não decoração. `artes visuais 2.623` contra
- * `TV 1` é o que impede alguém de semear uma linguagem que devolve um item —
- * e por isso `.onb-conta` nunca ganha `display: none` em porte nenhum. Se não
- * couber ao lado, desce de linha; sumir não é opção.
+ * A CONTAGEM É PARTE DO ROTULO, não decoração: `artes visuais 2.623` contra
+ * `TV 2` é o tamanho do acervo de cada linguagem, e é o que torna a escolha
+ * informada em vez de às cegas. Por isso `.onb-conta` nunca ganha
+ * `display: none` em porte nenhum — se não couber ao lado, desce de linha.
+ * (Ela NÃO é aviso de feed vazio: medido, «culinária» tem 2 entidades e ainda
+ * alcança 15 cartões. Quem protege do vazio é o corte de alcance, no dado.)
  *
  * A DECLARAÇÃO DE AUSÊNCIA (`.declaracao`) É TEXTO, NUNCA TOOLTIP. Ela diz o
  * que o acervo não tem — gênero de filme no Play, autor no Notícias — e
