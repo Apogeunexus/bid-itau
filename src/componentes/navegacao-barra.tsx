@@ -11,6 +11,7 @@ import {
   ICONE_COMUNIDADE,
   ICONE_SALVOS,
   ICONE_RECOMPENSAS,
+  ICONE_IA,
 } from "@/componentes/base/icones";
 import { IconeVivo, pulsarGradeApps } from "@/componentes/icone-vivo";
 import { Grafismo } from "@/componentes/grafismo";
@@ -61,6 +62,11 @@ const ABAS: Aba[] = [
   { href: "/comunidade", rotulo: "Comunidade", icone: ICONE_COMUNIDADE },
   { href: "/recompensas", rotulo: "Recompensas", icone: ICONE_RECOMPENSAS },
   { href: "/salvos", rotulo: "Salvos", icone: ICONE_SALVOS },
+  /* Roteiros com IA entrou na barra (27.08). Ele já tinha porta no hub, mas o hub é o
+     quinto botão: a pergunta em linguagem natural é o caminho que a banca abre primeiro e
+     estava a dois toques. Coube porque as abas perderam o rótulo — com texto, seis alvos
+     não cabiam em 390px sem truncar todos. */
+  { href: "/ia", rotulo: "Roteiros com IA", icone: ICONE_IA },
 ];
 
 const HREF_APPS = "/apps";
@@ -178,12 +184,14 @@ export function NavegacaoBarra() {
               <AbaLink
                 href={aba.href}
                 aria-current={dentroDe(aba.href) ? "page" : undefined}
+                /* O rótulo saiu da barra e virou `aria-label`: sem ele o leitor de tela
+                   anunciaria «link» quatro vezes. Nome escondido não é nome ausente. */
+                aria-label={aba.rotulo}
                 className="barra-aba"
                 whileTap={reduzir ? undefined : { scale: 0.96 }}
                 transition={toque}
               >
                 <IconeVivo ativo={dentroDe(aba.href)}>{aba.icone}</IconeVivo>
-                <span className="tipo-legenda">{aba.rotulo}</span>
               </AbaLink>
             </li>
           ))}
@@ -197,11 +205,11 @@ export function NavegacaoBarra() {
         {dentroDe(HREF_APPS) ? null : (
           <Link
             href={HREF_APPS}
+            aria-label="Apps"
             className="barra-apps"
             onPointerDown={(evento) => pulsarGradeApps(evento.currentTarget)}
           >
             {ICONE_APPS}
-            <span className="tipo-micro">Apps</span>
           </Link>
         )}
       </nav>
