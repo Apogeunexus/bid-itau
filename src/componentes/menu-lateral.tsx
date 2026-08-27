@@ -10,7 +10,7 @@ import {
   ICONE_CURSOS,
   ICONE_DESCOBRIR,
   ICONE_IA,
-  ICONE_LOJA,
+  ICONE_RECOMPENSAS,
   ICONE_MAPA,
   ICONE_MUSEU,
   ICONE_NOTICIAS,
@@ -89,7 +89,7 @@ const PRINCIPAIS: Item[] = [
       { href: "/comunidade/guardadas", rotulo: "Guardadas", icone: ICONE_SALVOS },
     ],
   },
-  { href: "/loja", rotulo: "Loja", icone: ICONE_LOJA },
+  { href: "/recompensas", rotulo: "Recompensas", icone: ICONE_RECOMPENSAS },
   { href: "/desafios", rotulo: "Desafios", icone: ICONE_TROFEU },
 ];
 

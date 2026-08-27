@@ -6,6 +6,7 @@ import {
   destaqueDoStreaming,
   dimensoesDoStreaming,
 } from "@/dados/play";
+import { medidasDasFaixas } from "@/dados/sementes";
 
 export const metadata: Metadata = { title: "Play — Itaú Cultural" };
 
@@ -32,6 +33,11 @@ const CATALOGO = catalogoNoFioStreaming();
  * não mostra. */
 const CATEGORIAS = CATALOGO.categorias.filter((c) => c.valor !== "podcasts");
 
+/* Os dois denominadores são DIFERENTES e a primeira escrita desta tela trocou um pelo
+ * outro: `CATALOGO.total` é o total do RECORTE de streaming, não do acervo. A frase saía
+ * «das 113 mídias do acervo, aqui são 113», que é tautologia com cara de medição. */
+const MEDIDAS = medidasDasFaixas();
+
 export default function PaginaPlay() {
   return (
     <>
@@ -44,8 +50,10 @@ export default function PaginaPlay() {
             O acervo <strong>não declara gênero de filme</strong>: não há campo de tipo nem
             de formato, então não existe «documentário» nem «ficção» para escolher aqui — o
             que existe é a categoria acima, do jeito que o CMS a escreve. E das{" "}
-            {CATALOGO.total.toLocaleString("pt-BR")} mídias do acervo, as de podcast moram
-            no Cast: aqui são {CATALOGO.itens.length.toLocaleString("pt-BR")} para assistir.
+            {MEDIDAS.midias.toLocaleString("pt-BR")} mídias do acervo,{" "}
+            {MEDIDAS.podcasts.toLocaleString("pt-BR")} são podcast e moram no Cast: esta vitrine é
+            só streaming, e são {CATALOGO.itens.length.toLocaleString("pt-BR")} para
+            assistir.
           </>
         }
       />

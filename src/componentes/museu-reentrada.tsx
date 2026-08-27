@@ -29,10 +29,12 @@ const NA_PAREDE = 8;
 export function MuseuReentrada({ obras }: { obras: RostoDeSemente[] }) {
   const { sementes, alternarSemente, hidratado } = useSessao();
 
-  if (!hidratado) return null;
-
-  const marcadas = sementes.filter((c) => c.startsWith("e:"));
-  if (marcadas.length >= BASTANTE) return null;
+  // ANTES DE HIDRATAR A FAIXA APARECE, e isso não é descuido. Devolver `null` até o
+  // `localStorage` ser lido tirava a seção inteira do HTML estático — ela passava a
+  // existir só depois do JavaScript, e sumia de qualquer verificação que leia o build. O
+  // HTML de saída passa a ser o estado de quem ainda não semeou, que é quem chega aqui.
+  const marcadas = hidratado ? sementes.filter((c) => c.startsWith("e:")) : [];
+  if (hidratado && marcadas.length >= BASTANTE) return null;
 
   return (
     <section className="pref" aria-label="Escolha obras que te param">

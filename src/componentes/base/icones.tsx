@@ -375,8 +375,8 @@ export const ICONE_COMUNIDADE = (
   </Icone>
 );
 
-/** Presente — a lojinha de resgate. */
-export const ICONE_LOJA = (
+/** Presente — a recompensas de resgate. */
+export const ICONE_RECOMPENSAS = (
   <Icone>
     <path d="M4 11h16v8.2a.8.8 0 0 1-.8.8H4.8a.8.8 0 0 1-.8-.8V11Z" {...traco} />
     <path d="M3.4 7.6h17.2v3.4H3.4V7.6Z" {...traco} />

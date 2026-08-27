@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useSessao } from "@/contexto/sessao";
 
 /**
@@ -51,12 +52,14 @@ export function PreferenciaFaixa({
   autorado?: boolean;
 }) {
   const { preferencias, alternarPreferencia, hidratado } = useSessao();
+  const [editando, setEditando] = useState(false);
+
   const marcadas = hidratado ? (preferencias[app] ?? []) : [];
 
   // Antes de hidratar, `marcadas` é vazio e a faixa aparece — que é exatamente o HTML do
-  // build. Trocar isso por um estado de carregamento faria a tela piscar no primeiro
-  // render de cada visita, para esconder um componente que não é urgente.
-  if (marcadas.length > 0) {
+  // build. Trocar isso por um estado de carregamento faria a tela piscar a cada visita
+  // para esconder um componente que não é urgente.
+  if (marcadas.length > 0 && !editando) {
     const rotulos = opcoes
       .filter((o) => marcadas.includes(o.valor))
       .map((o) => o.rotulo)
@@ -64,11 +67,10 @@ export function PreferenciaFaixa({
     return (
       <p className="pref-resumo">
         <span>Mostrando primeiro: {rotulos}</span>
-        <button
-          type="button"
-          className="onb-texto-acao"
-          onClick={() => marcadas.forEach((v) => alternarPreferencia(app, v))}
-        >
+        {/* «Mudar» REABRE a faixa com as escolhas intactas. A primeira escrita deste
+            componente desmarcava tudo aqui — o rótulo prometia editar e a ação apagava,
+            sem aviso e sem volta. */}
+        <button type="button" className="onb-texto-acao" onClick={() => setEditando(true)}>
           Mudar
         </button>
       </p>
@@ -84,7 +86,7 @@ export function PreferenciaFaixa({
           <button
             key={opcao.valor}
             type="button"
-            aria-pressed={false}
+            aria-pressed={marcadas.includes(opcao.valor)}
             onClick={() => alternarPreferencia(app, opcao.valor)}
             className="pref-pastilha"
           >
@@ -93,6 +95,12 @@ export function PreferenciaFaixa({
           </button>
         ))}
       </div>
+
+      {editando ? (
+        <button type="button" className="onb-texto-acao" onClick={() => setEditando(false)}>
+          Pronto
+        </button>
+      ) : null}
 
       <p className="declaracao">
         {autorado ? <span className="declaracao-autorado">lista nossa</span> : null}

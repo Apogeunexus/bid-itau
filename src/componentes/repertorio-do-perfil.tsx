@@ -46,11 +46,13 @@ export function RepertorioDoPerfil({
     [precomputo, sementes],
   );
 
-  if (!hidratado) return null;
-
   // Sem semente não há o que medir — e o vazio aqui não é um erro, é um convite. Mostrar
   // «0 linguagens ampliadas» seria dar um número onde não houve medição.
-  if (!sementes.length) {
+  //
+  // Antes de hidratar cai neste mesmo ramo, de propósito: é o estado de quem ainda não
+  // semeou, e é ele que precisa estar no HTML estático. Devolver `null` aqui tirava a
+  // seção do build inteiro.
+  if (!hidratado || !sementes.length) {
     return (
       <section className="pref" aria-label="Repertório do seu perfil">
         <h2 className="pref-pergunta">O seu repertório ainda não começou.</h2>

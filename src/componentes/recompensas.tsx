@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Moeda } from "@/componentes/pontos-base";
 import { usePontos } from "@/contexto/pontos";
-import { FAMILIAS, recompensasDaFamilia } from "@/dados/loja";
+import { FAMILIAS, recompensasDaFamilia } from "@/dados/recompensas";
 import type { RecompensaDefinida } from "@/lib/pontos/tipos";
 
 const ROTULO_DA_ENTREGA: Record<RecompensaDefinida["entrega"], string> = {
@@ -30,27 +30,27 @@ function Cartao({
   return (
     <button
       type="button"
-      className="loja-cartao"
+      className="recompensa-cartao"
       data-alcancavel={alcancavel ? "sim" : "nao"}
       onClick={aoAbrir}
     >
-      <span className="loja-foto">
+      <span className="recompensa-foto">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={recompensa.imagem} alt={recompensa.imagemAlt} loading="lazy" />
       </span>
-      <span className="loja-corpo">
+      <span className="recompensa-corpo">
         <span className="tipo-detalhe font-bold">{recompensa.titulo}</span>
-        <span className="loja-resumo">{recompensa.descricao}</span>
-        <span className="loja-preco mt-auto">
+        <span className="recompensa-resumo">{recompensa.descricao}</span>
+        <span className="recompensa-preco mt-auto">
           <Moeda />
           {recompensa.custo}
         </span>
         {esgotada ? (
-          <span className="loja-falta">esgotado</span>
+          <span className="recompensa-falta">esgotado</span>
         ) : alcancavel ? (
           <span className="tipo-legenda font-bold text-acao-tinta">dá para resgatar</span>
         ) : (
-          <span className="loja-falta">
+          <span className="recompensa-falta">
             faltam {(recompensa.custo - fichas).toLocaleString("pt-BR")}
           </span>
         )}
@@ -96,7 +96,7 @@ function FolhaDoItem({
   function resgatar() {
     if (!podeResgatar) return;
     setErro(null);
-    const rastro = motor.emitir("loja.resgate.efetuado", {
+    const rastro = motor.emitir("recompensa.resgatada", {
       tipo: "recompensa",
       id: recompensa.id,
     });
@@ -129,7 +129,7 @@ function FolhaDoItem({
           <h2 id={`folha-${recompensa.id}`} className="tipo-titulo-3 font-bold">
             {recompensa.titulo}
           </h2>
-          <span className="loja-preco text-xl">
+          <span className="recompensa-preco text-xl">
             <Moeda />
             {recompensa.custo}
           </span>
@@ -198,7 +198,7 @@ function FolhaDoItem({
   );
 }
 
-export function Loja() {
+export function Recompensas() {
   const { motor, hidratado } = usePontos();
   const [aberta, setAberta] = useState<RecompensaDefinida | null>(null);
 
@@ -217,7 +217,7 @@ export function Loja() {
               <h2 className="tipo-detalhe font-bold">{familia.rotulo}</h2>
               <p className="tipo-legenda text-tinta-2">{familia.resumo}</p>
             </div>
-            <div className="loja-grade">
+            <div className="recompensa-grade">
               {itens.map((r) => (
                 <Cartao
                   key={r.id}

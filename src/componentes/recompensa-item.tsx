@@ -13,7 +13,7 @@ const ROTULO_DA_ENTREGA: Record<RecompensaDefinida["entrega"], string> = {
   "no-produto": "Vale dentro do próprio app, sem envio.",
 };
 
-export function LojaItem({ recompensa }: { recompensa: RecompensaDefinida }) {
+export function RecompensaItem({ recompensa }: { recompensa: RecompensaDefinida }) {
   const { motor, hidratado } = usePontos();
   const [resgatando, setResgatando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -29,7 +29,7 @@ export function LojaItem({ recompensa }: { recompensa: RecompensaDefinida }) {
     setResgatando(true);
     setErro(null);
 
-    const rastro = motor.emitir("loja.resgate.efetuado", {
+    const rastro = motor.emitir("recompensa.resgatada", {
       tipo: "recompensa",
       id: recompensa.id,
     });
@@ -51,7 +51,7 @@ export function LojaItem({ recompensa }: { recompensa: RecompensaDefinida }) {
       </div>
 
       <div className="cartao">
-        <span className="loja-preco text-xl">
+        <span className="recompensa-preco text-xl">
           <Moeda />
           {recompensa.custo}
         </span>
@@ -104,8 +104,8 @@ export function LojaItem({ recompensa }: { recompensa: RecompensaDefinida }) {
 
       <p className="credito-foto">Foto: {recompensa.imagemCredito}</p>
 
-      <Link href="/loja/" className="botao-discreto no-underline self-start">
-        ← Voltar à loja
+      <Link href="/recompensas/" className="botao-discreto no-underline self-start">
+        ← Voltar às recompensas
       </Link>
     </div>
   );

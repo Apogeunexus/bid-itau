@@ -13,9 +13,12 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   catalogoDeSementes,
+  medidasDasFaixas,
   precomputoDeSementes,
   temasDeLeitura,
 } from "../src/dados/sementes";
+import { catalogoDeCursos } from "../src/dados/cursos";
+import { catalogoDoPlay } from "../src/dados/play";
 import {
   ampliacaoDeRepertorio,
   comporFeed,
@@ -271,7 +274,72 @@ assercao("os temas do Notícias casam com o acervo, todos", () => {
   for (const t of temas) exigir(t.n > 0, `o tema «${t.rotulo}» casou com contagem zero`);
 });
 
-console.log("\nPORTÃO 8 — a ampliação de repertório é exata");
+console.log("\nPORTÃO 8 — os denominadores das faixas batem com o acervo");
+
+assercao("cada medida das faixas confere com uma contagem independente", () => {
+  // ESTE PORTÃO EXISTE POR UM DEFEITO QUE CHEGOU AO HTML. As faixas somavam FACETAS para
+  // achar quantos itens declaram linguagem, e item com duas linguagens conta duas vezes:
+  // o build saiu dizendo «50 dos 336 podcasts não declaram linguagem» quando são 100, e
+  // «33 das 54 formações declaram» quando são 24. Aqui a conferência vem por outro
+  // caminho — os catálogos do próprio app — para uma fonte errada não confirmar a si
+  // mesma.
+  const m = medidasDasFaixas();
+  const midias = catalogoDoPlay();
+  const podcasts = midias.filter((x) => x.categoria === "podcasts");
+  const cursos = catalogoDeCursos();
+
+  const pares: [string, number, number][] = [
+    ["mídias", m.midias, midias.length],
+    ["podcasts", m.podcasts, podcasts.length],
+    [
+      "podcasts sem linguagem",
+      m.podcastsSemLinguagem,
+      podcasts.filter((x) => x.linguagens.length === 0).length,
+    ],
+    ["formações", m.formacoes, cursos.total],
+    [
+      "formações com linguagem",
+      m.formacoesComLinguagem,
+      cursos.itens.filter((c) => c.linguagens.length > 0).length,
+    ],
+  ];
+  for (const [nome, declarado, contado] of pares) {
+    exigir(declarado === contado, `${nome}: a faixa diz ${declarado}, o acervo tem ${contado}`);
+  }
+
+  // A soma das facetas TEM de divergir da contagem por item — se não divergisse, este
+  // portão estaria verde por acidente e não pegaria a volta do defeito.
+  const somaDeFacetas = cursos.linguagens.reduce((t, l) => t + l.n, 0);
+  exigir(
+    somaDeFacetas !== m.formacoesComLinguagem,
+    "soma de facetas igual à contagem por item — o portão perdeu o poder de separar as duas",
+  );
+});
+
+assercao("as seções de perfil existem no HTML de quem ainda não semeou", () => {
+  // Devolver `null` até o localStorage ser lido tira a seção do HTML estático: ela passa
+  // a existir só com JavaScript e some de qualquer verificação que leia o build. O Museu
+  // caiu nisso e a faixa não apareceu em nenhuma das 2.463 páginas geradas.
+  for (const tela of [
+    "src/componentes/museu-reentrada.tsx",
+    "src/componentes/repertorio-do-perfil.tsx",
+  ]) {
+    exigir(
+      !/if \(!hidratado\) return null;/.test(ler(tela)),
+      `${tela}: return null antes de hidratar tira a seção do HTML estático`,
+    );
+  }
+
+  // A mesma classe de defeito com outra forma: `hidratado && algo` num ramo de JSX some
+  // do HTML pelo mesmo motivo. O aviso do feed sem semente caiu nisso e não existia em
+  // nenhuma das 5.475 páginas exportadas.
+  exigir(
+    !/\{hidratado && /.test(ler("src/componentes/feed.tsx")),
+    "feed.tsx: `hidratado &&` num ramo de JSX tira o conteúdo do HTML estático",
+  );
+});
+
+console.log("\nPORTÃO 9 — a ampliação de repertório é exata");
 
 assercao("a métrica não é calculada sobre o teto do payload", () => {
   const perfil = [catalogo.linguagens[3].chave];

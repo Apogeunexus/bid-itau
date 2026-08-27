@@ -10,10 +10,11 @@ import {
   ICONE_PERFIL,
   ICONE_COMUNIDADE,
   ICONE_SALVOS,
-  ICONE_LOJA,
+  ICONE_RECOMPENSAS,
 } from "@/componentes/base/icones";
 import { IconeVivo, pulsarGradeApps } from "@/componentes/icone-vivo";
-import { AssinaturaIc } from "@/componentes/marca";
+import { Grafismo } from "@/componentes/grafismo";
+import { SeloDoPerfil } from "@/componentes/selo-do-perfil";
 import { ContadorDeFichas } from "@/componentes/contador-fichas";
 import { SeletorDeTema } from "@/componentes/seletor-tema";
 import { useSessao } from "@/contexto/sessao";
@@ -58,7 +59,7 @@ interface Aba {
 const ABAS: Aba[] = [
   { href: "/descobrir", rotulo: "Descobrir", icone: ICONE_DESCOBRIR },
   { href: "/comunidade", rotulo: "Comunidade", icone: ICONE_COMUNIDADE },
-  { href: "/loja", rotulo: "Loja", icone: ICONE_LOJA },
+  { href: "/recompensas", rotulo: "Recompensas", icone: ICONE_RECOMPENSAS },
   { href: "/salvos", rotulo: "Salvos", icone: ICONE_SALVOS },
 ];
 
@@ -86,7 +87,13 @@ export function NavegacaoBarra() {
   return (
     <>
       <header className="barra-topo">
-        <AssinaturaIc prioridade />
+        {/* O GRAFISMO NO LUGAR DA ASSINATURA. O `\C` é o marcador oficial do
+            manual (D-11, FUND-03) — não é a assinatura recortada, que o manual
+            proíbe alterar em proporção ou lettering. A assinatura completa segue
+            no menu lateral e no rodapé, onde há largura para ela respirar. */}
+        <Link href="/" className="barra-marca no-underline" aria-label="Início">
+          <Grafismo variacao="completo" rotulo="Itaú Cultural" />
+        </Link>
 
         <ContadorDeFichas />
 
@@ -123,6 +130,11 @@ export function NavegacaoBarra() {
             onClick={() => setContaAberta((v) => !v)}
           >
             <IconeVivo ativo={contaAberta}>{ICONE_PERFIL}</IconeVivo>
+            {/* O SELO GRUDA NO ÍCONE, não fica ao lado. Ao lado ele seria mais um
+                item disputando a única linha do topo; grudado, ele é lido como
+                propriedade da pessoa — do mesmo jeito que um distintivo numa
+                lapela, e não um número no painel. */}
+            <SeloDoPerfil />
           </button>
 
           <AnimatePresence initial={false}>

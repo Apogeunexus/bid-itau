@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cursos } from "@/componentes/cursos";
 import { PreferenciaFaixa } from "@/componentes/preferencia-faixa";
 import { catalogoDeCursos } from "@/dados/cursos";
+import { medidasDasFaixas } from "@/dados/sementes";
 
 export const metadata: Metadata = {
   title: "Cursos — Itaú Cultural",
@@ -17,9 +18,12 @@ export const metadata: Metadata = {
  */
 const CATALOGO = catalogoDeCursos();
 
-/* Quantas formações declaram alguma linguagem. É o número que impede a pergunta de
- * linguagem de existir nesta faixa: filtrar por ela esconderia as que não declaram. */
-const COM_LINGUAGEM = CATALOGO.linguagens.reduce((total, l) => total + l.n, 0);
+/* Quantas formações declaram alguma linguagem, contadas ITEM A ITEM.
+ *
+ * Somar as facetas devolvia 33 de 54 — uma formação que declara duas linguagens entra nas
+ * duas. São 24, e a diferença não é detalhe: é o número que justifica esta faixa não ter
+ * pergunta de linguagem. */
+const MEDIDAS = medidasDasFaixas();
 
 export default function PaginaCursos() {
   return (
@@ -32,9 +36,11 @@ export default function PaginaCursos() {
           <>
             Não há pergunta de linguagem aqui de propósito:{" "}
             <strong>
-              só {COM_LINGUAGEM} das {CATALOGO.total} formações declaram alguma
+              só {MEDIDAS.formacoesComLinguagem} das {MEDIDAS.formacoes} formações declaram
+              alguma
             </strong>
-            , e recortar por ela esconderia as outras {CATALOGO.total - COM_LINGUAGEM}. O
+            , e recortar por ela esconderia as outras{" "}
+            {MEDIDAS.formacoes - MEDIDAS.formacoesComLinguagem}. O
             acervo também não traz nota, preço nem nome de instrutor — nada disso é
             oferecido porque nada disso existe no dado.
           </>

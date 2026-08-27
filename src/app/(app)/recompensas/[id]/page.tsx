@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Grafismo } from "@/componentes/grafismo";
-import { LojaItem } from "@/componentes/loja-item";
-import { RECOMPENSAS, recompensaPorId } from "@/dados/loja";
+import { RecompensaItem } from "@/componentes/recompensa-item";
+import { RECOMPENSAS, recompensaPorId } from "@/dados/recompensas";
 
 export function generateStaticParams() {
   return RECOMPENSAS.map((r) => ({ id: r.id }));
@@ -21,7 +21,7 @@ export default async function PaginaRecompensa({ params }: { params: Promise<{ i
         </div>
       </header>
 
-      <LojaItem recompensa={recompensa} />
+      <RecompensaItem recompensa={recompensa} />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { NoticiasHub } from "@/componentes/noticias";
 import { PreferenciaFaixa } from "@/componentes/preferencia-faixa";
-import { temasDeLeitura, totalDeTemasComMateria } from "@/dados/sementes";
+import { medidasDasFaixas, temasDeLeitura } from "@/dados/sementes";
 
 export const metadata: Metadata = { title: "Notícias — Itaú Cultural" };
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Notícias — Itaú Cultural" };
  * moram em `noticias.tsx`, que é servidor e alcança `leituras.ts` (DP-F).
  */
 const TEMAS = temasDeLeitura();
-const TOTAL_DE_TEMAS = totalDeTemasComMateria();
+const TOTAL_DE_TEMAS = medidasDasFaixas().temasComMateria;
 
 export default function Noticias() {
   return (

@@ -68,7 +68,7 @@ export function Feed({
   precomputoSementes,
   limite,
 }: FeedProps) {
-  const { personaId, disposicoes, sementes, hidratado } = useSessao();
+  const { personaId, disposicoes, sementes } = useSessao();
 
   /**
    * O feed do perfil, quando existe. `null` — e não lista vazia — quando não há semente:
@@ -114,8 +114,13 @@ export function Feed({
     <div className="flex flex-col gap-3">
       {/* SEM SEMENTE O FEED FUNCIONA E DIZ QUE ESTÁ GENÉRICO. Ele não é um erro nem um
           vazio: é o feed base, e a pessoa precisa saber que existe um mais seu a três
-          toques de distância. Some assim que a primeira semente é marcada. */}
-      {hidratado && !doPerfil ? (
+          toques de distância. Some assim que a primeira semente é marcada.
+
+          SEM GUARDA DE `hidratado`, de propósito. A primeira escrita tinha
+          `hidratado && !doPerfil`, e o aviso não existia em nenhuma das 5.475 páginas do
+          export — só aparecia depois do JavaScript. `doPerfil` já é `null` antes de
+          hidratar, que é exatamente o estado de quem ainda não semeou. */}
+      {!doPerfil ? (
         <p className="onb-aviso-feed">
           <span>Este é o feed base do acervo — ele ainda não sabe nada sobre você.</span>
           <Link href="/onboarding/2/" className="onb-texto-acao">

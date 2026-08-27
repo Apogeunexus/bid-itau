@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { BarraDeNivel, Fichas, Moeda, Painel, SeloDaSequencia, SemanaDaSequencia, Vazio } from "@/componentes/pontos-base";
 import { usePontos } from "@/contexto/pontos";
-import { FASES_DE_ENTREGA, recompensaPorId } from "@/dados/loja";
+import { FASES_DE_ENTREGA, recompensaPorId } from "@/dados/recompensas";
 import { CONFIG } from "@/dados/pontos";
 import { extrato } from "@/lib/pontos/livro";
 import type { Ativo, FaseDoResgate, Resgate } from "@/lib/pontos/tipos";
@@ -92,7 +92,7 @@ export function Carteira() {
           </div>
         </div>
 
-        <Link href="/loja" className="botao-acao no-underline">
+        <Link href="/recompensas" className="botao-acao no-underline">
           Ver o que dá para resgatar
         </Link>
       </div>
