@@ -134,18 +134,26 @@
   object-fit: cover;
 }
 
-/* O VÉU, escuro embaixo e transparente em cima: o nome mora no rodapé do
-   cartaz e é lá que o contraste precisa existir. Véu uniforme apagaria a foto
-   inteira para resolver um problema que só existe num terço dela. */
+/* O VÉU PRECISA GARANTIR CONTRASTE, NÃO SUGERI-LO.
+ *
+ * A primeira versão era um gradiente que ia a 78% de preto na base — e ainda assim
+ * «artes visuais» e «fotografia» ficaram ilegíveis, porque as duas capas são fotografias
+ * CLARAS e o texto é branco. Gradiente resolve o caso médio; aqui o caso médio não é o que
+ * importa, é o pior.
+ *
+ * Então a base ganha preto quase sólido na altura em que o nome mora, e o gradiente só faz
+ * a transição para o topo, onde a foto aparece limpa. O nome fica legível sobre qualquer
+ * capa, clara ou escura, sem depender de quem escolheu a foto. */
 .onb-lingua::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
-    color-mix(in srgb, var(--ic-preto) 78%, transparent) 0%,
-    color-mix(in srgb, var(--ic-preto) 38%, transparent) 45%,
-    transparent 100%
+    color-mix(in srgb, var(--ic-preto) 92%, transparent) 0%,
+    color-mix(in srgb, var(--ic-preto) 88%, transparent) 30%,
+    color-mix(in srgb, var(--ic-preto) 45%, transparent) 55%,
+    color-mix(in srgb, var(--ic-preto) 15%, transparent) 100%
   );
 }
 
@@ -324,16 +332,16 @@
   align-items: center;
 }
 
+/* NÃO É GRUDENTO. Ele já foi `position: sticky` no fim do bloco — e dentro da moldura do
+ * telefone isso o fazia flutuar POR CIMA da grade, tapando dois cartazes no meio da lista.
+ * O rodapé de uma tela de escolha não precisa acompanhar a rolagem: ele é o passo
+ * seguinte, e o passo seguinte vem depois de ver as opções. */
 .onb-rodape {
-  position: sticky;
-  inset-block-end: 0;
   display: flex;
   flex-wrap: wrap;
   gap: var(--espaco-pilha);
   align-items: center;
-  justify-content: space-between;
-  padding-block: var(--espaco-cartao);
-  background: linear-gradient(to top, var(--cor-fundo) 70%, transparent);
+  padding-block-start: var(--espaco-cartao);
 }
 
 .onb-avancar {
