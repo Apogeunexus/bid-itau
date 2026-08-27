@@ -669,18 +669,24 @@
   gap: 0.5rem;
   margin-inline: calc(var(--espaco-tela) * -1);
   padding: 0.75rem var(--espaco-tela) 1rem;
-  background: color-mix(in srgb, var(--cor-fundo) 92%, transparent);
-  backdrop-filter: blur(8px);
+  /* OPACO, e não translúcido com desfoque. O véu de 92% deixava o texto da
+     conversa aparecer por trás do campo enquanto rolava — e o campo de escrever
+     é a única coisa da tela que precisa estar sempre legível. Desfoque é
+     acabamento; aqui ele custava a leitura. */
+  background: var(--cor-fundo);
 }
 
+/* O DESLOCAMENTO ERA CONTADO DUAS VEZES, e é isso que fazia o campo boiar.
+ *
+ * O container de rolagem da moldura JÁ reserva 6rem no rodapé para a barra
+ * inferior. O compositor pedia mais 6rem de `bottom` por cima disso, e o
+ * resultado medido era um campo assentando a 192px do fundo num viewport de
+ * 844 — com uma faixa morta de 96px embaixo, por onde a conversa rolava
+ * atrás do fundo translúcido. Parecia flutuante porque estava flutuando.
+ *
+ * `bottom: 0` gruda no fim do container, que é exatamente a borda de cima da
+ * barra. Sem offset, sem faixa, sem conteúdo passando por baixo. */
 [data-view="mobile"] .ia-compositor {
-  bottom: 6rem;
-}
-
-/* No vazio o campo já senta no fim do flex, acima do padding da moldura.
- * O offset de 6rem só vale na conversa, quando o compositor gruda e
- * precisaria cobrir a barra. */
-[data-view="mobile"] .ia[data-fase="vazio"] .ia-compositor {
   bottom: 0;
 }
 
