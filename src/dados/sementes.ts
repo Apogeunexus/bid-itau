@@ -1,10 +1,12 @@
 import vocabularioJson from "./gerado/vocabulario.json";
 import { expandir, paraCartao, type Candidato } from "./caminhada";
 import { porId, porLinguagem, porSlug, slugsPorTipo } from "./grafo";
+import { capaDe } from "./imagem";
 import type { Persona } from "./personas";
 import {
   chaveDeEntidade,
   chaveDeLinguagem,
+  type CapaDeSemente,
   LASTRO_FORTE,
   TETO_POR_SEMENTE,
   type CartaoEnxuto,
@@ -230,14 +232,18 @@ function semear(): Semeadura {
     // atravessada e toda a música contaria como ampliação.
     linguagensDe[chave] = [slug];
     const doVocabulario = VOCABULARIO.linguagens.find((l) => l.id === slug);
-    linguagens.push({
+    const rotulo = doVocabulario?.rotulo ?? entidade.titulo;
+    const linguagem: LinguagemDeSemente = {
       chave,
       slug,
-      rotulo: doVocabulario?.rotulo ?? entidade.titulo,
+      rotulo,
       cor: doVocabulario?.cor ?? "--ic-cinza",
       entidades: porLinguagem(slug).length,
       alcance: alcancePorChave.get(chave) ?? 0,
-    });
+    };
+    const capa = capaDaLinguagem(slug, rotulo);
+    if (capa) linguagem.capa = capa;
+    linguagens.push(linguagem);
   }
 
   // --- pessoas e obras ---
@@ -284,6 +290,44 @@ function semear(): Semeadura {
     catalogo,
   };
   return memo;
+}
+
+/**
+ * A capa de uma linguagem: uma AMOSTRA do acervo dela, não uma ilustração.
+ *
+ * É o mesmo princípio dos cartazes do hub de apps — a foto mostra o que tem dentro. Por
+ * isso ela sai de uma entidade que REALMENTE pertence à linguagem, e por isso não há
+ * empréstimo: linguagem cujo acervo não tem imagem local nenhuma fica sem capa e a carta
+ * cai no gradiente da cor. Pegar a foto de outra linguagem seria prometer um acervo que
+ * não está ali.
+ *
+ * A escolha é determinística e semeada pelo slug: sem isso, a mesma entidade encabeçaria
+ * várias linguagens por ordem de id, que é a falha M-4 de `caminhada.ts`. Preferência para
+ * obra e pessoa — uma reprodução ou um retrato diz «artes visuais» melhor que a foto de
+ * uma reportagem sobre artes visuais.
+ */
+function capaDaLinguagem(slug: string, rotulo: string): CapaDeSemente | undefined {
+  const PESO_DA_CLASSE: Record<string, number> = { obra: 0, pessoa: 1, evento: 2, midia: 3 };
+
+  const candidatas = porLinguagem(slug)
+    .map((e) => ({ e, foto: capaDe(e) }))
+    .filter((c) => Boolean(c.foto.imagem))
+    .sort((a, b) => {
+      const pa = PESO_DA_CLASSE[a.e.classe] ?? 9;
+      const pb = PESO_DA_CLASSE[b.e.classe] ?? 9;
+      if (pa !== pb) return pa - pb;
+      return hash32(`${slug}|${a.e.id}`) - hash32(`${slug}|${b.e.id}`);
+    });
+
+  const escolhida = candidatas[0];
+  if (!escolhida?.foto.imagem) return undefined;
+
+  const capa: CapaDeSemente = {
+    arquivo: escolhida.foto.imagem,
+    alt: `Amostra do acervo de ${rotulo}: ${escolhida.e.titulo}`,
+  };
+  if (escolhida.foto.creditoImagem) capa.credito = escolhida.foto.creditoImagem;
+  return capa;
 }
 
 function rostoDe(e: Entidade, classe: ClasseDeSemente, alcance: number): RostoDeSemente {

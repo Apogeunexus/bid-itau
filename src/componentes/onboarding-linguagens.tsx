@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useSessao } from "@/contexto/sessao";
 import { LASTRO_FORTE, type LinguagemDeSemente } from "@/dados/sementes-wire";
 
@@ -11,6 +12,15 @@ import { LASTRO_FORTE, type LinguagemDeSemente } from "@/dados/sementes-wire";
  * 1 captura intenção («o que te move hoje»), este captura território cultural, e os dois
  * fazem trabalho diferente no motor — disposição pondera e corta o feed, linguagem é
  * SEMENTE, o ponto de onde a caminhada parte.
+ *
+ * A CARTA É UM CARTAZ, e a foto é AMOSTRA do acervo daquela linguagem — o mesmo princípio
+ * do hub de apps: a imagem mostra o que tem dentro, não ilustra o rótulo. É por isso que
+ * ela sai de uma entidade que realmente pertence à linguagem, e por isso não há foto
+ * emprestada: linguagem sem imagem no próprio acervo cairia no gradiente da cor.
+ *
+ * O nome vai POR CIMA da foto, com véu. Sem o véu, uma parede de 19 fotografias com
+ * assunto e luz diferentes deixa metade dos nomes ilegíveis — e o nome é a única coisa
+ * que precisa ser lida aqui.
  *
  * A CARTA NÃO MOSTRA CONTAGEM (pedido de 27.08). O número do acervo estava colado no
  * rótulo como evidência do tamanho de cada linguagem — mas ele não decidia nada para quem
@@ -51,6 +61,16 @@ export function OnboardingLinguagens({ linguagens }: { linguagens: LinguagemDeSe
               className="onb-lingua"
               style={{ ["--cor-linguagem" as string]: `var(${linguagem.cor})` }}
             >
+              {linguagem.capa ? (
+                <Image
+                  className="onb-lingua-foto"
+                  src={linguagem.capa.arquivo}
+                  alt={linguagem.capa.alt}
+                  width={320}
+                  height={240}
+                  unoptimized
+                />
+              ) : null}
               <span className="onb-rotulo">{linguagem.rotulo}</span>
             </button>
           );

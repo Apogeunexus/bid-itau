@@ -75,84 +75,104 @@
 .onb-grade {
   display: grid;
   gap: var(--espaco-pilha);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-@media (min-width: 40rem) {
-  .onb-grade {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+  /* COLUNA POR LARGURA MÍNIMA, e não por número fixo de colunas em cada porte.
+   *
+   * Com `repeat(4, 1fr)` num porte largo, a coluna resultante podia ficar mais estreita
+   * que «documentário» ou «arte e tecnologia», e a palavra transbordava a carta — foi o
+   * que aconteceu com audiovisual, patrimônio, arquitetura e documentário. Aqui a coluna
+   * nunca desce de 9rem e o número delas é o que couber: a grade se adapta à palavra em
+   * vez de a palavra ter de caber na grade. */
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
 }
 
 @media (min-width: 64rem) {
   .onb-grade {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--espaco-cartao);
   }
 }
 
-@media (min-width: 90rem) {
-  .onb-grade {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-}
-
 /* ---------------------------------------------------------------------------
- * 3 · Carta de linguagem
+ * 3 · Carta de linguagem — um CARTAZ
  *
- * A cor vem da linguagem, por variável inline (`--cor-linguagem`), do mesmo
- * vocabulário que o selo de linguagem já usa no cartão do feed — é assim que a
- * pessoa reconhece no feed o que marcou aqui.
+ * A foto é AMOSTRA do acervo daquela linguagem, não ilustração dela: mesmo
+ * princípio dos cartazes do hub de apps. Ela sai de uma entidade que pertence
+ * à linguagem, e não há empréstimo — sem foto própria, o cartaz cai na cor.
+ *
+ * O nome vai POR CIMA, com véu. Sem véu, uma parede de 19 fotografias com
+ * assunto e luz diferentes deixa metade dos nomes ilegível — e o nome é a
+ * única coisa que precisa ser lida aqui.
  * ------------------------------------------------------------------------- */
 
 .onb-lingua {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--espaco-pilha);
-  /* Sem a linha de contagem a carta encolheu. 4.5rem ainda dá alvo de sobra para o
-     polegar e mantém a grade com respiro em vez de virar uma lista de botões. */
-  min-height: 4.5rem;
+  align-items: flex-end;
+  /* Proporção fixa: a parede só lê como grade quando todo cartaz tem a mesma
+     forma. 4:3 dá altura para um nome de duas linhas sem virar retrato. */
+  aspect-ratio: 4 / 3;
   padding: var(--espaco-cartao);
+  overflow: hidden;
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
-  background: var(--cor-superficie);
+  /* A cor da linguagem por baixo: ela aparece enquanto a foto carrega e no
+     lugar dela quando não há foto — nunca um retângulo cinza sem identidade. */
+  background: var(--cor-linguagem, var(--cor-superficie-2));
   color: inherit;
   text-align: start;
   cursor: pointer;
+  min-width: 0;
   transition:
-    border-color var(--dur-1) var(--ease-padrao),
     box-shadow var(--dur-1) var(--ease-padrao),
     transform var(--dur-1) var(--ease-padrao);
 }
 
-/* A faixa de cor é o que diferencia uma linguagem da outra numa parede de cartas
- * de mesmo tamanho — e desde que a contagem saiu, ela é a ÚNICA pista visual além
- * do nome. Sem ela a grade vira lista de texto com borda. */
-.onb-lingua::before {
+.onb-lingua-foto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* O VÉU, escuro embaixo e transparente em cima: o nome mora no rodapé do
+   cartaz e é lá que o contraste precisa existir. Véu uniforme apagaria a foto
+   inteira para resolver um problema que só existe num terço dela. */
+.onb-lingua::after {
   content: "";
-  display: block;
-  width: 2.5rem;
-  height: 0.25rem;
-  border-radius: var(--raio-pilula);
-  background: var(--cor-linguagem, var(--cor-tinta-3));
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--ic-preto) 78%, transparent) 0%,
+    color-mix(in srgb, var(--ic-preto) 38%, transparent) 45%,
+    transparent 100%
+  );
 }
 
 .onb-lingua:hover {
-  border-color: var(--cor-borda-forte);
-  box-shadow: var(--sombra-1);
+  box-shadow: var(--sombra-2);
+  transform: translateY(-0.25rem);
 }
 
+/* Escolhido: moldura POR DENTRO, para o cartaz não deslocar a grade ao ser
+   marcado. A marca do canto entra junto — cor sozinha não é sinal. */
 .onb-lingua[aria-pressed="true"] {
   border-color: var(--cor-acao);
-  box-shadow: inset 0 0 0 1px var(--cor-acao);
-  background: var(--cor-acao-lavada);
+  box-shadow: inset 0 0 0 0.25rem var(--cor-acao);
 }
 
 .onb-rotulo {
+  position: relative;
   font-size: var(--tipo-corpo);
-  font-weight: 600;
-  line-height: 1.2;
+  font-weight: 700;
+  line-height: 1.15;
+  min-width: 0;
+  /* Branco fixo, e não `--cor-tinta`: o texto está sobre fotografia com véu
+     escuro nos dois temas, então ele acompanha o véu, não o tema. */
+  color: var(--ic-branco);
+  text-shadow: 0 1px 2px color-mix(in srgb, var(--ic-preto) 50%, transparent);
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 /* Usada nas pastilhas das faixas dos apps. Ver o cabeçalho desta folha. */

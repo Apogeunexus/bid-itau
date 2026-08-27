@@ -73,6 +73,23 @@ export interface LinguagemDeSemente {
   entidades: number;
   /** Quantos cartões esta semente alcança de fato. Zero não é oferecível. */
   alcance: number;
+  /**
+   * A capa da carta, e ela é AMOSTRA do acervo daquela linguagem — não ilustração dela.
+   *
+   * Mesmo princípio dos cartazes do hub de apps: a foto mostra o que tem dentro, e por
+   * isso sai de uma entidade real que pertence à linguagem. Ausente quando o acervo
+   * daquela linguagem não tem nenhuma imagem local — e aí a carta cai no gradiente da
+   * cor, sem foto emprestada de outra linguagem.
+   */
+  capa?: CapaDeSemente;
+}
+
+export interface CapaDeSemente {
+  arquivo: string;
+  /** Texto alternativo em pt-BR, dizendo de onde a amostra veio. */
+  alt: string;
+  /** Quem fez a foto, quando o acervo declara. */
+  credito?: string;
 }
 
 /** Uma pessoa ou obra oferecível como semente. */

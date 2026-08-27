@@ -81,9 +81,10 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
   return (
     <TelaEsqueleto
       nome={conteudo.titulo}
-      acoes={
-        /* «Avançar» e «Pular», os dois presentes em TODOS os passos, e os dois marcando
-           que a pessoa foi perguntada. Ver `onboarding-rodape.tsx`. */
+      rodape={
+        /* NO FIM DA TELA, e não no cabeçalho: «Avançar» acima da grade seria o botão de
+           confirmar aparecendo antes daquilo que ele confirma. Os dois continuam
+           presentes em TODOS os passos e os dois marcam que a pessoa foi perguntada. */
         <OnboardingRodape
           proximo={proximo}
           rotuloAvancar={passo === String(total) ? "Ver o meu Descobrir" : "Avançar"}

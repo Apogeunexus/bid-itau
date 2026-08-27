@@ -102,12 +102,21 @@ export function TelaEsqueleto({
   nome,
   objetivo,
   acoes,
+  rodape,
   children,
 }: {
   nome: string;
   /** Ausente nas telas que deixaram de ser esqueleto — ver o parágrafo abaixo. */
   objetivo?: string;
   acoes?: React.ReactNode;
+  /**
+   * As mesmas ações, mas DEPOIS do conteúdo.
+   *
+   * Numa tela de escolha, o botão de avançar no cabeçalho fica acima daquilo que ele
+   * confirma: a pessoa lê «Avançar» antes de ver o que há para escolher. No fim ele é o
+   * passo seguinte de verdade, e é o que a mão alcança depois de percorrer a grade.
+   */
+  rodape?: React.ReactNode;
   children?: React.ReactNode;
 }) {
   return (
@@ -125,6 +134,7 @@ export function TelaEsqueleto({
         {acoes ? <div className="flex flex-wrap gap-2 pt-1">{acoes}</div> : null}
       </header>
       {children}
+      {rodape ? <div className="onb-rodape">{rodape}</div> : null}
     </div>
   );
 }
