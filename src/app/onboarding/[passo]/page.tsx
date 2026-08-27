@@ -8,17 +8,20 @@ import { cidadesComAcervo } from "@/dados/cidade";
 import { catalogoDeSementes } from "@/dados/sementes";
 
 /**
- * Onboarding em QUATRO passos: disposição, linguagens, rostos e obras, e o passo de
+ * Onboarding em CINCO passos: disposição, linguagens, artistas, obras e o passo de
  * contexto (território + acessibilidade).
  *
  * ─────────────────────────────────────────────────────────────────────────────────────
  * O QUE MUDOU COM A S8, e por quê.
  *
  * Eram três passos — disposição, território, acessibilidade — e só o primeiro era Camada
- * 1. Os dois passos de semeadura entraram no meio, e território e acessibilidade se
- * FUNDIRAM num passo só. A fusão não é economia de tela: cinco passos empurram o abandono
- * para antes do passo 3, que é justamente o que alimenta o motor. Os dois são Camada 3,
- * os dois são contexto e não gosto, e nenhum dos dois é pré-requisito de nada (D-19).
+ * 1. Os passos de semeadura entraram no meio; território e acessibilidade continuam
+ * FUNDIDOS num passo só, que fecha a sequência. Os dois são Camada 3, os dois são
+ * contexto e não gosto, e nenhum é pré-requisito de nada (D-19).
+ *
+ * ARTISTAS E OBRAS SÃO DUAS TELAS, e a de obras não se recorta pela de artistas: o acervo
+ * não tem nenhuma aresta ligando pessoa a obra. O motivo medido está no cabeçalho de
+ * `onboarding-sementes.tsx`.
  *
  * NENHUM PASSO É PORTEIRO. «Pular» existe nos quatro e leva direto a Descobrir, que
  * funciona sem semente nenhuma e diz na tela que está mostrando o feed base. É a mesma
@@ -44,12 +47,17 @@ const PASSOS = {
     blocos: [] as string[],
   },
   "3": {
-    titulo: "Onboarding 3 — artistas e obras",
+    titulo: "Onboarding 3 — artistas",
     camada: "C1" as const,
     blocos: [] as string[],
   },
   "4": {
-    titulo: "Onboarding 4 — território e acessibilidade",
+    titulo: "Onboarding 4 — obras",
+    camada: "C1" as const,
+    blocos: [] as string[],
+  },
+  "5": {
+    titulo: "Onboarding 5 — território e acessibilidade",
     camada: "C3" as const,
     blocos: [
       "cidade atual, com correção manual",
@@ -60,7 +68,7 @@ const PASSOS = {
   },
 };
 
-/** Exatamente quatro passos. Sob `output: "export"` esta lista é a rota (D-24). */
+/** Exatamente cinco passos. Sob `output: "export"` esta lista é a rota (D-24). */
 export function generateStaticParams() {
   return Object.keys(PASSOS).map((passo) => ({ passo }));
 }
@@ -69,7 +77,19 @@ const PROXIMO: Record<string, string> = {
   "1": "/onboarding/2/",
   "2": "/onboarding/3/",
   "3": "/onboarding/4/",
-  "4": "/descobrir/",
+  "4": "/onboarding/5/",
+  "5": "/descobrir/",
+};
+
+/* A grade de cada passo de semeadura, recortada por classe no BUILD. Artistas e obras são
+ * telas independentes — ver o cabeçalho deste arquivo. */
+const ARTISTAS = {
+  grade: CATALOGO.grade.filter((r) => r.classe === "pessoa"),
+  busca: CATALOGO.busca.filter((r) => r.classe === "pessoa"),
+};
+const OBRAS = {
+  grade: CATALOGO.grade.filter((r) => r.classe === "obra"),
+  busca: CATALOGO.busca.filter((r) => r.classe === "obra"),
 };
 
 export default async function Onboarding({ params }: { params: Promise<{ passo: string }> }) {
@@ -101,10 +121,23 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
       {passo === "1" ? <OnboardingDisposicao /> : null}
       {passo === "2" ? <OnboardingLinguagens linguagens={CATALOGO.linguagens} /> : null}
       {passo === "3" ? (
-        <OnboardingSementes grade={CATALOGO.grade} busca={CATALOGO.busca} />
+        <OnboardingSementes
+          grade={ARTISTAS.grade}
+          busca={ARTISTAS.busca}
+          pergunta="Quais artistas já te interessam?"
+          rotuloDaBusca="Procurar artista pelo nome"
+        />
+      ) : null}
+      {passo === "4" ? (
+        <OnboardingSementes
+          grade={OBRAS.grade}
+          busca={OBRAS.busca}
+          pergunta="E quais obras te param?"
+          rotuloDaBusca="Procurar obra pelo título"
+        />
       ) : null}
 
-      {passo === "4" ? (
+      {passo === "5" ? (
         <>
           <EsqueletoLista rotulos={conteudo.blocos} />
 

@@ -6,10 +6,10 @@ import type { RostoDeSemente } from "@/dados/sementes-wire";
 
 /**
  * museu-reentrada.tsx — a única «faixa de preferência» do Museu, e ela não é uma pergunta
- * nova: é uma REENTRADA no passo 3 do onboarding.
+ * nova: é uma REENTRADA no passo de obras do onboarding.
  *
  * POR QUE NÃO É PERGUNTA PRÓPRIA. Escolher obras aqui é exatamente a mesma operação do
- * passo 3 e grava exatamente a mesma semente. Inventar um segundo eixo de preferência para
+ * passo 4 e grava exatamente a mesma semente. Inventar um segundo eixo de preferência para
  * o Museu seria perguntar duas vezes a mesma coisa com dois nomes — e o Museu não tem
  * eixo próprio para oferecer: são 22 espaços, 2 exposições permanentes e 5 eventos
  * expositivos únicos. Uma pergunta de gosto sobre cinco itens é teatro.

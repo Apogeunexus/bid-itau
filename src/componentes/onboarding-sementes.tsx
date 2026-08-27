@@ -6,9 +6,22 @@ import { useSessao } from "@/contexto/sessao";
 import type { RostoDeSemente } from "@/dados/sementes-wire";
 
 /**
- * onboarding-sementes.tsx — o passo 3 do onboarding cultural (S8). É aqui que o algoritmo
- * nasce: a entidade marcada vira o ponto de partida da caminhada no grafo, e o cartão que
- * chegar ao feed vai carregar a aresta que o trouxe.
+ * onboarding-sementes.tsx — os passos 3 e 4 do onboarding cultural (S8): artistas numa
+ * tela, obras na seguinte. É aqui que o algoritmo nasce — a entidade marcada vira o ponto
+ * de partida da caminhada no grafo, e o cartão que chegar ao feed carrega a aresta que o
+ * trouxe.
+ *
+ * AS DUAS TELAS SÃO INDEPENDENTES, e isso é uma consequência do acervo, não uma escolha
+ * de desenho. MEDIDO: **zero arestas ligam pessoa a obra** neste grafo — nenhuma das 239
+ * obras está ligada a nenhuma das 575 pessoas. As 404 pessoas que alcançam alguma obra em
+ * dois saltos chegam lá por LINGUAGEM (30.134 caminhos) ou território (3.137), nunca por
+ * autoria. E no texto: das 239 obras, 157 trazem `extra.detalhe` e só 3 citam alguma das
+ * 575 pessoas — sendo que o nome ali costuma ser o do fotógrafo da reprodução, não o do
+ * autor («1X125 · 2006 · Edouard Fraipont | Ampliação fotográfica»).
+ *
+ * Por isso a tela de obras NÃO se recorta pelos artistas escolhidos na anterior: o filtro
+ * viria vazio para praticamente todo mundo, e preenchê-lo com obras da mesma linguagem
+ * chamando de «obras desses artistas» seria inventar um vínculo que o acervo não tem.
  *
  * ─────────────────────────────────────────────────────────────────────────────────────
  * AS DUAS SAÍDAS SÃO REQUISITO, E O MOTIVO É MEDIDO
@@ -44,7 +57,17 @@ function iniciaisDe(titulo: string): string {
     .join("");
 }
 
-export function OnboardingSementes({ grade, busca }: { grade: RostoDeSemente[]; busca: RostoDeSemente[] }) {
+export function OnboardingSementes({
+  grade,
+  busca,
+  pergunta,
+  rotuloDaBusca,
+}: {
+  grade: RostoDeSemente[];
+  busca: RostoDeSemente[];
+  pergunta: string;
+  rotuloDaBusca: string;
+}) {
   const { sementes, alternarSemente, hidratado } = useSessao();
   const [rolagem, setRolagem] = useState(0);
   const [termo, setTermo] = useState("");
@@ -80,7 +103,7 @@ export function OnboardingSementes({ grade, busca }: { grade: RostoDeSemente[]; 
   return (
     <section className="flex flex-col gap-4">
       <div className="onb-cabeca">
-        <h2 className="onb-pergunta">Escolha quem já te interessa.</h2>
+        <h2 className="onb-pergunta">{pergunta}</h2>
       </div>
 
       <div className="onb-busca">
@@ -88,8 +111,8 @@ export function OnboardingSementes({ grade, busca }: { grade: RostoDeSemente[]; 
           type="search"
           value={termo}
           onChange={(e) => setTermo(e.target.value)}
-          placeholder="Procurar artista ou obra"
-          aria-label="Procurar artista ou obra pelo nome"
+          placeholder={rotuloDaBusca}
+          aria-label={rotuloDaBusca}
         />
       </div>
 

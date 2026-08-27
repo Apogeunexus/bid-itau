@@ -171,6 +171,13 @@
 
 .onb-rotulo {
   position: relative;
+  /* ACIMA DO VÉU, e isto é o defeito que a tela teve.
+   *
+   * O véu é o `::after` do botão, e pseudo-elemento vem DEPOIS dos filhos na ordem de
+   * pintura: sem `z-index` aqui, o preto de 92% cobria o texto em vez de ficar atrás
+   * dele, e todos os nomes apareciam apagados. O sintoma parecia problema de contraste e
+   * era de empilhamento — a cor do texto estava certa o tempo todo. */
+  z-index: 1;
   font-size: var(--tipo-corpo);
   font-weight: 700;
   line-height: 1.15;
