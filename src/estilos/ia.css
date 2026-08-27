@@ -1211,11 +1211,15 @@
 .ia-gaveta {
   position: absolute;
   inset-block-start: 0;
-  inset-inline-start: calc(var(--espaco-tela) * -1);
+  /* ZERO, e não um recuo negativo para «encostar na borda». O recuo de um
+     `--espaco-tela` empurrava a gaveta para fora da moldura, que tem
+     `overflow: hidden` — e o resultado era o título saindo como «oteiros» e a
+     seção como «ECENTES», com a primeira letra comida pela borda do aparelho. */
+  inset-inline-start: 0;
   z-index: 60;
-  width: 88%;
+  width: 92%;
   height: var(--altura-moldura, 100%);
-  padding-block: var(--espaco-tela);
+  padding: var(--espaco-tela) var(--espaco-cartao);
   border-inline-end: 1px solid var(--cor-borda-forte);
   border-start-end-radius: var(--raio-g);
   border-end-end-radius: var(--raio-g);
@@ -1239,7 +1243,7 @@
 .ia-gaveta-veu {
   position: absolute;
   inset-block-start: 0;
-  inset-inline: calc(var(--espaco-tela) * -1);
+  inset-inline: 0;
   height: var(--altura-moldura, 100%);
   z-index: 50;
   border: none;
@@ -1363,4 +1367,30 @@
   font-size: var(--tipo-micro);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+}
+
+/* Os roteiros salvos, dentro da gaveta. `details` e não seção aberta: a lista
+   de conversas é o assunto principal do painel, e os roteiros são o segundo —
+   abrir os dois de uma vez faria o painel começar rolado. */
+.ia-gaveta-salvos {
+  padding-block-start: var(--espaco-pilha);
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+.ia-gaveta-salvos summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.ia-gaveta-salvos summary::-webkit-details-marker {
+  display: none;
+}
+
+.ia-gaveta-salvos summary::after {
+  content: "＋";
+  margin-inline-start: 0.5rem;
+}
+
+.ia-gaveta-salvos[open] summary::after {
+  content: "−";
 }

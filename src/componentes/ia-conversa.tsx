@@ -635,7 +635,14 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
     if (!mensagens.length) return;
     const primeira = mensagens.find((m) => m.papel === "usuario");
     if (!primeira) return;
-    if (!idDaConversa.current) idDaConversa.current = `c${Date.now()}`;
+    // O ID VEM DA PRIMEIRA MENSAGEM, e não do relógio.
+    //
+    // Com `Date.now()` a mesma conversa ganhava ids diferentes a cada montagem do
+    // componente — em desenvolvimento o React monta duas vezes de propósito — e a lista
+    // aparecia com duas entradas idênticas, mesma pergunta e mesma hora. Derivar do id da
+    // primeira mensagem torna a identidade da conversa uma propriedade dela, não do
+    // instante em que alguém olhou para ela.
+    if (!idDaConversa.current) idDaConversa.current = `c-${primeira.id}`;
     setHistorico(
       guardarConversa<Mensagem, Pedido>({
         id: idDaConversa.current,
@@ -720,12 +727,7 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
             <button type="button" className="ia-nova" onClick={novaConversa}>
               {glifo(ICONE_MAIS)} Nova conversa
             </button>
-          ) : (
-            <details className="ia-topo-salvos">
-              <summary>Salvos</summary>
-              <RoteirosSalvos cidades={cidades} gostos={gostos} />
-            </details>
-          )}
+          ) : null}
         </div>
       </header>
 
@@ -793,6 +795,16 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
               aparelho. A mais antiga sai quando uma nova entra.
             </p>
           ) : null}
+
+          {/* OS ROTEIROS SALVOS MORAM AQUI (27.08), e não mais no cabeçalho da tela.
+              Conversa e roteiro são as duas coisas que a pessoa guarda desta tela, e
+              estavam em lugares diferentes: a conversa na gaveta, o roteiro num
+              «details» que só aparecia antes de começar a conversar — ou seja, sumia
+              justo depois de você gerar um. */}
+          <details className="ia-gaveta-salvos">
+            <summary className="ia-gaveta-secao">Roteiros salvos</summary>
+            <RoteirosSalvos cidades={cidades} gostos={gostos} />
+          </details>
           </aside>
         </>
       ) : null}
