@@ -140,6 +140,20 @@ export const ICONE_FILTROS = (
  * ------------------------------------------------------------------------- */
 
 /** «Entrar»: a seta que não promete nada além de atravessar. */
+/**
+ * Painel lateral — retângulo com a divisória à direita, traço fino.
+ *
+ * O desenho diz o que o botão FAZ: mostra a tela com uma coluna aberta ao lado. Uma seta
+ * diria só «vai para algum lugar», e três pontinhos diriam «tem mais alguma coisa» — os
+ * dois obrigam a descobrir por tentativa.
+ */
+export const ICONE_PAINEL = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+    <rect x="3" y="5" width="18" height="14" rx="2.5" />
+    <path d="M14.5 5v14" />
+  </svg>
+);
+
 export const ICONE_SETA = (
   <Icone>
     <path d="M4.5 12h14M12.8 6.2 18.5 12l-5.7 5.8" {...traco} />

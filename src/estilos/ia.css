@@ -1170,25 +1170,96 @@
   background: var(--cor-acao-lavada);
 }
 
+/* ---------------------------------------------------------------------------
+ * A GAVETA das conversas anteriores.
+ *
+ * Era folha embaixo do cabeçalho e virou menu lateral (27.08). A diferença que
+ * importa: a folha empurrava a conversa para baixo e a lista disputava a tela
+ * com o que a pessoa estava lendo; a gaveta entra por cima, pela borda, e sai
+ * inteira quando fecha.
+ *
+ * NADA DE `position: fixed`, e isto é regra da casa que esta folha declara no
+ * próprio cabeçalho: dentro da moldura do telefone, `fixed` ancora no viewport
+ * do NAVEGADOR e a gaveta escapa para fora do aparelho. Foi o que aconteceu na
+ * primeira tentativa — medido em 1440px, a gaveta abriu em 0→320 enquanto a
+ * moldura ia de 525 a 915.
+ *
+ * Ela é `absolute` contra `.ia`, entra pela DIREITA e mora dentro da tela. O
+ * botão que a abre vive no cabeçalho, então quem a abre está no topo — é lá que
+ * ela ancora, e é lá que ela é vista.
+ * ------------------------------------------------------------------------ */
+
+.ia {
+  position: relative;
+}
+
 .ia-historico {
   display: flex;
   flex-direction: column;
   gap: var(--espaco-pilha);
-  margin-block-end: var(--espaco-cartao);
   padding: var(--espaco-cartao);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-g);
   background: var(--cor-superficie);
+}
+
+.ia-gaveta {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  z-index: 60;
+  width: min(18rem, 86%);
+  max-height: 30rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-g);
+  box-shadow: var(--sombra-3);
+  overflow-y: auto;
+  animation: ia-gaveta-entra var(--dur-3) var(--ease-padrao);
+}
+
+@keyframes ia-gaveta-entra {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ia-gaveta {
+    animation: none;
+  }
+}
+
+.ia-gaveta-veu {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  border: none;
+  background: color-mix(in srgb, var(--ic-preto) 45%, transparent);
+  cursor: pointer;
+}
+
+.ia-gaveta-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-pilha);
+  padding-block-end: var(--espaco-pilha);
+  border-block-end: 1px solid var(--cor-borda);
+}
+
+.ia-gaveta-titulo {
+  font-size: var(--tipo-destaque);
+  font-weight: 700;
+}
+
+.ia-historico-seta {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .ia-historico-lista {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  /* Rolagem própria: vinte conversas empurrariam o campo de escrever para fora
-     da tela se a folha crescesse junto com a lista. */
-  max-height: 18rem;
-  overflow-y: auto;
 }
 
 .ia-historico-item {

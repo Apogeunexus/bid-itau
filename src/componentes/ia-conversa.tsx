@@ -19,6 +19,7 @@ import {
   ICONE_FICHA,
   ICONE_IA,
   ICONE_MAIS,
+  ICONE_PAINEL,
   ICONE_MAPA,
   ICONE_RELOGIO,
 } from "@/componentes/base/icones";
@@ -31,7 +32,6 @@ import {
   TETO_DE_CONVERSAS,
   type ConversaGuardada,
 } from "@/lib/ia-historico";
-import { Grafismo } from "@/componentes/grafismo";
 import {
   RoteirosSalvos,
   type OpcaoDaEntrevista,
@@ -695,11 +695,10 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
 
   return (
     <div className="ia" data-fase={conversando ? "conversa" : "vazio"}>
+      {/* SEM LOGO E SEM TÍTULO (27.08). A marca já está na barra do topo do app e o nome
+          da tela já está na aba que trouxe a pessoa até aqui — repetir os dois consumia a
+          primeira dobra de uma tela cujo assunto é o campo de escrever. */}
       <header className="ia-topo">
-        <div className="ia-topo-linha">
-          <Grafismo variacao="barra" className="ia-topo-marca" />
-          <h1 className="ia-topo-titulo tipo-destaque">Roteiros</h1>
-        </div>
         <div className="ia-topo-acoes">
           {/* O HISTÓRICO É O PRIMEIRO BOTÃO e existe nos dois estados da tela.
               Antes, «Nova conversa» apagava a anterior sem deixar rastro: não havia onde
@@ -711,9 +710,9 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
               className="ia-historico-botao"
               aria-expanded={historicoAberto}
               aria-label={`Conversas anteriores (${historico.length})`}
-              onClick={() => setHistoricoAberto((v) => !v)}
+              onClick={() => setHistoricoAberto(true)}
             >
-              <span aria-hidden="true">⋯</span>
+              {glifo(ICONE_PAINEL, "ia-historico-seta")}
             </button>
           ) : null}
 
@@ -731,7 +730,27 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
       </header>
 
       {historicoAberto ? (
-        <section className="ia-historico" aria-label="Conversas anteriores">
+        <>
+          {/* O VÉU FECHA A GAVETA. Sem ele, sair do menu exigiria mirar num botão pequeno
+              — e gaveta que só fecha pelo botão é gaveta que prende. */}
+          <button
+            type="button"
+            className="ia-gaveta-veu"
+            aria-label="Fechar as conversas anteriores"
+            onClick={() => setHistoricoAberto(false)}
+          />
+          <aside className="ia-historico ia-gaveta" aria-label="Conversas anteriores">
+            <div className="ia-gaveta-topo">
+              <span className="ia-gaveta-titulo">Suas conversas</span>
+              <button
+                type="button"
+                className="ia-historico-remover"
+                aria-label="Fechar"
+                onClick={() => setHistoricoAberto(false)}
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
           <ul className="ia-historico-lista">
             {historico.map((c) => (
               <li key={c.id} className="ia-historico-item">
@@ -773,7 +792,8 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
               aparelho. A mais antiga sai quando uma nova entra.
             </p>
           ) : null}
-        </section>
+          </aside>
+        </>
       ) : null}
 
       <div className="ia-fio">
