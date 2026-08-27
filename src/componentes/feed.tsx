@@ -1,17 +1,30 @@
 "use client";
 
+import { useMemo } from "react";
+import Link from "next/link";
 import { Cartao } from "@/componentes/cartao";
 import { useSessao } from "@/contexto/sessao";
 import type { AvisoFeed, Cartao as CartaoDTO, DiagnosticoFeed } from "@/dados/cartao";
+import { comporFeed, type PrecomputoDeSementes } from "@/dados/sementes-wire";
 
 /**
  * feed.tsx — o lado cliente de Descobrir (D-26, D-27, D-32, D-45).
  *
- * ESTE COMPONENTE NÃO CALCULA NADA. A caminhada rodou no build, 96 vezes — 3 personas × 32
- * subconjuntos de disposição — e o que atravessou a fronteira RSC foram os cartões prontos.
- * Trocar de disposição ou de persona aqui muda **um índice**: sem navegação, sem
- * `useEffect` de busca, sem refazer travessia. É isso que faz a troca ser instantânea na
- * apresentação, e é por isso que D-32 e D-45 são demonstráveis ao vivo em vez de descritas.
+ * A CAMINHADA CONTINUA RODANDO NO BUILD. O que mudou com a S8 é quem escolhe entre os
+ * resultados dela, e são dois caminhos que convivem:
+ *
+ * 1. **Sem semente** — o comportamento de sempre. As 96 combinações (3 personas × 32
+ *    subconjuntos de disposição) vieram prontas do build e trocar de disposição ou de
+ *    persona muda **um índice**. É isso que faz D-32 e D-45 serem demonstráveis ao vivo.
+ *
+ * 2. **Com semente** — o perfil que a pessoa montou no onboarding. Aqui o componente
+ *    COMPÕE: une as listas pré-computadas das sementes marcadas e ranqueia pela
+ *    interseção. Não é caminhada — a travessia já aconteceu no build, por semente; o que
+ *    roda aqui é união, contagem e rodízio de classe, tudo sobre índices.
+ *
+ * A composição precisa acontecer no cliente porque o número de combinações de sementes é
+ * astronômico: 709 sementes oferecíveis em subconjuntos de até 12 não cabem em nenhum
+ * precômputo. O que cabe — e foi medido em 0,88 MB — é uma lista por semente.
  *
  * DP-F: nenhuma linha deste arquivo conhece `@/dados/grafo`. Os tipos vêm de
  * `@/dados/cartao`, que é o DTO da fronteira e não importa acervo nenhum. Os 23 MB de grafo
@@ -41,6 +54,10 @@ export interface FeedProps {
   listas: CartaoDTO[][];
   porPersona: Record<string, CombinacaoFeedProps[]>;
   personaPadrao: string;
+  /** As listas por semente, do build. Medido em 0,88 MB com o teto de 24. */
+  precomputoSementes: PrecomputoDeSementes;
+  /** Cartões no feed. Vem de `LIMITE_FEED`, em `feeds.ts`, para não haver dois números. */
+  limite: number;
 }
 
 export function Feed({
@@ -48,8 +65,20 @@ export function Feed({
   listas,
   porPersona,
   personaPadrao,
+  precomputoSementes,
+  limite,
 }: FeedProps) {
-  const { personaId, disposicoes } = useSessao();
+  const { personaId, disposicoes, sementes, hidratado } = useSessao();
+
+  /**
+   * O feed do perfil, quando existe. `null` — e não lista vazia — quando não há semente:
+   * a diferença é o que decide entre «este é o seu feed» e «este é o feed base», e a tela
+   * diz qual dos dois está mostrando.
+   */
+  const doPerfil = useMemo(
+    () => (sementes.length ? comporFeed(precomputoSementes, sementes, limite) : null),
+    [sementes, precomputoSementes, limite],
+  );
 
   // T-02-02: `personaId` vem do `localStorage`, que o avaliador pode editar. `sessao.tsx`
   // já valida contra a lista de personas; aqui a reserva é estrutural — persona sem
@@ -61,7 +90,17 @@ export function Feed({
     0,
   );
   const combinacao = doPersona[mascara] ?? doPersona[0];
-  const cartoes = combinacao ? (listas[combinacao.lista] ?? []) : [];
+  const doBuild = combinacao ? (listas[combinacao.lista] ?? []) : [];
+
+  /**
+   * O cartão do perfil chega SEM `caminho` — ele é 56% do payload e por isso não viaja
+   * (ver `sementes-wire.ts`). A lista vazia aqui não é um caminho inventado nem um caminho
+   * perdido: a tela «por que isto apareceu» monta a explicação em `explicacao.ts`, que
+   * recalcula a travessia no build a partir do acervo, e nunca leu este campo.
+   */
+  const cartoes: CartaoDTO[] = doPerfil
+    ? doPerfil.map((c) => ({ ...c.cartao, motivo: c.motivo, caminho: [] }))
+    : doBuild;
 
   // Redesenho 2026-08: o destaque curado (D-29) sai da grade e abre a seção — a
   // MESMA carta da mesma combinação, só que fora do rodízio visual. A faixa do
@@ -73,6 +112,18 @@ export function Feed({
 
   return (
     <div className="flex flex-col gap-3">
+      {/* SEM SEMENTE O FEED FUNCIONA E DIZ QUE ESTÁ GENÉRICO. Ele não é um erro nem um
+          vazio: é o feed base, e a pessoa precisa saber que existe um mais seu a três
+          toques de distância. Some assim que a primeira semente é marcada. */}
+      {hidratado && !doPerfil ? (
+        <p className="onb-aviso-feed">
+          <span>Este é o feed base do acervo — ele ainda não sabe nada sobre você.</span>
+          <Link href="/onboarding/2/" className="onb-texto-acao">
+            Escolher o que te interessa
+          </Link>
+        </p>
+      ) : null}
+
       {/* Os avisos do motor. NÃO são opcionais: quando um corte marcado não pôde filtrar
           porque o acervo não declara o campo, a tela diz isso. É desconfortável e é o
           ponto — a diferença entre um filtro que mente e um que se declara. */}
