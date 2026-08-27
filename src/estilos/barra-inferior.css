@@ -268,7 +268,13 @@
 /* O rodapé que o conteúdo precisa para não terminar debaixo da barra. Mora nesta
  * folha, e não em `base.css`, porque a folga é uma consequência da barra: quem
  * apagar a barra apaga a folga junto, sem deixar um vão órfão no fim de toda
- * tela. Na web não existe barra e a regra não se aplica. */
+ * tela. Na web não existe barra e a regra não se aplica.
+ *
+ * 5rem, e não 6rem: a barra desenhada MEDE 78px, e reservar 96px deixava 18px de
+ * frincha entre o fim do conteúdo e o topo dela. Em telas que só rolam isso não
+ * aparecia; nos Roteiros, onde o campo de escrever gruda no fim do container, a
+ * frincha virava um vão visível entre o campo e os ícones. A reserva agora é a
+ * altura da barra mais um fio. */
 [data-view="mobile"] .moldura-rolagem {
-  padding-bottom: 6rem;
+  padding-bottom: 5rem;
 }

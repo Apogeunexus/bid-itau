@@ -666,9 +666,13 @@
   z-index: 20;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
   margin-inline: calc(var(--espaco-tela) * -1);
-  padding: 0.75rem var(--espaco-tela) 1rem;
+  /* O padding de baixo é MÍNIMO de propósito: entre a nota do campo e os ícones da barra
+     havia 42px medidos — 16 deste padding, 18 da frincha do container e 8 do topo da
+     barra. O campo é a última coisa da tela e a barra começa logo abaixo; folga ali é vão,
+     não respiro. */
+  padding: 0.5rem var(--espaco-tela) 0.25rem;
   /* OPACO, e não translúcido com desfoque. O véu de 92% deixava o texto da
      conversa aparecer por trás do campo enquanto rolava — e o campo de escrever
      é a única coisa da tela que precisa estar sempre legível. Desfoque é
@@ -706,7 +710,7 @@
   position: absolute;
   inset-inline: 0;
   inset-block-start: 100%;
-  height: 1.5rem;
+  height: 1rem;
   background: var(--cor-fundo);
 }
 

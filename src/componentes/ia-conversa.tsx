@@ -730,11 +730,17 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
             {glifo(ICONE_ENVIAR)}
           </button>
         </div>
-        <p className="ia-compositor-nota tipo-legenda">
-          {pensando
-            ? "Montando o percurso no acervo…"
-            : "Nenhum modelo é chamado. Enter envia."}
-        </p>
+        {/* A nota só existe ENQUANTO PENSA, e virou feedback em vez de rodapé fixo.
+            O texto parado — «Nenhum modelo é chamado. Enter envia.» — ocupava uma linha
+            embaixo do campo em toda visita e empurrava o campo para longe da barra.
+
+            SAIU DO PRODUTO, e não mudou de lugar: hoje nenhuma tela declara que aqui não
+            se chama modelo nenhum. Foi decisão do cliente em 27.08, e fica registrado
+            aqui porque a informação era verdadeira e continua sendo — quem quiser repor,
+            o lugar natural é a tela vazia, não o rodapé do campo. */}
+        {pensando ? (
+          <p className="ia-compositor-nota tipo-legenda">Montando o percurso no acervo…</p>
+        ) : null}
       </form>
     </div>
   );
