@@ -105,7 +105,8 @@ export function TelaEsqueleto({
   children,
 }: {
   nome: string;
-  objetivo: string;
+  /** Ausente nas telas que deixaram de ser esqueleto — ver o parágrafo abaixo. */
+  objetivo?: string;
   acoes?: React.ReactNode;
   children?: React.ReactNode;
 }) {
@@ -116,7 +117,11 @@ export function TelaEsqueleto({
           <Grafismo variacao="barra" className="h-5 w-auto shrink-0 text-acao-tinta" />
           <h1 className="text-2xl leading-tight font-bold desk:text-3xl">{nome}</h1>
         </div>
-        <p className="max-w-prose text-sm text-tinta-2">{objetivo}</p>
+        {/* A linha de objetivo é NOTA DE ESQUELETO: ela existe para dizer o que aquele
+            lugar vai ser quando existir. Numa tela que já é o produto, ela vira uma
+            explicação de si mesma logo acima do que se explica sozinho — por isso é
+            opcional, e some junto com o esqueleto. */}
+        {objetivo ? <p className="max-w-prose text-sm text-tinta-2">{objetivo}</p> : null}
         {acoes ? <div className="flex flex-wrap gap-2 pt-1">{acoes}</div> : null}
       </header>
       {children}

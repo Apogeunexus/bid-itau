@@ -13,12 +13,11 @@
  *    ela mora acima do conteúdo, rola junto com ele e some quando a preferência
  *    já existe. Pastilha em rolagem horizontal no telefone, linha na web.
  *
- * A CONTAGEM É PARTE DO ROTULO, não decoração: `artes visuais 2.623` contra
- * `TV 2` é o tamanho do acervo de cada linguagem, e é o que torna a escolha
- * informada em vez de às cegas. Por isso `.onb-conta` nunca ganha
- * `display: none` em porte nenhum — se não couber ao lado, desce de linha.
- * (Ela NÃO é aviso de feed vazio: medido, «culinária» tem 2 entidades e ainda
- * alcança 15 cartões. Quem protege do vazio é o corte de alcance, no dado.)
+ * A CARTA DE LINGUAGEM É SÓ O NOME (27.08). A contagem do acervo saiu: ela não
+ * decidia nada para quem escolhe — medido, «culinária» tem 2 registros e ainda
+ * alcança 15 cartões — e virava ruído em cima da única coisa que se lê ali.
+ * `.onb-conta` continua existindo para as pastilhas das faixas dos apps, onde o
+ * número é o próprio tamanho do recorte que se está escolhendo.
  *
  * A DECLARAÇÃO DE AUSÊNCIA (`.declaracao`) É TEXTO, NUNCA TOOLTIP. Ela diz o
  * que o acervo não tem — gênero de filme no Play, autor no Notícias — e
@@ -109,9 +108,11 @@
 .onb-lingua {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: var(--espaco-pilha);
-  min-height: 6rem;
+  /* Sem a linha de contagem a carta encolheu. 4.5rem ainda dá alvo de sobra para o
+     polegar e mantém a grade com respiro em vez de virar uma lista de botões. */
+  min-height: 4.5rem;
   padding: var(--espaco-cartao);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-m);
@@ -125,8 +126,9 @@
     transform var(--dur-1) var(--ease-padrao);
 }
 
-/* A faixa de cor é o que diferencia uma linguagem da outra numa parede de 18
- * cartas de mesmo tamanho. Sem ela a grade vira lista de texto com borda. */
+/* A faixa de cor é o que diferencia uma linguagem da outra numa parede de cartas
+ * de mesmo tamanho — e desde que a contagem saiu, ela é a ÚNICA pista visual além
+ * do nome. Sem ela a grade vira lista de texto com borda. */
 .onb-lingua::before {
   content: "";
   display: block;
@@ -153,7 +155,7 @@
   line-height: 1.2;
 }
 
-/* Nunca some. Ver o cabeçalho desta folha. */
+/* Usada nas pastilhas das faixas dos apps. Ver o cabeçalho desta folha. */
 .onb-conta {
   font-size: var(--tipo-legenda);
   color: var(--cor-tinta-3);

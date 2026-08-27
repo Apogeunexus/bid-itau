@@ -162,9 +162,9 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
       },
       {
         id: "loja",
-        rotulo: "Loja",
+        rotulo: "Recompensas",
         descricao: "O que suas fichas abrem",
-        href: "/loja",
+        href: "/recompensas",
         capa: {
           arquivo: "/hub/loja.jpg",
           alt: "Vitrine iluminada com caixas de presente empilhadas, um livro de arte, um fone de ouvido, um frasco de perfume e uma nécessaire de couro. Sobre vários deles pousam moedas douradas luminosas com uma estrela no centro.",

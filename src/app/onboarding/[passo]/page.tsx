@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { EsqueletoBloco, EsqueletoLista, TelaEsqueleto } from "@/componentes/esqueleto";
+import { EsqueletoLista, TelaEsqueleto } from "@/componentes/esqueleto";
 import { OnboardingDisposicao } from "@/componentes/onboarding-disposicao";
 import { OnboardingLinguagens } from "@/componentes/onboarding-linguagens";
 import { OnboardingRodape } from "@/componentes/onboarding-rodape";
@@ -36,29 +36,21 @@ const PASSOS = {
   "1": {
     titulo: "Onboarding 1 — disposição",
     camada: "C1" as const,
-    objetivo:
-      "Capturar intenção, não gosto declarado. A pergunta é «o que te move hoje?», e a seleção é múltipla e sem obrigatoriedade.",
     blocos: [] as string[],
   },
   "2": {
     titulo: "Onboarding 2 — linguagens",
     camada: "C1" as const,
-    objetivo:
-      "A primeira semente da caminhada. As 33 linguagens do vocabulário controlado, com o tamanho do acervo de cada uma colado no rótulo — a grade abre com as maiores e as demais ficam atrás de «ver todas», nunca escondidas.",
     blocos: [] as string[],
   },
   "3": {
     titulo: "Onboarding 3 — artistas e obras",
     camada: "C1" as const,
-    objetivo:
-      "É aqui que o algoritmo nasce: a entidade marcada vira ponto de partida no grafo. Grade de 194 rostos, busca sobre 676, e duas saídas — «não conheço nenhum destes» e «pular» — porque uma tela de reconhecimento que a pessoa não consegue responder é uma parede.",
     blocos: [] as string[],
   },
   "4": {
     titulo: "Onboarding 4 — território e acessibilidade",
     camada: "C3" as const,
-    objetivo:
-      "De onde a pessoa parte e o que ela precisa que o lugar ofereça. Camada 3: contexto, não gosto — e por D-19 nenhum dos dois pode virar porteiro de Descobrir.",
     blocos: [
       "cidade atual, com correção manual",
       "raio de deslocamento em tempo — até 30 min",
@@ -89,7 +81,6 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
   return (
     <TelaEsqueleto
       nome={conteudo.titulo}
-      objetivo={conteudo.objetivo}
       acoes={
         /* «Avançar» e «Pular», os dois presentes em TODOS os passos, e os dois marcando
            que a pessoa foi perguntada. Ver `onboarding-rodape.tsx`. */
@@ -99,10 +90,12 @@ export default async function Onboarding({ params }: { params: Promise<{ passo: 
         />
       }
     >
-      <EsqueletoBloco
-        altura="3rem"
-        rotulo={`passo ${passo} de ${total} · avançar e pular sempre disponíveis`}
-      />
+      {/* Era um `EsqueletoBloco` — um retângulo cinza rotulado, que é o vocabulário de uma
+          tela que ainda não existe. Nestes passos a tela já existe, e o placeholder
+          passava a anunciar ausência em cima de conteúdo. Sobrou a informação, que é real. */}
+      <p className="onb-passos">
+        passo {passo} de {total}
+      </p>
 
       {passo === "1" ? <OnboardingDisposicao /> : null}
       {passo === "2" ? <OnboardingLinguagens linguagens={CATALOGO.linguagens} /> : null}

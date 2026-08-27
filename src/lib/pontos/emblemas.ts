@@ -43,6 +43,17 @@ export function progressoDoCriterio(
       return { atual: saldo(estado, "reputacao"), alvo };
     case "comunidades":
       return { atual: estado.assinadas.length, alvo };
+    /**
+     * `missao_<id>` — o selo que uma missão entrega ao fechar.
+     *
+     * O sufixo aqui é um ID, não um número, e é o único critério em que isso
+     * acontece: `Number("m-primeira-exposicao")` é `NaN`, então `alvo` cai no 1
+     * por si só. Sem este caso o selo cairia no `default` e a tela de conquistas
+     * mostraria «0 de 1» para sempre, inclusive depois de ganho — um selo que se
+     * contradiz é pior que um selo ausente.
+     */
+    case "missao":
+      return { atual: estado.missoes[bruto]?.concluidaEm ? 1 : 0, alvo: 1 };
     default:
       // Critério desconhecido nunca cumpre, e nunca derruba a tela. Um emblema
       // com critério errado fica visivelmente fechado em vez de sumir em silêncio.

@@ -32,8 +32,11 @@ import {
   marcarRiscoSePreciso,
   sequenciaInicial,
 } from "./sequencia";
+import type { Veredito } from "./validacao";
 import type {
+  ArquivoDaProva,
   Ativo,
+  Comprovacao,
   ContextoDeEvento,
   DadosDoPrograma,
   EfeitoDoMotor,
@@ -77,6 +80,9 @@ const VALE_SEQUENCIA = new Set<NomeDeEvento>([
   "curso.concluido",
   "ocorrencia.presenca.confirmada",
   "comunidade.comentario.criado",
+  // Uma prova aprovada é gesto cultural com o mesmo peso dos outros: ir a uma
+  // exposição e registrar sustenta a ofensiva tanto quanto terminar um episódio.
+  "missao.prova.aprovada",
 ]);
 
 function estadoInicial(personaId: string, dados: DadosDoPrograma): EstadoDoMotor {
@@ -98,6 +104,8 @@ function estadoInicial(personaId: string, dados: DadosDoPrograma): EstadoDoMotor
     linguagensAlcancadas: [],
     ufsAlcancadas: [],
     diasDistintos: [chaveDoDia(agora)],
+    comprovacoes: [],
+    tags: [],
     execucoesPorRegra: {},
     execucoesHoje: {},
     itensPontuados: {},
@@ -241,7 +249,17 @@ export class Motor {
     const nivelAntes = this.nivel().numero;
     const metaAntes = this.meta();
 
-    this.embutidos(evento, rastro);
+    // O FATO PODE NÃO TER ACONTECIDO. Um resgate barrado por saldo ou estoque
+    // emite o mesmo evento de um resgate que deu certo, e antes disto tudo o que
+    // vem depois seguia em frente: a missão «O primeiro resgate» fechava e pagava
+    // por uma troca que nunca ocorreu. Quando o embutido recusa o fato, nada mais
+    // corre — nem regra, nem bônus, nem sequência, nem missão.
+    if (!this.embutidos(evento, rastro)) {
+      s.ultimoRastro = rastro;
+      this.confirmar(rastro.efeitos);
+      return rastro;
+    }
+
     this.avaliarRegras(evento, rastro);
     this.bonusDeTravessia(evento, rastro);
 
@@ -250,12 +268,48 @@ export class Motor {
     // Missões avançam DEPOIS das regras: uma missão que fecha por causa deste
     // evento paga o próprio prêmio na mesma emissão, e a pessoa vê as duas
     // concessões juntas em vez de descobrir a segunda no próximo carregamento.
-    for (const avanco of avancarMissoes(s, this.dados.missoes, nome)) {
+    // Prova aprovada anda SÓ na missão a que pertence — ver `avancarMissoes`.
+    const restrita = nome === "missao.prova.aprovada" ? alvo?.id : undefined;
+
+    // A pontuação por envio é paga ANTES do avanço: ela vale por cada prova
+    // aprovada, inclusive nas que não fecham a missão. É a dinâmica de hábito.
+    if (nome === "missao.prova.aprovada" && restrita) {
+      const missao = this.dados.missoes.find((m) => m.id === restrita);
+      if (missao?.porEnvio) {
+        const motivo = "Prova aprovada: " + missao.titulo;
+        if (missao.porEnvio.percurso > 0) {
+          this.creditar(rastro, "percurso", missao.porEnvio.percurso, motivo, evento.eventoId);
+        }
+        if (missao.porEnvio.fichas > 0) {
+          this.creditar(rastro, "ficha", missao.porEnvio.fichas, motivo, evento.eventoId);
+        }
+      }
+    }
+
+    for (const avanco of avancarMissoes(s, this.dados.missoes, nome, 1, restrita)) {
       if (!avanco.concluiu) continue;
       this.creditar(rastro, "percurso", avanco.missao.percurso, "Missão: " + avanco.missao.titulo, evento.eventoId);
       if (avanco.missao.fichas > 0) {
         this.creditar(rastro, "ficha", avanco.missao.fichas, "Missão: " + avanco.missao.titulo, evento.eventoId);
       }
+
+      // A tag é o que a conclusão ENTREGA além de ponto: ela abre conteúdo
+      // segmentado sem ninguém mexer em lista de gente na mão.
+      const tag = avanco.missao.tagAoConcluir;
+      if (tag && !s.tags.includes(tag)) {
+        s.tags.push(tag);
+        rastro.efeitos.push({ tipo: "tagConcedida", tag });
+      }
+
+      const emblemaId = avanco.missao.emblemaId;
+      if (emblemaId && !s.emblemas.some((e) => e.emblemaId === emblemaId)) {
+        const emblema = this.dados.emblemas.find((e) => e.id === emblemaId);
+        if (emblema) {
+          s.emblemas.push({ emblemaId, concedidoEm: s.agora });
+          rastro.efeitos.push({ tipo: "emblema", emblema });
+        }
+      }
+
       rastro.efeitos.push({ tipo: "missaoConcluida", missao: avanco.missao });
     }
 
@@ -284,14 +338,87 @@ export class Motor {
     return rastro;
   }
 
+  /* ── Comprovações ──────────────────────────────────────────────────────── */
+
+  /**
+   * Registra a prova enviada. NÃO EMITE EVENTO E NÃO TOCA O LIVRO — é só um fato
+   * pendente entrando na fila. O saldo depois desta chamada é idêntico ao de
+   * antes dela, e é isso que separa este desenho daquele em que o ponto chega
+   * antes de ser merecido e some depois num estorno que a pessoa não entende.
+   */
+  registrarProva(missaoId: string, arquivo: ArquivoDaProva, uf?: string): Comprovacao {
+    const s = this.estado;
+    s.sequenciaDeEventos++;
+
+    const comprovacao: Comprovacao = {
+      id: "cpv_" + s.sequenciaDeEventos,
+      missaoId,
+      arquivo,
+      fase: "analisando",
+      confianca: 0,
+      uf,
+      enviadaEm: s.agora,
+    };
+
+    s.comprovacoes.unshift(comprovacao);
+    this.confirmar([]);
+    return comprovacao;
+  }
+
+  /**
+   * Aplica o veredito. A aprovação — e SÓ ela — vira evento, e daí para frente é
+   * o caminho de sempre: regra, concessão, linha do livro, missão, emblema.
+   */
+  decidirProva(
+    comprovacaoId: string,
+    veredito: Veredito,
+  ): { comprovacao: Comprovacao; efeitos: EfeitoDoMotor[] } {
+    const s = this.estado;
+    const comprovacao = s.comprovacoes.find((c) => c.id === comprovacaoId);
+    if (!comprovacao) {
+      throw new Error("Comprovação inexistente: " + comprovacaoId);
+    }
+
+    comprovacao.fase = veredito.fase;
+    comprovacao.confianca = veredito.confianca;
+    comprovacao.leitura = veredito.leitura;
+    comprovacao.motivo = veredito.motivo;
+    comprovacao.decididaEm = s.agora;
+
+    const missao = this.dados.missoes.find((m) => m.id === comprovacao.missaoId);
+    const decidida: EfeitoDoMotor[] = missao
+      ? [{ tipo: "provaDecidida", comprovacao, missao }]
+      : [];
+
+    if (veredito.fase !== "aprovada") {
+      this.confirmar(decidida);
+      return { comprovacao, efeitos: decidida };
+    }
+
+    const rastro = this.emitir("missao.prova.aprovada", {
+      tipo: "missao",
+      id: comprovacao.missaoId,
+    });
+
+    // `emitir` já confirmou com os efeitos dele; esta segunda confirmação leva a
+    // decisão em si, que é o que a celebração escuta.
+    this.confirmar(decidida);
+    return { comprovacao, efeitos: [...rastro.efeitos, ...decidida] };
+  }
+
   /* ── Comportamentos que não são regra ──────────────────────────────────── */
 
   /**
    * O que muda o estado do MUNDO, e por isso não pode viver numa regra: regra
    * concede ativo, embutido registra fato. Separar os dois é o que permite trocar
    * a economia inteira (quanto vale cada coisa) sem tocar no que o produto faz.
+   *
+   * DEVOLVE SE O FATO ACONTECEU. Quase todo evento é um fato consumado quando
+   * chega aqui — o player terminou, a pessoa comentou. O resgate é a exceção: ele
+   * PEDE alguma coisa que o motor pode recusar, e recusar em silêncio deixaria o
+   * resto da emissão pagando por um gesto que não houve.
    */
-  private embutidos(evento: EventoDeAtividade, rastro: Rastro) {
+  private embutidos(evento: EventoDeAtividade, rastro: Rastro): boolean {
     const s = this.estado;
     const ctx = evento.contexto ?? {};
 
@@ -355,9 +482,9 @@ export class Motor {
         break;
       }
 
-      case "loja.resgate.efetuado": {
+      case "recompensa.resgatada": {
         const recompensa = this.dados.recompensas.find((r) => r.id === evento.alvo?.id);
-        if (!recompensa) break;
+        if (!recompensa) return false;
 
         // REVALIDA O SALDO mesmo com a tela já tendo validado. A tela valida para
         // não oferecer o que não dá; o motor valida porque é ele que responde pelo
@@ -365,11 +492,11 @@ export class Motor {
         // que nenhuma tela sabe desenhar.
         if (saldo(s, "ficha") < recompensa.custo) {
           rastro.efeitos.push({ tipo: "tetoAtingido", oQue: "Fichas insuficientes" });
-          break;
+          return false;
         }
         if (recompensa.estoque !== null && recompensa.estoque <= 0) {
           rastro.efeitos.push({ tipo: "tetoAtingido", oQue: "Recompensa esgotada" });
-          break;
+          return false;
         }
 
         const linha = novaLinha(s, {
@@ -383,7 +510,7 @@ export class Motor {
         rastro.linhas.push(linha);
 
         // O estoque DECREMENTA. Na origem deste porte ele não decrementava, e o
-        // efeito era uma loja que aceita mais resgates do que tem itens — o tipo
+        // efeito era umas recompensas que aceita mais resgates do que tem itens — o tipo
         // de bug que só aparece no dia da entrega.
         if (recompensa.estoque !== null) recompensa.estoque -= 1;
 
@@ -400,6 +527,8 @@ export class Motor {
       default:
         break;
     }
+
+    return true;
   }
 
   /* ── Regras ────────────────────────────────────────────────────────────── */

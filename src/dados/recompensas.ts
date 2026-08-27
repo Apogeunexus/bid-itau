@@ -1,5 +1,5 @@
 /**
- * loja.ts — o catálogo de resgate.
+ * recompensas.ts — o catálogo de resgate.
  *
  * A REGRA QUE DEFINE ESTE ARQUIVO: o prêmio é cultura, não brinde. Caneca, chaveiro
  * e camiseta com logotipo matam um programa cultural em duas semanas — eles dizem

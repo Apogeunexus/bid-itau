@@ -46,8 +46,17 @@ const PREFIXO = "agenda-cultural:pontos:";
  * Esquecer de subir custou uma tela: `publicacoesSalvas` nasceu na versão 2 e o
  * estado da versão 1 hidratava sem o campo, derrubando a comunidade em
  * `guardadas.length`. Campo novo no estado é sempre um degrau aqui.
+ *
+ * A versão 3 veio da troca de `loja.resgate.efetuado` por `recompensa.resgatada`:
+ * as chaves de `itensPontuados` guardadas antes carregam o nome velho e nunca
+ * mais casariam.
+ *
+ * A versão 4 é o módulo de desafios de 2026-08: `comprovacoes` e `tags` nasceram
+ * no estado, e um estado da versão 3 hidrataria sem os dois — derrubando a tela
+ * da missão em `comprovacoes.filter`, que é exatamente o erro que a versão 2 já
+ * tinha ensinado com `publicacoesSalvas`.
  */
-const VERSAO_DO_FORMATO = 2;
+const VERSAO_DO_FORMATO = 4;
 
 interface Guardado {
   versao: number;
@@ -78,6 +87,8 @@ const LISTAS = [
   "linguagensAlcancadas",
   "ufsAlcancadas",
   "diasDistintos",
+  "comprovacoes",
+  "tags",
 ] as const;
 
 const MAPAS = ["missoes", "reacoesDadas", "execucoesPorRegra", "execucoesHoje", "itensPontuados"] as const;

@@ -8,7 +8,7 @@
 
 import { COMUNIDADES, PESSOAS, PUBLICACOES } from "./comunidade";
 import { PUBLICACOES_DO_ACERVO } from "./comunidade-feed";
-import { RECOMPENSAS } from "./loja";
+import { RECOMPENSAS } from "./recompensas";
 import { CONFIG, EMBLEMAS, MISSOES, REGRAS } from "./pontos";
 import type { DadosDoPrograma } from "@/lib/pontos/tipos";
 

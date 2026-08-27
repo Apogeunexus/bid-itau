@@ -20,7 +20,24 @@ import type { EstadoDoMotor, MissaoDefinida, MissaoEmCurso, NomeDeEvento } from 
 export function chaveDePeriodo(missao: MissaoDefinida, agora: number): string {
   if (missao.expiraEm === "dia") return chaveDoDia(agora);
   if (missao.expiraEm === "semana") return chaveDaSemana(agora);
+  // `nunca` e `ciclo` NÃO resetam, e por motivos opostos: a missão de estreia não
+  // tem período nenhum, e a cumulativa tem UM período que vale do início ao
+  // fechamento. As duas devolvem chave constante — se a do ciclo variasse com o
+  // relógio, o progresso de 12 turnos zeraria no meio da janela.
+  if (missao.expiraEm === "nunca") return "sempre";
+  if (missao.expiraEm === "ciclo") return "ciclo:" + missao.id;
   return "temporada";
+}
+
+/** Em que ponto da janela a missão cumulativa está. Sem ciclo, está sempre aberta. */
+export function faseDoCiclo(
+  missao: MissaoDefinida,
+  agora: number,
+): "antes" | "aberto" | "encerrado" {
+  if (!missao.ciclo) return "aberto";
+  if (agora < missao.ciclo.comecaEm) return "antes";
+  if (agora > missao.ciclo.fechaEm) return "encerrado";
+  return "aberto";
 }
 
 /** Garante um estado válido para o período corrente, criando um zerado na virada. */
@@ -39,16 +56,26 @@ export interface AvancoDeMissao {
   concluiu: boolean;
 }
 
-/** Avança toda missão cujo `avancaCom` casa com o evento. */
+/**
+ * Avança toda missão cujo `avancaCom` casa com o evento.
+ *
+ * `restrita` EXISTE POR CAUSA DAS PROVAS. Todas as missões de mídia escutam o
+ * mesmo `missao.prova.aprovada`, então sem escopo uma foto aprovada na «Sua
+ * primeira exposição» avançaria junto «Arte fora do museu», «Leve alguém» e o
+ * resto do catálogo — um envio pagaria oito missões. Quando o evento nasce
+ * amarrado a uma missão, só ela anda.
+ */
 export function avancarMissoes(
   estado: EstadoDoMotor,
   definidas: MissaoDefinida[],
   nomeDoEvento: NomeDeEvento,
   passos = 1,
+  restrita?: string,
 ): AvancoDeMissao[] {
   const avancos: AvancoDeMissao[] = [];
 
   for (const missao of definidas) {
+    if (restrita !== undefined && missao.id !== restrita) continue;
     if (!missao.avancaCom.includes(nomeDoEvento)) continue;
 
     const emCurso = garantirEstado(estado, missao);

@@ -2,8 +2,8 @@
  * niveis.ts — percurso acumulado vira nível e progresso até o próximo.
  *
  * PERCURSO NUNCA DIMINUI, e por isso o nível também não. É a diferença entre este
- * ativo e a ficha: a ficha é gasta na loja, o percurso é histórico. Se resgatar
- * uma cortesia rebaixasse o nível, a loja passaria a punir exatamente o
+ * ativo e a ficha: a ficha é gasta nas recompensas, o percurso é histórico. Se resgatar
+ * uma cortesia rebaixasse o nível, as recompensas passaria a punir exatamente o
  * comportamento que ela existe para premiar.
  */
 

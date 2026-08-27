@@ -17,7 +17,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-ic-0",
     "comunidadeId": "ic",
-    "autorId": "p-tiago",
+    "autorId": "ic",
     "titulo": "Ruy Castro – Paiol Literário",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -28,7 +28,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 603,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-tiago",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 3,
         "quandoRotulo": "6d"
@@ -45,7 +45,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-ic-1",
     "comunidadeId": "ic",
-    "autorId": "p-ic",
+    "autorId": "ic",
     "titulo": "Por Aí: Projeto do Museu do Futebol proporciona atividades virtuais para idosos em isolamento",
     "corpo": "",
     "etiqueta": "Entrevista",
@@ -56,7 +56,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 389,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-maria",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 29,
         "quandoRotulo": "2d"
@@ -67,7 +67,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-ic-2",
     "comunidadeId": "ic",
-    "autorId": "p-maria",
+    "autorId": "ic",
     "titulo": "Relatos de criação | A jornada de Leonilia e os desafios da animação",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -95,7 +95,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-ic-3",
     "comunidadeId": "ic",
-    "autorId": "p-carlos",
+    "autorId": "ic",
     "titulo": "Índigo – Escritores-Leitores",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -110,7 +110,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-ic-4",
     "comunidadeId": "ic",
-    "autorId": "p-joana",
+    "autorId": "ic",
     "titulo": "Olhares sobre a Covid-19, Marco Zero | relato 9: Inglaterra",
     "corpo": "",
     "etiqueta": "Fotografia",
@@ -121,7 +121,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 482,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-rita",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 2,
         "quandoRotulo": "5d"
@@ -132,7 +132,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bro-mcs-0",
     "comunidadeId": "c-bro-mcs",
-    "autorId": "p-ic",
+    "autorId": "c-bro-mcs",
     "titulo": "Cultura hip-hop é tema de três projetos Rumos",
     "corpo": "",
     "etiqueta": "Rumos",
@@ -143,13 +143,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 432,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-rita",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 32,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-tiago",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 32,
         "quandoRotulo": "4d"
@@ -160,7 +160,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bro-mcs-1",
     "comunidadeId": "c-bro-mcs",
-    "autorId": "p-maria",
+    "autorId": "c-bro-mcs",
     "titulo": "Mostra “Memórias vivas e caminhantes” chega à IC Play",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -175,7 +175,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bro-mcs-2",
     "comunidadeId": "c-bro-mcs",
-    "autorId": "p-carlos",
+    "autorId": "c-bro-mcs",
     "titulo": "Confira os selecionados para a oficina inspirada em Sueli Carneiro e Conceição Evaristo",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -186,7 +186,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 236,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-joana",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 16,
         "quandoRotulo": "5d"
@@ -197,7 +197,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bro-mcs-3",
     "comunidadeId": "c-bro-mcs",
-    "autorId": "p-joana",
+    "autorId": "c-bro-mcs",
     "titulo": "Filme sobre Inezita Barroso estreia na Mostra Internacional de Cinema",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -208,7 +208,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 903,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-tiago",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 23,
         "quandoRotulo": "6d"
@@ -225,7 +225,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bro-mcs-4",
     "comunidadeId": "c-bro-mcs",
-    "autorId": "p-rita",
+    "autorId": "c-bro-mcs",
     "titulo": "Itaú Cultural seleciona professores do Ensino Médio e da EJA para projeto que articula cinema e educação",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -240,7 +240,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-teatro-amazonas-0",
     "comunidadeId": "c-teatro-amazonas",
-    "autorId": "p-joana",
+    "autorId": "c-teatro-amazonas",
     "titulo": "Arismar do Espírito Santo – Toca Brasil",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -255,7 +255,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-teatro-amazonas-1",
     "comunidadeId": "c-teatro-amazonas",
-    "autorId": "p-rita",
+    "autorId": "c-teatro-amazonas",
     "titulo": "Mauro Rodrigues – Toca Brasil",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -266,7 +266,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 911,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-joana",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 31,
         "quandoRotulo": "2d"
@@ -277,7 +277,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-teatro-amazonas-2",
     "comunidadeId": "c-teatro-amazonas",
-    "autorId": "p-tiago",
+    "autorId": "c-teatro-amazonas",
     "titulo": "Mario Adnet – Toca Brasil",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -288,13 +288,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 630,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-carlos",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 30,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-joana",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 30,
         "quandoRotulo": "4d"
@@ -305,7 +305,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-teatro-amazonas-3",
     "comunidadeId": "c-teatro-amazonas",
-    "autorId": "p-ic",
+    "autorId": "c-teatro-amazonas",
     "titulo": "Heitor dos Prazeres por Manoel Filho – Toca Brasil",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -316,7 +316,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 800,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-carlos",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 20,
         "quandoRotulo": "5d"
@@ -327,7 +327,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-teatro-amazonas-4",
     "comunidadeId": "c-teatro-amazonas",
-    "autorId": "p-maria",
+    "autorId": "c-teatro-amazonas",
     "titulo": "Alcione: 75 anos de uma voz vitoriosa",
     "corpo": "",
     "etiqueta": "Série",
@@ -338,13 +338,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 879,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-maria",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 19,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-carlos",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 19,
         "quandoRotulo": "1d"
@@ -355,7 +355,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bordadeiras-0",
     "comunidadeId": "c-bordadeiras",
-    "autorId": "p-joana",
+    "autorId": "c-bordadeiras",
     "titulo": "Aconteceu no IC – outubro de 2022",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -366,13 +366,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 384,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-maria",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 24,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-carlos",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 24,
         "quandoRotulo": "4d"
@@ -383,7 +383,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bordadeiras-1",
     "comunidadeId": "c-bordadeiras",
-    "autorId": "p-rita",
+    "autorId": "c-bordadeiras",
     "titulo": "Péricles abre a segunda temporada de “No estúdio IC”",
     "corpo": "",
     "etiqueta": "Vídeo",
@@ -394,13 +394,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 87,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-rita",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 7,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-tiago",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 7,
         "quandoRotulo": "1d"
@@ -411,7 +411,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bordadeiras-2",
     "comunidadeId": "c-bordadeiras",
-    "autorId": "p-tiago",
+    "autorId": "c-bordadeiras",
     "titulo": "Walter Smetak por Fernanda Porto – Toca Brasil",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -426,7 +426,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bordadeiras-3",
     "comunidadeId": "c-bordadeiras",
-    "autorId": "p-ic",
+    "autorId": "c-bordadeiras",
     "titulo": "Podcasts discutem história, novas narrativas e mercados musicais",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -437,7 +437,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 773,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-tiago",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 33,
         "quandoRotulo": "2d"
@@ -448,7 +448,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bordadeiras-4",
     "comunidadeId": "c-bordadeiras",
-    "autorId": "p-maria",
+    "autorId": "c-bordadeiras",
     "titulo": "Confira os selecionados para a oficina Apontamentos sobre a Cena",
     "corpo": "",
     "etiqueta": "Formação",
@@ -459,13 +459,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 99,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-maria",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 39,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-carlos",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 39,
         "quandoRotulo": "1d"
@@ -476,7 +476,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-itamatatiua-0",
     "comunidadeId": "c-itamatatiua",
-    "autorId": "p-joana",
+    "autorId": "c-itamatatiua",
     "titulo": "Novos documentários chegam à Itaú Cultural Play em novembro",
     "corpo": "",
     "etiqueta": "IC Play",
@@ -491,7 +491,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-itamatatiua-1",
     "comunidadeId": "c-itamatatiua",
-    "autorId": "p-rita",
+    "autorId": "c-itamatatiua",
     "titulo": "Experimente obras de arte do acervo do Itaú Cultural",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -502,13 +502,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 429,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-maria",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 9,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-carlos",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 9,
         "quandoRotulo": "1d"
@@ -519,7 +519,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-itamatatiua-2",
     "comunidadeId": "c-itamatatiua",
-    "autorId": "p-tiago",
+    "autorId": "c-itamatatiua",
     "titulo": "Os videogames chegam ao Itaú Cultural na mostra “Game+ Arte, cultura e comunidade”",
     "corpo": "",
     "etiqueta": "Agenda",
@@ -534,7 +534,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-itamatatiua-3",
     "comunidadeId": "c-itamatatiua",
-    "autorId": "p-ic",
+    "autorId": "c-itamatatiua",
     "titulo": "“Caderno do professor” apresenta plano de aula inspirado em Geraldo de Barros",
     "corpo": "",
     "etiqueta": "Publicação",
@@ -545,13 +545,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 594,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-maria",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 34,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-carlos",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 34,
         "quandoRotulo": "4d"
@@ -562,7 +562,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-itamatatiua-4",
     "comunidadeId": "c-itamatatiua",
-    "autorId": "p-maria",
+    "autorId": "c-itamatatiua",
     "titulo": "Olhares sobre a Covid-19, Marco Zero | relato 5: Espanha",
     "corpo": "",
     "etiqueta": "Entrevista",
@@ -573,7 +573,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 146,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-joana",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 26,
         "quandoRotulo": "5d"
@@ -584,7 +584,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-rendeiras-cariri-0",
     "comunidadeId": "c-rendeiras-cariri",
-    "autorId": "p-tiago",
+    "autorId": "c-rendeiras-cariri",
     "titulo": "Obra de Beatriz Milhazes é tema da nova edição do Caderno do Professor",
     "corpo": "",
     "etiqueta": "Publicação",
@@ -599,7 +599,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-rendeiras-cariri-1",
     "comunidadeId": "c-rendeiras-cariri",
-    "autorId": "p-ic",
+    "autorId": "c-rendeiras-cariri",
     "titulo": "Olhares sobre a Covid-19, Marco Zero | relato 4: Itália",
     "corpo": "",
     "etiqueta": "Entrevista",
@@ -614,7 +614,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-rendeiras-cariri-2",
     "comunidadeId": "c-rendeiras-cariri",
-    "autorId": "p-maria",
+    "autorId": "c-rendeiras-cariri",
     "titulo": "Pesquisa inédita de Walter Zanini é lançada no Itaú Cultural",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -625,13 +625,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 150,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-carlos",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 10,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-joana",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 10,
         "quandoRotulo": "4d"
@@ -642,7 +642,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-rendeiras-cariri-3",
     "comunidadeId": "c-rendeiras-cariri",
-    "autorId": "p-carlos",
+    "autorId": "c-rendeiras-cariri",
     "titulo": "Artistas negros | Recriar o céu e reformar a cidade: o barroco carioca de Mestre Valentim",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -653,13 +653,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 168,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-tiago",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 8,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-maria",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 8,
         "quandoRotulo": "4d"
@@ -670,7 +670,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-rendeiras-cariri-4",
     "comunidadeId": "c-rendeiras-cariri",
-    "autorId": "p-joana",
+    "autorId": "c-rendeiras-cariri",
     "titulo": "Olhares sobre a Covid-19, Marco Zero | relato 7: Portugal",
     "corpo": "",
     "etiqueta": "Fotografia",
@@ -681,7 +681,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 303,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-tiago",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 23,
         "quandoRotulo": "6d"
@@ -698,7 +698,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-belem-0",
     "comunidadeId": "c-caixa-belem",
-    "autorId": "p-tiago",
+    "autorId": "c-caixa-belem",
     "titulo": "“Filmes e vídeos de artistas”: mostra on-line reúne obras audiovisuais produzidas desde os anos 1970 no Brasil",
     "corpo": "",
     "etiqueta": "Do acervo",
@@ -709,13 +709,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 327,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-rita",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 7,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-tiago",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 7,
         "quandoRotulo": "1d"
@@ -726,7 +726,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-belem-1",
     "comunidadeId": "c-caixa-belem",
-    "autorId": "p-ic",
+    "autorId": "c-caixa-belem",
     "titulo": "Manto tupinambá chega ao IC para a mostra \"Um Século de Agora\"",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -737,13 +737,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 498,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-tiago",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 18,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-maria",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 18,
         "quandoRotulo": "4d"
@@ -754,7 +754,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-belem-2",
     "comunidadeId": "c-caixa-belem",
-    "autorId": "p-maria",
+    "autorId": "c-caixa-belem",
     "titulo": "Cores | Azul da cor do céu, do mar, do amor e dos bárbaros",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -765,7 +765,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 497,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-rita",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 37,
         "quandoRotulo": "2d"
@@ -776,7 +776,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-belem-3",
     "comunidadeId": "c-caixa-belem",
-    "autorId": "p-carlos",
+    "autorId": "c-caixa-belem",
     "titulo": "Recortes sobre Abdias Nascimento",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -787,7 +787,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 557,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-rita",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 17,
         "quandoRotulo": "2d"
@@ -798,7 +798,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-belem-4",
     "comunidadeId": "c-caixa-belem",
-    "autorId": "p-joana",
+    "autorId": "c-caixa-belem",
     "titulo": "Confira as palestras da série Um Possível Olhar sobre a Produção em Artes Visuais no Brasil",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -826,7 +826,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-coletivo-bispo-0",
     "comunidadeId": "c-coletivo-bispo",
-    "autorId": "p-ic",
+    "autorId": "c-coletivo-bispo",
     "titulo": "Pandemia de covid-19 muda calendário de eventos fotográficos no Brasil",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -837,7 +837,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 269,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-maria",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 29,
         "quandoRotulo": "2d"
@@ -848,7 +848,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-coletivo-bispo-1",
     "comunidadeId": "c-coletivo-bispo",
-    "autorId": "p-maria",
+    "autorId": "c-coletivo-bispo",
     "titulo": "O olhar feminino no período de criação das duas maiores metrópoles das Américas",
     "corpo": "",
     "etiqueta": "Fotografia",
@@ -863,7 +863,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-coletivo-bispo-2",
     "comunidadeId": "c-coletivo-bispo",
-    "autorId": "p-carlos",
+    "autorId": "c-coletivo-bispo",
     "titulo": "Exposições no mundo pós-covid e as novas formas de receber o público",
     "corpo": "",
     "etiqueta": "Entrevista",
@@ -874,13 +874,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 768,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-tiago",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 28,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-maria",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 28,
         "quandoRotulo": "4d"
@@ -891,7 +891,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-coletivo-bispo-3",
     "comunidadeId": "c-coletivo-bispo",
-    "autorId": "p-joana",
+    "autorId": "c-coletivo-bispo",
     "titulo": "Artistas Mulheres Contemporâneas no Acervo: Jac Leirner e o dinheiro fossilizado",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -906,7 +906,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-coletivo-bispo-4",
     "comunidadeId": "c-coletivo-bispo",
-    "autorId": "p-rita",
+    "autorId": "c-coletivo-bispo",
     "titulo": "Por Aí: MAM SP celebra 72 anos com programação virtual",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -917,13 +917,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 234,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-maria",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 14,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-carlos",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 14,
         "quandoRotulo": "4d"
@@ -934,7 +934,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-brigada-henfil-0",
     "comunidadeId": "c-brigada-henfil",
-    "autorId": "p-rita",
+    "autorId": "c-brigada-henfil",
     "titulo": "“Itaú Cultural play” recebe a mostra \"40 anos Teatro Sérgio Cardoso”",
     "corpo": "",
     "etiqueta": "IC Play",
@@ -945,7 +945,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 803,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-tiago",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 23,
         "quandoRotulo": "2d"
@@ -956,7 +956,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-brigada-henfil-1",
     "comunidadeId": "c-brigada-henfil",
-    "autorId": "p-tiago",
+    "autorId": "c-brigada-henfil",
     "titulo": "Relembre as exposições e mostras do IC em 2022",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -967,7 +967,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 536,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-joana",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 16,
         "quandoRotulo": "5d"
@@ -978,7 +978,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-brigada-henfil-2",
     "comunidadeId": "c-brigada-henfil",
-    "autorId": "p-ic",
+    "autorId": "c-brigada-henfil",
     "titulo": "Atores brasileiros respondem: o que aprendi com Fernanda Montenegro?",
     "corpo": "",
     "etiqueta": "Série",
@@ -993,7 +993,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-brigada-henfil-3",
     "comunidadeId": "c-brigada-henfil",
-    "autorId": "p-maria",
+    "autorId": "c-brigada-henfil",
     "titulo": "Espetáculo “Sebastião” abriga histórias dos que sofreram por amar",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1004,13 +1004,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 894,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-maria",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 14,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-carlos",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 14,
         "quandoRotulo": "4d"
@@ -1021,7 +1021,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-brigada-henfil-4",
     "comunidadeId": "c-brigada-henfil",
-    "autorId": "p-carlos",
+    "autorId": "c-brigada-henfil",
     "titulo": "Centralidades Periféricas discute o teatro feito nas periferias",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1036,7 +1036,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-basirah-0",
     "comunidadeId": "c-basirah",
-    "autorId": "p-tiago",
+    "autorId": "c-basirah",
     "titulo": "Luísa Strina – série +70",
     "corpo": "",
     "etiqueta": "Vídeo",
@@ -1047,13 +1047,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 681,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-joana",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 1,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-rita",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 1,
         "quandoRotulo": "1d"
@@ -1064,7 +1064,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-basirah-1",
     "comunidadeId": "c-basirah",
-    "autorId": "p-ic",
+    "autorId": "c-basirah",
     "titulo": "Cores | Encontro marcado com o amarelo e outros labirintos",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -1075,13 +1075,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 360,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-carlos",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 0,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-joana",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 0,
         "quandoRotulo": "4d"
@@ -1092,7 +1092,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-basirah-2",
     "comunidadeId": "c-basirah",
-    "autorId": "p-maria",
+    "autorId": "c-basirah",
     "titulo": "Aconteceu no IC – fevereiro de 2023",
     "corpo": "",
     "etiqueta": "Série",
@@ -1107,7 +1107,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-basirah-3",
     "comunidadeId": "c-basirah",
-    "autorId": "p-carlos",
+    "autorId": "c-basirah",
     "titulo": "Avenida Paulista, um cartão-postal que faz 130 anos",
     "corpo": "",
     "etiqueta": "Agenda",
@@ -1122,7 +1122,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-basirah-4",
     "comunidadeId": "c-basirah",
-    "autorId": "p-joana",
+    "autorId": "c-basirah",
     "titulo": "Franz Weissmann: o Vazio como Forma ganha prêmio APCA de Melhor Retrospectiva",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1133,13 +1133,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 468,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-tiago",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 28,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-maria",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 28,
         "quandoRotulo": "4d"
@@ -1150,7 +1150,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-armazem-0",
     "comunidadeId": "c-armazem",
-    "autorId": "p-rita",
+    "autorId": "c-armazem",
     "titulo": "Caderno do professor: conheça Angel Vianna e sua pesquisa na dança",
     "corpo": "",
     "etiqueta": "Publicação",
@@ -1161,7 +1161,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 41,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-joana",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 1,
         "quandoRotulo": "2d"
@@ -1172,7 +1172,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-armazem-1",
     "comunidadeId": "c-armazem",
-    "autorId": "p-tiago",
+    "autorId": "c-armazem",
     "titulo": "Arte e ciência: sobre resistências, morte e vida, corpos dissidentes e desejos de liberdade",
     "corpo": "",
     "etiqueta": "Opinião",
@@ -1183,13 +1183,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 261,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-joana",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 21,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-rita",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 21,
         "quandoRotulo": "1d"
@@ -1200,7 +1200,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-armazem-2",
     "comunidadeId": "c-armazem",
-    "autorId": "p-ic",
+    "autorId": "c-armazem",
     "titulo": "“Encontro periférico de artes” abre convocatória de dança",
     "corpo": "",
     "etiqueta": "Rumos",
@@ -1215,7 +1215,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-armazem-3",
     "comunidadeId": "c-armazem",
-    "autorId": "p-maria",
+    "autorId": "c-armazem",
     "titulo": "Uma nova Escola Itaú Cultural",
     "corpo": "",
     "etiqueta": "Formação",
@@ -1226,7 +1226,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 662,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-rita",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 22,
         "quandoRotulo": "5d"
@@ -1237,7 +1237,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-armazem-4",
     "comunidadeId": "c-armazem",
-    "autorId": "p-carlos",
+    "autorId": "c-armazem",
     "titulo": "Mover-se em memórias corporais",
     "corpo": "",
     "etiqueta": "Opinião",
@@ -1248,13 +1248,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 729,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-maria",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 9,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-carlos",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 9,
         "quandoRotulo": "1d"
@@ -1265,7 +1265,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-do-elefante-0",
     "comunidadeId": "c-caixa-do-elefante",
-    "autorId": "p-carlos",
+    "autorId": "c-caixa-do-elefante",
     "titulo": "Ficções: crianças | especial Bem-te-ouvi – Bruno e o Vento",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -1276,7 +1276,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 482,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-rita",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 2,
         "quandoRotulo": "5d"
@@ -1287,7 +1287,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-do-elefante-1",
     "comunidadeId": "c-caixa-do-elefante",
-    "autorId": "p-joana",
+    "autorId": "c-caixa-do-elefante",
     "titulo": "Aconteceu no IC – março de 2024",
     "corpo": "",
     "etiqueta": "Série",
@@ -1309,7 +1309,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-do-elefante-2",
     "comunidadeId": "c-caixa-do-elefante",
-    "autorId": "p-rita",
+    "autorId": "c-caixa-do-elefante",
     "titulo": "Ficções: crianças | especial Bem-te-ouvi – Se eu fosse passarinho",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -1320,13 +1320,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 930,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-carlos",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 30,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-joana",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 30,
         "quandoRotulo": "4d"
@@ -1337,7 +1337,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-do-elefante-3",
     "comunidadeId": "c-caixa-do-elefante",
-    "autorId": "p-tiago",
+    "autorId": "c-caixa-do-elefante",
     "titulo": "“Ficções Itaú Cultural”: ouça o episódio “Tratores para derrubar terreiros”",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -1348,7 +1348,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 393,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-tiago",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 13,
         "quandoRotulo": "6d"
@@ -1365,7 +1365,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-caixa-do-elefante-4",
     "comunidadeId": "c-caixa-do-elefante",
-    "autorId": "p-ic",
+    "autorId": "c-caixa-do-elefante",
     "titulo": "“Ficções Itaú Cultural”: ouça o episódio “Espuma”",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -1376,7 +1376,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 872,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-rita",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 12,
         "quandoRotulo": "5d"
@@ -1387,7 +1387,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-artmosfera-0",
     "comunidadeId": "c-artmosfera",
-    "autorId": "p-maria",
+    "autorId": "c-artmosfera",
     "titulo": "Cacilda Becker, presente! Centenário da Grande Dama do Teatro Brasileiro",
     "corpo": "",
     "etiqueta": "Entrevista",
@@ -1415,7 +1415,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-artmosfera-1",
     "comunidadeId": "c-artmosfera",
-    "autorId": "p-carlos",
+    "autorId": "c-artmosfera",
     "titulo": "Centenário de Sérgio Cardoso é celebrado em espetáculo inédito no Itaú Cultural",
     "corpo": "",
     "etiqueta": "Do acervo",
@@ -1426,13 +1426,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 405,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-carlos",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 25,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-joana",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 25,
         "quandoRotulo": "1d"
@@ -1443,7 +1443,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-artmosfera-2",
     "comunidadeId": "c-artmosfera",
-    "autorId": "p-joana",
+    "autorId": "c-artmosfera",
     "titulo": "Caramba!: um ano de pandemia, por Silvero Pereira",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1454,13 +1454,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 681,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-joana",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 1,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-rita",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 1,
         "quandoRotulo": "1d"
@@ -1471,7 +1471,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-artmosfera-3",
     "comunidadeId": "c-artmosfera",
-    "autorId": "p-rita",
+    "autorId": "c-artmosfera",
     "titulo": "A máquina que vence a morte: a busca de Leonardo da Vinci vira espetáculo no Itaú Cultural",
     "corpo": "",
     "etiqueta": "Do acervo",
@@ -1482,7 +1482,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 581,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-joana",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 21,
         "quandoRotulo": "2d"
@@ -1493,7 +1493,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-artmosfera-4",
     "comunidadeId": "c-artmosfera",
-    "autorId": "p-tiago",
+    "autorId": "c-artmosfera",
     "titulo": "Confira os selecionados | Escola IC: curso aborda panorama da cenografia e da expografia no Brasil",
     "corpo": "",
     "etiqueta": "Formação",
@@ -1504,13 +1504,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 174,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-maria",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 34,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-carlos",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 34,
         "quandoRotulo": "4d"
@@ -1521,7 +1521,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-a-cena-0",
     "comunidadeId": "c-a-cena",
-    "autorId": "p-ic",
+    "autorId": "c-a-cena",
     "titulo": "Livro de artista “Aberto pela Aduana”, apoiado pelo “Rumos Itaú Cultural”, tem lançamento no Museu Afro Brasil",
     "corpo": "",
     "etiqueta": "Agenda",
@@ -1532,13 +1532,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 627,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-rita",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 27,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-tiago",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 27,
         "quandoRotulo": "1d"
@@ -1549,7 +1549,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-a-cena-1",
     "comunidadeId": "c-a-cena",
-    "autorId": "p-maria",
+    "autorId": "c-a-cena",
     "titulo": "Um “tradutor do tempo”, Jaider Esbell é para sempre",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1560,7 +1560,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 563,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-tiago",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 3,
         "quandoRotulo": "2d"
@@ -1571,7 +1571,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-a-cena-2",
     "comunidadeId": "c-a-cena",
-    "autorId": "p-carlos",
+    "autorId": "c-a-cena",
     "titulo": "Os pássaros da cidade: a obra Passere Urbanus na nova fachada do Itaú Cultural",
     "corpo": "",
     "etiqueta": "Entrevista",
@@ -1582,7 +1582,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 323,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-tiago",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 23,
         "quandoRotulo": "2d"
@@ -1593,7 +1593,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-a-cena-3",
     "comunidadeId": "c-a-cena",
-    "autorId": "p-joana",
+    "autorId": "c-a-cena",
     "titulo": "Artistas Mulheres Contemporâneas no Acervo: Shirley Paes Leme e o fogo capturado",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -1608,7 +1608,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-a-cena-4",
     "comunidadeId": "c-a-cena",
-    "autorId": "p-rita",
+    "autorId": "c-a-cena",
     "titulo": "Olhares sobre a Covid-19, Marco Zero | relato 1: China",
     "corpo": "",
     "etiqueta": "Entrevista",
@@ -1619,7 +1619,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 422,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-rita",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 22,
         "quandoRotulo": "5d"
@@ -1630,7 +1630,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-atelie-gravura-0",
     "comunidadeId": "c-atelie-gravura",
-    "autorId": "p-rita",
+    "autorId": "c-atelie-gravura",
     "titulo": "Sobre a mostra “Dança agora” (ou Um texto que dança)",
     "corpo": "",
     "etiqueta": "Opinião",
@@ -1641,13 +1641,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 609,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-maria",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 9,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-carlos",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 9,
         "quandoRotulo": "1d"
@@ -1658,7 +1658,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-atelie-gravura-1",
     "comunidadeId": "c-atelie-gravura",
-    "autorId": "p-tiago",
+    "autorId": "c-atelie-gravura",
     "titulo": "Série Trajetórias estreia novos episódios na IC Play",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1680,7 +1680,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-atelie-gravura-2",
     "comunidadeId": "c-atelie-gravura",
-    "autorId": "p-ic",
+    "autorId": "c-atelie-gravura",
     "titulo": "Ismael Ivo morre aos 66 anos, vítima de covid-19",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1695,7 +1695,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-atelie-gravura-3",
     "comunidadeId": "c-atelie-gravura",
-    "autorId": "p-maria",
+    "autorId": "c-atelie-gravura",
     "titulo": "Por Aí: venha dançar junto com o Grupo Corpo",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1706,7 +1706,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 320,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-carlos",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 0,
         "quandoRotulo": "5d"
@@ -1717,7 +1717,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-atelie-gravura-4",
     "comunidadeId": "c-atelie-gravura",
-    "autorId": "p-carlos",
+    "autorId": "c-atelie-gravura",
     "titulo": "Escola IC: conheça os cursos autoformativos de música e de gastronomia",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1732,7 +1732,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bonobando-0",
     "comunidadeId": "c-bonobando",
-    "autorId": "p-joana",
+    "autorId": "c-bonobando",
     "titulo": "Versos | “O meu país tem uma tradição de massacres. E o seu?”",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1743,7 +1743,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 263,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-tiago",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 3,
         "quandoRotulo": "2d"
@@ -1754,7 +1754,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bonobando-1",
     "comunidadeId": "c-bonobando",
-    "autorId": "p-rita",
+    "autorId": "c-bonobando",
     "titulo": "Artistas Mulheres Contemporâneas no Acervo: as narrativas de Vânia Mignone",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -1765,13 +1765,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 807,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-rita",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 7,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-tiago",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 7,
         "quandoRotulo": "1d"
@@ -1782,7 +1782,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bonobando-2",
     "comunidadeId": "c-bonobando",
-    "autorId": "p-tiago",
+    "autorId": "c-bonobando",
     "titulo": "Enciclopédia Itaú Cultural estreia série de entrevistas exclusivas com artistas",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1797,7 +1797,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bonobando-3",
     "comunidadeId": "c-bonobando",
-    "autorId": "p-ic",
+    "autorId": "c-bonobando",
     "titulo": "Artistas Negros | Como se tornar invisível: o Poupatempo de Aline Motta",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -1808,7 +1808,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 314,
     "comentarios": [
       {
-        "autorId": "p-tiago",
+        "autorId": "p-maria",
         "corpo": "Já tinha lido e voltei.",
         "reacoes": 14,
         "quandoRotulo": "5d"
@@ -1819,7 +1819,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-bonobando-4",
     "comunidadeId": "c-bonobando",
-    "autorId": "p-maria",
+    "autorId": "c-bonobando",
     "titulo": "Alexandra Krenak – Mekukradjá",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -1830,7 +1830,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 107,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-rita",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 27,
         "quandoRotulo": "2d"
@@ -1841,7 +1841,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-cine-falcatrua-0",
     "comunidadeId": "c-cine-falcatrua",
-    "autorId": "p-ic",
+    "autorId": "c-cine-falcatrua",
     "titulo": "Cinema de tinta: a arte de Brisola Moutinho na fachada do Itaú Cultural",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1856,7 +1856,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-cine-falcatrua-1",
     "comunidadeId": "c-cine-falcatrua",
-    "autorId": "p-maria",
+    "autorId": "c-cine-falcatrua",
     "titulo": "Espaço Olavo Setubal recebe o vídeo “Ymá Nhandehetama”",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1867,13 +1867,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 669,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-maria",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 9,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-carlos",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 9,
         "quandoRotulo": "1d"
@@ -1884,7 +1884,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-cine-falcatrua-2",
     "comunidadeId": "c-cine-falcatrua",
-    "autorId": "p-carlos",
+    "autorId": "c-cine-falcatrua",
     "titulo": "Selecionados | “Entreolhares: fotografia” abre oficina de edição e publicação",
     "corpo": "",
     "etiqueta": "Agenda",
@@ -1895,13 +1895,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 897,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-rita",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 37,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-tiago",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 37,
         "quandoRotulo": "1d"
@@ -1912,7 +1912,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-cine-falcatrua-3",
     "comunidadeId": "c-cine-falcatrua",
-    "autorId": "p-joana",
+    "autorId": "c-cine-falcatrua",
     "titulo": "“Ensaios para o Museu das Origens” faz um mergulho na proposta de Mario Pedrosa",
     "corpo": "",
     "etiqueta": "Agenda",
@@ -1927,7 +1927,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-cine-falcatrua-4",
     "comunidadeId": "c-cine-falcatrua",
-    "autorId": "p-rita",
+    "autorId": "c-cine-falcatrua",
     "titulo": "“A criação da Bienal” estreia na IC Play e revisita a história da arte em São Paulo",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1942,7 +1942,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-o-imaginario-0",
     "comunidadeId": "c-o-imaginario",
-    "autorId": "p-tiago",
+    "autorId": "c-o-imaginario",
     "titulo": "“Entreolhares” realiza oficinas com artistas da “35ª Bienal” e visitas guiadas",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -1970,7 +1970,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-o-imaginario-1",
     "comunidadeId": "c-o-imaginario",
-    "autorId": "p-ic",
+    "autorId": "c-o-imaginario",
     "titulo": "Participe da visita expandida à exposição “Ensaios para o Museu das Origens”",
     "corpo": "",
     "etiqueta": "Agenda",
@@ -1981,13 +1981,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 855,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-carlos",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 15,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-joana",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 15,
         "quandoRotulo": "1d"
@@ -1998,7 +1998,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-o-imaginario-2",
     "comunidadeId": "c-o-imaginario",
-    "autorId": "p-maria",
+    "autorId": "c-o-imaginario",
     "titulo": "Instalação “Perder a imagem” é fechada temporariamente",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -2009,13 +2009,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 624,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-maria",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 24,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-carlos",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 24,
         "quandoRotulo": "4d"
@@ -2026,7 +2026,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-o-imaginario-3",
     "comunidadeId": "c-o-imaginario",
-    "autorId": "p-carlos",
+    "autorId": "c-o-imaginario",
     "titulo": "Artistas negros | Nossas duas cabeças e a comida dos deuses: a ebó-arte de Ayrson Heráclito",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -2048,7 +2048,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-o-imaginario-4",
     "comunidadeId": "c-o-imaginario",
-    "autorId": "p-joana",
+    "autorId": "c-o-imaginario",
     "titulo": "‘’Entreolhares’’ realiza pesquisa de opinião",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -2063,7 +2063,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-ailton-krenak-0",
     "comunidadeId": "c-ailton-krenak",
-    "autorId": "p-joana",
+    "autorId": "c-ailton-krenak",
     "titulo": "Observe – episódio 9: Produção cultural e ferramentas de gestão com Romulo Avelar e Cristina Araujo",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -2074,7 +2074,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 221,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-joana",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 21,
         "quandoRotulo": "2d"
@@ -2085,7 +2085,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-ailton-krenak-1",
     "comunidadeId": "c-ailton-krenak",
-    "autorId": "p-rita",
+    "autorId": "c-ailton-krenak",
     "titulo": "Confira a agenda completa de junho no Itaú Cultural",
     "corpo": "",
     "etiqueta": "Do acervo",
@@ -2100,7 +2100,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-ailton-krenak-2",
     "comunidadeId": "c-ailton-krenak",
-    "autorId": "p-tiago",
+    "autorId": "c-ailton-krenak",
     "titulo": "A saga de Zé do Burro na Itaú Cultural Play",
     "corpo": "",
     "etiqueta": "IC Play",
@@ -2111,13 +2111,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 711,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-joana",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 11,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-rita",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 11,
         "quandoRotulo": "1d"
@@ -2128,7 +2128,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-ailton-krenak-3",
     "comunidadeId": "c-ailton-krenak",
-    "autorId": "p-ic",
+    "autorId": "c-ailton-krenak",
     "titulo": "Lima Conta Arena",
     "corpo": "",
     "etiqueta": "Opinião",
@@ -2139,13 +2139,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 375,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-carlos",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 35,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-joana",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 35,
         "quandoRotulo": "1d"
@@ -2156,7 +2156,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-ailton-krenak-4",
     "comunidadeId": "c-ailton-krenak",
-    "autorId": "p-maria",
+    "autorId": "c-ailton-krenak",
     "titulo": "“Ficções Itaú Cultural”: ouça a peça “Virá”",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -2167,13 +2167,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 498,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-tiago",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 38,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-maria",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 38,
         "quandoRotulo": "4d"
@@ -2184,7 +2184,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-alceu-valenca-0",
     "comunidadeId": "c-alceu-valenca",
-    "autorId": "p-carlos",
+    "autorId": "c-alceu-valenca",
     "titulo": "Sergio Rodrigues – Paiol Literário",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -2199,7 +2199,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-alceu-valenca-1",
     "comunidadeId": "c-alceu-valenca",
-    "autorId": "p-joana",
+    "autorId": "c-alceu-valenca",
     "titulo": "Maria Valéria Rezende lança o romance “Carta à Rainha Louca”, projeto apoiado pelo Rumos Itaú Cultural",
     "corpo": "",
     "etiqueta": "Rumos",
@@ -2210,13 +2210,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 780,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-carlos",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 20,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-joana",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 20,
         "quandoRotulo": "4d"
@@ -2227,7 +2227,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-alceu-valenca-2",
     "comunidadeId": "c-alceu-valenca",
-    "autorId": "p-rita",
+    "autorId": "c-alceu-valenca",
     "titulo": "Dez anos sem Abdias, Abdias para sempre",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -2238,13 +2238,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 645,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-carlos",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 5,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-joana",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 5,
         "quandoRotulo": "1d"
@@ -2255,7 +2255,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-alceu-valenca-3",
     "comunidadeId": "c-alceu-valenca",
-    "autorId": "p-tiago",
+    "autorId": "c-alceu-valenca",
     "titulo": "Cíntia Moscovich – Paiol Literário",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -2266,13 +2266,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 207,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-rita",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 27,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-tiago",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 27,
         "quandoRotulo": "1d"
@@ -2283,7 +2283,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-alceu-valenca-4",
     "comunidadeId": "c-alceu-valenca",
-    "autorId": "p-ic",
+    "autorId": "c-alceu-valenca",
     "titulo": "Confira os selecionados para a antologia \"Repertório de Utopias\"",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -2294,13 +2294,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 321,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-joana",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 1,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-rita",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 1,
         "quandoRotulo": "1d"
@@ -2311,7 +2311,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adriana-varejao-0",
     "comunidadeId": "c-adriana-varejao",
-    "autorId": "p-rita",
+    "autorId": "c-adriana-varejao",
     "titulo": "Podcasts discutem resistência e representatividade na música",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -2322,13 +2322,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 519,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-maria",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 19,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-carlos",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 19,
         "quandoRotulo": "1d"
@@ -2339,7 +2339,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adriana-varejao-1",
     "comunidadeId": "c-adriana-varejao",
-    "autorId": "p-tiago",
+    "autorId": "c-adriana-varejao",
     "titulo": "Taciana Barros – Toca Brasil",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -2350,7 +2350,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 713,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-tiago",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 13,
         "quandoRotulo": "2d"
@@ -2361,7 +2361,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adriana-varejao-2",
     "comunidadeId": "c-adriana-varejao",
-    "autorId": "p-ic",
+    "autorId": "c-adriana-varejao",
     "titulo": "Morre Luiz Chagas, guitarrista da Isca de Polícia, aos 72 anos",
     "corpo": "",
     "etiqueta": "Série",
@@ -2372,13 +2372,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 48,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-tiago",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 28,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-maria",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 28,
         "quandoRotulo": "4d"
@@ -2389,7 +2389,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adriana-varejao-3",
     "comunidadeId": "c-adriana-varejao",
-    "autorId": "p-maria",
+    "autorId": "c-adriana-varejao",
     "titulo": "“Perambule”, de Clara Castro",
     "corpo": "",
     "etiqueta": "Coluna",
@@ -2404,7 +2404,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adriana-varejao-4",
     "comunidadeId": "c-adriana-varejao",
-    "autorId": "p-carlos",
+    "autorId": "c-adriana-varejao",
     "titulo": "Lydia Hortélio faz 90 anos: revisite alguns dos conteúdos da “Ocupação” dedicada à educadora",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -2419,7 +2419,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-abdias-nascimento-0",
     "comunidadeId": "c-abdias-nascimento",
-    "autorId": "p-maria",
+    "autorId": "c-abdias-nascimento",
     "titulo": "Itaú Cultural doa obra de arte para a cidade de São Paulo",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -2434,7 +2434,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-abdias-nascimento-1",
     "comunidadeId": "c-abdias-nascimento",
-    "autorId": "p-carlos",
+    "autorId": "c-abdias-nascimento",
     "titulo": "A arte visual e urbana cura a cidade em meio ao caos",
     "corpo": "",
     "etiqueta": "Entrevista",
@@ -2449,7 +2449,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-abdias-nascimento-2",
     "comunidadeId": "c-abdias-nascimento",
-    "autorId": "p-joana",
+    "autorId": "c-abdias-nascimento",
     "titulo": "Selecionados: Entreolhares – Câmera, Ação e Experimentação sobre o Ordinário Magnífico",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -2460,13 +2460,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 297,
     "comentarios": [
       {
-        "autorId": "p-ic",
+        "autorId": "p-rita",
         "corpo": "Essa eu levo para a roda de conversa de sábado.",
         "reacoes": 17,
         "quandoRotulo": "6d"
       },
       {
-        "autorId": "p-maria",
+        "autorId": "p-tiago",
         "corpo": "Guardei para ler com calma.",
         "reacoes": 17,
         "quandoRotulo": "1d"
@@ -2477,7 +2477,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-abdias-nascimento-3",
     "comunidadeId": "c-abdias-nascimento",
-    "autorId": "p-rita",
+    "autorId": "c-abdias-nascimento",
     "titulo": "Cidades | Caminhar é descobrir: as cidades e a surpresa nas fotos de Cristiano Mascaro",
     "corpo": "",
     "etiqueta": "Acervo",
@@ -2492,7 +2492,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-abdias-nascimento-4",
     "comunidadeId": "c-abdias-nascimento",
-    "autorId": "p-tiago",
+    "autorId": "c-abdias-nascimento",
     "titulo": "Workshop estimula novas percepções sobre a 33a Bienal de Arte de São Paulo",
     "corpo": "",
     "etiqueta": "Agenda",
@@ -2514,7 +2514,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adelia-sampaio-0",
     "comunidadeId": "c-adelia-sampaio",
-    "autorId": "p-rita",
+    "autorId": "c-adelia-sampaio",
     "titulo": "Observe – episódio 3: Dança: reinvenções, difusão e acessibilidade",
     "corpo": "",
     "etiqueta": "Podcast",
@@ -2525,7 +2525,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 713,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-tiago",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 33,
         "quandoRotulo": "2d"
@@ -2536,7 +2536,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adelia-sampaio-1",
     "comunidadeId": "c-adelia-sampaio",
-    "autorId": "p-tiago",
+    "autorId": "c-adelia-sampaio",
     "titulo": "Artista interessada pelos “fragmentos do mundo”, morre Rochelle Costi, aos 61 anos",
     "corpo": "",
     "etiqueta": "Notícia",
@@ -2547,13 +2547,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 720,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-carlos",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 20,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-joana",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 20,
         "quandoRotulo": "4d"
@@ -2564,7 +2564,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adelia-sampaio-2",
     "comunidadeId": "c-adelia-sampaio",
-    "autorId": "p-ic",
+    "autorId": "c-adelia-sampaio",
     "titulo": "Amanda Carneiro compartilha sua trajetória na série “Cada voz”",
     "corpo": "",
     "etiqueta": "Vídeo",
@@ -2579,7 +2579,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adelia-sampaio-3",
     "comunidadeId": "c-adelia-sampaio",
-    "autorId": "p-maria",
+    "autorId": "c-adelia-sampaio",
     "titulo": "Canção para ninar menino grande",
     "corpo": "",
     "etiqueta": "Coluna",
@@ -2590,7 +2590,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 257,
     "comentarios": [
       {
-        "autorId": "p-carlos",
+        "autorId": "p-rita",
         "corpo": "Vim parar aqui por causa de outra publicação e não me arrependi.",
         "reacoes": 37,
         "quandoRotulo": "2d"
@@ -2601,7 +2601,7 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
   {
     "id": "pub-ac-c-adelia-sampaio-4",
     "comunidadeId": "c-adelia-sampaio",
-    "autorId": "p-carlos",
+    "autorId": "c-adelia-sampaio",
     "titulo": "Mostra de livros de artista chega ao Museu de Arte de Santa Catarina",
     "corpo": "",
     "etiqueta": "Agenda",
@@ -2612,13 +2612,13 @@ export const PUBLICACOES_DO_ACERVO: PublicacaoDefinida[] = [
     "reacoes": 372,
     "comentarios": [
       {
-        "autorId": "p-joana",
+        "autorId": "p-rita",
         "corpo": "Mandei para um amigo que ia gostar.",
         "reacoes": 32,
         "quandoRotulo": "3d"
       },
       {
-        "autorId": "p-rita",
+        "autorId": "p-tiago",
         "corpo": "Não conhecia. Fui atrás depois de ver por aqui.",
         "reacoes": 32,
         "quandoRotulo": "4d"

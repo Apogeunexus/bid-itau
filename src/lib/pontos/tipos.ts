@@ -17,9 +17,9 @@
 /* ── Os três ativos, e por que não é um só ───────────────────────────────── */
 
 /**
- * `ficha`     — a moeda. Entra pelo uso, SAI na loja. É a única que debita.
+ * `ficha`     — a moeda. Entra pelo uso, SAI nas recompensas. É a única que debita.
  * `percurso`  — o quanto se andou. NUNCA debita e define o nível: se o resgate
- *               fizesse o nível cair, a loja puniria quem usa a loja.
+ *               fizesse o nível cair, as recompensas puniria quem usa as recompensas.
  * `reputacao` — o quanto se contribuiu para os outros. Não compra nada; abre
  *               poder dentro do produto (propor trilha, destacar publicação).
  */
@@ -35,6 +35,13 @@ export type Ativo = "ficha" | "percurso" | "reputacao";
  * observável (o player chegou ao fim); «gostou» não é. `presenca.confirmada` é o
  * único que vem de fora, e vem por código que o produtor gera no Studio — não por
  * autodeclaração.
+ *
+ * `missao.prova.aprovada` É A ÚNICA EXCEÇÃO, e ela confirma a regra em vez de
+ * abri-la. Uma comprovação enviada NÃO emite evento: ela fica em `comprovacoes`
+ * como fato pendente, sem tocar o livro. O evento só nasce quando existe um
+ * VEREDITO — e aí o que a plataforma observa não é a foto, é a decisão. Enquanto
+ * a análise não terminou, o saldo da pessoa é exatamente o mesmo de antes do
+ * envio, que é o que impede «ponto que existe antes de ser merecido».
  */
 export type NomeDeEvento =
   | "play.midia.concluida"
@@ -49,8 +56,15 @@ export type NomeDeEvento =
   | "comunidade.comentario.criado"
   | "comunidade.reacao.dada"
   | "comunidade.assinada"
-  | "loja.resgate.efetuado"
-  | "perfil.disposicoes.escolhidas";
+  | "recompensa.resgatada"
+  | "perfil.disposicoes.escolhidas"
+  | "perfil.completo"
+  | "museu.exposicao.percorrida"
+  | "mapa.territorio.aberto"
+  | "descobrir.item.aberto"
+  | "busca.concluida"
+  | "ia.roteiro.gerado"
+  | "missao.prova.aprovada";
 
 /**
  * O contexto que a tela anexa ao evento. Os dois primeiros campos são o coração
@@ -134,7 +148,60 @@ export interface Regra {
 
 /* ── Missões ─────────────────────────────────────────────────────────────── */
 
-export type TipoDeMissao = "diaria" | "semanal" | "temporada" | "social" | "territorio";
+export type TipoDeMissao =
+  | "diaria"
+  | "semanal"
+  | "temporada"
+  | "social"
+  | "territorio"
+  | "onboarding"
+  | "campo";
+
+/**
+ * De onde vem a prova de que a missão foi cumprida.
+ *
+ * `nativa` — a plataforma VIU acontecer: o evento entra pelo motor e a missão
+ *            fecha sozinha, sem fila, sem espera, sem arquivo.
+ * `midia`  — a pessoa envia uma foto ou print. Passa pela análise antes de valer.
+ *
+ * Os outros três formatos do escopo original (nota fiscal, texto livre e link
+ * público) NÃO existem aqui, e não por falta de tempo: a Fundação não vende, o
+ * que tira o caso de uso da nota fiscal, e os outros dois foram cortados no
+ * recorte de 2026-08-26 para o catálogo caber em dois formatos bem-feitos em vez
+ * de quatro pela metade.
+ */
+export type FormatoDeProva = "nativa" | "midia";
+
+/**
+ * `unica`      — uma conclusão encerra a missão para sempre. Sem placar: o foco é
+ *                a conquista individual.
+ * `cumulativa` — janela com início e fechamento em que a pessoa acumula. Pode ter
+ *                placar próprio.
+ */
+export type ModeloDeMissao = "unica" | "cumulativa";
+
+/**
+ * Como o placar de uma missão cumulativa ordena.
+ *
+ * `frequencia`  — dias DIFERENTES com pelo menos uma prova aprovada. Estilo
+ *                 ofensiva: premia constância, e quem despeja dez provas num
+ *                 domingo não passa na frente de quem fez uma por dia.
+ * `volume`      — total acumulado de provas validadas na janela. Estilo XP.
+ * `territorios` — unidades da federação distintas alcançadas. É a métrica que
+ *                 amarra o placar à tese de travessia do programa: o ranking
+ *                 mede o quanto você saiu do seu canto, não o quanto produziu.
+ */
+export type MetricaDeRanking = "frequencia" | "volume" | "territorios";
+
+/**
+ * As duas listas que a análise usa E que a tela mostra ao membro, palavra por
+ * palavra. Fonte única de propósito: regra que a pessoa não leu antes de enviar
+ * é reprovação que ela vai sentir como arbitrária.
+ */
+export interface RegrasDeAceite {
+  vale: string[];
+  naoVale: string[];
+}
 
 export interface MissaoDefinida {
   id: string;
@@ -147,9 +214,43 @@ export interface MissaoDefinida {
   fichas: number;
   /** Minutos estimados. A diária tem que caber em dois. */
   minutos: number;
-  expiraEm: "dia" | "semana" | "temporada";
+  expiraEm: "dia" | "semana" | "temporada" | "ciclo" | "nunca";
   /** Rota interna que cumpre a missão. Missão sem porta é beco. */
   rota: string;
+
+  /* ── O que a onda de 2026-08 acrescentou ──────────────────────────────── */
+
+  /** Ausente é `nativa`: as seis missões originais não migraram e não precisam. */
+  prova?: FormatoDeProva;
+  /** Ausente é `unica`. Só faz sentido declarar em missão de prova. */
+  modelo?: ModeloDeMissao;
+  /** A janela da cumulativa. Obrigatória quando `expiraEm` é `ciclo`. */
+  ciclo?: { comecaEm: number; fechaEm: number };
+  /** Exibidas na tela e usadas pela análise. Só em missão de `midia`. */
+  regrasDeAceite?: RegrasDeAceite;
+  /** Trava anti-spam. Ausente é sem limite. */
+  maxEnviosPorDia?: number;
+  /** Participações totais disponíveis. Ausente é sem limite. */
+  vagas?: number;
+  /** Quantas vagas já foram tomadas por OUTRAS pessoas — número de cenário. */
+  vagasTomadas?: number;
+  /**
+   * O que CADA prova aprovada paga na hora, antes de a missão fechar.
+   *
+   * São as três dinâmicas do escopo, expressas por presença e ausência em vez de
+   * um enum: só `porEnvio` é hábito; só `ranking.bonus` é competição pura; os
+   * dois juntos são a combinada. Um campo `dinamica: "..."` além destes seria uma
+   * terceira fonte capaz de discordar das outras duas.
+   */
+  porEnvio?: { percurso: number; fichas: number };
+  /** Placar próprio. Só em cumulativa; ausente é sem placar. */
+  ranking?: { metrica: MetricaDeRanking; bonus: [number, number, number] };
+  /** Tag de segmentação aplicada ao perfil na conclusão. */
+  tagAoConcluir?: string;
+  /** Emblema concedido na conclusão, do catálogo de emblemas. */
+  emblemaId?: string;
+  /** Agrupamento na tela. `primeiros-passos` sai do hub quando todas fecham. */
+  grupo?: "primeiros-passos";
 }
 
 export interface MissaoEmCurso {
@@ -158,6 +259,58 @@ export interface MissaoEmCurso {
   concluidaEm?: number;
   /** Período em que este progresso vale. Vira o período, o progresso zera. */
   chaveDoPeriodo: string;
+}
+
+/* ── Comprovações ────────────────────────────────────────────────────────── */
+
+/**
+ * `enviada`      — está no aparelho, a análise ainda não começou.
+ * `analisando`   — a esteira está rodando; a tela mostra as cinco etapas.
+ * `aprovada`     — passou. É AQUI, e só aqui, que `missao.prova.aprovada` é
+ *                  emitido e o livro recebe linha.
+ * `em-moderacao` — a análise não teve confiança suficiente e passou a bola para
+ *                  uma pessoa. Não credita nada enquanto estiver assim.
+ * `recusada`     — reprovada, com motivo escrito. Não credita.
+ */
+export type FaseDaComprovacao =
+  | "enviada"
+  | "analisando"
+  | "aprovada"
+  | "em-moderacao"
+  | "recusada";
+
+/**
+ * O arquivo que a pessoa enviou — e o que dele sobrevive.
+ *
+ * A FOTO ORIGINAL NUNCA É GUARDADA. O estado inteiro mora em `localStorage`
+ * (`contexto/pontos.tsx`), que tem cota da ordem de 5 MB: três fotos de celular
+ * em dataURL a estouram e a persistência morre em silêncio, levando junto o
+ * livro, os emblemas e o resto. Guardamos uma miniatura de 320px e o hash do
+ * original — que é, de todo modo, o que a trava antiduplicidade precisa.
+ */
+export interface ArquivoDaProva {
+  nome: string;
+  /** dataURL da miniatura reduzida. */
+  miniatura: string;
+  /** Hash do arquivo original. A mesma foto duas vezes não passa. */
+  hash: string;
+}
+
+export interface Comprovacao {
+  id: string;
+  missaoId: string;
+  arquivo: ArquivoDaProva;
+  fase: FaseDaComprovacao;
+  /** 0 a 100. O corte de 80 manda para moderação humana. */
+  confianca: number;
+  /** O que a análise leu da cena. Alimenta o painel e o texto da recusa. */
+  leitura?: string;
+  /** Obrigatório em recusa: reprovar sem dizer por quê é o que gera revolta. */
+  motivo?: string;
+  /** UF declarada pela pessoa. Alimenta o placar por territórios. */
+  uf?: string;
+  enviadaEm: number;
+  decididaEm?: number;
 }
 
 /* ── Sequência ───────────────────────────────────────────────────────────── */
@@ -270,7 +423,7 @@ export interface PessoaDaComunidade {
   uf: string;
 }
 
-/* ── Loja ────────────────────────────────────────────────────────────────── */
+/* ── Recompensas ─────────────────────────────────────────────────────────────── */
 
 export type FamiliaDeRecompensa =
   | "acesso"
@@ -323,6 +476,8 @@ export type EfeitoDoMotor =
   | { tipo: "linguagemNova"; linguagem: string }
   | { tipo: "territorioNovo"; uf: string }
   | { tipo: "resgateFeito"; recompensa: RecompensaDefinida }
+  | { tipo: "provaDecidida"; comprovacao: Comprovacao; missao: MissaoDefinida }
+  | { tipo: "tagConcedida"; tag: string }
   | { tipo: "tetoAtingido"; oQue: string };
 
 /* ── Rastro — o que a tela «Como ganhar» e o Observatório leem ───────────── */
@@ -358,6 +513,14 @@ export interface EstadoDoMotor {
   ufsAlcancadas: string[];
   /** Dias distintos de acesso já contados. */
   diasDistintos: string[];
+  /** Provas enviadas, em qualquer fase. Só as aprovadas viraram linha do livro. */
+  comprovacoes: Comprovacao[];
+  /**
+   * Tags de segmentação ganhas ao concluir missão. Elas não valem ponto: valem
+   * ACESSO — é por elas que conteúdo segmentado abre sem o gestor mexer em lista
+   * de gente na mão.
+   */
+  tags: string[];
   execucoesPorRegra: Record<string, number>;
   execucoesHoje: Record<string, number>;
   /** `"evento:tipo:id"` já pontuado — o freio de item repetido, em `motor.ts`. */

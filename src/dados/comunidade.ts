@@ -332,7 +332,40 @@ export const PESSOAS: PessoaDaComunidade[] = [
   { id: "p-tiago", nome: "Tiago Moraes", monograma: "TM", cidade: "Porto Alegre", uf: "RS" },
 ];
 
-const PESSOA_POR_ID = new Map(PESSOAS.map((p) => [p.id, p]));
+/**
+ * Toda comunidade assina as próprias publicações.
+ *
+ * Numa comunidade que leva o nome de uma instituição ou de uma artista, quem
+ * publica é ela — publicação assinada por terceiro ali dentro faz a comunidade
+ * parecer emprestada. O monograma sai das iniciais do nome, derivado e não
+ * escrito à mão, para nome novo nunca nascer sem avatar.
+ *
+ * O QUE ISSO NÃO SIGNIFICA: fala em primeira pessoa. O que essas publicações
+ * carregam é conteúdo DO ACERVO — título, imagem, crédito e link da matéria —,
+ * ou seja, a comunidade compartilha o que o Itaú Cultural publicou. As de
+ * pessoa continuam declarando na tela que a curadoria é do IC.
+ */
+function monogramaDe(nome: string): string {
+  const partes = nome
+    .replace(/[^\p{L}\p{N} ]/gu, " ")
+    .split(" ")
+    .filter(Boolean);
+  if (partes.length === 0) return "?";
+  if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase();
+  return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+}
+
+const PESSOAS_DAS_COMUNIDADES: PessoaDaComunidade[] = COMUNIDADES.map((c) => ({
+  id: c.id,
+  nome: c.nome,
+  monograma: monogramaDe(c.nome),
+  cidade: "",
+  uf: c.uf ?? "",
+}));
+
+const PESSOA_POR_ID = new Map(
+  [...PESSOAS, ...PESSOAS_DAS_COMUNIDADES].map((p) => [p.id, p]),
+);
 
 export function pessoaPorId(id: string): PessoaDaComunidade | undefined {
   return PESSOA_POR_ID.get(id);
@@ -350,7 +383,7 @@ export const PUBLICACOES: PublicacaoDefinida[] = [
   {
     id: "pub-ic-1",
     comunidadeId: COMUNIDADE_OFICIAL,
-    autorId: "p-ic",
+    autorId: "ic",
     titulo: "A temporada Travessias começou",
     corpo:
       "Durante 18 dias, tudo que estiver fora do seu repertório vale mais. Quem nunca ouviu um disco de música do Norte, quem nunca leu sobre gravura, quem nunca foi a um espetáculo de dança: é agora que compensa.",
@@ -381,7 +414,7 @@ export const PUBLICACOES: PublicacaoDefinida[] = [
   {
     id: "pub-ic-2",
     comunidadeId: COMUNIDADE_OFICIAL,
-    autorId: "p-ic",
+    autorId: "ic",
     titulo: "Qual linguagem você quer atravessar nesta temporada?",
     corpo: "A gente monta uma trilha com a mais votada.",
     etiqueta: "Enquete",
@@ -401,54 +434,6 @@ export const PUBLICACOES: PublicacaoDefinida[] = [
       ],
     },
   },
-  {
-    id: "pub-maria-1",
-    comunidadeId: COMUNIDADE_OFICIAL,
-    autorId: "p-maria",
-    titulo: "Fui ver o mural da Brigada Henfil",
-    corpo:
-      "Passei três anos andando por essa rua sem saber que aquilo tinha nome, coletivo e história. Segui a comunidade deles aqui.",
-    imagem: "/acervo/a2505a8218c98f69.jpeg",
-    imagemAlt: "Fotografia da fachada do Itaú Cultural com uma intervenção de arte urbana. Em primeiro plano, um banco de concreto e uma mureta lateral foram pintados com fundo azul-claro e flores de pétalas rosadas. No canto direito da mureta, uma mão realista segura um galho verde.",
-    imagemCredito: "agência ophelia",
-    reacoes: 96,
-    comentarios: [
-      {
-        autorId: "p-rita",
-        corpo: "Tem um trabalho deles no Recife Antigo também, vale a caminhada.",
-        reacoes: 18,
-        quandoRotulo: "5h",
-      },
-    ],
-    diasAtras: 2,
-  },
-  {
-    id: "pub-joana-1",
-    comunidadeId: "c-caixa-belem",
-    autorId: "p-joana",
-    titulo: "A mostra de Belém tem sessão com audiodescrição",
-    corpo:
-      "Levei minha mãe, que enxerga pouco. Foi a primeira vez que ela saiu de uma exposição falando do que viu em vez de perguntar o que era.",
-    imagem: "/acervo/7c8650657e847c65.jpeg",
-    imagemAlt: "Vemos a baía de Belém de longe. Há embarcações no mar e o Sol dá uma cor laranja à água. No horizonte, são visíveis várias casas coloridas a, ao centro, a igreja.",
-    imagemCredito: "Imagem: Edouard Fraipont/Itaú Cultural",
-    reacoes: 231,
-    comentarios: [],
-    diasAtras: 4,
-  },
-  {
-    id: "pub-tiago-1",
-    comunidadeId: "c-caixa-do-elefante",
-    autorId: "p-tiago",
-    titulo: "Ensaio aberto na quinta",
-    corpo: "Vamos abrir a montagem nova para vinte pessoas. Quem estiver em Porto Alegre, apareça.",
-    imagem: "/acervo/839992165fd4ea29.jpeg",
-    imagemAlt: "Vista ampla de um palco de teatro em penumbra. Três silhuetas humanas aparecem em destaque contra uma luz intensa que emana do centro do palco, criando feixes de luz que cortam o ambiente. No centro, há um pedestal ou instrumento. As figuras estão em movimento, sugerindo uma performance. Na parte inferior da imagem, vê-se a silhueta das cabeças da plateia, indicando que o ponto de vista é do público. A atmosfera é misteriosa, dramática e teatral, com forte contraste entre a luz intensa de fundo e as sombras das figuras.",
-    imagemCredito: "Thelma Vidales",
-    reacoes: 74,
-    comentarios: [],
-    diasAtras: 1,
-  },
 
   /* ── As comunidades curadas ──────────────────────────────────────────────
    * Quem assina é `p-ic` — a curadoria do Itaú Cultural. Nenhuma linha abaixo é
@@ -458,7 +443,7 @@ export const PUBLICACOES: PublicacaoDefinida[] = [
   {
     id: "pub-krenak-1",
     comunidadeId: "c-ailton-krenak",
-    autorId: "p-ic",
+    autorId: "c-ailton-krenak",
     titulo: "«A natureza não é recurso, é a gente»",
     corpo:
       "O verbete de Ailton Krenak na Enciclopédia reúne a trajetória de um pensador que atravessou a Constituinte, o cinema e a literatura sem mudar de posição. Reunimos aqui as obras do acervo que dialogam com o que ele escreve.",
@@ -489,7 +474,7 @@ export const PUBLICACOES: PublicacaoDefinida[] = [
   {
     id: "pub-alceu-1",
     comunidadeId: "c-alceu-valenca",
-    autorId: "p-ic",
+    autorId: "c-alceu-valenca",
     titulo: "O frevo que virou rock, e o rock que virou frevo",
     corpo:
       "São Bento do Una, 1946. A trajetória de Alceu Valença atravessa a MPB, o cinema e o carnaval de rua sem pedir licença a nenhum deles. Seis obras do acervo para entender a costura.",
@@ -511,7 +496,7 @@ export const PUBLICACOES: PublicacaoDefinida[] = [
   {
     id: "pub-varejao-1",
     comunidadeId: "c-adriana-varejao",
-    autorId: "p-ic",
+    autorId: "c-adriana-varejao",
     titulo: "Azulejo rachado é história rachada",
     corpo:
       "A pintura de Adriana Varejão usa o azulejo português para falar do que ele cobriu. Selecionamos as obras do acervo que conversam com essa leitura da herança colonial.",
@@ -527,7 +512,7 @@ export const PUBLICACOES: PublicacaoDefinida[] = [
   {
     id: "pub-abdias-1",
     comunidadeId: "c-abdias-nascimento",
-    autorId: "p-ic",
+    autorId: "c-abdias-nascimento",
     titulo: "Antes de ser pintor, ele fundou um teatro",
     corpo:
       "O Teatro Experimental do Negro nasceu em 1944 porque não havia palco para atores negros no Brasil. Abdias Nascimento construiu um. A pintura veio depois, e carrega os mesmos símbolos.",
@@ -556,7 +541,7 @@ export const PUBLICACOES: PublicacaoDefinida[] = [
   {
     id: "pub-adelia-1",
     comunidadeId: "c-adelia-sampaio",
-    autorId: "p-ic",
+    autorId: "c-adelia-sampaio",
     titulo: "«Amor Maldito», 1984 — e o silêncio dos 40 anos seguintes",
     corpo:
       "Adélia Sampaio foi a primeira mulher negra a dirigir um longa-metragem no Brasil. O filme circulou pouco e demorou décadas para ser reconhecido. O que veio depois dela, e o que ainda não veio.",

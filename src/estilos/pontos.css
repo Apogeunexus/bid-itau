@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
- * pontos.css — carteira, loja e comunidade.
+ * pontos.css — carteira, recompensas e comunidade.
  *
  * As três dividem uma folha porque dividem o mesmo vocabulário: o saldo em
  * ficha, o cartaz de item e o cartão de publicação aparecem nas três.
@@ -216,9 +216,9 @@
   font-weight: 700;
 }
 
-/* --- Loja --------------------------------------------------------------- */
+/* --- Recompensas ------------------------------------------------------------ */
 
-.loja-trilho {
+.recompensa-trilho {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 10.5rem;
@@ -231,11 +231,11 @@
   scrollbar-width: none;
 }
 
-.loja-trilho::-webkit-scrollbar {
+.recompensa-trilho::-webkit-scrollbar {
   display: none;
 }
 
-.loja-cartaz {
+.recompensa-cartaz {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -248,11 +248,11 @@
   text-decoration: none;
 }
 
-.loja-cartaz[data-alcancavel="nao"] {
+.recompensa-cartaz[data-alcancavel="nao"] {
   opacity: 0.72;
 }
 
-.loja-preco {
+.recompensa-preco {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
@@ -260,12 +260,12 @@
   font-variant-numeric: tabular-nums;
 }
 
-.loja-falta {
+.recompensa-falta {
   color: var(--cor-tinta-2);
   font-size: var(--tipo-legenda);
 }
 
-.loja-grade {
+.recompensa-grade {
   display: grid;
   gap: var(--espaco-pilha);
   grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
@@ -683,7 +683,7 @@
 
 /* --- Cartaz com foto e a folha do item ---------------------------------- */
 
-.loja-foto {
+.recompensa-foto {
   position: relative;
   aspect-ratio: 4 / 3;
   overflow: hidden;
@@ -691,13 +691,13 @@
   background: var(--cor-superficie-2);
 }
 
-.loja-foto img {
+.recompensa-foto img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.loja-cartao {
+.recompensa-cartao {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -711,7 +711,7 @@
   overflow: hidden;
 }
 
-.loja-cartao > .loja-corpo {
+.recompensa-cartao > .recompensa-corpo {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -719,7 +719,7 @@
   padding: 0.7rem;
 }
 
-.loja-cartao[data-alcancavel="nao"] .loja-foto img {
+.recompensa-cartao[data-alcancavel="nao"] .recompensa-foto img {
   filter: grayscale(0.55);
 }
 
@@ -803,7 +803,7 @@
   color: var(--cor-tinta-3);
 }
 
-.loja-resumo {
+.recompensa-resumo {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -852,28 +852,6 @@
   width: min(12rem, 100%);
 }
 
-.missao {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  padding: var(--espaco-cartao);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-m);
-  background: var(--cor-superficie);
-}
-
-.missao[data-concluida="sim"] {
-  border-color: var(--cor-acao);
-  background: var(--cor-acao-lavada);
-}
-
-.missao-cabeca {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-}
-
 .missao-etiqueta {
   display: inline-flex;
   align-items: center;
@@ -883,52 +861,6 @@
   color: var(--cor-acao-tinta);
   font-size: var(--tipo-legenda);
   font-weight: 700;
-}
-
-.missao-premio {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: var(--tipo-legenda);
-  color: var(--cor-tinta-3);
-}
-
-.missao-rodape {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 0.35rem;
-}
-
-.missao-rodape .nivel-barra {
-  flex: 1;
-}
-
-.missao-contagem {
-  flex: none;
-  font-size: var(--tipo-legenda);
-  font-variant-numeric: tabular-nums;
-  color: var(--cor-tinta-3);
-}
-
-.missao-fazer {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  background: var(--cor-acao);
-  color: var(--cor-sobre-acao);
-  font-size: var(--tipo-legenda);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.missao-feita {
-  flex: none;
-  font-size: var(--tipo-legenda);
-  font-weight: 700;
-  color: var(--cor-acao-tinta);
 }
 
 /* --- Seletor de comunidade ----------------------------------------------- */
@@ -1091,4 +1023,568 @@
   background: var(--cor-acao-lavada);
   color: var(--cor-acao-tinta);
   font-size: var(--tipo-detalhe);
+}
+
+/* --- Módulo de desafios: detalhe, prova e placar (onda 2026-08) ---------- */
+
+.missao-etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-pilha);
+}
+
+.missao-etiqueta[data-cor="modelo"] {
+  background: color-mix(in srgb, var(--cor-acao) 16%, transparent);
+  color: var(--cor-acao-tinta);
+}
+
+.missao-etiqueta[data-cor="prova"] {
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta-2);
+}
+
+.missao-etiqueta[data-cor="vagas"],
+.missao-etiqueta[data-cor="revisao"] {
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+}
+
+.missao-quadros {
+  display: grid;
+  gap: var(--espaco-pilha);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+.missao-quadro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.missao-quadro[data-tom="premio"],
+.cartao[data-tom="premio"] {
+  border-color: color-mix(in srgb, var(--cor-acao) 40%, var(--cor-borda));
+  background: var(--cor-acao-lavada);
+}
+
+/* --- As duas listas de regra ---------------------------------------------- */
+
+.regras-duas {
+  display: grid;
+  gap: var(--espaco-cartao);
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
+.regras-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.regras-lista li:not(:first-child) {
+  padding-left: 1.25rem;
+  position: relative;
+  color: var(--cor-tinta-2);
+}
+
+.regras-lista li:not(:first-child)::before {
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+.regras-lista[data-lado="vale"] li:not(:first-child)::before {
+  content: "✓";
+  color: var(--cor-acao-tinta);
+}
+
+.regras-lista[data-lado="nao-vale"] li:not(:first-child)::before {
+  content: "✕";
+  color: var(--cor-tinta-3);
+}
+
+/* --- A esteira de análise ------------------------------------------------- */
+
+.esteira-analise {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie-2);
+}
+
+.esteira-etapas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.esteira-passo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+.esteira-passo::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-borda);
+  transition: background var(--dur-1) ease;
+}
+
+.esteira-passo[data-estado="feita"] {
+  color: var(--cor-tinta-2);
+}
+
+.esteira-passo[data-estado="feita"]::before {
+  background: var(--cor-acao);
+}
+
+.esteira-passo[data-estado="agora"] {
+  color: var(--cor-tinta);
+  font-weight: 700;
+}
+
+.esteira-passo[data-estado="agora"]::before {
+  background: var(--cor-acao);
+  box-shadow: 0 0 0 0.25rem var(--cor-acao-lavada);
+}
+
+/* --- O desfecho do envio -------------------------------------------------- */
+
+.desfecho {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+.desfecho[data-fase="aprovada"] {
+  border-color: color-mix(in srgb, var(--ic-verde) 50%, var(--cor-borda));
+  background: color-mix(in srgb, var(--ic-verde) 14%, transparent);
+}
+
+.desfecho[data-fase="em-moderacao"] {
+  border-color: color-mix(in srgb, var(--cor-acao) 40%, var(--cor-borda));
+  background: var(--cor-acao-lavada);
+}
+
+.desfecho[data-fase="recusada"] {
+  background: var(--cor-superficie-2);
+}
+
+/* --- Minhas comprovações -------------------------------------------------- */
+
+.comprovacoes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.comprovacao {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-pilha);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.comprovacao-mini {
+  width: 3rem;
+  height: 3rem;
+  flex: none;
+  object-fit: cover;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+}
+
+.comprovacao > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+
+.comprovacao-selo {
+  flex: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-micro);
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta-2);
+}
+
+.comprovacao-selo[data-fase="aprovada"] {
+  background: color-mix(in srgb, var(--ic-verde) 22%, transparent);
+  color: var(--cor-tinta);
+}
+
+.comprovacao-selo[data-fase="em-moderacao"],
+.comprovacao-selo[data-fase="analisando"] {
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+}
+
+/* --- Placar --------------------------------------------------------------- */
+
+.ranking-atalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-cartao);
+  border-radius: var(--raio-g);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+}
+
+.placar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.placar-linha {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-pilha);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.placar-linha[data-eu="sim"] {
+  border-color: var(--cor-acao);
+  border-width: 2px;
+}
+
+.placar-linha > span:nth-child(3) {
+  flex: 1;
+  min-width: 0;
+}
+
+.placar-posicao {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+.placar-linha[data-podio="sim"] .placar-posicao {
+  background: var(--ic-amarelo);
+  color: var(--cor-tinta-crua);
+}
+
+.placar-monograma {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao-lavada);
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+.placar-bonus {
+  flex: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--ic-amarelo);
+  color: var(--cor-tinta-crua);
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+}
+
+.placar-valor {
+  flex: none;
+  font-weight: 700;
+}
+
+/* --- Filtros e primeiros passos ------------------------------------------- */
+
+.filtros-missao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-pilha);
+}
+
+.filtro-missao {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta-2);
+  font-size: var(--tipo-legenda);
+  cursor: pointer;
+}
+
+.filtro-missao[data-ativo="sim"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-weight: 700;
+}
+
+.campo-selecao {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-detalhe);
+}
+
+/* --- O card de missão em quatro colunas (espelho da lista de conquistas) --- */
+
+.missao-linha {
+  display: grid;
+  align-items: center;
+  gap: var(--espaco-pilha);
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "estrelas recompensa"
+    "corpo    corpo"
+    "estado   estado";
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+/* No computador as quatro leituras cabem lado a lado, que é onde o espelho da
+   referência funciona de verdade: o olho varre estrelas → nome → prêmio → falta. */
+@media (min-width: 48rem) {
+  .missao-linha {
+    grid-template-columns: auto 1fr auto minmax(9rem, 12rem);
+    grid-template-areas: "estrelas corpo recompensa estado";
+    gap: var(--espaco-cartao);
+  }
+}
+
+.missao-linha[data-concluida="sim"] {
+  border-color: color-mix(in srgb, var(--ic-verde) 45%, var(--cor-borda));
+  background: color-mix(in srgb, var(--ic-verde) 8%, transparent);
+}
+
+.estrelas-missao {
+  grid-area: estrelas;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.estrela {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+}
+
+.missao-corpo {
+  grid-area: corpo;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.missao-recompensa {
+  grid-area: recompensa;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.premio-fichas {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.premio-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.premio-chip[data-ativo="percurso"] {
+  background: color-mix(in srgb, var(--ic-azul) 20%, transparent);
+  color: var(--cor-tinta);
+}
+
+.premio-chip[data-ativo="ficha"] {
+  background: color-mix(in srgb, var(--ic-amarelo) 45%, transparent);
+  color: var(--cor-tinta-crua);
+}
+
+.missao-estado {
+  grid-area: estado;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.missao-trilho-barra {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie-2);
+}
+
+.missao-trilho-preenchimento {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--cor-acao);
+  transition: width var(--dur-2) ease;
+}
+
+.missao-trilho-numero {
+  position: relative;
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  /* Sobre a barra cheia OU vazia o número precisa continuar legível; o contorno
+     resolve os dois casos sem trocar de cor no meio do preenchimento. */
+  color: var(--cor-tinta);
+  text-shadow:
+    0 0 0.25rem var(--cor-superficie),
+    0 0 0.25rem var(--cor-superficie);
+}
+
+.missao-selo-feita {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--raio-pilula);
+  background: color-mix(in srgb, var(--ic-verde) 25%, transparent);
+  color: var(--cor-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+/* O botão de abrir a missão. LARANJA, que é a cor de AÇÃO do Itaú Cultural —
+   as estrelas e os chips são objetos ganhos, este é o único elemento do card
+   que se aperta, e a cor precisa dizer isso sozinha. */
+.missao-ver {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+.missao-ver:hover,
+.missao-ver:focus-visible {
+  background: var(--cor-acao-tinta);
+}
+
+/* --- A estrela azul do percurso, e o par de saldos do cabeçalho ----------- */
+
+.estrela-xp {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+.barra-saldos {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.saldo-pilula {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+}
+
+.saldo-pilula:hover,
+.saldo-pilula:focus-visible {
+  border-color: var(--cor-borda-forte);
+}
+
+.barra-marca {
+  display: inline-flex;
+  align-items: center;
+  color: var(--cor-acao);
+}
+
+/* --- O selo do nível grudado no ícone de perfil --------------------------- */
+
+.barra-conta-botao {
+  /* A ÂNCORA DO SELO. Sem isto o selo absoluto sobe até o primeiro ancestral
+     posicionado — que é o cabeçalho `sticky` — e vai parar no canto da barra
+     inteira em vez do canto do ícone. */
+  position: relative;
+}
+
+.selo-no-perfil {
+  position: absolute;
+  right: -0.125rem;
+  bottom: -0.125rem;
+  display: inline-flex;
+  /* O anel na cor da superfície separa o selo do ícone por baixo. Sem ele, um
+     selo azul sobre o traço azul do ícone vira uma mancha só. */
+  border-radius: var(--raio-pilula);
+  box-shadow: 0 0 0 0.125rem var(--cor-superficie);
+  pointer-events: none;
+}
+
+.selo-nivel[data-porte="pequeno"] {
+  width: 1rem;
+  height: 1rem;
 }
