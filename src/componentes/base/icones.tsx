@@ -141,16 +141,16 @@ export const ICONE_FILTROS = (
 
 /** «Entrar»: a seta que não promete nada além de atravessar. */
 /**
- * Painel lateral — retângulo com a divisória à direita, traço fino.
+ * Menu lateral — duas linhas de comprimentos diferentes, traço fino.
  *
- * O desenho diz o que o botão FAZ: mostra a tela com uma coluna aberta ao lado. Uma seta
- * diria só «vai para algum lugar», e três pontinhos diriam «tem mais alguma coisa» — os
- * dois obrigam a descobrir por tentativa.
+ * Duas e não três: o traço mais curto embaixo é o que distingue este botão de um menu de
+ * navegação cheio, e é o desenho que o aplicativo de conversa consagrou para «abrir a
+ * lista do lado». Três pontinhos diriam só «tem mais alguma coisa».
  */
 export const ICONE_PAINEL = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-    <rect x="3" y="5" width="18" height="14" rx="2.5" />
-    <path d="M14.5 5v14" />
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+    <path d="M5 10h14" strokeLinecap="round" />
+    <path d="M5 15h9" strokeLinecap="round" />
   </svg>
 );
 

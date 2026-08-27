@@ -128,7 +128,11 @@ body {
 [data-view="mobile"] .moldura {
   position: relative;
   width: 390px;
-  height: min(844px, calc(100vh - 4rem));
+  /* A altura vira token para quem precisa cobrir a tela inteira por dentro — hoje a
+     gaveta de conversas dos Roteiros. Sem ele, a medida seria copiada numa segunda folha
+     e as duas divergiriam na primeira mudança de moldura. */
+  --altura-moldura: min(844px, calc(100vh - 4rem));
+  height: var(--altura-moldura);
   flex: none;
   overflow: hidden;
   /* O BEZEL NÃO É O TEMA, É O OBJETO. A tela do telefone acompanha o tema — ela

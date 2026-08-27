@@ -1146,15 +1146,17 @@
   gap: var(--espaco-pilha);
 }
 
+/* Circular e à ESQUERDA do cabeçalho, como manda a referência: é o primeiro
+   alvo do polegar e o lugar consagrado de «abrir a lista». */
 .ia-historico-botao {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 1px solid var(--cor-borda-forte);
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
   border-radius: var(--raio-pilula);
-  background: transparent;
+  background: var(--cor-superficie-2);
   color: var(--cor-tinta-2);
   font-size: var(--tipo-titulo-3);
   line-height: 1;
@@ -1184,9 +1186,14 @@
  * primeira tentativa — medido em 1440px, a gaveta abriu em 0→320 enquanto a
  * moldura ia de 525 a 915.
  *
- * Ela é `absolute` contra `.ia`, entra pela DIREITA e mora dentro da tela. O
- * botão que a abre vive no cabeçalho, então quem a abre está no topo — é lá que
- * ela ancora, e é lá que ela é vista.
+ * Ela é `absolute` contra `.ia` e entra PELA ESQUERDA, deslocando a tela para a
+ * direita — a forma que o aplicativo de conversa consagrou e que a referência
+ * de 27.08 pede. Fica uma faixa da conversa à mostra na borda direita: é o que
+ * diz que a tela continua ali atrás e que dá para voltar tocando nela.
+ *
+ * A altura vem de `--altura-moldura`, declarada em `base.css` junto com a
+ * própria moldura. Copiar `min(844px, 100vh - 4rem)` para cá faria as duas
+ * medidas divergirem na primeira mudança do aparelho desenhado.
  * ------------------------------------------------------------------------ */
 
 .ia {
@@ -1204,12 +1211,14 @@
 .ia-gaveta {
   position: absolute;
   inset-block-start: 0;
-  inset-inline-end: 0;
+  inset-inline-start: calc(var(--espaco-tela) * -1);
   z-index: 60;
-  width: min(18rem, 86%);
-  max-height: 30rem;
-  border: 1px solid var(--cor-borda-forte);
-  border-radius: var(--raio-g);
+  width: 88%;
+  height: var(--altura-moldura, 100%);
+  padding-block: var(--espaco-tela);
+  border-inline-end: 1px solid var(--cor-borda-forte);
+  border-start-end-radius: var(--raio-g);
+  border-end-end-radius: var(--raio-g);
   box-shadow: var(--sombra-3);
   overflow-y: auto;
   animation: ia-gaveta-entra var(--dur-3) var(--ease-padrao);
@@ -1217,8 +1226,7 @@
 
 @keyframes ia-gaveta-entra {
   from {
-    transform: translateX(100%);
-    opacity: 0;
+    transform: translateX(-100%);
   }
 }
 
@@ -1230,7 +1238,9 @@
 
 .ia-gaveta-veu {
   position: absolute;
-  inset: 0;
+  inset-block-start: 0;
+  inset-inline: calc(var(--espaco-tela) * -1);
+  height: var(--altura-moldura, 100%);
   z-index: 50;
   border: none;
   background: color-mix(in srgb, var(--ic-preto) 45%, transparent);
@@ -1247,13 +1257,24 @@
 }
 
 .ia-gaveta-titulo {
-  font-size: var(--tipo-destaque);
+  font-size: var(--tipo-titulo-3);
   font-weight: 700;
 }
 
+/* «Recentes» — o rótulo da lista, no lugar onde a referência o põe: acima das
+   conversas, discreto, para separá-las do cabeçalho sem competir com ele. */
+.ia-gaveta-secao {
+  padding-block-start: var(--espaco-pilha);
+  color: var(--cor-tinta-3);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 .ia-historico-seta {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .ia-historico-lista {

@@ -741,7 +741,7 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
           />
           <aside className="ia-historico ia-gaveta" aria-label="Conversas anteriores">
             <div className="ia-gaveta-topo">
-              <span className="ia-gaveta-titulo">Suas conversas</span>
+              <span className="ia-gaveta-titulo">Roteiros</span>
               <button
                 type="button"
                 className="ia-historico-remover"
@@ -751,6 +751,7 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
                 <span aria-hidden="true">×</span>
               </button>
             </div>
+          <p className="ia-gaveta-secao">Recentes</p>
           <ul className="ia-historico-lista">
             {historico.map((c) => (
               <li key={c.id} className="ia-historico-item">
