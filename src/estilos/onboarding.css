@@ -1,0 +1,484 @@
+/* ===========================================================================
+ * onboarding.css — as telas de semeadura do perfil (S8) e as cinco faixas de
+ * preferência que os apps abrem.
+ *
+ * DUAS FAMÍLIAS, e elas não se misturam de propósito:
+ *
+ * 1. **`.onb-*` — o onboarding.** Tela cheia, uma pergunta por vez, grade de
+ *    escolha grande. É o único lugar do produto onde a pessoa olha uma parede
+ *    de opções sem ter pedido nada — então a carta é grande, o alvo é generoso
+ *    e a contagem do acervo vem colada no rótulo.
+ *
+ * 2. **`.pref-*` — a faixa dentro do app.** Nunca é modal e nunca é porteiro:
+ *    ela mora acima do conteúdo, rola junto com ele e some quando a preferência
+ *    já existe. Pastilha em rolagem horizontal no telefone, linha na web.
+ *
+ * A CONTAGEM É PARTE DO ROTULO, não decoração. `artes visuais 2.623` contra
+ * `TV 1` é o que impede alguém de semear uma linguagem que devolve um item —
+ * e por isso `.onb-conta` nunca ganha `display: none` em porte nenhum. Se não
+ * couber ao lado, desce de linha; sumir não é opção.
+ *
+ * A DECLARAÇÃO DE AUSÊNCIA (`.declaracao`) É TEXTO, NUNCA TOOLTIP. Ela diz o
+ * que o acervo não tem — gênero de filme no Play, autor no Notícias — e
+ * esconder isso atrás de um toque é escondê-lo. Nos dois portes ela é lida sem
+ * interação.
+ *
+ * REGRAS DA CASA: nunca importe esta folha de um componente; o único import de
+ * CSS do projeto é `layout.tsx → globals.css`. Só token, nenhuma medida fora da
+ * grade de 0.25rem, nenhum hex.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * 1 · A tela do onboarding
+ * ------------------------------------------------------------------------- */
+
+.onboarding {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-secao);
+  padding: var(--espaco-tela);
+  padding-bottom: calc(var(--espaco-secao) * 2);
+}
+
+.onb-cabeca {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+}
+
+.onb-pergunta {
+  font-size: var(--tipo-titulo-1);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.onb-subtitulo {
+  font-size: var(--tipo-detalhe);
+  color: var(--cor-tinta-2);
+  max-width: 34rem;
+}
+
+/* O contador de passos. É informação, não navegação: quem quiser voltar usa o
+ * histórico, e quem quiser sair usa «pular» — que está sempre visível. */
+.onb-passos {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------------------
+ * 2 · Grade de escolha
+ * ------------------------------------------------------------------------- */
+
+.onb-grade {
+  display: grid;
+  gap: var(--espaco-pilha);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 40rem) {
+  .onb-grade {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .onb-grade {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--espaco-cartao);
+  }
+}
+
+@media (min-width: 90rem) {
+  .onb-grade {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 3 · Carta de linguagem
+ *
+ * A cor vem da linguagem, por variável inline (`--cor-linguagem`), do mesmo
+ * vocabulário que o selo de linguagem já usa no cartão do feed — é assim que a
+ * pessoa reconhece no feed o que marcou aqui.
+ * ------------------------------------------------------------------------- */
+
+.onb-lingua {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--espaco-pilha);
+  min-height: 6rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease-padrao),
+    box-shadow var(--dur-1) var(--ease-padrao),
+    transform var(--dur-1) var(--ease-padrao);
+}
+
+/* A faixa de cor é o que diferencia uma linguagem da outra numa parede de 18
+ * cartas de mesmo tamanho. Sem ela a grade vira lista de texto com borda. */
+.onb-lingua::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 0.25rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-linguagem, var(--cor-tinta-3));
+}
+
+.onb-lingua:hover {
+  border-color: var(--cor-borda-forte);
+  box-shadow: var(--sombra-1);
+}
+
+.onb-lingua[aria-pressed="true"] {
+  border-color: var(--cor-acao);
+  box-shadow: inset 0 0 0 1px var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+.onb-rotulo {
+  font-size: var(--tipo-corpo);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Nunca some. Ver o cabeçalho desta folha. */
+.onb-conta {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * 4 · Carta de rosto — pessoa e obra
+ * ------------------------------------------------------------------------- */
+
+.onb-rosto {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease-padrao),
+    box-shadow var(--dur-1) var(--ease-padrao);
+}
+
+.onb-rosto:hover {
+  border-color: var(--cor-borda-forte);
+  box-shadow: var(--sombra-1);
+}
+
+.onb-rosto[aria-pressed="true"] {
+  border-color: var(--cor-acao);
+  box-shadow: inset 0 0 0 2px var(--cor-acao);
+}
+
+.onb-rosto-foto {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--cor-superficie-2);
+}
+
+.onb-rosto-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Sem foto o lugar da imagem não fica vazio: iniciais grandes sobre superfície.
+ * Só aparece pela BUSCA — a grade não oferece carta sem rosto (PRD §5.3). */
+.onb-iniciais {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: var(--tipo-titulo-1);
+  font-weight: 700;
+  color: var(--cor-tinta-3);
+  letter-spacing: 0.04em;
+}
+
+.onb-rosto-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--espaco-cartao);
+}
+
+.onb-rosto-nome {
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.onb-rosto-classe {
+  font-size: var(--tipo-micro);
+  color: var(--cor-tinta-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* A marca de escolhido, no canto da foto. Ícone e não só borda: quem enxerga
+ * pouco contraste precisa de uma segunda pista além da cor. */
+.onb-marca {
+  position: absolute;
+  inset-block-start: var(--espaco-pilha);
+  inset-inline-end: var(--espaco-pilha);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
+ * 5 · Busca do passo 3
+ * ------------------------------------------------------------------------- */
+
+.onb-busca {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-pilha);
+  padding-block: var(--espaco-pilha);
+  background: var(--cor-fundo);
+}
+
+.onb-busca input {
+  flex: 1;
+  min-height: 2.75rem;
+  padding-inline: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: inherit;
+  font-size: var(--tipo-corpo);
+}
+
+.onb-busca input:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+ * 6 · As duas saídas, e o rodapé
+ *
+ * «não conheço nenhum destes» e «pular» são a razão de a tela do passo 3 não
+ * virar um teste de erudição. Elas ficam SEMPRE visíveis, nunca atrás de
+ * rolagem, e por isso o rodapé é fixo no telefone.
+ * ------------------------------------------------------------------------- */
+
+.onb-saidas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-pilha);
+  align-items: center;
+}
+
+.onb-rodape {
+  position: sticky;
+  inset-block-end: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-pilha);
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--espaco-cartao);
+  background: linear-gradient(to top, var(--cor-fundo) 70%, transparent);
+}
+
+.onb-avancar {
+  min-height: 2.75rem;
+  padding-inline: var(--espaco-secao);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.onb-pular {
+  min-height: 2.75rem;
+  padding-inline: var(--espaco-cartao);
+  border-radius: var(--raio-pilula);
+  border: 1px solid var(--cor-borda-forte);
+  background: transparent;
+  color: inherit;
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.onb-texto-acao {
+  min-height: 2.75rem;
+  padding-inline: var(--espaco-pilha);
+  background: none;
+  border: none;
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------------------
+ * 7 · A faixa de preferência dentro do app
+ * ------------------------------------------------------------------------- */
+
+.pref {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  margin-block-end: var(--espaco-secao);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+.pref-pergunta {
+  font-size: var(--tipo-destaque);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Pastilhas rolando na horizontal. No telefone a fileira sangra até a borda da
+ * tela — cortar no gutter faz a última pastilha parecer a última que existe. */
+.pref-opcoes {
+  display: flex;
+  gap: var(--espaco-pilha);
+  overflow-x: auto;
+  margin-inline: calc(var(--espaco-cartao) * -1);
+  padding-inline: var(--espaco-cartao);
+  scrollbar-width: none;
+}
+
+.pref-opcoes::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .pref-opcoes {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+}
+
+.pref-pastilha {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+  min-height: 2.75rem;
+  padding-inline: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: inherit;
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-1) var(--ease-padrao);
+}
+
+.pref-pastilha[aria-pressed="true"] {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+/* A linha discreta que substitui a faixa depois de a preferência existir. */
+.pref-resumo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--espaco-pilha);
+  margin-block-end: var(--espaco-cartao);
+  font-size: var(--tipo-detalhe);
+  color: var(--cor-tinta-2);
+}
+
+/* ---------------------------------------------------------------------------
+ * 8 · Declaração de ausência
+ *
+ * O que o acervo NÃO tem, dito em texto corrido, com denominador. Fundo próprio
+ * para não se confundir com a legenda de um item — isto é uma afirmação sobre o
+ * acervo inteiro, não sobre a coisa mais perto dela.
+ * ------------------------------------------------------------------------- */
+
+.declaracao {
+  padding: var(--espaco-cartao);
+  border-inline-start: 0.25rem solid var(--cor-borda-forte);
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-detalhe);
+  color: var(--cor-tinta-2);
+  line-height: 1.45;
+}
+
+.declaracao strong {
+  color: var(--cor-tinta);
+  font-weight: 600;
+}
+
+/* Selo de procedência autorada, para a lista de temas do Notícias — a mesma
+ * distinção que `disposicoes.ts` já carrega no dado. */
+.declaracao-autorado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-inline-end: 0.5rem;
+  padding-inline: 0.5rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  font-size: var(--tipo-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cor-tinta-3);
+}
+
+/* ---------------------------------------------------------------------------
+ * 9 · Estados vazios do feed sem semente
+ * ------------------------------------------------------------------------- */
+
+.onb-aviso-feed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-pilha);
+  margin-block-end: var(--espaco-cartao);
+  padding: var(--espaco-cartao);
+  border: 1px dashed var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  font-size: var(--tipo-detalhe);
+  color: var(--cor-tinta-2);
+}
