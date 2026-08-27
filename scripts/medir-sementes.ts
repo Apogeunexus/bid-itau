@@ -365,6 +365,38 @@ console.log(
   `      motivos: escritos ${d.escritos} · compostos ${d.compostos} · textos distintos ${d.textos.length} · nós distintos ${d.nos.length}`,
 );
 
+
+// --- Formato E: guardar o TEXTO do motivo, deduplicado. Duplicar COMPOSITORES no
+// cliente seria a regra escrita duas vezes, que diverge na primeira edição.
+{
+  const textos = new Map<string, number>();
+  const linhas: number[][] = [];
+  const idxC = new Map<string, number>();
+  const cartoesE: unknown[] = [];
+  for (const [, lista] of porSemente) {
+    for (const c of lista) {
+      let ic = idxC.get(c.id);
+      if (ic === undefined) {
+        const { caminho: _cam, motivo: _mot, ...enxuto } = c;
+        ic = cartoesE.push(enxuto) - 1;
+        idxC.set(c.id, ic);
+      }
+      let it = textos.get(c.motivo.texto);
+      if (it === undefined) {
+        it = textos.size;
+        textos.set(c.motivo.texto, it);
+      }
+      linhas.push([ic, it]);
+    }
+  }
+  const tabela = [...textos.keys()];
+  console.log(
+    `  E · tabela + textos de motivo dedup ...... ` +
+      `${mb(pesar({ cartoes: cartoesE, textos: tabela, listas: linhas }))}` +
+      `   (textos distintos ${tabela.length} de ${linhas.length} · ${kb(pesar(tabela))})`,
+  );
+}
+
 console.log(`\nTETO: ${mb(TETO_PRECOMPUTO_BYTES)} (compartilhado com o precômputo de feeds.ts)`);
 for (const [nome, peso] of [
   ["A", a],
