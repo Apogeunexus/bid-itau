@@ -22,6 +22,14 @@ import {
   ICONE_MAPA,
   ICONE_RELOGIO,
 } from "@/componentes/base/icones";
+import {
+  guardarConversa,
+  lerConversas,
+  quandoPorExtenso,
+  removerConversa,
+  TETO_DE_CONVERSAS,
+  type ConversaGuardada,
+} from "@/lib/ia-historico";
 import { Grafismo } from "@/componentes/grafismo";
 import {
   RoteirosSalvos,
@@ -78,6 +86,9 @@ type MensagemAssistente = {
   destino?: DestinoDoRoteiro;
 };
 type Mensagem = MensagemUsuario | MensagemAssistente;
+
+/** Uma conversa guardada, com os tipos deste arquivo. Ver `lib/ia-historico.ts`. */
+type Conversa = ConversaGuardada<Mensagem, Pedido>;
 
 function ehAssistente(m: Mensagem): m is MensagemAssistente {
   return m.papel === "assistente";
@@ -376,6 +387,11 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
   const [passo, setPasso] = useState<0 | 1 | 2>(0);
   const [pensando, setPensando] = useState(false);
   const [artefatoVisivel, setArtefatoVisivel] = useState(false);
+  /** As conversas anteriores e a folha que as mostra. Ver `lib/ia-historico.ts`. */
+  const [historico, setHistorico] = useState<Conversa[]>([]);
+  const [historicoAberto, setHistoricoAberto] = useState(false);
+  /** O id da conversa CORRENTE. Criado no primeiro turno e mantido até «Nova conversa». */
+  const idDaConversa = useRef<string | null>(null);
   const timers = useRef<number[]>([]);
   const seq = useRef(0);
   const fim = useRef<HTMLDivElement>(null);
@@ -533,7 +549,49 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
     seguir(proximo, s.texto);
   }
 
+  // O histórico só pode ser lido no cliente: sob `output: "export"` o HTML sai do build e
+  // ler `localStorage` no primeiro render divergiria da hidratação (o mesmo motivo de
+  // `sessao.tsx` guardar `hidratado`).
+  useEffect(() => {
+    setHistorico(lerConversas<Mensagem, Pedido>());
+  }, []);
+
+  /**
+   * Guarda a conversa a cada turno, e não só no fim.
+   *
+   * Guardar no fim exigiria saber quando o fim acontece — e uma conversa não termina, ela
+   * é abandonada: a pessoa fecha a aba, troca de app, some. O que ela vai procurar depois
+   * é o que estava na tela no último momento em que olhou.
+   */
+  useEffect(() => {
+    if (!mensagens.length) return;
+    const primeira = mensagens.find((m) => m.papel === "usuario");
+    if (!primeira) return;
+    if (!idDaConversa.current) idDaConversa.current = `c${Date.now()}`;
+    setHistorico(
+      guardarConversa<Mensagem, Pedido>({
+        id: idDaConversa.current,
+        quando: Date.now(),
+        titulo: primeira.texto.trim().slice(0, 90),
+        mensagens,
+        pedido,
+      }),
+    );
+  }, [mensagens, pedido]);
+
+  function abrirConversa(c: Conversa) {
+    for (const t of timers.current) window.clearTimeout(t);
+    timers.current = [];
+    idDaConversa.current = c.id;
+    setMensagens(c.mensagens);
+    setPedido(c.pedido);
+    setPensando(false);
+    setArtefatoVisivel(true);
+    setHistoricoAberto(false);
+  }
+
   function novaConversa() {
+    idDaConversa.current = null;
     for (const t of timers.current) window.clearTimeout(t);
     timers.current = [];
     setMensagens([]);
@@ -574,17 +632,72 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
           <Grafismo variacao="barra" className="ia-topo-marca" />
           <h1 className="ia-topo-titulo tipo-destaque">Roteiros</h1>
         </div>
-        {conversando ? (
-          <button type="button" className="ia-nova" onClick={novaConversa}>
-            {glifo(ICONE_MAIS)} Nova conversa
-          </button>
-        ) : (
-          <details className="ia-topo-salvos">
-            <summary>Salvos</summary>
-            <RoteirosSalvos cidades={cidades} gostos={gostos} />
-          </details>
-        )}
+        <div className="ia-topo-acoes">
+          {/* O HISTÓRICO É O PRIMEIRO BOTÃO e existe nos dois estados da tela.
+              Antes, «Nova conversa» apagava a anterior sem deixar rastro: não havia onde
+              procurá-la, porque não havia o que procurar. Um botão que só aparecesse
+              durante a conversa seria inútil justamente para quem já saiu dela. */}
+          {historico.length ? (
+            <button
+              type="button"
+              className="ia-historico-botao"
+              aria-expanded={historicoAberto}
+              aria-label={`Conversas anteriores (${historico.length})`}
+              onClick={() => setHistoricoAberto((v) => !v)}
+            >
+              <span aria-hidden="true">⋯</span>
+            </button>
+          ) : null}
+
+          {conversando ? (
+            <button type="button" className="ia-nova" onClick={novaConversa}>
+              {glifo(ICONE_MAIS)} Nova conversa
+            </button>
+          ) : (
+            <details className="ia-topo-salvos">
+              <summary>Salvos</summary>
+              <RoteirosSalvos cidades={cidades} gostos={gostos} />
+            </details>
+          )}
+        </div>
       </header>
+
+      {historicoAberto ? (
+        <section className="ia-historico" aria-label="Conversas anteriores">
+          <ul className="ia-historico-lista">
+            {historico.map((c) => (
+              <li key={c.id} className="ia-historico-item">
+                <button
+                  type="button"
+                  className="ia-historico-abrir"
+                  onClick={() => abrirConversa(c)}
+                >
+                  <span className="ia-historico-titulo">{c.titulo}</span>
+                  <span className="ia-historico-quando tipo-legenda">
+                    {quandoPorExtenso(c.quando, Date.now())}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className="ia-historico-remover"
+                  aria-label={`Apagar a conversa «${c.titulo}»`}
+                  onClick={() => setHistorico(removerConversa<Mensagem, Pedido>(c.id))}
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          {/* O teto é DITO, não escondido: lista que corta em silêncio faz a conversa
+              antiga «sumir» sem explicação. */}
+          {historico.length >= TETO_DE_CONVERSAS ? (
+            <p className="ia-historico-teto tipo-legenda">
+              As {TETO_DE_CONVERSAS} conversas mais recentes ficam guardadas aqui, neste
+              aparelho. A mais antiga sai quando uma nova entra.
+            </p>
+          ) : null}
+        </section>
+      ) : null}
 
       <div className="ia-fio">
         {conversando ? (
