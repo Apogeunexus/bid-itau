@@ -265,11 +265,6 @@
   font-size: var(--tipo-legenda);
 }
 
-.recompensa-grade {
-  display: grid;
-  gap: var(--espaco-pilha);
-  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
-}
 
 /* --- Botões ------------------------------------------------------------- */
 
@@ -709,6 +704,10 @@
   text-align: left;
   cursor: pointer;
   overflow: hidden;
+  /* Item de trilho: encaixa no passo de rolagem e não encolhe abaixo da metade
+     da tela, que é a largura que `.trilho-duplo` reserva para ele. */
+  scroll-snap-align: start;
+  min-width: 0;
 }
 
 .recompensa-cartao > .recompensa-corpo {

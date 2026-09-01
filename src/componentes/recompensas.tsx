@@ -217,7 +217,7 @@ export function Recompensas() {
               <h2 className="tipo-detalhe font-bold">{familia.rotulo}</h2>
               <p className="tipo-legenda text-tinta-2">{familia.resumo}</p>
             </div>
-            <div className="recompensa-grade">
+            <div className="trilho-duplo">
               {itens.map((r) => (
                 <Cartao
                   key={r.id}
