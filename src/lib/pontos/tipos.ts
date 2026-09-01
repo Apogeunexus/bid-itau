@@ -445,6 +445,8 @@ export interface RecompensaDefinida {
   imagemCredito: string;
   /** O que a pessoa recebe de fato, dito antes do resgate. */
   entrega: "presencial" | "digital" | "correio" | "no-produto";
+  /** Aparece no bloco de destaques da capa de Recompensas. */
+  destaque?: boolean;
 }
 
 export type FaseDoResgate =

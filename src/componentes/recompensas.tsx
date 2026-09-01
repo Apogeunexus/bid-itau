@@ -212,7 +212,7 @@ export function Recompensas() {
         if (itens.length === 0) return null;
 
         return (
-          <section key={familia.id} className="flex flex-col gap-2">
+          <section key={familia.id} id={familia.id} className="flex flex-col gap-2 scroll-mt-4">
             <div className="flex flex-col gap-0.5">
               <h2 className="tipo-detalhe font-bold">{familia.rotulo}</h2>
               <p className="tipo-legenda text-tinta-2">{familia.resumo}</p>

@@ -17,6 +17,11 @@
  * foto bonita e escrever a descrição por conta própria poria palavra nossa na boca
  * do Itaú Cultural; aqui cada capa carrega a autoria de quem a fez.
  *
+ * OS TRÊS DESTAQUES são marcados AQUI e não escolhidos na tela. Escolher por
+ * saldo faria a capa mostrar coisas diferentes para cada pessoa e deixaria de
+ * ser curadoria — passaria a ser vitrine reativa. Um de cada natureza: o mais
+ * acessível, uma experiência e o que devolve.
+ *
  * ESTOQUE `null` NÃO É LACUNA. As famílias `poder` e `devolver` não consomem nada
  * físico: destacar a própria publicação ou apoiar um produtor pode acontecer mil
  * vezes. Fingir um estoque ali seria escassez inventada.
@@ -28,6 +33,7 @@ export const RECOMPENSAS: RecompensaDefinida[] = [
   /* ── Acesso — o que o IC já faz e não custa estoque novo ───────────────── */
   {
     id: "rec-exposicao",
+    destaque: true,
     familia: "acesso",
     titulo: "Ingresso para exposição",
     descricao: "Uma entrada para a exposição em cartaz no Itaú Cultural.",
@@ -76,6 +82,7 @@ export const RECOMPENSAS: RecompensaDefinida[] = [
   },
   {
     id: "rec-oficina",
+    destaque: true,
     familia: "acesso",
     titulo: "Vaga em oficina",
     descricao: "Uma vaga numa formação do Itaú Cultural, presencial ou on-line.",
@@ -230,6 +237,7 @@ export const RECOMPENSAS: RecompensaDefinida[] = [
   },
   {
     id: "rec-deserto",
+    destaque: true,
     familia: "devolver",
     titulo: "Apoie um território sem acervo",
     descricao:
@@ -269,3 +277,29 @@ export const FASES_DE_ENTREGA = [
   { id: "enviado", rotulo: "Enviado" },
   { id: "entregue", rotulo: "Entregue" },
 ] as const;
+
+/** As três da capa. Marcadas no catálogo, nunca escolhidas por saldo. */
+export function recompensasEmDestaque(): RecompensaDefinida[] {
+  return RECOMPENSAS.filter((r) => r.destaque);
+}
+
+/** Quantas recompensas cada família tem — a capa conta, nunca escreve o número. */
+export function contagemPorFamilia(): Record<RecompensaDefinida["familia"], number> {
+  const contas = {} as Record<RecompensaDefinida["familia"], number>;
+  for (const f of FAMILIAS) contas[f.id] = recompensasDaFamilia(f.id).length;
+  return contas;
+}
+
+/**
+ * A capa de cada família — a foto da primeira recompensa dela.
+ *
+ * Derivada, e não escolhida à mão: família nova ganha capa sozinha, e a foto
+ * já traz `imagemAlt` e crédito do acervo. Uma capa avulsa por família seria
+ * mais um lugar para alguém esquecer de preencher.
+ */
+export function capaDaFamilia(familia: RecompensaDefinida["familia"]) {
+  const primeira = recompensasDaFamilia(familia)[0];
+  return primeira
+    ? { imagem: primeira.imagem, imagemAlt: primeira.imagemAlt }
+    : { imagem: "", imagemAlt: "" };
+}

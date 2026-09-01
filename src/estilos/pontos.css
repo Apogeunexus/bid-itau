@@ -1740,3 +1740,120 @@ button.saldo-pilula {
   flex: none;
   min-width: 0;
 }
+
+/* --- Capa de Recompensas -------------------------------------------------- */
+
+/* DOIS POR TELA, e a conta é essa: cada cartão ocupa metade da largura visível
+ * menos meio vão. Largura fixa em `rem` mostraria três num telefone grande e um
+ * e meio num pequeno; em porcentagem, são sempre dois, em qualquer aparelho.
+ *
+ * A sangria negativa faz o trilho encostar na borda da tela enquanto o conteúdo
+ * continua alinhado com o resto da página — sem ela, o segundo cartão parece
+ * cortado por acidente em vez de continuar. */
+.trilho-duplo {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc(50% - (var(--espaco-pilha) / 2) - (var(--espaco-tela) / 2));
+  gap: var(--espaco-pilha);
+  overflow-x: auto;
+  margin-inline: calc(var(--espaco-tela) * -1);
+  padding-inline: var(--espaco-tela);
+  padding-bottom: 0.25rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.trilho-duplo::-webkit-scrollbar {
+  display: none;
+}
+
+.capa-cartao {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  text-decoration: none;
+  scroll-snap-align: start;
+}
+
+.capa-foto {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  flex: none;
+  background: var(--cor-superficie-2);
+}
+
+.capa-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A etiqueta fica SOBRE a foto e o resto do texto embaixo: em meia largura, o
+ * texto inteiro sobreposto vira duas palavras por linha e some. */
+.capa-etiqueta {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(0.4rem);
+  color: var(--ic-branco);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.capa-corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.6rem;
+}
+
+.capa-titulo {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.capa-nota {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--tipo-legenda);
+  line-height: 1.3;
+  color: var(--cor-tinta-2);
+}
+
+.capa-rodape {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+.capa-falta {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+.capa-pode {
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  color: var(--cor-acao-tinta);
+}
