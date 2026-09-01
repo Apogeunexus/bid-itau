@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import { Grafismo } from "@/componentes/grafismo";
 import { useSessao } from "@/contexto/sessao";
 import { DISPOSICOES } from "@/dados/disposicoes";
 
@@ -23,13 +22,12 @@ export function OnboardingDisposicao() {
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="flex items-center gap-1.5 text-xl leading-tight font-bold">
-        <Grafismo variacao="barra" className="h-4 w-auto shrink-0 text-acao-tinta" />
-        O que te move hoje?
-      </h2>
-      <p className="text-xs text-tinta-2">
-        Escolha quantas quiser, ou nenhuma. Vocabulário escrito pela curadoria — não veio
-        do acervo do Itaú Cultural.
+      {/* O TÍTULO E O CONVITE SAÍRAM DAQUI — os dois viraram o cabeçalho da página, para
+          que a tela tenha um título só. O que ficou é a NOTA DE PROCEDÊNCIA, que não é
+          convite nem enfeite: estas palavras foram escritas pela curadoria e não saíram
+          do acervo, e quem escolhe por elas tem direito de saber disso. */}
+      <p className="text-xs text-tinta-3">
+        Vocabulário escrito pela curadoria — não veio do acervo do Itaú Cultural.
       </p>
 
       <div className="flex flex-col gap-2">

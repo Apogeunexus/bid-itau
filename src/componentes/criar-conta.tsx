@@ -35,6 +35,21 @@ function cpfValido(bruto: string): boolean {
   return digito(9) === Number(d[9]) && digito(10) === Number(d[10]);
 }
 
+/**
+ * A mensagem do campo CPF, e por que ela é uma função e não uma string.
+ *
+ * A anterior era uma só — «confira os 11 dígitos» — e aparecia TAMBÉM sobre um CPF de
+ * onze dígitos com verificador errado. Quem digitou onze conta onze, lê que faltam
+ * dígitos e conclui que a tela está quebrada. São dois estados diferentes e cada um
+ * merece a sua frase: falta número, ou os números não fecham a conta.
+ */
+function erroDeCpf(bruto: string): string | null {
+  const digitos = bruto.replace(/\D/g, "");
+  if (digitos.length < 11) return "CPF incompleto — faltam dígitos.";
+  if (!cpfValido(bruto)) return "CPF inválido — confira os números digitados.";
+  return null;
+}
+
 /** "12345678901" → "123.456.789-01". A máscara é de leitura; o valor guardado é o dígito. */
 function mascararCpf(bruto: string): string {
   const d = bruto.replace(/\D/g, "").slice(0, 11);
@@ -69,7 +84,7 @@ export function CriarConta() {
     const digitosTelefone = telefone.replace(/\D/g, "").length;
     return {
       email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? null : "Escreva um e-mail válido.",
-      cpf: cpfValido(cpf) ? null : "CPF inválido — confira os 11 dígitos.",
+      cpf: erroDeCpf(cpf),
       telefone:
         digitosTelefone === 10 || digitosTelefone === 11
           ? null

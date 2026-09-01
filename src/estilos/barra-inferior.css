@@ -274,7 +274,14 @@
  * frincha entre o fim do conteúdo e o topo dela. Em telas que só rolam isso não
  * aparecia; nos Roteiros, onde o campo de escrever gruda no fim do container, a
  * frincha virava um vão visível entre o campo e os ícones. A reserva agora é a
- * altura da barra mais um fio. */
-[data-view="mobile"] .moldura-rolagem {
+ * altura da barra mais um fio.
+ *
+ * `:has(.barra-abas)` E NÃO O CONTÊINER INTEIRO. A regra valia para toda tela da visão
+ * app, inclusive as que ficam FORA do grupo `(app)` e portanto não têm barra nenhuma —
+ * entrar e criar conta. Lá a reserva não reservava nada: era uma faixa preta de 80px
+ * abaixo do formulário, dentro de uma tela cuja folha declara que não rola. Amarrada à
+ * presença da barra, a folga continua nascendo e morrendo junto com ela — que é o que o
+ * parágrafo acima já pedia. */
+[data-view="mobile"] .moldura-rolagem:has(.barra-abas) {
   padding-bottom: 5rem;
 }

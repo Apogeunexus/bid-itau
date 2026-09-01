@@ -61,7 +61,6 @@
  *
  * De quem é cada uma:
  *   web.css            — vocabulário compartilhado da visão web (05-01, escrita)
- *   acontece-web.css   — /acontece lado a lado com o mapa (05-01, escrita)
  *   web-descobrir.css  — Descobrir em grade, destaque curado (05-02)
  *   web-buscar.css     — Buscar com facetas em coluna permanente (05-02)
  *   web-evento.css     — página do evento com «aprofunda isto» em painel lateral (05-03)
@@ -72,7 +71,6 @@
  *   sem-resultado.css  — zero-resultado e /404 (05-06)
  *   play.css           — catálogo de mídias e player (05-07) */
 @import "../estilos/web.css";
-@import "../estilos/acontece-web.css";
 @import "../estilos/web-descobrir.css";
 @import "../estilos/web-buscar.css";
 @import "../estilos/web-evento.css";

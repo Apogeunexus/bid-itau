@@ -1,7 +1,6 @@
 import { Acontece } from "@/componentes/acontece";
 import { montarAgenda } from "@/dados/agenda";
 import { DATA_DE_REFERENCIA } from "@/dados/alerta";
-import { montarMapaDaAgenda } from "@/dados/mapa-agenda";
 
 /**
  * `/acontece` — AGEN-01, `docs/telas.md` tela 8.
@@ -25,18 +24,5 @@ import { montarMapaDaAgenda } from "@/dados/mapa-agenda";
 const HOJE = DATA_DE_REFERENCIA;
 
 export default function PaginaAcontece() {
-  /* `montarMapaDaAgenda` corre AQUI, ao lado de `montarAgenda`, no mesmo escopo de
-   * servidor e no mesmo build: é ele que resolve o id de cada evento da agenda, procura a
-   * coordenada de cada um e MEDE a interseção entre «tem sessão datada» e «tem lugar».
-   * Nada disso pode acontecer do lado do cliente — o módulo alcança os 23 MB do grafo.
-   *
-   * A MESMA constante `HOJE` alimenta os dois. Duas datas de referência diferentes na
-   * mesma tela fariam a agenda e a declaração de interseção discordarem sobre o que é
-   * passado, e a discordância seria de um dia, no caso mais fácil de não perceber. */
-  return (
-    <Acontece
-      agenda={montarAgenda({ hoje: HOJE })}
-      mapa={montarMapaDaAgenda({ hoje: HOJE })}
-    />
-  );
+  return <Acontece agenda={montarAgenda({ hoje: HOJE })} />;
 }

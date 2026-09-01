@@ -54,6 +54,31 @@ const CHAVE_SEMENTES = "agenda-cultural:sementes";
 const CHAVE_SEMEADO = "agenda-cultural:semeado";
 /** As preferências de cada app, num objeto só: `{ play: ["series"], cast: [...] }`. */
 const CHAVE_PREFERENCIAS = "agenda-cultural:preferencias";
+/** O passo 5 do onboarding: cidade, alcance, destino de viagem e recursos de acesso. */
+const CHAVE_LUGAR = "agenda-cultural:lugar";
+
+/**
+ * O que o passo 5 do onboarding guarda.
+ *
+ * UM OBJETO SÓ, e não quatro chaves de storage: são quatro respostas da MESMA pergunta
+ * («onde você quer descobrir cultura?»), e quatro chaves separadas quebrariam juntas na
+ * primeira renomeação — o mesmo raciocínio de `preferencias`.
+ *
+ * `null` é resposta legítima em todos: quem não escolheu cidade não é uma pessoa sem
+ * cidade, é uma pessoa que não quis dizer. Nenhum campo é obrigatório e nenhum bloqueia.
+ */
+export interface Lugar {
+  /** Slug da cidade com acervo. */
+  cidade: string | null;
+  /** Alcance de deslocamento: `15`, `30`, `60` ou `sem-limite`. */
+  alcance: string | null;
+  /** Slug do destino, quando a pessoa avisa que vai viajar. */
+  viagem: string | null;
+  /** Campos de acessibilidade marcados, pelos nomes de `ROTULO_DIMENSAO`. */
+  acesso: string[];
+}
+
+export const LUGAR_VAZIO: Lugar = { cidade: null, alcance: null, viagem: null, acesso: [] };
 
 interface ContextoSessao {
   personaId: string;
@@ -86,6 +111,12 @@ interface ContextoSessao {
    */
   preferencias: Record<string, string[]>;
   alternarPreferencia: (app: string, valor: string) => void;
+  /** As respostas do passo 5. Ver `Lugar`. */
+  lugar: Lugar;
+  /** Grava só os campos passados; os demais ficam como estavam. */
+  definirLugar: (parcial: Partial<Lugar>) => void;
+  /** Marca e desmarca um recurso de acessibilidade. */
+  alternarAcesso: (campo: string) => void;
   /** Falso até o localStorage ter sido lido — evita piscar a persona errada. */
   hidratado: boolean;
 }
@@ -125,6 +156,34 @@ function lerMapa(chave: string): Record<string, string[]> {
   }
 }
 
+/**
+ * `Lugar` guardado como JSON, campo a campo.
+ *
+ * Não é `JSON.parse` e pronto: o valor vem de storage que o avaliador pode editar à mão
+ * (T-02-02), e um `acesso` que veio como número quebraria o `.map` da tela. Cada campo é
+ * conferido no tipo e o que não passar cai no vazio, como em `lerLista` e `lerMapa`.
+ */
+function lerLugar(chave: string): Lugar {
+  try {
+    const bruto = window.localStorage.getItem(chave);
+    if (!bruto) return LUGAR_VAZIO;
+    const v: unknown = JSON.parse(bruto);
+    if (!v || typeof v !== "object" || Array.isArray(v)) return LUGAR_VAZIO;
+    const o = v as Record<string, unknown>;
+    const texto = (x: unknown) => (typeof x === "string" && x ? x : null);
+    return {
+      cidade: texto(o.cidade),
+      alcance: texto(o.alcance),
+      viagem: texto(o.viagem),
+      acesso: Array.isArray(o.acesso)
+        ? o.acesso.filter((x): x is string => typeof x === "string")
+        : [],
+    };
+  } catch {
+    return LUGAR_VAZIO;
+  }
+}
+
 function gravar(chave: string, valor: string) {
   try {
     window.localStorage.setItem(chave, valor);
@@ -143,6 +202,7 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
   const [sementes, setSementes] = useState<ChaveSemente[]>([]);
   const [semeado, setSemeado] = useState(false);
   const [preferencias, setPreferencias] = useState<Record<string, string[]>>({});
+  const [lugar, setLugar] = useState<Lugar>(LUGAR_VAZIO);
   const [hidratado, setHidratado] = useState(false);
 
   useEffect(() => {
@@ -159,6 +219,7 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
     setSalvos(lerLista(CHAVE_SALVOS));
     setSementes(lerLista(CHAVE_SEMENTES));
     setPreferencias(lerMapa(CHAVE_PREFERENCIAS));
+    setLugar(lerLugar(CHAVE_LUGAR));
     try {
       setSemeado(window.localStorage.getItem(CHAVE_SEMEADO) === "1");
     } catch {
@@ -213,6 +274,25 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const definirLugar = useCallback((parcial: Partial<Lugar>) => {
+    setLugar((atual) => {
+      const proximo = { ...atual, ...parcial };
+      gravar(CHAVE_LUGAR, JSON.stringify(proximo));
+      return proximo;
+    });
+  }, []);
+
+  const alternarAcesso = useCallback((campo: string) => {
+    setLugar((atual) => {
+      const acesso = atual.acesso.includes(campo)
+        ? atual.acesso.filter((c) => c !== campo)
+        : [...atual.acesso, campo];
+      const proximo = { ...atual, acesso };
+      gravar(CHAVE_LUGAR, JSON.stringify(proximo));
+      return proximo;
+    });
+  }, []);
+
   const marcarSemeado = useCallback(() => {
     setSemeado(true);
     gravar(CHAVE_SEMEADO, "1");
@@ -242,6 +322,9 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
       marcarSemeado,
       preferencias,
       alternarPreferencia,
+      lugar,
+      definirLugar,
+      alternarAcesso,
       hidratado,
     }),
     [
@@ -259,6 +342,9 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
       marcarSemeado,
       preferencias,
       alternarPreferencia,
+      lugar,
+      definirLugar,
+      alternarAcesso,
       hidratado,
     ],
   );

@@ -8,10 +8,11 @@ import { LASTRO_FORTE, type LinguagemDeSemente } from "@/dados/sementes-wire";
 /**
  * onboarding-linguagens.tsx — o passo 2 do onboarding cultural (S8).
  *
- * A pergunta é «por onde você entra?». Ela vem DEPOIS da disposição de propósito: o passo
- * 1 captura intenção («o que te move hoje»), este captura território cultural, e os dois
- * fazem trabalho diferente no motor — disposição pondera e corta o feed, linguagem é
- * SEMENTE, o ponto de onde a caminhada parte.
+ * A pergunta é «o que você gosta de explorar?», e mora no cabeçalho da página. Ela vem
+ * DEPOIS da disposição de propósito: o passo 1 captura intenção («o que te move hoje»),
+ * este captura território cultural, e os dois fazem trabalho diferente no motor —
+ * disposição pondera e corta o feed, linguagem é SEMENTE, o ponto de onde a caminhada
+ * parte.
  *
  * A CARTA É UM CARTAZ, e a foto é AMOSTRA do acervo daquela linguagem — o mesmo princípio
  * do hub de apps: a imagem mostra o que tem dentro, não ilustra o rótulo. É por isso que
@@ -45,10 +46,7 @@ export function OnboardingLinguagens({ linguagens }: { linguagens: LinguagemDeSe
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="onb-cabeca">
-        <h2 className="onb-pergunta">Por onde você entra?</h2>
-      </div>
-
+      {/* SEM TÍTULO AQUI — ele virou o `<h1>` da tela. Ver o cabeçalho da página. */}
       <div className="onb-grade">
         {mostradas.map((linguagem) => {
           const ativa = hidratado && sementes.includes(linguagem.chave);
@@ -79,7 +77,7 @@ export function OnboardingLinguagens({ linguagens }: { linguagens: LinguagemDeSe
 
       {fracas.length ? (
         <button type="button" className="onb-texto-acao" onClick={() => setVerTodas((v) => !v)}>
-          {verTodas ? "Mostrar só as principais" : "Ver todas as linguagens"}
+          {verTodas ? "Mostrar só as principais" : "Ver todas as categorias"}
         </button>
       ) : null}
 

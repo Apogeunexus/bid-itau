@@ -1611,8 +1611,17 @@
 
 /* --- O painel do nível e a escada de 18 degraus --------------------------- */
 
+/* SEM `position: relative` — E ISSO É A CORREÇÃO, não um esquecimento.
+ *
+ * Enquanto esta pílula era o bloco de contenção, o painel de 16rem ancorava pela DIREITA
+ * DELA — que fica no meio do cabeçalho, não na borda. O painel nascia com a esquerda
+ * fora do telefone e a moldura, que é `overflow: hidden`, comia o começo de «Faltam N de
+ * percurso». O estouro crescia com os números: com saldo zerado era 1px, com 180 de
+ * percurso e 45 fichas as duas pílulas engordam e empurram a âncora para dentro.
+ *
+ * Sem ela, quem ancora é `.barra-topo` — `sticky`, portanto posicionado, e do tamanho do
+ * telefone. `right: 0` passa a ser a borda direita da moldura e o painel cabe sempre. */
 .saldo-xp {
-  position: relative;
   display: inline-flex;
 }
 
@@ -1628,7 +1637,9 @@ button.saldo-pilula {
   z-index: 20;
   display: flex;
   width: 16rem;
-  max-width: calc(100vw - 2rem);
+  /* `100%` DO CABEÇALHO, não `100vw`: a unidade de janela media os 1440px do computador
+     e não limitava nada dentro de um telefone de 390px. */
+  max-width: 100%;
   flex-direction: column;
   gap: var(--espaco-pilha);
   padding: var(--espaco-cartao);

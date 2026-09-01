@@ -41,23 +41,9 @@
   padding-bottom: calc(var(--espaco-secao) * 2);
 }
 
-.onb-cabeca {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espaco-pilha);
-}
-
-.onb-pergunta {
-  font-size: var(--tipo-titulo-1);
-  font-weight: 700;
-  line-height: 1.15;
-}
-
-.onb-subtitulo {
-  font-size: var(--tipo-detalhe);
-  color: var(--cor-tinta-2);
-  max-width: 34rem;
-}
+/* `.onb-cabeca`, `.onb-pergunta` e `.onb-subtitulo` saíram daqui: cada passo tinha um
+ * título de módulo no alto e a pergunta de verdade logo abaixo, em corpo menor. A
+ * pergunta virou o `<h1>` da tela e o cabeçalho passou a ser um só, escrito na página. */
 
 /* O contador de passos. É informação, não navegação: quem quiser voltar usa o
  * histórico, e quem quiser sair usa «pular» — que está sempre visível. */
@@ -85,10 +71,12 @@
   grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
 }
 
-@media (min-width: 64rem) {
-  .onb-grade {
-    gap: var(--espaco-cartao);
-  }
+/* POR VISÃO, NÃO POR JANELA. `@media (min-width: 64rem)` mede a JANELA, e na visão app
+   o conteúdo vive dentro de uma moldura de 390px numa janela de 1440px — a regra de
+   computador entrava dentro do telefone. É o defeito que `base.css` documenta no alto da
+   moldura, e ele estava aqui em duas regras. */
+[data-view="web"] .onb-grade {
+  gap: var(--espaco-cartao);
 }
 
 /* ---------------------------------------------------------------------------
@@ -268,12 +256,8 @@
   line-height: 1.25;
 }
 
-.onb-rosto-classe {
-  font-size: var(--tipo-micro);
-  color: var(--cor-tinta-3);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
+/* `.onb-rosto-classe` saiu: era a palavra «ARTISTA» ou «OBRA» repetida em cada carta de
+ * uma grade em que todas são da mesma classe. Quem diz a classe é a pergunta no alto. */
 
 /* A marca de escolhido, no canto da foto. Ícone e não só borda: quem enxerga
  * pouco contraste precisa de uma segunda pista além da cor. */
@@ -339,16 +323,52 @@
   align-items: center;
 }
 
-/* NÃO É GRUDENTO. Ele já foi `position: sticky` no fim do bloco — e dentro da moldura do
- * telefone isso o fazia flutuar POR CIMA da grade, tapando dois cartazes no meio da lista.
- * O rodapé de uma tela de escolha não precisa acompanhar a rolagem: ele é o passo
- * seguinte, e o passo seguinte vem depois de ver as opções. */
 .onb-rodape {
   display: flex;
   flex-wrap: wrap;
   gap: var(--espaco-pilha);
   align-items: center;
   padding-block-start: var(--espaco-cartao);
+}
+
+/* GRUDENTO, E SEM CÁPSULA EM VOLTA.
+ *
+ * Ele já foi `sticky` e voltou a ser solto porque flutuava TRANSPARENTE por cima da
+ * grade e tapava dois cartazes. Solto, porém, o custo apareceu do outro lado: na parede
+ * de 33 linguagens do passo 2, «Avançar» nascia 1.559px abaixo do topo da moldura de
+ * 844px — 759px de rolagem para descobrir que o botão existe. Numa tela de escolha, a
+ * saída não pode ser um achado.
+ *
+ * A primeira volta resolveu isso embrulhando os dois botões numa pílula com borda e
+ * sombra — e a pílula em volta de duas pílulas virou um anel sem função, um contorno a
+ * mais para o olho ler antes de chegar ao botão. Ela saiu. Quem sustenta a legibilidade
+ * sobre a foto passa a ser cada botão por si: os dois são opacos e têm forma própria,
+ * que é o que a barra do app também faz. */
+[data-view="mobile"] .onb-rodape {
+  position: sticky;
+  bottom: var(--espaco-pilha);
+  z-index: 10;
+  justify-content: center;
+  padding-block: var(--espaco-pilha);
+  /* NUMA LINHA SÓ. Com «Começar a descobrir» ao lado de «Pular por enquanto», a quebra
+     empilhava dois botões grudentos e eles comiam um terço do telefone. Quem cede espaço
+     é o `padding` do principal, não o número de linhas. */
+  flex-wrap: nowrap;
+}
+
+[data-view="mobile"] .onb-avancar {
+  min-inline-size: 0;
+  padding-inline: var(--espaco-cartao);
+}
+
+/* CENTRADO NOS DOIS EIXOS. Os dois são `<a>`, e uma âncora com `min-height` não
+   centraliza nada: o rótulo assentava na linha de base, encostado no topo da pílula.
+   `inline-flex` com `place-items` é o que põe a palavra no meio do botão. */
+.onb-avancar,
+.onb-pular {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .onb-avancar {
@@ -367,7 +387,9 @@
   padding-inline: var(--espaco-cartao);
   border-radius: var(--raio-pilula);
   border: 1px solid var(--cor-borda-forte);
-  background: transparent;
+  /* OPACO, e não transparente: sem a cápsula em volta, é este fundo que separa «Pular»
+     do cartaz que passa por baixo dele durante a rolagem. */
+  background: var(--cor-superficie);
   color: inherit;
   font-size: var(--tipo-detalhe);
   font-weight: 600;
@@ -385,6 +407,117 @@
   text-decoration: underline;
   text-underline-offset: 0.25rem;
   cursor: pointer;
+}
+
+/* ---------------------------------------------------------------------------
+ * 6b · Os blocos do passo 5 — «onde você quer descobrir cultura?»
+ *
+ * QUATRO PERGUNTAS PEQUENAS, E NÃO UM FORMULÁRIO. Cada bloco é um cartão com título,
+ * uma linha de apoio e as opções em pastilha — a mesma pastilha do recorte dos apps
+ * (`.pref-pastilha`), porque é a mesma operação: tocar num nome para dizer o que se
+ * quer. Reusar em vez de desenhar uma segunda pastilha é o que impede as duas de
+ * divergirem na primeira mudança de token.
+ *
+ * O CARTÃO SEPARA AS PERGUNTAS. Sem ele as quatro viram uma lista corrida de pastilhas
+ * e a pessoa perde de vista qual responde o quê — que era o defeito da versão em que
+ * cidade e acessibilidade dividiam a tela sem moldura nenhuma.
+ * ------------------------------------------------------------------------- */
+
+.onb-blocos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-cartao);
+}
+
+.onb-bloco {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+.onb-bloco-titulo {
+  font-size: var(--tipo-destaque);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.onb-bloco-apoio {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+/* O dropdown de escolha única — cidade, alcance e destino. `<select>` nativo; o porquê
+ * está no cabeçalho de `onboarding-lugar.tsx`.
+ *
+ * `appearance: none` TIRA A SETA DO SISTEMA e o campo desenha a sua, porque a nativa não
+ * é estilizável e sobre o tema escuro ela sai na cor do sistema operacional — cinza
+ * claro no macOS, invisível no Windows escuro. O `padding-inline-end` reserva o lugar
+ * dela; sem a reserva, um nome de cidade longo passa por baixo da seta.
+ *
+ * `width: 100%` e não largura de conteúdo: os três campos empilhados com larguras
+ * diferentes leem como três coisas diferentes, e são a mesma pergunta três vezes. */
+.onb-campo {
+  position: relative;
+  display: flex;
+}
+
+.onb-select {
+  appearance: none;
+  width: 100%;
+  min-height: 2.75rem;
+  padding-inline: var(--espaco-cartao);
+  padding-inline-end: var(--espaco-secao);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.onb-select:hover {
+  border-color: var(--cor-acao);
+}
+
+.onb-select:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* A LISTA ABERTA É DESENHADA PELO SISTEMA e quase nada nela é estilizável. `color-scheme`
+   é o que existe: ele manda o navegador pintar o menu no tema escuro, em vez de abrir uma
+   folha branca sobre uma tela preta. */
+.onb-select option {
+  color-scheme: dark light;
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+}
+
+.onb-campo-seta {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--espaco-cartao);
+  display: flex;
+  align-items: center;
+  color: var(--cor-tinta-3);
+  /* O clique atravessa a seta e chega ao campo: sem isto, tocar exatamente na seta não
+     abre a lista, que é justamente onde a mão mira. */
+  pointer-events: none;
+}
+
+/* QUEBRAM LINHA, e não rolam de lado: aqui a lista é curta e fechada — quatro alcances,
+ * oito recursos, as cidades com acervo. Uma fileira que rola esconderia opção num
+ * conjunto que cabe inteiro na tela, e esconder opção fechada é pior que ocupar altura. */
+.onb-pastilhas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-pilha);
 }
 
 /* ---------------------------------------------------------------------------
@@ -423,18 +556,28 @@
   display: none;
 }
 
-@media (min-width: 64rem) {
-  .pref-opcoes {
-    flex-wrap: wrap;
-    overflow-x: visible;
-    margin-inline: 0;
-    padding-inline: 0;
-  }
+/* Idem: quebrar em várias linhas é o desenho da VISÃO WEB. Dentro da moldura de 390px a
+   janela de 1440px acendia a regra e as pastilhas viravam um bloco de três linhas em cima
+   do conteúdo, em vez da fileira que rola de lado. */
+[data-view="web"] .pref-opcoes {
+  flex-wrap: wrap;
+  overflow-x: visible;
+  margin-inline: 0;
+  padding-inline: 0;
 }
 
+/* O RÓTULO NO MEIO DA PÍLULA, nos dois eixos.
+ *
+ * `align-items: baseline` é herança do tempo em que a pastilha trazia o nome mais a
+ * contagem do acervo: duas fontes de tamanho diferente, que a linha de base alinhava. A
+ * contagem saiu em 27/08 e sobrou um filho só — e com um filho só a linha de base encosta
+ * o texto no topo, deixando toda a folga de `min-height` embaixo dele. `center` devolve o
+ * rótulo ao centro. Os três lugares que usam esta pílula — o passo 5, o recorte dos apps
+ * e o repertório do perfil — têm um filho cada, conferido. */
 .pref-pastilha {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   flex: 0 0 auto;
   min-height: 2.75rem;

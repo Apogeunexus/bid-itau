@@ -10,6 +10,12 @@ import { Grafismo } from "@/componentes/grafismo";
  *
  * Toda primitiva aceita um rótulo textual do que virá ali. Uma rota que não explica o que
  * vai ser é indistinguível de uma rota quebrada durante a apresentação.
+ *
+ * NADA PULSA AQUI, E ISSO É DELIBERADO. O pulso do esqueleto é uma promessa: «isto está
+ * chegando, espere». Nestes blocos não está chegando nada nesta sessão — eles marcam o
+ * que ainda não foi construído. Pulsando, a tela do passo 5 do onboarding lia como quatro
+ * imagens que nunca carregam, que é exatamente o que foi apontado na revisão. Parado, com
+ * o `\` do manual no lugar da foto, o bloco lê como o que é: um lugar reservado.
  */
 
 export function EsqueletoLinha({
@@ -23,7 +29,7 @@ export function EsqueletoLinha({
     <span
       aria-hidden
       style={{ width: largura }}
-      className={`block h-3 animate-pulse rounded-full bg-superficie-2 ${className ?? ""}`}
+      className={`block h-3 rounded-full bg-superficie-2 ${className ?? ""}`}
     />
   );
 }
@@ -40,8 +46,15 @@ export function EsqueletoBloco({
   return (
     <div
       style={{ height: altura }}
-      className={`flex animate-pulse items-center justify-center rounded-xl bg-superficie-2 px-3 text-center text-xs font-medium text-tinta-3 ${className ?? ""}`}
+      className={`relative flex items-center justify-center overflow-hidden rounded-xl bg-superficie-2 px-3 text-center text-xs font-medium text-tinta-3 ${className ?? ""}`}
     >
+      {/* O GRAFISMO NO LUGAR DA FOTO. Um retângulo cinza vazio é o desenho universal de
+          imagem quebrada; o `\` do manual num campo de superfície é o mesmo lugar
+          reservado dizendo de quem ele é — a mesma escolha de `capa-sem-imagem.tsx`, que
+          existe porque 78% dos cartões do feed caem nela. */}
+      {rotulo ? null : (
+        <Grafismo variacao="barra" className="h-6 w-auto text-tinta-3 opacity-40" />
+      )}
       {rotulo}
     </div>
   );
@@ -66,7 +79,10 @@ export function EsqueletoCartao({
     >
       <EsqueletoBloco altura="4.5rem" className="w-20 shrink-0" />
       <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
-        <p className="truncate text-sm font-semibold text-tinta-2">{rotulo}</p>
+        {/* SEM `truncate`. Em 390px os quatro rótulos do passo 5 morriam nas reticências
+            — «as 8 dimensões de acessibilid…» não informa nada. Quebrar em duas linhas
+            custa altura e devolve a frase inteira. */}
+        <p className="text-sm font-semibold text-tinta-2">{rotulo}</p>
         {Array.from({ length: linhas }, (_, i) => (
           <EsqueletoLinha key={i} largura={i === linhas - 1 ? "60%" : "92%"} />
         ))}

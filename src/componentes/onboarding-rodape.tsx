@@ -18,9 +18,12 @@ import { useSessao } from "@/contexto/sessao";
 export function OnboardingRodape({
   proximo,
   rotuloAvancar,
+  ultimo = false,
 }: {
   proximo: string;
   rotuloAvancar: string;
+  /** No último passo só existe uma saída — ver abaixo. */
+  ultimo?: boolean;
 }) {
   const { marcarSemeado } = useSessao();
 
@@ -29,9 +32,14 @@ export function OnboardingRodape({
       <Link href={proximo} className="onb-avancar no-underline" onClick={marcarSemeado}>
         {rotuloAvancar}
       </Link>
-      <Link href="/descobrir/" className="onb-pular no-underline" onClick={marcarSemeado}>
-        Pular
-      </Link>
+      {/* NO ÚLTIMO PASSO, «PULAR» SAI. Os dois botões apontavam para `/descobrir/` — a
+          mesma porta com dois nomes, um deles sugerindo que havia algo sendo deixado
+          para trás. Pular só quer dizer alguma coisa enquanto existe um passo adiante. */}
+      {ultimo ? null : (
+        <Link href="/descobrir/" className="onb-pular no-underline" onClick={marcarSemeado}>
+          Pular por enquanto
+        </Link>
+      )}
     </>
   );
 }

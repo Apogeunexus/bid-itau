@@ -126,14 +126,6 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
       esgotado: o.esgotado,
       espaco,
       origemDoEspaco: espaco ? (daTemporada ? "temporada" : "evento") : null,
-      // As três colunas que só a tabela da visão web tem. Saem do registro DA
-      // SESSÃO, não do evento: `Ocorrencia` carrega a própria ficha das 8
-      // dimensões e o próprio `declaraAcessibilidade`, herdado do evento pelo
-      // gerador. Ler do evento aqui daria o mesmo número hoje e mentiria no dia
-      // em que a fonte publicasse acessibilidade por sessão.
-      temporadaId: o.temporadaId,
-      recursosDeclarados: Object.values(o.acessibilidade).filter(Boolean).length,
-      declaraAcessibilidade: o.declaraAcessibilidade,
     };
   });
 

@@ -13,9 +13,9 @@
  *   · D-85 — o motivo por passo do editor de trilha (05-04) contra o selo público de
  *     `/trilha/[slug]/` (fase 3), comparados CARACTERE A CARACTERE. Nenhum plano da onda 2
  *     podia medir isso sozinho: um escreve o editor, o outro é herdado.
- *   · Os DOIS links para `/filtros/` — escritos por 05-01 (`/acontece/`) e por 05-02
- *     (`/buscar/`) contra uma rota que só 05-06 criou, depois. Nenhum dos três podia
- *     provar que ela resolve; aqui ela é CLICADA, não conferida por `href`.
+ *   · O link para `/filtros/` escrito por 05-01 (`/acontece/`) contra uma rota que só
+ *     05-06 criou, depois. Nenhum dos dois podia provar que ela resolve; aqui ela é
+ *     CLICADA, não conferida por `href`.
  *   · O peso somado da onda contra o orçamento por plano que 05-01 registrou.
  *   · O vocabulário `data-*` congelado por 05-01: nenhum atributo com dois significados.
  *   · Os números que as telas IMPRIMEM contra os que os módulos de build CALCULAM.
@@ -137,7 +137,6 @@ const ORCAMENTO_POR_PLANO = [
 /** As 11 folhas que 05-01 declarou de uma vez, para os seis executores da onda 2. */
 const FOLHAS_DA_FASE_5 = [
   "web.css",
-  "acontece-web.css",
   "web-descobrir.css",
   "web-buscar.css",
   "web-evento.css",
@@ -1098,17 +1097,6 @@ async function gateCoerencia(sonda) {
       `lista ${m.itensPorLugar} itens, mapa ${m.pinosPorLugar} pinos`,
     "110 + 48 = 158, com 158 na lista e 110 no mapa",
   );
-  const acontece = await html("acontece/index.html");
-  exigir(
-    contarAtributo(acontece, "item-lista") === m.itensPorLugar &&
-      contarAtributo(acontece, "pino") === m.pinosPorLugar &&
-      contarAtributo(acontece, "par") === m.itensPorLugar - m.comLugarForaDoDesenho + m.pinosPorLugar,
-    "05-01 · e a TELA imprime exatamente os números que o módulo calculou",
-    `HTML: ${contarAtributo(acontece, "item-lista")} itens · ${contarAtributo(acontece, "pino")} pinos · ` +
-      `${contarAtributo(acontece, "par")} data-par (${m.pinosPorLugar} itens mapeáveis + ${m.pinosPorLugar} pinos)`,
-    "os números do módulo, no HTML exportado",
-  );
-
   // ---- O painel de procedência (05-05) ----
   const p = sonda.painel;
   const somaE = p.entidades.reduce((s, f) => s + f.n, 0);
@@ -1212,7 +1200,7 @@ async function gateCoerencia(sonda) {
   exigir(
     contarAtributo(evento, "ocorrencia") > 0,
     "05-03 · a ficha do evento do CMS traz as ocorrências no artefato exportado",
-    `${contarAtributo(evento, "ocorrencia")} data-ocorrencia · ${contarAtributo(evento, "coluna-acessibilidade")} células de acessibilidade · ${contarAtributo(evento, "tabela-ocorrencias")} tabela(s)`,
+    `${contarAtributo(evento, "ocorrencia")} data-ocorrencia no artefato`,
     "> 0",
   );
 
@@ -1284,28 +1272,12 @@ async function gateCoerencia(sonda) {
 // ---------------------------------------------------------------------------
 
 const CONTRATO_POR_ROTA = [
-  {
-    rota: "acontece/index.html",
-    plano: "05-01",
-    esperado: {
-      "acontece-web": 1,
-      "modo-lista": 2,
-      interseccao: 1,
-      par: 220,
-      mapeavel: 158,
-      "item-lista": 158,
-      pino: 110,
-      "lista-recorte": 1,
-      denominador: 5,
-      "mapa-acontece": 1,
-    },
-  },
   { rota: "descobrir/index.html", plano: "05-02", esperado: { "grade-web": 1 } },
-  { rota: "buscar/index.html", plano: "05-02", esperado: { "coluna-facetas": 1, "link-filtros": 1 } },
+  { rota: "buscar/index.html", plano: "05-02", esperado: { "coluna-facetas": 1 } },
   {
     rota: `evento/${EVENTO_DO_CMS}/index.html`,
     plano: "05-03",
-    esperado: { "tabela-ocorrencias": 1, "painel-aprofunda": 1 },
+    esperado: { "painel-aprofunda": 1 },
   },
   {
     rota: "moderacao/fila/index.html",
@@ -1390,12 +1362,6 @@ const CONTRATO_POR_ROTA = [
 /** Os CINCO atributos que só existem durante uma interação. Zero no artefato é o certo. */
 const ATRIBUTOS_DE_INTERACAO = [
   {
-    rota: "acontece/index.html",
-    atributo: "realcado",
-    valor: "sim",
-    porque: "o realce de D-81 nasce de um mouseover; no artefato os 268 dizem «nao»",
-  },
-  {
     rota: "moderacao/fila/index.html",
     atributo: "motivo-veto",
     porque: "o campo de motivo só existe depois de clicar «vetar»",
@@ -1462,24 +1428,12 @@ async function gateContratoNoHtml() {
     );
   }
 
-  // O outro lado do mesmo atributo: `data-realcado="nao"` EXISTE no artefato, e em número.
-  // É a prova de que o zero acima é ausência de REALCE e não ausência do atributo — a
-  // distinção que 05-01 escreveu no código («sempre sim ou nao, nunca ausente»).
-  const acontece = await html("acontece/index.html");
-  exigir(
-    contarAtributoValor(acontece, "realcado", "nao") === 268,
-    "interação · e o par do zero: data-realcado=\"nao\" no artefato, em número",
-    `${contarAtributoValor(acontece, "realcado", "nao")} elementos dizem «nao» (158 itens + 110 pinos) · ` +
-      `${contarAtributoValor(acontece, "realcado", "sim")} dizem «sim»`,
-    "268 «nao» e 0 «sim»",
-  );
-
   // ---- O vocabulário compartilhado NÃO colidiu ----
   // 05-01 pediu, por escrito, que `data-denominador` fosse tratado como COMPARTILHADO com
   // 05-05, e `data-nao-sustenta` vem da fase 4 e atravessa a fase inteira. Um gate que os
   // tratasse como exclusivos de um plano acusaria como colisão o reúso que o contrato manda.
   const compartilhados = [
-    ["denominador", ["acontece", "filtros", "observatorio", "moderacao/fila", "play", "busca-nao-encontrada"]],
+    ["denominador", ["filtros", "observatorio", "moderacao/fila", "play", "busca-nao-encontrada"]],
     ["nao-sustenta", ["filtros", "observatorio", "moderacao/fila", "redacao/trilha", "play"]],
   ];
   const linhas = [];
@@ -1753,291 +1707,70 @@ async function gateDaRegua(cdp, base) {
 }
 
 // ---------------------------------------------------------------------------
-// WEB-02 · /acontece — O TRAÇADOR, e o gate mais importante da fase.
+// WEB-02 · /acontece — A MESMA AGENDA NAS DUAS VISÕES.
 //
-// É a única tela em que a visão web não é «a mesma coisa mais larga»: ela põe lista e mapa
-// lado a lado e os SINCRONIZA pelo cursor, que é o gesto que só existe onde há cursor — e é
-// o argumento inteiro de a visão web existir (D-81).
-//
-// OS PINOS SÃO SVG. `visiveis()` do prelúdio usa `offsetParent`, que é nulo em elemento SVG:
-// medi-los por ali daria zero pinos com o mapa cheio na tela. Aqui é retângulo e atributo.
+// A tela já teve um bloco só da web — lista e mapa lado a lado, sincronizados pelo cursor.
+// Ele saiu do produto: a web passou a mostrar exatamente o conteúdo da visão app, e o que
+// diverge entre as duas é só a disposição. O gate agora prova a AUSÊNCIA dele nas duas
+// visões, que é a afirmação que substituiu a de 05-01.
 // ---------------------------------------------------------------------------
 
 async function blocoAcontece(cdp, base, regua) {
-  titulo("── WEB-02 · /acontece — lista e mapa sincronizados pelo cursor (D-80, D-81, D-90) ──");
+  titulo("── WEB-02 · /acontece — a agenda da fase 3, idêntica nas duas visões (D-79) ──");
+
+  const medir = () =>
+    cdp.avaliar(
+      naPagina5(`
+        return {
+          view: attr('[data-view]', 'data-view'),
+          blocoWeb: visivel(document.querySelector('[data-acontece-web]')),
+          mapa: visivelSvg(document.querySelector('[data-mapa-acontece]')),
+          pinos: visiveisSvg('[data-pino]').length,
+          itensDaListaWeb: contaVisiveis('[data-item-lista]'),
+          interseccao: visivel(document.querySelector('[data-interseccao]')),
+          cartoes: contaVisiveis('[data-evento]'),
+        };
+      `),
+    );
 
   await porVisao(cdp, base, "/acontece/", "web");
+  const naWeb = await medir();
+  exigir(
+    naWeb.view === "web" &&
+      naWeb.blocoWeb === false &&
+      naWeb.mapa === false &&
+      naWeb.pinos === 0 &&
+      naWeb.itensDaListaWeb === 0 &&
+      naWeb.interseccao === false &&
+      naWeb.cartoes > 0,
+    "D-79 · na visão WEB /acontece é a agenda da fase 3, sem bloco exclusivo da web",
+    `view=${naWeb.view} · bloco web=${naWeb.blocoWeb} · mapa=${naWeb.mapa} · ${naWeb.pinos} pinos · ` +
+      `${naWeb.itensDaListaWeb} linhas de lista web · declaração=${naWeb.interseccao} · ${naWeb.cartoes} cartões`,
+    "nada exclusivo da web, e a agenda no lugar",
+  );
+  await fotografar(cdp, "05-08-acontece-web");
 
-  const layout = await cdp.avaliar(
-    naPagina5(`
-      const lista = document.querySelector('[data-lista-recorte]');
-      const mapa = document.querySelector('[data-mapa-acontece]');
-      return {
-        view: attr('[data-view]', 'data-view'),
-        blocoWeb: visivel(document.querySelector('[data-acontece-web]')),
-        lista: ret(lista), mapa: ret(mapa),
-        disjuntos: disjuntos(lista, mapa),
-        janela: innerHeight,
-        limite: limiteUtil(),
-      };
-    `),
-  );
-  exigir(
-    layout.blocoWeb && layout.disjuntos && layout.lista && layout.mapa,
-    "D-80 · lista e mapa LADO A LADO, medidos pelo retângulo e não pela classe",
-    `lista ${JSON.stringify(layout.lista)} · mapa ${JSON.stringify(layout.mapa)} · disjuntos=${layout.disjuntos}`,
-    "os dois presentes e os retângulos disjuntos",
-  );
-  exigir(
-    layout.mapa.base <= layout.limite.limite,
-    "D-80 · o mapa INTEIRO cabe na primeira vista — não só o topo dele (o defeito de 05-01)",
-    `mapa de ${layout.mapa.y} a ${layout.mapa.base} · limite ${layout.limite.limite} (${layout.limite.contra}) · janela ${layout.janela}`,
-    "a BASE do mapa acima do limite útil",
-  );
-
-  const pinos = await cdp.avaliar(
-    naPagina5(`
-      const svg = document.querySelector('[data-mapa-acontece]');
-      const quadro = svg.getBoundingClientRect();
-      const ps = todos('[data-pino]');
-      const zerados = ps.filter((p) => { const r = p.getBoundingClientRect(); return r.width <= 0 || r.height <= 0; });
-      const fora = ps.filter((p) => {
-        const r = p.getBoundingClientRect();
-        return r.left < quadro.left - 1 || r.right > quadro.right + 1 || r.top < quadro.top - 1 || r.bottom > quadro.bottom + 1;
-      });
-      return { total: ps.length, zerados: zerados.length, fora: fora.length,
-               comPar: ps.filter((p) => p.getAttribute('data-par')).length };
-    `),
-  );
-  exigir(
-    pinos.total === 110 && pinos.zerados === 0 && pinos.fora === 0 && pinos.comPar === 110,
-    "os 110 pinos existem com RETÂNGULO não-vazio dentro do quadro do mapa (SVG: nunca por visiveis())",
-    `${pinos.total} pinos · ${pinos.zerados} com retângulo zerado · ${pinos.fora} fora do quadro · ${pinos.comPar} com data-par`,
-    "110 pinos, 0 zerados, 0 fora, 110 com par",
-  );
-
-  // A BIJEÇÃO, e não o total. 05-01 mediu que dos 158 situados só 110 caem dentro do
-  // contorno do Brasil; os 48 de fora (Havana, Grande Londres, Itália, o litoral do Chile)
-  // ficam na LISTA, contados e nomeados, e não são desenhados — desenhá-los fora do viewBox
-  // os poria no DOM com data-par legível e ZERO pixel na tela, que é o gate verde sobre tela
-  // morta que esta fase existe para não repetir. O que o gate prova é que lista e mapa são o
-  // MESMO conjunto nos dois sentidos, o que é mais forte que qualquer contagem.
-  const bijecao = await cdp.avaliar(
-    naPagina5(`
-      const itens = todos('[data-item-lista]');
-      const mapeaveis = itens.filter((i) => i.getAttribute('data-mapeavel') === 'sim');
-      const naoMapeaveis = itens.filter((i) => i.getAttribute('data-mapeavel') === 'nao');
-      const paresDaLista = new Set(mapeaveis.map((i) => i.getAttribute('data-par')));
-      const paresDoMapa = new Set(todos('[data-pino]').map((p) => p.getAttribute('data-par')));
-      const soNaLista = [...paresDaLista].filter((p) => !paresDoMapa.has(p));
-      const soNoMapa = [...paresDoMapa].filter((p) => !paresDaLista.has(p));
-      return {
-        itens: itens.length, mapeaveis: mapeaveis.length, naoMapeaveis: naoMapeaveis.length,
-        paresDaLista: paresDaLista.size, paresDoMapa: paresDoMapa.size,
-        soNaLista: soNaLista.length, soNoMapa: soNoMapa.length,
-        comMotivo: naoMapeaveis.filter((i) => i.getAttribute('data-motivo-sem-pino')).length,
-        motivos: [...new Set(naoMapeaveis.map((i) => i.getAttribute('data-motivo-sem-pino')))],
-      };
-    `),
-  );
-  exigir(
-    bijecao.paresDaLista === 110 &&
-      bijecao.paresDoMapa === 110 &&
-      bijecao.soNaLista === 0 &&
-      bijecao.soNoMapa === 0 &&
-      bijecao.itens === 158 &&
-      bijecao.naoMapeaveis === 48 &&
-      bijecao.comMotivo === 48,
-    "05-01 · a BIJEÇÃO 110↔110 entre pino desenhável e linha da lista, nos DOIS sentidos",
-    `${bijecao.itens} itens na lista (${bijecao.mapeaveis} mapeáveis + ${bijecao.naoMapeaveis} não) · ` +
-      `${bijecao.paresDaLista} pares na lista ↔ ${bijecao.paresDoMapa} no mapa · ` +
-      `${bijecao.soNaLista} só na lista · ${bijecao.soNoMapa} só no mapa · ` +
-      `os ${bijecao.naoMapeaveis} não desenhados declaram POR QUE (${bijecao.motivos.join(", ")}): ${bijecao.comMotivo} de ${bijecao.naoMapeaveis}`,
-    "110 ↔ 110, sem sobra de nenhum lado, e 48 não-mapeáveis com motivo escrito",
-  );
-
-  // D-81 · O REALCE, MEDIDO POR CONTAGEM E NÃO POR AMOSTRA. «Realçou o pino certo» é fácil
-  // de provar sobre um; o que importa é que NENHUM OUTRO acendeu junto.
-  const antes = await cdp.avaliar(
-    naPagina5(`return { itens: contaVisiveis('[data-item-lista][data-realcado="sim"]'),
-                         pinos: todos('[data-pino][data-realcado="sim"]').length }; `),
-  );
-  exigir(
-    antes.itens === 0 && antes.pinos === 0,
-    "D-81 · nenhum realce antes de qualquer gesto (o zero do artefato, confirmado no DOM vivo)",
-    `itens realçados ${antes.itens} · pinos realçados ${antes.pinos}`,
-    "0 e 0",
-  );
-
-  const sobreOItem = await cdp.avaliar(
-    naPagina5Async(`
-      const item = todos('[data-item-lista][data-mapeavel="sim"]')[3];
-      const par = item.getAttribute('data-par');
-      await passarOMouse(item, 'mouseover');
-      const itens = todos('[data-item-lista][data-realcado="sim"]').map((e) => e.getAttribute('data-par'));
-      const pinos = todos('[data-pino][data-realcado="sim"]').map((e) => e.getAttribute('data-par'));
-      const pino = todos('[data-pino]').find((p) => p.getAttribute('data-par') === par);
-      return { par, itens, pinos, pinoRet: ret(pino),
-               tracoRealcado: pino ? getComputedStyle(pino).strokeWidth : null };
-    `),
-  );
-  exigir(
-    sobreOItem.itens.length === 1 &&
-      sobreOItem.pinos.length === 1 &&
-      sobreOItem.itens[0] === sobreOItem.par &&
-      sobreOItem.pinos[0] === sobreOItem.par,
-    "D-81 · mouseover no ITEM realça o pino de mesmo data-par — e NENHUM outro (contado, não amostrado)",
-    `par ${sobreOItem.par} · itens realçados ${JSON.stringify(sobreOItem.itens)} · pinos realçados ${JSON.stringify(sobreOItem.pinos)} · ` +
-      `o pino tem retângulo ${JSON.stringify(sobreOItem.pinoRet)} e traço ${sobreOItem.tracoRealcado}`,
-    "exatamente 1 item e 1 pino, os dois com o mesmo par",
-  );
-  // O REALCE É PINTURA, E NÃO SÓ ATRIBUTO. Um `data-realcado="sim"` sem uma linha de CSS
-  // atrás dele é o gate verde sobre tela morta em forma pura. E a espera aqui não é folclore:
-  // `.web-realce` declara `transition: … stroke-width 120ms`, e dois `requestAnimationFrame`
-  // (≈32 ms) medem o meio da transição — foi assim que a primeira execução deste gate leu
-  // `stroke-width: 0px` sobre um pino que estava, de fato, ficando laranja.
-  const pintura = await cdp.avaliar(
-    naPagina5Async(`
-      await new Promise((r) => setTimeout(r, 300));
-      const item = todos('[data-item-lista][data-realcado="sim"]')[0];
-      const pino = todos('[data-pino][data-realcado="sim"]')[0];
-      const outro = todos('[data-pino][data-realcado="nao"]')[0];
-      const ei = getComputedStyle(item), ep = getComputedStyle(pino), eo = getComputedStyle(outro);
-      return {
-        itemContorno: ei.outlineColor + ' ' + ei.outlineWidth,
-        itemFundo: ei.backgroundColor,
-        pinoTraco: ep.stroke + ' ' + ep.strokeWidth,
-        pinoPreenchimento: ep.fill,
-        pinoNaoRealcadoTraco: eo.stroke + ' ' + eo.strokeWidth,
-        pinoNaoRealcadoPreenchimento: eo.fill,
-      };
-    `),
-  );
-  exigir(
-    parseFloat(pintura.pinoTraco.split(" ").pop()) >= 2 &&
-      parseFloat(pintura.pinoNaoRealcadoTraco.split(" ").pop()) === 0 &&
-      parseFloat(pintura.itemContorno.split(" ").pop()) >= 2 &&
-      pintura.pinoPreenchimento !== pintura.pinoNaoRealcadoPreenchimento,
-    "D-81 · o realce é PINTURA e não só atributo — e o pino não realçado prova o contraste",
-    `item: contorno ${pintura.itemContorno}, fundo ${pintura.itemFundo} · ` +
-      `pino realçado: traço ${pintura.pinoTraco}, preenchimento ${pintura.pinoPreenchimento} · ` +
-      `pino NÃO realçado: traço ${pintura.pinoNaoRealcadoTraco}, preenchimento ${pintura.pinoNaoRealcadoPreenchimento}`,
-    "traço ≥ 2 no realçado, 0 no não realçado, e preenchimentos diferentes",
-  );
-  await fotografar(cdp, "05-08-acontece-web-realce");
-
-  const depoisDoMouseOut = await cdp.avaliar(
-    naPagina5Async(`
-      const item = todos('[data-item-lista][data-mapeavel="sim"]')[3];
-      await passarOMouse(item, 'mouseout');
-      return { itens: todos('[data-item-lista][data-realcado="sim"]').length,
-               pinos: todos('[data-pino][data-realcado="sim"]').length };
-    `),
-  );
-  exigir(
-    depoisDoMouseOut.itens === 0 && depoisDoMouseOut.pinos === 0,
-    "D-81 · mouseout devolve os DOIS a data-realcado=\"nao\" — o realce não fica preso aceso",
-    `itens ${depoisDoMouseOut.itens} · pinos ${depoisDoMouseOut.pinos}`,
-    "0 e 0",
-  );
-
-  const sobreOPino = await cdp.avaliar(
-    naPagina5Async(`
-      const pino = todos('[data-pino]')[42];
-      const par = pino.getAttribute('data-par');
-      await passarOMouse(pino, 'mouseover');
-      const itens = todos('[data-item-lista][data-realcado="sim"]').map((e) => e.getAttribute('data-par'));
-      const pinos = todos('[data-pino][data-realcado="sim"]').map((e) => e.getAttribute('data-par'));
-      await passarOMouse(pino, 'mouseout');
-      return { par, itens, pinos };
-    `),
-  );
-  exigir(
-    sobreOPino.itens.length === 1 &&
-      sobreOPino.pinos.length === 1 &&
-      sobreOPino.itens[0] === sobreOPino.par,
-    "D-81 · mouseover no PINO realça o ITEM de volta — a sincronia é dos DOIS lados",
-    `par ${sobreOPino.par} · itens ${JSON.stringify(sobreOPino.itens)} · pinos ${JSON.stringify(sobreOPino.pinos)}`,
-    "exatamente 1 item e 1 pino, com o mesmo par",
-  );
-
-  // O recorte «por data»: 129 itens, NENHUM com par, e a interseção declarada. É a tela em
-  // que o acervo não sustenta o cruzamento e o diz, em vez de mostrar um mapa vazio.
-  const porData = await cdp.avaliar(
-    naPagina5Async(`
-      const botao = todos('[data-modo-lista="data"]')[0];
-      botao.click();
-      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-      const itens = todos('[data-item-lista]');
-      const bloco = document.querySelector('[data-interseccao]');
-      return {
-        recorte: attr('[data-lista-recorte]', 'data-lista-recorte'),
-        itens: itens.length,
-        comPar: itens.filter((i) => i.getAttribute('data-par')).length,
-        pinos: todos('[data-pino]').length,
-        interseccaoVisivel: visivel(bloco),
-        denominadores: valores('[data-denominador]', 'data-denominador'),
-        numeros: todos('[data-denominador]').map((e) => (e.innerText || '').trim().split('\\n')[0]),
-      };
-    `),
-  );
-  exigir(
-    porData.recorte === "data" &&
-      porData.itens === 129 &&
-      porData.comPar === 0 &&
-      porData.pinos === 0 &&
-      porData.interseccaoVisivel === true,
-    "D-90 · no recorte «por data» nenhum item tem par, o mapa não desenha nada, e a interseção é PRODUTO",
-    `recorte «${porData.recorte}» · ${porData.itens} itens · ${porData.comPar} com par · ${porData.pinos} pinos · ` +
-      `bloco de interseção visível=${porData.interseccaoVisivel}`,
-    "129 itens, 0 pares, 0 pinos, e a declaração visível",
-  );
-  exigir(
-    porData.denominadores.length === 5 &&
-      porData.denominadores.join(",") === "com-sessao,com-lugar,com-os-dois,no-desenho,fora-do-desenho",
-    "D-90 · os CINCO denominadores da declaração estão na tela, com os números",
-    `${porData.denominadores.map((d, i) => `${d}=${porData.numeros[i]}`).join(" · ")}`,
-    "com-sessao, com-lugar, com-os-dois, no-desenho, fora-do-desenho",
-  );
-  await fotografar(cdp, "05-08-acontece-web-interseccao");
-
-  // A visão app: some o BLOCO INTEIRO, e não só a coluna do mapa — esconder só o mapa
-  // deixaria uma segunda lista de 158 eventos embaixo da agenda da fase 3 (desvio 4 de 05-01).
   await porVisao(cdp, base, "/acontece/", "mobile");
-  const naApp = await cdp.avaliar(
-    naPagina5(`
-      return {
-        view: attr('[data-view]', 'data-view'),
-        blocoWeb: visivel(document.querySelector('[data-acontece-web]')),
-        mapa: visivelSvg(document.querySelector('[data-mapa-acontece]')),
-        pinosComRetangulo: visiveisSvg('[data-pino]').length,
-        itensDaListaWeb: contaVisiveis('[data-item-lista]'),
-        cartoes: contaVisiveis('[data-evento]'),
-        moldura: Boolean(document.querySelector('.moldura')),
-      };
-    `),
-  );
+  const naApp = await medir();
   exigir(
-    naApp.view === "mobile" &&
-      naApp.blocoWeb === false &&
-      naApp.mapa === false &&
-      naApp.pinosComRetangulo === 0 &&
-      naApp.itensDaListaWeb === 0 &&
-      naApp.cartoes > 0,
-    "D-79 · na visão app /acontece é a agenda da fase 3: some o BLOCO INTEIRO, não só o mapa",
-    `view=${naApp.view} · bloco web visível=${naApp.blocoWeb} · mapa=${naApp.mapa} · ` +
-      `${naApp.pinosComRetangulo} pinos com retângulo · ${naApp.itensDaListaWeb} linhas da lista web visíveis · ` +
-      `${naApp.cartoes} cartões da agenda · moldura=${naApp.moldura}`,
-    "nada da web visível, e a agenda da fase 3 no lugar",
+    naApp.view === "mobile" && naApp.blocoWeb === false && naApp.cartoes > 0,
+    "D-79 · e na visão APP a mesma agenda, com a mesma ausência",
+    `view=${naApp.view} · bloco web=${naApp.blocoWeb} · ${naApp.cartoes} cartões da agenda`,
+    "a agenda da fase 3 nas duas visões",
+  );
+
+  exigir(
+    naWeb.cartoes === naApp.cartoes,
+    "as duas visões mostram a MESMA contagem de cartões — é a prova de que o conteúdo é um só",
+    `web ${naWeb.cartoes} · app ${naApp.cartoes}`,
+    "iguais",
   );
 
   resumo.push([
     "WEB-02",
-    `/acontece na visão web: lista e mapa lado a lado e disjuntos, o mapa inteiro acima da dobra ` +
-      `(base ${layout.mapa.base} de um limite de ${layout.limite.limite}); a bijeção 110↔110 provada nos dois ` +
-      `sentidos, com os 48 situados fora do contorno na lista, contados e com o motivo escrito; o realce ` +
-      `de D-81 acende UM item e UM pino nos dois sentidos e apaga os dois no mouseout. Na visão app, ` +
-      `a agenda da fase 3 intacta e zero mapa`,
+    `/acontece mostra a agenda da fase 3 nas duas visões, com ${naWeb.cartoes} cartões dos dois ` +
+      `lados; o bloco de lista e mapa que só existia na web saiu do produto e nenhuma das duas ` +
+      `visões o renderiza`,
   ]);
   void regua;
 }
@@ -2275,15 +2008,13 @@ async function blocoBuscar(cdp, base) {
       return {
         position: getComputedStyle(facetas).position,
         abaixoDosResultados: rf.top >= rr.top,
-        linkFiltrosVisivel: visivel(document.querySelector('[data-link-filtros]')),
       };
     `),
   );
   exigir(
     app.position === "static" && app.abaixoDosResultados,
     "D-79 · na visão app as facetas voltam a ficar EMPILHADAS abaixo dos resultados, e não coladas",
-    `position=${app.position} · abaixo dos resultados=${app.abaixoDosResultados} · ` +
-      `link para /filtros/ visível na app=${app.linkFiltrosVisivel} (a porta do app é de 05-06)`,
+    `position=${app.position} · abaixo dos resultados=${app.abaixoDosResultados}`,
     "static, e abaixo dos resultados",
   );
 
@@ -2298,18 +2029,20 @@ async function blocoBuscar(cdp, base) {
 // ---------------------------------------------------------------------------
 // WEB-03 · /evento/[slug] — a ficha com densidade de desktop.
 //
-// Dois eventos, e os dois são necessários: o do CMS tem 53 sessões e é ele que faz a tabela
-// existir; o da Enciclopédia tem ZERO sessão datada e a ficha das 8 dimensões em «não
-// declarado» — é o outro lado de D-43 na mesma tela.
+// Dois eventos, e os dois são necessários: o do CMS tem 53 sessões; o da Enciclopédia tem
+// ZERO sessão datada e a ficha das 8 dimensões em «não declarado» — é o outro lado de D-43
+// na mesma tela.
 //
-// A MEDIDA É `display` E VISIBILIDADE, NUNCA AUSÊNCIA DE ATRIBUTO. O HTML exportado é UM SÓ
-// para as duas visões e a visão é estado de cliente: emitir `data-tabela-ocorrencias` só na
-// web exigiria um `if (visao === …)`, que D-79/D-05 proíbem. 05-03 registrou isso por
-// escrito, e é por isso que este gate mede o LAYOUT e não a presença.
+// A TABELA DE OCORRÊNCIAS SAIU DO PRODUTO. A lista de sessões voltou a ser a pilha de
+// cartões da fase 2 nas DUAS visões, e o que a web ainda faz de diferente é pôr o painel
+// «aprofunda isto» ao lado em vez de embaixo. O gate mede isso: mesma lista dos dois lados,
+// e o painel na janela.
 // ---------------------------------------------------------------------------
 
 async function blocoEvento(cdp, base) {
-  titulo("── WEB-03 · /evento/[slug] — tabela de ocorrências e painel lateral (D-80, D-43) ──");
+  titulo("── WEB-03 · /evento/[slug] — a mesma lista de sessões, e o painel lateral (D-80, D-43) ──");
+
+  let ocorrenciasNaWeb = null;
 
   for (const [rotulo, slug] of [
     ["CMS · 53 sessões", EVENTO_DO_CMS],
@@ -2318,9 +2051,8 @@ async function blocoEvento(cdp, base) {
     await porVisao(cdp, base, `/evento/${slug}/`, "web");
     const web = await cdp.avaliar(
       naPagina5Async(`
-        const lista = document.querySelector('[data-tabela-ocorrencias]');
+        const lista = document.querySelector('.ocorrencias-lista');
         const painel = document.querySelector('[data-painel-aprofunda]');
-        const principal = painel ? painel.parentElement : null;
         const antes = ret(painel);
         scrollTo(0, 837);
         await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
@@ -2330,9 +2062,8 @@ async function blocoEvento(cdp, base) {
         return {
           temLista: Boolean(lista),
           display: lista ? getComputedStyle(lista).display : null,
-          linhas: lista ? lista.querySelectorAll('[data-ocorrencia]').length : 0,
+          linhas: contaVisiveis('[data-ocorrencia]'),
           celulasDeAcesso: contaVisiveis('[data-coluna-acessibilidade]'),
-          estados: [...new Set(valores('[data-coluna-acessibilidade]', 'data-coluna-acessibilidade'))],
           scrollWidth: lista ? lista.scrollWidth : null,
           clientWidth: lista ? lista.clientWidth : null,
           painelVisivel: visivel(painel),
@@ -2354,43 +2085,41 @@ async function blocoEvento(cdp, base) {
     );
     exigir(
       web.transborda.transborda === false && (!web.temLista || web.scrollWidth === web.clientWidth),
-      `${rotulo} · web · nada corre para fora: nem a página, nem a tabela`,
+      `${rotulo} · web · nada corre para fora: nem a página, nem a lista`,
       `documento ${web.transborda.scrollWidth}/${web.transborda.clientWidth} · ` +
-        (web.temLista ? `lista ${web.scrollWidth}/${web.clientWidth}` : "sem tabela nesta ficha"),
+        (web.temLista ? `lista ${web.scrollWidth}/${web.clientWidth}` : "sem sessões nesta ficha"),
       "scrollWidth == clientWidth nos dois",
     );
 
     if (slug === EVENTO_DO_CMS) {
+      ocorrenciasNaWeb = web.linhas;
       exigir(
-        web.display === "grid" && web.linhas === 53 && web.celulasDeAcesso === 53,
-        `${rotulo} · web · a lista de ocorrências É TABELA, com coluna de acessibilidade em cada linha`,
-        `display=${web.display} · ${web.linhas} linhas · ${web.celulasDeAcesso} células de acessibilidade visíveis · ` +
-          `estados ${JSON.stringify(web.estados)}`,
-        "grid, 53 linhas, 53 células",
+        web.display === "flex" && web.linhas === 53 && web.celulasDeAcesso === 0,
+        `${rotulo} · web · a lista de sessões é a PILHA da fase 2, sem célula de tabela`,
+        `display=${web.display} · ${web.linhas} sessões · ${web.celulasDeAcesso} células de acessibilidade visíveis`,
+        "flex, 53 sessões, 0 células de tabela",
       );
       await fotografar(cdp, "05-08-evento-cms-web");
     } else {
       exigir(
         web.linhas === 0 && web.dimensoes === 8,
-        `${rotulo} · web · sem sessão datada não há tabela, e a ficha das 8 dimensões continua na tela (D-43)`,
+        `${rotulo} · web · sem sessão datada não há lista, e a ficha das 8 dimensões continua na tela (D-43)`,
         `${web.linhas} ocorrências · ${web.dimensoes} dimensões visíveis na ficha`,
         "0 ocorrências e 8 dimensões",
       );
     }
   }
 
-  // A visão app da ficha do CMS: os blocos da fase 2, na ORDEM da fase 2, e zero tabela.
+  // A visão app da ficha do CMS: os mesmos blocos, na ORDEM da fase 2.
   await porVisao(cdp, base, `/evento/${EVENTO_DO_CMS}/`, "mobile");
   const app = await cdp.avaliar(
     naPagina5(`
-      const lista = document.querySelector('[data-tabela-ocorrencias]');
+      const lista = document.querySelector('.ocorrencias-lista');
       const blocos = visiveis('[data-bloco]').map((b) => ({ nome: b.getAttribute('data-bloco'), topo: Math.round(b.getBoundingClientRect().top + scrollY) }));
       return {
         display: lista ? getComputedStyle(lista).display : null,
-        cabecalhos: contaVisiveis('[data-cabecalho-tabela]'),
         celulasDeAcesso: contaVisiveis('[data-coluna-acessibilidade]'),
         ocorrencias: contaVisiveis('[data-ocorrencia]'),
-        condicoes: contaVisiveis('[data-condicao]'),
         blocos,
         ordenados: blocos.every((b, i) => i === 0 || b.topo >= blocos[i - 1].topo),
         moldura: Boolean(document.querySelector('.moldura')),
@@ -2401,15 +2130,22 @@ async function blocoEvento(cdp, base) {
     app.display === "flex" && app.celulasDeAcesso === 0 && app.ocorrencias === 53 && app.moldura,
     "D-79 · na visão app a ficha é a da fase 2: pilha de cartões, zero elemento de tabela visível",
     `display=${app.display} · ${app.celulasDeAcesso} células de acessibilidade visíveis · ` +
-      `${app.cabecalhos} cabeçalhos · ${app.ocorrencias} cartões de sessão · moldura=${app.moldura}`,
+      `${app.ocorrencias} cartões de sessão · moldura=${app.moldura}`,
     "flex, 0 células de tabela, 53 cartões",
+  );
+  exigir(
+    ocorrenciasNaWeb === app.ocorrencias,
+    "as duas visões listam as MESMAS sessões — o conteúdo da ficha é um só",
+    `web ${ocorrenciasNaWeb} · app ${app.ocorrencias}`,
+    "iguais",
   );
 
   resumo.push([
     "WEB-03",
-    `/evento/[slug] na visão web: 53 sessões em tabela de grade com coluna de acessibilidade e o painel ` +
-      `«aprofunda isto» ao lado, na primeira vista e ainda na janela depois de 837px de rolagem; no evento ` +
-      `da Enciclopédia, zero tabela e as 8 dimensões da ficha. Na visão app, os 53 cartões da fase 2 e zero tabela`,
+    `/evento/[slug]: as ${app.ocorrencias} sessões aparecem como a mesma pilha de cartões nas duas visões, ` +
+      `sem tabela e sem coluna de acessibilidade em nenhuma delas; o que a web faz de diferente é pôr o ` +
+      `painel «aprofunda isto» ao lado, na primeira vista e ainda na janela depois de 837px de rolagem; no ` +
+      `evento da Enciclopédia, zero sessão e as 8 dimensões da ficha`,
   ]);
 }
 
@@ -3695,7 +3431,6 @@ async function blocoContratosCruzados(cdp, base) {
 
   for (const [rota, seletorJs, plano] of [
     ["/acontece/", `Array.from(document.querySelectorAll('a[href="/filtros/"]')).find((a) => a.getBoundingClientRect().width > 0)`, "05-01"],
-    ["/buscar/", `document.querySelector('[data-link-filtros]')`, "05-02"],
   ]) {
     await porVisao(cdp, base, rota, "web");
     const href = await cdp.avaliar(`(${seletorJs})?.getAttribute('href') ?? null`);
@@ -3740,9 +3475,11 @@ async function blocoContratosCruzados(cdp, base) {
     "05-07": ["play/index.html", `play/${MIDIA_DE_AMOSTRA}/index.html`],
   };
   const EXCLUSIVOS = {
-    "05-01": ["acontece-web", "modo-lista", "interseccao", "par", "mapeavel", "item-lista", "pino", "lista-recorte", "mapa-acontece", "motivo-sem-pino"],
-    "05-02": ["grade-web", "destaque-curado", "coluna-facetas", "coluna-resultados", "link-filtros"],
-    "05-03": ["tabela-ocorrencias", "coluna-acessibilidade", "painel-aprofunda", "bloco-produtor"],
+    // 05-01 ficou sem atributo exclusivo: o bloco de lista e mapa que os carregava saiu
+    // do produto quando a visão web passou a mostrar só o que a app mostra.
+    "05-01": [],
+    "05-02": ["grade-web", "destaque-curado", "coluna-facetas", "coluna-resultados"],
+    "05-03": ["painel-aprofunda", "bloco-produtor"],
     "05-04": ["fila-moderacao", "item-fila", "procedencia-item", "score-ia", "acao-moderacao", "escopo-curador", "passo-trilha", "motivo-passo", "publicavel", "sugestao-ia", "limites-ia", "slug-trilha"],
     "05-05": ["observatorio", "procedencia-painel", "procedencia-fatia", "indicador", "publico", "leitura-procedencia", "mapa-desertos"],
     "05-06": ["filtros", "dimensao-acessibilidade", "declarado-ausente", "nao-declarado", "criterio-inexistente", "sem-resultado", "afrouxamento", "beco", "trilha-relacionada"],
@@ -3810,7 +3547,6 @@ async function blocoDeHonestidade(cdp, base) {
     ["/observatorio/", "web"],
     ["/play/", "mobile"],
     ["/moderacao/fila/", "web"],
-    ["/acontece/", "web"],
   ]) {
     await porVisao(cdp, base, rota, visao);
     const medida = await cdp.avaliar(
@@ -3906,10 +3642,10 @@ function imprimirResumo(estrutura) {
 
   console.log("\n  1 · O PERCURSO DAS TELAS NOVAS, na ordem que conta a história:");
   for (const [n, passo] of [
-    ["1", "/acontece/ na visão WEB — passe o cursor sobre uma linha da lista e mostre o pino acendendo, e vice-versa. É o único gesto do protótipo que só existe onde há cursor, e é o argumento inteiro de a visão web existir."],
-    ["2", "no mesmo lugar, troque para «por data»: 129 eventos, zero pino, e a interseção declarada com os cinco denominadores. É o acervo dizendo o que não sustenta."],
+    ["1", "/acontece/ — alterne entre App e Web e mostre que a agenda é a MESMA nas duas: mesmos cartões, mesmo texto. O que muda é a disposição, nunca o conteúdo."],
+    ["2", "/filtros/ é onde os denominadores do acervo moram: 129 eventos com sessão datada, 158 com lugar, e a interseção declarada. É o acervo dizendo o que não sustenta."],
     ["3", "/descobrir/ e /buscar/ na visão WEB — a grade de três colunas com o destaque atravessando duas, e as facetas em coluna permanente à esquerda."],
-    ["4", "/evento/<slug>/ na visão WEB — as 53 sessões em tabela com a coluna de acessibilidade, e o painel «aprofunda isto» colado ao lado."],
+    ["4", "/evento/<slug>/ na visão WEB — as 53 sessões na mesma lista da visão app, com o painel «aprofunda isto» colado ao lado em vez de embaixo."],
     ["5", "/moderacao/fila/ — clique «vetar» e tente confirmar com o campo vazio. O botão não conclui. É a resposta mecânica à pergunta mais difícil do RFP."],
     ["6", "/redacao/trilha/ — acrescente um passo do catálogo e mostre a trilha deixando de publicar, com o passo NOMEADO. Depois abra /trilha/<slug>/ e mostre que o motivo é o mesmo texto."],
     ["7", "/observatorio/ — o painel de procedência inteiro na primeira vista, e a inversão: o acervo deu as coisas, nós derivamos as ligações."],

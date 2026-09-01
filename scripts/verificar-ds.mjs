@@ -32,7 +32,6 @@ const SRC = path.join(RAIZ, "src");
  *  antigas passaram pelo migrador determinístico e a catraca vale para o
  *  conjunto inteiro. */
 const FOLHAS_MIGRADAS = [
-  "acontece-web.css",
   "agenda.css",
   "barra-inferior.css",
   "base.css",

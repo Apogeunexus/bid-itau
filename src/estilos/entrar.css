@@ -271,8 +271,12 @@
    dentro». Sem ele a medida seria copiada aqui e as duas divergiriam na primeira mudança
    de moldura. */
 [data-view="mobile"] .entrar {
-  height: var(--altura-moldura);
-  min-height: var(--altura-moldura);
+  /* `100%` DO CONTÊINER DE ROLAGEM, e não `--altura-moldura`: aquele token é a altura
+     EXTERNA do telefone e inclui a borda de 10px de cada lado, então a tela nascia 20px
+     mais alta que o espaço onde cabe — e a entrada, que não rola por decisão, rolava.
+     `.moldura-rolagem` tem altura definida, então a porcentagem resolve. */
+  height: 100%;
+  min-height: 100%;
 }
 
 /* --- Visão web: o painel não estica, a foto respira --- */

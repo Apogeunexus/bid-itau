@@ -60,13 +60,15 @@ function iniciaisDe(titulo: string): string {
 export function OnboardingSementes({
   grade,
   busca,
-  pergunta,
   rotuloDaBusca,
+  vazio,
 }: {
   grade: RostoDeSemente[];
   busca: RostoDeSemente[];
-  pergunta: string;
+  /** Placeholder e rótulo do campo de busca: «Buscar artistas», «Buscar obras». */
   rotuloDaBusca: string;
+  /** A frase de busca sem resultado, na voz da tela — artista numa, obra na outra. */
+  vazio: string;
 }) {
   const { sementes, alternarSemente, hidratado } = useSessao();
   const [rolagem, setRolagem] = useState(0);
@@ -102,10 +104,8 @@ export function OnboardingSementes({
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="onb-cabeca">
-        <h2 className="onb-pergunta">{pergunta}</h2>
-      </div>
-
+      {/* SEM TÍTULO AQUI. A pergunta virou o `<h1>` da tela, no cabeçalho da página —
+          repeti-la seria o segundo título que este refino existe para tirar. */}
       <div className="onb-busca">
         <input
           type="search"
@@ -117,7 +117,9 @@ export function OnboardingSementes({
       </div>
 
       {resultados?.length === 0 ? (
-        <p className="onb-aviso-feed">Nenhum nome do acervo casa com «{termo.trim()}».</p>
+        <p className="onb-aviso-feed">
+          {vazio} Tente outro termo, ou escolha um da grade.
+        </p>
       ) : null}
 
       <div className="onb-grade">
@@ -151,11 +153,12 @@ export function OnboardingSementes({
                   </span>
                 ) : null}
               </span>
+              {/* SÓ O NOME. Cada carta trazia «ARTISTA» ou «OBRA» embaixo do nome — numa
+                  tela em que todas as cartas são da mesma classe, isso é o mesmo rótulo
+                  repetido 24 vezes para não informar nada. Quem diz a classe é a
+                  pergunta no alto. */}
               <span className="onb-rosto-texto">
                 <span className="onb-rosto-nome">{rosto.titulo}</span>
-                <span className="onb-rosto-classe">
-                  {rosto.classe === "pessoa" ? "Artista" : "Obra"}
-                </span>
               </span>
             </button>
           );
@@ -169,7 +172,7 @@ export function OnboardingSementes({
             className="onb-texto-acao"
             onClick={() => setRolagem((r) => r + 1)}
           >
-            Não conheço nenhum destes — mostre outros
+            Não conheço nenhum — mostrar outros
           </button>
         </div>
       ) : null}

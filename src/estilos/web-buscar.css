@@ -120,39 +120,6 @@
   background: var(--ic-preto);
 }
 
-[data-view="web"] [data-busca-inteligente] {
-  display: none;
-}
-
-/* ---------------------------------------------------------------------------
- * O QUE APARECE EM UMA VISÃO E NÃO NA OUTRA — SEMPRE POR CSS, NUNCA POR RAMO.
- *
- * Os três blocos abaixo existem NO DOM nas duas visões, e é isso que permite não haver um
- * único `if (visao === …)` em `buscar.tsx`. A visão só é conhecida depois de ler o
- * `localStorage`, e ramificar por ela em JavaScript renderizaria no build uma árvore
- * diferente da do navegador — o React acusaria a divergência e o gate de console limpo
- * cairia. Quem some é a CAIXA, e `display: none` a remove sem deixar buraco: o `gap` do
- * flex e o da grade só existem entre caixas geradas.
- * ------------------------------------------------------------------------ */
-
-/* A tradução da busca em linguagem natural é permanente na web (tela 28) e não existe na
- * app, onde o convite equivalente da fase 3 continua no bloco «antes de digitar». */
-[data-view="mobile"] [data-frase-natural] {
-  display: none;
-}
-
-/* E o inverso: na web o convite da fase 3 sai, porque o bloco permanente acima já diz a
- * mesma coisa com a frase do Cenário 5 escrita por extenso. */
-[data-view="web"] [data-convite-frase="app"] {
-  display: none;
-}
-
-/* A porta para `/filtros/` é da coluna de facetas da web. No app, a entrada de Filtros é
- * do plano 05-06 e esta tela não abre uma segunda. */
-[data-view="mobile"] [data-link-filtros] {
-  display: none;
-}
-
 /* Canvas estreito: facetas acima, resultados abaixo. Especificidade empata
  * `[data-view="web"] .busca-corpo` e ganha neste arquivo. */
 @container canvas (max-width: 36rem) {

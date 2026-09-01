@@ -18,6 +18,18 @@ import type { RostoDeSemente } from "@/dados/sementes-wire";
  * possível para semear: uma parede de obras com imagem, onde reconhecer não depende de
  * saber o nome de ninguém. Some assim que houver semente de entidade suficiente — não é
  * um recorte permanente da tela.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────────────
+ * E QUEM JÁ FOI PERGUNTADA NÃO É PERGUNTADA DE NOVO.
+ *
+ * A condição de saída era só «tem 3 obras marcadas», e quem atravessou os cinco passos
+ * escolhendo nada — ou apertando «Pular», que é uma resposta — reencontrava a mesma
+ * parede ao abrir o Museu. Do lado de fora isso não lê como reentrada, lê como o
+ * onboarding voltando: foi exatamente o que a revisão apontou.
+ *
+ * `semeado` é o estado que o rodapé do onboarding grava, e ele quer dizer «foi
+ * perguntada» — não «escolheu alguma coisa». É a leitura certa aqui: a faixa é para quem
+ * nunca viu a pergunta, não para quem já a respondeu com um não.
  */
 
 /** Acima disto o perfil já tem de onde caminhar e a faixa sai da frente. */
@@ -27,14 +39,14 @@ const BASTANTE = 3;
 const NA_PAREDE = 8;
 
 export function MuseuReentrada({ obras }: { obras: RostoDeSemente[] }) {
-  const { sementes, alternarSemente, hidratado } = useSessao();
+  const { sementes, alternarSemente, semeado, hidratado } = useSessao();
 
   // ANTES DE HIDRATAR A FAIXA APARECE, e isso não é descuido. Devolver `null` até o
   // `localStorage` ser lido tirava a seção inteira do HTML estático — ela passava a
   // existir só depois do JavaScript, e sumia de qualquer verificação que leia o build. O
   // HTML de saída passa a ser o estado de quem ainda não semeou, que é quem chega aqui.
   const marcadas = hidratado ? sementes.filter((c) => c.startsWith("e:")) : [];
-  if (hidratado && marcadas.length >= BASTANTE) return null;
+  if (hidratado && (semeado || marcadas.length >= BASTANTE)) return null;
 
   return (
     <section className="pref" aria-label="Escolha obras que te param">
@@ -67,9 +79,10 @@ export function MuseuReentrada({ obras }: { obras: RostoDeSemente[] }) {
                   </span>
                 ) : null}
               </span>
+              {/* SÓ O NOME: a pergunta acima já diz que são obras, e repetir «OBRA» em
+                  cada uma das oito é o mesmo rótulo oito vezes sem informar nada. */}
               <span className="onb-rosto-texto">
                 <span className="onb-rosto-nome">{obra.titulo}</span>
-                <span className="onb-rosto-classe">Obra</span>
               </span>
             </button>
           );

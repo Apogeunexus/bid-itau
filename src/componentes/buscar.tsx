@@ -7,7 +7,6 @@ import { Chip, Estante, TrilhoDeChips } from "@/componentes/base/chip";
 import {
   ICONE_BUSCAR,
   ICONE_FILTROS,
-  ICONE_IA,
   ICONE_MAPA,
   ICONE_SETA,
   iconeDaClasse,
@@ -29,7 +28,6 @@ import { SelosDeLinguagem } from "@/componentes/selo-linguagem";
 // `src/app/(app)/buscar/page.tsx` é componente de SERVIDOR, e uma constante lida lá e
 // passada por prop viaja no HTML da página estática, não no JavaScript. Aquele arquivo
 // não é deste plano; quem o abrir a seguir deve fazer a troca.
-import { FRASE_DO_CENARIO_5 } from "@/dados/frase";
 import {
   consultar,
   expandirIndice,
@@ -615,34 +613,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           mesma sequência nas duas visões, e quem enxerga vê a coluna à esquerda na web. */}
       <div className="busca-corpo web-duas-colunas flex flex-col gap-4">
         <div data-coluna-resultados="sim" className="flex min-w-0 flex-col gap-4">
-          {/* A TRADUÇÃO DA BUSCA EM LINGUAGEM NATURAL, SEMPRE VISÍVEL NA WEB (tela 28).
-
-              Na visão app o convite para `/buscar/frase/` mora no bloco «antes de digitar»
-              e some assim que se digita, porque dentro da moldura de 390px cada bloco
-              permanente é altura roubada do primeiro resultado. Na web não há esse aperto:
-              a tradução da frase é uma das duas coisas que a tela 28 pede à vista o tempo
-              todo, e ela fica — com a frase do Cenário 5 escrita por extenso, e não só com
-              o convite, porque é a frase que mostra o que «traduzir» quer dizer.
-
-              É UM SEGUNDO BLOCO, e não o mesmo movido de lugar: mover o de lá para cá
-              mudaria a visão app, que tem de continuar como a fase 3 a deixou. Quem some
-              em cada visão é a caixa, por CSS, em `web-buscar.css` — nunca as duas juntas,
-              nunca nenhuma. */}
-          <section data-frase-natural="sim" className="web-painel busca-inteligente">
-            <p className="busca-inteligente-kicker">
-              <Mini icone={ICONE_IA} />
-              Busca inteligente
-            </p>
-            <p className="web-painel-titulo">não sabe o nome do que procura?</p>
-            <p className="tipo-detalhe">
-              Descreva com uma frase — <strong>«{FRASE_DO_CENARIO_5}»</strong> — e ela vira{" "}
-              <strong>critérios visíveis e editáveis</strong>, um a um, com o que não foi
-              entendido dito na cara: não é uma resposta de chatbot.
-            </p>
-            <Chip href="/buscar/frase/" className="w-fit font-semibold">
-              traduzir esta frase em critérios
-            </Chip>
-          </section>
           {/* ------------------------------------------------------------------ */}
           {/* 2. Antes de digitar — o estado que a banca vê primeiro              */}
           {/* ------------------------------------------------------------------ */}
@@ -995,9 +965,6 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
 
           <section className="flex flex-col gap-3">
             <p className="busca-bloco-titulo">Filtre o acervo</p>
-            <Chip href="/filtros/" data-link-filtros="sim" className="w-fit font-semibold">
-              Acessibilidade
-            </Chip>
             <BlocoFaceta
               titulo="tipo"
               opcoes={facetas.classe}

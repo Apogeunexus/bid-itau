@@ -17,10 +17,15 @@ export const metadata: Metadata = { title: "Museu — Itaú Cultural" };
 const OBRAS = catalogoDeSementes().grade.filter((r) => r.classe === "obra");
 
 export default function PaginaMuseu() {
+  /* A ORDEM É O MUSEU PRIMEIRO. A faixa de reentrada abria a tela e ocupava a dobra
+     inteira — 1.275px de parede de obras antes da primeira palavra sobre o Museu —, então
+     quem tocava em «Museu» via uma tela de onboarding. Ela continua na tela e continua
+     valendo para quem nunca semeou; o que mudou é que agora ela é um convite DEPOIS do
+     conteúdo, e não um pedágio antes dele. */
   return (
     <>
-      <MuseuReentrada obras={OBRAS} />
       <Museu />
+      <MuseuReentrada obras={OBRAS} />
     </>
   );
 }

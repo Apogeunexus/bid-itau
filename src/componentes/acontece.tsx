@@ -11,16 +11,9 @@ import {
   ICONE_RELOGIO,
   ICONE_SALVOS,
 } from "@/componentes/base/icones";
-import { OpcaoDeSegmento, Segmento } from "@/componentes/base/segmento";
 import { CapaDeCartao, CapaSemImagem } from "@/componentes/capa-sem-imagem";
-import { linguagemPorId, SelosDeLinguagem } from "@/componentes/selo-linguagem";
+import { linguagemPorId } from "@/componentes/selo-linguagem";
 import type { Agenda, DiaDaAgenda, EventoDaAgenda } from "@/dados/agenda";
-import type { MapaDaAgenda } from "@/dados/mapa-agenda";
-import {
-  expandirItem,
-  expandirPino,
-  type IdDoRecorte,
-} from "@/dados/mapa-agenda-wire";
 
 /**
  * acontece.tsx — a agenda como LISTA DE EVENTOS (D-53), e a faixa que navega dias que
@@ -225,49 +218,8 @@ interface EventoDoDia {
   horas: string[];
 }
 
-export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda }) {
+export function Acontece({ agenda }: { agenda: Agenda }) {
   const { dias, eventos, janelaSugerida, diagnostico } = agenda;
-
-  /* ---------------------------------------------------------------------
-   * O ESTADO DA VISÃO WEB (D-80, D-81).
-   *
-   * UM ÚNICO `parRealcado`, e os dois lados apenas o LEEM. Dois estados — um para a
-   * lista e outro para o mapa, sincronizados um contra o outro — divergem no primeiro
-   * caso de borda, e o sintoma é o realce que fica preso aceso depois que o cursor já
-   * saiu. Com um estado só, a divergência é impossível por construção.
-   *
-   * `modoLista` é o recorte ativo, e o alternador entre os dois É a declaração honesta
-   * de D-90 virada controle: «por data» são os 129 eventos com sessão, e o mapa ao lado
-   * declara com o denominador que 0 deles pode ser posto no mapa; «por lugar» são os 158
-   * situados, onde o par existe e a sincronia é real nos dois sentidos.
-   *
-   * NENHUM DOS DOIS LÊ A VISÃO. Não existe um ramo em JavaScript decidindo o que
-   * renderizar por `data-view`: o conteúdo sai pronto no artefato estático (D-02) e quem
-   * decide o layout é o CSS sob `[data-view="web"]` e `[data-view="mobile"]` (D-79).
-   * ------------------------------------------------------------------- */
-  const [parRealcado, setParRealcado] = useState<string | null>(null);
-  const [modoLista, setModoLista] = useState<IdDoRecorte>("lugar");
-
-  const realcar = useCallback((par: string | null) => setParRealcado(par), []);
-
-  const recorte = mapa.recortes.find((r) => r.id === modoLista) ?? mapa.recortes[0];
-  const itensDoRecorte = useMemo(() => recorte.itens.map(expandirItem), [recorte]);
-  const pinosDoRecorte = useMemo(() => recorte.pinos.map(expandirPino), [recorte]);
-
-  /* Os denominadores da declaração de D-90. Nenhum deles é literal: todos vêm da
-   * contagem feita no build por `mapa-agenda.ts`, que quebra o build se a interseção
-   * medida deixar de ser a que esta frase afirma. */
-  const denominadores = [
-    { chave: "com-sessao", n: mapa.interseccao.comSessao, rotulo: "com sessão datada" },
-    { chave: "com-lugar", n: mapa.interseccao.comLugar, rotulo: "com lugar no acervo" },
-    { chave: "com-os-dois", n: mapa.interseccao.comOsDois, rotulo: "com as duas coisas" },
-    { chave: "no-desenho", n: mapa.interseccao.comLugarNoDesenho, rotulo: "no mapa ao lado" },
-    {
-      chave: "fora-do-desenho",
-      n: mapa.interseccao.comLugarForaDoDesenho,
-      rotulo: "com lugar fora do Brasil",
-    },
-  ];
 
   const indicePorData = useMemo(
     () => new Map(dias.map((d, i) => [d.data, i])),
@@ -424,8 +376,7 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
       {/* ================================================================== */}
       {/* 1 — ENQUADRAMENTO. Só o nome da tela e a porta dos filtros: a       */}
       {/*     contagem do acervo e a data de referência saíram do cabeçalho,  */}
-      {/*     e quem quiser o denominador o encontra nos recortes da visão    */}
-      {/*     web, onde ele é argumento e não nota de rodapé.                 */}
+      {/*     e o denominador mora em `/filtros/`, que é a tela que o usa.    */}
       {/* ================================================================== */}
       <header className="flex flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
@@ -436,156 +387,6 @@ export function Acontece({ agenda, mapa }: { agenda: Agenda; mapa: MapaDaAgenda 
           </Link>
         </div>
       </header>
-
-      {/* ================================================================== */}
-      {/* A VISÃO WEB — lista e mapa lado a lado, sincronizados (D-79, D-80,   */}
-      {/*   D-81). MESMO COMPONENTE, mesma árvore de JSX. Não existe um        */}
-      {/*   `AconteceWeb` irmão, e não existe ramo em JavaScript lendo a visão */}
-      {/*   para decidir o que renderizar (D-05, D-02): quem apaga este bloco  */}
-      {/*   na visão app é uma regra de CSS em `acontece-web.css`, e o         */}
-      {/*   conteúdo sai pronto no artefato estático.                          */}
-      {/* ================================================================== */}
-      <section data-acontece-web className="acontece-web">
-        <div className="acontece-web-topo">
-          {/* O ALTERNADOR É A DECLARAÇÃO DE D-90 VIRADA CONTROLE. Ele não é um
-              filtro de conveniência: cada recorte responde uma pergunta que o
-              acervo sustenta, e a diferença entre as duas é o achado da tela. */}
-          <Segmento rotulo="Recorte da lista">
-            {mapa.recortes.map((r) => (
-              <OpcaoDeSegmento
-                key={r.id}
-                data-modo-lista={r.id}
-                selecionado={r.id === modoLista}
-                onClick={() => {
-                  setModoLista(r.id);
-                  // O realce morre com a troca de recorte: a chave acesa pode não
-                  // existir do outro lado, e um realce preso num pino que sumiu é o
-                  // sintoma clássico de estado que sobreviveu ao próprio conjunto.
-                  setParRealcado(null);
-                }}
-              >
-                {`${r.rotulo} · ${milhar(r.total)}`}
-              </OpcaoDeSegmento>
-            ))}
-          </Segmento>
-        </div>
-
-        {/* D-90. TEXTO DE PRODUTO: é a resposta da tela ao que o acervo não
-            sustenta. Nenhum destes números é literal —
-            todos vêm da contagem feita no build, e `mapa-agenda.ts` derruba o
-            build se a interseção medida deixar de ser a que esta frase afirma. */}
-        <div data-interseccao className="web-declaracao acontece-web-interseccao">
-          <p className="acontece-web-interseccao-texto">{mapa.interseccao.texto}</p>
-          <ul className="web-denominadores">
-            {denominadores.map((d) => (
-              <li key={d.chave} className="web-denominador" data-denominador={d.chave}>
-                <span className="web-denominador-numero">{milhar(d.n)}</span>
-                <span className="web-denominador-rotulo">{d.rotulo}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="web-duas-colunas acontece-web-colunas">
-          {/* ---------------- A COLUNA DA LISTA ---------------- */}
-          <div className="acontece-web-coluna-lista">
-            <div className="acontece-web-cabecalho-lista">
-              <h2 className="web-painel-titulo">{`${recorte.rotulo} · ${plural(recorte.total, "evento", "eventos")}`}</h2>
-              {/* 05-06 cria esta rota nesta mesma onda. Ela não existe enquanto a
-                  onda corre e o export estático não valida href interno; quem prova
-                  que ela resolve é o gate de 05-08. */}
-              <a href="/filtros/" className="acontece-web-atalho">
-                Filtrar este acervo
-              </a>
-            </div>
-
-            <ul className="web-lista-densa" data-lista-recorte={recorte.id}>
-              {itensDoRecorte.map((item) => (
-                <li
-                  key={item.slug}
-                  data-item-lista=""
-                  data-par={item.par}
-                  data-mapeavel={item.mapeavel ? "sim" : "nao"}
-                  data-motivo-sem-pino={
-                    item.mapeavel ? null : item.lugar ? "fora-do-desenho" : "sem-lugar"
-                  }
-                  /* SEMPRE «sim» OU «nao», nunca ausente. Um item que não pode ser
-                     realçado precisa dizer isso positivamente: atributo ausente é
-                     indistinguível de atributo que ninguém escreveu. */
-                  data-realcado={item.par !== null && item.par === parRealcado ? "sim" : "nao"}
-                  className="web-linha web-realce"
-                  onMouseEnter={() => realcar(item.par)}
-                  onMouseLeave={() => realcar(null)}
-                  /* Cursor não é o único apontador. Os itens já são links, então o
-                     foco de teclado percorre a lista sozinho — e a mesma sincronia
-                     acontece por Tab, sem uma linha de código a mais no mapa. */
-                  onFocus={() => realcar(item.par)}
-                  onBlur={() => realcar(null)}
-                >
-                  <Link href={item.rota} className="web-linha-titulo no-underline">
-                    {item.titulo}
-                  </Link>
-                  <span className="web-linha-meta">
-                    {item.mapeavel
-                      ? `${item.lugar} · pino no ${item.via === "espaco" ? "espaço" : "centroide do território"}`
-                      : item.lugar
-                        ? `${item.lugar} — fora do contorno do Brasil, sem pino neste desenho`
-                        : "sem lugar no acervo — este registro traz data e nenhum território"}
-                  </span>
-                  {item.totalSessoes > 0 ? (
-                    <span className="web-linha-meta">
-                      {`${plural(item.totalSessoes, "sessão", "sessões")}${
-                        item.proximaSessao
-                          ? ` · a próxima ${porExtenso(item.proximaSessao)}`
-                          : ""
-                      }`}
-                    </span>
-                  ) : null}
-                  {item.linguagens.length ? (
-                    <SelosDeLinguagem ids={[...item.linguagens]} limite={2} />
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* ---------------- A COLUNA DO MAPA ---------------- */}
-          {/* Desenhado AQUI, e não por `<Mapa>`: aquele componente carrega lente por
-              hash, camada de desertos e legenda de agrupamento que esta tela não
-              quer. O contorno e os pinos já vieram projetados de `mapa-agenda.ts`. */}
-          <div className="web-painel web-colada acontece-web-coluna-mapa">
-            <h2 className="web-painel-titulo">
-              {`${plural(recorte.mapeaveis, "pino", "pinos")} de ${milhar(recorte.total)}`}
-            </h2>
-            <svg
-              data-mapa-acontece=""
-              viewBox={mapa.viewBox}
-              className="web-mapa acontece-web-svg"
-              role="img"
-              aria-label={mapa.rotuloContorno}
-            >
-              <path d={mapa.contorno} className="acontece-web-contorno" />
-              {pinosDoRecorte.map((p) => (
-                <circle
-                  key={p.par}
-                  data-pino=""
-                  data-par={p.par}
-                  data-realcado={p.par === parRealcado ? "sim" : "nao"}
-                  className="web-realce acontece-web-pino"
-                  cx={p.x}
-                  cy={p.y}
-                  /* Raio maior no realce. É o que faz um pino de 3 px se destacar
-                     no meio de outros 109 sem precisar de cor nova. */
-                  r={p.par === parRealcado ? 5 : 3}
-                  onMouseEnter={() => realcar(p.par)}
-                  onMouseLeave={() => realcar(null)}
-                />
-              ))}
-            </svg>
-            <p className="acontece-web-declaracao-mapa">{recorte.declaracao}</p>
-          </div>
-        </div>
-      </section>
 
       {/* ================================================================== */}
       {/* 2 — A FAIXA DE DATAS (D-55). Montada da lista `dias`, que só contém */}
