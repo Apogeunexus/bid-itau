@@ -17,27 +17,21 @@
   view-transition-name: tela;
 }
 
-/* O QUE É FOTOGRAFADO NA VISÃO APP É A JANELA DO TELEFONE, e não a tela inteira.
+/* O NOME FICA EM `.tela-em-transicao`, E NÃO NO CONTÊINER DE ROLAGEM. Tentado e revertido.
  *
- * Os pseudoelementos de view transition vivem na CAMADA DE TOPO: eles se ancoram na
- * janela do navegador e nenhum `overflow: hidden` de ancestral os corta — nem o da
- * moldura. Com o nome em `.tela-em-transicao`, o grupo nascia do tamanho do CONTEÚDO:
- * 5.177px de altura num telefone de 844px. Ao trocar de aba, os 4.333px de sobra eram
- * pintados por baixo do aparelho, no palco — o rastro que aparece quando se muda de aba
- * rápido, porque a esta altura a animação anterior ainda não acabou.
+ * O rastro abaixo do telefone ao trocar de aba rápido tem causa conhecida: os
+ * pseudoelementos de view transition vivem na camada de topo, o grupo nasce do tamanho do
+ * CONTEÚDO — 5.177px num telefone de 844 — e nenhum `overflow: hidden` de ancestral os
+ * corta. Mover o nome para `.moldura-rolagem` corrige isso e cobra caro por fora:
+ * `view-transition-name` faz do elemento um CONTÊINER DE BLOCO para descendente absoluto,
+ * e o véu do convite de onboarding — `position: absolute; inset: 0` — passava a medir a
+ * rolagem inteira em vez do miolo da tela. Resultado: o véu subia por cima do cabeçalho e
+ * engolia os saldos e o menu da conta, que deixavam de responder ao toque. MEDIDO: com o
+ * nome na rolagem, o ponto central da estrela devolve `BUTTON.convite-modal-fundo`; com o
+ * nome aqui, devolve a própria pílula.
  *
- * Com o nome em `.moldura-rolagem`, a foto passa a ser a do contêiner de rolagem: 390 por
- * 844, exatamente a janelinha do telefone. O cabeçalho e as barras continuam saindo dela
- * pelos nomes próprios, como já saíam da raiz. Na visão web nada muda: lá a janela do
- * navegador É o recorte, e o nome segue onde estava. */
-[data-view="mobile"] .tela-em-transicao {
-  view-transition-name: none;
-}
-
-[data-view="mobile"] .moldura-rolagem {
-  view-transition-name: tela;
-}
-
+ * Quem for tentar de novo: primeiro tire o véu de dentro de `.tela-em-transicao`, ou lhe
+ * dê um contêiner próprio. Enquanto ele morar ali, este nome não se move. */
 .icone-vivo {
   display: flex;
   align-items: center;
