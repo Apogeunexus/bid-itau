@@ -101,12 +101,40 @@ function viraCartao(entidade: Entidade): boolean {
  * espaço) e acervo/criação (conteúdo, obra, termo, mídia, trilha, publicação) — para o
  * feed nunca virar agenda nem virar catálogo.
  */
+/**
+ * A ORDEM DO RODÍZIO — e por que `evento` aparece mais de uma vez desde 2026-09.
+ *
+ * O cursor de `rodiziar` anda uma posição por cartão escolhido, então esta lista não é
+ * uma preferência: é a distribuição. Doze classes, doze cartões, uma de cada — foi assim
+ * que o feed nasceu, e estava certo enquanto o acervo era a única fonte, porque ali
+ * «evento» era registro histórico sem data e um feed cheio deles seria um catálogo
+ * fingindo de agenda.
+ *
+ * Com a ingestão federada existe programação real e datada, e a proporção anterior passou
+ * a mentir sobre o produto: um acontecimento a cada onze cartões descreve uma
+ * enciclopédia, não uma plataforma de descoberta cultural. `evento` entra em quatro
+ * posições — dois em cada três cartões —, e as outras onze continuam no rodízio para os
+ * slots que sobrarem. O rodízio SE AUTOLIMITA: quando o balde de eventos esvazia,
+ * `escolher` cai na próxima classe não vazia, então sobrepesar aqui nunca produz slot em
+ * branco — produz o máximo de acontecimento que o alcance daquela pessoa sustenta.
+ *
+ * O NÚMERO É AJUSTÁVEL E ESTÁ AQUI DE PROPÓSITO: é a única linha que decide se o Descobrir
+ * parece agenda ou enciclopédia.
+ */
 const ROTACAO: readonly ClasseEntidade[] = [
   "evento",
+  "evento",
   "conteudo",
+  "evento",
+  "evento",
   "pessoa",
+  "evento",
+  "evento",
   "obra",
+  "evento",
+  "evento",
   "termo",
+  "evento",
   "midia",
   "coletivo",
   "instituicao",
@@ -315,7 +343,7 @@ export function expandir(persona: Persona): Expansao {
 
   // --- Reserva de salto 3 (DP-C). Só para classe da rotação que ficou vazia. ---
   const porClasse = new Set(candidatos.map((c) => c.entidade.classe));
-  const classesEmReserva = ROTACAO.filter((c) => !porClasse.has(c));
+  const classesEmReserva = [...new Set(ROTACAO)].filter((c) => !porClasse.has(c));
   const reserva: Candidato[] = [];
 
   if (classesEmReserva.length) {
@@ -581,8 +609,19 @@ function rodiziar(
     const anterior = i > 0 ? slots[i - 1]?.entidade.classe : undefined;
     const seguinte = i + 1 < slots.length ? slots[i + 1]?.entidade.classe : undefined;
     const proibidas = new Set<ClasseEntidade>();
-    if (anterior) proibidas.add(anterior);
-    if (seguinte) proibidas.add(seguinte);
+    // EVENTO É EXCEÇÃO À D-27, POR DECISÃO DE PRODUTO DE 2026-09.
+    //
+    // D-27 proíbe duas classes iguais coladas, e a regra existe por um bom motivo: sem ela
+    // o feed vira lista de uma coisa só e a pluralidade do acervo some. Mas ela foi escrita
+    // quando o acervo era a única fonte, e ali «evento» significava registro histórico sem
+    // data. Com a ingestão federada há programação REAL e datada, e um feed de descoberta
+    // cultural que mostra um evento a cada onze cartões não é plural — é uma enciclopédia
+    // com uma agenda pendurada.
+    //
+    // A exceção é só para `evento`. As outras onze classes continuam sob a regra, e o
+    // rodízio segue distribuindo — o que muda é que acontecimento pode vir em sequência.
+    if (anterior && anterior !== "evento") proibidas.add(anterior);
+    if (seguinte && seguinte !== "evento") proibidas.add(seguinte);
 
     // Ordem de relaxamento: primeiro tenta respeitar os dois vizinhos; depois só o
     // anterior; e só então repete — "quando houver alternativa" (D-27).
