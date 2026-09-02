@@ -965,6 +965,34 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes, cen
                             </span>
                           </button>
                         ))}
+                        {/* O ROTEIRO INTEIRO, DIA A DIA, DENTRO DA CONVERSA. Ele era um
+                            link para o Modo Cidade, e isso tirava a pessoa do chat para ver
+                            o que o chat tinha acabado de prometer. Sair só se justifica para
+                            a ficha de um item ou para o mapa — que são destinos, não a
+                            resposta. */}
+                        {m.cenario.roteiro?.map((d) => (
+                          <div key={d.numero} className="ia-dia">
+                            <p className="ia-dia-titulo">Dia {d.numero}</p>
+                            <div className="ia-dia-itens">
+                              {d.itens.map((i) => (
+                                <Link key={i.slug} href={i.rota} className="ia-dia-item no-underline">
+                                  {i.imagem ? (
+                                    <span className="ia-dia-capa">
+                                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                                      <img src={i.imagem} alt="" />
+                                    </span>
+                                  ) : null}
+                                  <span className="ia-dia-texto">
+                                    <span className="ia-dia-item-titulo">{i.titulo}</span>
+                                    <span className="ia-dia-item-classe">{i.rotuloClasse}</span>
+                                  </span>
+                                </Link>
+                              ))}
+                            </div>
+                            <p className="ia-dia-nota">{d.justificativa}</p>
+                          </div>
+                        ))}
+
                         {m.cenario.atalho ? (
                           <Link href={m.cenario.atalho.rota} className="ia-opcao no-underline">
                             <span className="ia-destino-texto">

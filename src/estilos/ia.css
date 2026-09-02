@@ -1740,3 +1740,79 @@
   font-weight: 700;
   color: var(--cor-acao-tinta);
 }
+
+/* ---------------------------------------------------------------------------
+ * O ROTEIRO DIA A DIA DENTRO DA CONVERSA.
+ * ------------------------------------------------------------------------- */
+.ia-dia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.ia-dia-titulo {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  color: var(--cor-acao-tinta);
+}
+
+.ia-dia-itens {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ia-dia-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cor-tinta);
+}
+
+.ia-dia-capa {
+  flex: none;
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  overflow: hidden;
+  border-radius: var(--raio-p);
+}
+
+.ia-dia-capa img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ia-dia-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ia-dia-item-titulo {
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.ia-dia-item-classe {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+/* A justificativa do dia é do produto, não nota: é ela que diz por que estes itens
+   estão juntos, e sem ela o dia é uma lista sem critério. */
+.ia-dia-nota {
+  margin: 0;
+  font-size: var(--tipo-legenda);
+  line-height: 1.4;
+  color: var(--cor-tinta-3);
+}

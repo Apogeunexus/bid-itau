@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ConversaDaIa } from "@/componentes/ia-conversa";
 import { cenariosResolvidos } from "@/dados/cenarios-ia";
-import { cidadesComAcervo } from "@/dados/cidade";
+import { cidadesComAcervo, montarRoteiro } from "@/dados/cidade";
 import { ocorrenciasDe, porSlug } from "@/dados/grafo";
 import {
   COMPANHIAS,
@@ -45,6 +45,26 @@ export default function Ia() {
       gratuito: Boolean(oc?.gratuito),
       reserva: extra?.fonteUrl ?? null,
     };
+  }, (cidadeSlug, dias) => {
+    // O ROTEIRO É MONTADO AQUI, no servidor, pelo MESMO `montarRoteiro` do Modo Cidade —
+    // não é uma segunda implementação. A conversa recebe só primitivo (DP-F).
+    // `montarRoteiro` fala por id de território, não por slug: a cidade é resolvida antes.
+    const cidade = cidadesComAcervo().find((c) => c.slug === cidadeSlug);
+    if (!cidade) return [];
+    const r = montarRoteiro({ territorioId: cidade.territorioId, dias });
+    if (!r) return [];
+    return r.dias.map((d) => ({
+      numero: d.numero,
+      justificativa: d.justificativa,
+      itens: d.itens.map((i) => ({
+        slug: i.slug,
+        classe: i.classe,
+        titulo: i.titulo,
+        rotuloClasse: i.rotuloClasse,
+        imagem: i.imagem ?? null,
+        rota: `/${i.classe === "evento" ? "evento" : i.classe === "espaco" ? "espaco" : "artista"}/${i.slug}/`,
+      })),
+    }));
   });
 
   return (

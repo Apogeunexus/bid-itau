@@ -193,13 +193,10 @@ export const CENARIOS_DE_IA: readonly CenarioDeIA[] = [
     ],
     sugestoes: [],
     atalho: {
-      titulo: "Seu roteiro de 4 dias em Belém",
-      descricao:
-        "39 registros do acervo do Itaú Cultural na cidade — 17 exposições, 11 artistas, " +
-        "8 espaços e 3 instituições — distribuídos por dia, com o deslocamento curto e o que " +
-        "é próprio do território na frente.",
+      titulo: "Abrir no Modo Cidade",
+      descricao: "Para reordenar os dias, trocar um item ou ver tudo no mapa.",
       rota: "/cidade/belem-para/",
-      acao: "Abrir o roteiro",
+      acao: "Abrir",
     },
     naoSustenta:
       "Nenhum evento do acervo cruza data futura com território, e Belém não é exceção: os 39 " +
@@ -272,6 +269,21 @@ export interface CartaoDoCenario {
   fonte: string | null;
 }
 
+export interface ItemDoRoteiroNoChat {
+  slug: string;
+  classe: string;
+  titulo: string;
+  rotuloClasse: string;
+  imagem: string | null;
+  rota: string;
+}
+
+export interface DiaNoChat {
+  numero: number;
+  itens: ItemDoRoteiroNoChat[];
+  justificativa: string;
+}
+
 export interface CenarioResolvido {
   id: string;
   persona: string;
@@ -281,6 +293,12 @@ export interface CenarioResolvido {
   jornada: PassoDaJornada[];
   cartoes: CartaoDoCenario[];
   atalho?: { titulo: string; descricao: string; rota: string; acao: string };
+  /**
+   * O ROTEIRO INTEIRO, DENTRO DA CONVERSA. Ele era um link para `/cidade/belem-para/`, e
+   * isso tirava a pessoa do chat para ver o que o chat tinha acabado de prometer. Sair só
+   * se justifica para a ficha de um item ou para o mapa — destinos, não a resposta.
+   */
+  roteiro?: DiaNoChat[];
   naoSustenta: string;
 }
 
@@ -303,6 +321,8 @@ export interface EventoParaCenario {
 
 export function cenariosResolvidos(
   buscar: (slug: string) => EventoParaCenario | undefined,
+  /** Monta o roteiro de N dias de um território. Injetado: `cidade.ts` alcança o grafo. */
+  montarRoteiroDe?: (cidade: string, dias: number) => DiaNoChat[],
 ): CenarioResolvido[] {
   return CENARIOS_DE_IA.map((c) => ({
     id: c.id,
@@ -313,6 +333,7 @@ export function cenariosResolvidos(
     jornada: [...(c.jornada ?? [])],
     naoSustenta: c.naoSustenta,
     atalho: c.atalho,
+    roteiro: c.id === "carlos-belem" ? montarRoteiroDe?.("belem-para", 4) : undefined,
     cartoes: c.sugestoes.flatMap((sg) => {
       const e = buscar(sg.slug);
       if (!e) return [];
