@@ -80,6 +80,7 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
       linguagens={cartao.linguagens}
       imagem={cartao.imagem}
       creditoImagem={cartao.creditoImagem}
+      semPastilha
       className="cartao-capa h-24 w-full rounded-lg"
     />
   );
@@ -95,6 +96,10 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
         </p>
       ) : null}
 
+      {/* A PASTILHA SAIU DA CAPA (2026-09). Ela dizia o mesmo que o chip de classe na
+          linha de tags logo abaixo — duas etiquetas para um fato — e dividia o canto da
+          foto com o crédito, deixando os dois cortados. O crédito ficou onde estava:
+          procedência é argumento da proposta, não rodapé. */}
       {/* Capa e texto são irmãos, não um link envolvendo os dois: na web o
           destaque curado põe a foto ao lado do bloco de texto, e o selo de
           motivo (outro link) precisa viver nesse bloco sem aninhar âncoras. */}
@@ -131,7 +136,7 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
               e `data-origem-motivo` — mudou a forma, não a promessa de que todo cartão
               diz por que veio. O grafismo saiu junto: uma barra laranja ao lado da
               pastilha de classe faria as duas parecerem de espécies diferentes. */}
-          <p className="m-0 flex flex-wrap items-center gap-2">
+          <p className="cartao-tags m-0">
             <span className="cartao-tag">{rotuloDaClasse(cartao.classe)}</span>
             <Link
               href={rotaDaExplicacao(cartao)}

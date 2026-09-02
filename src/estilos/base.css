@@ -1296,3 +1296,44 @@ body {
   width: 1rem;
   height: 1rem;
 }
+
+/* O SELO DE MOTIVO CABE EM UMA LINHA (2026-09).
+ *
+ * O motivo é texto da travessia, e em parte do acervo ele repete o título inteiro
+ * — «artista em + (2012 : Fortaleza, CE)». Numa pílula, isso virava duas ou três
+ * linhas e o cartão passava a ter mais etiqueta que conteúdo. O texto não muda:
+ * ele continua inteiro em `data-motivo` e na rota de explicação, que é onde a
+ * pergunta «por que isto?» é respondida. Aqui ele só para de vazar. */
+.selo-motivo.cartao-tag {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.selo-motivo.cartao-tag > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* A LINHA DE TAGS DO CARTÃO: tipo e motivo lado a lado, sempre (2026-09).
+ *
+ * Com `flex-wrap`, o motivo caía para uma linha só dele e ocupava a largura toda
+ * — e como em parte do acervo ele repete o título, o cartão terminava com o
+ * título escrito duas vezes, uma delas dentro de uma pílula. Sem quebra, o tipo
+ * fica com o tamanho que precisa e o motivo encolhe até caber, cortando no fim.
+ * O texto inteiro continua em `data-motivo` e na rota de explicação. */
+.cartao-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.cartao-tags > .cartao-tag:first-child {
+  flex: none;
+}
+
+.cartao-tags > .selo-motivo {
+  min-width: 0;
+  flex: 0 1 auto;
+}

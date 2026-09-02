@@ -55,6 +55,7 @@ export function CapaSemImagem({
   linguagens,
   className,
   compacta,
+  semPastilha,
 }: {
   titulo: string;
   classe: ClasseEntidade;
@@ -72,6 +73,13 @@ export function CapaSemImagem({
    * anunciando que não há imagem no acervo.
    */
   compacta?: boolean;
+  /**
+   * Esconde SÓ a pastilha, e mantém o crédito. Diferente de `compacta`, que some com as
+   * duas: quando a tela já etiqueta o tipo na linha de baixo, a pastilha sobre a foto vira
+   * a segunda etiqueta do mesmo fato — e ela dividia o canto com o crédito, deixando os
+   * dois cortados. O crédito não pode ir junto: procedência é argumento da proposta.
+   */
+  semPastilha?: boolean;
 }) {
   // Primeira linguagem que o vocabulário conhece. `find` e não `[0]`: a entidade pode
   // declarar uma linguagem que o vocabulário não promoveu, e cair no preto por causa
@@ -95,7 +103,7 @@ export function CapaSemImagem({
       <Textura className="-translate-x-px -translate-y-px text-[var(--ic-branco)] opacity-30" />
       <Textura className="translate-x-px translate-y-px text-[var(--ic-preto)] opacity-[0.16]" />
 
-      {compacta ? null : (
+      {compacta || semPastilha ? null : (
         <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
           {rotulo ?? rotuloDaClasse(classe)}
         </span>
@@ -119,6 +127,7 @@ export function CapaDeCartao({
   creditoImagem,
   className,
   compacta,
+  semPastilha,
   alt,
   prioridade,
 }: {
@@ -135,6 +144,8 @@ export function CapaDeCartao({
    * O crédito continua no `alt`, que é onde quem não vê a imagem o encontra.
    */
   compacta?: boolean;
+  /** Esconde só a pastilha e mantém o crédito — ver `CapaSemImagem`. */
+  semPastilha?: boolean;
   /** Substitui o alt composto. Use quando a fonte já descreve a foto (`imagemAlt`). */
   alt?: string;
   /** A peça de abertura: baixa na hora, não preguiçosa. */
@@ -149,6 +160,7 @@ export function CapaDeCartao({
         linguagens={linguagens}
         className={className}
         compacta={compacta}
+        semPastilha={semPastilha}
       />
     );
   }
@@ -168,7 +180,7 @@ export function CapaDeCartao({
         decoding="async"
         className="absolute inset-0 size-full object-cover"
       />
-      {compacta ? null : (
+      {compacta || semPastilha ? null : (
         <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
           {rotulo ?? rotuloDaClasse(classe)}
         </span>
