@@ -1156,8 +1156,12 @@ body {
   border-radius: var(--raio-g);
 }
 
+/* A CAPA É QUADRADA NAS DUAS VISÕES (2026-09). O design system decidiu 1:1 desde
+   a reformulação de agosto — «imagem quadrada dominante», a ficha do cartão de
+   evento — e o feed nunca aplicou: era uma faixa de 6rem no app e 12rem na web.
+   Faixa baixa corta rosto e cartaz, que são justamente o que faz alguém parar. */
 [data-view="web"] .cartao-capa {
-  height: 12rem;
+  height: auto;
 }
 
 [data-view="web"] .selo-motivo {

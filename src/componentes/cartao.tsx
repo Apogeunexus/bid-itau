@@ -81,7 +81,7 @@ export function Cartao({ cartao }: { cartao: CartaoDTO }) {
       imagem={cartao.imagem}
       creditoImagem={cartao.creditoImagem}
       semPastilha
-      className="cartao-capa h-24 w-full rounded-lg"
+      className="cartao-capa aspect-square w-full rounded-m"
     />
   );
 
