@@ -1010,22 +1010,27 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes, cen
                             <dd>{m.escolha.gratuito ? "gratuito" : "no site da casa"}</dd>
                           </div>
                         </dl>
+                        {/* OS DOIS LINKS PRIMEIRO, A AÇÃO POR ÚLTIMO. Reservar é o que fecha
+                            a conversa e leva para fora — fica embaixo de tudo, com a largura
+                            toda, para ser a última coisa que a pessoa lê e a mais fácil de
+                            acertar com o polegar. «Ver no mapa» e «ver a ficha» são desvios,
+                            não conclusão, e por isso continuam sendo link. */}
                         <div className="ia-escolha-acoes">
                           <Link href="/mapa/" className="ia-escolha-mapa no-underline">
                             Ver no mapa →
                           </Link>
-                          {m.escolha.reserva ? (
-                            <SaidaParaParceiro
-                              url={m.escolha.reserva}
-                              instituicao={m.escolha.fonte ?? "a instituição"}
-                              rotulo="Reservar ingresso ↗"
-                              className="ia-escolha-reservar"
-                            />
-                          ) : null}
+                          <Link href={m.escolha.rota} className="ia-escolha-ficha no-underline">
+                            Ver a ficha completa →
+                          </Link>
                         </div>
-                        <Link href={m.escolha.rota} className="ia-escolha-ficha no-underline">
-                          Ver a ficha completa →
-                        </Link>
+                        {m.escolha.reserva ? (
+                          <SaidaParaParceiro
+                            url={m.escolha.reserva}
+                            instituicao={m.escolha.fonte ?? "a instituição"}
+                            rotulo="Reservar ingresso ↗"
+                            className="ia-escolha-reservar"
+                          />
+                        ) : null}
                       </div>
                     ) : null}
 
