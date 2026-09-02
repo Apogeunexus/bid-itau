@@ -39,6 +39,15 @@ export interface SugestaoDoCenario {
   porque: string;
 }
 
+export interface PassoDaJornada {
+  /** A tela, com o nome que ela tem no produto. */
+  tela: string;
+  /** A rota real — a jornada é clicável, não ilustrada. */
+  rota: string;
+  /** O que acontece ali, e o que aquele passo resolve. */
+  oQueAcontece: string;
+}
+
 export interface CenarioDeIA {
   id: string;
   /** A persona do briefing a que este cenário pertence. */
@@ -52,6 +61,12 @@ export interface CenarioDeIA {
   /** Os eventos sugeridos, com o motivo de cada um. */
   sugestoes: SugestaoDoCenario[];
   /**
+   * A JORNADA INTEIRA, quando o cenário a pede. O briefing não pergunta «o que você
+   * recomenda para a Maria»: pergunta «como ela DESCOBRE sua primeira experiência teatral —
+   * apresente toda a jornada». Uma lista de sugestões responde a pergunta errada.
+   */
+  jornada?: PassoDaJornada[];
+  /**
    * O QUE A RESPOSTA NÃO SUSTENTA. Toda tela deste protótipo declara o próprio limite, e
    * a da IA mais que as outras: é a que mais parece saber coisas.
    */
@@ -63,49 +78,91 @@ export const CENARIOS_DE_IA: readonly CenarioDeIA[] = [
     id: "maria-primeira-vez",
     persona: "Maria, 27 anos",
     /**
-     * ELA NÃO PEDE TEATRO, e é isso que o cenário testa. A primeira redação — «nunca fui
-     * ao teatro e não sei por onde começar» — era o enunciado do briefing copiado, não uma
-     * pessoa falando: ninguém digita a própria persona. Esta é como alguém de 27 anos
-     * escreve de fato, com a objeção («não é pra mim») que é o verdadeiro obstáculo, e o
-     * repertório dito de passagem em vez de declarado.
+     * ELA NÃO DECLARA GOSTO NENHUM, E ISSO NÃO É DESCUIDO — é o cenário.
+     *
+     * A primeira redação fazia Maria dizer «curto rap e slam». Rap e slam saem do NOSSO
+     * PRD (§9), que propôs a cadeia rap → poesia falada → teatro; o briefing não diz uma
+     * palavra sobre o que ela ouve. Pôr um gosto na boca dela resolvia o problema difícil
+     * por decreto: com o repertório declarado, recomendar vira busca, e o princípio nº 1 do
+     * briefing — «descoberta antes de busca» — deixa de ser testado.
+     *
+     * Então ela chega como o briefing a descreve: 27 anos, nunca foi ao teatro, e nada
+     * mais. O trabalho da plataforma começa aí.
      */
-    prompt:
-      "nunca fui no teatro, sempre achei que não era pra mim. curto rap e slam — tem " +
-      "alguma coisa nessa pegada pra fazer no sábado?",
+    prompt: "sábado eu tô livre e não sei o que fazer. nunca fui em teatro na vida.",
     entendi:
-      "Você não pediu teatro — disse que ele não é para você. Então eu não discuto isso: " +
-      "entro pelo que você já ouve e mostro o caminho até o palco, em vez de largar você na " +
-      "porta dele. Se no fim for teatro, você descobre depois de já estar gostando.",
+      "Você não me disse o que gosta, e eu não vou pedir — quem sabe o nome do que procura " +
+      "já não precisa descobrir. O que eu tenho é uma data, uma cidade e uma porta que você " +
+      "nunca atravessou. Começo por aí, e a primeira pergunta não é sobre gênero: é sobre o " +
+      "que te move hoje.",
     criterios: [
-      { campo: "repertório", valor: "rap, slam", daFrase: "curto rap e slam" },
-      { campo: "experiência", valor: "primeira vez", daFrase: "nunca fui no teatro" },
-      { campo: "objeção", valor: "acha que não é para ela", daFrase: "sempre achei que não era pra mim" },
-      { campo: "linguagem de chegada", valor: "poesia, música", daFrase: "derivado do repertório" },
+      { campo: "janela", valor: "sábado", daFrase: "sábado eu tô livre" },
+      { campo: "repertório", valor: "vazio — nada declarado", daFrase: "não sei o que fazer" },
+      {
+        campo: "porta fechada",
+        valor: "teatro, nunca experimentado",
+        daFrase: "nunca fui em teatro na vida",
+      },
+    ],
+    jornada: [
+      {
+        tela: "Onboarding por disposição",
+        rota: "/onboarding/1/",
+        oQueAcontece:
+          "A pergunta não é «que gênero você gosta?» — é «o que te move hoje?». Ela escolhe " +
+          "«de graça e perto» e «quero algo que eu nunca vi». Duas escolhas, nenhum gênero " +
+          "nomeado: é disso que o feed parte.",
+      },
+      {
+        tela: "Descobrir",
+        rota: "/descobrir/",
+        oQueAcontece:
+          "O feed é caminhada no grafo, não ranking. Ela vê acontecimento com data, preço e " +
+          "lugar — e cada cartão traz por que veio.",
+      },
+      {
+        tela: "Por que isto apareceu",
+        rota: "/descobrir/",
+        oQueAcontece:
+          "Ela toca em «por que isto?» e lê as arestas que trouxeram o cartão. É aqui que a " +
+          "recomendação para de ser palpite: se o sistema não consegue dizer por quê, ele não " +
+          "sugere.",
+      },
+      {
+        tela: "Poesia falada, que é o passo curto",
+        rota: "/evento/cr-pescaria-de-curiosidades-3/",
+        oQueAcontece:
+          "Palavra dita em voz alta, para público, de graça, num museu de poesia. Ainda não é " +
+          "teatro e já é palco — é o degrau que a porta fechada exige.",
+      },
+      {
+        tela: "A primeira vez no teatro",
+        rota: "/evento/tm-recital-all-greek-to-me/",
+        oQueAcontece:
+          "A única sessão gratuita do Theatro Municipal no mês. Ela atravessa a porta do maior " +
+          "teatro da cidade sem pagar por isso — e reserva no canal da própria casa.",
+      },
     ],
     sugestoes: [
       {
         slug: "cr-pescaria-de-curiosidades-3",
         porque:
-          "Poesia falada num museu de poesia, e é gratuito. É o passo mais curto entre o slam " +
-          "que você já ouve e uma sala com público — mesma palavra dita em voz alta, outro lugar.",
-      },
-      {
-        slug: "cr-o-que-e-que-a-bahia-tem",
-        porque:
-          "Espetáculo musical na Casa das Rosas: já tem palco, direção e roteiro, e ainda entra " +
-          "pela música. É teatro sem se anunciar como teatro.",
+          "O degrau. Poesia falada, gratuita, e público numa sala: tudo o que um teatro tem, " +
+          "menos o nome que a assusta.",
       },
       {
         slug: "tm-recital-all-greek-to-me",
         porque:
-          "A única sessão gratuita do Theatro Municipal neste mês. Se a ideia é atravessar a " +
-          "porta de um teatro pela primeira vez, atravesse a do maior deles sem pagar por isso.",
+          "O destino. Sessão gratuita no Theatro Municipal — a primeira vez dela acontece no " +
+          "lugar que ela achava que não era para ela.",
       },
     ],
     naoSustenta:
-      "A ponte entre rap e slam é nossa, não do acervo: rap está classificado em Música e slam " +
-      "em Literatura, e nenhuma ligação da fonte une os dois. Ela aparece rotulada «autorado» na " +
-      "trilha, passo a passo — não escondemos a ponte, mostramos de quem ela é.",
+      "A cadeia que liga o que ela ouve ao palco é CURADORIA NOSSA, não ligação do acervo: o " +
+      "Itaú Cultural classifica cada linguagem em sua caixa e nada na fonte une música falada a " +
+      "teatro. Na trilha isso aparece rotulado «autorado», passo a passo. E a jornada acima " +
+      "supõe que ela responda ao onboarding — se ela pular, o feed parte só de «sábado, perto, " +
+      "de graça», que é menos preciso e continua honesto.",
   },
   {
     id: "carlos-belem",

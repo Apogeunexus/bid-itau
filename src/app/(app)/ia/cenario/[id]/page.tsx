@@ -88,6 +88,28 @@ export default async function PaginaDoCenario({ params }: PageProps<"/ia/cenario
         </ul>
       </section>
 
+      {/* A JORNADA, quando o cenário a tem. O briefing não pergunta o que recomendamos
+          para a Maria — pergunta COMO ela descobre, e manda apresentar a jornada inteira.
+          Cada passo é rota real e clicável: a demonstração ao vivo anda por aqui. */}
+      {cenario.jornada?.length ? (
+        <section className="flex flex-col gap-3">
+          <h2 className="text-lg leading-tight font-bold">A jornada, passo a passo</h2>
+          <ol className="cen-jornada">
+            {cenario.jornada.map((p, i) => (
+              <li key={p.rota + i} className="cen-passo">
+                <span className="cen-passo-n">{i + 1}</span>
+                <div className="cen-passo-corpo">
+                  <Link href={p.rota} className="cen-passo-tela no-underline">
+                    {p.tela} →
+                  </Link>
+                  <p className="cen-passo-texto">{p.oQueAcontece}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ) : null}
+
       {sugeridos.length ? (
         <section className="flex flex-col gap-3">
           <h2 className="text-lg leading-tight font-bold">O que eu sugiro</h2>
