@@ -1,5 +1,6 @@
 "use client";
 
+import type { CenarioResolvido } from "@/dados/cenarios-ia";
 import Link from "next/link";
 import {
   cloneElement,
@@ -90,6 +91,13 @@ type MensagemAssistente = {
   pergunta?: Campo;
   pensar?: boolean;
   destino?: DestinoDoRoteiro;
+  /**
+   * A RESPOSTA DE CENÁRIO, INTEIRA, DENTRO DA CONVERSA. Ela existia numa página à parte e
+   * isso quebrava a premissa: um chat que manda você para outro lugar não é um chat, é um
+   * menu. Aqui a leitura, os critérios, a jornada, os cartões e o limite chegam como
+   * mensagem — que é o que uma IA de roteiro faz.
+   */
+  cenario?: CenarioResolvido;
 };
 type Mensagem = MensagemUsuario | MensagemAssistente;
 
@@ -171,6 +179,7 @@ type Props = {
   dias: number[];
   cidades: OpcaoDaEntrevista[];
   sugestoes: SugestaoDeRoteiro[];
+  cenarios: CenarioResolvido[];
 };
 
 const PEDIDO_VAZIO: Pedido = {
@@ -450,7 +459,7 @@ function Fala({
   );
 }
 
-export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: Props) {
+export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes, cenarios }: Props) {
   const campoId = useId();
   const [pedido, setPedido] = useState<Pedido>(PEDIDO_VAZIO);
   const [mensagens, setMensagens] = useState<Mensagem[]>([]);
@@ -606,6 +615,28 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
       [campo]: campo === "dias" ? Number(slug) : slug,
     };
     seguir(proximo, rotulo);
+  }
+
+  /**
+   * O cenário do briefing não passa pela entrevista: a resposta dele já existe escrita e
+   * resolvida contra o grafo. O que se simula é só o tempo de pensar — sem ele a resposta
+   * aparece antes do olho chegar na pergunta, e a conversa parece um menu.
+   */
+  function responderCenario(c: CenarioResolvido) {
+    if (pensando) return;
+    setMensagens((m) => [
+      ...m,
+      { id: nid(), papel: "usuario", texto: c.prompt },
+      { id: nid(), papel: "assistente", texto: "", pensar: true },
+    ]);
+    setPensando(true);
+    window.setTimeout(() => {
+      setMensagens((m) => [
+        ...m.filter((x) => !(x.papel === "assistente" && x.pensar)),
+        { id: nid(), papel: "assistente", texto: c.entendi, cenario: c },
+      ]);
+      setPensando(false);
+    }, 900);
   }
 
   function escolherSugestao(s: SugestaoDeRoteiro) {
@@ -880,6 +911,63 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
                         cidades={cidades}
                       />
                     ) : null}
+                    {/* A RESPOSTA DE CENÁRIO, dentro da bolha: leitura, critérios amarrados
+                        ao trecho literal, a jornada com rota clicável, os eventos e o que a
+                        resposta não sustenta. Tudo aqui, nada em outra página. */}
+                    {m.cenario ? (
+                      <div className="ia-cenario">
+                        <p className="ia-cenario-rotulo">o que virou critério</p>
+                        <ul className="ia-cenario-criterios">
+                          {m.cenario.criterios.map((c) => (
+                            <li key={c.campo}>
+                              <b>{c.campo}</b> · {c.valor}
+                              <span className="ia-cenario-frase">veio de «{c.daFrase}»</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        {m.cenario.jornada.length ? (
+                          <>
+                            <p className="ia-cenario-rotulo">a jornada, passo a passo</p>
+                            <ol className="ia-cenario-jornada">
+                              {m.cenario.jornada.map((p, i) => (
+                                <li key={p.rota + i}>
+                                  <Link href={p.rota} className="ia-cenario-passo no-underline">
+                                    {i + 1}. {p.tela} →
+                                  </Link>
+                                  <span className="ia-cenario-passo-texto">{p.oQueAcontece}</span>
+                                </li>
+                              ))}
+                            </ol>
+                          </>
+                        ) : null}
+
+                        {m.cenario.cartoes.map((c) => (
+                          <Link key={c.slug} href={c.rota} className="ia-destino no-underline">
+                            {c.imagem ? (
+                              <span className="ia-destino-capa">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={c.imagem} alt="" />
+                              </span>
+                            ) : null}
+                            <span className="ia-destino-texto">
+                              <span className="ia-destino-titulo">{c.titulo}</span>
+                              <span className="ia-destino-meta tipo-legenda">{c.porque}</span>
+                            </span>
+                            <span className="ia-destino-acao">Abrir</span>
+                          </Link>
+                        ))}
+
+                        <p className="ia-cenario-limite">
+                          <b>O que esta resposta não sustenta.</b> {m.cenario.naoSustenta}
+                        </p>
+                        <p className="ia-cenario-nota">
+                          Resposta escrita, não gerada por modelo. O que está em demonstração é
+                          a forma da resposta — leitura, critério, jornada e limite.
+                        </p>
+                      </div>
+                    ) : null}
+
                     {m.destino ? (
                       <a href={m.destino.href} className="ia-destino">
                         {m.destino.capa ? (
@@ -929,10 +1017,16 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
                   // COM ROTA, O CARTÃO NAVEGA. Os três cenários do briefing têm resposta
                   // escrita e pré-computada; preencher o compositor com eles mandaria a
                   // pergunta para a entrevista, que responde outra coisa.
-                  return s.rota ? (
-                    <Link key={s.id} href={s.rota} className="ia-sugestao no-underline">
+                  const cenario = cenarios.find((c) => c.id === s.id);
+                  return cenario ? (
+                    <button
+                      key={s.id}
+                      type="button"
+                      className="ia-sugestao"
+                      onClick={() => responderCenario(cenario)}
+                    >
                       {miolo}
-                    </Link>
+                    </button>
                   ) : (
                     <button
                       key={s.id}

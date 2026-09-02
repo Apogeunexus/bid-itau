@@ -226,3 +226,59 @@ export const CENARIOS_DE_IA: readonly CenarioDeIA[] = [
 export function cenarioDeIA(id: string): CenarioDeIA | undefined {
   return CENARIOS_DE_IA.find((c) => c.id === id);
 }
+
+
+// ---------------------------------------------------------------------------
+// O DTO que atravessa a fronteira RSC — só primitivo
+// ---------------------------------------------------------------------------
+
+export interface CartaoDoCenario {
+  slug: string;
+  titulo: string;
+  imagem: string | null;
+  creditoImagem: string | null;
+  porque: string;
+  rota: string;
+}
+
+export interface CenarioResolvido {
+  id: string;
+  persona: string;
+  prompt: string;
+  entendi: string;
+  criterios: CriterioLido[];
+  jornada: PassoDaJornada[];
+  cartoes: CartaoDoCenario[];
+  naoSustenta: string;
+}
+
+/**
+ * A RESOLUÇÃO ACONTECE NO BUILD, não no clique. `ia-conversa.tsx` é cliente e não pode
+ * alcançar o grafo (DP-F): se um evento citado sumir, é aqui que ele some, e o cartão
+ * simplesmente não desce. A conversa nunca fica esperando dado.
+ */
+export function cenariosResolvidos(
+  buscar: (slug: string) => { titulo: string; imagem?: string; creditoImagem?: string } | undefined,
+): CenarioResolvido[] {
+  return CENARIOS_DE_IA.map((c) => ({
+    id: c.id,
+    persona: c.persona,
+    prompt: c.prompt,
+    entendi: c.entendi,
+    criterios: [...c.criterios],
+    jornada: [...(c.jornada ?? [])],
+    naoSustenta: c.naoSustenta,
+    cartoes: c.sugestoes.flatMap((sg) => {
+      const e = buscar(sg.slug);
+      if (!e) return [];
+      return [{
+        slug: sg.slug,
+        titulo: e.titulo,
+        imagem: e.imagem ?? null,
+        creditoImagem: e.creditoImagem ?? null,
+        porque: sg.porque,
+        rota: `/evento/${sg.slug}/`,
+      }];
+    }),
+  }));
+}

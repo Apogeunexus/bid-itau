@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { ConversaDaIa } from "@/componentes/ia-conversa";
+import { cenariosResolvidos } from "@/dados/cenarios-ia";
 import { cidadesComAcervo } from "@/dados/cidade";
+import { porSlug } from "@/dados/grafo";
 import {
   COMPANHIAS,
   GOSTOS,
@@ -21,6 +23,8 @@ export const metadata: Metadata = { title: "Roteiros — Itaú Cultural" };
 export default function Ia() {
   const cidades = cidadesComAcervo();
   const sugestoes = sugestoesDaEstrelinha();
+  // Resolvido AQUI, no servidor: a conversa é cliente e não alcança o grafo (DP-F).
+  const cenarios = cenariosResolvidos((slug) => porSlug("evento", slug));
 
   return (
     <ConversaDaIa
@@ -34,6 +38,7 @@ export default function Ia() {
         total: c.total,
       }))}
       sugestoes={sugestoes}
+      cenarios={cenarios}
     />
   );
 }
