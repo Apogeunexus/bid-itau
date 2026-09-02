@@ -2386,3 +2386,78 @@ button.saldo-pilula {
   cursor: progress;
 }
 
+/* --- Brinde de missão ---------------------------------------------------- */
+
+/*
+ * O aviso de missão cumprida. Ver `componentes/brinde-de-missao.tsx`: o canal de
+ * efeitos do motor existia inteiro e ninguém assinava.
+ *
+ * `absolute` CONTRA A MOLDURA, nunca `fixed` (D-04): na visão mobile o telefone é
+ * uma caixa de 390×844 e qualquer coisa ancorada na janela escapa dela e ocupa a
+ * largura da tela inteira, destruindo a ilusão.
+ */
+.brinde-missao {
+  position: absolute;
+  z-index: 40;
+  left: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  box-shadow: var(--shadow-3);
+  animation: brinde-entra var(--dur-2) var(--ease-padrao);
+}
+
+/*
+ * A ALTURA MUDA COM A VISÃO porque a barra de abas muda de lado: em `mobile` ela é
+ * `sticky bottom: 0` e mede 60px, e um aviso colado no fundo nasceria por baixo
+ * dela. Na web a mesma barra está no topo, e o fundo está livre.
+ */
+[data-view="mobile"] .brinde-missao {
+  bottom: calc(60px + 0.75rem);
+}
+
+[data-view="web"] .brinde-missao {
+  bottom: 0.75rem;
+  left: auto;
+  width: min(22rem, calc(100% - 1.5rem));
+}
+
+.brinde-missao-selo {
+  color: var(--cor-acao);
+}
+
+.brinde-missao-ganho {
+  color: var(--cor-tinta-2);
+}
+
+.brinde-missao-fechar {
+  align-self: flex-start;
+  margin-top: 0.35rem;
+  color: var(--cor-tinta-3);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+@keyframes brinde-entra {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+/* O projeto zera movimento em `prefers-reduced-motion` (D-04); o aviso segue a
+ * mesma regra — ele aparece, só não desliza. */
+@media (prefers-reduced-motion: reduce) {
+  .brinde-missao {
+    animation: none;
+  }
+}

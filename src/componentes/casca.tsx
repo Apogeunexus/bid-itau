@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import type { ReactNode } from "react";
+import { BrindeDeMissao } from "@/componentes/brinde-de-missao";
 import { useVisao, type Visao } from "@/contexto/visao";
 
 const OPCOES: Array<{ valor: Visao; rotulo: string }> = [
@@ -99,6 +100,10 @@ export function Casca({ children }: { children: ReactNode }) {
             contra o telefone — sobreposta, sem rolar junto e sem `fixed` (D-03/D-04). */}
         <div className="moldura desk:w-full">
           <div className="moldura-rolagem">{children}</div>
+          {/* IRMÃO da rolagem, não filho: o aviso de missão precisa ficar preso ao
+              telefone enquanto a tela rola por baixo. Mesma âncora da gaveta, e
+              pelo mesmo motivo — `fixed` escaparia da moldura (D-04). */}
+          <BrindeDeMissao />
         </div>
       </div>
 
