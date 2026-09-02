@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { FichaDeAcessibilidade } from "@/componentes/ficha-acessibilidade";
 import { ICONE_FICHA, ICONE_MAPA, ICONE_RELOGIO } from "@/componentes/base/icones";
+import { SaidaParaParceiro } from "@/componentes/base/saida-para-parceiro";
 import { Grafismo } from "@/componentes/grafismo";
 import {
   ListaDeOcorrencias,
@@ -285,14 +286,12 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
           `rel="noreferrer"` e `target="_blank"` porque o destino é site de terceiro. */}
       {entidade.procedencia === "parceiro" && typeof entidade.extra?.fonteUrl === "string" ? (
         <div className="flex flex-col gap-1">
-          <a
-            href={entidade.extra.fonteUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao no-underline transition-opacity hover:opacity-90"
-          >
-            Reservar em {entidade.fonte} ↗
-          </a>
+          <SaidaParaParceiro
+            url={entidade.extra.fonteUrl}
+            instituicao={entidade.fonte ?? "a instituição"}
+            rotulo={`Reservar em ${entidade.fonte ?? "a instituição"} ↗`}
+            className="w-fit cursor-pointer rounded-full bg-acao px-4 py-2 text-left text-sm font-semibold text-sobre-acao transition-opacity hover:opacity-90"
+          />
           <p className="text-xs leading-snug text-tinta-2">
             A reserva é feita no site da instituição. Nós levamos até lá — a Fundação Itaú
             não transaciona ingresso.

@@ -1,6 +1,7 @@
 "use client";
 
 import { SaibaMais } from "@/componentes/base/saiba-mais";
+import { SaidaParaParceiro } from "@/componentes/base/saida-para-parceiro";
 import { useSessao } from "@/contexto/sessao";
 
 /**
@@ -271,14 +272,12 @@ export function ListaDeOcorrencias({
                       volta ao topo para achar como reservar — e numa lista de oito
                       sessões o botão do alto já saiu da tela. */}
                   {linkDeReserva ? (
-                    <a
-                      href={linkDeReserva}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-fit text-xs font-bold text-acao-tinta underline underline-offset-2"
-                    >
-                      Reservar {nomeDaFonte ? `em ${nomeDaFonte}` : "no site da instituição"} ↗
-                    </a>
+                    <SaidaParaParceiro
+                      url={linkDeReserva}
+                      instituicao={nomeDaFonte ?? "a instituição"}
+                      rotulo={`Reservar ${nomeDaFonte ? `em ${nomeDaFonte}` : "no site da instituição"} ↗`}
+                      className="w-fit cursor-pointer text-left text-xs font-bold text-acao-tinta underline underline-offset-2"
+                    />
                   ) : null}
 
                   {/* O texto deixa explícito O QUE foi salvo: a sessão, não o evento. É o

@@ -43,6 +43,22 @@ const INGRESSOS: IngressoAutorado[] = [
   },
 ];
 
+/**
+ * A cobertura de link, que é o primeiro KPI do produtor.
+ *
+ * MEDIDO, NÃO ESTIMADO: `dados/normalizado/eventos.json` traz `comIngresso` em 0 dos
+ * registros e NENHUM campo de URL de compra — a classe não tem o campo. Os dois links
+ * abaixo foram escritos pela curadoria e vivem fora do acervo, rotulados como tal.
+ *
+ * O painel do produtor abre por este número e não por cliques: com zero evento publicando
+ * link, um gráfico de saída mostraria zero e pareceria fracasso de audiência quando é
+ * ausência de cadastro.
+ */
+export const EVENTOS_COM_LINK_NO_ACERVO = 0;
+
+/** Os escritos pela curadoria para o fluxo ser demonstrável. Não são do acervo. */
+export const INGRESSOS_AUTORADOS = INGRESSOS.length;
+
 const POR_SLUG = new Map(INGRESSOS.map((i) => [i.eventoSlug, i]));
 
 /** O ingresso autorado de um evento, se este for um dos dois de demonstração. */

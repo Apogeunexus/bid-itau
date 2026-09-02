@@ -331,3 +331,137 @@
   overscroll-behavior: contain;
   padding-right: 0.25rem;
 }
+
+/* ---------------------------------------------------------------------------
+ * 5 · Os três livros e os três estados da medida — a V2 do painel de alcance.
+ *
+ * POR QUE UM BLOCO NOVO EM VEZ DE REUSAR `.org-falta`. A lista de faltas é
+ * binária por desenho: bloqueia ou não bloqueia, e a cor carrega essa única
+ * decisão. A medida do painel tem TRÊS estados — conta hoje, instrumentado sem
+ * coleta, recusado — e enfiar o terceiro numa gramática de dois faria «ainda não
+ * coleta» e «nunca vai medir» pintarem igual. Seria exatamente o empacotamento
+ * que a V2 existe para desfazer.
+ *
+ * O VALOR VEM PRIMEIRO E É O MAIOR. Numa tela de KPI lida a três metros, o
+ * número é a âncora; rótulo antes do número obriga a ler a frase para descobrir
+ * se há algo para ler. Quando não há coleta, o lugar do número não fica vazio:
+ * ele diz «sem coleta», em peso menor e em tinta 3 — um espaço em branco seria
+ * lido como zero, que é uma afirmação diferente.
+ *
+ * AS DUAS COLUNAS DENTRO DO LIVRO SÃO IGUAIS. «O que eu fiz» não é subordinada a
+ * «o que resultou»: dar a ela metade da largura diria visualmente que a
+ * atividade do produtor vale menos que o resultado dela, e a tela toma o cuidado
+ * oposto — é a coluna que nunca vira comparação entre pessoas.
+ * ------------------------------------------------------------------------- */
+
+.org-livro-ordem {
+  font-family: var(--fonte-display);
+  color: var(--cor-tinta-3);
+}
+
+.org-livro-colunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.org-livro-coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.org-livro-coluna-nome {
+  margin: 0;
+  font-size: var(--tipo-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
+
+.org-medidas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.org-medida {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--cor-borda-forte);
+  background: var(--cor-superficie-2);
+}
+
+/* O estado pinta a barra da esquerda, e só ela: a medida que conta é sólida, a
+ * que tem instrumento sem coleta é a mesma cor lavada, e a recusada é neutra. A
+ * recusa NÃO é alarme — ela é uma decisão tomada, e um vermelho ali faria a
+ * disciplina da tela parecer defeito. */
+.org-medida[data-estado="conta"] {
+  border-left-color: var(--cor-acao);
+}
+
+.org-medida[data-estado="instrumentado"] {
+  border-left-color: color-mix(in srgb, var(--cor-acao) 40%, var(--cor-borda));
+  background: var(--cor-superficie);
+}
+
+.org-medida[data-estado="recusado"] {
+  border-left-style: dashed;
+  background: transparent;
+}
+
+.org-medida-valor {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Sem coleta não é zero. O peso cai e a tinta recua, para o lugar do número
+ * continuar ocupado sem afirmar uma quantidade que ninguém contou. */
+.org-medida-valor[data-vazio="sim"] {
+  font-family: inherit;
+  font-size: var(--tipo-detalhe);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--cor-tinta-3);
+}
+
+.org-medida-rotulo {
+  font-size: var(--tipo-detalhe);
+  line-height: 1.4;
+}
+
+.org-medida-de {
+  font-size: var(--tipo-micro);
+  color: var(--cor-tinta-3);
+}
+
+.org-estado {
+  align-self: flex-start;
+  font-size: var(--tipo-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-tinta-3);
+}
+
+.org-estado[data-estado="conta"] {
+  color: var(--cor-acao-tinta);
+}
+
+/* Abaixo de 1024px as duas colunas do livro viram uma. Elas nunca somem: o
+ * livro sem a coluna «o que eu fiz» vira um painel de resultado, que é
+ * justamente a leitura que a separação existe para impedir. */
+@media (max-width: 64rem) {
+  .org-livro-colunas {
+    grid-template-columns: 1fr;
+  }
+}

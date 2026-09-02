@@ -1341,3 +1341,31 @@ body {
   min-width: 0;
   flex: 0 1 auto;
 }
+
+/* O endereço de destino, para a pessoa ver PARA ONDE vai antes de ir. */
+.saida-dominio {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+/* A confirmação é a ação primária do diálogo: laranja cheio, como manda a regra de que
+   laranja é AÇÃO. «Ficar aqui» fica no cabeçalho, com peso de saída, não de escolha. */
+.saida-confirmar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  padding: var(--espaco-cartao);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.saida-confirmar:hover {
+  filter: brightness(1.06);
+}
