@@ -41,6 +41,25 @@ export const ICONE_DESCOBRIR = (
   </Icone>
 );
 
+/**
+ * O sino dos avisos.
+ *
+ * NASCEU FORA DO CONJUNTO, e apareceu: escrito como `<svg>` cru, ele ignorava o `Icone` e
+ * o `traco` que todos os outros usam — renderizava a 34px contra os 24 da lupa e do
+ * perfil, com traço de 1,75 contra 1,7, e ocupava a caixa inteira do botão em vez da
+ * malha. Ao lado dos irmãos parecia outro peso de desenho, porque era.
+ *
+ * O corpo cabe entre y=4 e y=17 e a boca entre x=5 e x=19, que é a mesma área de tinta
+ * dos demais (~15 de 24). O badalo é um arco curto embaixo — sem ele o sino vira um
+ * chapéu.
+ */
+export const ICONE_SINO = (
+  <Icone>
+    <path d="M17 10.5a5 5 0 1 0-10 0c0 4-1.5 5-1.5 5h13s-1.5-1-1.5-5" {...traco} />
+    <path d="M10.6 18.2a1.6 1.6 0 0 0 2.8 0" {...traco} />
+  </Icone>
+);
+
 export const ICONE_BUSCAR = (
   <Icone>
     <circle cx="11" cy="11" r="6.5" {...traco} />

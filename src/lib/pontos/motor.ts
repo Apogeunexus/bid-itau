@@ -32,6 +32,7 @@ import {
   marcarRiscoSePreciso,
   sequenciaInicial,
 } from "./sequencia";
+import type { Resgate } from "./tipos";
 import type { Veredito } from "./validacao";
 import type {
   ArquivoDaProva,
@@ -713,15 +714,129 @@ export class Motor {
 
     // Entregas andam com o tempo: um resgate parado em «resgatado» para sempre é
     // um beco — a tela promete cinco etapas e mostra uma.
+    //
+    // A ESTEIRA PARA EM «ENTREGUE», e não avança sozinha para «confirmado». «Entregue» é
+    // o produtor dizendo que despachou; quem sabe se chegou é quem esperava. Deixar o
+    // relógio confirmar por ela transformaria a confirmação em formalidade e apagaria
+    // justamente o caso que ela existe para pegar — o ingresso que não chegou.
     const FASES = ["resgatado", "processando", "separado", "enviado", "entregue"] as const;
     for (const resgate of s.resgates) {
-      const indice = FASES.indexOf(resgate.fase);
+      const indice = FASES.indexOf(resgate.fase as (typeof FASES)[number]);
+      if (indice < 0) continue; // já confirmado ou contestado: fora da esteira
       const avanco = Math.min(FASES.length - 1, indice + dias);
       resgate.fase = FASES[avanco];
     }
 
     this.confirmar(efeitos);
     return efeitos;
+  }
+
+  /**
+   * Anda UM passo na esteira de cada entrega que ainda não chegou.
+   *
+   * A ESTEIRA ESTAVA MORTA. `avancarDias` move as entregas junto com o resto do relógio,
+   * mas nada no aplicativo chama `avancarDias` — só as suítes. Na prática, um resgate
+   * ficava parado em «Resgatado» para sempre: a carteira prometia cinco etapas e mostrava
+   * uma, e a confirmação de recebimento — que só existe depois de «entregue» — era
+   * inalcançável sem editar o `localStorage` na mão.
+   *
+   * Quem chama é o provedor, num intervalo. Não é o relógio do mundo: é a encenação da
+   * logística que este protótipo precisa ter para o fluxo existir de ponta a ponta.
+   * Devolve `true` quando alguma coisa mudou, para o provedor não notificar à toa.
+   */
+  avancarEntregas(): boolean {
+    const FASES = ["resgatado", "processando", "separado", "enviado", "entregue"] as const;
+    let mudou = false;
+    for (const resgate of this.estado.resgates) {
+      const i = FASES.indexOf(resgate.fase as (typeof FASES)[number]);
+      if (i < 0 || i === FASES.length - 1) continue; // fora da esteira, ou já entregue
+      resgate.fase = FASES[i + 1];
+      mudou = true;
+    }
+    if (mudou) this.confirmar([]);
+    return mudou;
+  }
+
+  /* ── A entrega, vista por quem recebeu ──────────────────────────────────── */
+
+  /**
+   * Os resgates que estão esperando uma palavra da pessoa.
+   *
+   * É a fonte do contador do sino no cabeçalho e da tela de notificações. Só «entregue»
+   * entra: antes disso não há o que confirmar, e depois disso já houve resposta.
+   */
+  aguardandoConfirmacao(): Resgate[] {
+    return this.estado.resgates.filter((r) => r.fase === "entregue");
+  }
+
+  /** Chamados que a pessoa abriu e ainda não tiveram decisão. */
+  chamadosEmAberto(): Resgate[] {
+    return this.estado.resgates.filter((r) => r.chamado?.estado === "aberto");
+  }
+
+  /** «Recebi». Fecha a esteira e não mexe em saldo — a ficha já foi gasta e valeu. */
+  confirmarRecebimento(resgateId: string): void {
+    const resgate = this.estado.resgates.find((r) => r.id === resgateId);
+    if (!resgate || resgate.fase !== "entregue") return;
+    resgate.fase = "confirmado";
+    this.confirmar([]);
+  }
+
+  /**
+   * «Não recebi». Abre o chamado e NÃO devolve nada ainda — a devolução é o fechamento.
+   *
+   * `relato` vazio é recusado: um chamado sem o que a pessoa contou chega à fila como
+   * «não chegou» e ninguém consegue decidir. Quem chama já valida na tela; esta guarda
+   * existe porque o motor é a última fronteira antes do estado.
+   */
+  contestarEntrega(resgateId: string, relato: string): boolean {
+    const resgate = this.estado.resgates.find((r) => r.id === resgateId);
+    if (!resgate || resgate.fase !== "entregue") return false;
+    const texto = relato.trim();
+    if (!texto) return false;
+    resgate.fase = "contestado";
+    resgate.chamado = { aberto: this.estado.agora, relato: texto, estado: "aberto" };
+    this.confirmar([]);
+    return true;
+  }
+
+  /**
+   * A decisão de quem apura, e é AQUI que a ficha volta.
+   *
+   * `devolver` verdadeiro credita de novo o preço da recompensa e emite a concessão, para
+   * que a devolução apareça no extrato com motivo — um saldo que muda sem linha no
+   * extrato é o defeito que a carteira inteira existe para não ter.
+   */
+  fecharChamado(resgateId: string, devolver: boolean, decisao: string): void {
+    const resgate = this.estado.resgates.find((r) => r.id === resgateId);
+    if (!resgate?.chamado || resgate.chamado.estado !== "aberto") return;
+
+    resgate.chamado.estado = devolver ? "devolvido" : "negado";
+    resgate.chamado.fechado = this.estado.agora;
+    resgate.chamado.decisao = decisao;
+
+    if (devolver) {
+      /* A DEVOLUÇÃO ENTRA NO LIVRO, pelo mesmo caminho do débito que a criou — crédito de
+         ficha com motivo escrito. Mexer no saldo por fora deixaria a carteira com um
+         número que o extrato não explica, que é o defeito que a carteira existe para não
+         ter. O valor é o MESMO `custo` cobrado no resgate, lido do catálogo. */
+      const recompensa = this.dados.recompensas.find((r) => r.id === resgate.recompensaId);
+      const custo = recompensa?.custo ?? 0;
+      if (custo > 0) {
+        /* `eventoOrigemId` aponta para o RESGATE que está sendo desfeito, e não para um
+           evento novo: é o que liga as duas linhas do extrato — o débito de lá e o
+           crédito de cá — e o que permite responder «por que este saldo voltou». */
+        const linha = novaLinha(this.estado, {
+          ativo: "ficha",
+          valor: custo,
+          sentido: "credito",
+          motivo: `Devolução: ${recompensa?.titulo ?? "resgate"} não recebido`,
+          eventoOrigemId: resgate.id,
+        });
+        this.estado.livro.push(linha);
+      }
+    }
+    this.confirmar([]);
   }
 
   /** A chave da semana corrente — usada pelo rótulo da tela de sequência. */

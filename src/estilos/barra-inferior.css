@@ -35,21 +35,19 @@
 /* A troca de persona vinha no rodapé do menu lateral. Sem menu ela não teria
  * mais onde existir — e a demonstração inteira depende de alternar entre as
  * três ao vivo. */
-/* ---- A conta: um ícone no topo, e o menu que ele abre ----
+/* ---- A conta e a busca: dois alvos de ação no cabeçalho ----
  *
- * Era o NOME DA PERSONA numa pílula. O nome saiu em 23/08: ele gastava a única
- * linha do cabeçalho com um dado de demonstração, e o que a pessoa quer ali é a
- * porta para o que é dela. O menu carrega o que era a seção «Sua conta» no fim
- * de /apps — salvos, repertório e perfil —, e o nome continua dentro dele.
- *
- * O menu posiciona ABSOLUTO contra `.barra-conta`, que é o único elemento
- * posicionado nesta vizinhança: `fixed` se ancoraria na janela e escaparia da
- * moldura de 390px (D-03). */
-[data-view="mobile"] .barra-conta {
-  position: relative;
-  flex: none;
-}
+ * O ícone da conta já abriu um MENU aqui — seis atalhos e o seletor de tema, numa gaveta
+ * absoluta contra `.barra-conta`. A gaveta saiu: o avatar virou link para `/meu`, onde
+ * aquela lista tem espaço para ser uma tela com nível e saldos em vez de rótulos
+ * empilhados sobre o conteúdo. Com ela saíram `.barra-conta`, `.barra-conta-menu` e as
+ * quatro classes dos itens. */
 
+/* A LUPA E O BOTÃO DA CONTA SÃO O MESMO OBJETO com conteúdo diferente: dois alvos de
+   ação no cabeçalho, lado a lado. Uma segunda regra copiada divergiria da primeira na
+   próxima mudança de token — que é como um dos dois acabaria 2px menor que o outro. */
+[data-view="mobile"] .barra-busca,
+[data-view="mobile"] .barra-sino,
 [data-view="mobile"] .barra-conta-botao {
   display: flex;
   align-items: center;
@@ -65,63 +63,61 @@
     color var(--dur-1) var(--ease-padrao);
 }
 
+[data-view="mobile"] .barra-busca:hover,
+[data-view="mobile"] .barra-sino:hover,
 [data-view="mobile"] .barra-conta-botao:hover,
-[data-view="mobile"] .barra-conta-botao[aria-expanded="true"] {
+[data-view="mobile"] .barra-conta-botao[aria-current="page"] {
   border-color: var(--cor-acao);
   color: var(--cor-acao-tinta);
 }
 
+[data-view="mobile"] .barra-busca:focus-visible,
+[data-view="mobile"] .barra-sino:focus-visible,
 [data-view="mobile"] .barra-conta-botao:focus-visible {
   outline: 2px solid var(--cor-foco);
   outline-offset: 2px;
 }
 
-[data-view="mobile"] .barra-conta-menu {
+/* O SELO DO SINO ancora nele, e por isso o sino é `relative`. O número fica no canto
+   superior direito, meio para fora — é a posição que o olho já procura, e sair um pouco
+   do alvo é o que o separa do traço do ícone. */
+[data-view="mobile"] .barra-sino {
+  position: relative;
+}
+
+/* O SELO ENCOLHEU E ENCOSTOU NO CANTO.
+ *
+ * Ele nasceu com 16px de caixa sobre um botão de 36 — 44% do alvo — e sobrando 3px para
+ * fora de cada lado. O efeito era um selo que competia com o próprio sino em vez de
+ * anotá-lo, e que parecia solto, colado por cima. Agora a caixa é do corpo de legenda
+ * (12px), o número é micro, e o canto é o canto: o selo apoia na borda do botão em vez de
+ * flutuar fora dela. O anel de 1px basta para separá-lo do traço por baixo — 2px, na
+ * caixa menor, virava metade da moldura. */
+/* O PONTO DO SINO — 8px, sem número dentro.
+ *
+ * O selo já carregou «1» e «9+». Em 16px era 44% do botão de 36; em 12, 33% — e em
+ * qualquer medida que coubesse um dígito legível ele competia com o ícone em vez de
+ * anotá-lo. O ponto resolve o trabalho que é dele: dizer que existe algo esperando. A
+ * contagem vive no `aria-label` do link e por extenso na tela de avisos.
+ *
+ * O anel na cor da barra o separa do traço do sino por baixo — sem ele, laranja sobre o
+ * contorno claro do ícone vira uma mancha só. */
+[data-view="mobile"] .barra-sino-ponto {
   position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  inline-size: 15rem;
-  padding: 0.5rem;
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-g);
-  background: var(--cor-superficie);
-  box-shadow: var(--sombra-3);
-  transform-origin: top right;
+  /* NO CANTO, e não a 8px de cada borda — ali ele caía dentro do desenho do sino e lia
+     como uma bola pintada no meio do ícone, não como aviso. */
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  inline-size: var(--espaco-pilha);
+  block-size: var(--espaco-pilha);
+  border-radius: var(--raio-pilula);
+  box-shadow: 0 0 0 1px var(--cor-superficie);
+  background: var(--cor-acao);
 }
 
-[data-view="mobile"] .barra-conta-persona {
-  padding: 0.25rem 0.5rem;
-  color: var(--cor-tinta-3);
-}
 
-[data-view="mobile"] .barra-conta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  border-radius: var(--raio-m);
-  transition: background var(--dur-1) var(--ease-padrao);
-}
-
-[data-view="mobile"] .barra-conta-item:hover {
-  background: var(--cor-superficie-2);
-}
-
-[data-view="mobile"] .barra-conta-rotulo {
-  color: var(--cor-tinta);
-  font-weight: 700;
-}
-
-[data-view="mobile"] .barra-conta-descricao {
-  color: var(--cor-tinta-3);
-}
-
-/* A escolha de tema mora no fim do menu, separada por um fio: ela não é um
-   destino como os três de cima, é uma preferência da interface. */
+/* A escolha de tema mora no fim da tela de perfil desde que a gaveta da conta saiu do
+   cabeçalho. A folha continua aqui porque a classe é do chrome, não do perfil. */
 .seletor-tema {
   display: flex;
   flex-direction: column;

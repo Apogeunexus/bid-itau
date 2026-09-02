@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { Moeda } from "@/componentes/pontos-base";
 import { usePontos } from "@/contexto/pontos";
 import { FAMILIAS, recompensasDaFamilia } from "@/dados/recompensas";
+import { ComoRetirar } from "@/componentes/como-retirar";
 import type { RecompensaDefinida } from "@/lib/pontos/tipos";
 
 const ROTULO_DA_ENTREGA: Record<RecompensaDefinida["entrega"], string> = {
@@ -145,14 +146,7 @@ function FolhaDoItem({
           )}
 
           {feito ? (
-            <>
-              <p className="aviso" data-tom="acao">
-                Resgatado. A entrega já está na sua carteira, com as cinco etapas.
-              </p>
-              <Link href="/meu/carteira/" className="botao-acao no-underline">
-                Acompanhar a entrega
-              </Link>
-            </>
+            <ComoRetirar recompensa={recompensa} />
           ) : (
             <>
               {erro && (

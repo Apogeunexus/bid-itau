@@ -112,6 +112,26 @@ export interface FiltrosProps {
   numeros: NumerosDosFiltros;
 }
 
+/**
+ * As duas opções de ingresso.
+ *
+ * SEM CONTAGEM E SEM NOTA, por decisão de produto (01.09) — as duas estiveram aqui e
+ * saíram a pedido. Fica registrado o que elas diziam, porque a medição continua valendo e
+ * quem for mexer neste bloco precisa saber: `Ocorrencia.gratuito` é a NEGAÇÃO de um campo
+ * de ingresso que nenhum dos 300 eventos preenche, então as 2.425 ocorrências do acervo
+ * saem todas gratuitas. Na prática «Gratuito» passa tudo que é datado e «Pago» devolve
+ * vazio. Os números seguem medidos em `GRATUIDADE_MEDIDA`, em `frase.ts`.
+ */
+const OPCOES_DE_INGRESSO = [
+  { valor: "gratuito" as const, rotulo: "Gratuito" },
+  { valor: "pago" as const, rotulo: "Pago" },
+];
+
+const ROTULO_DE_INGRESSO: Record<"gratuito" | "pago", string> = {
+  gratuito: "Gratuito",
+  pago: "Pago",
+};
+
 export function Filtros({
   estados,
   indice,
@@ -127,6 +147,8 @@ export function Filtros({
   const [criterios, setCriterios] = useState<Criterio[]>([]);
   const [todasAsLinguagens, setTodasAsLinguagens] = useState(false);
   const [ufEscolhida, setUfEscolhida] = useState("");
+  /** Escolha única, e `null` é «qualquer ingresso» — o estado em que a tela abre. */
+  const [ingresso, setIngresso] = useState<"gratuito" | "pago" | null>(null);
   const [municipioEscolhido, setMunicipioEscolhido] = useState("");
 
   // ---- as estruturas de leitura do DTO, montadas UMA vez --------------------
@@ -483,7 +505,44 @@ export function Filtros({
       {/* ------------------------------------------------------------------ */}
       <div className="filtros-saida" data-coluna-saida>
       {/* ---------------------------------------------------------------- */}
-      {/* 4. O que o acervo NÃO sustenta (D-90)                             */}
+      {/* 4. Ingresso — e o que o acervo NÃO sustenta (D-90)                */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="filtros-bloco" data-bloco="ingresso">
+        <h2 className="filtros-bloco-titulo">Ingresso</h2>
+
+        <p className="filtros-bloco-linha">Gratuito ou pago, com o que o acervo declara.</p>
+
+        {/* MESMA GAVETA DA ACESSIBILIDADE, e não um controle novo: os dois são «marque o
+            que você quer» dentro desta tela, e duas formas para a mesma operação fariam a
+            segunda parecer outra coisa. */}
+        <details className="filtros-gaveta">
+          <summary className="filtros-gaveta-topo">
+            <span className="filtros-gaveta-rotulo">
+              {ingresso ? ROTULO_DE_INGRESSO[ingresso] : "Qualquer ingresso"}
+            </span>
+          </summary>
+
+          <ul className="filtros-dimensoes">
+            {OPCOES_DE_INGRESSO.map((o) => (
+              <li key={o.valor} className="filtros-dimensao" data-ingresso={o.valor}>
+                {/* Tocar de novo no que já está marcado DESMARCA — é escolha única, e sem
+                    isso não haveria como voltar para «qualquer ingresso». */}
+                <button
+                  type="button"
+                  aria-pressed={ingresso === o.valor}
+                  className="filtros-marcavel"
+                  onClick={() => setIngresso((atual) => (atual === o.valor ? null : o.valor))}
+                >
+                  <span className="filtros-marcavel-caixa" aria-hidden />
+                  <span className="filtros-marcavel-rotulo">{o.rotulo}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </details>
+
+      </section>
+
       
       {/* ---------------------------------------------------------------- */}
       {/* 5. O recorte, aqui mesmo — e o que NÃO viaja para /buscar         */}

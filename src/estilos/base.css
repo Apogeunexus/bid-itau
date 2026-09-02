@@ -925,6 +925,158 @@ body {
   font-weight: 700;
 }
 
+/* ---------------------------------------------------------------------------
+ * A disposição em DROPDOWN — a variante de dentro de uma caixa.
+ *
+ * O banner logo abaixo é o topo de Descobrir, onde as opções correm num trilho que
+ * encosta na borda da tela. Dentro do cartão do perfil aquele trilho sangrava pela borda
+ * arredondada e a última opção nascia cortada. Aqui a lista é VERTICAL: cinco rótulos
+ * longos cabem inteiros, e cada linha carrega a própria marca — que é o que diz, sem cor
+ * e sem contagem, que dá para escolher mais de um.
+ * ------------------------------------------------------------------------- */
+
+.disposicao-campo {
+  display: flex;
+  flex-direction: column;
+}
+
+.disposicao-gaveta {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+/* O resumo é o alvo de toque e precisa do tamanho de dedo dos outros campos da tela.
+   `list-style: none` mais o `::-webkit-details-marker` matam o triângulo do navegador —
+   ele não acompanha o tema e aparece cinza do sistema sobre o fundo escuro. */
+.disposicao-gaveta-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-pilha);
+  min-block-size: 2.75rem;
+  padding: var(--espaco-cartao);
+  cursor: pointer;
+  list-style: none;
+}
+
+.disposicao-gaveta-texto {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+/* Gira meia volta ao abrir. `transition` no `rotate` e não no `transform`: o resumo não
+   tem outra transformação, e animar a propriedade específica evita brigar com qualquer
+   uma que venha depois. */
+.disposicao-gaveta-seta {
+  flex: none;
+  color: var(--cor-tinta-3);
+  transition: rotate var(--dur-1) var(--ease-padrao);
+}
+
+.disposicao-gaveta[open] .disposicao-gaveta-seta {
+  rotate: 180deg;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disposicao-gaveta-seta {
+    transition: none;
+  }
+}
+
+.disposicao-gaveta-topo::-webkit-details-marker {
+  display: none;
+}
+
+.disposicao-gaveta-topo:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.disposicao-gaveta-rotulo {
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.disposicao-gaveta-valor {
+  font-weight: 600;
+}
+
+.disposicao-opcoes {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+.disposicao-opcao {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-pilha);
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+  padding: var(--espaco-pilha) var(--espaco-cartao);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.disposicao-opcao:hover {
+  background: var(--cor-superficie-2);
+}
+
+.disposicao-opcao:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: -2px;
+}
+
+/* A MARCA É QUADRADA, e não redonda: redondo é a forma de escolha única em quase toda
+   interface, e aqui dá para marcar quantas quiser. */
+/* A MARCA MEDE O CORPO DE LEGENDA, e não um número próprio: ela acompanha uma linha de
+   texto, então cresce e encolhe com a tipografia em vez de descolar dela. */
+.disposicao-opcao-marca {
+  flex: none;
+  inline-size: var(--tipo-corpo);
+  block-size: var(--tipo-corpo);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-p);
+}
+
+.disposicao-opcao[aria-pressed="true"] .disposicao-opcao-marca {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao);
+}
+
+.disposicao-opcao-rotulo {
+  min-inline-size: 0;
+}
+
+.disposicao-opcao-aviso {
+  padding: 0 var(--espaco-cartao) var(--espaco-pilha);
+  color: var(--cor-tinta-2);
+}
+
+.disposicao-limpar {
+  margin: 0 var(--espaco-cartao) var(--espaco-cartao);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-tinta-3);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
 .disposicao-banner {
   display: flex;
   flex-direction: column;

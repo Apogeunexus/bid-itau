@@ -5,7 +5,6 @@ import { Moeda } from "@/componentes/pontos-base";
 import { usePontos } from "@/contexto/pontos";
 import {
   FAMILIAS,
-  RECOMPENSAS,
   capaDaFamilia,
   contagemPorFamilia,
   recompensasEmDestaque,
@@ -109,7 +108,7 @@ export function RecompensasCapa() {
       </section>
 
       <Link href="/recompensas/catalogo/" className="botao-acao no-underline">
-        Ver as {RECOMPENSAS.length} recompensas
+        Ver loja completa
       </Link>
     </div>
   );

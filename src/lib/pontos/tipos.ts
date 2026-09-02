@@ -454,13 +454,42 @@ export type FaseDoResgate =
   | "processando"
   | "separado"
   | "enviado"
-  | "entregue";
+  | "entregue"
+  /* DEPOIS DE «ENTREGUE» VEM QUEM RECEBEU. «Entregue» é o produtor dizendo que despachou;
+     só a pessoa sabe se chegou. Sem estes dois, a esteira terminava na palavra de uma das
+     partes — e um ingresso que não chegou ficava marcado como entregue para sempre. */
+  | "confirmado"
+  | "contestado";
+
+/**
+ * O chamado aberto quando a pessoa diz que NÃO recebeu.
+ *
+ * ELE NÃO DEVOLVE AS FICHAS SOZINHO. A devolução acontece quando o chamado FECHA a favor
+ * de quem abriu — decisão de produto (01.09) —, e a tela promete resposta em até 24h. O
+ * caminho contrário seria devolver na hora e cobrar de volta se a apuração mostrasse que
+ * a entrega chegou; estornar saldo já gasto é pior do que esperar um dia.
+ *
+ * `relato` é escrito pela pessoa e é o que o produtor lê. Sem ele o chamado é «não
+ * chegou» sem nada para apurar, e a fila de moderação recebe um item que ninguém
+ * consegue decidir.
+ */
+export interface ChamadoDeEntrega {
+  aberto: number;
+  /** O que a pessoa contou. Obrigatório: é o conteúdo do chamado. */
+  relato: string;
+  estado: "aberto" | "devolvido" | "negado";
+  /** Quando fechou, e com que motivo escrito por quem decidiu. */
+  fechado?: number;
+  decisao?: string;
+}
 
 export interface Resgate {
   id: string;
   recompensaId: string;
   fase: FaseDoResgate;
   em: number;
+  /** Aberto quando a pessoa contesta a entrega. Ver `ChamadoDeEntrega`. */
+  chamado?: ChamadoDeEntrega;
 }
 
 /* ── Efeitos ─────────────────────────────────────────────────────────────── */

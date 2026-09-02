@@ -186,34 +186,151 @@
 
 /* --- Esteira de entrega ------------------------------------------------- */
 
+/* A BARRA MOSTRA O PROGRESSO; O TEXTO DIZ ONDE ESTÁ.
+ *
+ * As cinco etapas vinham escritas embaixo dos cinco segmentos, em colunas de `1fr`. Em
+ * 390px são ~66px por coluna e «Processando» não cabe: as palavras transbordavam a
+ * coluna e colidiam com as vizinhas. Agora os segmentos são só barra, e o rótulo é uma
+ * linha que sempre cabe porque é uma frase, não cinco palavras espremidas. */
 .esteira {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+}
+
+.esteira-barra {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.25rem;
 }
 
-.esteira-etapa {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  font-size: var(--tipo-legenda);
-  color: var(--cor-tinta-3);
-  text-align: center;
-}
-
 .esteira-trilho {
   height: 0.3rem;
-  border-radius: 999px;
+  border-radius: var(--raio-pilula);
   background: var(--cor-borda);
 }
 
-.esteira-etapa[data-alcancada="sim"] .esteira-trilho {
+.esteira-trilho[data-alcancada="sim"] {
   background: var(--cor-acao);
 }
 
-.esteira-etapa[data-alcancada="sim"] {
-  color: var(--cor-tinta);
+.esteira-rotulo {
+  color: var(--cor-tinta-2);
+  font-weight: 600;
+}
+
+/* ---- Como retirar: o passo entre gastar a ficha e receber ---------------
+ *
+ * O resgate não é a retirada. Este bloco é o passo do meio — abrir o link e aplicar o
+ * cupom —, e sem ele a confirmação de recebimento pergunta sobre uma entrega que nunca
+ * teve como acontecer. Ver o cabeçalho de `ComoRetirar`. */
+
+.retirada {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-cartao);
+}
+
+.retirada-passos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  margin: 0;
+  padding-inline-start: var(--espaco-secao);
+  font-size: var(--tipo-detalhe);
+  color: var(--cor-tinta-2);
+}
+
+/* O CÓDIGO EM MONOESPAÇADA E EM CAIXA PRÓPRIA: ele é para ser lido caractere a caractere
+   por quem não puder copiar, e uma fonte proporcional embaralha 0/O e 1/l. */
+.retirada-cupom {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-pilha) var(--espaco-cartao);
+  border: 1px dashed var(--cor-acao);
+  border-radius: var(--raio-m);
+  background: var(--cor-acao-lavada);
+}
+
+.retirada-codigo {
+  flex: 1;
+  min-inline-size: 0;
+  font-family: var(--fonte-mono, ui-monospace, monospace);
+  font-size: var(--tipo-detalhe);
   font-weight: 700;
+  letter-spacing: 0.06em;
+  overflow-wrap: anywhere;
+}
+
+.retirada-copiar {
+  flex: none;
+  min-block-size: 2.75rem;
+  padding-inline: var(--espaco-cartao);
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie);
+  color: var(--cor-acao-tinta);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.retirada-copiar:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* A linha do eco existe SEMPRE, com espaço rígido quando vazia: se ela aparecesse só ao
+   copiar, o bloco inteiro pularia dois pixels a cada toque. */
+.retirada-eco {
+  min-block-size: var(--tipo-corpo);
+  color: var(--cor-acao-tinta);
+}
+
+.retirada-secundario {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  padding-inline: var(--espaco-secao);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pilula);
+  color: inherit;
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+}
+
+/* ---- A confirmação dentro do cartão da carteira ------------------------- */
+
+/* O CARTÃO QUE ESPERA VOCÊ GANHA BORDA DE AÇÃO. Numa lista de entregas, é o que separa
+   «isto pede uma resposta sua» de «isto está a caminho» sem precisar de mais texto. */
+.cartao[data-fase-do-resgate="entregue"] {
+  border-color: var(--cor-acao);
+}
+
+.resgate-confirmacao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  padding-block-start: var(--espaco-pilha);
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+.resgate-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-pilha);
+}
+
+.resgate-estado {
+  padding-inline-start: var(--espaco-pilha);
+  border-inline-start: 2px solid var(--cor-borda-forte);
+  color: var(--cor-tinta-2);
+}
+
+.resgate-estado[data-estado="apuracao"] {
+  border-inline-start-color: var(--cor-acao);
 }
 
 /* --- Recompensas ------------------------------------------------------------ */
@@ -1544,6 +1661,384 @@
 .missao-ver:hover,
 .missao-ver:focus-visible {
   background: var(--cor-acao-tinta);
+}
+
+/* ---------------------------------------------------------------------------
+ * A TELA DE PERFIL — «onde eu estou» antes de «para onde ir».
+ *
+ * Três pesos, e a diferença entre eles é o conteúdo da tela: o TOPO diz quem a pessoa é,
+ * as duas PORTAS dizem o que ela vem fazer aqui — ganhar e gastar —, e a LISTA embaixo é
+ * o resto, que é destino legítimo e não decisão de primeira ordem. Antes os três tinham o
+ * mesmo tamanho, e uma tela em que tudo pesa igual não tem hierarquia nenhuma.
+ * ------------------------------------------------------------------------- */
+
+.perfil-resumo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-cartao);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+/* O SELO À ESQUERDA, O TEXTO À DIREITA. A arte é quadrada e é o retrato da tela — dar a
+   ela uma coluna própria é o que impede o texto de a espremer quando o nome do nível é
+   longo («Colecionador de olhares» tem 23 caracteres). */
+.perfil-identidade {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-cartao);
+}
+
+.perfil-identidade-vazia,
+.perfil-porta-vazia {
+  display: block;
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+}
+
+.perfil-identidade-vazia {
+  block-size: 5.5rem;
+}
+
+.perfil-porta-vazia {
+  block-size: 6rem;
+}
+
+.perfil-selo {
+  display: flex;
+  flex: none;
+}
+
+/* 4.5rem: grande o bastante para a arte ser lida como arte — abaixo disso as 18 viram a
+   mesma mancha — e pequena o bastante para o bloco caber sem rolagem em 390px. */
+.perfil-selo .selo-nivel {
+  inline-size: 4.5rem;
+  block-size: 4.5rem;
+}
+
+.perfil-identidade-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-inline-size: 0;
+  flex: 1;
+}
+
+.perfil-nome {
+  font-weight: 700;
+}
+
+.perfil-nivel {
+  font-weight: 600;
+  color: var(--cor-acao-tinta);
+}
+
+.perfil-falta {
+  color: var(--cor-tinta-2);
+}
+
+/* Os saldos ganham um fio acima: eles somam a mesma pessoa do bloco de cima, mas são
+   outra unidade — sem a linha, os cinco números da caixa leem como uma lista só. */
+.perfil-saldos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-secao);
+  padding-block-start: var(--espaco-cartao);
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+.perfil-saldo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+/* No cabeçalho do app este número cabe em 27px de pílula; aqui ele é o assunto, e o corpo
+   de título é o que diz isso sem precisar de rótulo em negrito. */
+.perfil-saldo-numero {
+  font-size: var(--tipo-titulo-2);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.perfil-saldo-rotulo {
+  color: var(--cor-tinta-2);
+}
+
+/* ---- As duas portas: número primeiro ------------------------------------
+ *
+ * `1fr 1fr` e não `auto-fit`: são exatamente duas, sempre, e `auto-fit` as empilharia em
+ * larguras estreitas — duas portas irmãs uma embaixo da outra perdem a comparação que
+ * lado a lado é imediata. `align-items: stretch` do grid garante a mesma altura mesmo
+ * quando um rótulo quebra linha e o outro não, que era o desalinho da primeira versão. */
+.perfil-portas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espaco-pilha);
+}
+
+.perfil-porta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: inherit;
+  transition:
+    border-color var(--dur-1) var(--ease-padrao),
+    background var(--dur-1) var(--ease-padrao);
+}
+
+.perfil-porta:hover {
+  border-color: var(--cor-acao);
+  background: var(--cor-acao-lavada);
+}
+
+.perfil-porta:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* O NÚMERO É O CONTEÚDO. Estas duas caixas traziam três linhas de descrição cada, com
+   comprimentos diferentes — dois irmãos de alturas diferentes, defeito que se vê antes de
+   se ler. O que a pessoa vem conferir é o número; a explicação ela teve na primeira vez. */
+.perfil-porta-numero {
+  font-size: var(--tipo-titulo-1);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cor-acao-tinta);
+}
+
+/* «de 3» acompanha o número em corpo de texto: no mesmo tamanho ele viraria parte da
+   contagem e a leitura de relance seria «2 de 3» como um número só. */
+.perfil-porta-de {
+  font-size: var(--tipo-detalhe);
+  font-weight: 600;
+  color: var(--cor-tinta-2);
+}
+
+.perfil-porta-rotulo {
+  font-weight: 700;
+}
+
+.perfil-porta-linha {
+  color: var(--cor-tinta-3);
+}
+
+/* ---- O resto, em lista ---------------------------------------------------
+ *
+ * Um fio entre os itens, e não uma moldura em cada: sete cartões com borda própria eram
+ * sete objetos disputando atenção; uma lista com fio é UM objeto com sete linhas. */
+.perfil-lista {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-g);
+  overflow: hidden;
+}
+
+.perfil-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: var(--espaco-cartao);
+  color: inherit;
+  transition: background var(--dur-1) var(--ease-padrao);
+}
+
+.perfil-item + .perfil-item {
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+.perfil-item:hover {
+  background: var(--cor-superficie-2);
+}
+
+.perfil-item-rotulo {
+  font-weight: 700;
+}
+
+.perfil-item-descricao {
+  color: var(--cor-tinta-3);
+}
+
+.perfil-tema {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+}
+
+.perfil-tema-rotulo {
+  color: var(--cor-tinta-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------------------
+ * A TELA DE AVISOS — confirmar o recebimento, ou abrir o chamado.
+ *
+ * Cada resgate entregue é um CARTÃO com uma decisão, e não uma linha de lista: são duas
+ * ações de peso diferente («recebi» fecha, «não recebi» abre um chamado com o produtor) e
+ * uma delas desdobra num formulário. Lista de uma linha não comporta isso sem virar
+ * gaveta dentro de gaveta.
+ * ------------------------------------------------------------------------- */
+
+.notif-lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-cartao);
+}
+
+.notif-vazio {
+  padding: var(--espaco-secao) var(--espaco-cartao);
+  border: 1px dashed var(--cor-borda);
+  border-radius: var(--raio-g);
+  color: var(--cor-tinta-2);
+}
+
+.notif-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+/* O QUE JÁ ESTÁ COM A OUTRA PONTA PERDE A BORDA DE AÇÃO. Ela existe para dizer «isto
+   espera você»; num chamado em apuração quem deve a resposta é o produtor, e manter o
+   destaque faria a pessoa procurar uma ação que não é dela. */
+.notif-cartao[data-estado="apuracao"] {
+  border-color: var(--cor-borda);
+}
+
+.notif-kicker {
+  color: var(--cor-acao-tinta);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.notif-cartao[data-estado="apuracao"] .notif-kicker {
+  color: var(--cor-tinta-3);
+}
+
+.notif-titulo {
+  font-weight: 700;
+}
+
+.notif-linha {
+  color: var(--cor-tinta-2);
+}
+
+/* O relato entre aspas e com fio: é a voz da pessoa dentro do cartão do sistema. */
+.notif-relato {
+  padding-inline-start: var(--espaco-pilha);
+  border-inline-start: 2px solid var(--cor-borda-forte);
+  color: var(--cor-tinta-3);
+  font-style: italic;
+}
+
+.notif-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-pilha);
+  padding-block-start: var(--espaco-pilha);
+}
+
+.notif-primario,
+.notif-secundario {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  padding-inline: var(--espaco-secao);
+  border-radius: var(--raio-pilula);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.notif-primario {
+  border: 0;
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+}
+
+/* DESABILITADO SE VÊ. Um botão que não responde e não parece diferente é um botão
+   quebrado; a opacidade mais o cursor dizem que falta alguma coisa antes. */
+.notif-primario:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notif-secundario {
+  border: 1px solid var(--cor-borda-forte);
+  background: var(--cor-superficie);
+  color: inherit;
+  font-weight: 600;
+}
+
+.notif-primario:focus-visible,
+.notif-secundario:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.notif-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-cartao);
+  padding-block-start: var(--espaco-pilha);
+  border-block-start: 1px solid var(--cor-borda);
+}
+
+.notif-campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+}
+
+.notif-campo-rotulo {
+  font-weight: 700;
+}
+
+.notif-textarea {
+  inline-size: 100%;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+  color: var(--cor-tinta);
+  font: inherit;
+  font-size: var(--tipo-detalhe);
+  resize: vertical;
+}
+
+.notif-textarea::placeholder {
+  color: var(--cor-tinta-3);
+}
+
+.notif-textarea:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* O prazo e a promessa de devolução, com o fio do acervo: é compromisso do produto com
+   quem espera, não letra miúda do formulário. */
+.notif-aviso {
+  padding-inline-start: var(--espaco-pilha);
+  border-inline-start: 2px solid var(--cor-acao);
+  color: var(--cor-tinta-2);
+}
+
+.notif-dica {
+  color: var(--cor-tinta-3);
 }
 
 /* --- A estrela azul do percurso, e o par de saldos do cabeçalho ----------- */

@@ -58,6 +58,16 @@ const PREFIXO = "agenda-cultural:pontos:";
  */
 const VERSAO_DO_FORMATO = 4;
 
+/**
+ * De quanto em quanto tempo a entrega anda um passo.
+ *
+ * 15s: são quatro passos até «entregue», ou seja um minuto do resgate até a tela pedir a
+ * confirmação. Rápido o bastante para caber numa demonstração ao vivo sem alguém esperar
+ * olhando, e lento o bastante para as cinco etapas serem VISTAS acontecendo — que é o que
+ * a esteira existe para mostrar. Não é o relógio do mundo; é a encenação da logística.
+ */
+const CADENCIA_DA_ENTREGA = 15_000;
+
 interface Guardado {
   versao: number;
   estado: EstadoDoMotor;
@@ -184,6 +194,27 @@ export function PontosProvider({ children }: { children: ReactNode }) {
       setPersistido(gravar(personaId, motor.atual));
     });
   }, [personaId, hidratado, geracao]);
+
+  /**
+   * A ESTEIRA DE ENTREGA ANDA SOZINHA, um passo a cada intervalo.
+   *
+   * Sem isto ela estava morta: `avancarDias` move as entregas, mas nada no aplicativo o
+   * chama — só as suítes. Um resgate ficava em «Resgatado» para sempre, a carteira
+   * prometia cinco etapas e mostrava uma, e a confirmação de recebimento (que só existe
+   * depois de «entregue») era inalcançável sem editar o `localStorage` na mão.
+   *
+   * O intervalo PARA quando não há mais o que andar — `avancarEntregas` devolve falso e o
+   * relógio é desligado. Um timer que continua rodando sobre nada é bateria gasta e um
+   * `setState` por minuto que ninguém pediu.
+   */
+  useEffect(() => {
+    const motor = motorRef.current;
+    if (!motor || !hidratado) return;
+    const relogio = setInterval(() => {
+      if (!motor.avancarEntregas()) clearInterval(relogio);
+    }, CADENCIA_DA_ENTREGA);
+    return () => clearInterval(relogio);
+  }, [hidratado, geracao]);
 
   const valor = useMemo<ContextoDePontos>(
     () => ({ motor: motorRef.current as Motor, hidratado, persistido }),

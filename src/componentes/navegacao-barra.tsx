@@ -1,14 +1,14 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import {
   ICONE_APPS,
   ICONE_DESCOBRIR,
   ICONE_PERFIL,
-  ICONE_COMUNIDADE,
+  ICONE_ACONTECE,
+  ICONE_BUSCAR,
   ICONE_SALVOS,
   ICONE_RECOMPENSAS,
   ICONE_IA,
@@ -16,24 +16,33 @@ import {
 import { IconeVivo, pulsarGradeApps } from "@/componentes/icone-vivo";
 import { Grafismo } from "@/componentes/grafismo";
 import { SeloDoPerfil } from "@/componentes/selo-do-perfil";
+import { SinoDeAvisos } from "@/componentes/sino-de-avisos";
 import { ContadorDeFichas } from "@/componentes/contador-fichas";
-import { SeletorDeTema } from "@/componentes/seletor-tema";
-import { useSessao } from "@/contexto/sessao";
-import { ATALHOS_CONTA } from "@/dados/apps";
-import { personaPorId } from "@/dados/personas";
 import { transicaoDe } from "@/lib/movimento";
 
 const AbaLink = motion.create(Link);
 
 /**
  * navegacao-barra.tsx — a navegação da VISÃO APP desde 2026-08-23: cabeçalho
- * fino em cima, quatro abas embaixo e um quinto botão que abre o hub.
+ * fino em cima, as abas embaixo e um botão redondo à parte que abre o hub.
  *
  * A REGRA DE CORTE DAS QUATRO. Não são «as quatro primeiras do menu»: são as
- * quatro que alguém abre sem ter decidido nada antes — o feed, a busca, a
- * agenda e o que ela já guardou. Tudo que exige uma escolha prévia («quero
- * assistir», «quero ler», «quero um curso») está a um toque em `/apps`, que é
- * onde essa escolha tem espaço para ser mostrada com imagem em vez de rótulo.
+ * quatro que alguém abre sem ter decidido nada antes — o feed, a agenda do que
+ * está acontecendo, o que ela ganha por percorrer e o que já guardou. Tudo que
+ * exige uma escolha prévia («quero assistir», «quero ler», «quero um curso»)
+ * está a um toque em `/apps`, que é onde essa escolha tem espaço para ser
+ * mostrada com imagem em vez de rótulo.
+ *
+ * A BUSCA SUBIU PARA O CABEÇALHO, e não é rebaixamento: procurar não é um
+ * DESTINO como os outros quatro, é uma ação que se faz de qualquer lugar. Como
+ * aba, ela disputava um dos quatro alvos do polegar com uma seção inteira do
+ * produto; como lupa ao lado dos saldos, ela fica alcançável de toda tela sem
+ * gastar aba nenhuma — que é o lugar onde a lupa mora em quase todo aplicativo.
+ *
+ * Comunidade saiu da barra e continua com cartaz próprio em `/apps` — ela exige
+ * uma decisão prévia («quero conversar»), que é o critério de corte acima.
+ * Roteiros com IA é a exceção declarada: pelo critério ele também sairia, e fica
+ * por decisão de produto — ver o comentário na lista.
  *
  * O QUINTO BOTÃO É REDONDO E SEPARADO, e não uma quinta aba. Ele não é um
  * destino de mesma natureza que os outros quatro: é a porta para o resto do
@@ -46,9 +55,11 @@ const AbaLink = motion.create(Link);
  * gaveta do menu lateral (D-03/D-04). `fixed` se ancoraria na janela e a barra
  * escaparia para a largura toda da tela, fora do telefone.
  *
- * O CABEÇALHO CARREGA A TROCA DE PERSONA porque o rodapé do menu lateral
- * carregava, e sem o menu ela não teria mais onde existir. A demonstração
- * inteira depende de alternar entre Maria, Carlos e Joana ao vivo.
+ * O AVATAR ABRE `/meu`, e não uma gaveta. Ele já carregou uma lista de seis
+ * atalhos mais o seletor de tema — a mesma lista que a tela de perfil já tinha,
+ * repetida por cima do conteúdo e em outra ordem. Agora é um link: quem toca no
+ * próprio rosto vai para a tela que fala dele, com nível, saldos e as duas
+ * portas do programa. O tema foi junto e mora no fim daquela tela.
  */
 
 interface Aba {
@@ -59,13 +70,13 @@ interface Aba {
 
 const ABAS: Aba[] = [
   { href: "/descobrir", rotulo: "Descobrir", icone: ICONE_DESCOBRIR },
-  { href: "/comunidade", rotulo: "Comunidade", icone: ICONE_COMUNIDADE },
+  { href: "/acontece", rotulo: "Acontece", icone: ICONE_ACONTECE },
   { href: "/recompensas", rotulo: "Recompensas", icone: ICONE_RECOMPENSAS },
   { href: "/salvos", rotulo: "Salvos", icone: ICONE_SALVOS },
-  /* Roteiros com IA entrou na barra (27.08). Ele já tinha porta no hub, mas o hub é o
-     quinto botão: a pergunta em linguagem natural é o caminho que a banca abre primeiro e
-     estava a dois toques. Coube porque as abas perderam o rótulo — com texto, seis alvos
-     não cabiam em 390px sem truncar todos. */
+  /* Roteiros com IA fecha a fileira. Ele já tem cartaz em `/apps`, mas o hub é o quinto
+     botão: a pergunta em linguagem natural é o caminho que se abre primeiro numa
+     demonstração, e de lá estava a dois toques. Cabe porque as abas não têm rótulo — com
+     texto, cinco alvos não entram em 390px sem truncar todos. */
   { href: "/ia", rotulo: "Roteiros com IA", icone: ICONE_IA },
 ];
 
@@ -76,17 +87,8 @@ export function NavegacaoBarra() {
   // igualdade exata contra os hrefs sem barra nunca acenderia (mesma correção
   // que o menu lateral carrega).
   const caminho = (usePathname() ?? "").replace(/\/$/, "");
-  const { personaId } = useSessao();
-  const persona = personaPorId(personaId);
-  const [contaAberta, setContaAberta] = useState(false);
-  const botaoConta = useRef<HTMLButtonElement>(null);
   const reduzir = useReducedMotion();
   const toque = transicaoDe("--dur-1", reduzir === true);
-  const painel = transicaoDe("--dur-2", reduzir === true);
-
-  // Trocar de tela FECHA o menu. Sem isto ele sobreviveria à navegação e
-  // reapareceria aberto sobre a tela seguinte, que nunca é o que se espera.
-  useEffect(() => setContaAberta(false), [caminho]);
 
   const dentroDe = (href: string) => caminho === href || caminho.startsWith(`${href}/`);
 
@@ -103,78 +105,40 @@ export function NavegacaoBarra() {
 
         <ContadorDeFichas />
 
-        {/* A CONTA VIRA ÍCONE, e o que era a seção «Sua conta» no fim de /apps
-            mora aqui dentro (pedido de 23/08). O nome da persona saiu do
-            cabeçalho: ele ocupava a única linha do topo com um dado que só
-            interessa a quem está avaliando a demonstração, e continua visível no
-            menu, no perfil e no rodapé do trilho da web.
-
-            SEM SCRIM, e o fechamento é por foco: um scrim precisaria posicionar
-            contra a moldura e este cabeçalho é `sticky`, ou seja o contêiner
-            dele — o scrim cobriria só a faixa do topo. Fechar em `Escape`, ao
-            sair o foco e ao tocar num item cobre teclado e dedo sem inventar
-            camada nova. */}
-        <div
-          className="barra-conta"
-          onBlur={(e) => {
-            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setContaAberta(false);
-          }}
-          onKeyDown={(e) => {
-            if (e.key !== "Escape") return;
-            setContaAberta(false);
-            botaoConta.current?.focus();
-          }}
+        {/* A LUPA AO LADO DOS SALDOS. Mesmo alvo de 36px do botão da conta, porque as duas
+            são ações do cabeçalho e um alvo menor que o vizinho lê como secundário sem
+            que ninguém tenha decidido isso. */}
+        <Link
+          href="/buscar/"
+          className="barra-busca no-underline"
+          aria-label="Buscar eventos, artistas, obras e espaços"
         >
-          <button
-            type="button"
-            ref={botaoConta}
-            data-conta
-            aria-expanded={contaAberta}
-            aria-controls="menu-da-conta"
-            aria-label={`Sua conta — você está como ${persona?.nome ?? "…"}`}
-            className="barra-conta-botao"
-            onClick={() => setContaAberta((v) => !v)}
-          >
-            <IconeVivo ativo={contaAberta}>{ICONE_PERFIL}</IconeVivo>
-            {/* O SELO GRUDA NO ÍCONE, não fica ao lado. Ao lado ele seria mais um
-                item disputando a única linha do topo; grudado, ele é lido como
-                propriedade da pessoa — do mesmo jeito que um distintivo numa
-                lapela, e não um número no painel. */}
-            <SeloDoPerfil />
-          </button>
+          {ICONE_BUSCAR}
+        </Link>
 
-          <AnimatePresence initial={false}>
-            {contaAberta ? (
-              <motion.div
-                key="menu-da-conta"
-                id="menu-da-conta"
-                className="barra-conta-menu"
-                initial={{ opacity: 0, scale: 0.96, y: -8 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.98, y: -4 }}
-                transition={painel}
-                style={{ transformOrigin: "top right" }}
-                inert={contaAberta ? undefined : true}
-              >
-                <p className="barra-conta-persona tipo-micro">
-                  você está como {persona?.nome ?? "…"}
-                </p>
-                {ATALHOS_CONTA.map((atalho) => (
-                  <Link
-                    key={atalho.href}
-                    href={atalho.href}
-                    className="barra-conta-item"
-                    onClick={() => setContaAberta(false)}
-                  >
-                    <span className="barra-conta-rotulo tipo-detalhe">{atalho.rotulo}</span>
-                    <span className="barra-conta-descricao tipo-legenda">{atalho.descricao}</span>
-                  </Link>
-                ))}
-                <SeletorDeTema />
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
-        </div>
+        {/* O SINO ENTRE A LUPA E O PERFIL. Buscar é ação de quem procura; o sino é o que
+            o produto tem a dizer; o avatar é quem você é. A ordem vai do que a pessoa faz
+            para o que é dela, e o aviso fica no meio, onde o polegar passa. */}
+        <SinoDeAvisos />
+
+        {/* O AVATAR É UM LINK, E NÃO MAIS UM MENU. Ele abria uma gaveta com seis atalhos
+            e o seletor de tema — uma lista de rótulos empilhada por cima do conteúdo, que
+            dizia para onde ir mas nada sobre quem você é. Agora ele abre `/meu`, onde o
+            nível, o percurso, as fichas e as duas portas principais têm espaço para ser
+            mostrados em vez de listados. O tema foi junto e mora no fim daquela tela.
+
+            O selo GRUDA NO ÍCONE, não fica ao lado: ao lado seria mais um item disputando
+            a única linha do topo; grudado, é lido como propriedade da pessoa — um
+            distintivo na lapela, não um número no painel. */}
+        <Link
+          href="/meu/"
+          className="barra-conta-botao no-underline"
+          aria-label="Seu perfil: nível, fichas e desafios"
+          aria-current={dentroDe("/meu") ? "page" : undefined}
+        >
+          <IconeVivo ativo={dentroDe("/meu")}>{ICONE_PERFIL}</IconeVivo>
+          <SeloDoPerfil />
+        </Link>
       </header>
 
       <nav className="barra-inferior" aria-label="Navegação principal">

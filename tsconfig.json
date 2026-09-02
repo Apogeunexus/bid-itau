@@ -52,7 +52,9 @@
     ".next-pontos/types/**/*.ts",
     ".next-pontos/dev/types/**/*.ts",
     ".next-s8dev/types/**/*.ts",
-    ".next-s8dev/dev/types/**/*.ts"
+    ".next-s8dev/dev/types/**/*.ts",
+    ".next-dev/types/**/*.ts",
+    ".next-dev/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

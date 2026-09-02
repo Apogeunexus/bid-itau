@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ComoRetirar } from "@/componentes/como-retirar";
 import { useState } from "react";
 import { Moeda } from "@/componentes/pontos-base";
 import { usePontos } from "@/contexto/pontos";
@@ -67,14 +68,7 @@ export function RecompensaItem({ recompensa }: { recompensa: RecompensaDefinida 
       </div>
 
       {feito ? (
-        <>
-          <p className="aviso" data-tom="acao">
-            Resgatado. A entrega já está na sua carteira, com as cinco etapas.
-          </p>
-          <Link href="/meu/carteira/" className="botao-acao no-underline">
-            Acompanhar a entrega
-          </Link>
-        </>
+        <ComoRetirar recompensa={recompensa} />
       ) : (
         <>
           {erro && (

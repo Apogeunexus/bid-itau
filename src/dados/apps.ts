@@ -368,15 +368,11 @@ export const GRUPOS_APPS: readonly GrupoApps[] = [
   },
 ];
 
-/** Sua conta: o que você guardou e quem você é. Sem capa, de propósito. */
-export const ATALHOS_CONTA: readonly Atalho[] = [
-  { href: "/comunidade/marketplace", rotulo: "Comunidades", descricao: "Produtores e organizações, por estado" },
-  { href: "/comunidade/guardadas", rotulo: "Guardadas", descricao: "As publicações que você guardou" },
-  { href: "/meu/carteira", rotulo: "Carteira", descricao: "Saldo, extrato e entregas" },
-  { href: "/salvos", rotulo: "Salvos", descricao: "O que você guardou e os alertas" },
-  { href: "/meu/repertorio", rotulo: "Meu repertório", descricao: "As linguagens que você atravessou" },
-  { href: "/meu", rotulo: "Perfil", descricao: "Persona, disposições e preferências" },
-];
+/* `ATALHOS_CONTA` saiu daqui: era a lista da gaveta que o avatar abria no cabeçalho, e
+ * a gaveta virou a tela `/meu`. A lista mora agora naquela página, junto do que ela
+ * ordena — nível, saldos e as duas portas —, em vez de viajar de um módulo de dados para
+ * um menu que só sabia empilhar rótulo e descrição. */
+
 
 /** Bastidor: só na visão web — no app cada uma destas rotas se declara «só web». */
 export const ATALHOS_BASTIDOR: readonly Atalho[] = [

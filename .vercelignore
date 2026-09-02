@@ -37,3 +37,9 @@
 /capturas
 *.log
 tsconfig.tsbuildinfo
+
+# `vercel link` grava um VERCEL_OIDC_TOKEN aqui. O arquivo subia junto e o build
+# recusava com «Not authorized» — o token do envio não é o do ambiente de build.
+/.env.local
+/.env*.local
+/.vercel
