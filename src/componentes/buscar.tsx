@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { cloneElement, useCallback, useEffect, useId, useMemo, useState } from "react";
 import type { ReactElement } from "react";
-import { Chip, Estante, TrilhoDeChips } from "@/componentes/base/chip";
+import { Chip, TrilhoDeChips } from "@/componentes/base/chip";
 import {
   ICONE_BUSCAR,
   ICONE_FILTROS,
@@ -887,37 +887,15 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
           </button>
         </div>
         <div className="busca-folha-corpo">
-          <Estante
-            titulo="Explore por linguagem"
-            rotulo="Explorar por linguagem artística"
-            verTodas={
-              facetas.linguagem.length > 12
-                ? {
-                    onClick: () => setTodasAsLinguagens((v) => !v),
-                    rotulo: todasAsLinguagens ? "Mostrar menos" : "Ver todas",
-                  }
-                : undefined
-            }
-          >
-            {(todasAsLinguagens ? facetas.linguagem : facetas.linguagem.slice(0, 12)).map((opcao) => (
-              <Chip
-                key={chaveCriterio(opcao)}
-                variante="explorar"
-                data-faceta={chaveCriterio(opcao)}
-                cor={opcao.cor ?? "--ic-preto"}
-                selecionado={marcados.has(chaveCriterio(opcao))}
-                onClick={() => alternarCriterio(opcao)}
-                contagem={milhar(opcao.n)}
-              >
-                {opcao.rotulo}
-              </Chip>
-            ))}
-          </Estante>
+          {/* O «Explore por linguagem» saiu daqui (2026-09). Ele era um trilho que
+              cortava o terceiro item e punha a seta por cima dele — e mostrava
+              EXATAMENTE o mesmo grupo que o bloco «linguagem» logo abaixo, agora em
+              gaveta. Dois controles para o mesmo critério, um deles ilegível. */}
 
           <section>
             <p className="busca-bloco-titulo">Buscas recentes</p>
             {recentes.length ? (
-              <TrilhoDeChips rotulo="Buscas recentes">
+              <div className="flex flex-wrap gap-2">
                 {recentes.map((termo) => (
                   <Chip
                     key={termo}
@@ -929,7 +907,7 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                     {termo}
                   </Chip>
                 ))}
-              </TrilhoDeChips>
+              </div>
             ) : (
               <p className="tipo-detalhe text-tinta-2">
                 Você ainda não buscou nada neste navegador.
@@ -1139,7 +1117,6 @@ function BlocoFaceta({
   aoTocar,
   rotulo,
   rodape,
-  recolhivel = false,
 }: {
   titulo: string;
   opcoes: OpcaoFaceta[];
@@ -1147,80 +1124,52 @@ function BlocoFaceta({
   aoTocar: (opcao: OpcaoFaceta) => void;
   rotulo?: (valor: string) => string;
   rodape?: React.ReactNode;
-  /**
-   * O grupo GANHA UM ALTERNADOR e começa fechado — na visão app, onde a regra que
-   * esconde o corpo é escrita. Na web o alternador não é desenhado e o corpo fica
-   * onde sempre esteve: o mesmo DOM, duas medidas (D-05).
-   */
-  recolhivel?: boolean;
 }) {
-  // O estado sobrevive a `recolhivel` mudar de valor: quem abriu «tema», buscou e depois
-  // limpou a busca encontra «tema» aberto — foi a última coisa que essa pessoa pediu.
-  const [aberto, setAberto] = useState(false);
-  const idCorpo = useId();
-  const recolhido = recolhivel && !aberto;
+  const nMarcados = opcoes.filter((o) => marcados.has(chaveCriterio(o))).length;
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <div className="busca-grupo-cabeca">
-        <p className="busca-bloco-titulo">{titulo}</p>
-        {recolhivel ? (
-          // O RÓTULO DO ALTERNADOR É A CONTAGEM DE OPÇÕES, e não um «ver» genérico:
-          // fechado, o grupo esconde justamente quantas escolhas há ali dentro, e é
-          // esse número que decide se vale o toque.
-          <button
-            type="button"
-            className="busca-grupo-alternador"
-            aria-expanded={aberto}
-            aria-controls={idCorpo}
-            onClick={() => setAberto((v) => !v)}
-          >
-            {aberto
-              ? "fechar"
-              : `${milhar(opcoes.length)} ${opcoes.length === 1 ? "opção" : "opções"}`}
-          </button>
-        ) : null}
-      </div>
-      <div
-        id={idCorpo}
-        className="busca-grupo-corpo"
-        data-recolhido={recolhido ? "sim" : undefined}
-      >
-        {opcoes.length ? (
-          // A CONTAGEM FICA AQUI, e não é exceção arbitrária: o parágrafo acima
-          // promete que «o número é quantos resultados aquela opção devolve
-          // agora». Tirá-la, como esta migração chegou a fazer, deixou a frase
-          // apontando para um dado que não estava na tela — e a promessa de que
-          // nenhum recorte leva a lugar nenhum (D-66) é argumento do produto, não
-          // decoração de chip. O que continua fora é o «sem ela: 340» dos
-          // critérios já marcados: aquele é o mesmo número repetido em cada
-          // pílula de uma fileira, e ninguém prometeu nada sobre ele.
-          <TrilhoDeChips rotulo={`Recortar por ${titulo}`} className="trilho-chips-rola" setas>
+    <section className="filtros-bloco" data-bloco={titulo}>
+      <h3 className="filtros-bloco-titulo">{titulo}</h3>
+
+      {opcoes.length ? (
+        <details className="filtros-gaveta" open={nMarcados > 0}>
+          <summary className="filtros-gaveta-topo">
+            <span className="filtros-gaveta-rotulo">
+              {nMarcados === 0
+                ? `Escolher ${titulo}`
+                : `${milhar(nMarcados)} ${nMarcados > 1 ? "marcados" : "marcado"}`}
+            </span>
+          </summary>
+
+          <ul className="filtros-dimensoes">
             {opcoes.map((opcao) => {
               const chave = chaveCriterio(opcao);
               return (
-                <Chip
-                  key={chave}
-                  variante="explorar"
-                  selecionado={marcados.has(chave)}
-                  data-faceta={chave}
-                  cor={opcao.cor ?? undefined}
-                  contagem={milhar(opcao.n)}
-                  onClick={() => aoTocar(opcao)}
-                >
-                  {titulo === "tipo" ? iconeDaClasse(opcao.valor) : null}
-                  {rotulo ? rotulo(opcao.valor) : opcao.rotulo}
-                </Chip>
+                <li key={chave} className="filtros-dimensao">
+                  <button
+                    type="button"
+                    aria-pressed={marcados.has(chave)}
+                    className="filtros-marcavel"
+                    data-faceta={chave}
+                    onClick={() => aoTocar(opcao)}
+                  >
+                    <span className="filtros-marcavel-caixa" aria-hidden />
+                    <span className="filtros-marcavel-rotulo">
+                      {rotulo ? rotulo(opcao.valor) : opcao.rotulo}
+                    </span>
+                    <span className="filtros-marcavel-n">{milhar(opcao.n)}</span>
+                  </button>
+                </li>
               );
             })}
-          </TrilhoDeChips>
-        ) : (
-          <p className="text-sm text-tinta-2">
-            Nenhuma opção deste campo recorta o resultado atual.
-          </p>
-        )}
-        {rodape}
-      </div>
-    </div>
+          </ul>
+        </details>
+      ) : (
+        <p className="filtros-bloco-linha text-tinta-2">
+          Nenhuma opção deste campo recorta o resultado atual.
+        </p>
+      )}
+      {rodape}
+    </section>
   );
 }
