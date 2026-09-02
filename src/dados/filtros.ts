@@ -90,7 +90,7 @@ export const DIMENSOES_ESPERADAS = 8;
 // acervo não tinha. Todos com `procedencia: "parceiro"`; o crivo de `parceiros.ts` é ter
 // DATA, porque evento sem data não é acontecimento. A conferência continua valendo: ela existe para pegar grafo
 // regerado e slug duplicado, e um número maior sem explicação continua quebrando alto.
-export const ENTIDADES_ESPERADAS = 7833;
+export const ENTIDADES_ESPERADAS = 7831;
 
 /** Teto do DTO que atravessa a fronteira RSC. 30 KB, medido a cada build. */
 export const TETO_DO_DTO = 30 * 1024;

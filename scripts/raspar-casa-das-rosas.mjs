@@ -64,12 +64,15 @@ const FICHA_DA_PAGINA = `(() => {
   // quem chega, e é o que serve. Nada é escrito por nós.
   const titulo = (document.querySelector("h1")?.innerText || "").trim();
   const desc = meta("og:description") || meta("description");
-  let corpo = null;
-  for (const p of document.querySelectorAll("p")) {
+  let corpo = null, melhor = 0;
+  for (const p of document.querySelectorAll("p, .elementor-widget-text-editor")) {
     const t = (p.innerText || "").replace(/\\s+/g, " ").trim();
-    if (t.length >= 60 && t.length <= 400 && t !== titulo && !/cookie|privacidade|newsletter|atalhos?\\s+Ctrl|aumentar ou diminuir|contraste|leitor de tela|utilize os atalhos|programa..o completa e garanta|receba em primeira m|primeira m.o a programa|conte.dos especiais, bastidores/i.test(t)) {
-      corpo = t; break;
-    }
+    if (t.length < 80 || t.length > 700 || t === titulo) continue;
+    if (/cookie|privacidade|newsletter|atalhos?\\s+Ctrl|aumentar ou diminuir|contraste|leitor de tela|utilize os atalhos|programa..o completa e garanta|receba em primeira m|conte.dos especiais, bastidores|Museu ter|Jardim seg/i.test(t)) continue;
+    // O MAIS LONGO QUE PASSA, e não o primeiro: em toda página raspada o primeiro
+    // parágrafo aceitável era rodapé institucional e a descrição real vinha depois.
+    // Comprimento é o único sinal disponível sem conhecer o tema do site.
+    if (t.length > melhor) { melhor = t.length; corpo = t; }
   }
   const resumo = desc && desc.trim() && desc.trim() !== titulo ? desc.trim() : corpo;
   return JSON.stringify({ imagem: og || maior, resumo });

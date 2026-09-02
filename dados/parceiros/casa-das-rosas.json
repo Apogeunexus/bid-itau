@@ -1,47 +1,7 @@
 {
   "fonte": "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura",
-  "total": 5,
+  "total": 3,
   "eventos": [
-    {
-      "id": "evento:parceiro:cr-espaco-materia-e-tempo-leituras-da-arquitetura-domestica",
-      "titulo": "Espaço, matéria e tempo: leituras da arquitetura doméstica",
-      "classe": "evento",
-      "procedencia": "parceiro",
-      "fonte": "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura",
-      "fonteUrl": "https://casadasrosas.org.br/programacao/grupo-de-estudos/espaco-materia-e-tempo-leituras-da-arquitetura-domestica/",
-      "linguagemDeclarada": "Grupo de Estudos",
-      "gratuito": true,
-      "espacoDeclarado": "Casa das Rosas, Avenida Paulista, São Paulo, SP",
-      "ocorrencias": [
-        {
-          "inicio": "2026-08-04",
-          "fim": "2026-09-01"
-        }
-      ],
-      "imagem": "https://casadasrosas.org.br/wp-content/uploads/2026/06/Casa-das-Rosas-090217-9469_Andre-Hoff.jpg",
-      "resumo": "04/08 | A casa como objeto Com Vânia Carneiro de Carvalho A partir das discussões sobre cultura material, o encontro propõe refletir sobre a casa como documento e objeto de pesquisa. Serão introduzidas questões relacionadas à espacialidade, à materialidade da arquitetura e às diferentes possibilidades de leitura da casa enquanto artefato histórico e social.",
-      "revisadoPor": null
-    },
-    {
-      "id": "evento:parceiro:cr-4076",
-      "titulo": "A Paulista de Tarsila",
-      "classe": "evento",
-      "procedencia": "parceiro",
-      "fonte": "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura",
-      "fonteUrl": "https://casadasrosas.org.br/programacao/evento-especial/4076/",
-      "linguagemDeclarada": "Evento especial",
-      "gratuito": true,
-      "espacoDeclarado": "Casa das Rosas, Avenida Paulista, São Paulo, SP",
-      "ocorrencias": [
-        {
-          "inicio": "2026-09-01",
-          "fim": "2026-09-01"
-        }
-      ],
-      "imagem": "https://casadasrosas.org.br/wp-content/uploads/2026/08/Tarsila_do_Amaral_ca._1925-e1787594744663.jpg",
-      "resumo": "A atividade é realizada em parceria com o Instituto Tarsila.",
-      "revisadoPor": null
-    },
     {
       "id": "evento:parceiro:cr-uma-breve-historia-das-rosas",
       "titulo": "Uma breve história das rosas",
@@ -59,7 +19,7 @@
         }
       ],
       "imagem": "https://casadasrosas.org.br/wp-content/uploads/2026/08/rosa-de-cinco-petalas-Layane-Florencio-Araujo.jpg",
-      "resumo": null,
+      "resumo": "A atividade convida o público a percorrer o jardim da Casa das Rosas para conhecer a trajetória dessa flor que dá nome ao museu e compõe sua paisagem. A partir da observação botânica das rosas presentes no espaço, a visita explora seu surgimento ao longo da história do planeta, suas características originais, o processo de domesticação e os diferentes significados simbólicos que adquiriram ao longo do tempo. O percurso também relaciona a flora do jardim aos registros fósseis das primeiras flores, promovendo um diálogo entre natureza, patrimônio e a história da própria Casa das Rosas.",
       "revisadoPor": null
     },
     {
@@ -79,7 +39,7 @@
         }
       ],
       "imagem": "https://casadasrosas.org.br/wp-content/uploads/2026/06/Poetas-da-Cancao-2.jpg",
-      "resumo": "O Asa da Palavra convida o público a embarcar em um passeio musical para conhecer a Bahia de Caymmi, Caetano, Gil e Tom Zé. No repertório, canções como “A Terceira Margem do Rio”, “Lugar Comum”, “Maracangalha”, “Samba, Suor e Cerveja” e “Tigresa” conduzem essa travessia.",
+      "resumo": "O espetáculo “O que é que a Bahia tem?”, com direção musical e arranjos de Adilson Rodrigues, também traz um encontro entre música e poesia — marca registrada do Asa da Palavra —, com “Mortal Loucura”, poema de Gregório de Matos Guerra musicado por José Miguel Wisnik, além de “Alegre Menina”, de Dori Caymmi, e “Gabriela”, de Tom Jobim, ambas inspiradas no romance “Gabriela, Cravo e Canela”, de Jorge Amado.",
       "revisadoPor": null
     },
     {
@@ -99,7 +59,7 @@
         }
       ],
       "imagem": "https://casadasrosas.org.br/wp-content/uploads/2026/08/Design-sem-nome-scaled.png",
-      "resumo": null,
+      "resumo": "A atividade propõe uma experiência lúdica em que os participantes aprendem sobre temáticas relacionadas ao museu enquanto pescam na fonte do jardim. A dinâmica incentiva a curiosidade, o interesse pelo espaço e a apropriação de informações sobre a história, a arquitetura e os elementos que compõem a Casa das Rosas. Em diálogo com o tema da 19ª Primavera dos Museus, “Museus para Todas as Pessoas”, a atividade busca promover um ambiente acolhedor e participativo, estimulando o compartilhamento de conhecimentos e fortalecendo o sentimento de pertencimento ao patrimônio cultural por meio de uma experiência acessível e divertida.",
       "revisadoPor": null
     }
   ]

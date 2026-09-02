@@ -235,11 +235,17 @@ const RASPADOS: EventoRaspado[] = [
  * só exposição de museu. O resultado foi um feed que não mudou para a Maria — o repertório
  * dela é literatura, música e poesia, e exposição de artes visuais não a alcança.
  *
- * Cartão sem foto o design system já resolve: `CapaSemImagem` compõe a capa na cor da
- * linguagem, com a textura da marca. O que um evento não pode faltar é DATA — sem ela não
- * há ocorrência, e sem ocorrência ele não é um acontecimento, é uma ficha.
+ * FICHA INCOMPLETA NÃO ENTRA. Um evento no feed precisa responder as cinco perguntas de
+ * quem o vê: o que é (título e descrição), quando (data), onde (espaço), com que cara
+ * (imagem) e como ir (link de reserva). Faltando qualquer uma, o cartão promete e não
+ * entrega — e numa demonstração ao vivo é o cartão incompleto que a banca abre.
+ *
+ * Mais barato descartar do que remendar: as fontes têm mais programação do que cabe no
+ * feed, então o crivo não custa cobertura, custa só o que estava pela metade.
  */
-const APROVEITAVEIS = RASPADOS.filter((e) => e.ocorrencias.length > 0);
+const APROVEITAVEIS = RASPADOS.filter(
+  (e) => e.ocorrencias.length > 0 && e.imagem && e.resumo && e.espacoDeclarado && e.fonteUrl,
+);
 
 export const ENTIDADES_DE_PARCEIRO: Entidade[] = APROVEITAVEIS.map(paraEntidade);
 

@@ -358,6 +358,20 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
              Não existe para parceiro: verbete é da Enciclopédia. */}
       {deParceiro ? null : <Verbete entidade={entidade} />}
 
+      {/* A DESCRIÇÃO DO PARCEIRO, INTEIRA. Esconder o verbete deixou a ficha sem texto
+          nenhum: título, três fatos e um botão. O texto é o que a instituição escreveu na
+          própria página — não é resumo nosso, e por isso vai sem corte e com a fonte
+          nomeada. É ele que responde «o que é isto?» antes de alguém decidir reservar. */}
+      {deParceiro && entidade.resumo ? (
+        <section className="ev-descricao flex flex-col gap-2">
+          <h2 className="text-lg leading-tight font-bold">Sobre este evento</h2>
+          <p className="max-w-prose text-sm leading-relaxed text-tinta-2">{entidade.resumo}</p>
+          <p className="text-[0.65rem] tracking-wide text-tinta-3 uppercase">
+            texto publicado por {entidade.fonte}
+          </p>
+        </section>
+      ) : null}
+
       {/* 6 — a ficha das 8 dimensões (D-43). No DOM ela fecha a coluna
              principal; na visão app o `order` a devolve para depois de «onde
              acontece», que é o lugar exato em que a fase 2 a deixou. */}
