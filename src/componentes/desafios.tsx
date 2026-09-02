@@ -275,7 +275,7 @@ export function Desafios() {
           <div className="flex flex-col gap-1">
             <h2 className="tipo-destaque font-bold">Primeiros passos</h2>
             <span className="tipo-legenda text-tinta-2">
-              Uma para cada canto do aplicativo · {fechadas} de {primeirosPassos.length} feitas
+              O percurso de abertura, na ordem · {fechadas} de {primeirosPassos.length} feitas
             </span>
           </div>
           <div className="flex flex-col gap-3">
