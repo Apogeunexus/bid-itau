@@ -469,6 +469,7 @@ export function montarIndice(fonte: FonteDoGrafo): IndiceDTO {
     ic: "acervo do Itaú Cultural",
     derivado: "derivado por regra",
     autorado: "escrito pela curadoria",
+    parceiro: "publicado por instituição parceira",
   };
 
   const facetas: Facetas = {

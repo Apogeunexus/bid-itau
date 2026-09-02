@@ -41,6 +41,7 @@ const ROTULO_PROCEDENCIA: Record<Procedencia, string> = {
   autorado: "ligação autorada",
   ic: "ligação escrita no acervo do Itaú Cultural",
   derivado: "ligação derivada por regra do acervo",
+  parceiro: "ligação declarada pelo parceiro",
 };
 
 /**
@@ -68,6 +69,14 @@ function explicarProcedencia(
       return (
         `A ligação entre «${de}» e «${para}» foi calculada a partir de dado do acervo por ` +
         `regra determinística, sem redação nossa.`
+      );
+    case "parceiro":
+      // A ligação não é nossa nem do acervo: a instituição parceira é que a declara ao
+      // publicar as duas coisas juntas na própria página. Dizer «derivada por regra» aqui
+      // atribuiria a nós uma leitura que foi deles.
+      return (
+        `Ligação declarada pela instituição parceira: «${de}» e «${para}» aparecem ` +
+        `juntos na publicação dela, e não numa regra nossa nem no acervo do Itaú Cultural.`
       );
   }
 }

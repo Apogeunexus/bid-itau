@@ -236,12 +236,15 @@ export const SIGNIFICADO_DA_PROCEDENCIA: Record<Procedencia, string> = {
     "Nós extraímos do que veio do Itaú Cultural, por regra escrita e auditável: as ocorrências datadas, os territórios, os espaços e as ligações de semelhança. Não é invenção, é leitura — mas é leitura NOSSA, e por isso está separada.",
   autorado:
     "Nós inventamos para o protótipo. Não existe no acervo do Itaú Cultural: foi escrito por nós para a demonstração ter o que mostrar.",
+  parceiro:
+    "Uma instituição publicou, e nós lemos. MASP, Pinacoteca e Theatro Municipal entram por raspagem das próprias páginas públicas — não é acervo do Itaú Cultural nem invenção nossa: é o que um terceiro afirma, com a fonte registrada e a revisão humana ainda pendente.",
 };
 
 export const ROTULO_DA_PROCEDENCIA: Record<Procedencia, string> = {
   ic: "Itaú Cultural",
   derivado: "derivado por nós",
   autorado: "autorado por nós",
+  parceiro: "publicado por parceiro",
 };
 
 // ---------------------------------------------------------------------------
@@ -388,7 +391,7 @@ const CLASSES: readonly ClasseEntidade[] = [
   "trilha",
 ];
 
-const zerado = (): Record<Procedencia, number> => ({ ic: 0, derivado: 0, autorado: 0 });
+const zerado = (): Record<Procedencia, number> => ({ ic: 0, derivado: 0, autorado: 0, parceiro: 0 });
 
 /**
  * A varredura. UMA passada sobre o acervo inteiro, pela porta de `grafo.ts`.
@@ -421,16 +424,19 @@ function acervo(): Acervo {
     ic: new Map(),
     derivado: new Map(),
     autorado: new Map(),
+    parceiro: new Map(),
   };
   const porRelacao: Record<Procedencia, Map<Relacao, number>> = {
     ic: new Map(),
     derivado: new Map(),
     autorado: new Map(),
+    parceiro: new Map(),
   };
   const exemploPorProcedencia: Record<Procedencia, ExemploDeEntidade | null> = {
     ic: null,
     derivado: null,
     autorado: null,
+    parceiro: null,
   };
 
   const vistas = new Set<string>();
@@ -472,6 +478,7 @@ function acervo(): Acervo {
       ic: maiores(porClasse.ic),
       derivado: maiores(porClasse.derivado),
       autorado: maiores(porClasse.autorado),
+      parceiro: maiores(porClasse.parceiro),
     },
     exemploPorProcedencia,
     arestasPorProcedencia,
@@ -479,6 +486,7 @@ function acervo(): Acervo {
       ic: maiores(porRelacao.ic),
       derivado: maiores(porRelacao.derivado),
       autorado: maiores(porRelacao.autorado),
+      parceiro: maiores(porRelacao.parceiro),
     },
     totalDeArestas: vistas.size,
   };

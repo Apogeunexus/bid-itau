@@ -1,0 +1,169 @@
+{
+  "fonte": "https://theatromunicipal.org.br/pt-br/programacao/",
+  "instituicao": "Theatro Municipal de São Paulo",
+  "metodo": "navegador headless via CDP; a listagem é montada no cliente e não vem no HTML",
+  "total": 8,
+  "gratuitos": 1,
+  "eventos": [
+    {
+      "id": "evento:parceiro:tm-quarteto-toca-ernesto-nazareth",
+      "titulo": "Quarteto toca Ernesto Nazareth",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Theatro Municipal de São Paulo",
+      "fonteUrl": "https://theatromunicipal.org.br/eventos/quarteto-toca-ernesto-nazareth/",
+      "linguagemDeclarada": "Concertos",
+      "gratuito": false,
+      "ingressoDeclarado": "pago",
+      "espacoDeclarado": "Praça das Artes",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-03",
+          "fim": "2026-09-03"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:tm-encerramento-do-festival-de-trompas",
+      "titulo": "Encerramento do Festival de Trompas",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Theatro Municipal de São Paulo",
+      "fonteUrl": "https://theatromunicipal.org.br/eventos/encerramento-do-festival-de-trompas/",
+      "linguagemDeclarada": "Música",
+      "gratuito": false,
+      "ingressoDeclarado": "pago",
+      "espacoDeclarado": "Praça das Artes",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-04",
+          "fim": "2026-09-04"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:tm-recital-all-greek-to-me",
+      "titulo": "Recital “All Greek To Me”",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Theatro Municipal de São Paulo",
+      "fonteUrl": "https://theatromunicipal.org.br/eventos/recital-all-greek-to-me/",
+      "linguagemDeclarada": "Música",
+      "gratuito": true,
+      "ingressoDeclarado": "gratuito",
+      "espacoDeclarado": "Theatro Municipal",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-06",
+          "fim": "2026-09-06"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:tm-quarteto-de-cordas-apresenta-dialogos-montgomery-mozart-e-haydn",
+      "titulo": "Quarteto de Cordas – Diálogos: Montgomery, Mozart e Haydn",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Theatro Municipal de São Paulo",
+      "fonteUrl": "https://theatromunicipal.org.br/eventos/quarteto-de-cordas-apresenta-dialogos-montgomery-mozart-e-haydn/",
+      "linguagemDeclarada": "Música",
+      "gratuito": false,
+      "ingressoDeclarado": "pago",
+      "espacoDeclarado": "Praça das Artes",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-17",
+          "fim": "2026-09-17"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:tm-opera-don-carlo",
+      "titulo": "Ópera Don Carlo, de Giuseppe Verdi",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Theatro Municipal de São Paulo",
+      "fonteUrl": "https://theatromunicipal.org.br/eventos/opera-don-carlo/",
+      "linguagemDeclarada": "Ópera",
+      "gratuito": false,
+      "ingressoDeclarado": "pago",
+      "espacoDeclarado": "Theatro Municipal",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-18",
+          "fim": "2026-09-26"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:tm-concerto-luz-e-sombras",
+      "titulo": "Luz e Sombra",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Theatro Municipal de São Paulo",
+      "fonteUrl": "https://theatromunicipal.org.br/eventos/concerto-luz-e-sombras/",
+      "linguagemDeclarada": "Concertos",
+      "gratuito": false,
+      "ingressoDeclarado": "pago",
+      "espacoDeclarado": "Praça das Artes",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-24",
+          "fim": "2026-09-24"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:tm-concerto-curvas-do-vento",
+      "titulo": "Curvas do Vento",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Theatro Municipal de São Paulo",
+      "fonteUrl": "https://theatromunicipal.org.br/eventos/concerto-curvas-do-vento/",
+      "linguagemDeclarada": "Concertos",
+      "gratuito": false,
+      "ingressoDeclarado": "pago",
+      "espacoDeclarado": "Theatro Municipal",
+      "ocorrencias": [
+        {
+          "inicio": "2026-10-02",
+          "fim": "2026-10-03"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:tm-quarteto-toca-shostakovich",
+      "titulo": "Quarteto toca Shostakovich",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Theatro Municipal de São Paulo",
+      "fonteUrl": "https://theatromunicipal.org.br/eventos/quarteto-toca-shostakovich/",
+      "linguagemDeclarada": "Concertos",
+      "gratuito": false,
+      "ingressoDeclarado": "pago",
+      "espacoDeclarado": "Praça das Artes",
+      "ocorrencias": [
+        {
+          "inicio": "2026-10-08",
+          "fim": "2026-10-08"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    }
+  ]
+}

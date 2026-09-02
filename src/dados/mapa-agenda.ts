@@ -93,7 +93,11 @@ export type {
 // ---------------------------------------------------------------------------
 
 /**
- * Os números apurados contra o grafo de 2026-08-22. Eles NÃO são usados para produzir a
+ * Os números apurados contra o grafo de 2026-08-22, REMEDIDOS em 2026-09-01 quando a
+ * ingestão federada entrou: os 16 eventos datados do Theatro Municipal e do MASP levaram
+ * «com sessão» de 129 para 145. A INTERSEÇÃO NÃO MUDOU e é isso que importa — parceiro
+ * traz data, não traz território, então a afirmação de D-90 continua sendo «nenhum evento
+ * cruza data futura com lugar», agora sobre um denominador maior. Eles NÃO são usados para produzir a
  * tela — tudo o que a tela imprime é contado no build. Eles existem para que um acervo
  * regerado que mudasse a forma do problema PARE DE COMPILAR em vez de deixar a tela mentir
  * em silêncio: a frase de D-90 diz «0 dos 129», e um acervo em que a interseção deixasse
@@ -102,7 +106,7 @@ export type {
  * Mesmo molde de `ARESTAS_ENCENADAS_ESPERADAS` em `duplicatas.ts`.
  */
 export const INTERSECCAO_ESPERADA = 0;
-export const EVENTOS_COM_SESSAO_ESPERADOS = 129;
+export const EVENTOS_COM_SESSAO_ESPERADOS = 145;
 export const EVENTOS_COM_LUGAR_ESPERADOS = 158;
 
 /** Teto declarado do DTO desta tela, em bytes. O orçamento deste plano na fase é 60 KB. */

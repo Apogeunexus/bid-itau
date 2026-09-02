@@ -14,6 +14,12 @@
  */
 
 import { CAPAS_EXTRA } from "./capas-extra";
+import {
+  ARESTAS_DE_PARCEIRO,
+  ENTIDADES_DE_PARCEIRO,
+  INSTITUICOES_DE_PARCEIRO,
+  OCORRENCIAS_DE_PARCEIRO,
+} from "./parceiros";
 import entidadesJson from "./gerado/entidades.json";
 import arestasJson from "./gerado/arestas.json";
 import ocorrenciasJson from "./gerado/ocorrencias.json";
@@ -48,9 +54,23 @@ function comCapasExtras(lista: readonly Entidade[]): Entidade[] {
   });
 }
 
-const ENTIDADES = comCapasExtras(entidadesJson as unknown as Entidade[]);
-const ARESTAS = arestasJson as unknown as Aresta[];
-const OCORRENCIAS = ocorrenciasJson as unknown as OcorrenciasPorEvento;
+/**
+ * O ACERVO MAIS OS PARCEIROS, NESTA ORDEM. Ingestão federada entra como camada e não pelo
+ * gerador: `gerar-grafo.mjs` transforma o acervo do Itaú Cultural e não conhece outra
+ * fonte, então dado de parceiro que passasse por lá seria apagado na próxima geração — ou,
+ * pior, sairia indistinguível do acervo. Aqui os dois convivem com a procedência intacta,
+ * e a fronteira continua legível no código e na tela. Ver `parceiros.ts`.
+ */
+const ENTIDADES = [
+  ...comCapasExtras(entidadesJson as unknown as Entidade[]),
+  ...ENTIDADES_DE_PARCEIRO,
+  ...INSTITUICOES_DE_PARCEIRO,
+];
+const ARESTAS = [...(arestasJson as unknown as Aresta[]), ...ARESTAS_DE_PARCEIRO];
+const OCORRENCIAS: OcorrenciasPorEvento = {
+  ...(ocorrenciasJson as unknown as OcorrenciasPorEvento),
+  ...OCORRENCIAS_DE_PARCEIRO,
+};
 
 /**
  * Grau acima do qual um nó é tratado como concentrador e fica barrado como salto

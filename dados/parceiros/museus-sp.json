@@ -1,0 +1,234 @@
+{
+  "metodo": "dois estágios em navegador headless: listagem descobre as páginas, cada página entrega a ficha por Open Graph. Nenhum seletor de tema — só metatag e padrão de data.",
+  "museus": [
+    "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+    "Pinacoteca de São Paulo"
+  ],
+  "total": 13,
+  "comData": 8,
+  "comImagem": 9,
+  "eventos": [
+    {
+      "id": "evento:parceiro:masp-carolina-caycedo-confluencias",
+      "titulo": "CAROLINA CAYCEDO: CONFLUÊNCIAS",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+      "fonteUrl": "https://masp.org.br/exposicoes/carolina-caycedo-confluencias",
+      "resumo": "Museu de Arte de São Paulo",
+      "espacoDeclarado": "MASP, Avenida Paulista, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [
+        {
+          "inicio": "2026-10-04",
+          "fim": "2026-10-04"
+        }
+      ],
+      "imagem": "https://assets.masp.org.br/images/img_01_masp_preto_branco.jpg",
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:masp-sol-calero",
+      "titulo": "SOL CALERO: CASA MARÍA LIONZA",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+      "fonteUrl": "https://masp.org.br/exposicoes/sol-calero",
+      "resumo": "Museu de Arte de São Paulo",
+      "espacoDeclarado": "MASP, Avenida Paulista, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [
+        {
+          "inicio": "2026-07-03",
+          "fim": "2026-07-03"
+        }
+      ],
+      "imagem": "https://assets.masp.org.br/images/img_01_masp_preto_branco.jpg",
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:masp-damian-ortega-materia-e-energia",
+      "titulo": "DAMIÁN ORTEGA: MATÉRIA E ENERGIA",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+      "fonteUrl": "https://masp.org.br/exposicoes/damian-ortega-materia-e-energia",
+      "resumo": "Museu de Arte de São Paulo",
+      "espacoDeclarado": "MASP, Avenida Paulista, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-13",
+          "fim": "2026-09-13"
+        }
+      ],
+      "imagem": "https://assets.masp.org.br/images/img_01_masp_preto_branco.jpg",
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:masp-acervo-em-transformacao-2020",
+      "titulo": "ACERVO EM TRANSFORMAÇÃO",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+      "fonteUrl": "https://masp.org.br/exposicoes/acervo-em-transformacao-2020",
+      "resumo": "Museu de Arte de São Paulo",
+      "espacoDeclarado": "MASP, Avenida Paulista, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [],
+      "imagem": "https://assets.masp.org.br/images/img_01_masp_preto_branco.jpg",
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:masp-historias-latino-americanas",
+      "titulo": "HISTÓRIAS LATINO-AMERICANAS",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+      "fonteUrl": "https://masp.org.br/exposicoes/historias-latino-americanas",
+      "resumo": "Museu de Arte de São Paulo",
+      "espacoDeclarado": "MASP, Avenida Paulista, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-04",
+          "fim": "2027-01-31"
+        }
+      ],
+      "imagem": "https://assets.masp.org.br/images/img_01_masp_preto_branco.jpg",
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:masp-manuel-herreros-mateo-manaure-mi-nombre-es-venezuela",
+      "titulo": "MANUEL HERREROS & MATEO MANAURE: MI NOMBRE ES VENEZUELA",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+      "fonteUrl": "https://masp.org.br/exposicoes/manuel-herreros-mateo-manaure-mi-nombre-es-venezuela",
+      "resumo": "Museu de Arte de São Paulo",
+      "espacoDeclarado": "MASP, Avenida Paulista, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [
+        {
+          "inicio": "2026-11-27",
+          "fim": "2027-04-04"
+        }
+      ],
+      "imagem": "https://assets.masp.org.br/images/img_01_masp_preto_branco.jpg",
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:masp-rosa-elena-curruchich-cronicas-de-comalapa",
+      "titulo": "ROSA ELENA CURRUCHICH: CRÔNICAS DE COMALAPA",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+      "fonteUrl": "https://masp.org.br/exposicoes/rosa-elena-curruchich-cronicas-de-comalapa",
+      "resumo": "Museu de Arte de São Paulo",
+      "espacoDeclarado": "MASP, Avenida Paulista, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [
+        {
+          "inicio": "2026-10-30",
+          "fim": "2027-04-04"
+        }
+      ],
+      "imagem": "https://assets.masp.org.br/images/img_01_masp_preto_branco.jpg",
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:masp-pablo-delano-museu-da-antiga-colonia",
+      "titulo": "PABLO DELANO: MUSEU DA ANTIGA COLÔNIA",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+      "fonteUrl": "https://masp.org.br/exposicoes/pablo-delano-museu-da-antiga-colonia",
+      "resumo": "Museu de Arte de São Paulo",
+      "espacoDeclarado": "MASP, Avenida Paulista, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [
+        {
+          "inicio": "2026-10-30",
+          "fim": "2027-01-31"
+        }
+      ],
+      "imagem": "https://assets.masp.org.br/images/img_01_masp_preto_branco.jpg",
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:masp-jesus-soto",
+      "titulo": "JESÚS SOTO",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "MASP — Museu de Arte de São Paulo Assis Chateaubriand",
+      "fonteUrl": "https://masp.org.br/exposicoes/jesus-soto",
+      "resumo": "Museu de Arte de São Paulo",
+      "espacoDeclarado": "MASP, Avenida Paulista, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [
+        {
+          "inicio": "2026-11-27",
+          "fim": "2027-04-04"
+        }
+      ],
+      "imagem": "https://assets.masp.org.br/images/img_01_masp_preto_branco.jpg",
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:pinacoteca-uma-obra-pintura-sem-fim",
+      "titulo": "Uma Obra: Pintura sem fim",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Pinacoteca de São Paulo",
+      "fonteUrl": "https://pinacoteca.org.br/programacao/exposicoes/uma-obra-pintura-sem-fim/",
+      "resumo": null,
+      "espacoDeclarado": "Pinacoteca de São Paulo, Luz, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:pinacoteca-nao-se-assuste-pessoa",
+      "titulo": "Não se assuste, pessoa",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Pinacoteca de São Paulo",
+      "fonteUrl": "https://pinacoteca.org.br/programacao/exposicoes/nao-se-assuste-pessoa/",
+      "resumo": null,
+      "espacoDeclarado": "Pinacoteca de São Paulo, Luz, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:pinacoteca-para-criancas",
+      "titulo": "Para crianças: experiências com a arte desde 1968",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Pinacoteca de São Paulo",
+      "fonteUrl": "https://pinacoteca.org.br/programacao/exposicoes/para-criancas/",
+      "resumo": null,
+      "espacoDeclarado": "Pinacoteca de São Paulo, Luz, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:pinacoteca-beatriz-milhazes",
+      "titulo": "Beatriz Milhazes: gravuras do acervo da Pinacoteca de São Paulo",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Pinacoteca de São Paulo",
+      "fonteUrl": "https://pinacoteca.org.br/programacao/exposicoes/beatriz-milhazes/",
+      "resumo": null,
+      "espacoDeclarado": "Pinacoteca de São Paulo, Luz, São Paulo, SP",
+      "gratuito": null,
+      "ocorrencias": [],
+      "imagem": null,
+      "revisadoPor": null
+    }
+  ]
+}

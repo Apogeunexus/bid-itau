@@ -19,7 +19,14 @@
  * - `derivado`  — calculado a partir de dado `ic` por regra determinística
  * - `autorado`  — escrito à mão para o protótipo, e rotulado como tal na tela
  */
-export type Procedencia = "ic" | "derivado" | "autorado";
+/**
+ * De onde o campo veio. O enum do PRD §6 tem seis valores; o protótipo usava três, porque
+ * só existiam três fontes. `parceiro` entra em 2026-09 com a ingestão federada — MASP,
+ * Pinacoteca e Theatro Municipal raspados — e é o que separa, NA TELA, o que o Itaú
+ * Cultural publicou do que um terceiro publicou. Sem ele os dois seriam a mesma coisa,
+ * que é o erro exato que a procedência existe para impedir.
+ */
+export type Procedencia = "ic" | "derivado" | "autorado" | "parceiro";
 
 /** Sistema de onde o identificador de origem foi lido. Compõe o `id`. */
 export type OrigemId = "cms" | "enc" | "derivado" | "autorado";
