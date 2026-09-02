@@ -1,5 +1,6 @@
 import { Grafismo } from "@/componentes/grafismo";
 import { linguagemPorId } from "@/componentes/selo-linguagem";
+import { rotuloDaClasse } from "@/lib/rotulos";
 import type { ClasseEntidade } from "@/dados/tipos";
 
 /**
@@ -96,7 +97,7 @@ export function CapaSemImagem({
 
       {compacta ? null : (
         <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
-          {rotulo ?? classe}
+          {rotulo ?? rotuloDaClasse(classe)}
         </span>
       )}
     </div>
@@ -169,7 +170,7 @@ export function CapaDeCartao({
       />
       {compacta ? null : (
         <span className="relative m-2 mt-auto rounded-full bg-[var(--ic-branco)] px-2 py-0.5 text-[0.65rem] font-bold tracking-widest text-[var(--ic-preto)] uppercase">
-          {rotulo ?? classe}
+          {rotulo ?? rotuloDaClasse(classe)}
         </span>
       )}
       {compacta || !creditoImagem ? null : (

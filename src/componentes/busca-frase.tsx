@@ -19,6 +19,7 @@ import {
   type VizinhancaDeSemelhanca,
 } from "@/dados/frase";
 import { ROTA_POR_CLASSE } from "@/dados/rotas";
+import { rotuloDaClasse } from "@/lib/rotulos";
 import type { ClasseEntidade } from "@/dados/tipos";
 
 /**
@@ -76,23 +77,6 @@ const TETO_EXIBICAO = 100;
 /** Quantos ids cabem na gramática de lente sem estourar a URL. O corte é declarado. */
 const TETO_LENTE = 60;
 
-const ROTULO_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  conteudo: "editorial",
-  pessoa: "pessoa",
-  midia: "mídia",
-  termo: "verbete",
-  territorio: "território",
-  evento: "evento",
-  instituicao: "instituição",
-  obra: "obra",
-  coletivo: "coletivo",
-  espaco: "espaço",
-  tema: "tema",
-  formacao: "formação",
-  publicacao: "publicação",
-  linguagem: "linguagem",
-  trilha: "trilha",
-};
 
 
 
@@ -595,7 +579,7 @@ export function BuscaFrase({
               em{" "}
               {Object.entries(resposta.porClasse)
                 .sort((a, b) => b[1] - a[1])
-                .map(([classe, n]) => `${ROTULO_CLASSE[classe as ClasseEntidade] ?? classe} ${n}`)
+                .map(([classe, n]) => `${rotuloDaClasse(classe as ClasseEntidade)} ${n}`)
                 .join(" · ")}
             </p>
           ) : null}
@@ -643,7 +627,7 @@ export function BuscaFrase({
                 >
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="frase-tipo" data-tipo-rotulo>
-                      {ROTULO_CLASSE[resultado.classe] ?? resultado.classe}
+                      {rotuloDaClasse(resultado.classe)}
                     </span>
                     {resultado.territorioRotulo ? (
                       <span className="text-xs text-tinta-2">{resultado.territorioRotulo}</span>

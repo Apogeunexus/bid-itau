@@ -81,44 +81,8 @@
   outline: none;
 }
 
-.busca-caixa-filtro {
-  position: relative;
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 0;
-  border-radius: var(--raio-pilula);
-  background: var(--cor-superficie-2);
-  color: var(--cor-tinta);
-  cursor: pointer;
-}
 
-.busca-caixa-filtro:focus-visible {
-  outline: 2px solid var(--cor-acao);
-  outline-offset: 2px;
-}
 
-.busca-caixa-filtro-n {
-  position: absolute;
-  top: -0.25rem;
-  right: -0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.25rem;
-  height: 1.25rem;
-  padding: 0 0.25rem;
-  border-radius: var(--raio-pilula);
-  background: var(--cor-acao);
-  color: var(--cor-sobre-acao);
-  font-size: var(--tipo-micro);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-}
 
 svg.busca-glifo {
   display: block;
@@ -862,4 +826,79 @@ svg.busca-glifo {
 
 [data-view="web"] .busca-folha-scrim {
   display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * O FILTRO COMO LINHA, e não como ícone dentro do campo (2026-09).
+ *
+ * O modelo é `/filtros/`: todo controle diz seu estado EM PALAVRAS. O ícone de
+ * sliders com um número sobreposto dizia «há três» sem dizer três de quê, e só
+ * para quem já sabia que aquele ícone era o filtro. A linha diz a palavra e o
+ * estado, e ocupa a largura toda porque é o único controle daquele degrau.
+ * ------------------------------------------------------------------------- */
+.busca-filtro-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  text-align: start;
+  cursor: pointer;
+  transition: border-color var(--dur-1) var(--ease-padrao);
+}
+
+.busca-filtro-linha:hover {
+  border-color: var(--cor-acao);
+}
+
+.busca-filtro-linha-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+.busca-filtro-linha-estado {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+}
+
+/* Com filtro aplicado o estado é AÇÃO EM CURSO, e ganha a cor de ação — é a
+   mesma leitura que «1 filtro aplicado» tem no alto de `/filtros/`. */
+.busca-filtro-linha[aria-expanded="true"] .busca-filtro-linha-estado,
+.busca-filtro-linha:hover .busca-filtro-linha-estado {
+  color: var(--cor-acao-tinta);
+}
+
+/* ---------------------------------------------------------------------------
+ * AS SEÇÕES EM GRADE. Duas colunas no app, quatro na web: o que decide é caber
+ * inteiro. Nenhum item pela metade, nenhuma seta por cima de conteúdo.
+ * ------------------------------------------------------------------------- */
+.busca-secoes-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+[data-view="web"] .busca-secoes-grade {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.busca-secoes-grade > * {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* O tipo do item da amostra, agora abaixo do título e não sobre a foto. */
+.busca-amostra-tipo {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+  text-transform: lowercase;
 }

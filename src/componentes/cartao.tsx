@@ -3,6 +3,7 @@ import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
 import type { Cartao as CartaoDTO } from "@/dados/cartao";
 import { rotaDaEntidade } from "@/dados/rotas";
+import { rotuloDaClasse } from "@/lib/rotulos";
 import type { ClasseEntidade } from "@/dados/tipos";
 
 /**
@@ -64,29 +65,6 @@ const ROTULO_ESPECIAL: Record<NonNullable<CartaoDTO["especial"]>, string> = {
   curado: "Destaque curado",
   serendipidade: "Fora do seu repertório, de propósito",
 };
-
-/** Classe da ontologia → o nome da categoria na tag. Espelha `buscar.tsx`. */
-const ROTULO_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  conteudo: "editorial",
-  pessoa: "pessoa",
-  midia: "mídia",
-  termo: "verbete",
-  territorio: "território",
-  evento: "evento",
-  instituicao: "instituição",
-  obra: "obra",
-  coletivo: "coletivo",
-  espaco: "espaço",
-  tema: "tema",
-  formacao: "formação",
-  publicacao: "publicação",
-  linguagem: "linguagem",
-  trilha: "trilha",
-};
-
-function rotuloDaClasse(classe: ClasseEntidade): string {
-  return ROTULO_CLASSE[classe] ?? classe;
-}
 
 // ---------------------------------------------------------------------------
 // Componente

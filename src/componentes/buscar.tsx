@@ -41,6 +41,7 @@ import {
   type ResultadoBusca,
 } from "@/dados/indice";
 import { ROTA_POR_CLASSE } from "@/dados/rotas";
+import { rotuloDaClasse } from "@/lib/rotulos";
 import type { ClasseEntidade } from "@/dados/tipos";
 
 /**
@@ -137,27 +138,6 @@ const GIRO_DA_SUGESTAO = 4000;
  * internos da ontologia faria a etiqueta de tipo — o elemento que sustenta D-63 — pedir
  * tradução justamente de quem está vendo a tela pela primeira vez.
  */
-const ROTULO_CLASSE: Partial<Record<ClasseEntidade, string>> = {
-  conteudo: "editorial",
-  pessoa: "pessoa",
-  midia: "mídia",
-  termo: "verbete",
-  territorio: "território",
-  evento: "evento",
-  instituicao: "instituição",
-  obra: "obra",
-  coletivo: "coletivo",
-  espaco: "espaço",
-  tema: "tema",
-  formacao: "formação",
-  publicacao: "publicação",
-  linguagem: "linguagem",
-  trilha: "trilha",
-};
-
-function rotuloDaClasse(classe: ClasseEntidade): string {
-  return ROTULO_CLASSE[classe] ?? classe;
-}
 
 const ROTULO_CAMPO: Record<CampoCriterio, string> = {
   texto: "texto",
@@ -536,27 +516,32 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
             onChange={(e) => setTexto(e.target.value)}
             onBlur={() => registrarRecente(texto)}
           />
-          <button
-            type="button"
-            className="busca-caixa-filtro"
-            aria-label={
-              nFiltros
-                ? `Ir para os filtros, ${milhar(nFiltros)} ${nFiltros === 1 ? "ativo" : "ativos"}`
-                : "Ir para os filtros"
-            }
-            aria-controls="busca-facetas"
-            aria-expanded={mostrarFiltros}
-            onClick={irAosFiltros}
-          >
-            <Mini icone={ICONE_FILTROS} />
-            {nFiltros ? (
-              <span className="busca-caixa-filtro-n" aria-hidden>
-                {milhar(nFiltros)}
-              </span>
-            ) : null}
-          </button>
         </div>
       </form>
+
+      {/* O FILTRO SAIU DE DENTRO DO CAMPO (2026-09). Ele era um ícone de sliders sem
+          rótulo, com um número sobreposto, dentro da caixa de busca — a mesma função que
+          em `/acontece/` e `/descobrir/` chega por um Chip com a palavra escrita. Três
+          formas para uma função é o que fazia esta tela destoar das outras. Agora ela seg
+          o modelo de `/filtros/`: palavra à esquerda, ESTADO EM PALAVRAS à direita, nunca
+          um ícone mudo — quem olha sabe se há filtro aplicado sem tocar em nada. */}
+      <button
+        type="button"
+        className="busca-filtro-linha"
+        aria-controls="busca-facetas"
+        aria-expanded={mostrarFiltros}
+        onClick={irAosFiltros}
+      >
+        <span className="busca-filtro-linha-rotulo">
+          <Mini icone={ICONE_FILTROS} />
+          Filtros
+        </span>
+        <span className="busca-filtro-linha-estado">
+          {nFiltros
+            ? `${milhar(nFiltros)} ${nFiltros === 1 ? "aplicado" : "aplicados"}`
+            : "nenhum aplicado"}
+        </span>
+      </button>
 
       {/* Critérios marcados: fichas visíveis e removíveis, cada uma dizendo quantos
           resultados haveria SEM ela (D-64). É a informação que o plano 03-06 usa para
@@ -622,32 +607,27 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   busca abre como um índice de blog, com as seções selecionáveis.
                   Marcar uma seção é marcar o critério de classe: o mesmo mecanismo
                   de faceta de sempre, só que na porta. */}
-              <Estante
-                className="busca-bloco"
-                titulo="Explore por seção"
-                rotulo="Explorar por seção do acervo"
-              >
-                {/* Sem «Ver todas»: as 15 classes já estão no trilho. A seta é
-                    o recado de que há mais — um link que não leva a uma página
-                    de seções mentiria o destino. */}
-                {/* O RÓTULO PASSA POR `rotuloDaClasse`, e isso é conserto e não gosto:
-                    `opcao.rotulo` é o valor cru da ontologia, e a fileira dizia
-                    «conteudo», «midia», «territorio» — sem acento, e com os nomes
-                    internos do modelo de dados na primeira fileira que a pessoa vê. É
-                    exatamente o que o mapa de rótulos existe para impedir, e a faceta
-                    «tipo» lá embaixo já o usava; aqui faltava. */}
-                {facetas.classe.map((opcao) => (
-                  <Chip
-                    key={chaveCriterio(opcao)}
-                    variante="explorar"
-                    data-faceta={chaveCriterio(opcao)}
-                    onClick={() => alternarCriterio(opcao)}
-                  >
-                    {iconeDaClasse(opcao.valor)}
-                    {rotuloDaClasse(opcao.valor as ClasseEntidade)}
-                  </Chip>
-                ))}
-              </Estante>
+              {/* GRADE, E NÃO TRILHO (2026-09). Como Estante, as classes rolavam na
+                  horizontal: o terceiro item aparecia pela metade e a seta de «há mais»
+                  ficava POR CIMA dele. Cortar um item ao meio é o oposto do que o modelo
+                  de `/filtros/` faz — lá todo controle cabe inteiro e diz seu estado. Em
+                  grade as quinze classes cabem, sem seta sobreposta e sem corte. */}
+              <section className="busca-bloco">
+                <p className="busca-bloco-titulo">explore por seção</p>
+                <div className="busca-secoes-grade">
+                  {facetas.classe.map((opcao) => (
+                    <Chip
+                      key={chaveCriterio(opcao)}
+                      variante="explorar"
+                      data-faceta={chaveCriterio(opcao)}
+                      onClick={() => alternarCriterio(opcao)}
+                    >
+                      {iconeDaClasse(opcao.valor)}
+                      {rotuloDaClasse(opcao.valor as ClasseEntidade)}
+                    </Chip>
+                  ))}
+                </div>
+              </section>
 
               {/* A VITRINE: cartões reais do índice com a capa na cor da linguagem —
                   a aparência dominante do produto (M-6), sem custo novo de bytes. */}
@@ -660,16 +640,25 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                       href={`${ROTA_POR_CLASSE[entrada.classe]}/${entrada.slug}/`}
                       className="flex flex-col gap-1.5 no-underline"
                     >
+                      {/* `compacta`: a pastilha de tipo e a faixa de crédito dividiam o
+                          mesmo canto da capa e os DOIS saíam cortados — «Digitalizado do
+                          origin…», «Foto de Autoria desc…». O tipo desce para a linha de
+                          metadados, onde cabe inteiro; o crédito continua no `alt`, que é
+                          onde quem não vê a imagem o encontra. */}
                       <CapaDeCartao
                         titulo={entrada.titulo}
                         classe={entrada.classe}
                         linguagens={entrada.linguagens}
                         imagem={entrada.imagem}
                         creditoImagem={entrada.creditoImagem}
+                        compacta
                         className="aspect-square w-full rounded-p"
                       />
                       <span className="line-clamp-2 text-sm leading-snug font-semibold">
                         {entrada.titulo}
+                      </span>
+                      <span className="busca-amostra-tipo">
+                        {rotuloDaClasse(entrada.classe)}
                       </span>
                     </Link>
                   ))}
