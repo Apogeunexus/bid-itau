@@ -679,7 +679,16 @@ export function montarFeed({
   const slots: (Candidato | null)[] = new Array(Math.max(0, limite)).fill(null);
 
   // --- D-29: o destaque curado sobrepõe o rodízio, em posição fixa ---
-  const balideTrilha = baldes.get("trilha") ?? [];
+  //
+  // O DESTAQUE PASSOU A SER ACONTECIMENTO, E NÃO MAIS TRILHA (2026-09). D-29 fixa a
+  // POSIÇÃO do destaque curado, não a classe dele: «o primeiro cartão é escolhido pela
+  // curadoria». Trilha era a única coisa que havia para destacar enquanto o acervo não
+  // tinha programação com data — e destacar uma trilha autorada como abertura de um feed
+  // de descoberta é abrir com o que nós escrevemos, não com o que está acontecendo.
+  //
+  // Com a ingestão federada há evento datado, e é ele que abre. A trilha continua no
+  // rodízio, no lugar que o balde dela alcançar.
+  const balideTrilha = baldes.get("evento")?.length ? baldes.get("evento")! : (baldes.get("trilha") ?? []);
   const curado = balideTrilha.length && limite > POSICAO_CURADO ? balideTrilha.shift()! : null;
   if (curado) {
     slots[POSICAO_CURADO] = curado;

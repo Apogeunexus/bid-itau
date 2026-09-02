@@ -111,6 +111,33 @@ const EXTRAIR = `(() => {
   return JSON.stringify(lidos);
 })()`;
 
+
+/** Abre a página do evento e completa foto e descrição — a listagem não as traz. */
+const FICHA_DA_PAGINA = `(() => {
+  const meta = (p) => document.querySelector(\`meta[property="\${p}"], meta[name="\${p}"]\`)?.content || null;
+  const og = meta("og:image");
+  let maior = null, area = 0;
+  for (const im of document.querySelectorAll("img")) {
+    const a = (im.naturalWidth || 0) * (im.naturalHeight || 0);
+    if (a > area && (im.naturalWidth || 0) >= 400) { area = a; maior = im.currentSrc || im.src; }
+  }
+  // A CHAMADA VEM DO CORPO QUANDO A METATAG NÃO SERVE. O Municipal não tem og:description,
+  // e a da Casa das Rosas é o próprio título repetido — nos dois casos o cartão ficaria sem
+  // linha de apoio. O primeiro parágrafo de tamanho de frase é o que a página oferece a
+  // quem chega, e é o que serve. Nada é escrito por nós.
+  const titulo = (document.querySelector("h1")?.innerText || "").trim();
+  const desc = meta("og:description") || meta("description");
+  let corpo = null;
+  for (const p of document.querySelectorAll("p")) {
+    const t = (p.innerText || "").replace(/\\s+/g, " ").trim();
+    if (t.length >= 60 && t.length <= 400 && t !== titulo && !/cookie|privacidade|newsletter|atalhos?\\s+Ctrl|aumentar ou diminuir|contraste|leitor de tela|utilize os atalhos|programa..o completa e garanta/i.test(t)) {
+      corpo = t; break;
+    }
+  }
+  const resumo = desc && desc.trim() && desc.trim() !== titulo ? desc.trim() : corpo;
+  return JSON.stringify({ imagem: og || maior, resumo });
+})()`;
+
 /** dd/mm/aaaa → aaaa-mm-dd. O grafo fala ISO; a fonte, não. */
 function paraIso(br) {
   const [d, m, a] = br.split("/");
@@ -130,6 +157,18 @@ try {
   console.log(`  itens na listagem: ${n?.value ?? n}`);
   const cru = await cdp.avaliar(EXTRAIR);
   lidos = JSON.parse(typeof cru === "string" ? cru : (cru?.value ?? "[]"));
+  // SEGUNDO ESTÁGIO: a listagem do JetEngine não traz foto nem chamada, e cartão sem
+  // capa nem descrição não sustenta um feed. Cada página é aberta uma vez.
+  for (const e of lidos) {
+    if (!e.url) continue;
+    await cdp.navegar(e.url);
+    await new Promise((r) => setTimeout(r, 1400));
+    const f = await cdp.avaliar(FICHA_DA_PAGINA);
+    const ficha = JSON.parse(typeof f === "string" ? f : (f?.value ?? "{}"));
+    e.imagem = ficha.imagem || e.imagem;
+    e.resumo = ficha.resumo || null;
+    console.log(`      ${ficha.imagem ? "[img]" : "[   ]"} ${e.titulo.slice(0, 46)}`);
+  }
 } finally {
   await cdp.encerrar();
 }
@@ -150,6 +189,7 @@ const eventos = lidos
     espacoDeclarado: e.espaco,
     ocorrencias: [{ inicio: paraIso(e.inicio), fim: paraIso(e.fim) }],
     imagem: e.imagem,
+    resumo: e.resumo ?? null,
     // Nada daqui entra no grafo sem passar por gente. O campo existe para que a fila de
     // revisão do Studio saiba que ninguém ainda olhou.
     revisadoPor: null,

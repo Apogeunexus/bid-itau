@@ -300,6 +300,28 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
           medido); nos dois eventos de demonstração o link é AUTORADO e rotulado como
           tal, no estatuto da trilha do Cenário 1 (D-37). O `<a>` externo é clique da
           pessoa, não requisição do protótipo — zero rede em runtime continua valendo. */}
+      {/* O LINK DE RESERVA DO PARCEIRO (2026-09). Quando o evento veio por ingestão
+          federada, quem vende ou reserva é a instituição, não nós — e a URL que a raspagem
+          guardou é justamente a página onde isso acontece. Sem este botão o cartão contava
+          um evento e deixava a pessoa sem saída: descobrir sem poder ir é meio produto.
+          `rel="noreferrer"` e `target="_blank"` porque o destino é site de terceiro. */}
+      {entidade.procedencia === "parceiro" && typeof entidade.extra?.fonteUrl === "string" ? (
+        <div className="flex flex-col gap-1">
+          <a
+            href={entidade.extra.fonteUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao no-underline transition-opacity hover:opacity-90"
+          >
+            Reservar em {entidade.fonte} ↗
+          </a>
+          <p className="text-xs leading-snug text-tinta-2">
+            A reserva é feita no site da instituição. Nós levamos até lá — a Fundação Itaú
+            não transaciona ingresso.
+          </p>
+        </div>
+      ) : null}
+
       {ingresso ? (
         <div className="flex flex-col gap-1">
           <a
