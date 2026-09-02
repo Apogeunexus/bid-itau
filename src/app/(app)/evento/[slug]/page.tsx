@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { FichaDeAcessibilidade } from "@/componentes/ficha-acessibilidade";
+import { ICONE_FICHA, ICONE_MAPA, ICONE_RELOGIO } from "@/componentes/base/icones";
 import { Grafismo } from "@/componentes/grafismo";
 import {
   ListaDeOcorrencias,
@@ -141,6 +142,34 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
     };
   });
 
+  // --- OS TRÊS FATOS DO ALTO (2026-09) -------------------------------------
+  // Onde, quando e ingresso. Antes era preciso rolar até o meio da tela para saber quando
+  // o evento acontece: a contagem de sessões vinha depois de dois parágrafos sobre o que o
+  // acervo não publica. Cada fato declara a AUSÊNCIA em uma linha quando a fonte não traz
+  // — a honestidade continua, deixa de ser parágrafo.
+  const ordenadas = [...ocorrencias].sort((a, b) => a.inicio.localeCompare(b.inicio));
+  const primeira = ordenadas[0];
+  const espacoDoFato = ordenadas.find((o) => o.espaco)?.espaco ?? doEvento;
+  const gratuitas = ocorrencias.filter((o) => o.gratuito).length;
+
+  const quando = primeira
+    ? new Intl.DateTimeFormat("pt-BR", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(new Date(primeira.inicio))
+    : null;
+
+  const ingressoDoFato = !ocorrencias.length
+    ? null
+    : gratuitas === ocorrencias.length
+      ? "Todas as sessões gratuitas"
+      : gratuitas === 0
+        ? "Nenhuma sessão gratuita declarada"
+        : `${gratuitas} de ${ocorrencias.length} sessões gratuitas`;
+
   // --- a ponte, nos dois sentidos ------------------------------------------
   const grupos = indexar(vinculosDe(entidade.id));
   const quemRealiza = grupos.get("quem-realiza");
@@ -194,6 +223,44 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
           </p>
         )}
       </header>
+
+      {/* O BLOCO DE FATOS — onde, quando e ingresso, antes de qualquer parágrafo. */}
+      <section className="ev-fatos" aria-label="Onde, quando e ingresso">
+        <div className="ev-fato">
+          <span className="ev-fato-icone" aria-hidden>
+            {ICONE_MAPA}
+          </span>
+          <div>
+            <p className="ev-fato-valor">{espacoDoFato ?? "Local não publicado"}</p>
+            {espacoDoFato ? null : (
+              <p className="ev-fato-nota">O acervo não situa esta entrada em nenhum espaço.</p>
+            )}
+          </div>
+        </div>
+
+        <div className="ev-fato">
+          <span className="ev-fato-icone" aria-hidden>
+            {ICONE_RELOGIO}
+          </span>
+          <div>
+            <p className="ev-fato-valor">{quando ?? "Sem sessão datada"}</p>
+            <p className="ev-fato-nota">
+              {ocorrencias.length
+                ? `${ocorrencias.length} ${ocorrencias.length === 1 ? "sessão" : "sessões"} no total`
+                : "O acervo registra este evento sem data de sessão."}
+            </p>
+          </div>
+        </div>
+
+        {ingressoDoFato ? (
+          <div className="ev-fato">
+            <span className="ev-fato-icone" aria-hidden>
+              {ICONE_FICHA}
+            </span>
+            <p className="ev-fato-valor">{ingressoDoFato}</p>
+          </div>
+        ) : null}
+      </section>
 
       {/* ------------------------------------------------------------------ */}
       {/* AS DUAS COLUNAS DA VISÃO WEB (D-80, tela 27), E A MESMA PILHA DA     */}

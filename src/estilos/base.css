@@ -1163,3 +1163,136 @@ body {
 [data-view="web"] .selo-motivo {
   font-size: var(--tipo-detalhe);
 }
+
+/* ---------------------------------------------------------------------------
+ * SAIBA MAIS — o popup dos textos longos da ficha (2026-09).
+ *
+ * O gatilho é LINK, não botão cheio: ele não é a ação da tela, é a porta para o
+ * argumento. Laranja porque é ação, sublinhado porque é a única forma de dizer
+ * «isto abre» sem gastar um ícone.
+ * ------------------------------------------------------------------------- */
+.saiba-mais-gatilho {
+  align-self: flex-start;
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  color: var(--cor-acao-tinta);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.saiba-mais {
+  margin: auto auto 0;
+  width: 100%;
+  max-width: 34rem;
+  max-height: 82vh;
+  padding: 0;
+  border: none;
+  border-radius: var(--raio-g) var(--raio-g) 0 0;
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+}
+
+/* Na web ele deixa de ser gaveta de baixo e vira painel centrado — a mesma peça,
+   duas medidas, sem um componente irmão por visão (D-05). */
+[data-view="web"] .saiba-mais {
+  margin: auto;
+  border-radius: var(--raio-g);
+}
+
+.saiba-mais::backdrop {
+  background: color-mix(in srgb, var(--ic-preto) 55%, transparent);
+}
+
+.saiba-mais-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-tela);
+}
+
+.saiba-mais-cabeca {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-pilha);
+}
+
+.saiba-mais-titulo {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-titulo-3);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.saiba-mais-fechar {
+  flex: none;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie-2);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.saiba-mais-texto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  overflow-y: auto;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.5;
+  color: var(--cor-tinta-2);
+}
+
+/* ---------------------------------------------------------------------------
+ * O BLOCO DE FATOS da ficha do evento: onde, quando e ingresso, no alto.
+ *
+ * Antes era preciso rolar até o meio da tela para saber QUANDO o evento
+ * acontece — a contagem de sessões vinha depois de dois parágrafos sobre o que
+ * o acervo não publica. Três linhas com ícone respondem as três perguntas que
+ * levam alguém a abrir uma ficha de evento.
+ * ------------------------------------------------------------------------- */
+.ev-fatos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.ev-fato {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.ev-fato-icone {
+  display: flex;
+  padding-top: 0.25rem;
+  color: var(--cor-acao-tinta);
+}
+
+.ev-fato-valor {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.ev-fato-nota {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-tinta-3);
+  line-height: 1.35;
+}
+
+/* O glifo do fato tem tamanho fixo: os três ícones vêm do mesmo `<Icone>` e
+   herdariam o tamanho do texto ao redor, que muda entre app e web. */
+.ev-fato-icone svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import { SaibaMais } from "@/componentes/base/saiba-mais";
 import { useSessao } from "@/contexto/sessao";
 
 /**
@@ -154,14 +155,31 @@ export function ListaDeOcorrencias({
           {proxima ? ` · a próxima ${porExtenso(proxima.inicio)}` : ""}
         </h2>
 
+        {/* O PARÁGRAFO VIROU POPUP (2026-09). Ele explicava, em quatro linhas no
+            corpo da ficha, por que as sessões listadas já passaram — informação
+            correta, e a primeira coisa que alguém lia sobre o evento. Na tela fica
+            o fato em uma linha; o argumento inteiro abre no «Por que estas datas?»,
+            palavra por palavra. */}
         {ocorrencias.length > 0 && !proxima ? (
-          <p className="text-xs leading-relaxed text-tinta-2">
-            {`Nenhuma sessão futura em relação à data de referência: ${
-              ocorrencias.length === 1
-                ? "a sessão listada já passou"
-                : "as sessões listadas já passaram"
-            }. Elas continuam na tela porque o registro do evento é o mesmo — o que mudou foi a data em que este protótipo foi gerado.`}
-          </p>
+          <div className="flex flex-col items-start gap-1">
+            <p className="text-xs leading-relaxed text-tinta-2">
+              {ocorrencias.length === 1
+                ? "A sessão listada já passou."
+                : "As sessões listadas já passaram."}
+            </p>
+            <SaibaMais rotulo="Por que estas datas?" titulo="Por que estas datas">
+              <p>
+                {`Nenhuma sessão futura em relação à data de referência: ${
+                  ocorrencias.length === 1
+                    ? "a sessão listada já passou"
+                    : "as sessões listadas já passaram"
+                }. Elas continuam na tela porque o registro do evento é o mesmo — o que mudou foi a data em que este protótipo foi gerado.`}
+              </p>
+              <p>
+                {`A data de referência deste protótipo é ${curta(dataDeReferencia)}. Ela existe para que o comportamento da tela seja o mesmo hoje e daqui a seis meses: sem uma data fixa, «próxima sessão» mudaria de resposta a cada dia e a demonstração deixaria de ser reproduzível.`}
+              </p>
+            </SaibaMais>
+          </div>
         ) : null}
 
         {/* A data de referência só é dita onde ela decide alguma coisa. No evento
