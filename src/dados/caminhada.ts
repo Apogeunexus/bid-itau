@@ -545,6 +545,23 @@ function escolherSerendipidade(
       if (FORA_DO_FEED.has(e.slug)) continue;
       if (expansao.visitados.has(e.id)) continue;
       if (!permitido(e)) continue;
+      // A MESMA REGRA DO BALDE VALE AQUI. A serendipidade não passa pelos baldes, e por
+      // isso escapou do crivo na primeira tentativa: era ela que punha a «10ª Bienal
+      // Internacional de Gravura» — sem imagem, sem descrição, sem sessão — na posição 5.
+      // Um cartão que existe para surpreender não pode surpreender com uma ficha vazia.
+      if (
+        e.classe === "evento" &&
+        !(
+          e.imagem &&
+          e.resumo &&
+          typeof e.extra?.fonteUrl === "string" &&
+          !e.clonadoDe &&
+          !e.id.startsWith("evento:autorado:dup-") &&
+          ocorrenciasDe(e.id).length
+        )
+      ) {
+        continue;
+      }
       const chave = semear(personaId, e.id);
       if (chave < melhorChave) {
         melhorChave = chave;
@@ -662,13 +679,45 @@ export function montarFeed({
   const elegiveis = expansao.candidatos.filter((c) => filtro.permitido(c.entidade));
   const cortados = expansao.candidatos.length - elegiveis.length;
 
+  /**
+   * FICHA INCOMPLETA NÃO VIRA CARTÃO DE EVENTO (2026-09).
+   *
+   * A regra vale para o acervo tanto quanto para o parceiro. «10ª Bienal Internacional de
+   * Gravura» chegou ao feed sem imagem, sem descrição e sem sessão nenhuma: um cartão que
+   * anuncia um acontecimento e não diz o que é, quando é nem com que cara. Numa
+   * demonstração ao vivo é justamente esse que a banca abre.
+   *
+   * Só evento passa por este crivo, e de propósito: artista, verbete e obra são fichas de
+   * acervo e existem legitimamente sem data. Acontecimento sem data não é acontecimento.
+   *
+   * Isto é «curadoria antes de quantidade» aplicada onde dói: o feed encolhe de classe em
+   * vez de mostrar promessa vazia.
+   */
+  const fichaCompleta = (c: Candidato): boolean => {
+    const e = c.entidade;
+    if (e.classe !== "evento") return true;
+    // DUPLICATA PLANTADA NUNCA VAI PARA O FEED. Os ~40 clones do Cenário 3 existem para a
+    // fila do Studio provar a deduplicação; um deles chegou a aparecer no Descobrir, que é
+    // o pior lugar possível — o produto mostrando de vitrine o defeito que ele conserta.
+    if (e.clonadoDe || e.id.startsWith("evento:autorado:dup-")) return false;
+    // AS CINCO RESPOSTAS: o que é, quando, onde, com que cara e COMO IR. O link de reserva
+    // entra no crivo porque descobrir sem poder ir é meio produto — e um cartão de agenda
+    // sem saída é promessa que a tela não cumpre.
+    const temLink = typeof e.extra?.fonteUrl === "string" && e.extra.fonteUrl.length > 0;
+    return Boolean(e.imagem && e.resumo && temLink && ocorrenciasDe(e.id).length);
+  };
+
+
   // --- baldes por classe, cada um já ordenado por DP-D/DP-E ---
   const baldes = new Map<ClasseEntidade, Candidato[]>();
   for (const classe of ROTACAO) baldes.set(classe, []);
-  for (const c of elegiveis) baldes.get(c.entidade.classe)?.push(c);
+  for (const c of elegiveis) {
+    if (!fichaCompleta(c)) continue;
+    baldes.get(c.entidade.classe)?.push(c);
+  }
   // A reserva de 3 saltos entra DEPOIS de tudo que tem 1 ou 2, e só nas classes vazias.
   for (const c of expansao.reserva) {
-    if (!filtro.permitido(c.entidade)) continue;
+    if (!filtro.permitido(c.entidade) || !fichaCompleta(c)) continue;
     baldes.get(c.entidade.classe)?.push(c);
   }
   for (const [classe, lista] of baldes) {

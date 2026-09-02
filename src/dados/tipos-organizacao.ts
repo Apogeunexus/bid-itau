@@ -1348,34 +1348,60 @@ export const POR_QUE_A_PREVIA =
  */
 export const O_QUE_O_ALCANCE_NAO_SUSTENTA: readonly { medida: string; porque: string }[] = [
   {
-    medida: "público presente",
-    porque:
-      "não existe sinal de presença no acervo: nenhuma ocorrência declara lotação, bilheteria " +
-      "ou contagem de porta. Um número aqui seria inventado inteiro.",
-  },
-  {
-    medida: "visualizações e escutas",
-    porque:
-      "o acervo traz a mídia, não a métrica dela. Play e Cast são telas do produto; o " +
-      "contador de reprodução mora no serviço que serve o arquivo, e não há um.",
-  },
-  {
-    medida: "inscrições efetivadas",
-    porque:
-      "a inscrição existe como funcionalidade e não como dado: nenhum registro do acervo " +
-      "guarda quem se inscreveu em quê.",
-  },
-  {
-    medida: "comparação com o próprio histórico",
-    porque:
-      "comparar exige duas medidas do mesmo indicador em datas diferentes. O grafo é uma " +
-      "fotografia, e a data de referência é uma só.",
-  },
-  {
     medida: "alcance por faixa etária ou perfil",
     porque:
       "o campo de faixa etária é adição de contrato desta onda e ainda não tem dado; perfil " +
       "de público autenticado é do nível 8, e o acervo tem 3 pessoas-usuárias.",
+  },
+  {
+    medida: "comparação do acervo com o próprio histórico",
+    porque:
+      "comparar exige duas medidas do mesmo indicador em datas diferentes. O grafo é uma " +
+      "fotografia, e a data de referência é uma só. Sobre USO existe série — ver a lista ao " +
+      "lado —, mas sobre o acervo não existe.",
+  },
+];
+
+/**
+ * O que TEM instrumento e não tem coleta. A lista que a V2 acrescentou.
+ *
+ * ELA EXISTE PARA DESFAZER UM EMPACOTAMENTO. Até aqui, a tela tinha dois estados: o número
+ * que ela conta e a medida que ela recusa. Isso punha na mesma gaveta duas coisas muito
+ * diferentes — «não há como medir isto» e «o instrumento está escrito, a coleta é que não
+ * roda». Três das cinco recusas originais eram do segundo tipo desde que o motor de pontos
+ * entrou, e chamar as três de impossíveis subestima o que a proposta já tem pronto.
+ *
+ * CADA LINHA NOMEIA O EVENTO. É o que separa esta lista de uma promessa: quem confere abre
+ * `src/lib/pontos/tipos.ts`, acha o nome, e vê que o contrato existe. Uma lista de «em breve»
+ * sem o nome do evento seria pior do que a recusa, porque a recusa pelo menos é verificável.
+ */
+export const O_QUE_ESTA_INSTRUMENTADO: readonly {
+  medida: string;
+  evento: string;
+  porque: string;
+}[] = [
+  {
+    medida: "presença e taxa de lotação",
+    evento: "ocorrencia.presenca.confirmada",
+    porque:
+      "o numerador entra por CÓDIGO gerado pelo produtor, nunca por autodeclaração, e o " +
+      "denominador é a capacidade que a ficha do espaço declara. É PISO de público, não " +
+      "público: quem foi e não resgatou o código não aparece.",
+  },
+  {
+    medida: "conclusões de conteúdo",
+    evento: "play.midia.concluida · cast.episodio.concluido · leitura.materia.concluida",
+    porque:
+      "a palavra é CONCLUSÃO, e não visualização: o player chegar ao fim é observável, o play " +
+      "não. O contador de reprodução continua morando no serviço que serve o arquivo.",
+  },
+  {
+    medida: "saída para a plataforma de ingresso",
+    evento: "ingresso.saida.clicada",
+    porque:
+      "a plataforma NÃO vende: a compra acontece fora, e sem retorno da plataforma de venda " +
+      "não há bilhete nem comparecimento. Mede-se INTENÇÃO, e a palavra «conversão» não " +
+      "existe neste painel.",
   },
 ];
 
@@ -1383,6 +1409,94 @@ export const REGRA_DO_ALCANCE =
   "Se o dado não sustenta, a tela diz. Um painel de alcance com número inventado destrói o " +
   "argumento de procedência da proposta inteira — e num painel institucional ninguém " +
   "confere, que é justamente o que torna a mentira barata.";
+
+/**
+ * Os três estados em que uma medida pode estar, e por que são três e não dois.
+ */
+export type EstadoDaMedida = "conta" | "instrumentado" | "recusado";
+
+export const ROTULO_DO_ESTADO: Record<EstadoDaMedida, string> = {
+  conta: "conta hoje",
+  instrumentado: "instrumentado, sem coleta",
+  recusado: "recusado",
+};
+
+export const REGRA_DOS_TRES_ESTADOS =
+  "Toda medida deste painel declara em qual dos três estados ela está. «Conta hoje» tem " +
+  "numerador e denominador no produto. «Instrumentado» tem o evento escrito no contrato e " +
+  "não tem coleta. «Recusado» não tem instrumento, e a tela diz por quê. Sem essa distinção, " +
+  "um painel afirma tudo com o mesmo peso.";
+
+/**
+ * Por que o ingresso não vira KPI de venda.
+ *
+ * A ORDEM IMPORTA E É DECISÃO: cobertura vem ANTES de desempenho. Com zero evento
+ * publicando link, um painel que abrisse por «cliques» mostraria zero e pareceria fracasso
+ * de audiência quando é ausência de cadastro. O produtor precisa ver o que falta preencher,
+ * não um gráfico vazio.
+ */
+export const INGRESSO_NAO_E_VENDA =
+  "A plataforma não vende ingresso, e isso não é limitação a contornar: é o topo do funil. " +
+  "O acervo não tem campo de link de compra — nenhum dos eventos publica um —, e a compra, " +
+  "quando existe, acontece na plataforma do produtor. O mais longe que a medida honesta " +
+  "chega é o clique de SAÍDA. Sem retorno da plataforma de venda não há conversão, e a " +
+  "palavra não aparece em lugar nenhum deste painel.";
+
+// ---------------------------------------------------------------------------
+// Os três livros do produtor — a divisão da V2
+// ---------------------------------------------------------------------------
+
+/**
+ * As funções do produtor chegam em três blocos, e os três TÊM DENOMINADORES DIFERENTES.
+ *
+ * É essa diferença — e não a família da métrica — que decide o corte. Seis camadas numa
+ * tela só produzem uma página onde o número que importa fica abaixo da dobra, que é como
+ * um painel institucional deixa de ser lido.
+ *
+ * DENTRO DE CADA LIVRO, DUAS COLUNAS: «o que eu fiz» e «o que resultou». Separar não é
+ * organização, é proteção — `CONFORMIDADE_NAO_E_VIGILANCIA` já fixou que medida não vira
+ * nota de desempenho de pessoa, e a coluna «eu fiz» é espelho do produtor para ele mesmo,
+ * nunca comparação entre produtores.
+ */
+export interface LivroDoProdutor {
+  id: string;
+  ordem: string;
+  rotulo: string;
+  pergunta: string;
+  denominador: string;
+  quando: string;
+  rota: string | null;
+}
+
+export const LIVROS_DO_PRODUTOR: readonly LivroDoProdutor[] = [
+  {
+    id: "publiquei",
+    ordem: "L1",
+    rotulo: "O que eu publiquei",
+    pergunta: "Minha grade está no ar e completa?",
+    denominador: "o próprio catálogo",
+    quando: "antes do evento",
+    rota: null,
+  },
+  {
+    id: "chegou",
+    ordem: "L2",
+    rotulo: "O que aconteceu com quem chegou",
+    pergunta: "Como foi?",
+    denominador: "quem apareceu",
+    quando: "no dia seguinte",
+    rota: null,
+  },
+  {
+    id: "devolvi",
+    ordem: "L3",
+    rotulo: "O que eu devolvi ao programa",
+    pergunta: "O que eu pus na economia funcionou?",
+    denominador: "o que a organização injetou",
+    quando: "no fim da temporada",
+    rota: null,
+  },
+];
 
 // ---------------------------------------------------------------------------
 // A conformidade — O10, funcionalidade 168

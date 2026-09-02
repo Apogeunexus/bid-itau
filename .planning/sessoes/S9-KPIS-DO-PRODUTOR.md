@@ -13,10 +13,13 @@
 
 **Objetivo.** Hoje o painel do produtor conta quatro arestas do grafo e recusa cinco medidas
 por escrito (`src/componentes/studio-org-alcance.tsx`). As quatro são de OFERTA — o que a
-organização publicou. Nenhuma é de USO. Ao fim desta sessão o painel mede seis camadas —
-oferta, presença, conclusão, reserva, comunidade e qualidade — e cada número na tela declara
-**em qual dos três estados** ele está: conta agora, instrumentado à espera de coleta, ou
-recusado por construção.
+organização publicou. Nenhuma é de USO. Ao fim desta sessão o painel mede **três livros** — o que
+o produtor publicou, o que aconteceu com quem chegou, e o que ele devolveu ao programa —, cada
+livro dividido em «o que eu fiz» e «o que resultou», e cada número declarando **em qual dos três
+estados** ele está: conta agora, instrumentado à espera de coleta, ou recusado por construção.
+
+A plataforma **não vende ingresso**, e essa restrição não é uma limitação a contornar: é o que
+define o topo do funil. Ver §2.9.
 
 A troca conceitual é essa: **a recusa deixa de ser binária.** Hoje uma medida ou aparece ou
 está na lista das cinco negadas. Isso empacota junto duas coisas muito diferentes — «não há
@@ -36,7 +39,11 @@ chamando as três de impossíveis subestima a proposta na frente da banca.
    disso a tela mostra a distribuição, não a média.
 5. Toda tela diz, no cabeçalho, que o que ela lê é **a persona ativa neste navegador** — não a
    audiência. Ver §2.6.
-6. `npm run checar` verde e `npm run verificar-kpis` verde (suíte nova, §9).
+6. Nenhuma tela usa as palavras «conversão», «vendas» ou «bilheteria». O KPI de ingresso se
+   chama *saída para a plataforma*, e mede intenção.
+7. Toda medida que descreve o comportamento de uma pessoa identificada — resposta a comentário,
+   tempo de resposta, cursos concluídos — vive na coluna «o que eu fiz» e não sai dela.
+8. `npm run checar` verde e `npm run verificar-kpis` verde (suíte nova, §9).
 
 ---
 
@@ -177,6 +184,33 @@ na mesma coluna e no mesmo tamanho de sempre.
 
 ---
 
+### 2.9 · O ingresso não devolve dado, e é isso que promove o código de presença
+
+`src/dados/ingressos.ts` mede: **0 dos 300 eventos declaram link de ingresso**. A fonte só tem
+`comIngresso` sempre falso e `preco` sempre `null`; dois links foram escritos pela curadoria e
+rotulados como tal. E o módulo já fixa a natureza do gesto:
+
+> É um `<a href>` externo que a pessoa CLICA — não uma requisição que o protótipo faz.
+
+**A plataforma não vende, e a compra acontece na Sympla.** O mais longe que a medida honesta
+chega é o **clique de saída**: intenção, nunca conversão. Sem postback da plataforma de venda —
+que não existe e não está no escopo — não há bilhete, não há comparecimento e não há receita.
+
+As duas consequências que organizam o painel:
+
+1. **As palavras «conversão», «vendas» e «bilheteria» não existem no vocabulário do painel.** O
+   KPI se chama *saída para a plataforma de ingresso*, e o denominador dele é *eventos com sessão
+   futura*, não cliques.
+2. **A lotação só pode vir do código de presença.** Como o ingresso não devolve dado, o código
+   deixa de ser mecânica de gamificação e passa a ser o único instrumento de audiência do
+   produto. É a justificativa mais forte da regra `r-presenca` valer 150 percurso.
+
+Evento novo, e ele é de cliente puro porque o clique acontece na nossa página antes de sair:
+`ingresso.saida.clicada`. **Não concede ponto** — pagar por clicar em link externo é comprar
+tráfego para a Sympla com a moeda do programa.
+
+---
+
 ## 3. Restrições herdadas
 
 1. **`REGRA_DO_ALCANCE` continua literal na tela**, palavra por palavra. Ela é o que dá licença
@@ -195,87 +229,169 @@ na mesma coluna e no mesmo tamanho de sempre.
 
 ---
 
-## 4. Escopo — funcionalidades 169 a 178
+## 4. Escopo — três livros, funcionalidades 169 a 180
 
 ### 4.1 · O modelo dos três estados
 
-Cada KPI da V2 declara um de três estados, e o estado é visível na tela, não em rodapé:
+Cada KPI declara um de três estados, visível na tela e não em rodapé:
 
 - **conta** — numerador e denominador existem no produto hoje.
 - **instrumentado** — o evento existe no contrato, a coleta agregada não. A tela nomeia o evento.
 - **recusado** — não existe instrumento, e a tela diz por quê.
 
-### 4.2 · As seis camadas
+### 4.2 · A divisão: três livros, e por que não são seis camadas
 
-| # | camada | KPI | numerador ÷ denominador | fonte | estado |
-|---|---|---|---|---|---|
-| C0 | Oferta | eventos realizados · sessões · linguagens · territórios | arestas `realiza` / `ocorre_em` | grafo | conta |
-| C0 | Oferta | sessões com espaço declarado | `espacoId ≠ null` ÷ 2.425 | grafo | conta (hoje: 0) |
-| C1 | Presença | presenças confirmadas por código | `presencas[]` | livro | instrumentado |
-| C1 | Presença | **taxa de lotação** | presenças ÷ `capacidade` | livro ÷ cadastro | instrumentado |
-| C1 | Presença | sessões com teto declarado | `capacidade ≠ null` ÷ sessões | cadastro | conta |
-| C2 | Conclusão | conclusões por classe | 5 eventos de conclusão | livro | instrumentado |
-| C3 | Reserva | taxa de confirmação · ocupação · pendência · motivo dominante | funil da visita | reserva | conta |
-| C4 | Comunidade | assinantes · publicações · reações · comentários | literais do dado | dado | conta, rotulado |
-| C4 | Comunidade | assinaturas, salvamentos, comentários e reações **observados** | 4 eventos | livro | instrumentado |
-| C4 | Comunidade | comunidades sem publicação em 30 dias | contagem ÷ 23 | dado | conta |
-| C5 | Qualidade | nota média · distribuição | `ocorrencia.avaliada` travada em presença | livro | instrumentado |
-| C6 | Operação | fila do produtor · devoluções por motivo · faltas bloqueantes | O10, já existente | rascunho | conta |
+As funções do produtor chegam em três blocos, e os três **têm denominadores diferentes**. É essa
+diferença, e não a família da métrica, que decide o corte — seis camadas numa tela só produzem
+uma página onde o número que importa fica abaixo da dobra.
 
-### 4.3 · As funcionalidades
+| livro | pergunta que responde | denominador | quando ele abre |
+|---|---|---|---|
+| **L1 · O que eu publiquei** | «minha grade está no ar e completa?» | o próprio catálogo | antes do evento |
+| **L2 · O que aconteceu com quem chegou** | «como foi?» | quem apareceu | no dia seguinte |
+| **L3 · O que eu devolvi ao programa** | «o que eu pus na economia funcionou?» | o que ele injetou | no fim da temporada |
+
+### 4.3 · Duas colunas dentro de cada livro
+
+Todo livro se divide em **«o que eu fiz»** e **«o que resultou»**. O bloco 2 das funções mistura
+as duas coisas: *criar comunidade* e *criar conteúdo* são SAÍDA do produtor; *interagir*,
+*responder comentários* e *concluir cursos* são ATIVIDADE dele.
+
+Separar não é organização, é proteção: `CONFORMIDADE_NAO_E_VIGILANCIA` já fixou que medida não
+vira nota de desempenho de pessoa. **A coluna «o que eu fiz» é espelho do produtor para ele
+mesmo, e nunca entra em comparação entre produtores.** A coluna «o que resultou» pode ser
+comparada, porque ela mede o registro.
+
+### 4.4 · L1 · O que eu publiquei
+
+| coluna | KPI | numerador ÷ denominador | fonte | estado |
+|---|---|---|---|---|
+| eu fiz | eventos publicados · sessões | arestas `realiza` / `ocorre_em` | grafo | conta |
+| eu fiz | **cobertura de link de ingresso** | eventos com link ÷ eventos com sessão futura | grafo | conta (hoje: 0 de 300) |
+| eu fiz | sessões com teto declarado | `capacidade ≠ null` ÷ sessões | cadastro | conta |
+| eu fiz | ficha de acessibilidade declarada | `declaraAcessibilidade` ÷ sessões | grafo | conta |
+| eu fiz | faltas bloqueantes abertas | `Falta[]` com `bloqueia: true` | rascunho | conta |
+| resultou | **saída para a plataforma de ingresso** | `ingresso.saida.clicada` ÷ eventos com link | livro | instrumentado |
+| resultou | sessões com espaço declarado | `espacoId ≠ null` ÷ 2.425 | grafo | conta (hoje: 0) |
+
+> A cobertura de link vem ANTES do desempenho do link, e a ordem é a decisão: com 0 de 300, um
+> painel que abrisse por «cliques» mostraria zero e pareceria fracasso de audiência quando é
+> ausência de cadastro. O produtor precisa ver o que falta preencher, não um gráfico vazio.
+
+### 4.5 · L2 · O que aconteceu com quem chegou
+
+| coluna | KPI | numerador ÷ denominador | fonte | estado |
+|---|---|---|---|---|
+| resultou | presenças confirmadas por código | `presencas[]` | livro | instrumentado |
+| resultou | **taxa de lotação** | presenças ÷ `capacidade` | livro ÷ cadastro | instrumentado |
+| resultou | conclusões por classe | 5 eventos de conclusão | livro | instrumentado |
+| resultou | funil da reserva educativa | solicitada → confirmada ÷ recusada | reserva | conta |
+| resultou | nota | `ocorrencia.avaliada`, travada em presença | livro | instrumentado |
+| resultou | reações e comentários recebidos | 115 publicações, 59.187 reações | dado + livro | conta, rotulado |
+| eu fiz | **taxa de resposta a comentário** | comentários respondidos ÷ recebidos | livro | instrumentado |
+| eu fiz | tempo até a primeira resposta | mediana, em horas | livro | instrumentado |
+| eu fiz | comunidades minhas sem publicação em 30 dias | contagem ÷ minhas | dado | conta |
+| eu fiz | cursos concluídos pelo produtor | `curso.concluido` | livro | instrumentado |
+
+> «Taxa de resposta» e «tempo até responder» são as duas únicas medidas do painel que descrevem
+> o comportamento de uma pessoa identificada. Elas ficam na coluna «eu fiz» e **não saem dela** —
+> nem para comparação, nem para o Observatório, nem para o selo de embaixador.
+
+### 4.6 · L3 · O que eu devolvi ao programa
+
+O catálogo tem 17 recompensas em 5 famílias (`acesso`, `bastidor`, `editorial`, `poder`,
+`devolver`), 4 formas de entrega e uma esteira de **7 fases** que não termina em «entregue»:
+`resgatado → processando → separado → enviado → entregue → confirmado | contestado`.
+
+| coluna | KPI | numerador ÷ denominador | fonte | estado |
+|---|---|---|---|---|
+| eu fiz | benefícios publicados · estoque restante | `RecompensaDefinida` | dado | conta |
+| eu fiz | missões publicadas por tipo | 30 hoje (14 onboarding, 10 campo) | dado | conta |
+| resultou | funil de resgate | resgatado → entregue ÷ catálogo | livro | instrumentado |
+| resultou | **taxa de contestação** | `contestado` ÷ `entregue` | livro | instrumentado |
+| resultou | funil de missão | iniciada → prova → aprovada | comprovações | instrumentado |
+| resultou | **taxa de reprovação de prova** | reprovadas ÷ decididas | comprovações | instrumentado |
+| resultou | emblemas concedidos a partir das minhas missões | 16 definidos | livro | instrumentado |
+
+Duas leituras que só existem porque a esteira e a fila de prova já foram desenhadas assim:
+
+- **`contestado` é o único KPI que mede o produtor cumprindo a promessa dele.** «Entregue» é o
+  produtor dizendo que despachou; só quem recebeu sabe se chegou. Uma esteira que parasse em
+  «entregue» mediria a palavra de uma das partes.
+- **Taxa de reprovação de prova alta é missão mal escrita, não gente desonesta.** `Comprovacao`
+  exige `motivo` em toda recusa, e é o motivo dominante que a tela mostra ao lado do número — o
+  alerta é de redação da missão, e a tela diz isso com todas as letras. Ler reprovação como
+  fraude é o caminho mais curto para um produtor punir o próprio público.
+
+### 4.7 · O selo de embaixador sai do L3, e não do L2
+
+Não existe «embaixador» no código hoje — buscado em `src/`, nenhuma ocorrência. É conceito novo,
+e o critério dele é a decisão de desenho mais perigosa desta sessão.
+
+**O selo não pode sair de lotação nem de nota.** Lotação premia quem tem sala grande em capital;
+nota premia quem tem público fiel. Os dois transformam o selo numa medida de tamanho, e a tese do
+produto é distribuição territorial. O critério é do L3 — **o que a pessoa devolveu**: missões
+publicadas que foram concluídas, benefícios entregues sem contestação, territórios distintos
+alcançados pelas próprias missões. É a mesma métrica `territorios` que o ranking de missão já usa
+e pelo mesmo motivo: mede o quanto se saiu do próprio canto.
+
+### 4.8 · As funcionalidades
 
 - **169.** Estado da medida em três valores, com a coluna que os exibe lado a lado.
-- **170.** Taxa de lotação por ocorrência, com o teto declarado como denominador obrigatório.
-- **171.** Tabela de sessões — uma linha por ocorrência, ordenável, com presença, teto e nota.
-- **172.** Funil da reserva educativa como medida, sobre a O4.
-- **173.** Painel de saúde das comunidades, com o corte de 30 dias sem publicação.
-- **174.** Conclusões por classe, com a palavra «conclusão» substituindo «visualização».
-- **175.** Evento `ocorrencia.avaliada`, travado em presença confirmada e sem concessão de ponto.
-- **176.** Distribuição de nota abaixo de n=5, média a partir de 5.
-- **177.** Série temporal sobre o livro, com a declaração de que o acervo não tem série.
-- **178.** Exportação da tabela de sessões em CSV, com o cabeçalho carregando fonte e denominador.
+- **170.** Divisão em três livros, com «eu fiz» e «o que resultou» dentro de cada um.
+- **171.** Cobertura de link de ingresso, com o denominador de eventos com sessão futura.
+- **172.** Evento `ingresso.saida.clicada`, sem concessão de ponto.
+- **173.** Taxa de lotação por ocorrência, com teto declarado obrigatório no denominador.
+- **174.** Tabela de sessões — uma linha por ocorrência, ordenável, com presença, teto e nota.
+- **175.** Funil da reserva educativa como medida, sobre a O4.
+- **176.** Taxa de resposta a comentário e tempo até a primeira resposta, presos ao L2 «eu fiz».
+- **177.** Funil de resgate com taxa de contestação.
+- **178.** Funil de missão com taxa de reprovação e motivo dominante.
+- **179.** Evento `ocorrencia.avaliada`, travado em presença e sem concessão de ponto; média a
+  partir de n=5, distribuição abaixo disso.
+- **180.** Critério do selo de embaixador, calculado sobre o L3 e declarado na tela.
 
 ---
 
 ## 5. As telas
 
-A V2 troca uma tela por três. A O9 hoje é uma página só, e empilhar seis camadas nela produziria
-a rolagem em que o número importante fica abaixo da dobra — que é como um painel institucional
-deixa de ser lido.
+Uma tela por livro, mais a capa. Quatro rotas.
 
 ### 5.1 · `/studio/alcance` — a capa
 
-Mantém a estrutura de duas colunas que já funciona. **Muda o conteúdo das duas.**
+Mantém as duas colunas que já funcionam. Esquerda: **um cartão por livro**, com o número que
+resume cada um (sessões publicadas · presenças confirmadas · benefícios entregues) e o caminho
+para a tela. Direita: a coluna que era «5 medidas recusadas» vira **duas listas empilhadas** —
+«instrumentado, sem coleta» (3 itens, cada um nomeando o evento que o alimenta) e «recusado»
+(2 itens, com o motivo de sempre). Mesmo tamanho da esquerda: a recusa continua sendo conteúdo.
 
-Esquerda, quatro números de oferta (como hoje) **mais** três de uso: presenças confirmadas,
-conclusões, e sessões com teto declarado. Cada um com o rótulo do estado colado.
+### 5.2 · `/studio/sessoes` — L1 e L2, e o cavalo de batalha
 
-Direita, a coluna que era «5 medidas recusadas» vira **duas listas empilhadas**:
-«instrumentado, sem coleta» (3 itens, cada um nomeando o evento) e «recusado» (2 itens, com o
-motivo de sempre). O tamanho continua igual ao da esquerda — a recusa continua sendo conteúdo.
+Uma linha por ocorrência: data, título, espaço, teto, presenças, lotação, nota, link de ingresso,
+pendência. É onde a operação mora e é a tela que responde «como foi a sessão de terça». Ordenável
+por lotação e por data. Sem teto declarado, a célula diz «sem teto» e a linha ganha o marcador de
+`Falta` — o vocabulário que a S6 já escreveu.
 
-### 5.2 · `/studio/sessoes` — a tabela, e o cavalo de batalha
+Exportação em CSV com fonte e denominador no cabeçalho de cada coluna: um CSV que perde a
+procedência ao sair da tela reintroduz o problema inteiro na primeira planilha.
 
-Uma linha por ocorrência do produtor: data, título, espaço, teto, presenças, lotação, nota, e a
-coluna de pendência. É onde a operação mora, e é a tela que responde «como foi a sessão de
-terça». Ordenável por lotação e por data. Sem teto declarado, a célula de lotação diz «sem teto»
-e a linha ganha o marcador de falta — que já é o vocabulário de `Falta` da S6.
+### 5.3 · `/studio/comunidade` — o L2 do lado social
 
-Exportação em CSV com o cabeçalho carregando fonte e denominador de cada coluna (178): um CSV
-que perde a procedência ao sair da tela reintroduz o problema inteiro na primeira planilha.
-
-### 5.3 · `/studio/comunidade` — a saúde das 23
-
-Assinantes, publicações, reações e comentários por comunidade, em duas colunas separadas:
-**declarado no dado** e **observado pelo motor**. Mais o corte que interessa à Fundação: quantas
-das 22 do marketplace estão sem publicação há 30 dias, e quais UFs elas cobrem — porque o
-argumento do marketplace é a distribuição territorial, e uma comunidade parada em MS pesa
+As comunidades do produtor em duas colunas separadas — **declarado no dado** (assinantes,
+reações) e **observado pelo motor** (assinaturas, salvamentos, comentários, reações). Mais a
+taxa de resposta dele e o corte de 30 dias sem publicação, com a UF de cada comunidade parada:
+o argumento do marketplace é distribuição territorial, e uma comunidade parada em MS pesa
 diferente de uma parada em SP.
 
 > **Risco de alinhamento.** O deploy em produção já serve `/studio/comunidade`, `/studio/pautas`,
-> `/studio/perfil` e `/studio/pontos/loja`, que não existem em nenhum branch publicado (§ resumo).
-> Antes de criar `/studio/comunidade` esta sessão **confere se a rota já está tomada** e, se
-> estiver, estende em vez de sobrescrever.
+> `/studio/perfil` e `/studio/pontos/loja`, que não existem em nenhum branch publicado. Antes de
+> criar a rota, **confira se ela já está tomada** e estenda em vez de sobrescrever.
+
+### 5.4 · `/studio/programa` — o L3
+
+Os dois funis lado a lado — resgate (7 fases, terminando em contestado) e missão (prova →
+veredito) — mais o painel de motivo dominante de reprovação e o critério do selo de embaixador
+com a distância que falta para ele.
 
 ---
 
@@ -299,6 +415,11 @@ fixas na rolagem, porque uma linha sem identidade não é lida.
   por decisão. É adição de contrato, não de tela.
 - **PEDIDO-S9-04** — presença não carrega carimbo de porta: `presencas` guarda só o id. Sem hora
   de confirmação não há curva de chegada, e a V2 não a promete.
+- **PEDIDO-S9-06** — `ingresso.saida.clicada` e o campo de link no evento não existem: o acervo
+  só tem `comIngresso` falso. Publicar link é adição da tela do produtor, e sem ela a cobertura
+  fica travada em 0 de 300.
+- **PEDIDO-S9-07** — «embaixador» não existe no código. Classe, selo e critério são adição de
+  ontologia, não de tela.
 - **PEDIDO-S9-05** — `assinantes` é literal por comunidade. Se a Fundação quiser assinatura como
   medida viva, ela sai de `comunidade.assinada` no livro, e aí depende de agregação.
 
@@ -331,14 +452,18 @@ fixas na rolagem, porque uma linha sem identidade não é lida.
 
 ## 10. Ordem de execução — e o que não se corta
 
-1. **Os três estados e a coluna que os exibe (169).** Sem isso o resto vira painel comum.
-2. **Teto e lotação (170)**, com o caminho de declaração ligado a `/studio/espacos`.
-3. **Tabela de sessões (171, 178)** — é a tela que a operação usa todo dia.
-4. **Funil da reserva (172)** — é o KPI completo que já existe e ninguém exibe.
-5. **Comunidade (173)**, conferindo antes se a rota já está tomada em produção.
-6. **Conclusões (174)** e **série sobre o livro (177)**.
-7. **Nota (175, 176)** — por último, porque é contrato novo e é o que mais custa se sair errado.
+1. **Os três estados e os três livros (169, 170).** Sem isso o resto vira painel comum.
+2. **L1: cobertura de link e saída para a plataforma (171, 172)** — é o que a restrição de não
+   vender ingresso obriga a resolver primeiro, e é o único KPI acionável com 0 de 300.
+3. **L2: teto e lotação (173)**, com o caminho de declaração ligado a `/studio/espacos`.
+4. **Tabela de sessões (174)** — é a tela que a operação usa todo dia.
+5. **Funil da reserva (175)** — é o KPI completo que já existe e ninguém exibe.
+6. **Comunidade e resposta a comentário (176)**, conferindo antes se a rota já está tomada.
+7. **L3: os dois funis (177, 178)**, com contestação e motivo dominante de reprovação.
+8. **Nota (179)** e **selo de embaixador (180)** — por último: são contrato novo e são os dois
+   que mais custam se saírem errados.
 
-**Não se corta:** o item 1 e a trava de presença do item 7. Um painel de KPI sem o estado da
-medida é um painel que afirma tudo com o mesmo peso; e nota sem trava de presença é a mentira
-barata voltando pela porta que a O9 fechou.
+**Não se corta:** o item 1, a trava de presença do 179 e o critério territorial do 180. Um painel
+sem o estado da medida afirma tudo com o mesmo peso; nota sem trava de presença é a mentira
+barata voltando pela porta que a O9 fechou; e selo por lotação transforma a distribuição
+territorial — que é a tese — em medida de tamanho de sala.

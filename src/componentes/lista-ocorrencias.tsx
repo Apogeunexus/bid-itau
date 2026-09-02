@@ -127,6 +127,8 @@ export function ListaDeOcorrencias({
   dataDeReferencia,
   espacoDoEvento,
   horaConhecida = true,
+  linkDeReserva,
+  nomeDaFonte,
   className,
 }: {
   ocorrencias: OcorrenciaExibivel[];
@@ -137,6 +139,9 @@ export function ListaDeOcorrencias({
   espacoDoEvento?: string | null;
   /** `false` quando a fonte não publicou a hora — a sessão mostra só a data. */
   horaConhecida?: boolean;
+  /** Página da instituição onde a reserva é feita — repetida em cada sessão. */
+  linkDeReserva?: string | null;
+  nomeDaFonte?: string | null;
   className?: string;
 }) {
   const { salvos, alternarSalvo } = useSessao();
@@ -261,6 +266,20 @@ export function ListaDeOcorrencias({
                       O acervo não publica o espaço desta sessão.
                     </p>
                   )}
+
+                  {/* A SAÍDA REPETIDA EM CADA SESSÃO. Quem rola até a terceira data não
+                      volta ao topo para achar como reservar — e numa lista de oito
+                      sessões o botão do alto já saiu da tela. */}
+                  {linkDeReserva ? (
+                    <a
+                      href={linkDeReserva}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-fit text-xs font-bold text-acao-tinta underline underline-offset-2"
+                    >
+                      Reservar {nomeDaFonte ? `em ${nomeDaFonte}` : "no site da instituição"} ↗
+                    </a>
+                  ) : null}
 
                   {/* O texto deixa explícito O QUE foi salvo: a sessão, não o evento. É o
                       que prepara Meu Repertório sem entregá-lo. */}

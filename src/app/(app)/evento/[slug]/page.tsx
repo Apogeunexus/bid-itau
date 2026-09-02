@@ -320,6 +320,8 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
         dataDeReferencia={DATA_DE_REFERENCIA}
         espacoDoEvento={espacoDoFato}
         horaConhecida={horaConhecida}
+        linkDeReserva={typeof entidade.extra?.fonteUrl === "string" ? entidade.extra.fonteUrl : null}
+        nomeDaFonte={entidade.fonte ?? null}
       />
 
       {/* A entrada para a escolha de sessão (AGEN-02, D-56). Só aparece quando o evento

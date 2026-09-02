@@ -363,10 +363,17 @@ export function Produtor({
       {/* páginas, e ele não pode sumir nem aparecer zerado sem explicação.   */}
       {/* Ele é produto, não nota de protótipo — como as declarações de      */}
       {/* honestidade da fase 4.                                             */}
+      {/* O BLOCO NÃO SE APLICA A PARCEIRO (2026-09). A frase inteira é uma auditoria do
+          acervo do Itaú Cultural — «nenhum dos 361 produtores tem programação futura» — e
+          numa página do MASP ou do Theatro Municipal ela é simplesmente falsa: a
+          programação futura deles está logo acima, raspada da própria casa. Declarar uma
+          lacuna que aquela instituição não tem é o oposto da honestidade que o bloco
+          existe para praticar. */}
       <section
         data-bloco-produtor="em-cartaz"
         data-nao-sustenta="programacao-futura"
         className="pr-bloco pr-cartaz flex flex-col gap-2"
+        hidden={produtor.procedencia === "parceiro"}
       >
         <h2 className="flex items-baseline gap-1.5 text-sm font-bold">
           <Grafismo variacao="barra" className="h-3.5 w-auto shrink-0 text-acao-tinta" />
