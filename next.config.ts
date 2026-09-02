@@ -75,7 +75,18 @@ const nextConfig: NextConfig = {
    *
    * Não afeta o build: `next build` não lê esta opção.
    */
-  allowedDevOrigins: ["127.0.0.1"],
+  /*
+   * O IP DE REDE ENTRA PELO MESMO MOTIVO, e ele é o caso que faltava: para
+   * gravar a tela do celular é preciso abrir o protótipo pelo endereço do Mac
+   * na Wi-Fi, e essa é mais uma origem que o Next 16 bloqueia. O sintoma é o
+   * descrito acima e é traiçoeiro — a tela desenha, mas o cabeçalho perde os
+   * saldos, porque `contador-fichas.tsx` devolve `null` enquanto não hidrata.
+   * Parece um defeito do contador; é a origem barrada.
+   *
+   * O ENDEREÇO MUDA. É DHCP: se o Mac trocar de IP, o de baixo para de valer e
+   * o sintoma volta igual. Confira com `ipconfig getifaddr en0` e troque aqui.
+   */
+  allowedDevOrigins: ["127.0.0.1", "172.17.10.156"],
   experimental: {
     // 24 MB de JSON (`arestas` 13 MB + `entidades` 9,4 MB + `ocorrencias` 1,8 MB)
     // são carregados POR WORKER, e em memória viram várias vezes isso em objetos.
