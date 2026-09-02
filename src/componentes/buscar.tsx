@@ -9,7 +9,6 @@ import {
   ICONE_FILTROS,
   ICONE_MAPA,
   ICONE_SETA,
-  iconeDaClasse,
 } from "@/componentes/base/icones";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { Grafismo } from "@/componentes/grafismo";
@@ -607,27 +606,10 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
                   busca abre como um índice de blog, com as seções selecionáveis.
                   Marcar uma seção é marcar o critério de classe: o mesmo mecanismo
                   de faceta de sempre, só que na porta. */}
-              {/* GRADE, E NÃO TRILHO (2026-09). Como Estante, as classes rolavam na
-                  horizontal: o terceiro item aparecia pela metade e a seta de «há mais»
-                  ficava POR CIMA dele. Cortar um item ao meio é o oposto do que o modelo
-                  de `/filtros/` faz — lá todo controle cabe inteiro e diz seu estado. Em
-                  grade as quinze classes cabem, sem seta sobreposta e sem corte. */}
-              <section className="busca-bloco">
-                <p className="busca-bloco-titulo">explore por seção</p>
-                <div className="busca-secoes-grade">
-                  {facetas.classe.map((opcao) => (
-                    <Chip
-                      key={chaveCriterio(opcao)}
-                      variante="explorar"
-                      data-faceta={chaveCriterio(opcao)}
-                      onClick={() => alternarCriterio(opcao)}
-                    >
-                      {iconeDaClasse(opcao.valor)}
-                      {rotuloDaClasse(opcao.valor as ClasseEntidade)}
-                    </Chip>
-                  ))}
-                </div>
-              </section>
+              {/* «Explore por seção» SAIU DAQUI (2026-09). Ele marcava o critério de
+                  classe — exatamente o que o grupo «tipo» do painel de filtros faz, agora
+                  em gaveta. Dois controles para o mesmo critério em duas telas é o que
+                  fazia a busca destoar; o lugar do filtro é o painel de filtros. */}
 
               {/* A VITRINE: cartões reais do índice com a capa na cor da linguagem —
                   a aparência dominante do produto (M-6), sem custo novo de bytes. */}

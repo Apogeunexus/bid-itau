@@ -877,25 +877,6 @@ svg.busca-glifo {
   color: var(--cor-acao-tinta);
 }
 
-/* ---------------------------------------------------------------------------
- * AS SEÇÕES EM GRADE. Duas colunas no app, quatro na web: o que decide é caber
- * inteiro. Nenhum item pela metade, nenhuma seta por cima de conteúdo.
- * ------------------------------------------------------------------------- */
-.busca-secoes-grade {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
-}
-
-[data-view="web"] .busca-secoes-grade {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.busca-secoes-grade > * {
-  width: 100%;
-  justify-content: flex-start;
-}
-
 /* O tipo do item da amostra, agora abaixo do título e não sobre a foto. */
 .busca-amostra-tipo {
   font-size: var(--tipo-legenda);
