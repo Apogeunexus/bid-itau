@@ -1091,3 +1091,90 @@
   gap: 0.5rem;
   font-size: var(--tipo-legenda);
 }
+
+
+/* ---------------------------------------------------------------------------
+ * Chamados de entrega — abertos por quem resgatou e não recebeu.
+ *
+ * Bloco próprio dentro da fila: mesma esteira de decisão, objeto de outra natureza. O
+ * porquê está no cabeçalho de `moderacao-chamados.tsx`. Borda de ação porque é a única
+ * decisão desta tela que credita saldo na carteira de alguém.
+ * ------------------------------------------------------------------------- */
+
+.moderacao-chamados {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  margin-block: var(--espaco-cartao);
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-acao);
+  border-radius: var(--raio-g);
+  background: var(--cor-superficie);
+}
+
+.moderacao-chamados-lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.moderacao-chamado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  align-items: flex-start;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+}
+
+.moderacao-chamado-titulo {
+  font-weight: 700;
+}
+
+.moderacao-chamado-relato {
+  padding-inline-start: var(--espaco-pilha);
+  border-inline-start: 2px solid var(--cor-borda-forte);
+  color: var(--cor-tinta-2);
+  font-style: italic;
+}
+
+.moderacao-chamado-decisao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-pilha);
+  inline-size: 100%;
+}
+
+.moderacao-chamado-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: var(--tipo-legenda);
+}
+
+.moderacao-chamado-campo input {
+  min-block-size: 2.75rem;
+  padding-inline: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  font: inherit;
+}
+
+.moderacao-chamado-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-pilha);
+}
+
+/* Botão que não responde precisa parecer que não responde. */
+.moderacao-chamado-acoes .studio-botao:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

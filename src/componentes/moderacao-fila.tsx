@@ -5,6 +5,7 @@ import { OpcaoDeSegmento, Segmento } from "./base/segmento";
 import { useEffect, useMemo, useState } from "react";
 import { ROTULO_DA_ACAO, decisaoCompleta, situacaoApos } from "@/dados/tipos-acesso";
 import { CHAVE_DO_ARMAZEM, gravarArmazem, lerArmazem } from "./moderacao-armazem";
+import { ModeracaoChamados } from "./moderacao-chamados";
 import type {
   AcaoDeclarada,
   AcaoDaModeracao,
@@ -490,6 +491,11 @@ export function ModeracaoFila({
           confiança e a regra que o produziu. Nada aqui vira dado público sem alguém
           decidir, e toda decisão fica com nome e carimbo.
         </p>
+
+        {/* OS CHAMADOS DE ENTREGA VÊM ANTES DA FILA DO ACERVO. São poucos, têm prazo
+            prometido a quem abriu — 24h — e são a única decisão desta tela que mexe em
+            saldo de alguém. Embaixo da fila de 300 itens, ninguém os veria a tempo. */}
+        <ModeracaoChamados />
 
         {/* AS OUTRAS TRÊS TELAS DA MODERAÇÃO. Sem estes links elas existem no artefato
             e não são alcançáveis por ninguém — tela sem entrada é tela que não existe

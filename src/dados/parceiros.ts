@@ -1,5 +1,6 @@
 import museus from "../../dados/parceiros/museus-sp.json";
 import municipal from "../../dados/parceiros/theatro-municipal.json";
+import casaDasRosas from "../../dados/parceiros/casa-das-rosas.json";
 import type { Aresta, Entidade, Ocorrencia } from "./tipos";
 
 /**
@@ -41,6 +42,15 @@ interface EventoRaspado {
  * sem linguagem é honesta — inventar a classificação é que não seria.
  */
 const LINGUAGEM_DO_PARCEIRO: Record<string, string> = {
+  // Casa das Rosas: a categoria já vem na listagem, então aqui não há inferência nenhuma.
+  Poesia: "poesia",
+  Literatura: "literatura",
+  "Grupo de Estudos": "literatura",
+  Curso: "literatura",
+  Oficina: "literatura",
+  "Visita Temática": "poesia",
+  "Evento especial": "poesia",
+  "Exposição": "artes-visuais",
   "Ópera": "musica",
   "Música": "musica",
   Concertos: "musica",
@@ -71,6 +81,7 @@ const HORA_PADRAO = "T10:00:00";
 const LINGUAGEM_POR_INSTITUICAO: Record<string, string> = {
   "MASP — Museu de Arte de São Paulo Assis Chateaubriand": "artes-visuais",
   "Pinacoteca de São Paulo": "artes-visuais",
+  "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura": "poesia",
 };
 
 function paraEntidade(e: EventoRaspado): Entidade {
@@ -198,7 +209,11 @@ function lerRaspados(bruto: { eventos: unknown[] }): EventoRaspado[] {
   return lidos;
 }
 
-const RASPADOS: EventoRaspado[] = [...lerRaspados(museus), ...lerRaspados(municipal)];
+const RASPADOS: EventoRaspado[] = [
+  ...lerRaspados(museus),
+  ...lerRaspados(municipal),
+  ...lerRaspados(casaDasRosas),
+];
 
 /**
  * O CRIVO É DATA, NÃO IMAGEM — e a primeira versão errou nisso.

@@ -1,0 +1,101 @@
+{
+  "fonte": "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura",
+  "total": 5,
+  "eventos": [
+    {
+      "id": "evento:parceiro:cr-espaco-materia-e-tempo-leituras-da-arquitetura-domestica",
+      "titulo": "Espaço, matéria e tempo: leituras da arquitetura doméstica",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura",
+      "fonteUrl": "https://casadasrosas.org.br/programacao/grupo-de-estudos/espaco-materia-e-tempo-leituras-da-arquitetura-domestica/",
+      "linguagemDeclarada": "Grupo de Estudos",
+      "gratuito": true,
+      "espacoDeclarado": "Casa das Rosas, Avenida Paulista, São Paulo, SP",
+      "ocorrencias": [
+        {
+          "inicio": "2026-08-04",
+          "fim": "2026-09-01"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:cr-4076",
+      "titulo": "A Paulista de Tarsila",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura",
+      "fonteUrl": "https://casadasrosas.org.br/programacao/evento-especial/4076/",
+      "linguagemDeclarada": "Evento especial",
+      "gratuito": true,
+      "espacoDeclarado": "Casa das Rosas, Avenida Paulista, São Paulo, SP",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-01",
+          "fim": "2026-09-01"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:cr-uma-breve-historia-das-rosas",
+      "titulo": "Uma breve história das rosas",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura",
+      "fonteUrl": "https://casadasrosas.org.br/programacao/visita-tematica/uma-breve-historia-das-rosas/",
+      "linguagemDeclarada": "Visita Temática",
+      "gratuito": true,
+      "espacoDeclarado": "Casa das Rosas, Avenida Paulista, São Paulo, SP",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-19",
+          "fim": "2026-09-19"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:cr-o-que-e-que-a-bahia-tem",
+      "titulo": "O que é que a Bahia tem?",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura",
+      "fonteUrl": "https://casadasrosas.org.br/programacao/musica/o-que-e-que-a-bahia-tem/",
+      "linguagemDeclarada": "Música",
+      "gratuito": true,
+      "espacoDeclarado": "Casa das Rosas, Avenida Paulista, São Paulo, SP",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-26",
+          "fim": "2026-09-26"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    },
+    {
+      "id": "evento:parceiro:cr-pescaria-de-curiosidades-3",
+      "titulo": "Pescaria de Curiosidades Vivência",
+      "classe": "evento",
+      "procedencia": "parceiro",
+      "fonte": "Casa das Rosas — Espaço Haroldo de Campos de Poesia e Literatura",
+      "fonteUrl": "https://casadasrosas.org.br/programacao/vivencia/pescaria-de-curiosidades-3/",
+      "linguagemDeclarada": "Poesia",
+      "gratuito": true,
+      "espacoDeclarado": "Casa das Rosas, Avenida Paulista, São Paulo, SP",
+      "ocorrencias": [
+        {
+          "inicio": "2026-09-26",
+          "fim": "2026-09-26"
+        }
+      ],
+      "imagem": null,
+      "revisadoPor": null
+    }
+  ]
+}

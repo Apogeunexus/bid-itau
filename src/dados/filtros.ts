@@ -85,12 +85,12 @@ import type { ClasseEntidade, DimensaoAcessibilidade, Entidade } from "./tipos";
 export const DIMENSOES_ESPERADAS = 8;
 
 /** O acervo gerado. `RESUMO_DA_FICHA` tem de fatiar exatamente isto. */
-// 7.810 era o acervo sozinho. Os 17 que entraram em 2026-09-01 são a ingestão federada —
+// 7.810 era o acervo sozinho. Os 23 que entraram em 2026-09-01 são a ingestão federada —
 // 8 exposições do MASP, 8 eventos do Theatro Municipal e a instituição do Municipal, que o
 // acervo não tinha. Todos com `procedencia: "parceiro"`; o crivo de `parceiros.ts` é ter
 // DATA, porque evento sem data não é acontecimento. A conferência continua valendo: ela existe para pegar grafo
 // regerado e slug duplicado, e um número maior sem explicação continua quebrando alto.
-export const ENTIDADES_ESPERADAS = 7827;
+export const ENTIDADES_ESPERADAS = 7833;
 
 /** Teto do DTO que atravessa a fronteira RSC. 30 KB, medido a cada build. */
 export const TETO_DO_DTO = 30 * 1024;
