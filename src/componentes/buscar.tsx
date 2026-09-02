@@ -489,58 +489,56 @@ export function Buscar({ indice }: { indice: IndiceDTO }) {
       {/* ------------------------------------------------------------------ */}
       {/* 1. O campo único                                                    */}
       {/* ------------------------------------------------------------------ */}
-      <form
-        className="busca-caixa-wrap"
-        role="search"
-        onSubmit={(e) => {
-          e.preventDefault();
-          registrarRecente(texto);
-        }}
-      >
-        <div className="busca-caixa">
-          <span className="busca-caixa-lupa" aria-hidden>
-            <Mini icone={ICONE_BUSCAR} />
+      {/* O FILTRO FICA AO LADO DO CAMPO, e não dentro dele (2026-09). Dentro, era um
+          ícone mudo com um número sobreposto — a mesma função que em `/acontece/` e
+          `/descobrir/` chega por um chip com a palavra escrita. Ao lado, ele mantém a
+          PALAVRA e a contagem, e o campo mantém a largura de que precisa. */}
+      <div className="busca-linha-campo">
+        <form
+          className="busca-caixa-wrap"
+          role="search"
+          onSubmit={(e) => {
+            e.preventDefault();
+            registrarRecente(texto);
+          }}
+        >
+          <div className="busca-caixa">
+            <span className="busca-caixa-lupa" aria-hidden>
+              <Mini icone={ICONE_BUSCAR} />
+            </span>
+            <label className="sr-only" htmlFor="busca-campo">
+              Buscar no acervo
+            </label>
+            <input
+              id="busca-campo"
+              className="busca-campo"
+              type="search"
+              autoFocus
+              autoComplete="off"
+              placeholder={`Busque por ${SUGESTOES[sugestao]}…`}
+              value={texto}
+              onChange={(e) => setTexto(e.target.value)}
+              onBlur={() => registrarRecente(texto)}
+            />
+          </div>
+        </form>
+        <button
+          type="button"
+          className="busca-filtro-linha"
+          aria-controls="busca-facetas"
+          aria-expanded={mostrarFiltros}
+          onClick={irAosFiltros}
+        >
+          <span className="busca-filtro-linha-rotulo">
+            <Mini icone={ICONE_FILTROS} />
+            Filtros
           </span>
-          <label className="sr-only" htmlFor="busca-campo">
-            Buscar no acervo
-          </label>
-          <input
-            id="busca-campo"
-            className="busca-campo"
-            type="search"
-            autoFocus
-            autoComplete="off"
-            placeholder={`Busque por ${SUGESTOES[sugestao]}…`}
-            value={texto}
-            onChange={(e) => setTexto(e.target.value)}
-            onBlur={() => registrarRecente(texto)}
-          />
-        </div>
-      </form>
+          {nFiltros ? (
+            <span className="busca-filtro-linha-estado">{milhar(nFiltros)}</span>
+          ) : null}
+        </button>
+      </div>
 
-      {/* O FILTRO SAIU DE DENTRO DO CAMPO (2026-09). Ele era um ícone de sliders sem
-          rótulo, com um número sobreposto, dentro da caixa de busca — a mesma função que
-          em `/acontece/` e `/descobrir/` chega por um Chip com a palavra escrita. Três
-          formas para uma função é o que fazia esta tela destoar das outras. Agora ela seg
-          o modelo de `/filtros/`: palavra à esquerda, ESTADO EM PALAVRAS à direita, nunca
-          um ícone mudo — quem olha sabe se há filtro aplicado sem tocar em nada. */}
-      <button
-        type="button"
-        className="busca-filtro-linha"
-        aria-controls="busca-facetas"
-        aria-expanded={mostrarFiltros}
-        onClick={irAosFiltros}
-      >
-        <span className="busca-filtro-linha-rotulo">
-          <Mini icone={ICONE_FILTROS} />
-          Filtros
-        </span>
-        <span className="busca-filtro-linha-estado">
-          {nFiltros
-            ? `${milhar(nFiltros)} ${nFiltros === 1 ? "aplicado" : "aplicados"}`
-            : "nenhum aplicado"}
-        </span>
-      </button>
 
       {/* Critérios marcados: fichas visíveis e removíveis, cada uma dizendo quantos
           resultados haveria SEM ela (D-64). É a informação que o plano 03-06 usa para
