@@ -1,4 +1,8 @@
 import Link from "next/link";
+import {
+  CHAVE_EXPOSICOES_PERCORRIDAS,
+  ConcluirMissao,
+} from "@/componentes/base/concluir-missao";
 import { ICONE_MAPA, ICONE_SETA } from "@/componentes/base/icones";
 import { Grafismo } from "@/componentes/grafismo";
 import { PalcoYoutube } from "@/componentes/palco";
@@ -191,6 +195,15 @@ export function ExposicaoPermanenteFicha({
           </ul>
         </section>
       ) : null}
+
+      <ConcluirMissao
+        evento="museu.exposicao.percorrida"
+        alvo={{ tipo: "exposicao", id: expo.slug }}
+        chave={CHAVE_EXPOSICOES_PERCORRIDAS}
+        titulo="Chegou à última sala?"
+        rotulo="Marcar exposição como percorrida"
+        rotuloFeito="Percorrida"
+      />
 
       <p className="museu-expo-voltar tipo-legenda">
         <Link href="/museu/" className="underline decoration-borda-forte underline-offset-4">

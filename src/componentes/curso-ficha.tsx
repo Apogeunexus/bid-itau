@@ -1,6 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import {
+  CHAVE_AULAS_CONCLUIDAS,
+  ConcluirMissao,
+} from "@/componentes/base/concluir-missao";
 import { ICONE_CONFERIDO, ICONE_MAIS, ICONE_SETA } from "@/componentes/base/icones";
 import { CHAVE_LISTA_CURSOS, useMinhaLista } from "@/componentes/base/minha-lista";
 import { Grafismo } from "@/componentes/grafismo";
@@ -153,6 +157,15 @@ export function CursoFicha({
           </ul>
         </section>
       ) : null}
+
+      <ConcluirMissao
+        evento="curso.aula.concluida"
+        alvo={{ tipo: "curso", id: curso.slug }}
+        chave={CHAVE_AULAS_CONCLUIDAS}
+        titulo="Terminou a primeira aula?"
+        rotulo="Marcar aula como concluída"
+        rotuloFeito="Aula concluída"
+      />
 
       <p className="tipo-legenda">
         <Link href="/cursos/" className="underline decoration-borda-forte underline-offset-4">

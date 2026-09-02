@@ -1,4 +1,8 @@
 import Link from "next/link";
+import {
+  CHAVE_PERFIL_COMPLETO,
+  ConcluirMissao,
+} from "@/componentes/base/concluir-missao";
 import { Grafismo } from "@/componentes/grafismo";
 import { PerfilCabecalho } from "@/componentes/perfil-cabecalho";
 import { SeletorDeTema } from "@/componentes/seletor-tema";
@@ -55,6 +59,19 @@ export default function Meu() {
       {/* Nível, saldos e as duas portas — tudo que depende do motor de pontos, num
           componente de cliente só. Ver o cabeçalho dele. */}
       <PerfilCabecalho />
+
+      {/* A primeira missão do percurso de abertura mora aqui: sem perfil declarado, a
+          comunidade não tem como te achar, e é a única das oito que não depende de
+          nenhuma outra tela. `alvo` é a persona, não um slug de acervo — o que se
+          completa é a conta de quem está usando. */}
+      <ConcluirMissao
+        evento="perfil.completo"
+        alvo={{ tipo: "perfil", id: "eu" }}
+        chave={CHAVE_PERFIL_COMPLETO}
+        titulo="Foto, uma linha sobre você e a sua cidade"
+        rotulo="Marcar perfil como completo"
+        rotuloFeito="Perfil completo"
+      />
 
       <nav aria-label="Outros atalhos do perfil" className="perfil-lista">
         {DEMAIS.map((atalho) => (

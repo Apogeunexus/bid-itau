@@ -2351,3 +2351,38 @@ button.saldo-pilula {
   font-weight: 700;
   color: var(--cor-acao-tinta);
 }
+
+/* --- Concluir missão ----------------------------------------------------- */
+
+/*
+ * O ato explícito de «terminei isto», no rodapé da matéria, da exposição, do curso
+ * e do perfil. Ver `componentes/base/concluir-missao.tsx`: quatro eventos do
+ * programa existiam no vocabulário e nenhuma tela os emitia.
+ *
+ * O BLOCO É UM PAINEL REBAIXADO, e não um botão solto no fim do texto: solto, ele
+ * lia como parte do conteúdo — mais um link no rodapé — em vez de um controle. O
+ * rebaixo é o mesmo de `.midia-painel`, porque é a mesma peça em outra tela.
+ */
+.concluir-missao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie-2);
+}
+
+/* Marcado NÃO é desbotado: a missão foi cumprida, e um controle apagado diria que
+ * ela falhou. Ele fica preenchido, que é como o player já marca o concluído. */
+.concluir-missao .player-botao[aria-pressed="true"] {
+  background: var(--cor-tinta);
+  color: var(--cor-fundo);
+  cursor: default;
+}
+
+.concluir-missao .player-botao:disabled[aria-pressed="false"] {
+  opacity: 0.5;
+  cursor: progress;
+}
+

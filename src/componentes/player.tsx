@@ -8,6 +8,7 @@ import { CHAVE_LISTA_PLAY, useMinhaLista } from "@/componentes/base/minha-lista"
 import { CapaSemImagem } from "@/componentes/capa-sem-imagem";
 import { FichaDeAcessibilidade } from "@/componentes/ficha-acessibilidade";
 import { gravarConcluidas, lerConcluidas } from "@/componentes/play";
+import { usePontos } from "@/contexto/pontos";
 import {
   creditoQueCredita,
   diaParaIso,
@@ -140,6 +141,7 @@ export function Player({
   const [concluidas, setConcluidas] = useState<string[]>([]);
   const [hidratado, setHidratado] = useState(false);
   const minhaLista = useMinhaLista(CHAVE_LISTA_PLAY);
+  const { motor } = usePontos();
 
   // A leitura mora no efeito: ler `localStorage` no primeiro render divergiria da
   // hidratação, porque o HTML foi gerado no build.
@@ -156,6 +158,21 @@ export function Player({
     const proximo = [...new Set([...concluidas, midia.slug])];
     setConcluidas(proximo);
     gravarConcluidas(proximo);
+
+    // ESTA TELA SERVE PLAY E CAST: as duas rotas caem em `/play/[slug]`, e quem
+    // separa é a fonte — mídia com link de Spotify é episódio de áudio, o resto é
+    // vídeo. Emitir o evento errado faria a missão do Cast fechar assistindo a um
+    // documentário, e a tela de Desafios contaria uma história que não aconteceu.
+    //
+    // O GUARDA NÃO É DECORAÇÃO: o botão «Concluída» continua chamando `concluir`
+    // depois de marcada, e sem ele cada clique repetido emitiria de novo — o que o
+    // teto por dia da regra esconderia por um tempo e o extrato denunciaria depois.
+    if (!assistida) {
+      motor.emitir(midia.spotify ? "cast.episodio.concluido" : "play.midia.concluida", {
+        tipo: "midia",
+        id: midia.slug,
+      });
+    }
   }
 
   function desfazer() {

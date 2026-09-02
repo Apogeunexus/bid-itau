@@ -1,4 +1,8 @@
 import Link from "next/link";
+import {
+  CHAVE_MATERIAS_LIDAS,
+  ConcluirMissao,
+} from "@/componentes/base/concluir-missao";
 import { ICONE_LIVRO, ICONE_SETA } from "@/componentes/base/icones";
 import { CapaDeCartao } from "@/componentes/capa-sem-imagem";
 import { dataCurta } from "@/componentes/cartao-leitura";
@@ -130,6 +134,15 @@ export function Materia({ materia }: { materia: MateriaCompleta }) {
           </ul>
         </section>
       ) : null}
+
+      <ConcluirMissao
+        evento="leitura.materia.concluida"
+        alvo={{ tipo: "materia", id: materia.slug }}
+        chave={CHAVE_MATERIAS_LIDAS}
+        titulo="Terminou a leitura?"
+        rotulo="Marcar como lida"
+        rotuloFeito="Lida"
+      />
 
       <p className="materia-voltar tipo-legenda">
         <Link href="/noticias/" className="underline decoration-borda-forte underline-offset-4">
