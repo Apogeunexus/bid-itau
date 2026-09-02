@@ -39,6 +39,7 @@
  */
 
 import { contagens, ocorrenciasDe, porSlug, porTerritorio, slugsPorTipo, vizinhos } from "./grafo";
+import { ARESTAS_DE_PARCEIRO } from "./parceiros";
 import {
   METODOS_INDEXADOS,
   caminhoDe,
@@ -547,9 +548,28 @@ function conferir(): Conferencia {
       `as fatias de entidade somam ${somaDeEntidades} e o acervo tem ${META.totais.entidades}`,
     );
   }
-  if (somaDeArestas !== a.totalDeArestas || somaDeArestas !== META.totais.arestas) {
+  /*
+   * O ACERVO EM EXECUÇÃO NÃO É SÓ O `meta.json`. `grafo.ts:69` monta as ligações
+   * somando `gerado/arestas.json` com `ARESTAS_DE_PARCEIRO` — a ingestão federada do
+   * MASP e do Theatro Municipal. Quem escreve o `meta.json` é o gerador, que não
+   * conhece os parceiros: a varredura SEMPRE vê mais ligações do que o meta declara,
+   * e a diferença é exatamente o tamanho dessa lista.
+   *
+   * Sem esta soma a conferência acusava 66601 contra 66563 e derrubava o build
+   * inteiro em `/observatorio`, mandando regerar o grafo — conselho que não
+   * resolvia, porque o `porProcedencia` estava correto o tempo todo. Pior: regerar
+   * nesta máquina apaga as 2.382 capas locais, já que `dados/imagens/` não é
+   * versionado. O defeito era a conferência ignorar uma fonte que o grafo usa.
+   *
+   * `PROCEDENCIAS` continua sem `parceiro` de propósito — o painel mostra as três
+   * fatias do acervo do IC, e parceiro é outra história. Aqui só o total precisa
+   * saber que elas existem.
+   */
+  const arestasEsperadas = somaDeArestas + ARESTAS_DE_PARCEIRO.length;
+  if (arestasEsperadas !== a.totalDeArestas || somaDeArestas !== META.totais.arestas) {
     problemas.push(
-      `as fatias de aresta somam ${somaDeArestas}, a varredura viu ${a.totalDeArestas} ligações distintas e meta.json declara ${META.totais.arestas}`,
+      `as fatias de aresta somam ${somaDeArestas} mais ${ARESTAS_DE_PARCEIRO.length} de parceiro, ` +
+        `a varredura viu ${a.totalDeArestas} ligações distintas e meta.json declara ${META.totais.arestas}`,
     );
   }
 
