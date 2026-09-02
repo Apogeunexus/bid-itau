@@ -5,6 +5,8 @@ import {
   type CidadeExportavel,
   type Roteiro,
 } from "./cidade";
+import { CENARIOS_DE_IA } from "./cenarios-ia";
+import { porSlug } from "./grafo";
 import vocabularioJson from "@/dados/gerado/vocabulario.json";
 import type { Vocabulario } from "@/dados/tipos";
 
@@ -140,6 +142,10 @@ export function roteiroDaEstrelinha(combinacao: string): RoteiroDaEstrelinha | n
 export interface SugestaoDaEstrelinha {
   id: string;
   texto: string;
+  /** Quando presente, o cartão NAVEGA em vez de preencher o compositor. */
+  rota?: string;
+  /** A persona do briefing, mostrada como etiqueta do cartão. */
+  persona?: string;
   gosto: string;
   companhia: string;
   dias: number;
@@ -149,56 +155,36 @@ export interface SugestaoDaEstrelinha {
   altCapa: string;
 }
 
+/**
+ * AS SUGESTÕES SÃO OS TRÊS CENÁRIOS DO BRIEFING (2026-09), e não mais quatro pedidos
+ * genéricos montados a partir das cidades com acervo.
+ *
+ * Os antigos — «quatro dias em São Paulo, com música» — testavam o compositor e não diziam
+ * nada: são o formulário da entrevista escrito em prosa. Numa apresentação de uma hora, a
+ * porta da IA precisa ser a pergunta que a banca escreveu no próprio documento. Cada uma
+ * leva à resposta escrita do cenário, em `/ia/cenario/[id]`, com o que foi entendido, os
+ * critérios que saíram daí, os eventos reais que atendem e o que a resposta não sustenta.
+ *
+ * A capa de cada cartão é a foto do PRIMEIRO evento que a resposta cita — se o evento sair
+ * do grafo, o cartão perde a capa e a verificação vê.
+ */
 export function sugestoesDaEstrelinha(): SugestaoDaEstrelinha[] {
-  const cidades = cidadesComAcervo();
-  if (cidades.length === 0) return [];
-  const a = cidades[0];
-  const b = cidades[1] ?? a;
-  const c = cidades[2] ?? a;
-
-  const pedidos: Array<Omit<SugestaoDaEstrelinha, "capa" | "creditoCapa" | "altCapa"> & { id: string }> = [
-    {
-      id: "musica-sozinho",
-      texto: `Quatro dias em ${a.titulo}, com música. Vou só.`,
-      gosto: "musica",
+  return CENARIOS_DE_IA.map((c) => {
+    const primeiro = c.sugestoes[0];
+    const evento = primeiro ? porSlug("evento", primeiro.slug) : undefined;
+    return {
+      id: c.id,
+      texto: c.prompt,
+      // A entrevista não é o caminho destes: eles vão direto para a resposta escrita.
+      gosto: "surpresa",
       companhia: "sozinho",
       dias: 4,
-      cidade: a.slug,
-    },
-    {
-      id: "teatro-dois",
-      texto: `Um fim de semana de teatro em ${b.titulo}, a dois.`,
-      gosto: "teatro",
-      companhia: "a-dois",
-      dias: 2,
-      cidade: b.slug,
-    },
-    {
-      id: "surpresa-grupo",
-      texto: `Me surpreenda em ${c.titulo}: três dias, em grupo.`,
-      gosto: "surpresa",
-      companhia: "em-grupo",
-      dias: 3,
-      cidade: c.slug,
-    },
-    {
-      id: "visuais-crianca",
-      texto: `Artes visuais em ${a.titulo}, três dias, com criança.`,
-      gosto: "artes-visuais",
-      companhia: "com-crianca",
-      dias: 3,
-      cidade: a.slug,
-    },
-  ];
-
-  return pedidos.map((p) => {
-    const r = roteiroDaEstrelinha(`${p.cidade}--${p.dias}-dias--${p.gosto}`);
-    const item = r?.roteiro.dias.flatMap((d) => d.itens).find((i) => i.imagem);
-    return {
-      ...p,
-      capa: item?.imagem ?? null,
-      creditoCapa: item?.creditoImagem ?? null,
-      altCapa: item ? item.titulo : p.texto,
+      cidade: "",
+      rota: `/ia/cenario/${c.id}/`,
+      persona: c.persona,
+      capa: evento?.imagem ?? null,
+      creditoCapa: evento?.creditoImagem ?? null,
+      altCapa: evento?.titulo ?? c.persona,
     };
   });
 }

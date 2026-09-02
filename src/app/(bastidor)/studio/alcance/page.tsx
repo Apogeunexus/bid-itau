@@ -1,6 +1,6 @@
 import { StudioOrgAlcance } from "@/componentes/studio-org-alcance";
 import { COMUNIDADES } from "@/dados/comunidade";
-import { EVENTOS_COM_LINK_NO_ACERVO, INGRESSOS_AUTORADOS } from "@/dados/ingressos";
+import { EVENTOS_COM_LINK_NO_ACERVO } from "@/dados/ingressos";
 import {
   DATA_DA_MEDIDA,
   GESTOR_DA_ORGANIZACAO,
@@ -11,8 +11,8 @@ import {
   instituicoesDoAcervo,
   numerosDaIntegracao,
 } from "@/dados/organizacao";
-import { EMBLEMAS, MISSOES } from "@/dados/pontos";
-import { FAMILIAS, RECOMPENSAS } from "@/dados/recompensas";
+import { MISSOES } from "@/dados/pontos";
+import { RECOMPENSAS } from "@/dados/recompensas";
 
 /**
  * Studio · Organização — O9 · Alcance consolidado (funcionalidade 152), na V2 dos três livros.
@@ -46,11 +46,8 @@ export default function PaginaStudioOrgAlcance() {
       catalogo={{
         eventosDoAcervo: numeros.eventos,
         eventosComLink: EVENTOS_COM_LINK_NO_ACERVO,
-        ingressosAutorados: INGRESSOS_AUTORADOS,
         recompensas: RECOMPENSAS.length,
-        familiasDeRecompensa: FAMILIAS.length,
         missoes: MISSOES.length,
-        emblemas: EMBLEMAS.length,
         comunidades: COMUNIDADES.length,
       }}
       organizacao={ORGANIZACAO_DA_DEMONSTRACAO}

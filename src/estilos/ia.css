@@ -1411,3 +1411,105 @@
 .ia-gaveta-salvos[open] summary::after {
   content: "−";
 }
+
+/* A persona do briefing como etiqueta do cartão de cenário: quem pergunta antes do
+   que se pergunta, porque é a persona que a banca reconhece do próprio documento. */
+.ia-sugestao-persona {
+  display: block;
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cor-acao-tinta);
+  margin-bottom: 0.25rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * A RESPOSTA DE CENÁRIO — `/ia/cenario/[id]`.
+ * ------------------------------------------------------------------------- */
+.cen-pergunta {
+  margin: 0;
+  padding: var(--espaco-cartao);
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0 var(--raio-m) var(--raio-m) 0;
+  background: var(--cor-acao-lavada);
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-destaque);
+  line-height: 1.35;
+}
+
+.cen-criterios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cen-criterio {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.cen-criterio-campo {
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cor-tinta-3);
+}
+
+.cen-criterio-valor {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-detalhe);
+  font-weight: 700;
+}
+
+.cen-criterio-frase {
+  font-size: var(--tipo-legenda);
+  color: var(--cor-acao-tinta);
+}
+
+.cen-sugestao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: var(--espaco-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+}
+
+.cen-sugestao-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--cor-tinta);
+}
+
+.cen-sugestao-titulo {
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-destaque);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cen-sugestao-porque {
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+  color: var(--cor-tinta-2);
+}
+
+/* O limite tem o mesmo desenho da declaração de honestidade do resto do produto. */
+.cen-nao-sustenta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: var(--espaco-cartao);
+  border-left: 3px solid var(--cor-acao);
+  border-radius: 0 var(--raio-m) var(--raio-m) 0;
+  background: var(--cor-acao-lavada);
+}

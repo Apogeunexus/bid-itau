@@ -333,48 +333,41 @@
 }
 
 /* ---------------------------------------------------------------------------
- * 5 · Os três livros e os três estados da medida — a V2 do painel de alcance.
+ * 5 · Os três livros — a V2 do painel, no MESMO vocabulário de cartão.
  *
- * POR QUE UM BLOCO NOVO EM VEZ DE REUSAR `.org-falta`. A lista de faltas é
- * binária por desenho: bloqueia ou não bloqueia, e a cor carrega essa única
- * decisão. A medida do painel tem TRÊS estados — conta hoje, instrumentado sem
- * coleta, recusado — e enfiar o terceiro numa gramática de dois faria «ainda não
- * coleta» e «nunca vai medir» pintarem igual. Seria exatamente o empacotamento
- * que a V2 existe para desfazer.
+ * O QUE MUDOU FORAM OS KPIs, NÃO O DESENHO. `.web-denominadores` e
+ * `.web-denominador` de `web.css` continuam sendo o cartão: número grande,
+ * rótulo micro. É o que faz a tela ser lida a três metros numa banca, e trocá-lo
+ * por lista de texto transformaria o painel em documento — documento ninguém
+ * confere de pé. Este bloco ACRESCENTA três coisas ao cartão e nada mais.
  *
- * O VALOR VEM PRIMEIRO E É O MAIOR. Numa tela de KPI lida a três metros, o
- * número é a âncora; rótulo antes do número obriga a ler a frase para descobrir
- * se há algo para ler. Quando não há coleta, o lugar do número não fica vazio:
- * ele diz «sem coleta», em peso menor e em tinta 3 — um espaço em branco seria
- * lido como zero, que é uma afirmação diferente.
+ * A PRIMEIRA É O DENOMINADOR NO PRÓPRIO CARTÃO. «41» não diz nada; «41 de 300»
+ * diz. A linha de baixo é micro e recuada de propósito: ela sustenta o número
+ * sem competir com ele.
  *
- * AS DUAS COLUNAS DENTRO DO LIVRO SÃO IGUAIS. «O que eu fiz» não é subordinada a
- * «o que resultou»: dar a ela metade da largura diria visualmente que a
- * atividade do produtor vale menos que o resultado dela, e a tela toma o cuidado
- * oposto — é a coluna que nunca vira comparação entre pessoas.
+ * A SEGUNDA É O CARTÃO SEM COLETA. Ele mostra «—» em tinta recuada, e não zero.
+ * Deixar o cartão fora da grade esconderia que a medida existe; imprimir zero
+ * afirmaria uma quantidade que ninguém contou. O traço é o único estado que diz
+ * «o instrumento está escrito, a coleta é que não roda».
+ *
+ * A TERCEIRA É A BARRA DE PARTICIPAÇÃO, que substitui a lista de faltas nos dois
+ * recortes de L1. Linguagem e território são proporção — quanto do catálogo dela
+ * cada um ocupa —, e proporção lida em número exige o leitor fazer a divisão de
+ * cabeça. A barra faz a divisão; o número continua ao lado para quem confere.
  * ------------------------------------------------------------------------- */
 
 .org-livro-ordem {
-  font-family: var(--fonte-display);
   color: var(--cor-tinta-3);
 }
 
-.org-livro-colunas {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  align-items: start;
-}
-
-.org-livro-coluna {
+.org-kpis {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  min-width: 0;
+  gap: 1rem;
 }
 
-.org-livro-coluna-nome {
-  margin: 0;
+.org-kpi-grupo-nome {
+  margin: 0 0 0.5rem;
   font-size: var(--tipo-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -382,7 +375,31 @@
   color: var(--cor-tinta-3);
 }
 
-.org-medidas {
+/* O cartão ganha uma régua embaixo e largura mínima: sem elas, cartões de
+ * rótulo curto e longo desalinham e a faixa deixa de ser uma grade. */
+[data-view="web"] .org-kpi {
+  min-width: 8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--cor-acao);
+}
+
+[data-view="web"] .org-kpi[data-estado="instrumentado"] {
+  border-bottom-style: dashed;
+  border-bottom-color: var(--cor-borda-forte);
+}
+
+[data-view="web"] .org-kpi .web-denominador-numero[data-vazio="sim"] {
+  color: var(--cor-tinta-3);
+}
+
+.org-kpi-de {
+  font-size: var(--tipo-micro);
+  color: var(--cor-tinta-3);
+}
+
+/* ---- A barra de participação ---- */
+
+.org-barras {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -391,77 +408,43 @@
   list-style: none;
 }
 
-.org-medida {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.5rem 0.75rem;
-  border-left: 3px solid var(--cor-borda-forte);
+.org-barra {
+  display: grid;
+  grid-template-columns: minmax(6rem, 12rem) 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.org-barra-rotulo {
+  font-size: var(--tipo-detalhe);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.org-barra-trilho {
+  position: relative;
+  height: 0.5rem;
   background: var(--cor-superficie-2);
 }
 
-/* O estado pinta a barra da esquerda, e só ela: a medida que conta é sólida, a
- * que tem instrumento sem coleta é a mesma cor lavada, e a recusada é neutra. A
- * recusa NÃO é alarme — ela é uma decisão tomada, e um vermelho ali faria a
- * disciplina da tela parecer defeito. */
-.org-medida[data-estado="conta"] {
-  border-left-color: var(--cor-acao);
+.org-barra-trilho::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--parte, 0%);
+  background: var(--cor-acao);
 }
 
-.org-medida[data-estado="instrumentado"] {
-  border-left-color: color-mix(in srgb, var(--cor-acao) 40%, var(--cor-borda));
-  background: var(--cor-superficie);
+/* O recorte «sem território declarado» é ausência, não categoria: ele usa a
+ * mesma marca da falta que bloqueia, para não ser lido como um lugar. */
+.org-barra[data-vazio="sim"] .org-barra-trilho::before {
+  background: var(--cor-borda-forte);
 }
 
-.org-medida[data-estado="recusado"] {
-  border-left-style: dashed;
-  background: transparent;
-}
-
-.org-medida-valor {
+.org-barra-numero {
   font-family: var(--fonte-display);
-  font-size: var(--tipo-titulo-3);
+  font-size: var(--tipo-detalhe);
   font-weight: 700;
-  line-height: 1;
-}
-
-/* Sem coleta não é zero. O peso cai e a tinta recua, para o lugar do número
- * continuar ocupado sem afirmar uma quantidade que ninguém contou. */
-.org-medida-valor[data-vazio="sim"] {
-  font-family: inherit;
-  font-size: var(--tipo-detalhe);
-  font-weight: 400;
-  font-style: italic;
-  color: var(--cor-tinta-3);
-}
-
-.org-medida-rotulo {
-  font-size: var(--tipo-detalhe);
-  line-height: 1.4;
-}
-
-.org-medida-de {
-  font-size: var(--tipo-micro);
-  color: var(--cor-tinta-3);
-}
-
-.org-estado {
-  align-self: flex-start;
-  font-size: var(--tipo-micro);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--cor-tinta-3);
-}
-
-.org-estado[data-estado="conta"] {
-  color: var(--cor-acao-tinta);
-}
-
-/* Abaixo de 1024px as duas colunas do livro viram uma. Elas nunca somem: o
- * livro sem a coluna «o que eu fiz» vira um painel de resultado, que é
- * justamente a leitura que a separação existe para impedir. */
-@media (max-width: 64rem) {
-  .org-livro-colunas {
-    grid-template-columns: 1fr;
-  }
+  color: var(--cor-tinta-2);
 }

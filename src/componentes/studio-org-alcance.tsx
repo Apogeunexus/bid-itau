@@ -4,13 +4,10 @@ import { useMemo } from "react";
 import { StudioOrgNavegacao } from "./studio-org-navegacao";
 import { useOrganizacao } from "./studio-org-estado";
 import {
-  INGRESSO_NAO_E_VENDA,
   LIVROS_DO_PRODUTOR,
   O_QUE_ESTA_INSTRUMENTADO,
   O_QUE_O_ALCANCE_NAO_SUSTENTA,
-  REGRA_DOS_TRES_ESTADOS,
   REGRA_DO_ALCANCE,
-  ROTULO_DO_ESTADO,
   type EstadoDaMedida,
 } from "@/dados/tipos-organizacao";
 import type { EventoParaPrograma, InstituicaoDoAcervo } from "@/dados/organizacao";
@@ -18,23 +15,22 @@ import type { EventoParaPrograma, InstituicaoDoAcervo } from "@/dados/organizaca
 /**
  * studio-org-alcance.tsx — O9 · Alcance consolidado (funcionalidade 152), na V2 dos três livros.
  *
- * É A TELA ONDE É MAIS FÁCIL MENTIR, e por isso metade dela continua sendo a lista do que ela
- * se recusa a exibir. O que a V2 muda não é a disciplina — é o número de gavetas.
+ * O QUE A V2 TROCA SÃO OS KPIs, NÃO O DESENHO. O vocabulário visual continua sendo o de
+ * sempre: `.web-denominadores` — número grande, rótulo micro —, que é o que faz esta tela ser
+ * lida a três metros numa banca. Substituir o cartão de número por prosa transformaria um
+ * painel em documento, e documento ninguém confere de pé.
  *
- * A RECUSA DEIXOU DE SER BINÁRIA. A V1 tinha dois estados: o número que conta e a medida que
- * recusa. Isso punha na mesma gaveta «não há como medir isto» e «o instrumento está escrito,
- * a coleta é que não roda» — e três das cinco recusas originais eram do segundo tipo desde
- * que o motor de pontos entrou. Agora são três estados, e cada medida declara o seu.
+ * A PROSA VIROU ATRIBUTO. Cada motivo — por que uma medida não coleta, por que a recusa
+ * existe — mora em `title` no cartão e por extenso APENAS na coluna da direita, que é onde a
+ * V1 já os punha. No corpo do painel, uma linha por bloco, no máximo.
  *
- * OS TRÊS LIVROS TÊM DENOMINADORES DIFERENTES, e é isso que os separa: o catálogo do
- * produtor, quem apareceu, e o que a organização injetou no programa. Empilhar os três numa
- * lista única de indicadores faria comparar coisas cujo «de quantos» não é o mesmo.
+ * TRÊS LIVROS COM DENOMINADORES DIFERENTES: o catálogo dela, quem apareceu, e o que ela
+ * injetou no programa. Uma faixa de KPI por livro; dentro da faixa, «o que eu fiz» antes de
+ * «o que resultou», na ordem de leitura e sem virar duas colunas — o painel é uma régua só.
  *
- * DENTRO DE CADA LIVRO, «O QUE EU FIZ» E «O QUE RESULTOU». A separação é proteção, não
- * arrumação: a coluna «eu fiz» descreve o comportamento de uma pessoa identificada, e
- * `CONFORMIDADE_NAO_E_VIGILANCIA` proíbe que ela vire nota de desempenho.
- *
- * A INSTITUIÇÃO É A QUE A O1 ESCOLHEU. As duas telas leem o mesmo campo do mesmo estado.
+ * O CARTÃO SEM COLETA MOSTRA «—», E NÃO ZERO. Espaço em branco é lido como zero, e zero é uma
+ * afirmação que ninguém contou. O traço, em tinta recuada, é o único jeito de o cartão
+ * ocupar o lugar sem afirmar quantidade.
  *
  * SÓ NA VISÃO WEB (D-67).
  */
@@ -42,11 +38,8 @@ import type { EventoParaPrograma, InstituicaoDoAcervo } from "@/dados/organizaca
 interface Catalogo {
   eventosDoAcervo: number;
   eventosComLink: number;
-  ingressosAutorados: number;
   recompensas: number;
-  familiasDeRecompensa: number;
   missoes: number;
-  emblemas: number;
   comunidades: number;
 }
 
@@ -63,88 +56,72 @@ interface Props {
   dataDeReferencia: string;
 }
 
-/** Uma linha de medida dentro de um livro. `valor === null` é o que ainda não tem coleta. */
-interface Medida {
-  coluna: "fiz" | "resultou";
+interface Kpi {
   rotulo: string;
-  valor: string | null;
+  /** `null` = instrumentado sem coleta. O cartão mostra «—». */
+  valor: number | null;
   de: string;
+  coluna: "fiz" | "resultou";
   estado: EstadoDaMedida;
+  porque?: string;
 }
 
-function Estado({ estado }: { estado: EstadoDaMedida }) {
+function Cartao({ kpi }: { kpi: Kpi }) {
   return (
-    <span className="org-estado" data-estado={estado}>
-      {ROTULO_DO_ESTADO[estado]}
-    </span>
-  );
-}
-
-function Livro({
-  ordem,
-  rotulo,
-  pergunta,
-  denominador,
-  quando,
-  medidas,
-  nota,
-}: {
-  ordem: string;
-  rotulo: string;
-  pergunta: string;
-  denominador: string;
-  quando: string;
-  medidas: Medida[];
-  nota: string;
-}) {
-  const fiz = medidas.filter((m) => m.coluna === "fiz");
-  const resultou = medidas.filter((m) => m.coluna === "resultou");
-
-  return (
-    <section className="studio-painel">
-      <div className="studio-painel-cabeca">
-        <h2 className="studio-painel-nome">
-          <span className="org-livro-ordem">{ordem}</span> {rotulo}
-        </h2>
-        <span className="studio-pastilha">denominador: {denominador}</span>
-      </div>
-      <p className="studio-objetivo">{pergunta}</p>
-      <p className="studio-campo-nota">Abre {quando}.</p>
-
-      <div className="org-livro-colunas">
-        <div className="org-livro-coluna">
-          <h3 className="org-livro-coluna-nome">O que eu fiz</h3>
-          <ul className="org-medidas">
-            {fiz.map((m) => (
-              <Linha key={m.rotulo} medida={m} />
-            ))}
-          </ul>
-        </div>
-        <div className="org-livro-coluna">
-          <h3 className="org-livro-coluna-nome">O que resultou</h3>
-          <ul className="org-medidas">
-            {resultou.map((m) => (
-              <Linha key={m.rotulo} medida={m} />
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <p className="studio-campo-nota">{nota}</p>
-    </section>
-  );
-}
-
-function Linha({ medida }: { medida: Medida }) {
-  return (
-    <li className="org-medida" data-estado={medida.estado}>
-      <span className="org-medida-valor" data-vazio={medida.valor === null ? "sim" : "nao"}>
-        {medida.valor ?? "sem coleta"}
+    <li className="web-denominador org-kpi" data-estado={kpi.estado} title={kpi.porque}>
+      <span className="web-denominador-numero" data-vazio={kpi.valor === null ? "sim" : "nao"}>
+        {kpi.valor === null ? "—" : kpi.valor.toLocaleString("pt-BR")}
       </span>
-      <span className="org-medida-rotulo">{medida.rotulo}</span>
-      <span className="org-medida-de">de {medida.de}</span>
-      <Estado estado={medida.estado} />
+      <span className="web-denominador-rotulo">{kpi.rotulo}</span>
+      <span className="org-kpi-de">de {kpi.de}</span>
     </li>
+  );
+}
+
+function Faixa({ kpis }: { kpis: Kpi[] }) {
+  const fiz = kpis.filter((k) => k.coluna === "fiz");
+  const resultou = kpis.filter((k) => k.coluna === "resultou");
+  return (
+    <div className="org-kpis">
+      {fiz.length > 0 && (
+        <div className="org-kpi-grupo" data-coluna="fiz">
+          <p className="org-kpi-grupo-nome">O que eu fiz</p>
+          <ul className="web-denominadores">
+            {fiz.map((k) => (
+              <Cartao key={k.rotulo} kpi={k} />
+            ))}
+          </ul>
+        </div>
+      )}
+      {resultou.length > 0 && (
+        <div className="org-kpi-grupo" data-coluna="resultou">
+          <p className="org-kpi-grupo-nome">O que resultou</p>
+          <ul className="web-denominadores">
+            {resultou.map((k) => (
+              <Cartao key={k.rotulo} kpi={k} />
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** A barra de participação — o recorte por linguagem e por território, em proporção. */
+function Barras({ dados, total }: { dados: [string, number][]; total: number }) {
+  return (
+    <ul className="org-barras">
+      {dados.map(([rotulo, quantos]) => (
+        <li key={rotulo} className="org-barra" data-vazio={rotulo.startsWith("sem ") ? "sim" : "nao"}>
+          <span className="org-barra-rotulo">{rotulo}</span>
+          <span
+            className="org-barra-trilho"
+            style={{ ["--parte" as string]: `${total === 0 ? 0 : (quantos / total) * 100}%` }}
+          />
+          <span className="org-barra-numero">{quantos}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -196,174 +173,31 @@ export function StudioOrgAlcance({
 
   const semEventos = instituicoes.filter((i) => i.eventosRealizados === 0).length;
 
-  /**
-   * As medidas de cada livro. Elas moram aqui e não em `tipos-organizacao.ts` porque
-   * dependem do estado da tela — a constante lá é o CONTRATO (quais livros existem, quais
-   * estados existem), e o contrato não sabe quantos eventos esta instituição realiza.
-   */
-  const livros: Record<string, { medidas: Medida[]; nota: string }> = {
-    publiquei: {
-      medidas: [
-        {
-          coluna: "fiz",
-          rotulo: "eventos que ela realiza",
-          valor: String(meus.length),
-          de: `${catalogo.eventosDoAcervo} do acervo`,
-          estado: "conta",
-        },
-        {
-          coluna: "fiz",
-          rotulo: "sessões somadas",
-          valor: String(sessoes),
-          de: `${ocorrencias} do acervo`,
-          estado: "conta",
-        },
-        {
-          coluna: "fiz",
-          rotulo: "linguagens cobertas",
-          valor: String(porLinguagem.length),
-          de: "33 do vocabulário",
-          estado: "conta",
-        },
-        {
-          coluna: "fiz",
-          rotulo: "territórios cobertos",
-          valor: String(porTerritorio.length),
-          de: `${meus.length} eventos dela`,
-          estado: "conta",
-        },
-        {
-          coluna: "fiz",
-          rotulo: "eventos com link de compra publicado",
-          valor: String(catalogo.eventosComLink),
-          de: `${catalogo.eventosDoAcervo} do acervo`,
-          estado: "conta",
-        },
-        {
-          coluna: "resultou",
-          rotulo: "sessões que declaram espaço",
-          valor: String(ocorrenciasComEspaco),
-          de: `${ocorrencias} ocorrências`,
-          estado: "conta",
-        },
-        {
-          coluna: "resultou",
-          rotulo: "saída para a plataforma de ingresso",
-          valor: null,
-          de: `${catalogo.eventosComLink} eventos com link`,
-          estado: "instrumentado",
-        },
-      ],
-      nota:
-        `Os quatro primeiros são arestas do grafo, contadas: «realiza» liga a instituição ao ` +
-        `evento e as sessões vêm de «ocorre_em». Nenhum deles mede público. «Realiza» é de ` +
-        `MUITOS PARA MUITOS no acervo — o mesmo evento costuma ser realizado por várias ` +
-        `instituições, e estes números são a fatia desta, não uma fatia exclusiva.`,
-    },
-    chegou: {
-      medidas: [
-        {
-          coluna: "resultou",
-          rotulo: "presenças confirmadas por código",
-          valor: null,
-          de: "sessões com teto declarado",
-          estado: "instrumentado",
-        },
-        {
-          coluna: "resultou",
-          rotulo: "taxa de lotação",
-          valor: null,
-          de: "capacidade declarada na ficha do espaço",
-          estado: "instrumentado",
-        },
-        {
-          coluna: "resultou",
-          rotulo: "conclusões de conteúdo",
-          valor: null,
-          de: "itens publicados por ela",
-          estado: "instrumentado",
-        },
-        {
-          coluna: "resultou",
-          rotulo: "nota da sessão",
-          valor: null,
-          de: "presenças confirmadas — nunca do público geral",
-          estado: "instrumentado",
-        },
-        {
-          coluna: "resultou",
-          rotulo: "alcance por faixa etária ou perfil",
-          valor: null,
-          de: "3 pessoas-usuárias no acervo",
-          estado: "recusado",
-        },
-        {
-          coluna: "fiz",
-          rotulo: "taxa de resposta a comentário",
-          valor: null,
-          de: "comentários recebidos",
-          estado: "instrumentado",
-        },
-        {
-          coluna: "fiz",
-          rotulo: "comunidades sem publicar há 30 dias",
-          valor: null,
-          de: `${catalogo.comunidades} comunidades do marketplace`,
-          estado: "instrumentado",
-        },
-      ],
-      nota:
-        `As duas medidas da coluna «o que eu fiz» descrevem o comportamento de uma pessoa ` +
-        `identificada, e é por isso que elas ficam desse lado e não saem dele: são espelho do ` +
-        `produtor para ele mesmo, nunca comparação entre produtores. A lotação é PISO de ` +
-        `público — quem foi e não resgatou o código de presença não aparece na conta.`,
-    },
-    devolvi: {
-      medidas: [
-        {
-          coluna: "fiz",
-          rotulo: "benefícios no catálogo do programa",
-          valor: String(catalogo.recompensas),
-          de: `${catalogo.familiasDeRecompensa} famílias`,
-          estado: "conta",
-        },
-        {
-          coluna: "fiz",
-          rotulo: "missões publicadas no programa",
-          valor: String(catalogo.missoes),
-          de: `${catalogo.emblemas} emblemas concedíveis`,
-          estado: "conta",
-        },
-        {
-          coluna: "resultou",
-          rotulo: "funil de resgate até entregue",
-          valor: null,
-          de: "resgates abertos",
-          estado: "instrumentado",
-        },
-        {
-          coluna: "resultou",
-          rotulo: "taxa de contestação de entrega",
-          valor: null,
-          de: "resgates marcados como entregues",
-          estado: "instrumentado",
-        },
-        {
-          coluna: "resultou",
-          rotulo: "taxa de reprovação de prova",
-          valor: null,
-          de: "provas com veredito",
-          estado: "instrumentado",
-        },
-      ],
-      nota:
-        `«Contestado» é o único número que mede a organização cumprindo a própria promessa: ` +
-        `«entregue» é ela dizendo que despachou, e só quem recebeu sabe se chegou. E ` +
-        `reprovação de prova alta é MISSÃO MAL ESCRITA, não gente desonesta — o painel mostra ` +
-        `o motivo dominante ao lado do número, porque ler reprovação como fraude é o caminho ` +
-        `mais curto para o produtor punir o próprio público. Os dois números da esquerda são ` +
-        `do catálogo do PROGRAMA: nenhum deles foi publicado por esta organização ainda.`,
-    },
+  const porLivro: Record<string, Kpi[]> = {
+    publiquei: [
+      { rotulo: "eventos realizados", valor: meus.length, de: `${catalogo.eventosDoAcervo} do acervo`, coluna: "fiz", estado: "conta" },
+      { rotulo: "sessões somadas", valor: sessoes, de: `${ocorrencias} ocorrências`, coluna: "fiz", estado: "conta" },
+      { rotulo: "linguagens cobertas", valor: porLinguagem.length, de: "33 do vocabulário", coluna: "fiz", estado: "conta" },
+      { rotulo: "territórios cobertos", valor: porTerritorio.length, de: `${meus.length} eventos`, coluna: "fiz", estado: "conta" },
+      { rotulo: "com link de compra", valor: catalogo.eventosComLink, de: `${catalogo.eventosDoAcervo} do acervo`, coluna: "fiz", estado: "conta", porque: "O acervo não tem campo de link de compra. A plataforma não vende — a compra acontece fora." },
+      { rotulo: "sessões com espaço", valor: ocorrenciasComEspaco, de: `${ocorrencias} ocorrências`, coluna: "resultou", estado: "conta" },
+      { rotulo: "saída para o ingresso", valor: null, de: `${catalogo.eventosComLink} com link`, coluna: "resultou", estado: "instrumentado", porque: "ingresso.saida.clicada — mede intenção, nunca conversão: sem retorno da plataforma de venda não há bilhete." },
+    ],
+    chegou: [
+      { rotulo: "taxa de resposta", valor: null, de: "comentários recebidos", coluna: "fiz", estado: "instrumentado", porque: "comunidade.comentario.criado — espelho do produtor para ele mesmo, nunca comparação entre produtores." },
+      { rotulo: "comunidades paradas", valor: null, de: `${catalogo.comunidades} do marketplace`, coluna: "fiz", estado: "instrumentado", porque: "Sem publicação há 30 dias." },
+      { rotulo: "presenças confirmadas", valor: null, de: "código do produtor", coluna: "resultou", estado: "instrumentado", porque: "ocorrencia.presenca.confirmada — entra por código, nunca por autodeclaração. É piso de público, não público." },
+      { rotulo: "taxa de lotação", valor: null, de: "capacidade declarada", coluna: "resultou", estado: "instrumentado", porque: "Presenças ÷ capacidade da ficha do espaço. Sem teto declarado não há porcentagem." },
+      { rotulo: "conclusões", valor: null, de: "itens publicados", coluna: "resultou", estado: "instrumentado", porque: "play.midia.concluida · cast.episodio.concluido · leitura.materia.concluida — conclusão, não visualização." },
+      { rotulo: "nota da sessão", valor: null, de: "presenças confirmadas", coluna: "resultou", estado: "instrumentado", porque: "ocorrencia.avaliada, travada em presença. Média só a partir de 5; abaixo disso, distribuição." },
+    ],
+    devolvi: [
+      { rotulo: "benefícios no catálogo", valor: catalogo.recompensas, de: "5 famílias", coluna: "fiz", estado: "conta", porque: "Do catálogo do programa — nenhum publicado por esta organização ainda." },
+      { rotulo: "missões publicadas", valor: catalogo.missoes, de: "16 emblemas", coluna: "fiz", estado: "conta", porque: "Do catálogo do programa — nenhuma publicada por esta organização ainda." },
+      { rotulo: "resgates entregues", valor: null, de: "resgates abertos", coluna: "resultou", estado: "instrumentado", porque: "recompensa.resgatada — a esteira tem 7 fases e não termina em «entregue»." },
+      { rotulo: "taxa de contestação", valor: null, de: "marcados entregues", coluna: "resultou", estado: "instrumentado", porque: "«Entregue» é a organização dizendo que despachou; só quem recebeu sabe se chegou." },
+      { rotulo: "reprovação de prova", valor: null, de: "provas com veredito", coluna: "resultou", estado: "instrumentado", porque: "missao.prova.aprovada — reprovação alta é missão mal escrita, não gente desonesta." },
+    ],
   };
 
   return (
@@ -380,18 +214,6 @@ export function StudioOrgAlcance({
         <StudioOrgNavegacao ativa="alcance" />
       </header>
 
-      <section className="studio-painel">
-        <h2 className="studio-painel-nome">As duas regras desta tela</h2>
-        <div className="web-declaracao">
-          <strong>Se o dado não sustenta, a tela diz</strong>
-          <span>{REGRA_DO_ALCANCE}</span>
-        </div>
-        <div className="web-declaracao">
-          <strong>E ela diz em qual dos três estados cada medida está</strong>
-          <span>{REGRA_DOS_TRES_ESTADOS}</span>
-        </div>
-      </section>
-
       {!org.pronto ? (
         <section className="studio-painel">
           <p className="studio-nota">Lendo o estado guardado neste navegador…</p>
@@ -402,112 +224,64 @@ export function StudioOrgAlcance({
         </section>
       ) : (
         <div className="web-duas-colunas">
-          {/* -------- Os três livros, à esquerda -------- */}
           <div className="studio-forma">
-            <section className="studio-painel">
-              <div className="studio-painel-cabeca">
-                <h2 className="studio-painel-nome">{atual.titulo}</h2>
-                <span className="studio-pastilha">
-                  a instituição que a ficha institucional declara
-                </span>
-              </div>
-              <p className="studio-campo-nota">
-                O painel se divide em três livros porque os três têm DENOMINADORES diferentes —
-                o catálogo dela, quem apareceu, e o que ela injetou no programa. Uma lista única
-                de indicadores compararia coisas cujo «de quantos» não é o mesmo.
-              </p>
-            </section>
-
             {LIVROS_DO_PRODUTOR.map((l) => (
-              <Livro
-                key={l.id}
-                ordem={l.ordem}
-                rotulo={l.rotulo}
-                pergunta={l.pergunta}
-                denominador={l.denominador}
-                quando={l.quando}
-                medidas={livros[l.id]?.medidas ?? []}
-                nota={livros[l.id]?.nota ?? ""}
-              />
+              <section key={l.id} className="studio-painel">
+                <div className="studio-painel-cabeca">
+                  <h2 className="studio-painel-nome">
+                    <span className="org-livro-ordem">{l.ordem}</span> {l.rotulo}
+                  </h2>
+                  <span className="studio-pastilha">de {l.denominador}</span>
+                </div>
+                <Faixa kpis={porLivro[l.id] ?? []} />
+              </section>
             ))}
 
             <section className="studio-painel">
-              <h2 className="studio-painel-nome">O ingresso não é venda</h2>
-              <div className="web-declaracao">
-                <strong>Mede-se intenção, nunca conversão</strong>
-                <span>{INGRESSO_NAO_E_VENDA}</span>
+              <div className="studio-painel-cabeca">
+                <h2 className="studio-painel-nome">L1 · Por linguagem</h2>
+                <span className="studio-pastilha">{porLinguagem.length} de 33</span>
               </div>
-              <p className="studio-campo-nota">
-                Medido: <strong>{catalogo.eventosComLink}</strong> dos{" "}
-                {catalogo.eventosDoAcervo} eventos publicam link de compra — a classe do acervo
-                não tem o campo. Os {catalogo.ingressosAutorados} links que a ficha do evento
-                exibe foram escritos pela curadoria e aparecem rotulados como tal. Por isso a
-                cobertura vem antes do desempenho: um gráfico de cliques aqui mostraria zero e
-                pareceria fracasso de audiência quando é ausência de cadastro.
-              </p>
-            </section>
-
-            <section className="studio-painel">
-              <h2 className="studio-painel-nome">L1 · Por linguagem</h2>
               {porLinguagem.length === 0 ? (
                 <p className="studio-campo-nota">
-                  Esta instituição não realiza evento nenhum no acervo — e são {semEventos} de{" "}
-                  {instituicoes.length} nessa situação.
+                  Não realiza evento nenhum no acervo — são {semEventos} de {instituicoes.length}
+                  {" "}nessa situação.
                 </p>
               ) : (
-                <ul className="org-falta">
-                  {porLinguagem.map(([rotulo, quantos]) => (
-                    <li key={rotulo} className="org-falta-item" data-bloqueia="nao">
-                      <span>{rotulo}</span>
-                      <span className="org-falta-dono">
-                        {quantos} de {meus.length} eventos
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <Barras dados={porLinguagem} total={meus.length} />
               )}
             </section>
 
             <section className="studio-painel">
-              <h2 className="studio-painel-nome">L1 · Por território</h2>
+              <div className="studio-painel-cabeca">
+                <h2 className="studio-painel-nome">L1 · Por território</h2>
+                <span className="studio-pastilha">{porTerritorio.length} recortes</span>
+              </div>
               {porTerritorio.length === 0 ? (
                 <p className="studio-campo-nota">Sem eventos, não há território a recortar.</p>
               ) : (
-                <ul className="org-falta">
-                  {porTerritorio.map(([rotulo, quantos]) => (
-                    <li
-                      key={rotulo}
-                      className="org-falta-item"
-                      data-bloqueia={rotulo === "sem território declarado" ? "sim" : "nao"}
-                    >
-                      <span>{rotulo}</span>
-                      <span className="org-falta-dono">
-                        {quantos} de {meus.length} eventos
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <Barras dados={porTerritorio} total={meus.length} />
               )}
             </section>
           </div>
 
-          {/* -------- O que não conta ainda, e o que nunca vai contar -------- */}
           <aside className="org-colada studio-forma">
+            <section className="studio-painel">
+              <h2 className="studio-painel-nome">A regra desta tela</h2>
+              <div className="web-declaracao">
+                <strong>Se o dado não sustenta, a tela diz</strong>
+                <span>{REGRA_DO_ALCANCE}</span>
+              </div>
+            </section>
+
             <section className="studio-painel">
               <div className="studio-painel-cabeca">
                 <h2 className="studio-painel-nome">Instrumentado, sem coleta</h2>
                 <span className="studio-pastilha">
-                  <span className="studio-pastilha-numero">
-                    {O_QUE_ESTA_INSTRUMENTADO.length}
-                  </span>{" "}
+                  <span className="studio-pastilha-numero">{O_QUE_ESTA_INSTRUMENTADO.length}</span>{" "}
                   com evento escrito
                 </span>
               </div>
-              <p className="studio-nota">
-                Cada linha tem o instrumento pronto no contrato e não tem coleta agregada. O nome
-                do evento está aí para quem confere abrir o arquivo e ver que existe — «em breve»
-                sem o nome do evento seria pior do que a recusa, porque a recusa é verificável.
-              </p>
               <ul className="org-falta">
                 {O_QUE_ESTA_INSTRUMENTADO.map((m) => (
                   <li key={m.medida} className="org-falta-item" data-bloqueia="nao">
@@ -518,11 +292,6 @@ export function StudioOrgAlcance({
                   </li>
                 ))}
               </ul>
-              <p className="studio-campo-nota">
-                O livro-razão do programa mora no navegador de cada pessoa, por persona, e não há
-                autenticação. Agregar entre pessoas exige servidor — é isso, e não o modelo, que
-                falta.
-              </p>
             </section>
 
             <section className="studio-painel">
@@ -532,13 +301,9 @@ export function StudioOrgAlcance({
                   <span className="studio-pastilha-numero">
                     {O_QUE_O_ALCANCE_NAO_SUSTENTA.length}
                   </span>{" "}
-                  medidas recusadas
+                  recusadas
                 </span>
               </div>
-              <p className="studio-nota">
-                Estas não têm instrumento nenhum, e a tela diz o motivo. Elas ocupam a mesma
-                coluna e o mesmo tamanho do que a tela conta, porque a recusa é o conteúdo.
-              </p>
               <ul className="org-falta">
                 {O_QUE_O_ALCANCE_NAO_SUSTENTA.map((m) => (
                   <li key={m.medida} className="org-falta-item" data-bloqueia="sim">

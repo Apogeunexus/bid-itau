@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   cloneElement,
   useCallback,
@@ -49,6 +50,10 @@ import {
  */
 
 export type SugestaoDeRoteiro = {
+  /** Quando presente, o cartão NAVEGA para a resposta escrita em vez de preencher o campo. */
+  rota?: string;
+  /** A persona do briefing, mostrada como etiqueta acima do pedido. */
+  persona?: string;
   id: string;
   texto: string;
   gosto: string;
@@ -904,24 +909,41 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes }: P
             <p className="ia-vazio-titulo tipo-titulo-2">Como posso ajudar?</p>
             {sugestoes.length > 0 ? (
               <div className="ia-sugestoes">
-                {sugestoes.map((s) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    className="ia-sugestao"
-                    onClick={() => escolherSugestao(s)}
-                  >
-                    {s.capa ? (
-                      <span className="ia-sugestao-capa">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={s.capa} alt="" />
+                {sugestoes.map((s) => {
+                  const miolo = (
+                    <>
+                      {s.capa ? (
+                        <span className="ia-sugestao-capa">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={s.capa} alt="" />
+                        </span>
+                      ) : null}
+                      <span className="ia-sugestao-texto">
+                        {s.persona ? (
+                          <span className="ia-sugestao-persona">{s.persona}</span>
+                        ) : null}
+                        <span className="ia-sugestao-pedido">{s.texto}</span>
                       </span>
-                    ) : null}
-                    <span className="ia-sugestao-texto">
-                      <span className="ia-sugestao-pedido">{s.texto}</span>
-                    </span>
-                  </button>
-                ))}
+                    </>
+                  );
+                  // COM ROTA, O CARTÃO NAVEGA. Os três cenários do briefing têm resposta
+                  // escrita e pré-computada; preencher o compositor com eles mandaria a
+                  // pergunta para a entrevista, que responde outra coisa.
+                  return s.rota ? (
+                    <Link key={s.id} href={s.rota} className="ia-sugestao no-underline">
+                      {miolo}
+                    </Link>
+                  ) : (
+                    <button
+                      key={s.id}
+                      type="button"
+                      className="ia-sugestao"
+                      onClick={() => escolherSugestao(s)}
+                    >
+                      {miolo}
+                    </button>
+                  );
+                })}
               </div>
             ) : null}
           </div>
