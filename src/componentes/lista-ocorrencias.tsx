@@ -105,9 +105,10 @@ function horaCurta(iso: string): string {
   return hora ? hora.replace(":", "h") : "";
 }
 
-function porExtenso(iso: string): string {
-  const hora = horaCurta(iso);
+function porExtenso(iso: string, comHora = true): string {
   const base = diaPorExtenso(iso);
+  if (!comHora) return base;
+  const hora = horaCurta(iso);
   return hora ? `${base}, ${hora}` : base;
 }
 
@@ -124,12 +125,18 @@ export function ListaDeOcorrencias({
   ocorrencias,
   temporadas,
   dataDeReferencia,
+  espacoDoEvento,
+  horaConhecida = true,
   className,
 }: {
   ocorrencias: OcorrenciaExibivel[];
   temporadas: TemporadaExibivel[];
   /** Datetime ISO do build. É contra esta data que «a próxima» é calculada. */
   dataDeReferencia: string;
+  /** Espaço declarado no evento, para as sessões que não o trazem. */
+  espacoDoEvento?: string | null;
+  /** `false` quando a fonte não publicou a hora — a sessão mostra só a data. */
+  horaConhecida?: boolean;
   className?: string;
 }) {
   const { salvos, alternarSalvo } = useSessao();
@@ -152,7 +159,7 @@ export function ListaDeOcorrencias({
           {ocorrencias.length === 0
             ? "Sem sessões datadas"
             : `${ocorrencias.length} ${ocorrencias.length === 1 ? "sessão" : "sessões"}`}
-          {proxima ? ` · a próxima ${porExtenso(proxima.inicio)}` : ""}
+          {proxima ? ` · a próxima ${porExtenso(proxima.inicio, horaConhecida)}` : ""}
         </h2>
 
         {/* O PARÁGRAFO VIROU POPUP (2026-09). Ele explicava, em quatro linhas no
@@ -208,8 +215,17 @@ export function ListaDeOcorrencias({
                 >
                   <p className="ocorrencia-quando text-sm font-semibold">
                     <span className="ocorrencia-dia">{diaPorExtenso(ocorrencia.inicio)}</span>
-                    <span className="ocorrencia-sep">{hora ? ", " : " · "}</span>
-                    <span className="ocorrencia-hora">{hora ? hora : "sem horário"}</span>
+                    {/* «sem horário» é afirmação sobre o REGISTRO e só vale quando o
+                        registro é do acervo. Para parceiro a fonte simplesmente não
+                        publicou a hora, e a sentinela de meia-noite não pode virar texto. */}
+                    {horaConhecida ? (
+                      <>
+                        <span className="ocorrencia-sep">{hora ? ", " : " · "}</span>
+                        <span className="ocorrencia-hora">{hora ? hora : "sem horário"}</span>
+                      </>
+                    ) : (
+                      <span className="ocorrencia-hora sr-only"> — horário não publicado</span>
+                    )}
                   </p>
 
                   <p className="ocorrencia-condicao flex flex-wrap gap-x-2 gap-y-1 text-xs text-tinta-2">
@@ -232,6 +248,13 @@ export function ListaDeOcorrencias({
                           ? "na temporada"
                           : "no registro do evento"}
                       </span>
+                    </p>
+                  ) : espacoDoEvento ? (
+                    // O espaço vem do evento quando a sessão não o declara — é o caso de
+                    // toda programação de parceiro, onde a casa é a mesma em todas as
+                    // sessões e a fonte a escreve uma vez só.
+                    <p className="ocorrencia-espaco text-xs leading-relaxed text-tinta-2">
+                      {espacoDoEvento}
                     </p>
                   ) : (
                     <p className="ocorrencia-espaco text-xs leading-relaxed text-tinta-2">

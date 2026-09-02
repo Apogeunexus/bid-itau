@@ -61,8 +61,20 @@ const LINGUAGEM_DO_PARCEIRO: Record<string, string> = {
   "Dança": "danca",
 };
 
-/** Sem hora na fonte, a sessão abre às 10h — e o `extra` registra que a hora é nossa. */
-const HORA_PADRAO = "T10:00:00";
+/**
+ * A HORA QUE NÃO LEMOS NÃO É AFIRMADA.
+ *
+ * `Ocorrencia.inicio` é datetime, então precisa de uma hora para existir — e por um tempo
+ * ela foi «10:00», o que pôs na ficha de um concerto de orquestra «ter., 01 de set.,
+ * 10:00». A fonte não disse isso. A página do Municipal até traz «20:00», mas traz junto o
+ * horário de funcionamento da casa — 10h, 19h, 7h —, e um extrator ingênuo acertaria umas
+ * e erraria outras, o que é pior do que não dizer.
+ *
+ * Então a meia-noite é sentinela, não afirmação: `horaConhecida: false` no `extra` manda a
+ * tela mostrar só a data. Quando a fonte publicar a hora, o campo vira `true` e a tela
+ * volta a mostrá-la sem tocar em mais nada.
+ */
+const HORA_SENTINELA = "T00:00:00";
 
 /**
  * A LINGUAGEM QUANDO A FONTE NÃO DIZ, e por que isso é inferência declarada e não chute.
@@ -120,7 +132,7 @@ function paraEntidade(e: EventoRaspado): Entidade {
       espacoDeclarado: e.espacoDeclarado ?? null,
       linguagemDeclarada: e.linguagemDeclarada ?? null,
       linguagemInferida: Boolean(inferida),
-      horaAutorada: true,
+      horaConhecida: false,
       // Ninguém revisou. É o que a fila do Studio lê para saber o que espera gente.
       revisadoPor: null,
     },
@@ -132,7 +144,7 @@ function ocorrenciasDe(e: EventoRaspado): Ocorrencia[] {
     id: `${e.id}:oc${i}`,
     temporadaId: `${e.id}:temp`,
     eventoId: e.id,
-    inicio: `${o.inicio}${HORA_PADRAO}`,
+    inicio: `${o.inicio}${HORA_SENTINELA}`,
     espacoId: null,
     preco: null,
     // `gratuito: null` da raspagem quer dizer «a fonte não publicou»; vira `false` porque

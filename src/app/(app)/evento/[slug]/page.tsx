@@ -147,18 +147,28 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
   // o evento acontece: a contagem de sessões vinha depois de dois parágrafos sobre o que o
   // acervo não publica. Cada fato declara a AUSÊNCIA em uma linha quando a fonte não traz
   // — a honestidade continua, deixa de ser parágrafo.
+  const horaConhecida = entidade.extra?.horaConhecida !== false;
   const ordenadas = [...ocorrencias].sort((a, b) => a.inicio.localeCompare(b.inicio));
   const primeira = ordenadas[0];
-  const espacoDoFato = ordenadas.find((o) => o.espaco)?.espaco ?? doEvento;
+  // O ESPAÇO DECLARADO PELO PARCEIRO CONTA. Ele vem da raspagem — «Casa das Rosas,
+  // Avenida Paulista» — e vivia só no `extra`, então a ficha dizia «local não publicado»
+  // sobre um evento cujo lugar a fonte publica. Acervo primeiro, porque é o dado mais
+  // forte; o do parceiro entra quando o acervo não tem.
+  const espacoDeclaradoPeloParceiro =
+    typeof entidade.extra?.espacoDeclarado === "string" ? entidade.extra.espacoDeclarado : null;
+  const espacoDoFato =
+    ordenadas.find((o) => o.espaco)?.espaco ?? doEvento ?? espacoDeclaradoPeloParceiro;
   const gratuitas = ocorrencias.filter((o) => o.gratuito).length;
 
+  // A HORA SÓ APARECE QUANDO A FONTE A PUBLICOU. Evento de parceiro chega com meia-noite
+  // sentinela porque `Ocorrencia.inicio` é datetime e precisa de algo — mostrar esse algo
+  // seria afirmar um horário que ninguém disse. Ver `horaConhecida` em `parceiros.ts`.
   const quando = primeira
     ? new Intl.DateTimeFormat("pt-BR", {
         weekday: "short",
         day: "2-digit",
         month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
+        ...(horaConhecida ? { hour: "2-digit" as const, minute: "2-digit" as const } : {}),
       }).format(new Date(primeira.inicio))
     : null;
 
@@ -196,6 +206,12 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
    * `data-painel-aprofunda` — um painel que existe com zero bloco é o defeito que a
    * ausência declarada existe para impedir, e o gate mede o número, não a presença.
    */
+  // AS NOTAS DE AUSÊNCIA SÃO SOBRE O ACERVO, e um evento de parceiro não veio dele.
+  // «O registro do Itaú Cultural não nomeia instituição realizadora» é verdade e é
+  // irrelevante numa ficha cuja instituição está escrita no topo: a nota explicaria um
+  // silêncio que não existe ali. Para parceiro a ficha mostra o que a fonte publicou e
+  // para de auditar um acervo que não é o dela.
+  const deParceiro = entidade.procedencia === "parceiro";
   const doPainel = [quemRealiza, quemAtua, onde, aprofunda, contextualiza, semelhante, falaSobre];
   const blocosDoPainel = doPainel.filter(Boolean).length;
 
@@ -262,44 +278,6 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
         ) : null}
       </section>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* AS DUAS COLUNAS DA VISÃO WEB (D-80, tela 27), E A MESMA PILHA DA     */}
-      {/* FASE 2 NA VISÃO APP.                                                */}
-      {/*                                                                     */}
-      {/* A ORDEM DO DOM É UMA SÓ e quem reordena é o layout, nunca um ramo em */}
-      {/* JavaScript (D-79/D-05). Em `[data-view="mobile"]`, `web-evento.css`  */}
-      {/* dissolve estes dois invólucros com `display: contents` e devolve os  */}
-      {/* onze blocos à ordem exata da fase 2 com quatro valores de `order`.   */}
-      {/* Em `[data-view="web"]` eles são as duas colunas da grade, e o lateral */}
-      {/* cola pelo `.web-coluna-fixa` de `web.css`.                          */}
-      {/* ------------------------------------------------------------------ */}
-      <div className="ev-principal flex flex-col gap-6">
-      {/* 2 e 4 — A CONTAGEM NO TOPO E AS OCORRÊNCIAS ABAIXO (D-42). O evento
-             aparece uma vez só; as sessões são registros próprios dentro dele. */}
-      <ListaDeOcorrencias
-        ocorrencias={ocorrencias}
-        temporadas={temporadasExibiveis}
-        dataDeReferencia={DATA_DE_REFERENCIA}
-      />
-
-      {/* A entrada para a escolha de sessão (AGEN-02, D-56). Só aparece quando o evento
-          TEM sessão: `/evento/[slug]/sessoes` é exportada apenas para os 129 eventos com
-          ocorrência datada, e oferecer o link nos outros 171 seria link para uma página
-          que o `generateStaticParams` não emitiu — 404 na demonstração ao vivo. */}
-      {ocorrencias.length ? (
-        <Link
-          href={`/evento/${entidade.slug}/sessoes/`}
-          className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao no-underline transition-opacity hover:opacity-90"
-        >
-          Escolher e salvar uma sessão
-        </Link>
-      ) : null}
-
-      {/* A PONTE DE VENDA (reformulação 2026-08): quando o evento tem link de ingresso,
-          o botão leva direto à plataforma. O acervo NÃO publica esse dado (0 de 300 —
-          medido); nos dois eventos de demonstração o link é AUTORADO e rotulado como
-          tal, no estatuto da trilha do Cenário 1 (D-37). O `<a>` externo é clique da
-          pessoa, não requisição do protótipo — zero rede em runtime continua valendo. */}
       {/* O LINK DE RESERVA DO PARCEIRO (2026-09). Quando o evento veio por ingestão
           federada, quem vende ou reserva é a instituição, não nós — e a URL que a raspagem
           guardou é justamente a página onde isso acontece. Sem este botão o cartão contava
@@ -322,6 +300,46 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
         </div>
       ) : null}
 
+      {/* ------------------------------------------------------------------ */}
+      {/* AS DUAS COLUNAS DA VISÃO WEB (D-80, tela 27), E A MESMA PILHA DA     */}
+      {/* FASE 2 NA VISÃO APP.                                                */}
+      {/*                                                                     */}
+      {/* A ORDEM DO DOM É UMA SÓ e quem reordena é o layout, nunca um ramo em */}
+      {/* JavaScript (D-79/D-05). Em `[data-view="mobile"]`, `web-evento.css`  */}
+      {/* dissolve estes dois invólucros com `display: contents` e devolve os  */}
+      {/* onze blocos à ordem exata da fase 2 com quatro valores de `order`.   */}
+      {/* Em `[data-view="web"]` eles são as duas colunas da grade, e o lateral */}
+      {/* cola pelo `.web-coluna-fixa` de `web.css`.                          */}
+      {/* ------------------------------------------------------------------ */}
+      <div className="ev-principal flex flex-col gap-6">
+      {/* 2 e 4 — A CONTAGEM NO TOPO E AS OCORRÊNCIAS ABAIXO (D-42). O evento
+             aparece uma vez só; as sessões são registros próprios dentro dele. */}
+      <ListaDeOcorrencias
+        ocorrencias={ocorrencias}
+        temporadas={temporadasExibiveis}
+        dataDeReferencia={DATA_DE_REFERENCIA}
+        espacoDoEvento={espacoDoFato}
+        horaConhecida={horaConhecida}
+      />
+
+      {/* A entrada para a escolha de sessão (AGEN-02, D-56). Só aparece quando o evento
+          TEM sessão: `/evento/[slug]/sessoes` é exportada apenas para os 129 eventos com
+          ocorrência datada, e oferecer o link nos outros 171 seria link para uma página
+          que o `generateStaticParams` não emitiu — 404 na demonstração ao vivo. */}
+      {ocorrencias.length ? (
+        <Link
+          href={`/evento/${entidade.slug}/sessoes/`}
+          className="w-fit rounded-full bg-acao px-4 py-2 text-sm font-semibold text-sobre-acao no-underline transition-opacity hover:opacity-90"
+        >
+          Escolher e salvar uma sessão
+        </Link>
+      ) : null}
+
+      {/* A PONTE DE VENDA (reformulação 2026-08): quando o evento tem link de ingresso,
+          o botão leva direto à plataforma. O acervo NÃO publica esse dado (0 de 300 —
+          medido); nos dois eventos de demonstração o link é AUTORADO e rotulado como
+          tal, no estatuto da trilha do Cenário 1 (D-37). O `<a>` externo é clique da
+          pessoa, não requisição do protótipo — zero rede em runtime continua valendo. */}
       {ingresso ? (
         <div className="flex flex-col gap-1">
           <a
@@ -336,13 +354,17 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
         </div>
       ) : null}
 
-      {/* 3 — o verbete, embutido, com crédito e link de procedência (D-39) */}
-      <Verbete entidade={entidade} />
+      {/* 3 — o verbete, embutido, com crédito e link de procedência (D-39).
+             Não existe para parceiro: verbete é da Enciclopédia. */}
+      {deParceiro ? null : <Verbete entidade={entidade} />}
 
       {/* 6 — a ficha das 8 dimensões (D-43). No DOM ela fecha a coluna
              principal; na visão app o `order` a devolve para depois de «onde
              acontece», que é o lugar exato em que a fase 2 a deixou. */}
-      <div className="ev-ficha-acesso">
+      {/* A ficha das 8 dimensões audita a DECLARAÇÃO do acervo. Numa ficha de parceiro ela
+          são oito linhas dizendo «não declarado» sobre um registro que nunca teve o campo —
+          ruído, não transparência. Volta quando a instituição declarar. */}
+      <div className="ev-ficha-acesso" hidden={deParceiro}>
         <FichaDeAcessibilidade
           acessibilidade={entidade.acessibilidade}
           declaraDimensoes={declaraAcessibilidade}
@@ -362,8 +384,9 @@ export default async function PaginaEvento({ params }: { params: Promise<{ slug:
       {/* e deixar meia tela vazia.                                           */}
       {/* ------------------------------------------------------------------ */}
       <aside
-        data-painel-aprofunda={blocosDoPainel}
+        data-painel-aprofunda={deParceiro ? 0 : blocosDoPainel}
         className="ev-lateral web-painel web-coluna-fixa flex flex-col gap-4"
+        hidden={deParceiro}
       >
         {/* 5 — QUEM REALIZA E QUEM ATUA, COM PAPEL. A volta da ponte: daqui se
                chega ao verbete do artista, e o vínculo está nomeado. */}

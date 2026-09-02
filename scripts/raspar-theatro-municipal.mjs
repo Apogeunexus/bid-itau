@@ -130,7 +130,7 @@ const FICHA_DA_PAGINA = `(() => {
   let corpo = null;
   for (const p of document.querySelectorAll("p")) {
     const t = (p.innerText || "").replace(/\\s+/g, " ").trim();
-    if (t.length >= 60 && t.length <= 400 && t !== titulo && !/cookie|privacidade|newsletter|atalhos?\\s+Ctrl|aumentar ou diminuir|contraste|leitor de tela|utilize os atalhos|programa..o completa e garanta/i.test(t)) {
+    if (t.length >= 60 && t.length <= 400 && t !== titulo && !/cookie|privacidade|newsletter|atalhos?\\s+Ctrl|aumentar ou diminuir|contraste|leitor de tela|utilize os atalhos|programa..o completa e garanta|receba em primeira m|primeira m.o a programa|conte.dos especiais, bastidores/i.test(t)) {
       corpo = t; break;
     }
   }
