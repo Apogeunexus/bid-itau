@@ -1635,3 +1635,103 @@
   font-size: var(--tipo-legenda);
   color: var(--cor-tinta-3);
 }
+
+
+/* ---------------------------------------------------------------------------
+ * AS OPÇÕES E A ESCOLHA — a conversa que resolve.
+ * ------------------------------------------------------------------------- */
+.ia-opcao {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.16s;
+}
+
+.ia-opcao:hover {
+  border-color: var(--cor-acao);
+}
+
+.ia-escolha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.ia-escolha-capa {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--raio-m);
+}
+
+.ia-escolha-capa img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.ia-escolha-resumo {
+  margin: 0;
+  font-size: var(--tipo-detalhe);
+  line-height: 1.45;
+}
+
+.ia-escolha-fatos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+}
+
+.ia-escolha-fatos > div {
+  display: flex;
+  gap: 0.5rem;
+  font-size: var(--tipo-legenda);
+}
+
+.ia-escolha-fatos dt {
+  flex: none;
+  width: 4.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--cor-tinta-3);
+}
+
+.ia-escolha-fatos dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.ia-escolha-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.ia-escolha-reservar {
+  padding: 0.5rem 1rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acao);
+  color: var(--cor-sobre-acao);
+  font-family: var(--fonte-display);
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ia-escolha-mapa,
+.ia-escolha-ficha {
+  font-size: var(--tipo-legenda);
+  font-weight: 700;
+  color: var(--cor-acao-tinta);
+}

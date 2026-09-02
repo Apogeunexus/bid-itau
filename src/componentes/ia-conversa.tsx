@@ -1,6 +1,7 @@
 "use client";
 
-import type { CenarioResolvido } from "@/dados/cenarios-ia";
+import type { CartaoDoCenario, CenarioResolvido } from "@/dados/cenarios-ia";
+import { SaidaParaParceiro } from "@/componentes/base/saida-para-parceiro";
 import Link from "next/link";
 import {
   cloneElement,
@@ -98,6 +99,8 @@ type MensagemAssistente = {
    * mensagem — que é o que uma IA de roteiro faz.
    */
   cenario?: CenarioResolvido;
+  /** A opção que a pessoa escolheu, resolvida na mesma conversa. */
+  escolha?: CartaoDoCenario;
 };
 type Mensagem = MensagemUsuario | MensagemAssistente;
 
@@ -639,6 +642,31 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes, cen
     }, 900);
   }
 
+  /** A pessoa escolheu uma das opções: a conversa responde com o evento resolvido. */
+  function escolherOpcao(c: CartaoDoCenario) {
+    if (pensando) return;
+    setMensagens((m) => [
+      ...m,
+      { id: nid(), papel: "usuario", texto: c.titulo },
+      { id: nid(), papel: "assistente", texto: "", pensar: true },
+    ]);
+    setPensando(true);
+    window.setTimeout(() => {
+      setMensagens((m) => [
+        ...m.filter((x) => !(x.papel === "assistente" && x.pensar)),
+        {
+          id: nid(),
+          papel: "assistente",
+          texto: c.gratuito
+            ? "Ótima escolha. É gratuito — dá só uma olhada e garanta seu lugar:"
+            : "Ótima escolha. Aqui está tudo o que você precisa saber:",
+          escolha: c,
+        },
+      ]);
+      setPensando(false);
+    }, 700);
+  }
+
   function escolherSugestao(s: SugestaoDeRoteiro) {
     if (pensando) return;
     const proximo: Pedido = {
@@ -911,39 +939,20 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes, cen
                         cidades={cidades}
                       />
                     ) : null}
-                    {/* A RESPOSTA DE CENÁRIO, dentro da bolha: leitura, critérios amarrados
-                        ao trecho literal, a jornada com rota clicável, os eventos e o que a
-                        resposta não sustenta. Tudo aqui, nada em outra página. */}
+                    {/* AS OPÇÕES, e nada além delas. A bolha listava critérios, jornada e
+                        o limite da resposta — a máquina se justificando para quem só
+                        perguntou o que fazer no sábado. A transparência não sumiu: ela vive
+                        na ficha do evento e na explicação da recomendação, onde alguém a
+                        procura de propósito. Aqui a conversa fala como gente. */}
                     {m.cenario ? (
                       <div className="ia-cenario">
-                        <p className="ia-cenario-rotulo">o que virou critério</p>
-                        <ul className="ia-cenario-criterios">
-                          {m.cenario.criterios.map((c) => (
-                            <li key={c.campo}>
-                              <b>{c.campo}</b> · {c.valor}
-                              <span className="ia-cenario-frase">veio de «{c.daFrase}»</span>
-                            </li>
-                          ))}
-                        </ul>
-
-                        {m.cenario.jornada.length ? (
-                          <>
-                            <p className="ia-cenario-rotulo">a jornada, passo a passo</p>
-                            <ol className="ia-cenario-jornada">
-                              {m.cenario.jornada.map((p, i) => (
-                                <li key={p.rota + i}>
-                                  <Link href={p.rota} className="ia-cenario-passo no-underline">
-                                    {i + 1}. {p.tela} →
-                                  </Link>
-                                  <span className="ia-cenario-passo-texto">{p.oQueAcontece}</span>
-                                </li>
-                              ))}
-                            </ol>
-                          </>
-                        ) : null}
-
                         {m.cenario.cartoes.map((c) => (
-                          <Link key={c.slug} href={c.rota} className="ia-destino no-underline">
+                          <button
+                            key={c.slug}
+                            type="button"
+                            className="ia-opcao"
+                            onClick={() => escolherOpcao(c)}
+                          >
                             {c.imagem ? (
                               <span className="ia-destino-capa">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -954,17 +963,58 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes, cen
                               <span className="ia-destino-titulo">{c.titulo}</span>
                               <span className="ia-destino-meta tipo-legenda">{c.porque}</span>
                             </span>
-                            <span className="ia-destino-acao">Abrir</span>
-                          </Link>
+                          </button>
                         ))}
+                      </div>
+                    ) : null}
 
-                        <p className="ia-cenario-limite">
-                          <b>O que esta resposta não sustenta.</b> {m.cenario.naoSustenta}
-                        </p>
-                        <p className="ia-cenario-nota">
-                          Resposta escrita, não gerada por modelo. O que está em demonstração é
-                          a forma da resposta — leitura, critério, jornada e limite.
-                        </p>
+                    {/* A ESCOLHA, respondida na mesma conversa: o que é, quando, onde e como
+                        reservar. É onde a conversa deixa de sugerir e passa a resolver. */}
+                    {m.escolha ? (
+                      <div className="ia-escolha">
+                        {m.escolha.imagem ? (
+                          <span className="ia-escolha-capa">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={m.escolha.imagem} alt="" />
+                          </span>
+                        ) : null}
+                        {m.escolha.resumo ? (
+                          <p className="ia-escolha-resumo">{m.escolha.resumo}</p>
+                        ) : null}
+                        <dl className="ia-escolha-fatos">
+                          {m.escolha.quando ? (
+                            <div>
+                              <dt>quando</dt>
+                              <dd>{m.escolha.quando}</dd>
+                            </div>
+                          ) : null}
+                          {m.escolha.onde ? (
+                            <div>
+                              <dt>onde</dt>
+                              <dd>{m.escolha.onde}</dd>
+                            </div>
+                          ) : null}
+                          <div>
+                            <dt>ingresso</dt>
+                            <dd>{m.escolha.gratuito ? "gratuito" : "no site da casa"}</dd>
+                          </div>
+                        </dl>
+                        <div className="ia-escolha-acoes">
+                          <Link href="/mapa/" className="ia-escolha-mapa no-underline">
+                            Ver no mapa →
+                          </Link>
+                          {m.escolha.reserva ? (
+                            <SaidaParaParceiro
+                              url={m.escolha.reserva}
+                              instituicao={m.escolha.fonte ?? "a instituição"}
+                              rotulo="Reservar ingresso ↗"
+                              className="ia-escolha-reservar"
+                            />
+                          ) : null}
+                        </div>
+                        <Link href={m.escolha.rota} className="ia-escolha-ficha no-underline">
+                          Ver a ficha completa →
+                        </Link>
                       </div>
                     ) : null}
 

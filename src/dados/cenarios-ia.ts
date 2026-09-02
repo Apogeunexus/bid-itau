@@ -54,7 +54,14 @@ export interface CenarioDeIA {
   persona: string;
   /** A pergunta como a pessoa a escreveria. */
   prompt: string;
-  /** A abertura da resposta — o que foi entendido, em uma frase. */
+  /**
+   * A ABERTURA, e ela fala com a pessoa — não explica o algoritmo.
+   *
+   * A primeira versão abria com «o que eu entendi» e listava critérios. Isso é a máquina
+   * se justificando: quem chega perguntando o que fazer no sábado não quer auditoria de
+   * leitura, quer resposta. A transparência do produto não sumiu — ela vive na tela do
+   * evento e na explicação da recomendação, onde alguém a procura de propósito.
+   */
   entendi: string;
   /** Os critérios extraídos, cada um amarrado ao trecho que o produziu. */
   criterios: CriterioLido[];
@@ -91,10 +98,9 @@ export const CENARIOS_DE_IA: readonly CenarioDeIA[] = [
      */
     prompt: "sábado eu tô livre e não sei o que fazer. nunca fui em teatro na vida.",
     entendi:
-      "Você não me disse o que gosta, e eu não vou pedir — quem sabe o nome do que procura " +
-      "já não precisa descobrir. O que eu tenho é uma data, uma cidade e uma porta que você " +
-      "nunca atravessou. Começo por aí, e a primeira pergunta não é sobre gênero: é sobre o " +
-      "que te move hoje.",
+      "Que legal que você está disposta a ter sua primeira experiência com o teatro! Separei " +
+      "três opções para sábado, todas gratuitas e no centro de São Paulo. Escolha a que mais " +
+      "te agrada e eu te mostro o resto.",
     criterios: [
       { campo: "janela", valor: "sábado", daFrase: "sábado eu tô livre" },
       { campo: "repertório", valor: "vazio — nada declarado", daFrase: "não sei o que fazer" },
@@ -146,15 +152,15 @@ export const CENARIOS_DE_IA: readonly CenarioDeIA[] = [
     sugestoes: [
       {
         slug: "cr-pescaria-de-curiosidades-3",
-        porque:
-          "O degrau. Poesia falada, gratuita, e público numa sala: tudo o que um teatro tem, " +
-          "menos o nome que a assusta.",
+        porque: "Poesia falada, de graça, numa casa pequena. Bom para começar sem susto.",
+      },
+      {
+        slug: "cr-o-que-e-que-a-bahia-tem",
+        porque: "Espetáculo musical com direção e roteiro. Palco, mas com música na frente.",
       },
       {
         slug: "tm-recital-all-greek-to-me",
-        porque:
-          "O destino. Sessão gratuita no Theatro Municipal — a primeira vez dela acontece no " +
-          "lugar que ela achava que não era para ela.",
+        porque: "No Theatro Municipal, e é a única sessão gratuita do mês. Se for para começar, comece grande.",
       },
     ],
     naoSustenta:
@@ -169,9 +175,9 @@ export const CENARIOS_DE_IA: readonly CenarioDeIA[] = [
     persona: "Carlos, 4 dias em Belém",
     prompt: "Vou passar quatro dias em Belém e nunca estive na cidade. O que eu não posso perder?",
     entendi:
-      "Quatro dias e um território que você não conhece. Priorizo o que é próprio de Belém — " +
-      "não a franquia que também existe na sua cidade — e equilibro deslocamento e densidade " +
-      "para você não gastar o dia no trânsito.",
+      "Quatro dias dá para conhecer Belém com calma. Montei o roteiro priorizando o que só " +
+      "existe aí — nada de franquia que você já tem em casa — e deixei os deslocamentos curtos " +
+      "para você não passar o dia no trânsito.",
     criterios: [
       { campo: "território", valor: "Belém, PA", daFrase: "quatro dias em Belém" },
       { campo: "janela", valor: "4 dias", daFrase: "quatro dias" },
@@ -192,9 +198,9 @@ export const CENARIOS_DE_IA: readonly CenarioDeIA[] = [
     persona: "João",
     prompt: "Quero algo parecido com a Bienal, gratuito e perto de mim.",
     entendi:
-      "Três critérios numa frase só, e eu mostro os três antes de mostrar resultado — você tira " +
-      "qualquer um com um toque e vê o número mudar na hora. Não é conversa: é a sua frase " +
-      "virando filtro, e o filtro continua seu.",
+      "Entendi: arte contemporânea, de graça e por perto. Separei duas exposições na Avenida " +
+      "Paulista que combinam com o que você curtiu na Bienal. Escolha uma e eu te mostro o " +
+      "resto.",
     criterios: [
       { campo: "semelhança", valor: "arte contemporânea, coletiva, em espaço expositivo", daFrase: "parecido com a Bienal" },
       { campo: "preço", valor: "gratuito", daFrase: "gratuito" },
@@ -239,6 +245,14 @@ export interface CartaoDoCenario {
   creditoImagem: string | null;
   porque: string;
   rota: string;
+  /** O que a instituição escreveu sobre o evento — vira o resumo na conversa. */
+  resumo: string | null;
+  quando: string | null;
+  onde: string | null;
+  gratuito: boolean;
+  /** A página da casa, onde a reserva acontece. */
+  reserva: string | null;
+  fonte: string | null;
 }
 
 export interface CenarioResolvido {
@@ -257,8 +271,20 @@ export interface CenarioResolvido {
  * alcançar o grafo (DP-F): se um evento citado sumir, é aqui que ele some, e o cartão
  * simplesmente não desce. A conversa nunca fica esperando dado.
  */
+export interface EventoParaCenario {
+  titulo: string;
+  imagem?: string;
+  creditoImagem?: string;
+  resumo?: string;
+  fonte?: string;
+  quando?: string | null;
+  onde?: string | null;
+  gratuito?: boolean;
+  reserva?: string | null;
+}
+
 export function cenariosResolvidos(
-  buscar: (slug: string) => { titulo: string; imagem?: string; creditoImagem?: string } | undefined,
+  buscar: (slug: string) => EventoParaCenario | undefined,
 ): CenarioResolvido[] {
   return CENARIOS_DE_IA.map((c) => ({
     id: c.id,
@@ -278,6 +304,12 @@ export function cenariosResolvidos(
         creditoImagem: e.creditoImagem ?? null,
         porque: sg.porque,
         rota: `/evento/${sg.slug}/`,
+        resumo: e.resumo ?? null,
+        quando: e.quando ?? null,
+        onde: e.onde ?? null,
+        gratuito: e.gratuito === true,
+        reserva: e.reserva ?? null,
+        fonte: e.fonte ?? null,
       }];
     }),
   }));
