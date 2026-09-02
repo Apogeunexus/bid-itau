@@ -1369,3 +1369,20 @@ body {
 .saida-confirmar:hover {
   filter: brightness(1.06);
 }
+
+/* ---------------------------------------------------------------------------
+ * O AVISO DE SAÍDA É CENTRADO, e não gaveta de baixo — nas duas visões.
+ *
+ * Ele herdava `.saiba-mais`, que é gaveta inferior no app porque ali o conteúdo é
+ * leitura: sobe, você lê, desce. Este diálogo é DECISÃO, e decisão não fica no
+ * canto do polegar — ela para no meio da tela, com o fundo escurecido em volta,
+ * porque é o único momento em que o produto pede uma escolha antes de entregar
+ * a pessoa a outro site.
+ * ------------------------------------------------------------------------- */
+.saida-dialogo,
+[data-view="web"] .saida-dialogo {
+  margin: auto;
+  width: calc(100% - 2 * var(--espaco-tela));
+  max-width: 26rem;
+  border-radius: var(--raio-g);
+}

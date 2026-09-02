@@ -1719,6 +1719,9 @@
 }
 
 .ia-escolha-reservar {
+  flex: none;
+  white-space: nowrap;
+  align-self: center;
   padding: 0.5rem 1rem;
   border-radius: var(--raio-pilula);
   background: var(--cor-acao);

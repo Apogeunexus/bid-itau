@@ -68,6 +68,14 @@ export interface CenarioDeIA {
   /** Os eventos sugeridos, com o motivo de cada um. */
   sugestoes: SugestaoDoCenario[];
   /**
+   * A SAÍDA QUANDO NÃO HÁ EVENTO PARA OFERECER. Belém não tem casa raspada e o acervo não
+   * cruza data futura com território — então a conversa não tem cartão de sessão para dar.
+   * Fingir que tem seria o pior desfecho; ficar só no parágrafo, o segundo pior. O que o
+   * produto REALMENTE faz nesse caso é o Modo Cidade: roteiro por dia sobre o que existe no
+   * território. É isso que a conversa entrega.
+   */
+  atalho?: { titulo: string; descricao: string; rota: string; acao: string };
+  /**
    * A JORNADA INTEIRA, quando o cenário a pede. O briefing não pergunta «o que você
    * recomenda para a Maria»: pergunta «como ela DESCOBRE sua primeira experiência teatral —
    * apresente toda a jornada». Uma lista de sugestões responde a pergunta errada.
@@ -175,15 +183,24 @@ export const CENARIOS_DE_IA: readonly CenarioDeIA[] = [
     persona: "Carlos, 4 dias em Belém",
     prompt: "Vou passar quatro dias em Belém e nunca estive na cidade. O que eu não posso perder?",
     entendi:
-      "Quatro dias dá para conhecer Belém com calma. Montei o roteiro priorizando o que só " +
-      "existe aí — nada de franquia que você já tem em casa — e deixei os deslocamentos curtos " +
-      "para você não passar o dia no trânsito.",
+      "Quatro dias dá para conhecer Belém com calma. Montei um roteiro dia a dia priorizando " +
+      "o que só existe aí — nada de franquia que você já tem em casa — e deixei os " +
+      "deslocamentos curtos para você não passar o dia no trânsito. Dá uma olhada:",
     criterios: [
       { campo: "território", valor: "Belém, PA", daFrase: "quatro dias em Belém" },
       { campo: "janela", valor: "4 dias", daFrase: "quatro dias" },
       { campo: "repertório", valor: "nenhum declarado", daFrase: "nunca estive na cidade" },
     ],
     sugestoes: [],
+    atalho: {
+      titulo: "Seu roteiro de 4 dias em Belém",
+      descricao:
+        "39 registros do acervo do Itaú Cultural na cidade — 17 exposições, 11 artistas, " +
+        "8 espaços e 3 instituições — distribuídos por dia, com o deslocamento curto e o que " +
+        "é próprio do território na frente.",
+      rota: "/cidade/belem-para/",
+      acao: "Abrir o roteiro",
+    },
     naoSustenta:
       "Nenhum evento do acervo cruza data futura com território, e Belém não é exceção: os 39 " +
       "registros que o Itaú Cultural documenta lá são o que a cidade PRODUZIU — 17 exposições, " +
@@ -263,6 +280,7 @@ export interface CenarioResolvido {
   criterios: CriterioLido[];
   jornada: PassoDaJornada[];
   cartoes: CartaoDoCenario[];
+  atalho?: { titulo: string; descricao: string; rota: string; acao: string };
   naoSustenta: string;
 }
 
@@ -294,6 +312,7 @@ export function cenariosResolvidos(
     criterios: [...c.criterios],
     jornada: [...(c.jornada ?? [])],
     naoSustenta: c.naoSustenta,
+    atalho: c.atalho,
     cartoes: c.sugestoes.flatMap((sg) => {
       const e = buscar(sg.slug);
       if (!e) return [];

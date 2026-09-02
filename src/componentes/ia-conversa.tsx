@@ -965,6 +965,17 @@ export function ConversaDaIa({ gostos, companhias, dias, cidades, sugestoes, cen
                             </span>
                           </button>
                         ))}
+                        {m.cenario.atalho ? (
+                          <Link href={m.cenario.atalho.rota} className="ia-opcao no-underline">
+                            <span className="ia-destino-texto">
+                              <span className="ia-destino-titulo">{m.cenario.atalho.titulo}</span>
+                              <span className="ia-destino-meta tipo-legenda">
+                                {m.cenario.atalho.descricao}
+                              </span>
+                            </span>
+                            <span className="ia-escolha-reservar">{m.cenario.atalho.acao}</span>
+                          </Link>
+                        ) : null}
                       </div>
                     ) : null}
 

@@ -62,7 +62,7 @@ export function SaidaParaParceiro({
         {rotulo}
       </button>
 
-      <dialog ref={dialogo} className="saiba-mais" aria-labelledby="saida-titulo">
+      <dialog ref={dialogo} className="saiba-mais saida-dialogo" aria-labelledby="saida-titulo">
         <div className="saiba-mais-corpo">
           <div className="saiba-mais-cabeca">
             <h2 id="saida-titulo" className="saiba-mais-titulo">
