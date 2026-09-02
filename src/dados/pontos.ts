@@ -298,6 +298,13 @@ export const REGRAS: Regra[] = [
 /* ── Missões ─────────────────────────────────────────────────────────────── */
 
 /**
+ * A BARRA FINAL NÃO É ESTILO, É A ROTA (2026-09). `next.config.ts` declara
+ * `trailingSlash: true` e `output: "export"`: a URL canônica de toda tela tem barra e o
+ * arquivo mora em `<rota>/index.html`. Sem ela, `next dev` devolve 308 e disfarça — mas o
+ * export estático não tem servidor para redirecionar, e «Fazer no app» leva a lugar
+ * nenhum. As 26 rotas abaixo estavam sem, e o defeito só aparecia no artefato que a banca
+ * abre, nunca no desenvolvimento.
+ *
  * TODA MISSÃO TEM `rota`. Uma missão que pede «ouça um episódio» e não leva ao
  * Cast transfere para a pessoa o trabalho de achar o Cast, e esse trabalho custa
  * mais que a recompensa. Missão sem porta é beco.
@@ -316,7 +323,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 3,
     expiraEm: "nunca",
-    rota: "/meu",
+    rota: "/meu/",
     tagAoConcluir: "perfil-completo",
     emblemaId: "e-perfil-completo",
   },
@@ -337,7 +344,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 2,
     expiraEm: "nunca",
-    rota: "/comunidade",
+    rota: "/comunidade/",
   },
   {
     id: "m-abre-play",
@@ -352,7 +359,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 15,
     expiraEm: "nunca",
-    rota: "/play",
+    rota: "/play/",
   },
   {
     id: "m-abre-cast",
@@ -367,7 +374,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 30,
     expiraEm: "nunca",
-    rota: "/cast",
+    rota: "/cast/",
   },
   {
     id: "m-abre-museu",
@@ -382,7 +389,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 8,
     expiraEm: "nunca",
-    rota: "/museu",
+    rota: "/museu/",
   },
   {
     id: "m-abre-noticias",
@@ -397,7 +404,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 2,
     expiraEm: "nunca",
-    rota: "/noticias",
+    rota: "/noticias/",
   },
   {
     id: "m-abre-cursos",
@@ -412,7 +419,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 12,
     expiraEm: "nunca",
-    rota: "/cursos",
+    rota: "/cursos/",
   },
   {
     /**
@@ -433,7 +440,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 2,
     expiraEm: "nunca",
-    rota: "/recompensas",
+    rota: "/recompensas/",
   },
 
   /* ── Perfil ─────────────────────────────────────────────────────────────── */
@@ -449,7 +456,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 2,
     minutos: 2,
     expiraEm: "dia",
-    rota: "/noticias",
+    rota: "/noticias/",
   },
   {
     id: "m-sem-travessia",
@@ -462,7 +469,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 20,
     expiraEm: "semana",
-    rota: "/descobrir",
+    rota: "/descobrir/",
   },
   {
     id: "m-sem-social",
@@ -475,7 +482,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 5,
     minutos: 3,
     expiraEm: "semana",
-    rota: "/comunidade",
+    rota: "/comunidade/",
   },
   {
     id: "m-sem-agenda",
@@ -488,7 +495,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 4,
     minutos: 2,
     expiraEm: "semana",
-    rota: "/acontece",
+    rota: "/acontece/",
   },
   {
     id: "m-territorio",
@@ -502,7 +509,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 12,
     minutos: 10,
     expiraEm: "semana",
-    rota: "/mapa",
+    rota: "/mapa/",
   },
   {
     id: "m-temporada-trilha",
@@ -515,7 +522,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 40,
     minutos: 0,
     expiraEm: "temporada",
-    rota: "/trilha/do-rap-ao-teatro-documentario",
+    rota: "/trilha/do-rap-ao-teatro-documentario/",
   },
 
   /* ── Primeiros passos: uma trilha por app do hub ────────────────────────── */
@@ -545,7 +552,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 3,
     minutos: 2,
     expiraEm: "nunca",
-    rota: "/acontece",
+    rota: "/acontece/",
   },
   {
     id: "m-abre-mapa",
@@ -559,7 +566,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 3,
     minutos: 2,
     expiraEm: "nunca",
-    rota: "/mapa",
+    rota: "/mapa/",
   },
   {
     id: "m-abre-descobrir",
@@ -573,7 +580,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 3,
     minutos: 2,
     expiraEm: "nunca",
-    rota: "/descobrir",
+    rota: "/descobrir/",
   },
   {
     id: "m-abre-buscar",
@@ -587,7 +594,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 3,
     minutos: 2,
     expiraEm: "nunca",
-    rota: "/buscar",
+    rota: "/buscar/",
   },
   {
     id: "m-abre-ia",
@@ -601,7 +608,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 3,
     minutos: 3,
     expiraEm: "nunca",
-    rota: "/ia",
+    rota: "/ia/",
   },
   {
     id: "m-perfil-interesses",
@@ -615,7 +622,10 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 4,
     minutos: 2,
     expiraEm: "nunca",
-    rota: "/meu/disposicoes",
+    // `/meu/disposicoes/` NUNCA EXISTIU — a rota devolvia 404 e a missão de onboarding
+    // mandava para o vazio. O seletor de disposições vive dentro de `/meu/`, renderizado
+    // por `SeletorDisposicao` em modo dropdown; é para lá que «Fazer no app» leva.
+    rota: "/meu/",
     emblemaId: "e-jornada-iniciada",
   },
 
@@ -643,7 +653,7 @@ export const MISSOES: MissaoDefinida[] = [
     minutos: 0,
     expiraEm: "ciclo",
     ciclo: { comecaEm: EPOCA - 7 * DIA_MS, fechaEm: EPOCA + 14 * DIA_MS },
-    rota: "/desafios/m-campo-brasil",
+    rota: "/desafios/m-campo-brasil/",
     maxEnviosPorDia: 1,
     vagas: 1500,
     vagasTomadas: 1284,
@@ -685,7 +695,7 @@ export const MISSOES: MissaoDefinida[] = [
     minutos: 0,
     expiraEm: "ciclo",
     ciclo: { comecaEm: EPOCA - 7 * DIA_MS, fechaEm: EPOCA + 14 * DIA_MS },
-    rota: "/desafios/m-campo-rua",
+    rota: "/desafios/m-campo-rua/",
     maxEnviosPorDia: 2,
     emblemaId: "e-arte-de-rua",
     regrasDeAceite: {
@@ -715,7 +725,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 20,
     minutos: 0,
     expiraEm: "nunca",
-    rota: "/desafios/m-primeira-exposicao",
+    rota: "/desafios/m-primeira-exposicao/",
     tagAoConcluir: "primeira-exposicao",
     emblemaId: "e-primeira-exposicao",
     regrasDeAceite: {
@@ -744,7 +754,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 25,
     minutos: 0,
     expiraEm: "nunca",
-    rota: "/desafios/m-leve-alguem",
+    rota: "/desafios/m-leve-alguem/",
     emblemaId: "e-leve-alguem",
     regrasDeAceite: {
       vale: [
@@ -770,7 +780,7 @@ export const MISSOES: MissaoDefinida[] = [
     minutos: 0,
     expiraEm: "ciclo",
     ciclo: { comecaEm: EPOCA - 7 * DIA_MS, fechaEm: EPOCA + 14 * DIA_MS },
-    rota: "/desafios/m-roteiro-afetivo",
+    rota: "/desafios/m-roteiro-afetivo/",
     maxEnviosPorDia: 3,
     emblemaId: "e-roteiro",
     regrasDeAceite: {
@@ -800,7 +810,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 30,
     minutos: 0,
     expiraEm: "nunca",
-    rota: "/desafios/m-quem-ensinou",
+    rota: "/desafios/m-quem-ensinou/",
     emblemaId: "e-quem-ensinou",
     regrasDeAceite: {
       vale: [
@@ -832,7 +842,7 @@ export const MISSOES: MissaoDefinida[] = [
     minutos: 2,
     expiraEm: "ciclo",
     ciclo: { comecaEm: EPOCA - 7 * DIA_MS, fechaEm: EPOCA + 14 * DIA_MS },
-    rota: "/noticias",
+    rota: "/noticias/",
     ranking: { metrica: "frequencia", bonus: [400, 250, 100] },
     emblemaId: "e-leitor-diario",
   },
@@ -848,7 +858,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 10,
     minutos: 1,
     expiraEm: "temporada",
-    rota: "/descobrir",
+    rota: "/descobrir/",
   },
   {
     id: "m-estive-la",
@@ -862,7 +872,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 15,
     minutos: 0,
     expiraEm: "nunca",
-    rota: "/acontece",
+    rota: "/acontece/",
     emblemaId: "e-presenca-1",
   },
   {
@@ -877,7 +887,7 @@ export const MISSOES: MissaoDefinida[] = [
     fichas: 25,
     minutos: 0,
     expiraEm: "nunca",
-    rota: "/cursos",
+    rota: "/cursos/",
   },
 ];
 

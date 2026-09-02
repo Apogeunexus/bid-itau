@@ -87,6 +87,17 @@ const nextConfig: NextConfig = {
    * o sintoma volta igual. Confira com `ipconfig getifaddr en0` e troque aqui.
    */
   allowedDevOrigins: ["127.0.0.1", "172.17.10.156"],
+  /*
+   * O TETO POR PÁGINA SOBE DE 60s PARA 180s porque `/cidade/[slug]` estoura o
+   * padrão nas capitais grandes e derruba o build inteiro depois de três
+   * tentativas — `porto-alegre-rio-grande-do-sul` foi a que reprovou.
+   *
+   * Não é o número que resolve o problema, e é bom dizer: `precomputarCidade`
+   * atravessa o grafo inteiro por cidade, e com 24 MB de JSON por worker isso
+   * cresce com o acervo. Subir o teto compra tempo para exportar hoje; o
+   * conserto é o precômputo, não o relógio.
+   */
+  staticPageGenerationTimeout: 180,
   experimental: {
     // 24 MB de JSON (`arestas` 13 MB + `entidades` 9,4 MB + `ocorrencias` 1,8 MB)
     // são carregados POR WORKER, e em memória viram várias vezes isso em objetos.
